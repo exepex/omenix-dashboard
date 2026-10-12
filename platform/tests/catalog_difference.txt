@@ -1,0 +1,3 @@
+> acl default functions by app_owner in (all schemas): app_owner EXECUTE granted by app_owner
+> acl default functions by fno_owner in (all schemas): fno_owner EXECUTE granted by fno_owner
+> acl default functions by stock_owner in (all schemas): stock_owner EXECUTE granted by stock_owner

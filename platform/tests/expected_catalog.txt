@@ -1,0 +1,74 @@
+acl database omenix: <admin> CONNECT granted by <admin>
+acl database omenix: <admin> CREATE granted by <admin>
+acl database omenix: <admin> TEMPORARY granted by <admin>
+acl database omenix: app_owner CONNECT granted by <admin>
+acl database omenix: dashboard_app CONNECT granted by <admin>
+acl database omenix: fno_owner CONNECT granted by <admin>
+acl database omenix: fno_writer CONNECT granted by <admin>
+acl database omenix: stock_inbox_reader CONNECT granted by <admin>
+acl database omenix: stock_owner CONNECT granted by <admin>
+acl database omenix: stock_writer CONNECT granted by <admin>
+acl default functions by app_owner in (all schemas): app_owner EXECUTE granted by app_owner
+acl default functions by fno_owner in (all schemas): fno_owner EXECUTE granted by fno_owner
+acl default functions by stock_owner in (all schemas): stock_owner EXECUTE granted by stock_owner
+acl default sequences by app_owner in app: dashboard_app SELECT granted by app_owner
+acl default sequences by app_owner in app: dashboard_app USAGE granted by app_owner
+acl default sequences by fno_owner in fno: fno_writer SELECT granted by fno_owner
+acl default sequences by fno_owner in fno: fno_writer USAGE granted by fno_owner
+acl default sequences by stock_owner in stock: stock_writer SELECT granted by stock_owner
+acl default sequences by stock_owner in stock: stock_writer USAGE granted by stock_owner
+acl default tables by app_owner in app: dashboard_app INSERT granted by app_owner
+acl default tables by app_owner in app: dashboard_app SELECT granted by app_owner
+acl default tables by app_owner in app: dashboard_app UPDATE granted by app_owner
+acl default tables by app_owner in app: stock_inbox_reader SELECT granted by app_owner
+acl default tables by fno_owner in fno: dashboard_app SELECT granted by fno_owner
+acl default tables by fno_owner in fno: fno_writer DELETE granted by fno_owner
+acl default tables by fno_owner in fno: fno_writer INSERT granted by fno_owner
+acl default tables by fno_owner in fno: fno_writer SELECT granted by fno_owner
+acl default tables by fno_owner in fno: fno_writer UPDATE granted by fno_owner
+acl default tables by stock_owner in stock: dashboard_app SELECT granted by stock_owner
+acl default tables by stock_owner in stock: stock_writer DELETE granted by stock_owner
+acl default tables by stock_owner in stock: stock_writer INSERT granted by stock_owner
+acl default tables by stock_owner in stock: stock_writer SELECT granted by stock_owner
+acl default tables by stock_owner in stock: stock_writer UPDATE granted by stock_owner
+acl schema app: app_owner CREATE granted by app_owner
+acl schema app: app_owner USAGE granted by app_owner
+acl schema app: dashboard_app USAGE granted by app_owner
+acl schema app: stock_inbox_reader USAGE granted by app_owner
+acl schema fno: dashboard_app USAGE granted by fno_owner
+acl schema fno: fno_owner CREATE granted by fno_owner
+acl schema fno: fno_owner USAGE granted by fno_owner
+acl schema fno: fno_writer USAGE granted by fno_owner
+acl schema public: PUBLIC USAGE granted by pg_database_owner
+acl schema public: pg_database_owner CREATE granted by pg_database_owner
+acl schema public: pg_database_owner USAGE granted by pg_database_owner
+acl schema stock: dashboard_app USAGE granted by stock_owner
+acl schema stock: stock_owner CREATE granted by stock_owner
+acl schema stock: stock_owner USAGE granted by stock_owner
+acl schema stock: stock_writer USAGE granted by stock_owner
+member <admin> in app_owner: admin=f inherit=f set=t grantor=<admin>
+member <admin> in app_owner: admin=t inherit=f set=f grantor=<superuser>
+member <admin> in dashboard_app: admin=t inherit=f set=f grantor=<superuser>
+member <admin> in fno_owner: admin=f inherit=f set=t grantor=<admin>
+member <admin> in fno_owner: admin=t inherit=f set=f grantor=<superuser>
+member <admin> in fno_writer: admin=t inherit=f set=f grantor=<superuser>
+member <admin> in stock_inbox_reader: admin=t inherit=f set=f grantor=<superuser>
+member <admin> in stock_owner: admin=f inherit=f set=t grantor=<admin>
+member <admin> in stock_owner: admin=t inherit=f set=f grantor=<superuser>
+member <admin> in stock_writer: admin=t inherit=f set=f grantor=<superuser>
+owner database omenix: <admin>
+owner schema app: app_owner
+owner schema fno: fno_owner
+owner schema public: pg_database_owner
+owner schema stock: stock_owner
+role app_owner: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=-1 valid_until=never
+role dashboard_app: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=20 valid_until=never
+role fno_owner: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=-1 valid_until=never
+role fno_writer: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=5 valid_until=never
+role setting dashboard_app in (all databases): statement_timeout=15s
+role setting fno_writer in (all databases): statement_timeout=60s
+role setting stock_inbox_reader in (all databases): statement_timeout=30s
+role setting stock_writer in (all databases): statement_timeout=60s
+role stock_inbox_reader: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=5 valid_until=never
+role stock_owner: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=-1 valid_until=never
+role stock_writer: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=5 valid_until=never
