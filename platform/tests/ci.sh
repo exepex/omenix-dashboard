@@ -4,8 +4,10 @@
 # .postgres.database.azure.com.
 #
 # It proves, in order:
-#   1. the owner's original script (sql/reference/azure_setup.sql) yields exactly tests/expected_catalog.txt;
-#   2. platform/sql applied on top of that server changes nothing (same catalog);
+#   1. the owner's original script (sql/reference/azure_setup.sql) yields exactly tests/reference_catalog.txt, and
+#      the declared state tests/expected_catalog.txt differs from it only by tests/catalog_difference.txt (the
+#      deliberate change: no PUBLIC EXECUTE on the owner roles' functions);
+#   2. platform/sql applied on top of that server converges it to expected_catalog.txt;
 #   3. platform/sql on an empty server yields the same catalog, and a second run changes nothing (idempotent);
 #   4. the role matrix passes for all seven roles;
 #   5. the matrix catches drift (each injected drift makes it fail), and platform/sql removes the drift again.
@@ -39,18 +41,25 @@ echo "== 1. the owner's original script"
 reset
 admin_sql postgres -f "$platform/sql/reference/azure_setup.sql" > /dev/null
 snapshot reference
-same_as_expected reference "reference/azure_setup.sql gives expected_catalog.txt"
+if diff -u "$here/reference_catalog.txt" "$work/reference.txt"; then
+  echo "ok: reference/azure_setup.sql gives reference_catalog.txt"
+else echo "FAILED: reference_catalog.txt" >&2; exit 1; fi
+# The only allowed difference between the original's effect and platform/sql's is catalog_difference.txt.
+diff "$here/reference_catalog.txt" "$here/expected_catalog.txt" | grep '^[<>]' > "$work/difference.txt" || true
+if diff -u "$here/catalog_difference.txt" "$work/difference.txt"; then
+  echo "ok: platform/sql differs from the original only by catalog_difference.txt"
+else echo "FAILED: an undocumented difference from the original script" >&2; exit 1; fi
 
 echo "== 2. platform/sql on top of the owner's server"
 apply_platform
 snapshot converged
-same_as_expected converged "platform/sql changes nothing on a server set up by the original script"
+same_as_expected converged "platform/sql on a server set up by the original script gives expected_catalog.txt"
 
 echo "== 3. platform/sql on an empty server, twice"
 reset
 apply_platform
 snapshot fresh
-same_as_expected fresh "platform/sql on an empty server gives the same catalog as the original script"
+same_as_expected fresh "platform/sql on an empty server gives expected_catalog.txt"
 apply_platform
 snapshot again
 same_as_expected again "second run of platform/sql changes nothing"
@@ -74,7 +83,9 @@ x1_admin|GRANT stock_owner TO stock_writer|stock_writer
 x1_admin|GRANT dashboard_app TO stock_inbox_reader|stock_inbox_reader
 x1_admin|ALTER ROLE fno_writer CONNECTION LIMIT 50|fno_writer
 x1_admin|ALTER ROLE dashboard_app SET statement_timeout = 0|dashboard_app
-x1_admin|ALTER ROLE app_owner CREATEDB|app_owner'
+x1_admin|ALTER ROLE app_owner CREATEDB|app_owner
+stock_owner|ALTER DEFAULT PRIVILEGES IN SCHEMA stock GRANT EXECUTE ON FUNCTIONS TO dashboard_app|dashboard_app
+fno_owner|ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO PUBLIC|fno_writer'
 while IFS='|' read -r who sql victim; do
   if [ "$who" = x1_admin ]; then admin_sql omenix -c "$sql"
   else admin_sql omenix -c "SET ROLE $who" -c "$sql"; fi

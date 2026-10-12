@@ -8,6 +8,9 @@ acl database omenix: fno_writer CONNECT granted by <admin>
 acl database omenix: stock_inbox_reader CONNECT granted by <admin>
 acl database omenix: stock_owner CONNECT granted by <admin>
 acl database omenix: stock_writer CONNECT granted by <admin>
+acl default functions by app_owner in (all schemas): app_owner EXECUTE granted by app_owner
+acl default functions by fno_owner in (all schemas): fno_owner EXECUTE granted by fno_owner
+acl default functions by stock_owner in (all schemas): stock_owner EXECUTE granted by stock_owner
 acl default sequences by app_owner in app: dashboard_app SELECT granted by app_owner
 acl default sequences by app_owner in app: dashboard_app USAGE granted by app_owner
 acl default sequences by fno_owner in fno: fno_writer SELECT granted by fno_owner

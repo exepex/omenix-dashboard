@@ -118,6 +118,20 @@ stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | DELETE FROM ap
 dashboard_app | allow | SELECT nextval('app.x1_probe_id_seq') | NEXTVAL on app
 stock_writer,fno_writer,stock_inbox_reader | deny | SELECT nextval('app.x1_probe_id_seq') | no NEXTVAL on app
 
+# Functions: an owner role's functions are executable by that owner only (default privileges revoke PUBLIC EXECUTE)
+stock_owner | allow | SELECT stock.x1_probe_f() | the owner role runs its own function in stock
+fno_owner,app_owner | deny | SELECT stock.x1_probe_f() | another owner role cannot run a function in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT stock.x1_probe_f() | no runtime role runs a function stock_owner created in stock
+stock_owner | value=false | SELECT has_function_privilege('public', 'stock.x1_probe_f()', 'EXECUTE')::text AS v | PUBLIC cannot execute functions (checked as the owner) in stock
+fno_owner | allow | SELECT fno.x1_probe_f() | the owner role runs its own function in fno
+stock_owner,app_owner | deny | SELECT fno.x1_probe_f() | another owner role cannot run a function in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT fno.x1_probe_f() | no runtime role runs a function fno_owner created in fno
+fno_owner | value=false | SELECT has_function_privilege('public', 'fno.x1_probe_f()', 'EXECUTE')::text AS v | PUBLIC cannot execute functions (checked as the owner) in fno
+app_owner | allow | SELECT app.x1_probe_f() | the owner role runs its own function in app
+stock_owner,fno_owner | deny | SELECT app.x1_probe_f() | another owner role cannot run a function in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT app.x1_probe_f() | no runtime role runs a function app_owner created in app
+app_owner | value=false | SELECT has_function_privilege('public', 'app.x1_probe_f()', 'EXECUTE')::text AS v | PUBLIC cannot execute functions (checked as the owner) in app
+
 # Runtime roles: cannot switch to an owner or another runtime role
 stock_writer | deny | SET ROLE stock_owner | stock_writer cannot act as stock_owner
 stock_writer | deny | SET ROLE fno_owner | stock_writer cannot act as fno_owner

@@ -7,7 +7,9 @@ select named fields only). Read each file before committing it.
 
 | File | Criterion | Script |
 |---|---|---|
+| `<date>-x1-apply.txt` | declared state (no PUBLIC EXECUTE on functions) | `owner/apply_real.sh` |
 | `<date>-x1-real-matrix.txt` | 1, 2 | `owner/run_real_matrix.sh` |
 | `<date>-x1-tls.txt` | 3 | `owner/check_tls.sh` |
 | `<date>-x1-restore.txt` | 4 | `owner/restore_test.sh` |
 | `<date>-x1-server.txt` | 5 (and tier, region, backups) | `owner/server_evidence.sh` |
+| `<date>-x1-protect.txt` | delete lock and failed-connection alert | `owner/protect_server.sh` |

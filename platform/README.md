@@ -38,9 +38,10 @@ gateway both of them cannot use. (Some evidence: Vercel and Azure documentation;
 4. The admin and owner-role passwords are never stored in any deployment.
 
 **Accepted risk (reasoning only):** anyone on the internet can try passwords against the server; a weak or leaked
-password is the whole defence for that role. Worth doing later: connection and failed-login logging with an alert,
-an Azure resource lock against accidental deletion of the server (deleting a server deletes its backups), and
-narrowing the rule if the clients ever get fixed addresses.
+password is the whole defence for that role. Mitigations set by the owner (`owner/protect_server.sh`): an Azure
+`CanNotDelete` lock on the server (deleting a server deletes its backups) and an email alert when there are more than
+10 failed connections in 15 minutes (metric `connections_failed`; it counts every failed connection and does not say
+who failed). Later: narrow the rule if the clients ever get fixed addresses.
 
 ## Roles and who holds which credential
 
@@ -54,7 +55,9 @@ narrowing the rule if the clients ever get fixed addresses.
 | server admin | create roles and databases | nowhere: the owner's password manager only |
 
 No runtime role can create anything (no `CREATE` on the database, `public` or any schema, no temporary tables),
-change or drop a table, switch to another role, or read a schema it was not given. Limits: 5 connections for each
+change or drop a table, switch to another role, read a schema it was not given, or execute a function an owner role
+created (PostgreSQL's default `EXECUTE` for `PUBLIC` is revoked for the owner roles; grant it per function when one is
+really needed). Limits: 5 connections for each
 writer and the inbox reader, 20 for the dashboard; statement timeouts 60 s (writers), 15 s (dashboard), 30 s (inbox).
 
 URL format: `postgresql://<role>:<password>@omenix-pg.postgres.database.azure.com:5432/omenix?sslmode=verify-full`
@@ -88,28 +91,39 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `sql/10_database.sql` | database `omenix`; only the seven roles may connect |
 | `sql/20_schemas.sql` | schemas `stock`, `fno`, `app` and their owners; no `CREATE` on `public` |
 | `sql/30_grants.sql` | schema `USAGE` for exactly the runtime roles that need it |
-| `sql/40_default_privileges.sql` | grants every future table and sequence gets from its owner role |
+| `sql/40_default_privileges.sql` | grants every future table and sequence gets from its owner role; no `EXECUTE` for anyone else on its functions |
 | `sql/apply.sh` | runs 00-40 in order as the admin; idempotent, converges drift, never touches passwords or rows |
 | `sql/reference/azure_setup.sql` | the script the owner ran on 12 Oct 2026 (copy of `exepex/trading` `docs/migration/azure_setup.sql` at `a8cdad4`, sha256 `7315f0ac…3491`) |
-| `tests/role_matrix.txt` | the matrix: 341 checks over 7 roles (allowed, forbidden, expected values) |
+| `tests/role_matrix.txt` | the matrix: 365 checks over 7 roles (allowed, forbidden, expected values) |
 | `tests/role_matrix.sh` | runs the matrix, one connection per role; `X1_REQUIRE_TLS=1` adds a TLS check |
-| `tests/catalog_snapshot.sql`, `tests/expected_catalog.txt` | normalised listing of roles, memberships, ACLs and default privileges, and its expected content |
-| `tests/fixtures_up.sql`, `tests/fixtures_down.sql` | probe tables `x1_probe` in each schema, created by the owner roles |
+| `tests/catalog_snapshot.sql`, `tests/expected_catalog.txt` | normalised listing of roles, memberships, ACLs and default privileges, and its declared content |
+| `tests/reference_catalog.txt`, `tests/catalog_difference.txt` | the listing the original script gives, and the only allowed difference from it |
+| `tests/fixtures_up.sql`, `tests/fixtures_down.sql` | probe table `x1_probe` and function `x1_probe_f` in each schema, created by the owner roles |
 | `tests/ci.sh` | the whole test on a disposable PostgreSQL 16 (CI: `.github/workflows/platform-tests.yml`) |
 | `owner/` | the owner's scripts for the real server; checklist in `owner/CHECKLIST_X1.md` |
 | `evidence/` | outputs of the owner's scripts, committed by the owner |
 
-## Equivalence with what the owner ran
+## Equivalence with what the owner ran, and the one deliberate difference
 
-`tests/ci.sh` proves on every push that `sql/reference/azure_setup.sql` and `sql/00..40` produce the identical
-catalog (`tests/expected_catalog.txt`, 71 lines), that `sql/00..40` applied on top of the owner's setup changes
-nothing, and that a second run changes nothing. The differences are only in what happens when the server has
-**drifted** from the declared state; on the owner's server as set up they do nothing:
-- grants on the database, schemas and default privileges are revoked from the other Omenix roles and `PUBLIC` before
-  being granted, so extra grants are removed (the original only added);
+`tests/ci.sh` proves on every push that `sql/reference/azure_setup.sql` gives `tests/reference_catalog.txt` (71
+lines), that `sql/00..40` gives `tests/expected_catalog.txt` (74 lines) both on an empty server and on top of the
+owner's setup, that a second run changes nothing, and that the two listings differ only by
+`tests/catalog_difference.txt`:
+
+**Deliberate difference (orchestrator decision, 12 Oct 2026; strong evidence: PostgreSQL grants `EXECUTE` on every new
+function to `PUBLIC` by default):** each owner role's default privileges no longer give `PUBLIC` `EXECUTE` on the
+functions and procedures it creates. With the original setup, `dashboard_app` could execute any function an owner
+role creates in `stock`, `fno` or `app`, and each writer those in its own schema (shown by running the matrix on the
+original setup: 9 checks fail). Only a global default (without `IN SCHEMA`) can remove a built-in default, so the
+revoke is global per owner role; it adds the three `acl default functions` lines. The real server gets it from
+`owner/apply_real.sh`.
+
+Everything else acts only on **drift** and does nothing on the owner's server as set up:
+- grants on the database, schemas and default privileges (tables, sequences, functions) are revoked from the other
+  Omenix roles and `PUBLIC` before being granted, so extra grants are removed (the original only added);
 - role attributes, connection limits and settings are set to the declared values (`RESET ALL` first), and any
   membership of or in an Omenix role other than the admin's is revoked;
-- global default privileges of the owner roles (without `IN SCHEMA`) on tables and sequences are revoked;
+- global default privileges of the owner roles on tables and sequences are revoked;
 - `SUPERUSER`, `REPLICATION` and `BYPASSRLS` are asserted absent (the Azure admin cannot change them);
 - the database and schemas are created only when missing, and a schema's owner is reset if it changed.
 The `\du` and `\dn+` listings at the end of the original are not repeated (`tests/catalog_snapshot.sql` is the check).
