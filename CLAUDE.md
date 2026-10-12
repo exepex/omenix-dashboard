@@ -41,6 +41,11 @@ evidence before accepting or rejecting it; secrets never in files or chat; keep 
 
 ## Code
 
+- **Engineering standards (owner, mandatory for every agent and every session):** SOLID, DRY, KISS and clean code
+  (clear names, small single-purpose functions, components and classes, no duplication, no dead code, comments only for
+  the "why"). **No file and no class over 350 lines** (TypeScript, JavaScript, Python; generated files such as
+  `registry.generated.ts` excepted). Anything that would pass 350 lines is broken down, never squeezed. Files inherited
+  over the limit are broken down when their screen is rebuilt; new or rewritten files must meet it.
 - `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build` must pass before pushing.
 - Secrets only in Vercel's environment variables. Automatic deployments are off (`web/vercel.json`); the owner
   deploys by hand.
