@@ -1,6 +1,6 @@
 # Omenix: one dashboard for stocks and F&O, screen structure (proposal)
 
-Status: **proposed 12 Oct 2026, for the owner's approval**, before any mockup is drawn. Owner's direction: "when a
+Status: **superseded on 12 Oct 2026 by `PLATFORM_DESIGN.md`** for navigation and screens; its principles (separate accounts, no cross-currency sums, India-only F&O, the shared portfolio contract, the screener's data limits) stay valid. Owner's direction: "when a
 user logs in to any brokerage account ... they see their positions open, whether it's stocks or whether it's future
 and options ... future and options we are tracking only for India." Later the same day: "we would be creating screener for both
 future and options and stocks ... We are building the application as a professional stockbroker tool ... even if it
