@@ -17,7 +17,24 @@ only. **Nothing here holds a password, token or connection string; never add one
 | TLS | required (`require_secure_transport` = on, the Azure default); clients use `sslmode=verify-full` |
 | Database | `omenix`, schemas `stock`, `fno`, `app` |
 
-`owner/server_evidence.sh` reads all of this from the server with `az` and marks any difference.
+Expected values, read by `owner/server_evidence.sh` (it compares each with the server's `az` output; change them
+only here):
+
+<!-- server-settings:start -->
+| Check | Expected |
+|---|---|
+| location | Central India |
+| sku | Standard_B1ms |
+| tier | Burstable |
+| PostgreSQL version | 16 |
+| storage GiB | 32 |
+| storage performance tier | P4 |
+| backup retention days | 14 |
+| public network access | Enabled |
+| data encryption | SystemManaged |
+| require_secure_transport | on |
+| firewall rules | 0.0.0.0-255.255.255.255 |
+<!-- server-settings:end -->
 
 ## Network: public access, one firewall rule open to every address
 
@@ -39,9 +56,9 @@ gateway both of them cannot use. (Some evidence: Vercel and Azure documentation;
 
 **Accepted risk (reasoning only):** anyone on the internet can try passwords against the server; a weak or leaked
 password is the whole defence for that role. Mitigations set by the owner (`owner/protect_server.sh`): an Azure
-`CanNotDelete` lock on the server (deleting a server deletes its backups) and an email alert when there are more than
+`CanNotDelete` lock on the server (deleting a server deletes its backups), an email alert when there are more than
 10 failed connections in 15 minutes (metric `connections_failed`; it counts every failed connection and does not say
-who failed). Later: narrow the rule if the clients ever get fixed addresses.
+who failed), and an email alert when storage is above 80 percent (metric `storage_percent`). Later: narrow the rule if the clients ever get fixed addresses.
 
 ## Roles and who holds which credential
 
@@ -54,11 +71,16 @@ who failed). Later: narrow the rule if the clients ever get fixed addresses.
 | `stock_owner`, `fno_owner`, `app_owner` | create and change tables in their own schema | nowhere: the owner's password manager only, used by hand for migrations |
 | server admin | create roles and databases | nowhere: the owner's password manager only |
 
-No runtime role can create anything (no `CREATE` on the database, `public` or any schema, no temporary tables),
-change or drop a table, switch to another role, read a schema it was not given, or execute a function an owner role
-created (PostgreSQL's default `EXECUTE` for `PUBLIC` is revoked for the owner roles; grant it per function when one is
-really needed). Limits: 5 connections for each
-writer and the inbox reader, 20 for the dashboard; statement timeouts 60 s (writers), 15 s (dashboard), 30 s (inbox).
+Inside `omenix` no runtime role can create a table, view, sequence, function, type, index, schema or temporary table
+(no `CREATE` on the database, `public` or any schema, no `TEMPORARY`), change or drop a table, switch to another
+role, read a schema it was not given, or execute a function an owner role created (PostgreSQL's default `EXECUTE` for
+`PUBLIC` is revoked for the owner roles; grant it per function when one is really needed). **Exceptions that
+PostgreSQL leaves open to every role are listed below under "Named exceptions"; "cannot create anything" is not true
+without them.**
+
+**Connection limits** (enforced: a role cannot change its own): 5 for each writer and the inbox reader, 20 for the
+dashboard. **Statement timeouts** 60 s (writers), 15 s (dashboard), 30 s (inbox) are **defaults, not limits**: any
+role can switch its own off (named exception 3).
 
 URL format: `postgresql://<role>:<password>@omenix-pg.postgres.database.azure.com:5432/omenix?sslmode=verify-full`
 (set by the owner in each environment's settings; see `exepex/trading` `docs/migration/README.md`).
@@ -66,6 +88,23 @@ URL format: `postgresql://<role>:<password>@omenix-pg.postgres.database.azure.co
 **Rule for every table migration (P3, K1, W2 and later):** create tables as the schema's owner role (log in as it,
 or `SET ROLE` to it). Only then do the default privileges below give the runtime roles their access. A table created
 by the admin itself gets no grants and stays invisible to the runtime roles.
+
+## Named exceptions (what PostgreSQL lets every role do, and what limits it)
+
+Found by the judge (judge 3) and confirmed by `tests/ci.sh` step 4 with real attempts. Each is checked by the role
+matrix as `known:`: it prints **OPEN** while the server allows it (never counted as a pass) and PASS once closed.
+`sql/15_server_wide.sql` tries to close 1 and 2 on every apply and prints what is still open; the owner's
+`owner/apply_real.sh` records whether Azure's admin may close them. In CI (a non-superuser admin, like Azure's) they
+stay open; CI step 6 shows they close where the admin owns the objects, and that the admin cannot lock itself out.
+
+| # | Exception | Why it is open | Harm from a leaked runtime credential | Mitigation and detection |
+|---|---|---|---|---|
+| 1 | Create **large objects** in `omenix` (`lo_create`, `lo_creat`, `lo_from_bytea`) | PostgreSQL has no privilege for creating large objects; only revoking `EXECUTE` on these functions from `PUBLIC` stops it, and the functions belong to the bootstrap superuser (on Azure: `azuresu`), so the admin may not be allowed | Fill the 32 GiB disk (the server stops accepting writes) | Storage alert above 80 percent (`owner/protect_server.sh`); the matrix's strict check "no large object exists" (`pg_largeobject_metadata` is empty) fails as soon as one exists |
+| 2 | **Connect to other databases** (`postgres`, `template1`, any Azure adds) and create **temporary tables** in `postgres` | PostgreSQL grants `CONNECT` and `TEMPORARY` to `PUBLIC` on these databases; their owner (not the admin unless Azure makes it so) can revoke | Temporary tables use disk until the session ends; reading `postgres` shows nothing of ours | Storage alert; `15_server_wide.sql` revokes when allowed |
+| 3 | **Switch off its own statement timeout**, for its session (`SET statement_timeout = 0`) or persistently (`ALTER ROLE CURRENT_USER SET statement_timeout = 0`) | `statement_timeout` is a user setting; PostgreSQL 16 has no setting a non-superuser cannot override for itself | Unbounded queries on a 1-vCore server (slow or unavailable dashboard) | The persistent change shows in the catalog snapshot (a `role setting` line) and fails the matrix's timeout check (CI drift test as the role itself); `apply.sh` (`RESET ALL`) removes it. The session change leaves no trace. Enforceable limit, not built (reasoning only): a scheduled watchdog run by the admin (for example `pg_cron`, if allowed on Azure) that ends runtime-role queries older than the timeout with `pg_terminate_backend`; CPU alerting is the cheaper first step |
+| 4 | **Change or remove its own password** (`ALTER ROLE CURRENT_USER PASSWORD ...`) | Every role may change its own password in PostgreSQL | Lock its own deployment out (denial of service), not escalate | The deployment's connections then fail, which trips the failed-connection alert; the owner resets the password as admin |
+
+The story owner decides whether these exceptions are acceptable; X1 does not claim them away.
 
 ## Scope: infrastructure only; dashboard tables come later (follow-up for W7)
 
@@ -89,12 +128,13 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 |---|---|
 | `sql/00_roles.sql` | the seven roles, attributes, connection limits, timeouts; removes stray memberships; the admin's SET-only membership in the owner roles |
 | `sql/10_database.sql` | database `omenix`; only the seven roles may connect |
+| `sql/15_server_wide.sql` | tries to close named exceptions 1 and 2 (other databases, large objects) and prints what is still open |
 | `sql/20_schemas.sql` | schemas `stock`, `fno`, `app` and their owners; no `CREATE` on `public` |
 | `sql/30_grants.sql` | schema `USAGE` for exactly the runtime roles that need it |
 | `sql/40_default_privileges.sql` | grants every future table and sequence gets from its owner role; no `EXECUTE` for anyone else on its functions |
 | `sql/apply.sh` | runs 00-40 in order as the admin; idempotent, converges drift, never touches passwords or rows |
 | `sql/reference/azure_setup.sql` | the script the owner ran on 12 Oct 2026 (copy of `exepex/trading` `docs/migration/azure_setup.sql` at `a8cdad4`, sha256 `7315f0ac…3491`) |
-| `tests/role_matrix.txt` | the matrix: 365 checks over 7 roles (allowed, forbidden, expected values) |
+| `tests/role_matrix.txt` | the matrix: 428 checks over 7 roles (allowed, forbidden, expected values, named exceptions) |
 | `tests/role_matrix.sh` | runs the matrix, one connection per role; `X1_REQUIRE_TLS=1` adds a TLS check |
 | `tests/catalog_snapshot.sql`, `tests/expected_catalog.txt` | normalised listing of roles, memberships, ACLs and default privileges, and its declared content |
 | `tests/reference_catalog.txt`, `tests/catalog_difference.txt` | the listing the original script gives, and the only allowed difference from it |

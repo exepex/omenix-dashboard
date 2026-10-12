@@ -9,6 +9,7 @@ here="$(cd "$(dirname "$0")" && pwd)"
 run() { psql -X -q -v ON_ERROR_STOP=1 -d "$1" -f "$here/$2"; }
 run postgres 00_roles.sql
 run postgres 10_database.sql
+run omenix 15_server_wide.sql
 run omenix 20_schemas.sql
 run omenix 30_grants.sql
 run omenix 40_default_privileges.sql

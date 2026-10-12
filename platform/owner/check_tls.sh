@@ -19,6 +19,10 @@ out="$evidence_dir/$today-x1-tls.txt"
     for p in require_secure_transport ssl_min_protocol_version; do
       az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n "$p" --query "{name:name, value:value}" -o tsv
     done
+    rst="$(az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n require_secure_transport --query value -o tsv | tr 'A-Z' 'a-z')"
+    if [ "$rst" = on ]; then rst_ok=yes; else rst_ok=no; fi
+  else
+    rst_ok="not checked (X1_SKIP_AZ=1)"
   fi
   echo; echo "== 2. connection without TLS (sslmode=disable) must be refused"
   # PGSSLROOTCERT is removed for this attempt only: with sslrootcert=system libpq itself refuses sslmode=disable
@@ -37,6 +41,6 @@ out="$evidence_dir/$today-x1-tls.txt"
   echo; echo "== 3. verified TLS connection as dashboard_app (sslmode=$PGSSLMODE)"
   PGUSER=dashboard_app psql -X -d omenix -A -F ' ' -c "SELECT 'ssl=' || ssl, 'version=' || version, 'cipher=' || cipher FROM pg_stat_ssl WHERE pid = pg_backend_pid()" -t \
     && tls_ok=yes || tls_ok=no
-  echo; echo "RESULT: non-TLS refused: $plain_refused; verified TLS connection works: $tls_ok"
+  echo; echo "RESULT: require_secure_transport on: $rst_ok; non-TLS refused: $plain_refused; verified TLS connection works: $tls_ok"
 } 2>&1 | tee "$out"
 echo "Saved: $out"

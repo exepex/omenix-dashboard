@@ -23,14 +23,19 @@ file before committing it.
 
 ## 1. Bring the server to the declared state (1 minute, once)
 
-The server still has the effect of the original `azure_setup.sql`. `platform/sql` changes exactly one thing on it
-(`platform/tests/catalog_difference.txt`): functions that the owner roles create later are no longer executable by
-everyone (PostgreSQL's default lets `PUBLIC` execute every new function). Without this step the matrix in step 2 fails
-on purpose.
+The server still has the effect of the original `azure_setup.sql`. In `omenix`, `platform/sql` changes exactly one
+thing (`platform/tests/catalog_difference.txt`): functions that the owner roles create later are no longer executable
+by everyone (PostgreSQL's default lets `PUBLIC` execute every new function). Without this step the matrix in step 2
+fails on purpose. It also **tries** to close named exceptions 1 and 2 of `platform/README.md` (other databases, large
+objects); whether Azure's admin is allowed to is unknown until this run, and the answer is evidence either way.
 
 - [ ] `platform/owner/apply_real.sh`: asks the admin name and password (hidden), prints the changes it is about to
       make (expected: the three `acl default functions` lines), applies `platform/sql/00..40`, and compares the result
       with `expected_catalog.txt`.
+- [ ] Read the block `still open for PUBLIC`: each row is a named exception the admin could not close (`0 rows` = all
+      closed). Warnings such as `no privileges could be revoked` belong to it. Both outcomes are fine to commit.
+- [ ] If anything that uses the `postgres` database stops working after a successful revoke (nothing of ours does),
+      undo it as admin: `GRANT CONNECT, TEMPORARY ON DATABASE postgres TO PUBLIC;`.
 - [ ] Pass = `RESULT: catalog identical to expected_catalog.txt after apply: yes`. Commit the evidence file.
 
 ## 2. Criteria 1 and 2: the role matrix with each runtime credential (about 2 minutes)
@@ -38,12 +43,14 @@ on purpose.
 - [ ] `platform/owner/run_real_matrix.sh`
   - asks the admin user name and password (hidden), then psql asks the password of `stock_writer`, `fno_writer`,
     `dashboard_app` and `stock_inbox_reader`, once each;
-  - creates the probe tables `stock.x1_probe`, `fno.x1_probe`, `app.x1_probe` as the owner roles, runs 276 checks over
+  - creates the probe tables `stock.x1_probe`, `fno.x1_probe`, `app.x1_probe` as the owner roles, runs 312 checks over
     verified TLS (every runtime role, including "connection is encrypted"), and drops the probe tables again, also
     after a failure;
   - compares the server's catalog with `platform/tests/expected_catalog.txt`.
 - [ ] Optional, also the owner roles: `X1_INCLUDE_OWNERS=1 platform/owner/run_real_matrix.sh` (asks their passwords).
-- [ ] Pass = last line `RESULT: matrix passed: yes; snapshot identical: yes`.
+- [ ] Pass = last line `RESULT: matrix passed: yes; snapshot identical: yes; open named exceptions: N`. `OPEN` lines
+      are the named exceptions of `platform/README.md` that the server does not enforce (expected: up to 8 per role,
+      fewer if step 1 closed some); they are listed, never counted as passes.
   If the snapshot differs, do not change anything: commit the file and hand it over. A difference that only names
   Azure's own roles is expected to be harmless; any other difference is drift and is fixed by running
   `platform/sql/apply.sh` (as admin, with `PGHOST`, `PGUSER`, `PGSSLMODE=verify-full`, `PGSSLROOTCERT=system` set)
@@ -57,14 +64,15 @@ on purpose.
   - tries a connection **without** encryption under a made-up user name (`x1_tls_probe`, no password involved): the
     server must refuse it because it is not encrypted;
   - connects as `dashboard_app` with verified TLS (asks its password) and shows the TLS version and cipher.
-- [ ] Pass = `RESULT: non-TLS refused: yes; verified TLS connection works: yes`.
+- [ ] Pass = `RESULT: require_secure_transport on: yes; non-TLS refused: yes; verified TLS connection works: yes`.
 - [ ] Commit the evidence file as in step 2.
 
 ## 4. Criterion 5: firewall and server settings from az (1 minute)
 
 - [ ] `platform/owner/server_evidence.sh`
-  - prints region, tier, version, storage, backup retention, public access, encryption and the firewall rules, each
-    compared with `platform/README.md`. No IDs, subscription or admin name are queried.
+  - prints region, tier, version, storage, backup retention, public access, encryption, `require_secure_transport` and
+    the firewall rules, each compared with the expected values it reads from the `server-settings` table in
+    `platform/README.md`. No IDs, subscription or admin name are queried.
 - [ ] Pass = `RESULT: 0 difference(s) from platform/README.md`. If not 0, either the server or the README is wrong:
       hand the file over, do not edit the README to match.
 - [ ] Commit the evidence file.
@@ -81,15 +89,17 @@ on purpose.
     current IP only**;
   - checks the marker token and the catalog (roles, schemas, grants) on the scratch server;
   - asks you to **type the scratch server's name** and deletes it, then confirms it is gone;
-  - drops the marker table on `omenix-pg`.
+  - drops the marker table on `omenix-pg`, always, even if the script stops part-way; a stop after the restore started
+    prints the delete command for the scratch server (never deleted without your typed confirmation).
 - [ ] Pass = `RESULT: marker restored: yes; catalog identical: yes; scratch server deleted: yes`.
 - [ ] If the script stops part-way: delete the scratch server in the portal (or
-      `az postgres flexible-server delete -g "$X1_RG" -n omenix-pg-x1restore --yes`) so it stops costing money, and
-      drop the marker as admin: `SET ROLE fno_owner; DROP TABLE IF EXISTS fno.x1_restore_marker;`.
+      `az postgres flexible-server delete -g "$X1_RG" -n omenix-pg-x1restore --yes`) so it stops costing money. The
+      marker is dropped by the script; if it says it could not, drop it as admin:
+      `SET ROLE fno_owner; DROP TABLE IF EXISTS fno.x1_restore_marker;`.
 - [ ] A day later: Azure portal, Cost Management, Cost analysis, filter resource `omenix-pg-x1restore`; write the
       amount into the `COST:` line of the evidence file. Commit it.
 
-## 6. Protect the server: delete lock and failed-login alert (2 minutes)
+## 6. Protect the server: delete lock, failed-login and storage alerts (2 minutes)
 
 Do this after step 5 (the lock is only on `omenix-pg`, so the restore test's scratch server can still be deleted, but
 running it afterwards keeps the steps simple).
@@ -100,12 +110,14 @@ running it afterwards keeps the steps simple).
   - asks for the email address for alerts (typed at the prompt, kept only in Azure) and creates the action group
     `omenix-db-alerts`;
   - creates the metric alert `omenix-pg-failed-connections`: more than 10 failed connections in 15 minutes, checked
-    every 5 minutes (`X1_FAILED_THRESHOLD=<n>` changes the 10).
+    every 5 minutes (`X1_FAILED_THRESHOLD=<n>` changes the 10);
+  - creates the metric alert `omenix-pg-storage`: storage above 80 percent (`X1_STORAGE_THRESHOLD=<n>`), the
+    mitigation for named exceptions 1 and 2 (large objects and temporary tables can fill the disk).
 - [ ] What the alert can and cannot do (strong evidence, Microsoft's Flexible Server metric list): the metric
       `connections_failed` ("Failed Connections", enabled by default) counts **every** failed connection: wrong
       password, unknown user, a non-TLS attempt (step 3 makes one), a role over its connection limit. It does not say
       which user or address failed; for that, server logs would have to be sent to Log Analytics (paid, not set up).
-- [ ] Pass = `RESULT: lock, action group and alert in place`. Azure sends a confirmation email to the address; check
+- [ ] Pass = `RESULT: lock, action group and both alerts in place`. Azure sends a confirmation email to the address; check
       it arrived. Commit the evidence file (it holds no email address).
 - [ ] To delete the server on purpose some day: `az lock delete -g "$X1_RG" --name omenix-pg-no-delete --resource omenix-pg --resource-type Microsoft.DBforPostgreSQL/flexibleServers` first.
 

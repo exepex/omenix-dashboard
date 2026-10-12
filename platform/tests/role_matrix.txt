@@ -22,6 +22,20 @@ stock_owner,app_owner,stock_writer,stock_inbox_reader | value=false | SELECT has
 app_owner,dashboard_app,stock_inbox_reader | value=true | SELECT has_schema_privilege('app', 'USAGE')::text AS v | may enter schema app
 stock_owner,fno_owner,stock_writer,fno_writer | value=false | SELECT has_schema_privilege('app', 'USAGE')::text AS v | may not enter schema app
 
+# Named exceptions (platform/README.md): PostgreSQL lets every role do these unless a superuser closes them.
+# known:<x> = OPEN while the server allows it, PASS once closed (sql/05_server_wide.sql tries; on Azure the admin may not be able to).
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SELECT lo_from_bytea(0, 'x1'::bytea) | create a large object (stored on disk, outlives the session)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SELECT lo_create(0) | create a large object
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SELECT lo_creat(-1) | create a large object
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:value= | SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT') | connect to a database other than omenix
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:value= | SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'TEMP') | create temporary tables in a database other than omenix
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SET statement_timeout = 0 | switch off its own statement timeout for its session
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | ALTER ROLE CURRENT_USER SET statement_timeout = 0 | switch off its own statement timeout persistently (caught by the catalog snapshot)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | ALTER ROLE CURRENT_USER PASSWORD NULL | change or remove its own password (rolled back here)
+
+# Detection: the large-object exception has not been used
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | value=0 | SELECT count(*)::text AS v FROM pg_largeobject_metadata | no large object exists in omenix
+
 # Every role: nothing can be created in public
 stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TABLE public.x1_matrix (i int) | no table in public
 stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE VIEW public.x1_matrix_v AS SELECT 1 AS i | no view in public

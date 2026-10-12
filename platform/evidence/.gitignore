@@ -1,0 +1,5 @@
+# Temporary files of the owner scripts (removed by their traps; never commit them)
+.snapshot.*
+.before.*
+.after.*
+.restore.*

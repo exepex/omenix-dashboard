@@ -7,6 +7,9 @@
 #      documented Flexible Server metric, enabled by default) above X1_FAILED_THRESHOLD (default 10) in 15 minutes,
 #      checked every 5 minutes. The metric counts EVERY failed connection (wrong password, unknown user, non-TLS attempt,
 #      connection limit reached), not only password guessing; it does not say who failed. Idempotent: re-running updates.
+#   4. Metric alert "omenix-pg-storage": average Storage percent (metric storage_percent) above X1_STORAGE_THRESHOLD
+#      (default 80) over 15 minutes. Mitigation for the large-object exception (platform/README.md): any role can
+#      store large objects, and nothing else stops a leaked credential from filling the 32 GiB disk.
 # Run on the owner's Mac from the repository root:   X1_RG=<resource group> platform/owner/protect_server.sh
 # Output: platform/evidence/<date>-x1-protect.txt (no email address, IDs or subscription).
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -39,6 +42,14 @@ printf 'Email address for alerts (stored only in Azure, not shown or saved here)
     || die "alert not created"
   az monitor metrics alert show -g "$X1_RG" -n omenix-pg-failed-connections \
     --query "{name:name, enabled:enabled, severity:severity, window:windowSize, every:evaluationFrequency, metric:criteria.allOf[0].metricName, aggregation:criteria.allOf[0].timeAggregation, operator:criteria.allOf[0].operator, threshold:criteria.allOf[0].threshold}" -o yaml
-  echo; echo "RESULT: lock, action group and alert in place"
+  echo; echo "== 4. storage alert (mitigation for the large-object exception and any runaway writer)"
+  az monitor metrics alert create -g "$X1_RG" -n omenix-pg-storage --scopes "$server_id" \
+    --condition "avg storage_percent > ${X1_STORAGE_THRESHOLD:-80}" --window-size 15m --evaluation-frequency 5m \
+    --severity 2 --action omenix-db-alerts \
+    --description "Storage of $server above ${X1_STORAGE_THRESHOLD:-80} percent (X1)" -o none \
+    || die "storage alert not created"
+  az monitor metrics alert show -g "$X1_RG" -n omenix-pg-storage \
+    --query "{name:name, enabled:enabled, window:windowSize, every:evaluationFrequency, metric:criteria.allOf[0].metricName, aggregation:criteria.allOf[0].timeAggregation, operator:criteria.allOf[0].operator, threshold:criteria.allOf[0].threshold}" -o yaml
+  echo; echo "RESULT: lock, action group and both alerts in place"
 } 2>&1 | tee "$out"
 echo "Saved: $out"

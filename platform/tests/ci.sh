@@ -10,7 +10,9 @@
 #   2. platform/sql applied on top of that server converges it to expected_catalog.txt;
 #   3. platform/sql on an empty server yields the same catalog, and a second run changes nothing (idempotent);
 #   4. the role matrix passes for all seven roles;
-#   5. the matrix catches drift (each injected drift makes it fail), and platform/sql removes the drift again.
+#   5. the matrix catches drift (each injected drift makes it fail), and platform/sql removes the drift again;
+#   6. the named exceptions are real (step 4 confirms them with real attempts), and they close where the admin is
+#      allowed to close them (15_server_wide.sql), without locking the admin out.
 # Like Azure, the admin is a non-superuser with only CREATEDB and CREATEROLE (role x1_admin, created here).
 # Connection: PGHOST/PGPORT of a server where X1_SUPERUSER (default postgres) logs in without a password (trust).
 set -euo pipefail
@@ -30,12 +32,23 @@ same_as_expected() {
 }
 reset() {
   su_sql -c "DROP DATABASE IF EXISTS omenix WITH (FORCE)"
+  # Undo step 6 of an earlier run: template databases back to the superuser, PostgreSQL's default PUBLIC rights.
+  su_sql -c "ALTER DATABASE postgres OWNER TO $superuser" -c "ALTER DATABASE template1 OWNER TO $superuser" \
+    -c "GRANT CONNECT, TEMPORARY ON DATABASE postgres TO PUBLIC" -c "GRANT CONNECT ON DATABASE template1 TO PUBLIC"
+  if [ "$(su_sql -At -c "SELECT count(*) FROM pg_roles WHERE rolname = 'x1_admin'")" = 1 ]; then
+    su_sql -c "REVOKE ALL ON DATABASE postgres, template1 FROM x1_admin"
+  fi
   for r in stock_owner fno_owner app_owner stock_writer fno_writer dashboard_app stock_inbox_reader x1_admin; do
     su_sql -c "DROP ROLE IF EXISTS $r"
   done
   su_sql -c "CREATE ROLE x1_admin LOGIN CREATEDB CREATEROLE"
 }
 apply_platform() { PGOPTIONS="-c client_min_messages=warning" admin "$platform/sql/apply.sh" > /dev/null; }
+
+echo "== 0. owner scripts read their expected server settings from platform/README.md"
+"$platform/owner/server_evidence.sh" --list-expected > "$work/settings.txt" \
+  || { cat "$work/settings.txt"; echo "FAILED: README server-settings table" >&2; exit 1; }
+echo "ok: $(wc -l < "$work/settings.txt" | tr -d ' ') expected settings parsed from README.md"
 
 echo "== 1. the owner's original script"
 reset
@@ -67,10 +80,22 @@ same_as_expected again "second run of platform/sql changes nothing"
 echo "== 4. role matrix, all seven roles"
 admin_sql omenix -f "$here/fixtures_up.sql"
 "$here/role_matrix.sh" > "$work/matrix.txt" || { cat "$work/matrix.txt"; echo "FAILED: role matrix" >&2; exit 1; }
-tail -1 "$work/matrix.txt"
+grep '^role matrix:' "$work/matrix.txt"
+# The named exceptions are real, and the matrix's privilege checks agree with real attempts (same role, same server).
+for r in stock_writer dashboard_app; do
+  PGUSER=$r psql -X -q -d template1 -c "SELECT 1" > /dev/null 2>&1 || { echo "FAILED: $r expected to reach template1 here" >&2; exit 1; }
+  PGUSER=$r psql -X -q -d postgres -c "CREATE TEMP TABLE x1_t (i int)" > /dev/null 2>&1 \
+    || { echo "FAILED: $r expected a temp table in postgres here" >&2; exit 1; }
+  lo="$(PGUSER=$r psql -X -q -A -t -d omenix -c "SELECT lo_from_bytea(0, 'x1'::bytea)")" \
+    || { echo "FAILED: $r expected a large object here" >&2; exit 1; }
+  admin_sql omenix -c "SET ROLE $r" -c "SELECT lo_unlink($lo)" > /dev/null 2>&1 \
+    || su_sql -d omenix -c "SELECT lo_unlink($lo)" > /dev/null
+done
+echo "ok: named exceptions confirmed by real attempts (template1 connect, temp table in postgres, large object)"
 
 echo "== 5. drift is caught (catalog and matrix) and removed by platform/sql"
-# Each drift: who applies it | SQL | the role whose matrix must then fail ("-": a latent drift with no effect a role
+# Each drift: who applies it (an owner role via SET ROLE, the admin, or login:<role> = the role itself) | SQL | the role
+# whose matrix must then fail ("-": a latent drift with no effect a role
 # can exercise today, e.g. a default grant on a schema the role cannot enter; only the catalog shows it)
 drifts='stock_owner|GRANT CREATE ON SCHEMA stock TO stock_writer|stock_writer
 app_owner|ALTER DEFAULT PRIVILEGES IN SCHEMA app GRANT DELETE ON TABLES TO dashboard_app|dashboard_app
@@ -85,10 +110,15 @@ x1_admin|ALTER ROLE fno_writer CONNECTION LIMIT 50|fno_writer
 x1_admin|ALTER ROLE dashboard_app SET statement_timeout = 0|dashboard_app
 x1_admin|ALTER ROLE app_owner CREATEDB|app_owner
 stock_owner|ALTER DEFAULT PRIVILEGES IN SCHEMA stock GRANT EXECUTE ON FUNCTIONS TO dashboard_app|dashboard_app
-fno_owner|ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO PUBLIC|fno_writer'
+fno_owner|ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO PUBLIC|fno_writer
+login:dashboard_app|ALTER ROLE CURRENT_USER SET statement_timeout = 0|dashboard_app
+login:stock_writer|ALTER ROLE CURRENT_USER SET statement_timeout = 0|stock_writer'
 while IFS='|' read -r who sql victim; do
-  if [ "$who" = x1_admin ]; then admin_sql omenix -c "$sql"
-  else admin_sql omenix -c "SET ROLE $who" -c "$sql"; fi
+  case "$who" in
+    x1_admin) admin_sql omenix -c "$sql" ;;
+    login:*) PGUSER="${who#login:}" psql -X -q -v ON_ERROR_STOP=1 -d omenix -c "$sql" ;;  # the role itself
+    *) admin_sql omenix -c "SET ROLE $who" -c "$sql" ;;
+  esac
   # Recreate the probe tables so drifted default privileges reach them.
   admin_sql omenix -f "$here/fixtures_down.sql"
   admin_sql omenix -f "$here/fixtures_up.sql"
@@ -113,5 +143,26 @@ while IFS='|' read -r who sql victim; do
   "$here/role_matrix.sh" > "$work/matrix.txt" || { cat "$work/matrix.txt"; echo "FAILED: matrix after repair" >&2; exit 1; }
 done <<< "$drifts"
 
+echo "== 6. where the admin may close them, the named exceptions close"
+# Like an Azure admin that owns the template databases; the large-object functions can only be revoked by a
+# superuser here (PostgreSQL's bootstrap superuser owns them), standing in for a server where the admin can.
+su_sql -c "ALTER DATABASE postgres OWNER TO x1_admin" -c "ALTER DATABASE template1 OWNER TO x1_admin"
+for f in 'lo_create(oid)' 'lo_creat(integer)' 'lo_from_bytea(oid, bytea)'; do
+  su_sql -d omenix -c "REVOKE EXECUTE ON FUNCTION pg_catalog.$f FROM PUBLIC"
+done
+PGOPTIONS="-c client_min_messages=warning" admin "$platform/sql/apply.sh" > "$work/apply6.txt"
+grep -q '(0 rows)' "$work/apply6.txt" || { cat "$work/apply6.txt"; echo "FAILED: 15_server_wide.sql left something open" >&2; exit 1; }
+admin_sql postgres -c "SELECT 1" > /dev/null || { echo "FAILED: the admin locked itself out of postgres" >&2; exit 1; }
+for r in stock_writer dashboard_app; do
+  if PGUSER=$r psql -X -q -d template1 -c "SELECT 1" > /dev/null 2>&1; then echo "FAILED: $r still reaches template1" >&2; exit 1; fi
+  if PGUSER=$r psql -X -q -d postgres -c "SELECT 1" > /dev/null 2>&1; then echo "FAILED: $r still reaches postgres" >&2; exit 1; fi
+done
+"$here/role_matrix.sh" > "$work/matrix6.txt" || { cat "$work/matrix6.txt"; echo "FAILED: matrix after closing" >&2; exit 1; }
+open_left="$(grep '^OPEN  ' "$work/matrix6.txt" | grep -v -e 'statement_timeout' -e 'PASSWORD' || true)"
+[ -z "$open_left" ] || { echo "$open_left"; echo "FAILED: exceptions still open after closing" >&2; exit 1; }
+grep '^role matrix:' "$work/matrix6.txt"
+echo "ok: large objects and other databases closed; only the self-change exceptions (timeout, password) stay open"
+
 admin_sql omenix -f "$here/fixtures_down.sql"
+reset
 echo "X1 platform tests: all passed"
