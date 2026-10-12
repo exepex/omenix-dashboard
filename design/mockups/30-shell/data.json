@@ -24,31 +24,29 @@
  "families": {
   "rule": {
    "label": "Rule-based",
-   "icon": "rule"
-  },
-  "ai": {
-   "label": "AI-based",
-   "icon": "smart_toy"
+   "icon": "rule",
+   "long": "Rule-based"
   },
   "hybrid": {
-   "label": "Hybrid (rule + AI)",
-   "icon": "bolt"
+   "label": "Hybrid",
+   "icon": "bolt",
+   "long": "Hybrid: AI team within the rules"
+  },
+  "ai": {
+   "label": "AI team",
+   "icon": "smart_toy",
+   "long": "AI team, fully autonomous"
   },
   "baseline": {
    "label": "Baselines",
-   "icon": "trending_flat"
+   "icon": "trending_flat",
+   "long": "Baselines"
   },
   "manual": {
    "label": "You",
-   "icon": "account_circle"
+   "icon": "account_circle",
+   "long": "You"
   }
- },
- "family_text": {
-  "manual": "Trades you place yourself.",
-  "rule": "Written rules decide; no AI in the decision. Stocks: rules on the price model's forecast and the news (for example “Model + news”). F&O: Book 1, the approved playbook.",
-  "ai": "An AI decides. Stocks: AI traders that read the prices and the news (for example “AI combined A”). F&O: Book 3, the fully AI system.",
-  "hybrid": "The AI decides, but only inside limits that the rules set. F&O only: Book 2. The stock tool has no hybrid strategy.",
-  "baseline": "Simple yardsticks a strategy has to beat (“Always buy”, “Follow yesterday”, “Model without news”); never in the head-to-head."
  },
  "pick_rules": {
   "best_expected_gain": "Best expected gain",
@@ -439,13 +437,13 @@
      "currency": "INR"
     },
     "fno-b2": {
-     "name": "Hybrid (rule + AI) · F&O Book 2",
+     "name": "Hybrid · F&O Book 2",
      "kind": "strategy",
      "approach": "hybrid",
      "currency": "INR"
     },
     "fno-b3": {
-     "name": "AI-based · F&O Book 3",
+     "name": "AI team · F&O Book 3",
      "kind": "strategy",
      "approach": "ai",
      "currency": "INR"
@@ -456,7 +454,7 @@
      "id": "RELIANCE",
      "family": "ai",
      "strategy_id": "ai.combined.opus.v1",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "pick_rules": [
       "best_expected_gain",
       "highest_probability"
@@ -538,6 +536,14 @@
    "no_pick": [
     "HDFCBANK"
    ],
+   "family_text": {
+    "manual": "Trades you place yourself.",
+    "rule": "Rules read the data, use a standard strategy or invent a new one, and predict the price. No AI is involved. Stocks: for example “Model + news”. F&O: Book 1.",
+    "hybrid": "The AI team does the analysis and research, but acts only inside the rule-based limits. Stocks: planned, no hybrid stock strategy yet. F&O: Book 2.",
+    "ai": "A team of AI agents with different roles decides on its own: it uses an existing strategy or invents a new one. F&O: Book 3.",
+    "baseline": "Simple yardsticks a strategy has to beat (“Always buy”, “Follow yesterday”, “Model without news”); never in the head-to-head."
+   },
+   "example_note": "EXAMPLE DATA copied from the application's own catalogue records (stock tool example files of 6-7 Oct 2026). F&O contract prices and the Manual account's starting cash are labelled examples. Nothing here places a real order.",
    "default_amount": 100000.0,
    "go_live": {
     "proven": false,
@@ -554,77 +560,62 @@
     {
      "kind": "strategy",
      "label": "Model + news",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + half news",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + double news",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + confirmed news only",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + major news only",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + news + global cues",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + news, calm markets only",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + news, 60% bar",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Always buy",
-     "sub": "Strategy · Baselines"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Follow yesterday",
-     "sub": "Strategy · Baselines"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model without news",
-     "sub": "Strategy · Baselines"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
-     "label": "AI news & results",
-     "sub": "Strategy · AI-based"
-    },
-    {
-     "kind": "strategy",
-     "label": "AI price pattern & mood",
-     "sub": "Strategy · AI-based"
-    },
-    {
-     "kind": "strategy",
-     "label": "AI combined B",
-     "sub": "Strategy · AI-based"
-    },
-    {
-     "kind": "strategy",
-     "label": "AI combined A",
-     "sub": "Strategy · AI-based"
+     "label": "AI team",
+     "sub": "Strategy"
     },
     {
      "kind": "news",
@@ -1037,8 +1028,8 @@
      "kind": "manual",
      "approach": "manual",
      "currency": "USD",
-     "capital": 6000.0,
-     "cash": 5007.6,
+     "capital": 5000.0,
+     "cash": 4007.6,
      "open_structures": 0,
      "at_risk": 0,
      "capital_note": "Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
@@ -1061,7 +1052,7 @@
      "id": "NVDA",
      "family": "ai",
      "strategy_id": "ai.combined.opus.v1",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "pick_rules": [
       "highest_probability"
      ],
@@ -1101,7 +1092,7 @@
      "id": "NVDA",
      "family": "ai",
      "strategy_id": "ai.combined.opus.v1",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "pick_rules": [
       "best_expected_gain"
      ],
@@ -1180,6 +1171,14 @@
     }
    ],
    "no_pick": [],
+   "family_text": {
+    "manual": "Trades you place yourself.",
+    "rule": "Rules read the data, use a standard strategy or invent a new one, and predict the price. No AI is involved. Stocks: for example “Model + news”.",
+    "hybrid": "The AI team does the analysis and research, but acts only inside the rule-based limits. Stocks: planned, no hybrid stock strategy yet.",
+    "ai": "A team of AI agents with different roles decides on its own: it uses an existing strategy or invents a new one.",
+    "baseline": "Simple yardsticks a strategy has to beat (“Always buy”, “Follow yesterday”, “Model without news”); never in the head-to-head."
+   },
+   "example_note": "EXAMPLE DATA copied from the application's own catalogue records (stock tool example files of 6-7 Oct 2026). The Manual account's starting cash is a labelled example. Nothing here places a real order.",
    "default_amount": 1000.0,
    "go_live": {
     "proven": false,
@@ -1196,77 +1195,62 @@
     {
      "kind": "strategy",
      "label": "Model + news",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + half news",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + double news",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + confirmed news only",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + major news only",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + news + global cues",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + news, calm markets only",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model + news, 60% bar",
-     "sub": "Strategy · Rule-based"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Always buy",
-     "sub": "Strategy · Baselines"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Follow yesterday",
-     "sub": "Strategy · Baselines"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
      "label": "Model without news",
-     "sub": "Strategy · Baselines"
+     "sub": "Strategy"
     },
     {
      "kind": "strategy",
-     "label": "AI news & results",
-     "sub": "Strategy · AI-based"
-    },
-    {
-     "kind": "strategy",
-     "label": "AI price pattern & mood",
-     "sub": "Strategy · AI-based"
-    },
-    {
-     "kind": "strategy",
-     "label": "AI combined B",
-     "sub": "Strategy · AI-based"
-    },
-    {
-     "kind": "strategy",
-     "label": "AI combined A",
-     "sub": "Strategy · AI-based"
+     "label": "AI team",
+     "sub": "Strategy"
     },
     {
      "kind": "news",

@@ -44,19 +44,19 @@ PF.mount({screen: 'shell', group: null, render(main, c) {
   main.append(el('div', {class: 'parts'},
     part('search', 'primary', 'Global search', `The only search box: ${india ? 'a stock, an index, or an option by its words (nifty 22800 call) or its exchange code (NIFTY26OCT22800CE)' : 'a stock or company'}, plus strategies, news and pages. Every stock and contract result has B and S. Press / or Ctrl K anywhere.`,
       btn('Open search', () => c.openPal(''), undefined, 'search'), btn(india ? 'Try “NIFTY26OCT22800CE”' : 'Try “nvidia”', () => c.openPal(india ? 'NIFTY26OCT22800CE' : 'nvidia'))),
-    part('public', 'info', 'Market switch and status', india ? 'Beside it: whether the market is open or closed, and when that changes; your own buy and sell are paused while it is closed. India shows stocks and F&O. Switch to US: every F&O element is absent there, not empty. Currencies are never summed.' : 'US shows stocks only: F&O is India only, so every F&O element is absent here. Switch to India to see it.',
+    part('public', 'info', 'Market switch and status', (india ? 'India shows stocks and F&O; in the US every F&O element is absent, not empty.' : 'US: stocks only.') + ' Beside it: whether the market is open or closed, and when that changes; your own buy and sell are paused while it is closed. Currencies are never summed.',
       btn(india ? 'Switch to US' : 'Switch to India', () => { c.st.m = india ? 'us' : 'india'; c.st.wl = 0; c.rerender(); })),
     part('monitoring', 'neutral', 'Index strip', `${P.indices.map(id => c.item(id).sym).join(', ')}. Hover any index for its as-of time and source. Stale values turn grey and say “stale”.`,
       el('span', {class: 'muted', style: 'font-size:12.5px'}, 'Top bar, right of the market switch; on a phone, a row under the search.')),
     part('dashboard', 'primary', 'Navigation rail', 'Seven groups (Dashboard, Markets, Trade, Portfolio, Strategies, Research, Control) plus Assistant, Help and Settings. Hover or focus a group for its screens; pinned screens sit below.',
       btn(c.st.rail === 'icons' ? 'Show labels' : 'Icons only', () => { c.st.rail = c.st.rail === 'icons' ? 'labels' : 'icons'; c.rerender(); })),
-    part('bolt', 'warn', 'Today’s buy picks panel', 'Left bar on desktop, “Picks” tab on a phone: each approach’s pick for today (rule-based, AI-based, hybrid) with how many strategies agree, the model’s chance, Yes or No after market costs and the strategy’s record on that stock. Buy and Sell on every row while the market is open.',
+    part('bolt', 'warn', 'Today’s buy picks panel', 'Left bar on desktop, “Picks” tab on a phone: each approach’s pick for today (rule-based, AI team, hybrid) with how many strategies agree, the model’s chance, Yes or No after market costs and the strategy’s record on that stock. Buy and Sell on every row while the market is open.',
       btn('Rule-based only', () => { c.st.ap = 'rule'; c.rerender(); }), btn('All', () => { c.st.ap = 'all'; c.rerender(); })),
     part('open_in_new', 'info', 'Hover cards', 'Every ticker and contract is a link. Hover (or tap) for price, change, as-of, your position and Chart, Chain, Buy, Sell:',
       el('div', {class: 'inline-tk'}, ...firstTk.map(id => inst(id)))),
-    part('more_vert', 'neutral', 'Context menu', 'The same small menu on every row: Chart, Option chain, Buy or sell, Add to watchlist, News, Open details, Set an alert.',
+    part('more_vert', 'neutral', 'Context menu', `The same small menu on every row: Chart, ${india ? 'Option chain, ' : ''}Buy or sell, Add to watchlist, News, Open details, Set an alert.`,
       btn('Open a row menu', e => c.openMenu(firstTk[0], e.currentTarget), undefined, 'more_vert')),
-    part('receipt_long', 'paper', 'Order window', 'Manual paper account only; checks against its limits before confirming; F&O refused where our data has no executable quote. “Paper order: no real order is placed.”',
+    part('receipt_long', 'paper', 'Order window', (india ? 'Manual paper account only; checks against its limits before confirming; F&O refused where our data has no executable quote.' : 'Manual paper account only; checks cash and holdings before confirming.') + ' Locked while the market is closed.',
       ...(india ? [btn('Stock buy', () => c.openOrder('RELIANCE', 'buy'), 'md-btn small buy'), btn('Option buy (passes)', () => c.openOrder('NIFTY26OCT23300CE', 'buy')), btn('Option sell (blocked)', () => c.openOrder('NIFTY26OCT22800CE', 'sell')), btn('Future (refused)', () => c.openOrder('NIFTY26OCTFUT', 'buy'))]
                  : [btn('Stock buy', () => c.openOrder('NVDA', 'buy'), 'md-btn small buy'), btn('Sell held shares', () => c.openOrder('AAPL', 'sell'), 'md-btn small sell')])),
     part('dock_to_left', 'primary', 'Right drawer and bottom sheet', 'Orders and quick views open without leaving the page: from the right on desktop, as a bottom sheet on a phone. Esc closes; focus returns where it was.',
@@ -81,7 +81,7 @@ PF.mount({screen: 'shell', group: null, render(main, c) {
       el('ul', {class: 'honest'},
         el('li', {}, el('span', {class: 'mb-mark na'}, icon('remove')), el('span', {}, el('b', {}, 'Streaming prices'), 'Every price carries its as-of time. A live feed is a separate, priced decision.')),
         el('li', {}, el('span', {class: 'mb-mark no'}, icon('close')), el('span', {}, el('b', {}, 'Real orders'), 'Never. Orders are Paper: on the button, the confirmation and every result.')),
-        el('li', {}, el('span', {class: 'mb-mark na'}, icon('remove')), el('span', {}, el('b', {}, 'Market depth'), 'Not recorded. Best bid and ask only, from the 3 pm NIFTY snapshot, with its time.')),
+        el('li', {}, el('span', {class: 'mb-mark na'}, icon('remove')), el('span', {}, el('b', {}, 'Market depth'), india ? 'Not recorded. Best bid and ask only, from the 3 pm NIFTY snapshot, with its time.' : 'Not recorded: no order book in our data.')),
         el('li', {}, el('span', {class: 'mb-mark na'}, icon('remove')), el('span', {}, el('b', {}, 'Mutual funds, IPOs, bonds'), 'Out of scope; not shown.'))))));
 }});
 </script>

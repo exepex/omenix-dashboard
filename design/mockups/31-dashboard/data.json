@@ -51,6 +51,25 @@
      ]
     },
     {
+     "family": "hybrid",
+     "lines": [
+      {
+       "label": "Stocks",
+       "value": null,
+       "pnl": null,
+       "pnl_label": "",
+       "sub": "No hybrid stock strategy yet: planned (owner, 13 Oct 2026)"
+      },
+      {
+       "label": "F&O Book 2",
+       "value": 500000.0,
+       "pnl": 0.0,
+       "pnl_label": "no trade yet",
+       "sub": "No approved strategy yet · loss limit used ₹0 of ₹30,000"
+      }
+     ]
+    },
+    {
      "family": "ai",
      "lines": [
       {
@@ -75,19 +94,6 @@
        "sub": "No approved strategy yet · loss limit used ₹0 of ₹30,000"
       }
      ]
-    },
-    {
-     "family": "hybrid",
-     "lines": [
-      {
-       "label": "F&O Book 2",
-       "value": 500000.0,
-       "pnl": 0.0,
-       "pnl_label": "no trade yet",
-       "sub": "No approved strategy yet · loss limit used ₹0 of ₹30,000"
-      }
-     ],
-     "note": "Stocks: the stock tool has no hybrid strategy."
     },
     {
      "family": "baseline",
@@ -200,7 +206,7 @@
      "avg": 1182.0,
      "unrealised": 3024.0,
      "family": "ai",
-     "strategy": "AI news & results",
+     "strategy": "AI team",
      "strategy_id": "ai.news_results.sonnet.v1",
      "horizon": 5,
      "exit": "2026-10-08",
@@ -213,7 +219,7 @@
      "avg": 1182.0,
      "unrealised": 3024.0,
      "family": "ai",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "strategy_id": "ai.combined.opus.v1",
      "horizon": 5,
      "exit": "2026-10-08",
@@ -252,7 +258,7 @@
      "avg": 711.5,
      "unrealised": -7.0,
      "family": "ai",
-     "strategy": "AI news & results",
+     "strategy": "AI team",
      "strategy_id": "ai.news_results.sonnet.v1",
      "horizon": 5,
      "exit": "2026-10-08",
@@ -265,7 +271,7 @@
      "avg": 711.5,
      "unrealised": -7.0,
      "family": "ai",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "strategy_id": "ai.combined.opus.v1",
      "horizon": 5,
      "exit": "2026-10-08",
@@ -291,7 +297,7 @@
      "avg": 1182.0,
      "unrealised": 3024.0,
      "family": "ai",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "strategy_id": "ai.combined.opus.v1",
      "horizon": 5,
      "exit": "2026-10-08",
@@ -423,7 +429,7 @@
      "lines": [
       {
        "label": "Your paper account",
-       "value": 6008.49,
+       "value": 5008.49,
        "pnl": 8.49,
        "pnl_label": "open profit",
        "sub": "1 stock open · Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
@@ -446,6 +452,18 @@
        "pnl": 47.37,
        "pnl_label": "settled",
        "sub": "2 trades settled, 2 won · 2 open now"
+      }
+     ]
+    },
+    {
+     "family": "hybrid",
+     "lines": [
+      {
+       "label": "Stocks",
+       "value": null,
+       "pnl": null,
+       "pnl_label": "",
+       "sub": "No hybrid stock strategy yet: planned (owner, 13 Oct 2026)"
       }
      ]
     },
@@ -540,7 +558,7 @@
      "avg": 229.27,
      "unrealised": 43.49,
      "family": "ai",
-     "strategy": "AI news & results",
+     "strategy": "AI team",
      "strategy_id": "ai.news_results.sonnet.v1",
      "horizon": 5,
      "exit": "2026-10-07",
@@ -553,7 +571,7 @@
      "avg": 229.27,
      "unrealised": 43.49,
      "family": "ai",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "strategy_id": "ai.combined.opus.v1",
      "horizon": 5,
      "exit": "2026-10-07",
@@ -592,7 +610,7 @@
      "avg": 330.8,
      "unrealised": 8.56,
      "family": "ai",
-     "strategy": "AI news & results",
+     "strategy": "AI team",
      "strategy_id": "ai.news_results.sonnet.v1",
      "horizon": 5,
      "exit": "2026-10-07",
@@ -605,7 +623,7 @@
      "avg": 330.8,
      "unrealised": 8.56,
      "family": "ai",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "strategy_id": "ai.combined.opus.v1",
      "horizon": 5,
      "exit": "2026-10-07",
@@ -631,7 +649,7 @@
      "avg": 334.89,
      "unrealised": -10.78,
      "family": "ai",
-     "strategy": "AI news & results",
+     "strategy": "AI team",
      "strategy_id": "ai.news_results.sonnet.v1",
      "horizon": 5,
      "exit": "2026-10-07",
@@ -644,7 +662,7 @@
      "avg": 334.89,
      "unrealised": -10.78,
      "family": "ai",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "strategy_id": "ai.combined.opus.v1",
      "horizon": 5,
      "exit": "2026-10-07",
@@ -657,7 +675,7 @@
      "avg": 229.27,
      "unrealised": 43.49,
      "family": "ai",
-     "strategy": "AI combined A",
+     "strategy": "AI team",
      "strategy_id": "ai.combined.opus.v1",
      "horizon": 5,
      "exit": "2026-10-07",
@@ -669,7 +687,7 @@
      "icon": "schedule",
      "tone": "info",
      "title": "13 paper trades exit today",
-     "sub": "AAPL, JPM, NVDA at N+5: AI combined A, AI news & results, Always buy, Model + news, Model without news",
+     "sub": "AAPL, JPM, NVDA at N+5: AI team, Always buy, Model + news, Model without news",
      "inst": "NVDA"
     },
     {

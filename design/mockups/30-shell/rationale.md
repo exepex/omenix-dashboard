@@ -61,8 +61,15 @@ overflowing or overlapping texts at twelve widths.
   the default screenshots show the closed state; `#clock=open` shows the same pages during the session (labelled).
 - **The hybrid:** the owner compares three systems in parallel (scoreboard A: same decisions; scoreboard B: whole
   systems). They are the F&O tool's books: Book 1 rule-based, Book 2 hybrid (rule + AI), Book 3 AI-based. The stock
-  tool has rule-based and AI-based strategies only, plus baselines as the comparison line. The picks panel filters
+  tool has rule-based and AI-based strategies today, plus baselines as the comparison line; a hybrid stock strategy
+  is planned (owner, 13 Oct 2026), so Hybrid is a full approach for stocks too, with an empty state until it exists. The picks panel filters
   by Rule-based, AI-based and Hybrid; every row, card and position carries its approach badge.
+
+## Fifth round (13 Oct 2026, owner): three approaches, the AI team, the gallery
+- The three approaches carry the owner's exact meanings and order: Rule-based (no AI), Hybrid (the AI team within the
+  rules), AI team (fully autonomous, agents with roles). The earlier model-versus-model AI strategies are shown as
+  "AI team"; no AI model is named anywhere. Hybrid applies to stocks too (empty state until it exists).
+- The US paper account starts at $5,000 (owner).
 
 ## Supersedes
 The shell of mockups 01-12 (each rationale says so). They stay unchanged: the web app and its tests read them.

@@ -1,0 +1,545 @@
+{
+ "page": "page.html",
+ "states": [
+  {
+   "id": "home",
+   "section": "1. The whole page",
+   "title": "Home, India, market closed (the real example clock: 7 Oct, 17:30 IST). Phone, tablet, laptop, desktop, large desktop.",
+   "hash": "",
+   "widths": [
+    1680,
+    1280,
+    1024,
+    768,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "home-open",
+   "section": "1. The whole page",
+   "title": "Home during the session (example clock): Buy and Sell are live.",
+   "hash": "clock=open",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "home-dark",
+   "section": "1. The whole page",
+   "title": "Dark theme.",
+   "hash": "theme=dark",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "home-us",
+   "section": "1. The whole page",
+   "title": "US market: stocks only, no F&O element anywhere; US$.",
+   "hash": "m=us",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "home-compact",
+   "section": "1. The whole page",
+   "title": "Compact density (Settings): more rows on screen.",
+   "hash": "density=compact",
+   "widths": [
+    1280
+   ],
+   "full": true
+  },
+  {
+   "id": "market-closed",
+   "section": "2. Market open or closed",
+   "title": "The market chip, closed: hover for the reason and the next opening.",
+   "hash": "",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "hover": ".mb-mkt"
+    }
+   ]
+  },
+  {
+   "id": "market-open",
+   "section": "2. Market open or closed",
+   "title": "The market chip, open (example clock).",
+   "hash": "clock=open",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "hover": ".mb-mkt"
+    }
+   ]
+  },
+  {
+   "id": "search-empty",
+   "section": "3. Search (the only search box)",
+   "title": "Search opened (press / or tap it): recently viewed first, then pages.",
+   "hash": "pal=1",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "search-name",
+   "section": "3. Search (the only search box)",
+   "title": "By name: “reliance”, with Buy and Sell on the result.",
+   "hash": "pal=reliance&clock=open",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "search-code",
+   "section": "3. Search (the only search box)",
+   "title": "By exchange code: “NIFTY26OCT22800CE”.",
+   "hash": "pal=NIFTY26OCT22800CE&clock=open",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "search-words",
+   "section": "3. Search (the only search box)",
+   "title": "By words: “nifty 22800 call”.",
+   "hash": "pal=nifty%2022800%20call&clock=open",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "search-us-fno",
+   "section": "3. Search (the only search box)",
+   "title": "US: an F&O search explains that F&O is India only.",
+   "hash": "m=us&pal=nifty",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "buy-from-search",
+   "section": "4. Buy and sell",
+   "title": "Buy straight from a search result opens the order window.",
+   "hash": "pal=reliance&clock=open",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": ".mb-pal-item .mb-bs.buy"
+    }
+   ]
+  },
+  {
+   "id": "buy-top-pick",
+   "section": "4. Buy and sell",
+   "title": "Buy from “Top pick” (at a glance).",
+   "hash": "clock=open",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": ".mb-glance .md-btn.buy"
+    }
+   ]
+  },
+  {
+   "id": "buy-stock",
+   "section": "4. Buy and sell",
+   "title": "Buy a stock: price basis, estimates, limit checks, the fill time.",
+   "hash": "clock=open&drawer=order:RELIANCE:buy",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "sell-holding",
+   "section": "4. Buy and sell",
+   "title": "Sell from your holding (no short selling: checked against what you hold).",
+   "hash": "clock=open&drawer=order:RELIANCE:sell",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "buy-limit",
+   "section": "4. Buy and sell",
+   "title": "Limit order: fills only if the next valid quotes reach the price.",
+   "hash": "clock=open&drawer=order:RELIANCE:buy",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": ".mb-drawer [aria-label='Order type'] button:nth-child(2)"
+    }
+   ]
+  },
+  {
+   "id": "buy-bracket",
+   "section": "4. Buy and sell",
+   "title": "With a stop-loss and a target (bracket).",
+   "hash": "clock=open&drawer=order:RELIANCE:buy",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": "#o-brk"
+    }
+   ]
+  },
+  {
+   "id": "order-placed",
+   "section": "4. Buy and sell",
+   "title": "Order recorded: the confirmation says when it fills.",
+   "hash": "clock=open&drawer=order:RELIANCE:buy",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": ".mb-drawer-foot .md-btn.buy"
+    }
+   ]
+  },
+  {
+   "id": "buy-option",
+   "section": "4. Buy and sell",
+   "title": "Buy an option within the ₹10,000 loss limit: passes.",
+   "hash": "clock=open&drawer=order:NIFTY26OCT23300CE:buy",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "sell-option-blocked",
+   "section": "4. Buy and sell",
+   "title": "Sell a single option: blocked (unlimited loss).",
+   "hash": "clock=open&drawer=order:NIFTY26OCT22800CE:sell",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "future-refused",
+   "section": "4. Buy and sell",
+   "title": "A future: refused, no executable quote in our data.",
+   "hash": "clock=open&drawer=order:NIFTY26OCTFUT:buy",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "basket",
+   "section": "4. Buy and sell",
+   "title": "F&O basket (example state): all legs or none, same limit checks.",
+   "hash": "clock=open&fno=example&drawer=basket:IFLY-22800",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "market-closed-lock",
+   "section": "4. Buy and sell",
+   "title": "Market closed: Buy and Sell are locked, with the reason.",
+   "hash": "drawer=order:RELIANCE:buy",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "us-buy",
+   "section": "4. Buy and sell",
+   "title": "US: buy NVDA in dollars.",
+   "hash": "m=us&clock=open&drawer=order:NVDA:buy",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "picks-rule",
+   "section": "5. Today's buy picks",
+   "title": "Filter: Rule-based.",
+   "hash": "ap=rule",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "picks-ai",
+   "section": "5. Today's buy picks",
+   "title": "Filter: AI-based.",
+   "hash": "ap=ai",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "picks-hybrid",
+   "section": "5. Today's buy picks",
+   "title": "Filter: Hybrid (empty: no hybrid stock strategy yet, no approved F&O strategy).",
+   "hash": "ap=hybrid",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "picks-fno-example",
+   "section": "5. Today's buy picks",
+   "title": "Example state, not today: F&O picks once a book's strategy is approved.",
+   "hash": "fno=example&ap=hybrid&clock=open",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "picks-us",
+   "section": "5. Today's buy picks",
+   "title": "US picks: NVDA clears costs (Yes, green).",
+   "hash": "m=us&clock=open",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "picks-phone-tab",
+   "section": "5. Today's buy picks",
+   "title": "Phone: the Picks tab.",
+   "hash": "wlopen=1",
+   "widths": [
+    390
+   ]
+  },
+  {
+   "id": "hover-card",
+   "section": "6. Any stock or contract",
+   "title": "Hover card on a ticker.",
+   "hash": "hc=RELIANCE&clock=open",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "quick-view",
+   "section": "6. Any stock or contract",
+   "title": "Quick view (tap a ticker): trend, as-of, your position, Buy and Sell.",
+   "hash": "drawer=quick:RELIANCE&clock=open",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "trades-yours",
+   "section": "7. Open paper trades",
+   "title": "Tab: Yours.",
+   "hash": "own=manual",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Open paper trades']"
+    }
+   ]
+  },
+  {
+   "id": "trades-rule",
+   "section": "7. Open paper trades",
+   "title": "Tab: Rule-based (trades grouped per stock).",
+   "hash": "own=rule",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Open paper trades']"
+    }
+   ]
+  },
+  {
+   "id": "trades-ai",
+   "section": "7. Open paper trades",
+   "title": "Tab: AI-based.",
+   "hash": "own=ai",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Open paper trades']"
+    }
+   ]
+  },
+  {
+   "id": "trades-hybrid",
+   "section": "7. Open paper trades",
+   "title": "Tab: Hybrid (empty for now).",
+   "hash": "own=hybrid",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Open paper trades']"
+    }
+   ]
+  },
+  {
+   "id": "trades-baselines",
+   "section": "7. Open paper trades",
+   "title": "Tab: Baselines (the comparison line).",
+   "hash": "own=baseline",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Open paper trades']"
+    }
+   ]
+  },
+  {
+   "id": "who-trades",
+   "section": "8. Who trades, needs you, coming up, news",
+   "title": "Who trades: you and each approach, never added together.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Who trades']"
+    }
+   ]
+  },
+  {
+   "id": "needs-you",
+   "section": "8. Who trades, needs you, coming up, news",
+   "title": "Needs you.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "#needs"
+    }
+   ]
+  },
+  {
+   "id": "coming-news",
+   "section": "8. Who trades, needs you, coming up, news",
+   "title": "Coming up and top news.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": ".grid.even.sec"
+    }
+   ]
+  },
+  {
+   "id": "notifications",
+   "section": "9. Top bar and navigation",
+   "title": "Notifications (the bell).",
+   "hash": "notif=1",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "profile",
+   "section": "9. Top bar and navigation",
+   "title": "Profile menu: theme, density, rail, shortcuts.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": "#me"
+    }
+   ]
+  },
+  {
+   "id": "shortcuts",
+   "section": "9. Top bar and navigation",
+   "title": "Keyboard shortcuts (press ?).",
+   "hash": "keys=1",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "rail-flyout",
+   "section": "9. Top bar and navigation",
+   "title": "Navigation rail: a group's screens on hover.",
+   "hash": "fly=trade",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "phone-more",
+   "section": "9. Top bar and navigation",
+   "title": "Phone: More (all screens).",
+   "hash": "drawer=nav",
+   "widths": [
+    390
+   ]
+  }
+ ]
+}

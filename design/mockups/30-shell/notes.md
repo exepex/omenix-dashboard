@@ -39,12 +39,21 @@ never converted or summed across currencies; times are UTC ISO strings shown in 
 | Lock | while closed, every manual Buy and Sell (search, picks, positions, hover card, order window, basket, keyboard B and S) is disabled, faded, with the reason; the strategies keep paper trading on their own | dashboard rule over the same fields |
 | Example clock | `status.example_open_now` (`#clock=open`): the same page during the session, labelled as an example | mockup only |
 
-## Approaches (who decides)
-`families`: `manual` (You), `rule` (Rule-based), `ai` (AI-based), `hybrid` (Hybrid, rule + AI), `baseline` (Baselines,
-the comparison line). Stock tool: families `rule` (8 strategies), `ai` (4), `baseline` (3); **no hybrid**. F&O tool:
-Book 1 = rule-based, Book 2 = hybrid (the AI decides inside limits the rules set), Book 3 = AI-based (exepex/trading
-design section 12; orchestrator, 13 Oct 2026). Strategy names shown to users never name the AI model: `display_names`
-in real_data.py drops it ("AI combined (Opus)" → "AI combined A"; letters are placeholders until the owner names them).
+## Approaches (who decides; owner, 13 Oct 2026)
+`families` (label, icon, long name), in this order:
+1. `rule`, **Rule-based**: rules read the data, use a standard strategy or invent a new one, and predict the price.
+   No AI is involved.
+2. `hybrid`, **Hybrid: AI team within the rules**: the AI team does the analysis and research but acts only inside
+   the rule-based limits.
+3. `ai`, **AI team, fully autonomous**: agents with different roles decide on their own, using an existing strategy
+   or inventing a new one.
+4. `baseline`, **Baselines**: the comparison line.
+5. `manual`, **You**.
+
+Stock tool today: `rule` (8 strategies), `ai` (4 earlier strategies that compared AI models; the screens show them all
+as "AI team" and never name a model), `baseline` (3); the hybrid and the AI team are being built, so a hybrid stock
+line is an empty state for now. F&O tool: Book 1 rule-based, Book 2 hybrid, Book 3 AI team (exepex/trading design
+section 12). The description of each approach is per market (`markets.<m>.family_text`): F&O is named only in India.
 
 ## Navigation rail, flyouts, pinned
 Static structure in `platform.js` (`NAV`, `PINS`); India-only entries absent in the US. No backend data.
@@ -70,5 +79,5 @@ Static structure in `platform.js` (`NAV`, `PINS`); India-only entries absent in 
 weekend), `snap3pm` (stale after 26 h). A stale value is greyed and says "stale".
 
 ## Owner-changeable defaults
-Manual account Rs 5 lakh (US $6,000, my assumption) with the F&O books' limits; it holds the owner's real own paper
+Manual account Rs 5 lakh (US $5,000, owner 13 Oct 2026) with the F&O books' limits; it holds the owner's real own paper
 trades (RELIANCE 50 at ₹1,182; AAPL 3 at $330.80).

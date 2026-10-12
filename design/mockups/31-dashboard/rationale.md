@@ -39,9 +39,17 @@ Honest answer: better, not best. Open weaknesses, in the order I would fix them:
 
 ## Fourth round (13 Oct 2026, owner)
 "Who trades" is now one card per approach, matching the owner's three-way comparison: You; Rule-based (stocks and F&O
-Book 1); AI-based (stocks and F&O Book 3); Hybrid (F&O Book 2; the stock tool has no hybrid); Baselines as the
+Book 1); AI-based (stocks and F&O Book 3); Hybrid (stocks: planned, empty state for now; F&O Book 2); Baselines as the
 comparison line. Each line stays its own account or scoreboard. The market line says open or closed and when that
 changes; Buy (green) and Sell (red) are locked while closed. Strategy names never name the AI model.
+
+## Fifth round (13 Oct 2026, owner): three approaches, the AI team, the gallery
+- The three approaches carry the owner's exact meanings and order: Rule-based (no AI), Hybrid (the AI team within the
+  rules), AI team (fully autonomous, agents with roles). The earlier model-versus-model AI strategies are shown as
+  "AI team"; no AI model is named anywhere. Hybrid applies to stocks too (empty state until it exists).
+- The US paper account starts at $5,000 (owner).
+- Every function of Home has its own picture: `gallery.html` (46 states, desktop and phone), made by
+  `design/system/shoot_states.js` from `states.json` and `design/mockups/_platform/gallery.py`.
 
 ## Supersedes
 `01-home`'s layout (01-home/rationale.md says so).

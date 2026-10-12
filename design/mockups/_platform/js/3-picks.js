@@ -1,10 +1,10 @@
 /* Omenix platform runtime, part 3 of 7: today's buy picks panel and the phone bottom tabs. Concatenated in file order by platform_build.py into one script. */
 /* signals panel (owner, 13 Oct 2026): the left bar lists today's buy picks of the strategies, by approach (rule-based,
-   AI-based, hybrid), with the real figures: how many strategies agree, the model's chance of a rise, the expected gain after
+   AI team, hybrid), with the real figures: how many strategies agree, the model's chance of a rise, the expected gain after
    market costs (below costs is said in words) and the picking strategy's own record on that stock. Filter chips and
    pages instead of another search box; every row trades with B / S. */
 const FAM = S.families, SIG_PAGE = 6;
-const apBadge = f => el('span', {class: 'mb-ap ' + f, 'data-tip': `${FAM[f].label}: ${S.family_text[f]}`}, icon(FAM[f].icon), FAM[f].label);
+const apBadge = f => el('span', {class: 'mb-ap ' + f, 'data-tip': `${FAM[f].long}: ${P().family_text[f]}`}, icon(FAM[f].icon), FAM[f].label);
 const PICK = r => (r || []).map(k => S.pick_rules[k]).join(' and ');
 function sigRows() {
   const keep = x => st.ap === 'all' || x.family === st.ap;
@@ -37,9 +37,9 @@ function signalsBody(where) {
     el('div', {class: 'mb-wl-head'},
       el('div', {class: 'mb-wl-title'}, el('h2', {}, 'Today’s buy picks'), help(`The head-to-head picks of each strategy family for today's session, from the stock tool. Not proven yet: ${G.months_forward} of 2 months of forward paper trading and about ${G.trades_needed} more settled trades are needed before any signal can be called strong.`),
         where === 'panel' && st.wlopen ? el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close the picks', onclick: () => { st.wlopen = false; applySettings(); renderTabs(); }}, icon('close')) : null),
-      el('div', {class: 'mb-wl-chips', role: 'group', 'aria-label': 'Who picked'}, chip('all', 'All'), chip('rule', FAM.rule.label), chip('ai', FAM.ai.label), P().fno ? chip('hybrid', 'Hybrid') : null),
+      el('div', {class: 'mb-wl-chips', role: 'group', 'aria-label': 'Who picked'}, chip('all', 'All'), chip('rule', FAM.rule.label), chip('hybrid', FAM.hybrid.label), chip('ai', FAM.ai.label)),
       el('div', {class: 'mb-wl-meta'}, el('span', {}, `Not proven yet · ${G.trades_needed} trades to go`))),
-    el('ul', {class: 'mb-wl-list', 'aria-label': 'Today’s buy picks'}, ...shown.map(sigRow), shown.length ? null : el('li', {class: 'quiet', style: 'margin:12px'}, st.ap === 'hybrid' ? 'No hybrid pick: the hybrid runs F&O only (Book 2), and no F&O strategy is approved yet.' : 'No pick from this approach today.')),
+    el('ul', {class: 'mb-wl-list', 'aria-label': 'Today’s buy picks'}, ...shown.map(sigRow), shown.length ? null : el('li', {class: 'quiet', style: 'margin:12px'}, st.ap === 'hybrid' ? `No hybrid pick yet: a hybrid stock strategy is planned${P().fno ? ', and no F&O strategy (Book 2) is approved yet' : ''}.` : 'No pick from this approach today.')),
     P().no_pick && P().no_pick.length && st.ap !== 'hybrid' ? el('div', {class: 'mb-wl-note'}, icon('remove'), el('span', {}, el('b', {}, P().no_pick.join(', ') + ': '), 'no strategy picks it today (no candidate clears the bar).')) : null,
     fs && st.fno !== 'example' ? el('div', {class: 'mb-wl-note'}, icon('science'), el('span', {}, el('b', {}, 'F&O: no approved strategy yet. '), fs.note.replace(/^No F&O strategy has passed testing yet: /, ''))) : null,
     el('div', {class: 'mb-wl-foot mb-pager'}, el('span', {}, rows.length ? `${st.pg * SIG_PAGE + 1}–${st.pg * SIG_PAGE + shown.length} of ${rows.length}` : '0 of 0'),

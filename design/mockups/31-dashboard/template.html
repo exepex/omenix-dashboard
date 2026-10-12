@@ -59,7 +59,7 @@ PF.mount({screen: 'dashboard', group: 'dashboard', strip: false,
   writeHash(h) { if (OWNER !== 'all') h.set('own', OWNER); if (PPG) h.set('ppg', PPG + 1); },
   render(main, c) {
   const {el, icon, inst, money, num, delta, moneyDelta, item, P, S} = c;
-  const M = D.markets[c.m], FAM = S.families, TXT = S.family_text, session = M.session.date;
+  const M = D.markets[c.m], FAM = S.families, TXT = P.family_text, session = M.session.date;
   const head = (title, sub, go) => el('div', {class: 'sec-head'}, el('h2', {}, title), sub ? el('span', {class: 'sub'}, sub) : null, go ? el('a', {class: 'go', href: '#', onclick: e => { e.preventDefault(); c.go(go[1]); }}, go[0], icon('chevron_right')) : null);
   main.append(el('h1', {class: 'vh'}, 'Home'));
 
@@ -92,10 +92,10 @@ PF.mount({screen: 'dashboard', group: 'dashboard', strip: false,
   main.append(el('section', {class: 'sec card home-sig', 'aria-label': 'Today’s buy picks'}, ...c.signalsBody('home')));
 
   /* 4. who trades and how it is going: your account, each strategy family, the F&O books; never summed */
-  main.append(el('section', {class: 'sec', 'aria-label': 'Who trades'}, head('Who trades, and how it is going', 'You, and each approach: rule-based, AI-based' + (P.fno ? ', hybrid (rule + AI)' : '') + ', with the baselines as the comparison line. Each line is its own paper account or scoreboard; nothing is added together.', ['Accounts and funds', 'funds']),
+  main.append(el('section', {class: 'sec', 'aria-label': 'Who trades'}, head('Who trades, and how it is going', 'You, and the three approaches: rule-based, hybrid (the AI team within the rules) and the autonomous AI team, with the baselines as the comparison line. Each line is its own paper account or scoreboard; nothing is added together.', ['Accounts and funds', 'funds']),
     el('div', {class: 'aps'}, ...M.groups.map(g => el('article', {class: 'mb-apcard'},
-      el('div', {class: 'h'}, el('span', {class: 'mb-avatar ' + ({manual: 'paper', ai: 'info', rule: '', baseline: 'neutral', hybrid: 'warn'}[g.family])}, icon(FAM[g.family].icon)), el('b', {}, FAM[g.family].label), el('small', {}, TXT[g.family])),
-      ...g.lines.map(l => el('div', {class: 'line'}, el('span', {class: 'k'}, l.label), el('div', {class: 'fig'}, l.value != null ? el('span', {class: 'val'}, money(l.value)) : null, el('span', {class: 'd'}, moneyDelta(l.pnl, 2), ' ' + l.pnl_label)), el('span', {class: 's'}, l.sub))),
+      el('div', {class: 'h'}, el('span', {class: 'mb-avatar ' + ({manual: 'paper', ai: 'info', rule: '', baseline: 'neutral', hybrid: 'warn'}[g.family])}, icon(FAM[g.family].icon)), el('b', {}, FAM[g.family].long), el('small', {}, TXT[g.family])),
+      ...g.lines.map(l => el('div', {class: 'line'}, el('span', {class: 'k'}, l.label), l.value == null && l.pnl == null ? null : el('div', {class: 'fig'}, l.value != null ? el('span', {class: 'val'}, money(l.value)) : null, el('span', {class: 'd'}, moneyDelta(l.pnl, 2), ' ' + l.pnl_label)), el('span', {class: 's'}, l.sub))),
       g.note ? el('div', {class: 'today'}, icon('info'), g.note) : null)))));
 
   /* 5. open paper trades by who opened them, paged; and what needs you */
@@ -104,7 +104,7 @@ PF.mount({screen: 'dashboard', group: 'dashboard', strip: false,
   for (const t of M.strategy_trades) (grouped[t.id + '|' + t.family] ||= {id: t.id, family: t.family, trades: []}).trades.push(t);
   const all = M.own.map(p => ({...p, own: true})).concat(Object.values(grouped));
   const count = k => all.filter(p => k === 'all' || p.family === k).length;
-  const tabs = el('div', {class: 'md-segmented dense tabs', role: 'group', 'aria-label': 'Who opened the trade'}, ...[['all', 'All'], ['manual', 'Yours'], ['rule', 'Rule-based'], ['ai', 'AI-based'], ...(P.fno ? [['hybrid', 'Hybrid']] : []), ['baseline', 'Baselines']].map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(OWNER === k), onclick: () => { OWNER = k; PPG = 0; c.rerender(); }}, `${v} ${count(k)}`)));
+  const tabs = el('div', {class: 'md-segmented dense tabs', role: 'group', 'aria-label': 'Who opened the trade'}, ...[['all', 'All'], ['manual', 'Yours'], ['rule', 'Rule-based'], ['hybrid', 'Hybrid'], ['ai', 'AI team'], ['baseline', 'Baselines']].map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(OWNER === k), onclick: () => { OWNER = k; PPG = 0; c.rerender(); }}, `${v} ${count(k)}`)));
   const rows = all.filter(p => OWNER === 'all' || p.family === OWNER), pages = Math.max(1, Math.ceil(rows.length / PPG_SIZE)); PPG = Math.min(PPG, pages - 1);
   const uniq = xs => [...new Set(xs)];
   const posRow = p => { const it = item(p.id);

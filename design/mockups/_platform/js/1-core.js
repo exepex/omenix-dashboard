@@ -95,5 +95,5 @@ const isFno = it => it.kind === 'option' || it.kind === 'future';
 const tradable = it => it.kind !== 'index';
 const price = it => num(it.last, 2);
 const paperTag = () => el('span', {class: 'mb-tag paper', 'data-tip': 'Paper: research and paper trading only. No real order, no real money.'}, 'Paper');
-const mockTag = () => el('span', {class: 'mb-tag mock', 'data-tip': S._note}, 'Example data');
+const mockTag = () => el('span', {class: 'mb-tag mock', 'data-tip': P().example_note}, 'Example data');
 

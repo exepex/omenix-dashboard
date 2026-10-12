@@ -31,9 +31,23 @@ def load(page: str) -> dict:
 HOME, COMPANY, PORTFOLIOS = load("01-home"), load("03-company"), load("07-paper-portfolios")
 NOW = HOME["cutoff"]                                    # 2026-10-07T12:00:00Z: 17:30 IST, 08:00 ET
 CLOSE_AT = {"india": "T10:00:00Z", "us": "T20:00:00Z"}  # the exchanges' close in UTC (15:30 IST, 16:00 ET)
-FAMILY = {"rule": ("Rule-based", "rule"), "ai": ("AI-based", "smart_toy"), "hybrid": ("Hybrid (rule + AI)", "bolt"), "baseline": ("Baselines", "trending_flat")}
+# the three approaches (owner, 13 Oct 2026), in this order, plus the baselines as the comparison line
+FAMILY = {"rule": ("Rule-based", "rule", "Rule-based"), "hybrid": ("Hybrid", "bolt", "Hybrid: AI team within the rules"),
+          "ai": ("AI team", "smart_toy", "AI team, fully autonomous"), "baseline": ("Baselines", "trending_flat", "Baselines")}
 # F&O books (exepex/trading design section 12, stories E5, F5, F6; orchestrator, 13 Oct 2026): one approach each
 BOOK_FAMILY = {1: "rule", 2: "hybrid", 3: "ai"}
+
+
+def family_text(m: str) -> dict:
+    """Plain words for each approach; F&O is named only in India (it is absent in the US)."""
+    fno = m == "india"
+    return {
+        "manual": "Trades you place yourself.",
+        "rule": "Rules read the data, use a standard strategy or invent a new one, and predict the price. No AI is involved. Stocks: for example “Model + news”." + (" F&O: Book 1." if fno else ""),
+        "hybrid": "The AI team does the analysis and research, but acts only inside the rule-based limits. Stocks: planned, no hybrid stock strategy yet." + (" F&O: Book 2." if fno else ""),
+        "ai": "A team of AI agents with different roles decides on its own: it uses an existing strategy or invents a new one." + (" F&O: Book 3." if fno else ""),
+        "baseline": "Simple yardsticks a strategy has to beat (“Always buy”, “Follow yesterday”, “Model without news”); never in the head-to-head.",
+    }
 NEXT_OPEN = {"india": "2026-10-08T03:45:00Z", "us": "2026-10-07T13:30:00Z"}   # Thu 8 Oct 09:15 IST; today 09:30 ET
 EXAMPLE_OPEN_NOW = {"india": "2026-10-07T05:43:00Z", "us": "2026-10-07T14:30:00Z"}  # #clock=open: the intraday check (11:13 IST), 10:30 ET
 EXAMPLE = "EXAMPLE value: the F&O tool's read model is not in this repository yet."
@@ -87,7 +101,7 @@ def manual_account(m: str) -> dict:
     """The proposed Manual paper account (PLATFORM_DESIGN.md section 5): owner-changeable starting cash, holding the
     owner's real own paper trades of 07-paper-portfolios."""
     own = PORTFOLIOS["markets"][m]["owner"]["positions"]
-    capital = 500000.0 if m == "india" else 6000.0
+    capital = 500000.0 if m == "india" else 5000.0   # owner, 13 Oct 2026: Rs 5 lakh in India, $5,000 in the US
     cost = sum(p["cost"] for p in own)
     return {"name": "Your paper account", "kind": "manual", "approach": "manual", "currency": HOME["markets"][m]["currency"],
             "capital": capital, "cash": r2(capital - cost), "open_structures": 0, "at_risk": 0,
@@ -97,16 +111,15 @@ def manual_account(m: str) -> dict:
 MODEL = re.compile(r"\s*\((?:Sonnet|Opus|Haiku)[^)]*\)")
 
 
+AI_TEAM = "AI team"
+
+
 def display_names(m: str) -> dict:
-    """Strategy id -> the name users see: the AI model is never named; two AI strategies that differ only by model get
-    the letters A and B (placeholder names until the owner names them)."""
+    """Strategy id -> the name users see. AI-based decisions come from one AI team: several agents, each with its own
+    expertise, deciding together (owner, 13 Oct 2026); the earlier model-versus-model AI strategies are not shown one by
+    one, and no AI model is ever named. Today's example records still come from those earlier strategies."""
     S = HOME["markets"][m]["strategies"]
-    base = {k: MODEL.sub("", v["name"]) for k, v in S.items()}
-    out = {}
-    for k, name in base.items():
-        twins = sorted(i for i, n in base.items() if n == name)
-        out[k] = name if len(twins) == 1 else f"{name} {'AB'[twins.index(k)]}"
-    return out
+    return {k: AI_TEAM if v["family"] == "ai" else MODEL.sub("", v["name"]) for k, v in S.items()}
 
 
 def signals(m: str) -> list:
@@ -158,11 +171,12 @@ def shell_payload() -> dict:
                        "open_utc": status["session"]["session_open_utc"].replace("+00:00", "Z"), "close_utc": status["session"]["session_close_utc"].replace("+00:00", "Z"),
                        "next_open_utc": NEXT_OPEN[m], "example_open_now": EXAMPLE_OPEN_NOW[m]},
             "watchlists": [{"name": "Tracked companies", "items": [c["ticker"] for c in P["companies"]]}],
-            "accounts": accounts, "signals": sig, "no_pick": no_pick,
+            "accounts": accounts, "signals": sig, "no_pick": no_pick, "family_text": family_text(m),
+            "example_note": "EXAMPLE DATA copied from the application's own catalogue records (stock tool example files of 6-7 Oct 2026). " + ("F&O contract prices and the Manual account's starting cash are labelled examples." if m == "india" else "The Manual account's starting cash is a labelled example.") + " Nothing here places a real order.",
             "default_amount": P["companies"][0]["amount"],
             "go_live": P["go_live"],
             "recent": [c["ticker"] for c in P["companies"] if c["state"] == "active"][:3],
-            "search_extra": [{"kind": "strategy", "label": display_names(m)[k], "sub": f"Strategy · {FAMILY[v['family']][0]}"} for k, v in P["strategies"].items()]
+            "search_extra": [{"kind": "strategy", "label": name, "sub": "Strategy"} for name in dict.fromkeys(display_names(m).values())]
                             + [{"kind": "news", "label": n["title"], "sub": f"News · {n['source']} · {', '.join(n['tickers']) or 'market'}"} for n in P["news"][:12]],
         }
         if m == "india":
@@ -199,14 +213,7 @@ def shell_payload() -> dict:
             "eod": {"label": "NSE end-of-day file", "detail": "NSE's daily F&O file, published after the close", "max_age_h": 78},
             "snap3pm": {"label": "3 pm option snapshot", "detail": "the F&O tool's 3 pm NIFTY monthly option quotes (best bid and ask only)", "max_age_h": 26},
         },
-        "families": {k: {"label": v[0], "icon": v[1]} for k, v in FAMILY.items()} | {"manual": {"label": "You", "icon": "account_circle"}},
-        "family_text": {
-            "manual": "Trades you place yourself.",
-            "rule": "Written rules decide; no AI in the decision. Stocks: rules on the price model's forecast and the news (for example “Model + news”). F&O: Book 1, the approved playbook.",
-            "ai": "An AI decides. Stocks: AI traders that read the prices and the news (for example “AI combined A”). F&O: Book 3, the fully AI system.",
-            "hybrid": "The AI decides, but only inside limits that the rules set. F&O only: Book 2. The stock tool has no hybrid strategy.",
-            "baseline": "Simple yardsticks a strategy has to beat (“Always buy”, “Follow yesterday”, “Model without news”); never in the head-to-head.",
-        },
+        "families": {k: {"label": v[0], "icon": v[1], "long": v[2]} for k, v in FAMILY.items()} | {"manual": {"label": "You", "icon": "account_circle", "long": "You"}},
         "pick_rules": {"best_expected_gain": "Best expected gain", "highest_probability": "Highest probability"},
         "limits_note": "Owner-changeable default (PLATFORM_DESIGN.md section 5): Rs 5 lakh with the F&O books' limits.",
         "markets": markets,
@@ -254,8 +261,10 @@ def home_payload(shell: dict) -> dict:
             if m == "india":
                 lines.append(book({"rule": 1, "ai": 3}[fam]))
             groups.append({"family": fam, "lines": lines})
-        if m == "india":
-            groups.append({"family": "hybrid", "lines": [book(2)], "note": "Stocks: the stock tool has no hybrid strategy."})
+        hybrid_stocks = {"label": "Stocks", "value": None, "pnl": None, "pnl_label": "", "sub": "No hybrid stock strategy yet: planned (owner, 13 Oct 2026)"}
+        groups.append({"family": "hybrid", "lines": [hybrid_stocks] + ([book(2)] if m == "india" else [])})
+        order = {"manual": 0, "rule": 1, "hybrid": 2, "ai": 3}
+        groups.sort(key=lambda g: order[g["family"]])
         groups.append({"family": "baseline", "lines": [
             {"label": f"Stocks · yesterday ({int(P['eod']['session_date'][8:10])} Oct)", "value": None, "pnl": eod["baseline"]["net_pnl"], "pnl_label": "settled",
              "sub": f"{eod['baseline']['trades']} trades settled, {eod['baseline']['wins']} won · {sum(1 for t in strat if t['family'] == 'baseline')} open now · the comparison line"}]})
