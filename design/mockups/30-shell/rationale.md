@@ -22,6 +22,18 @@ F&O underlyings and contracts; price, change, as-of; hover for B, S, Chart, Chai
 (breadcrumb, title, as-of, actions), and a right drawer for the Paper order window and quick views. Phone: search on
 top, index row under it, bottom tabs Home · Watchlist · Orders · Portfolio · More, the drawer as a bottom sheet.
 
+## Owner feedback, 13 Oct 2026 (applied)
+> "I do not understand what is the purpose of giving informational blocks on top ... user should be able to navigate
+> to a company stock FNO by a quick search ... place a buy and sell order even from the quick search ... elegant,
+> sharp corners and more materialized."
+
+- The informational band at the top of this page is gone; Paper and Mock stay as small tags, explanations sit in
+  help tooltips.
+- Global search results now carry **B** and **S** on every tradable stock or contract: one click opens the Paper
+  order window (`shot-palette-*`). Home gets its own quick-search block (31-dashboard).
+- Sharp corners across the design system: cards, panels, buttons, chips, tabs and search fields 4 px (were 8-12 px
+  and pills); icon buttons, badges and avatars stay round.
+
 ## Decisions (and why)
 - **Rail with labels under icons (84 px), not a 256 px sidebar.** At 1280 px the watchlist (300 px) and a labelled
   sidebar would leave the page 700 px; the Material rail keeps labels (the design asks "icons with labels") and

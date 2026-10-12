@@ -20,7 +20,7 @@ const icon = (id, cls = 'ms') => { const s = svgEl('svg', {class: cls, 'aria-hid
 const help = tip => el('button', {class: 'md-help', type: 'button', 'data-tip': tip, 'aria-label': 'Explain'}, '?');
 
 /* ---- state and the URL ------------------------------------------------------------------------------------- */
-const st = {m: 'india', theme: 'light', wl: 0, density: 'comfortable', rail: 'labels', wlOff: false, drawer: null, pal: null, keys: false, hc: null, menu: null, fly: null, notif: false, wlopen: false};
+const st = {m: 'india', theme: 'light', wl: 0, density: 'comfortable', rail: 'labels', wlOff: false, drawer: null, pal: null, keys: false, hc: null, menu: null, fly: null, notif: false, wlopen: false, qs: null};
 let page = null, lastFocus = null;
 function readHash() {
   const h = new URLSearchParams(location.hash.slice(1));
@@ -31,7 +31,7 @@ function readHash() {
   if (h.get('rail') === 'icons') st.rail = 'icons';
   if (h.get('wloff') === '1') st.wlOff = true;
   st.drawer = h.get('drawer'); st.pal = h.get('pal'); st.keys = h.get('keys') === '1'; st.hc = h.get('hc'); st.menu = h.get('menu');
-  st.fly = h.get('fly'); st.notif = h.get('notif') === '1'; st.wlopen = h.get('wlopen') === '1';
+  st.qs = h.get('qs'); st.fly = h.get('fly'); st.notif = h.get('notif') === '1'; st.wlopen = h.get('wlopen') === '1';
   if (page && page.readHash) page.readHash(h);
 }
 function writeHash() {
@@ -289,6 +289,10 @@ function openProfile(anchor) {
     el('div', {class: 'mb-pal-group', style: 'text-transform:none;letter-spacing:0;font-weight:500'}, 'Paper only · no broker is connected'));
   F.menu.classList.add('on'); place(F.menu, anchor, {side: 'below'}); F.menu.style.left = Math.max(8, innerWidth - F.menu.offsetWidth - 8) + 'px';
 }
+/* B and S pair: paper buy and sell straight from a result row */
+const bsPair = (id, before = () => {}) => { const it = item(id); return el('span', {class: 'bs', style: 'display:inline-flex;gap:4px'},
+  el('button', {class: 'mb-bs buy', type: 'button', 'aria-label': `Paper buy ${it.sym}`, 'data-tip': 'Paper buy', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'buy'); }}, 'B'),
+  el('button', {class: 'mb-bs sell', type: 'button', 'aria-label': `Paper sell ${it.sym}`, 'data-tip': 'Paper sell', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'sell'); }}, 'S')); };
 /* command palette: stocks, F&O underlyings, contracts, screens, strategies, news, pages; recently viewed when empty */
 let palSel = 0, palRows = [];
 function palIndex() {
@@ -320,7 +324,7 @@ function palDraw(q) {
   palRows = palResults(q); palSel = 0;
   const list = $('#pal-list', F.pal); list.replaceChildren();
   let g = null;
-  palRows.forEach((r, i) => { if (r.group !== g) { g = r.group; list.append(el('div', {class: 'mb-pal-group'}, g)); } list.append(el('div', {class: 'mb-pal-item', role: 'option', id: 'pal-' + i, 'aria-selected': String(i === palSel), onclick: () => { closePal(); r.open(); }, onpointermove: () => palMark(i)}, el('span', {class: 'mb-avatar ' + (r.group === 'Pages' ? 'neutral' : r.group === 'News' ? 'info' : '')}, icon(r.ic)), el('span', {style: 'min-width:0'}, el('b', {}, r.label), el('small', {}, r.sub)), el('span', {class: 'end'}, ...(r.end || [])))); });
+  palRows.forEach((r, i) => { if (r.group !== g) { g = r.group; list.append(el('div', {class: 'mb-pal-group'}, g)); } list.append(el('div', {class: 'mb-pal-item', role: 'option', id: 'pal-' + i, 'aria-selected': String(i === palSel), onclick: () => { closePal(); r.open(); }, onpointermove: () => palMark(i)}, el('span', {class: 'mb-avatar ' + (r.group === 'Pages' ? 'neutral' : r.group === 'News' ? 'info' : '')}, icon(r.ic)), el('span', {style: 'min-width:0'}, el('b', {}, r.label), el('small', {}, r.sub)), el('span', {class: 'end', style: 'display:flex;gap:8px;align-items:center'}, ...(r.end || []), r.id && tradable(item(r.id)) ? bsPair(r.id, closePal) : null))); });
   if (!palRows.length) list.append(el('div', {class: 'quiet', style: 'margin:8px'}, `Nothing matches “${q}” in the ${P().label} market.${!P().fno && /nifty|fut|\bce\b|\bpe\b|option/i.test(q) ? ' F&O is India only: switch the market to India.' : ''}`));
 }
 function palMark(i) { palSel = i; $$('.mb-pal-item', F.pal).forEach((n, j) => n.setAttribute('aria-selected', String(j === i))); $('#pal-' + i, F.pal)?.scrollIntoView({block: 'nearest'}); }
@@ -346,12 +350,48 @@ function closeKeys() { F.keys.classList.remove('on'); st.keys = false; if (!F.dr
 let snackT = null;
 function snack(msg) { F.snack.replaceChildren(el('span', {}, msg), el('button', {class: 'md-btn text', type: 'button', onclick: () => F.snack.classList.remove('on')}, 'OK')); F.snack.classList.add('on'); clearTimeout(snackT); snackT = setTimeout(() => F.snack.classList.remove('on'), 5000); }
 
+
+/* ---- quick search block (Home): find a stock, index or F&O contract and trade it from the result ---------------- */
+function quickSearch() {
+  let scope = 'all', sel = 0, rows = [];
+  const box = el('div', {class: 'mb-qsearch', id: 'qsearch'});
+  const res = el('div', {class: 'mb-qsearch-results', role: 'listbox', id: 'qs-list', 'aria-label': 'Results'});
+  const input = el('input', {type: 'search', id: 'qs-input', autocomplete: 'off', placeholder: P().fno ? 'Search a stock, index or F&O contract to trade: reliance, nifty 24800 ce' : 'Search a stock or index to trade: apple, nvda', 'aria-label': 'Quick search to trade', 'aria-controls': 'qs-list', oninput: () => draw(), onfocus: () => { if (input.value) draw(); }, onkeydown: e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); mark(Math.min(rows.length - 1, sel + 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); mark(Math.max(0, sel - 1)); }
+    else if (e.key === 'Enter' && rows[sel]) { e.preventDefault(); openDrawer('quick:' + rows[sel].id); }
+    else if (e.key === 'Escape') { box.classList.remove('open'); }
+  }});
+  const scopes = [['all', 'All'], ['stock', 'Stocks'], ...(P().fno ? [['fno', 'F&O']] : [])];
+  const seg = el('div', {class: 'md-segmented dense mb-qsearch-scope', role: 'group', 'aria-label': 'Search in'}, ...scopes.map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(k === scope), onclick: e => { scope = k; $$('button', seg).forEach(b => b.setAttribute('aria-pressed', String(b === e.currentTarget))); draw(); input.focus(); }}, v)));
+  function match() {
+    const q = input.value.trim().toLowerCase(), words = q.split(/\s+/).filter(Boolean);
+    return Object.values(P().items).filter(it => (scope === 'all' || (scope === 'stock' ? !isFno(it) : isFno(it) || it.fno && it.kind === 'index')) && words.every(w => (it.sym + ' ' + it.name).toLowerCase().includes(w))).slice(0, 8);
+  }
+  function mark(i) { sel = i; $$('.mb-qs-row', res).forEach((n, j) => n.setAttribute('aria-selected', String(j === i))); }
+  function draw() {
+    const q = input.value.trim(); rows = q ? match() : []; sel = 0; st.qs = q || null;
+    box.classList.toggle('open', !!q);
+    res.replaceChildren(...rows.map((it, i) => el('div', {class: 'mb-qs-row', role: 'option', 'data-inst': it.id, 'aria-selected': String(i === 0), onclick: () => openDrawer('quick:' + it.id), onpointermove: () => mark(i)},
+      el('span', {class: 'mb-avatar ' + (isFno(it) ? 'info' : it.kind === 'index' ? 'neutral' : '')}, icon(isFno(it) ? 'layers' : it.kind === 'index' ? 'monitoring' : 'apartment')),
+      el('span', {style: 'min-width:0'}, el('b', {}, it.sym, it.held ? el('span', {class: 'mb-label paper', style: 'margin-left:6px;padding:0 5px;font-size:10.5px;line-height:16px'}, 'held') : null), el('small', {}, it.name)),
+      el('span', {class: 'px'}, price(it), el('small', {}, delta(it.chg_pct), ' · ', asOf(it).short + (asOf(it).stale ? ' · stale' : ''))),
+      tradable(it) ? bsPair(it.id, () => box.classList.remove('open')) : el('small', {class: 'muted', style: 'max-width:110px;white-space:normal'}, P().fno && it.fno ? 'Index: trade its options' : 'Index: not traded'))));
+    if (q && !rows.length) res.append(el('div', {class: 'quiet', style: 'margin:6px'}, `Nothing matches “${q}”${scope !== 'all' ? ' in this tab' : ''}.${!P().fno && /nifty|fut|\bce\b|\bpe\b/i.test(q) ? ' F&O is India only.' : ''}`));
+  }
+  document.addEventListener('click', e => { if (!box.contains(e.target)) box.classList.remove('open'); });
+  const recent = el('div', {class: 'mb-qsearch-recent'}, el('span', {}, 'Recent:'), ...P().recent.map(id => { const it = item(id); return el('button', {class: 'md-chip assist', type: 'button', 'data-inst': id, onclick: () => openDrawer('quick:' + id)}, it.sym, ' ', delta(it.chg_pct)); }));
+  box.append(el('label', {class: 'mb-qsearch-field'}, icon('search'), input, seg), res);
+  if (st.qs) { input.value = st.qs; setTimeout(draw, 0); }
+  return el('div', {}, box, recent);
+}
+
 /* ---- the right drawer: Paper order window, quick view, phone "More" ------------------------------------------ */
 function openDrawer(view) {
   closeHc(); closeMenu(); closePal();
   if (!F.drawer.classList.contains('open')) lastFocus = document.activeElement;
   const [kind, id, side] = view.split(':');
-  const body = kind === 'order' ? orderView(id, side) : kind === 'quick' ? quickView(id) : navView();
+  const body = kind === 'order' ? orderView(id, side) : kind === 'quick' ? quickView(id) : kind === 'basket' ? basketView(id) : navView();
   if (!body) return;
   F.drawer.replaceChildren(el('div', {class: 'mb-sheet-grip', 'aria-hidden': 'true'}), ...body);
   F.drawer.classList.add('open'); F.veil.classList.add('on'); st.drawer = view; writeHash();
@@ -468,6 +508,58 @@ function orderView(id, side = 'buy') {
       executable ? sumBox : null),
     foot];
 }
+
+/* Paper basket: a multi-leg F&O idea placed as one paper order (all legs or none), with the same limit checks */
+const BASKETS = {};
+function basketView(bid) {
+  const b = BASKETS[bid]; if (!b) return null;
+  const Pm = P(), manualId = Object.keys(Pm.accounts).find(k => Pm.accounts[k].kind === 'manual'), acc = Pm.accounts[manualId], L = Pm.limits;
+  let lots = 1;
+  const legs = b.legs.map(l => ({...l, it: item(l.id)}));
+  const box = el('div', {style: 'display:grid;gap:12px'}), foot = el('div', {class: 'mb-drawer-foot'});
+  const executable = legs.every(l => l.it.kind === 'option' && l.it.source === 'snap3pm');
+  function draw() {
+    const lot = legs[0].it.lot;
+    const perUnit = legs.reduce((a, l) => a + (l.side === 'sell' ? l.it.bid : -l.it.ask) * l.lots, 0);
+    const net = perUnit * lot * lots;
+    const ch = legs.reduce((a, l) => a + charges(l.it, l.side, (l.side === 'sell' ? l.it.bid : l.it.ask) * lot * l.lots * lots).total, 0);
+    /* the structure's own maximum loss and profit (as on the idea card); the limit check adds the charges */
+    const maxLoss = b.kind === 'debit' ? -net : (b.width - perUnit) * lot * lots;
+    const maxProfit = b.kind === 'debit' ? (b.width + perUnit) * lot * lots : net;
+    const margin = b.margin_per_lot * lots;
+    const checks = [[executable, 'Executable quotes for every leg', '3 pm snapshot of 12 Oct'],
+      [maxLoss + ch <= L.max_loss_per_trade, `Maximum loss with charges ≤ ${money(L.max_loss_per_trade)} a trade`, money(maxLoss + ch)],
+      [acc.open_structures + 1 <= L.max_open_structures, `Open structures ≤ ${L.max_open_structures}`, `${acc.open_structures} open + this one`],
+      [acc.at_risk + maxLoss <= L.max_at_risk, `At risk ≤ ${money(L.max_at_risk)}`, `${money(acc.at_risk)} + ${money(maxLoss)}`],
+      [margin <= acc.cash, 'Margin estimate within cash', `${money(margin)} of ${money(acc.cash)}`]];
+    const ok = checks.every(c => c[0]);
+    box.replaceChildren(
+      el('table', {class: 'mb-legs'}, el('thead', {}, el('tr', {}, el('th', {}, 'Leg'), el('th', {}, 'Side'), el('th', {class: 'num'}, 'Lots'), el('th', {class: 'num'}, 'Price'))),
+        el('tbody', {}, ...legs.map(l => el('tr', {}, el('td', {}, l.it.sym.replace(/^NIFTY 27 OCT /, '')), el('td', {}, el('span', {class: 'mb-label ' + (l.side === 'buy' ? 'success' : 'danger')}, l.side === 'buy' ? 'Buy' : 'Sell')), el('td', {class: 'num'}, String(l.lots * lots)), el('td', {class: 'num'}, num(l.side === 'sell' ? l.it.bid : l.it.ask) + (l.side === 'sell' ? ' bid' : ' ask')))))),
+      el('dl', {class: 'mb-order-sum'},
+        el('dt', {}, net >= 0 ? 'Net credit' : 'Net debit'), el('dd', {}, money(Math.abs(net), 2)),
+        el('dt', {}, 'Charges (estimate) ', help(Pm.charges.label + '. Four legs, each charged on its own premium.')), el('dd', {}, money(ch, 2)),
+        el('dt', {}, 'Maximum profit (before charges)'), el('dd', {}, money(maxProfit, 2)),
+        el('dt', {}, 'Maximum loss (before charges)'), el('dd', {}, money(maxLoss, 2)),
+        el('dt', {}, 'Breakevens'), el('dd', {}, b.breakevens.map(x => num(x, 0)).join(' / ')),
+        el('dt', {}, 'Margin estimate ', help('Hedged structure: from our recorded margin source (labelled). Mock value.')), el('dd', {}, money(margin)),
+        el('dt', {class: 'tot'}, 'Probability of profit ', help('Risk-neutral, from the snapshot’s implied volatility: what option prices imply, not a forecast of ours.')), el('dd', {class: 'tot'}, b.pop + '% (risk-neutral)')),
+      el('div', {}, el('div', {class: 'mb-micro', style: 'margin-bottom:6px'}, 'Checks against the Manual account’s limits'),
+        el('ul', {class: 'mb-checks'}, ...checks.map(([pass, t, d]) => el('li', {class: pass ? 'ok' : 'fail'}, el('span', {class: 'mb-mark ' + (pass ? 'ok' : 'no')}, icon(pass ? 'check' : 'close')), el('span', {}, t, el('span', {class: 'vh'}, pass ? ' passed' : ' failed'), el('small', {}, d)))))),
+      el('div', {class: 'mb-alert paper'}, icon('description'), el('div', {}, el('b', {class: 't'}, 'Paper basket: no real order is placed'), el('div', {class: 's'}, 'All legs or none. The F&O tool fills them from the next 3 pm snapshot with the books’ own fill model, never from a guessed price.')), el('span')));
+    foot.replaceChildren(el('button', {class: 'md-btn filled buy', type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Paper basket recorded: ${b.name}, ${lots} lot${lots > 1 ? 's' : ''}. Open until ${Pm.next_quotes.option}.`); }}, icon(ok ? 'receipt_long' : 'block'), ok ? `Place paper basket · ${legs.length} legs` : 'Blocked by a limit check'),
+      el('div', {class: 'muted', style: 'font-size:12px;text-align:center'}, ok ? `Fills at the next valid quotes: ${Pm.next_quotes.option}.` : 'Nothing is recorded until every check passes.'));
+  }
+  const lotIn = el('input', {class: 'mb-input', type: 'number', min: '1', step: '1', value: '1', id: 'b-lots', oninput: e => { lots = Math.max(1, Math.floor(+e.target.value || 1)); draw(); }});
+  draw();
+  return [drawerHead('Paper F&O basket', null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, b.name), paperTag())),
+    el('div', {class: 'mb-drawer-body'},
+      el('div', {class: 'mb-field'}, el('span', {class: 'l'}, 'Account'), el('div', {class: 'mb-input', style: 'display:flex;align-items:center'}, `${acc.name} · cash ${money(acc.cash)}`)),
+      el('div', {class: 'mb-field-row'}, el('div', {class: 'mb-field'}, el('label', {for: 'b-lots'}, `Lots (lot ${legs[0].it.lot})`), lotIn), el('div', {class: 'mb-field'}, el('span', {class: 'l'}, 'Order type'), el('div', {class: 'mb-input', style: 'display:flex;align-items:center;font-size:14px'}, 'Market, all legs'))),
+      box,
+      el('button', {class: 'md-btn outlined', type: 'button', onclick: () => go('builder')}, icon('calculate'), 'Adjust in the Strategy builder')),
+    foot];
+}
 function openOrder(id, side) { const it = item(id); if (!it) return; openDrawer(`order:${id}:${side}`); }
 
 /* ---- tooltip (hover, focus, tap; Escape closes) ------------------------------------------------------------- */
@@ -539,7 +631,7 @@ function pagehead({crumbs = [], title, meta = [], actions = []}) {
     el('div', {style: 'min-width:0'}, el('h1', {}, title)), el('div', {class: 'mb-pagehead-meta'}, ...meta), el('div', {class: 'mb-pagehead-actions'}, ...actions));
 }
 const inst = (id, text) => { const it = item(id); return el('a', {class: 'tk', href: '#', 'data-inst': id, onclick: e => { e.preventDefault(); openDrawer('quick:' + id); }}, text || (it ? it.sym : id)); };
-function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, openOrder, openDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, rerender: renderAll}; }
+function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, openOrder, openDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, quickSearch, bsPair, baskets: BASKETS, tradable, rerender: renderAll}; }
 function mount(cfg) { page = cfg; frame(); readHash(); renderAll(); bind(); openFromHash(); }
 return {mount, el, icon, svgEl, money, num, sgn, delta, P, st};
 })();
