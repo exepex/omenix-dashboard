@@ -1,4 +1,35 @@
-/* Omenix platform runtime, part 2 of 6. Concatenated in file order by platform_build.py into one script. */
+/* Omenix platform runtime, part 2 of 7: navigation model, the frame, the app bar, the navigation rail. Concatenated in file order by platform_build.py into one script. */
+/* ---- navigation (PLATFORM_DESIGN.md section 4; a screen without a mockup yet is marked "soon") ------------------ */
+const B = n => `../${n}/page.html`;
+const NAV = [
+  {id: 'dashboard', label: 'Dashboard', icon: 'dashboard', items: [{id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: B('31-dashboard'), key: 'g h'}]},
+  {id: 'markets', label: 'Markets', icon: 'monitoring', items: [{id: 'markets', label: 'Markets overview', icon: 'monitoring'}, {id: 'watchlists', label: 'Watchlists', icon: 'star'}, {id: 'chart', label: 'Chart', icon: 'show_chart'}, {id: 'calendar', label: 'Calendar', icon: 'calendar_month'}]},
+  {id: 'trade', label: 'Trade', icon: 'candlestick_chart', items: [{id: 'chain', label: 'Option chain', icon: 'layers', india: true}, {id: 'builder', label: 'Strategy builder', icon: 'calculate', india: true}, {id: 'screener', label: 'Screener', icon: 'filter_list', key: 'g s'}, {id: 'order', label: 'Order window', icon: 'receipt_long', action: 'order', key: 'B / S'}]},
+  {id: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', items: [{id: 'positions', label: 'Positions', icon: 'account_balance_wallet', key: 'g p'}, {id: 'holdings', label: 'Holdings', icon: 'pie_chart'}, {id: 'funds', label: 'Accounts and funds', icon: 'payments'}, {id: 'orders', label: 'Orders', icon: 'receipt_long', key: 'g o'}, {id: 'reports', label: 'Reports', icon: 'bar_chart'}]},
+  {id: 'strategies', label: 'Strategies', icon: 'science', items: [{id: 'lab', label: 'Strategy lab', icon: 'science'}, {id: 'track', label: 'Track record', icon: 'history'}, {id: 'scoreboards', label: 'Scoreboards', icon: 'leaderboard'}, {id: 'forecasts', label: 'Forecasts', icon: 'query_stats', india: true}]},
+  {id: 'research', label: 'Research', icon: 'travel_explore', items: [{id: 'stock', label: 'Stock page', icon: 'apartment'}, {id: 'news', label: 'News', icon: 'newspaper'}, {id: 'events', label: 'Calendar', icon: 'event'}, {id: 'alerts', label: 'Alerts', icon: 'notifications'}]},
+  {id: 'control', label: 'Control', icon: 'shield', items: [{id: 'risk', label: 'Risk', icon: 'shield'}, {id: 'judge', label: 'Judge and evidence', icon: 'gavel'}, {id: 'health', label: 'Data health', icon: 'dns'}]},
+  null,
+  {id: 'assistant', label: 'Assistant', icon: 'smart_toy', items: [{id: 'assistant', label: 'Assistant', icon: 'smart_toy'}]},
+  {id: 'help', label: 'Help', icon: 'help', items: [{id: 'help', label: 'Help and glossary', icon: 'help'}, {id: 'shortcuts', label: 'Keyboard shortcuts', icon: 'keyboard', action: 'keys', key: '?'}]},
+  {id: 'settings', label: 'Settings', icon: 'settings', items: [{id: 'settings', label: 'Settings', icon: 'settings'}]},
+];
+const PINS = [{label: 'Pinned: NIFTY option chain', short: 'NIFTY chain', icon: 'layers', india: true, screen: 'chain'}, {label: 'Pinned: saved screen "High IV rank, rising open interest"', short: 'High IV', icon: 'filter_list', india: true, screen: 'screener'}, {label: 'Pinned: Stock tool scoreboard (Rule vs AI)', short: 'Rule vs AI', icon: 'leaderboard', screen: 'scoreboards'}];
+const shown = x => !x.india || P().fno;
+const allScreens = () => NAV.filter(Boolean).flatMap(g => g.items.filter(shown).map(i => ({...i, group: g.id})));
+const screen = id => allScreens().find(s => s.id === id);
+const SOON = 'This screen’s mockup is not drawn yet (design/PLATFORM_DESIGN.md section 9 gives the order).';
+function go(id) {
+  const s = screen(id);
+  if (!s) return snack('This screen is India only: it is absent in the US market.');
+  if (s.action === 'order') return openOrder(firstTradable(), 'buy');
+  if (s.action === 'keys') return openKeys();
+  if (s.href) { location.href = s.href + hashCarry(); return; }
+  snack(`${s.label}: ${SOON}`);
+}
+const hashCarry = () => { const h = new URLSearchParams(); if (st.m !== 'india') h.set('m', st.m); if (st.clock === 'open') h.set('clock', 'open'); if (st.theme !== 'light') h.set('theme', st.theme); if (st.density !== 'comfortable') h.set('density', st.density); const s = h.toString(); return s ? '#' + s : ''; };
+const firstTradable = () => { const ids = P().signals.map(x => x.id); return ids.find(id => tradable(item(id))) || Object.keys(P().items)[0]; };
+
 /* ---- the frame ---------------------------------------------------------------------------------------------- */
 let F = {};
 function frame() {
@@ -25,7 +56,7 @@ function applySettings() {
 function renderAll() {
   applySettings();
   const inner = $('#page', F.main);
-  F.pf.replaceChildren(appbar(), navrail(), watchlist(), F.main, tabbar());
+  F.pf.replaceChildren(appbar(), navrail(), signalsPanel(), F.main, tabbar());
   inner.replaceChildren();
   page.render(inner, ctx());
   inner.append(el('footer', {}, 'Omenix · research and paper trading only: nothing here places a real order · ', el('b', {}, 'Mock data'), ` as of ${nowLabel()}`));
@@ -38,13 +69,14 @@ function appbar() {
   return el('header', {class: 'mb-appbar', id: 'appbar'},
     el('a', {class: 'mb-appbar-brand', href: B('31-dashboard') + hashCarry(), 'aria-label': 'Omenix: Dashboard'}, el('span', {class: 'mb-brand-mark'}, 'OM')),
     el('div', {class: 'mb-appbar-name'}, 'Omenix', el('small', {}, 'Research · Paper only')),
-    el('button', {class: 'mb-gsearch', type: 'button', onclick: () => openPal(''), 'aria-label': 'Search stocks, F&O, screens (slash)'}, icon('search'), el('span', {}, P().fno ? 'Search stocks, F&O, screens…' : 'Search stocks, screens, news…'), el('span', {class: 'mb-kbd'}, '/')),
+    el('button', {class: 'mb-gsearch', type: 'button', onclick: () => openPal(''), 'aria-label': 'Search stocks, F&O, screens (slash)'}, icon('search'), el('span', {class: 'lg'}, P().fno ? 'Search stocks, F&O, codes' : 'Search stocks'), el('span', {class: 'sm'}, 'Search…'), el('span', {class: 'mb-kbd'}, '/')),
     el('div', {class: 'md-segmented dense light', role: 'group', 'aria-label': 'Market'}, ...Object.entries(S.markets).map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(k === st.m), onclick: () => { if (st.m !== k) { st.m = k; st.wl = 0; closeAll(); renderAll(); } }}, v.label))),
-    el('div', {class: 'mb-idx-strip', 'aria-label': 'Indices'}, ...P().indices.map(id => { const it = item(id), a = asOf(it); return el('a', {class: 'mb-idx' + (a.stale ? ' stale' : ''), href: '#', 'data-tip': `${it.sym}: ${a.tip}`, onclick: e => { e.preventDefault(); go('markets'); }}, el('span', {class: 'n'}, it.sym), el('span', {class: 'v'}, price(it)), delta(it.chg_pct)); })),
+    (k => el('span', {class: 'mb-mkt' + (k.open ? ' open' : ''), role: 'status', 'data-tip': `${P().exchange}: ${k.word.toLowerCase()}, ${k.text}.${k.open ? ' You can buy and sell.' : ' Your buy and sell are paused until then; the strategies keep paper trading.'}${st.clock === 'open' ? ' (Example clock: during the session.)' : ''}`}, el('i', {'aria-hidden': 'true'}), el('b', {}, k.word), el('span', {class: 't'}, k.text)))(market()),
+    page.strip === false ? null : el('div', {class: 'mb-idx-strip', 'aria-label': 'Indices'}, ...P().indices.map(id => { const it = item(id), a = asOf(it); return el('a', {class: 'mb-idx' + (a.stale ? ' stale' : ''), href: '#', 'data-tip': `${it.sym}: ${a.tip}`, onclick: e => { e.preventDefault(); go('markets'); }}, el('span', {class: 'n'}, it.sym), el('span', {class: 'v'}, price(it)), delta(it.chg_pct)); })),
     el('div', {class: 'mb-appbar-end'},
-      el('button', {class: 'md-icon-btn hide-phone', type: 'button', 'aria-label': st.wlOff ? 'Show the watchlist' : 'Hide the watchlist', 'data-tip': (st.wlOff ? 'Show' : 'Hide') + ' the watchlist panel', onclick: () => { if (innerWidth < 1200) { st.wlopen = !st.wlopen; applySettings(); } else { st.wlOff = !st.wlOff; applySettings(); writeHash(); } }}, icon('dock_to_left')),
+      el('button', {class: 'md-icon-btn hide-phone', type: 'button', 'aria-label': st.wlOff ? 'Show today’s picks' : 'Hide today’s picks', 'data-tip': (st.wlOff ? 'Show' : 'Hide') + ' today’s picks panel', onclick: () => { if (innerWidth < 1200) { st.wlopen = !st.wlopen; applySettings(); } else { st.wlOff = !st.wlOff; applySettings(); writeHash(); } }}, icon('dock_to_left')),
       el('button', {class: 'md-icon-btn mb-badged', type: 'button', id: 'bell', 'aria-label': `Notifications, ${unread} unread`, onclick: e => openNotif(e.currentTarget)}, icon('notifications'), unread ? el('span', {class: 'md-badge count'}, unread) : null),
-      el('button', {class: 'md-icon-btn hide-phone', type: 'button', 'aria-label': 'Switch theme', 'data-tip': document.documentElement.dataset.theme === 'dark' ? 'Light theme' : 'Dark theme', onclick: () => { st.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; renderAll(); }}, icon(document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode')),
+      el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': 'Switch theme', 'data-tip': document.documentElement.dataset.theme === 'dark' ? 'Light theme' : 'Dark theme', onclick: () => { st.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; renderAll(); }}, icon(document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode')),
       el('button', {class: 'mb-me', type: 'button', id: 'me', 'aria-label': 'Profile and settings', onclick: e => openProfile(e.currentTarget)}, 'OW')));
 }
 
@@ -61,55 +93,7 @@ function navrail() {
     nav.append(el('div', {class: 'mb-rail-grp'}, el('a', {class: 'mb-rail-item', href: first.href ? first.href + hashCarry() : '#', 'aria-current': cur ? 'page' : null, 'aria-haspopup': items.length > 1 ? 'menu' : null, onclick: e => { if (!first.href) { e.preventDefault(); go(first.id); } }}, el('span', {class: 'mb-nav-ind'}, icon(g.icon)), el('span', {class: 'mb-nav-label'}, g.label)), items.length > 1 || !first.href ? fly : null));
   }
   const pins = PINS.filter(shown);
-  if (pins.length) { nav.append(el('div', {class: 'mb-rail-sep', role: 'separator'})); for (const p of pins) nav.append(el('a', {class: 'mb-rail-pin', href: '#', 'data-tip': p.label, 'aria-label': p.label, onclick: e => { e.preventDefault(); go(p.screen); }}, p.short)); }
+  if (pins.length) { nav.append(el('div', {class: 'mb-rail-sep', role: 'separator'})); nav.append(el('div', {class: 'mb-rail-pins-t'}, icon('push_pin'), 'Pinned')); for (const p of pins) nav.append(el('a', {class: 'mb-rail-pin', href: '#', 'data-tip': p.label, 'aria-label': p.label, onclick: e => { e.preventDefault(); go(p.screen); }}, icon(p.icon), el('span', {}, p.short))); }
   return nav;
 }
-
-/* watchlist panel */
-let dragId = null;
-function watchlist() {
-  const L = P().watchlists[st.wl];
-  const list = el('ul', {class: 'mb-wl-list', id: 'wl-list', 'aria-label': `Watchlist ${L.name}`});
-  for (const id of L.items) list.append(wlRow(item(id)));
-  if (!L.items.length) list.append(el('li', {class: 'quiet', style: 'margin:12px'}, `“${L.name}” is empty. Type in the field above to add stocks${P().fno ? ', F&O underlyings or contracts' : ''}; or use “Add all to watchlist” in the Screener.`));
-  const find = el('input', {type: 'search', placeholder: P().fno ? 'Search and add: infy, nifty 24500 ce' : 'Search and add: aapl, msft', 'aria-label': 'Filter or add to this watchlist', oninput: e => { const q = e.target.value.trim().toLowerCase(); for (const r of $$('.mb-wl-row', list)) r.hidden = q && !r.dataset.text.includes(q); }, onkeydown: e => { if (e.key === 'Enter') openPal(e.target.value); }});
-  return el('aside', {class: 'mb-wl', id: 'wl', 'aria-label': 'Watchlist'},
-    el('div', {class: 'mb-wl-head'}, el('label', {class: 'mb-wl-find'}, icon('search'), find),
-      el('div', {class: 'mb-wl-meta'}, el('span', {}, el('b', {}, L.name), ` · ${L.items.length} / 50`), el('span', {class: 'mb-asof', 'data-tip': 'Every row shows its own as-of time: these are end-of-day files, the 3 pm option snapshot and the stock tool’s runs, not a live feed.'}, icon('schedule'), 'not live'),
-        st.wlopen ? el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close the watchlist', onclick: () => { st.wlopen = false; applySettings(); renderTabs(); }}, icon('close')) : null)),
-    list,
-    el('div', {class: 'mb-wl-foot', role: 'tablist', 'aria-label': 'Watchlists'}, ...P().watchlists.map((w, i) => el('button', {type: 'button', role: 'tab', 'aria-pressed': String(i === st.wl), 'aria-selected': String(i === st.wl), 'data-tip': `${w.name} (${w.items.length})`, onclick: () => { st.wl = i; F.pf.replaceChild(watchlist(), $('#wl', F.pf)); writeHash(); }}, i + 1)),
-      el('button', {type: 'button', 'aria-label': 'Watchlist settings: columns, sort', 'data-tip': 'Sort, columns and list names (Settings)', onclick: () => snack('Watchlist settings: sort, columns and names live in Settings.')}, icon('tune'))));
-}
-function wlRow(it) {
-  const a = asOf(it), held = it.held;
-  const acts = el('div', {class: 'mb-wl-acts'},
-    el('button', {class: 'mb-bs buy', type: 'button', 'aria-label': `Paper buy ${it.sym}`, 'data-tip': tradable(it) ? 'Paper buy (B)' : 'An index cannot be traded: use its futures or options', disabled: !tradable(it), onclick: e => { e.stopPropagation(); openOrder(it.id, 'buy'); }}, 'B'),
-    el('button', {class: 'mb-bs sell', type: 'button', 'aria-label': `Paper sell ${it.sym}`, 'data-tip': tradable(it) ? 'Paper sell (S)' : 'An index cannot be traded', disabled: !tradable(it), onclick: e => { e.stopPropagation(); openOrder(it.id, 'sell'); }}, 'S'),
-    el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': 'Chart', 'data-tip': 'Chart', onclick: e => { e.stopPropagation(); go('chart'); }}, icon('show_chart')),
-    P().fno && (it.fno || isFno(it)) ? el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': 'Option chain', 'data-tip': 'Option chain', onclick: e => { e.stopPropagation(); go('chain'); }}, icon('layers')) : null,
-    el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': `More actions for ${it.sym}`, 'aria-haspopup': 'menu', onclick: e => { e.stopPropagation(); openMenu(it.id, e.currentTarget); }}, icon('more_vert')));
-  const row = el('li', {class: 'mb-wl-row' + (a.stale ? ' stale' : ''), tabindex: '0', draggable: 'true', 'data-inst': it.id, 'data-text': (it.sym + ' ' + it.name).toLowerCase(), 'aria-label': `${it.sym}, ${price(it)}, ${sgn(it.chg_pct)}, ${a.short}${a.stale ? ', stale' : ''}`,
-      onclick: () => openHc(it.id, row), onkeydown: e => { if (e.key === 'Enter') openHc(it.id, row); },
-      ondragstart: e => { dragId = it.id; e.dataTransfer.effectAllowed = 'move'; }, ondragover: e => e.preventDefault(),
-      ondrop: e => { e.preventDefault(); const L = P().watchlists[st.wl].items; if (!dragId || dragId === it.id) return; L.splice(L.indexOf(dragId), 1); L.splice(L.indexOf(it.id), 0, dragId); dragId = null; F.pf.replaceChild(watchlist(), $('#wl', F.pf)); }},
-    icon('drag_indicator', 'ms grip'),
-    el('div', {style: 'min-width:0'}, el('div', {class: 'sym'}, it.sym, held ? el('span', {class: 'mb-label paper', style: 'padding:0 5px;font-size:10.5px;line-height:16px', 'data-tip': `Held in ${P().accounts[held.account].name}: ${held.qty} at ${num(held.avg)} (Paper)`}, 'held') : null), el('div', {class: 'sub'}, it.name)),
-    el('div', {class: 'px'}, el('div', {}, price(it)), el('small', {'data-tip': a.tip}, delta(it.chg_pct), ' · ' + a.short + (a.stale ? ' · stale' : ''))),
-    acts);
-  return row;
-}
-
-/* phone bottom tabs: Home · Watchlist · Orders · Portfolio · More */
-function tabbar() {
-  const t = (id, label, ic, on, fn) => el('a', {class: 'mb-nav-item', href: '#', 'aria-current': on ? 'page' : null, onclick: e => { e.preventDefault(); fn(); }}, el('span', {class: 'mb-nav-ind'}, icon(ic)), label);
-  const w = st.wlopen;
-  return el('nav', {class: 'mb-navbar', id: 'tabs', 'aria-label': 'Main'},
-    t('home', 'Home', 'home', !w && page.screen === 'dashboard', () => go('dashboard')),
-    t('wl', 'Watchlist', 'star', w, () => { st.wlopen = !st.wlopen; applySettings(); renderTabs(); }),
-    t('orders', 'Orders', 'receipt_long', !w && page.screen === 'orders', () => go('orders')),
-    t('portfolio', 'Portfolio', 'account_balance_wallet', !w && page.group === 'portfolio' && page.screen !== 'orders', () => go('positions')),
-    t('more', 'More', 'menu', !w && !['dashboard', 'orders'].includes(page.screen) && page.group !== 'portfolio', () => openDrawer('nav')));
-}
-const renderTabs = () => { const t = $('#tabs', F.pf); if (t) F.pf.replaceChild(tabbar(), t); };
 

@@ -1,4 +1,4 @@
-/* Omenix platform runtime, part 6 of 6. Concatenated in file order by platform_build.py into one script. */
+/* Omenix platform runtime, part 7 of 7: tooltip, global events, hash-driven states, the page API. Concatenated in file order by platform_build.py into one script. */
 /* ---- tooltip (hover, focus, tap; Escape closes) ------------------------------------------------------------- */
 let pinned = null;
 function showTip(t, text) { const tip = $('#tip'); tip.textContent = text; tip.classList.add('on'); const r = t.getBoundingClientRect(); let left = r.left + r.width / 2 - tip.offsetWidth / 2, top = r.top - tip.offsetHeight - 8; left = Math.max(8, Math.min(innerWidth - tip.offsetWidth - 8, left)); if (top < 8) top = r.bottom + 8; tip.style.left = left + 'px'; tip.style.top = top + 'px'; }
@@ -44,7 +44,7 @@ function bind() {
     if (e.key === '?') { e.preventDefault(); openKeys(); return; }
     if (gPending && Date.now() - gPending < 1200) { gPending = 0; const to = {h: 'dashboard', p: 'positions', o: 'orders', s: 'screener'}[e.key]; if (to) { e.preventDefault(); go(to); } return; }
     if (e.key === 'g') { gPending = Date.now(); return; }
-    if (e.key === 'b' || e.key === 's') { const r = e.target.closest('[data-inst]'); if (r && tradable(item(r.dataset.inst))) { e.preventDefault(); openOrder(r.dataset.inst, e.key === 'b' ? 'buy' : 'sell'); } }
+    if (e.key === 'b' || e.key === 's') { const r = e.target.closest('[data-inst]'); if (r && tradable(item(r.dataset.inst))) { e.preventDefault(); if (tradeLock()) { snack(tradeLock()); return; } openOrder(r.dataset.inst, e.key === 'b' ? 'buy' : 'sell'); } }
   });
   addEventListener('scroll', () => $('#appbar')?.classList.toggle('scrolled', scrollY > 4), {passive: true});
   addEventListener('hashchange', () => { readHash(); closeAll(); renderAll(); openFromHash(); });
@@ -68,7 +68,7 @@ function pagehead({crumbs = [], title, meta = [], actions = []}) {
     el('div', {style: 'min-width:0'}, el('h1', {}, title)), el('div', {class: 'mb-pagehead-meta'}, ...meta), el('div', {class: 'mb-pagehead-actions'}, ...actions));
 }
 const inst = (id, text) => { const it = item(id); return el('a', {class: 'tk', href: '#', 'data-inst': id, onclick: e => { e.preventDefault(); openDrawer('quick:' + id); }}, text || (it ? it.sym : id)); };
-function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, openOrder, openDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, quickSearch, bsPair, baskets: BASKETS, tradable, rerender: renderAll}; }
+function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, openOrder, openDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, bsPair, market, tradeLock, tradable, apBadge, signalsBody, rerender: renderAll}; }
 function mount(cfg) { page = cfg; frame(); readHash(); renderAll(); bind(); openFromHash(); }
 return {mount, el, icon, svgEl, money, num, sgn, delta, P, st};
 })();

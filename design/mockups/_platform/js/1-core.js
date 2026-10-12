@@ -1,13 +1,13 @@
-/* Omenix platform runtime, part 1 (files design/mockups/_platform/js/*.js, concatenated in file order by platform_build.py
-   into one script, split by purpose to keep every file small). The runtime of the design mockups (design/PLATFORM_DESIGN.md sections 2, 3, 5 and 6).
+/* Omenix platform runtime, part 1 of 7 (files design/mockups/_platform/js/*.js, concatenated in file order by platform_build.py
+   into one script). The runtime of the design mockups (design/PLATFORM_DESIGN.md sections 2, 3, 5 and 6).
    A page defines `const SHELL = ...30-shell/data.json...` and `const D = ...its own data.json...`, then this script,
    then calls PF.mount({screen, group, render(main, ctx)}). The shell draws the app bar (brand, global search, market
    switch, index strip, bell, theme, profile), the navigation rail (groups with flyouts, pinned screens), the
-   watchlist panel (5 lists, hover actions B S Chart Chain News More, drag to reorder), the hover card, the context
+   picks panel (today’s buy picks by strategy family with their real figures; filter chips, pages, B / S on every row), the hover card, the context
    menu, the command palette, the shortcuts list, the right drawer (Paper order window, quick view; a bottom sheet on
    phones) and the phone bottom tabs. Every class is a component of design/system/components.css; this file holds
    behaviour only. The URL hash holds the state (m, theme, wl, density, rail, drawer, pal, keys, hc, menu, fly, notif,
-   wlopen), so Back, Forward and bookmarks work and every screenshot state is a link. Paper only: the order window
+   wlopen, ap, pg, fno), so Back, Forward and bookmarks work and every screenshot state is a link. Paper only: the order window
    records a paper order in the dashboard's inbox; nothing here places, modifies or cancels a real order. */
 'use strict';
 const PF = (() => {
@@ -21,25 +21,30 @@ const icon = (id, cls = 'ms') => { const s = svgEl('svg', {class: cls, 'aria-hid
 const help = tip => el('button', {class: 'md-help', type: 'button', 'data-tip': tip, 'aria-label': 'Explain'}, '?');
 
 /* ---- state and the URL ------------------------------------------------------------------------------------- */
-const st = {m: 'india', theme: 'light', wl: 0, density: 'comfortable', rail: 'labels', wlOff: false, drawer: null, pal: null, keys: false, hc: null, menu: null, fly: null, notif: false, wlopen: false, qs: null};
+const st = {clock: 'now', m: 'india', theme: 'light', wl: 0, ap: 'all', pg: 0, fno: 'today', density: 'comfortable', rail: 'labels', wlOff: false, drawer: null, pal: null, keys: false, hc: null, menu: null, fly: null, notif: false, wlopen: false};
 let page = null, lastFocus = null;
 function readHash() {
   const h = new URLSearchParams(location.hash.slice(1));
   if (h.get('m') in S.markets) st.m = h.get('m');
+  st.clock = h.get('clock') === 'open' ? 'open' : 'now';
   if (['light', 'dark', 'system'].includes(h.get('theme'))) st.theme = h.get('theme');
-  const wl = +h.get('wl'); if (wl >= 1 && wl <= 5) st.wl = wl - 1;
+  if (['rule', 'ai', 'hybrid'].includes(h.get('ap'))) st.ap = h.get('ap');
+  st.pg = Math.max(0, (+h.get('pg') || 1) - 1); st.fno = h.get('fno') === 'example' ? 'example' : 'today';
   if (h.get('density') === 'compact') st.density = 'compact';
   if (h.get('rail') === 'icons') st.rail = 'icons';
   if (h.get('wloff') === '1') st.wlOff = true;
   st.drawer = h.get('drawer'); st.pal = h.get('pal'); st.keys = h.get('keys') === '1'; st.hc = h.get('hc'); st.menu = h.get('menu');
-  st.qs = h.get('qs'); st.fly = h.get('fly'); st.notif = h.get('notif') === '1'; st.wlopen = h.get('wlopen') === '1';
+  st.fly = h.get('fly'); st.notif = h.get('notif') === '1'; st.wlopen = h.get('wlopen') === '1';
   if (page && page.readHash) page.readHash(h);
 }
 function writeHash() {
   const h = new URLSearchParams();
   if (st.m !== 'india') h.set('m', st.m);
+  if (st.clock === 'open') h.set('clock', 'open');
   if (st.theme !== 'light') h.set('theme', st.theme);
-  if (st.wl) h.set('wl', st.wl + 1);
+  if (st.ap !== 'all') h.set('ap', st.ap);
+  if (st.pg) h.set('pg', st.pg + 1);
+  if (st.fno !== 'today') h.set('fno', st.fno);
   if (st.density !== 'comfortable') h.set('density', st.density);
   if (st.rail !== 'labels') h.set('rail', st.rail);
   if (st.wlOff) h.set('wloff', '1');
@@ -76,40 +81,19 @@ function asOf(it) {
 }
 const asOfEl = (it, withIcon = true) => { const a = asOf(it); return el('span', {class: 'mb-asof' + (a.stale ? ' stale' : ''), 'data-tip': a.tip}, withIcon ? icon(a.stale ? 'warning' : 'schedule') : null, a.short + (a.stale ? ' · stale' : '')); };
 const item = id => P().items[id];
+/* market session: open or closed now; your own buy and sell work only while it is open (owner, 13 Oct 2026). The
+   strategies keep paper trading on their own schedule. #clock=open shows the same page during the session (example). */
+function market(m = st.m) {
+  const T = P(m).status, now = Date.parse(st.clock === 'open' ? T.example_open_now : S.now), o = Date.parse(T.open_utc), c = Date.parse(T.close_utc), z = P(m).zone;
+  const at = iso => { const d = local(iso, m); return `${hm(d)} ${z}`; };
+  if (now >= o && now < c) return {open: true, word: 'Open', text: `closes ${at(T.close_utc)}`};
+  const next = now < o ? T.open_utc : T.next_open_utc;
+  return {open: false, word: 'Closed', text: `opens ${now < o ? 'today' : dateShort(next, m)} ${at(next)}`, next};
+}
+const tradeLock = () => { const k = market(); return k.open ? null : `Market closed: you can buy and sell again when it ${k.text}. The strategies keep paper trading on their own.`; };
 const isFno = it => it.kind === 'option' || it.kind === 'future';
 const tradable = it => it.kind !== 'index';
 const price = it => num(it.last, 2);
 const paperTag = () => el('span', {class: 'mb-tag paper', 'data-tip': 'Paper: research and paper trading only. No real order, no real money.'}, 'Paper');
-const mockTag = () => el('span', {class: 'mb-tag mock', 'data-tip': S._note}, 'Mock');
-
-/* ---- navigation (PLATFORM_DESIGN.md section 4; a screen without a mockup yet is marked "soon") ------------------ */
-const B = n => `../${n}/page.html`;
-const NAV = [
-  {id: 'dashboard', label: 'Dashboard', icon: 'dashboard', items: [{id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: B('31-dashboard'), key: 'g h'}]},
-  {id: 'markets', label: 'Markets', icon: 'monitoring', items: [{id: 'markets', label: 'Markets overview', icon: 'monitoring'}, {id: 'watchlists', label: 'Watchlists', icon: 'star'}, {id: 'chart', label: 'Chart', icon: 'show_chart'}, {id: 'calendar', label: 'Calendar', icon: 'calendar_month'}]},
-  {id: 'trade', label: 'Trade', icon: 'candlestick_chart', items: [{id: 'chain', label: 'Option chain', icon: 'layers', india: true}, {id: 'builder', label: 'Strategy builder', icon: 'calculate', india: true}, {id: 'screener', label: 'Screener', icon: 'filter_list', key: 'g s'}, {id: 'order', label: 'Paper order window', icon: 'receipt_long', action: 'order', key: 'B / S'}]},
-  {id: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', items: [{id: 'positions', label: 'Positions', icon: 'account_balance_wallet', key: 'g p'}, {id: 'holdings', label: 'Holdings', icon: 'pie_chart'}, {id: 'funds', label: 'Accounts and funds', icon: 'payments'}, {id: 'orders', label: 'Orders', icon: 'receipt_long', key: 'g o'}, {id: 'reports', label: 'Reports', icon: 'bar_chart'}]},
-  {id: 'strategies', label: 'Strategies', icon: 'science', items: [{id: 'lab', label: 'Strategy lab', icon: 'science'}, {id: 'track', label: 'Track record', icon: 'history'}, {id: 'scoreboards', label: 'Scoreboards', icon: 'leaderboard'}, {id: 'forecasts', label: 'Forecasts', icon: 'query_stats', india: true}]},
-  {id: 'research', label: 'Research', icon: 'travel_explore', items: [{id: 'stock', label: 'Stock page', icon: 'apartment'}, {id: 'news', label: 'News', icon: 'newspaper'}, {id: 'events', label: 'Calendar', icon: 'event'}, {id: 'alerts', label: 'Alerts', icon: 'notifications'}]},
-  {id: 'control', label: 'Control', icon: 'shield', items: [{id: 'risk', label: 'Risk', icon: 'shield'}, {id: 'judge', label: 'Judge and evidence', icon: 'gavel'}, {id: 'health', label: 'Data health', icon: 'dns'}]},
-  null,
-  {id: 'assistant', label: 'Assistant', icon: 'smart_toy', items: [{id: 'assistant', label: 'Assistant', icon: 'smart_toy'}]},
-  {id: 'help', label: 'Help', icon: 'help', items: [{id: 'help', label: 'Help and glossary', icon: 'help'}, {id: 'shortcuts', label: 'Keyboard shortcuts', icon: 'keyboard', action: 'keys', key: '?'}]},
-  {id: 'settings', label: 'Settings', icon: 'settings', items: [{id: 'settings', label: 'Settings', icon: 'settings'}]},
-];
-const PINS = [{label: 'Pinned: NIFTY option chain', short: 'NC', india: true, screen: 'chain'}, {label: 'Pinned: saved screen "High IV rank, rising open interest"', short: 'IV', india: true, screen: 'screener'}, {label: 'Pinned: Stock tool scoreboard (Rule vs AI)', short: 'RA', screen: 'scoreboards'}];
-const shown = x => !x.india || P().fno;
-const allScreens = () => NAV.filter(Boolean).flatMap(g => g.items.filter(shown).map(i => ({...i, group: g.id})));
-const screen = id => allScreens().find(s => s.id === id);
-const SOON = 'This screen’s mockup is not drawn yet (design/PLATFORM_DESIGN.md section 9 gives the order).';
-function go(id) {
-  const s = screen(id);
-  if (!s) return snack('This screen is India only: it is absent in the US market.');
-  if (s.action === 'order') return openOrder(firstTradable(), 'buy');
-  if (s.action === 'keys') return openKeys();
-  if (s.href) { location.href = s.href + hashCarry(); return; }
-  snack(`${s.label}: ${SOON}`);
-}
-const hashCarry = () => { const h = new URLSearchParams(); if (st.m !== 'india') h.set('m', st.m); if (st.theme !== 'light') h.set('theme', st.theme); if (st.density !== 'comfortable') h.set('density', st.density); const s = h.toString(); return s ? '#' + s : ''; };
-const firstTradable = () => { const ids = P().watchlists[st.wl].items.concat(P().watchlists[0].items); return ids.find(id => tradable(item(id))) || Object.keys(P().items)[0]; };
+const mockTag = () => el('span', {class: 'mb-tag mock', 'data-tip': S._note}, 'Example data');
 

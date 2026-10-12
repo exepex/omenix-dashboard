@@ -530,9 +530,10 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-appbar-name { font: 700 18px/1 var(--md-ref-typeface-plain); letter-spacing: -.3px; color: var(--md-sys-color-on-surface); white-space: nowrap; }
 .mb-appbar-name small { display: block; font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); letter-spacing: .2px; margin-top: 3px; }
 .mb-appbar-end { margin-left: auto; display: flex; align-items: center; gap: var(--mb-space-1); flex: none; }
-.mb-gsearch { display: flex; align-items: center; gap: 8px; height: 40px; width: 340px; flex: 0 1 340px; min-width: 0; padding: 0 8px 0 14px; border-radius: var(--md-sys-shape-corner-small); border: 1px solid transparent; background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-medium); cursor: text; text-align: left; }
+.mb-gsearch { display: flex; align-items: center; gap: 8px; height: 40px; width: auto; flex: 1 1 220px; max-width: 420px; min-width: 0; padding: 0 8px 0 14px; border-radius: var(--md-sys-shape-corner-small); border: 1px solid transparent; background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-medium); cursor: text; text-align: left; }
 .mb-gsearch:hover { border-color: var(--md-sys-color-outline-variant); }
 .mb-gsearch .ms { width: 20px; height: 20px; flex: none; }
+.mb-gsearch .sm { display: none; }
 .mb-gsearch > span:not(.mb-kbd) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mb-kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 3px; border: 1px solid var(--md-sys-color-outline-variant); border-bottom-width: 2px; background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface-variant); font: 600 11px/1 var(--md-ref-typeface-mono); white-space: nowrap; flex: none; }
 /* index strip: name, value, signed change; the as-of time in its tooltip */
@@ -543,6 +544,13 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-idx .v { font: 600 13.5px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
 .mb-idx .mb-delta { font-size: 12px; }
 .mb-idx.stale .v, .mb-idx.stale .mb-delta { color: var(--md-sys-color-on-surface-variant); }
+/* market status chip: open (green) or closed (grey), always with the word and the next time; your own buy and sell
+   are paused while it is closed */
+.mb-mkt { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-small); white-space: nowrap; flex: none; }
+.mb-mkt i { width: 8px; height: 8px; border-radius: 50%; background: var(--mb-color-neutral); flex: none; }
+.mb-mkt b { font-weight: 700; color: var(--md-sys-color-on-surface); }
+.mb-mkt.open { background: var(--mb-color-up-container); color: var(--mb-color-on-up-container); }
+.mb-mkt.open i { background: var(--mb-color-up); } .mb-mkt.open b { color: var(--mb-color-on-up-container); }
 .mb-me { width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); font: 700 13px/1 var(--md-ref-typeface-plain); display: inline-grid; place-items: center; cursor: pointer; margin-left: var(--mb-space-1); }
 .mb-badged { position: relative; }
 .mb-badged > .md-badge.count { position: absolute; top: 4px; right: 3px; font-size: 10px; min-width: 16px; }
@@ -557,7 +565,10 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-rail-item[aria-current="page"] { color: #fff; font-weight: 700; }
 .mb-rail-item[aria-current="page"] .mb-nav-ind { background: var(--mb-sidebar-active); box-shadow: var(--mb-sidebar-active-shadow); }
 .mb-rail-sep { width: 40px; height: 1px; background: color-mix(in srgb, var(--mb-sidebar-ink) 18%, transparent); margin: var(--mb-space-2) 0; flex: none; }
-.mb-rail-pin { width: 40px; height: 36px; border-radius: var(--md-sys-shape-corner-small); display: grid; place-items: center; color: var(--mb-sidebar-muted); text-decoration: none; font: 700 10.5px/1 var(--md-ref-typeface-plain); }
+.mb-rail-pins-t { display: flex; align-items: center; gap: 3px; font: 600 10px/14px var(--md-ref-typeface-plain); letter-spacing: .04em; text-transform: uppercase; color: var(--mb-sidebar-muted); margin-bottom: 2px; }
+.mb-rail-pins-t .ms { width: 12px; height: 12px; }
+.mb-rail-pin { width: 72px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 2px; border-radius: var(--md-sys-shape-corner-small); color: var(--mb-sidebar-ink); text-decoration: none; font: 500 10.5px/13px var(--md-ref-typeface-plain); text-align: center; overflow-wrap: anywhere; }
+.mb-rail-pin .ms { width: 18px; height: 18px; color: var(--mb-sidebar-muted); }
 .mb-rail-pin:hover { background: color-mix(in srgb, var(--mb-sidebar-ink) 12%, transparent); color: #fff; }
 .mb-rail-fly { display: none; position: absolute; left: calc(100% - 4px); top: -4px; z-index: 40; min-width: 230px; padding: var(--mb-space-2); border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); box-shadow: var(--md-sys-elevation-3); }
 .mb-rail-grp:hover > .mb-rail-fly, .mb-rail-grp:focus-within > .mb-rail-fly, .mb-rail-fly.on { display: block; }
@@ -569,7 +580,8 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-rail-fly a small { margin-left: auto; color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-small); }
 .mb-pf.rail-compact { grid-template-columns: var(--mb-navrail-compact) var(--mb-wl-width) minmax(0, 1fr); }
 .mb-pf.rail-compact.wl-off { grid-template-columns: var(--mb-navrail-compact) minmax(0, 1fr); }
-.mb-pf.rail-compact .mb-rail-item { width: 52px; font-size: 0; gap: 0; }
+.mb-pf.rail-compact .mb-rail-item, .mb-pf.rail-compact .mb-rail-pin { width: 52px; font-size: 0; gap: 0; }
+.mb-pf.rail-compact .mb-rail-pins-t { font-size: 0; }
 .mb-pf.rail-compact .mb-appbar-brand { width: var(--mb-navrail-compact); }
 
 /* watchlist panel (Kite-style): tabs 1-5, a filter field, rows with price, change and as-of; hover or tap shows B S and more */
@@ -604,10 +616,12 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-bs { width: 28px; height: 28px; border: 0; border-radius: 3px; display: inline-grid; place-items: center; font: 800 12.5px/1 var(--md-ref-typeface-plain); cursor: pointer; padding: 0; }
 .mb-bs.buy { background: var(--mb-color-up); color: var(--mb-color-on-up); }
 .mb-bs.sell { background: var(--mb-color-down); color: var(--mb-color-on-down); }
-.mb-bs:disabled { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface-variant); cursor: not-allowed; }
+.mb-bs:disabled { opacity: .45; cursor: not-allowed; }
 .md-btn.buy { background: var(--mb-color-up); color: var(--mb-color-on-up); }
 .md-btn.sell { background: var(--mb-color-down); color: var(--mb-color-on-down); }
-.md-btn.buy:disabled, .md-btn.sell:disabled { background: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent); color: color-mix(in srgb, var(--md-sys-color-on-surface) 50%, transparent); box-shadow: none; }
+/* locked (market closed): Buy stays green and Sell red, faded, with the reason in the tooltip */
+.md-btn.buy:disabled { background: var(--mb-color-up); color: var(--mb-color-on-up); opacity: .45; box-shadow: none; }
+.md-btn.sell:disabled { background: var(--mb-color-down); color: var(--mb-color-on-down); opacity: .45; box-shadow: none; }
 
 /* breadcrumbs, page head (breadcrumb · title · as-of · actions), as-of stamp */
 .mb-crumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 4px; margin: 0; padding: 0; list-style: none; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
@@ -709,8 +723,10 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 .mb-pf.compact .md-table th { padding-top: 6px; padding-bottom: 6px; }
 .mb-pf.compact .mb-wl-row { padding-top: 5px; padding-bottom: 5px; }
 
+@media (max-width: 1359px) { .mb-appbar-name { display: none; } }
+@media (max-width: 1279px) { .mb-mkt .t { display: none; } }
+@media (max-width: 1099px) { .mb-idx-strip { display: none; } }
 @media (max-width: 1279px) {
-  .mb-gsearch { width: 260px; flex-basis: 260px; }
   .mb-idx-strip .mb-idx:nth-child(n+3) { display: none; }
 }
 @media (max-width: 1199px) {
@@ -721,6 +737,12 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 }
 @media (max-width: 899px) {
   .mb-idx-strip { display: none; }
+  .mb-pf { --mb-appbar-height: 108px; grid-template-rows: auto minmax(0, 1fr); }
+  .mb-appbar { height: auto; flex-wrap: wrap; row-gap: 0; }
+  .mb-appbar-brand { height: 60px; }
+  .mb-gsearch { order: 9; flex: 1 0 calc(100% - 2 * var(--mb-gutter)); max-width: none; margin: 0 var(--mb-gutter) 8px; }
+  .mb-gsearch .mb-kbd { display: none; }
+  .mb-appbar > .md-segmented { margin-left: auto; }
 }
 @media (max-width: 599px) {
   .mb-pf, .mb-pf.wl-off, .mb-pf.rail-compact { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
@@ -728,8 +750,10 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
   .mb-appbar { height: auto; flex-wrap: wrap; row-gap: 0; padding: 0 var(--mb-space-2) 0 0; gap: 0 var(--mb-space-2); }
   .mb-appbar-brand { width: 52px; height: 56px; background: none; }
   .mb-appbar-brand .mb-brand-mark { width: 32px; height: 32px; }
-  .mb-gsearch { flex: 1 1 0; width: auto; height: 38px; padding: 0 10px; }
-  .mb-gsearch .mb-kbd { display: none; }
+  .mb-gsearch { order: 9; flex: 1 0 calc(100% - 2 * var(--mb-gutter)); width: auto; height: 40px; margin: 0 var(--mb-gutter) 8px; padding: 0 12px; }
+  .mb-gsearch .mb-kbd, .mb-gsearch .sm { display: none; }
+  .mb-gsearch .lg { display: block; }
+  .mb-appbar > .md-segmented { margin-left: auto; }
   .mb-appbar-end { margin-left: 0; }
   .mb-appbar-end .hide-phone { display: none; }
   .mb-idx-strip { order: 10; flex: 1 0 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px var(--mb-gutter) 6px; overflow: visible; border-top: 1px solid var(--md-sys-color-surface-container-high); }
@@ -755,66 +779,81 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
   .mb-drawer, .mb-drawer.open, .mb-veil, .mb-snack, .mb-rail-item, .mb-rail-item .mb-nav-ind { transition: none; }
 }
 
-/* ---- Home: quick search, idea cards, carousel, account tiles (owner feedback, 13 Oct 2026) -------------------
-   Quick search finds a stock, index or F&O contract and trades it from the result (B / S open the Paper order
-   window). Idea cards carry a 0-100 score ring, the signal in words and a quick Paper buy. Carousels scroll
-   sideways with snap; on a phone the next card peeks. */
-.mb-qsearch { position: relative; z-index: 15; }
-.mb-qsearch-field { display: flex; align-items: center; gap: 12px; height: 54px; padding: 0 8px 0 16px; border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface); box-shadow: var(--mb-card-shadow); transition: border-color var(--md-sys-motion-duration-short), box-shadow var(--md-sys-motion-duration-short); }
-.mb-qsearch-field:focus-within { border-color: var(--md-sys-color-primary); box-shadow: 0 0 0 1px var(--md-sys-color-primary), var(--md-sys-elevation-2); }
-.mb-qsearch-field > .ms { width: 24px; height: 24px; color: var(--md-sys-color-primary); }
-.mb-qsearch-field input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-large); outline: none; }
-.mb-qsearch-field input::placeholder { color: var(--md-sys-color-on-surface-variant); }
-.mb-qsearch-scope { flex: none; }
-.mb-qsearch-results { position: absolute; left: 0; right: 0; top: calc(100% + 4px); max-height: 440px; overflow-y: auto; padding: 6px; border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface); box-shadow: var(--md-sys-elevation-3); display: none; }
-.mb-qsearch.open .mb-qsearch-results { display: block; }
-.mb-qs-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 8px 10px; border-radius: var(--md-sys-shape-corner-small); cursor: pointer; }
-.mb-qs-row:hover, .mb-qs-row[aria-selected="true"] { background: var(--md-sys-color-surface-container-low); }
-.mb-qs-row .mb-avatar { width: 34px; height: 34px; } .mb-qs-row .mb-avatar .ms { width: 18px; height: 18px; }
-.mb-qs-row b { display: block; font-weight: 600; overflow-wrap: anywhere; }
-.mb-qs-row small { display: block; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-qs-row .px { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.mb-qs-row .bs { display: flex; gap: 4px; }
-.mb-qsearch-recent { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-qsearch-recent .md-chip { cursor: pointer; }
-
+/* ---- Signals panel and Home parts (owner feedback, 13 Oct 2026) ------------------------------------------------
+   The left panel lists the top signals by approach (rule-based, AI-based, hybrid) with B / S on every row, filter
+   chips and pages (no second search box). Home: a "today at a glance" line, the market band, approach cards (each
+   approach's separate paper accounts, never summed). The approach badge always carries an icon and the word. */
 /* score ring 0-100 (set --v); the number is always printed inside */
 .mb-score { --v: 0; width: 46px; height: 46px; border-radius: 50%; flex: none; display: grid; place-items: center; background: conic-gradient(var(--md-sys-color-primary) calc(var(--v) * 1%), var(--md-sys-color-surface-container-high) 0); }
-.mb-score b { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--md-sys-color-surface); font: 700 14px/1 var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); font-variant-numeric: tabular-nums; }
-.mb-score.sm { width: 36px; height: 36px; } .mb-score.sm b { width: 28px; height: 28px; font-size: 12px; }
+.mb-score b { width: 36px; letter-spacing: -.3px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--md-sys-color-surface); font: 700 14px/1 var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); font-variant-numeric: tabular-nums; }
+.mb-score.sm { width: 46px; height: 46px; } .mb-score.sm b { width: 38px; height: 38px; font-size: 11px; }
 
-/* carousel: a sideways row with snap and prev / next buttons in its head */
-.mb-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 2 * var(--mb-space-4)) / 3); gap: var(--mb-space-4); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; padding: 2px 2px var(--mb-space-3); margin: 0 -2px; overscroll-behavior-x: contain; }
-.mb-carousel > * { scroll-snap-align: start; min-width: 0; }
-.mb-carousel.two { grid-auto-columns: calc((100% - var(--mb-space-4)) / 2); }
+.mb-ap { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; border-radius: 3px; font: 600 11px/16px var(--md-ref-typeface-plain); white-space: nowrap; background: var(--mb-color-neutral-container); color: var(--mb-color-on-neutral-container); }
+.mb-ap .ms { width: 12px; height: 12px; }
+.mb-ap.manual { background: var(--mb-color-paper-container); color: var(--mb-color-on-paper-container); }
+.mb-ap.ai { background: var(--mb-color-info-container); color: var(--mb-color-on-info-container); }
+.mb-ap.rule { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+.mb-ap.hybrid { background: var(--mb-color-warn-container); color: var(--mb-color-on-warn-container); }
+.mb-wl-title { display: flex; align-items: center; gap: 6px; }
+.mb-wl-title h2 { font: 600 15px/20px var(--md-ref-typeface-plain); margin: 0; }
+.mb-wl-title .md-icon-btn { margin-left: auto; }
+.mb-wl-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mb-wl-note { display: flex; gap: 8px; align-items: flex-start; margin: 8px 12px; padding: 8px 10px; border-radius: var(--mb-panel-radius); background: var(--md-sys-color-surface-container-low); font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-wl-note .ms { width: 16px; height: 16px; flex: none; margin-top: 1px; }
+.mb-wl-note b { color: var(--md-sys-color-on-surface); }
+.mb-pager { justify-content: flex-end; gap: 4px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-pager > span { margin-right: auto; padding-left: 4px; }
+.mb-sig-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 3px 10px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-sig-row:hover, .mb-sig-row:focus-within { background: var(--md-sys-color-surface-container-low); }
+.mb-sig-row > .mb-score { grid-row: 1 / span 3; align-self: start; }
+.mb-sig-row .top { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-width: 0; }
+.mb-sig-row .top b, .mb-sig-row .top .tk { font: 700 13.5px/18px var(--md-ref-typeface-plain); overflow-wrap: anywhere; }
+.mb-sig-row .px { text-align: right; font: 600 13.5px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mb-sig-row .px small { display: block; font: 11px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-sig-row .px small .mb-delta { font-size: 11.5px; }
+.mb-sig-row .why { grid-column: 2 / span 2; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface); }
+.mb-sig-row .cost { grid-column: 2 / span 2; }
+.mb-sig-row .cost .mb-label { white-space: normal; }
+.mb-sig-row .proof { grid-column: 2 / -1; flex-wrap: wrap; display: flex; gap: 4px; align-items: center; font: 11.5px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); min-width: 0; }
+.mb-sig-row .proof .ms { width: 13px; height: 13px; flex: none; }
+.mb-sig-row .act { grid-column: 2 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
+.mb-sig-row .act .md-btn { height: 32px; }
+.mb-sig-row .act .md-btn:only-child { grid-column: 1 / -1; }
 
-/* idea card: what, why (the signal in words), how much, and a quick Paper order */
-.mb-idea { display: grid; gap: 10px; align-content: start; padding: var(--mb-space-4); border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); border-top: 3px solid var(--mb-verdict-ok-box); transition: box-shadow var(--md-sys-motion-duration-short); }
-.mb-idea:hover { box-shadow: var(--mb-card-shadow-hover); }
-.mb-idea.strong { border-top-color: var(--mb-verdict-strong-box); }
-.mb-idea.no { border-top-color: var(--mb-verdict-no-box); }
-.mb-idea-top { display: flex; align-items: flex-start; gap: 10px; }
-.mb-idea-top .who { min-width: 0; flex: 1; }
-.mb-idea-top .who b { display: block; font: 700 15px/20px var(--md-ref-typeface-plain); overflow-wrap: anywhere; }
-.mb-idea-top .who small { display: block; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-idea-px { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font: 600 15px/20px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
-.mb-idea-why { font: var(--md-sys-typescale-body-medium); color: var(--md-sys-color-on-surface); }
-.mb-idea-why b { font-weight: 700; }
-.mb-idea-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0; }
-.mb-idea-facts > div { padding: 6px 8px; border-radius: var(--mb-panel-radius); background: var(--md-sys-color-surface-container-low); min-width: 0; }
-.mb-idea-facts dt { font: 600 10.5px/14px var(--md-ref-typeface-plain); letter-spacing: .04em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
-.mb-idea-facts dd { margin: 0; font: 600 13px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.mb-idea-acts { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.mb-idea-acts .md-btn.buy, .mb-idea-acts .md-btn.sell { flex: 1; }
+/* today at a glance: three answers in one row (my money today, the best signal, what needs me), each actionable */
+.mb-glance { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mb-glance > div { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 2px 12px; align-items: start; align-content: start; padding: 14px 16px; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); min-width: 0; }
+.mb-glance .mb-avatar { grid-row: 1 / span 2; }
+.mb-glance .l { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-glance .v { font: 700 18px/24px var(--md-ref-typeface-plain); overflow-wrap: anywhere; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.mb-glance .v .md-btn { height: 28px; }
 
-/* account tile: one paper account, never summed with another */
-.mb-acct { display: grid; gap: 4px; padding: var(--mb-space-4); border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); text-decoration: none; color: var(--md-sys-color-on-surface); min-width: 0; border-left: 3px solid var(--md-sys-color-primary); }
-.mb-acct:hover { box-shadow: var(--mb-card-shadow-hover); }
-.mb-acct.book { border-left-color: var(--mb-chart-3); } .mb-acct.stock { border-left-color: var(--mb-chart-2); }
-.mb-acct .n { display: flex; align-items: center; gap: 6px; font: 600 12.5px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
-.mb-acct .v { font: 700 20px/26px var(--md-ref-typeface-plain); letter-spacing: -.3px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.mb-acct .d { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.mb-acct .d .mb-delta { font-size: 13px; }
+/* market band: session, indices with a trend line, breadth, movers */
+.mb-mband { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr); gap: 0; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); overflow: hidden; }
+.mb-mband > * { padding: 12px 16px; min-width: 0; border-left: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-mband > :first-child { border-left: 0; }
+.mb-mband .n { font: 600 11px/16px var(--md-ref-typeface-plain); letter-spacing: .05em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.mb-mband .v { font: 700 17px/22px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.mb-mband svg { width: 100%; height: 26px; display: block; margin-top: 4px; }
+.mb-mband .brd { display: grid; gap: 6px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-mband .bar { display: flex; height: 8px; border-radius: 2px; overflow: hidden; }
+.mb-mband .bar i { display: block; } .mb-mband .bar .a { background: var(--mb-color-up); } .mb-mband .bar .u { background: var(--md-sys-color-surface-container-highest); } .mb-mband .bar .d { background: var(--mb-color-down); }
+
+/* approach card: one approach (You, Rule-based, AI-based, Hybrid), its separate accounts as lines, never summed */
+.mb-apcard { display: grid; gap: 10px; align-content: start; padding: 16px; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); min-width: 0; }
+.mb-apcard .h { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 10px; align-items: center; }
+.mb-apcard .h .mb-avatar { grid-row: 1 / span 2; }
+.mb-apcard .h b { font: 600 15px/20px var(--md-ref-typeface-plain); }
+.mb-apcard .h small { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-apcard .line { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; padding-top: 8px; border-top: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-apcard .line .k { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-apcard .line .val { font: 700 17px/22px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.mb-apcard .line .fig { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.mb-apcard .line .d { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); white-space: nowrap; }
+.mb-apcard .line .d .mb-delta { font-size: 14px; }
+.mb-apcard .line .s { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-apcard .today { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); display: flex; gap: 6px; align-items: center; }
+.mb-apcard .today .ms { width: 14px; height: 14px; }
 
 /* basket (multi-leg paper order) legs inside the order window */
 .mb-legs { width: 100%; border-collapse: collapse; font: var(--md-sys-typescale-body-small); font-variant-numeric: tabular-nums; }
@@ -822,15 +861,12 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 .mb-legs td { padding: 6px; border-bottom: 1px solid var(--md-sys-color-surface-container-high); }
 .mb-legs .num { text-align: right; }
 
-@media (max-width: 1199px) { .mb-carousel { grid-auto-columns: calc((100% - var(--mb-space-4)) / 2); } }
+@media (max-width: 1199px) { .mb-mband { grid-template-columns: repeat(3, minmax(0, 1fr)); } .mb-mband > :last-child { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--md-sys-color-surface-container-high); } }
+@media (max-width: 899px) { .mb-glance { grid-template-columns: 1fr; } }
 @media (max-width: 599px) {
-  .mb-carousel, .mb-carousel.two { grid-auto-columns: 84%; gap: var(--mb-space-3); }
-  .mb-qsearch-field { height: 50px; padding-left: 12px; }
-  .mb-qsearch-scope { display: none; }
-  .mb-qs-row { grid-template-columns: minmax(0, 1fr) auto; }
-  .mb-qs-row .mb-avatar { display: none; }
-  .mb-qs-row .bs { grid-column: 1 / -1; }
-  .mb-qs-row .bs .mb-bs { flex: 1; width: auto; }
+  .mb-mband > * { padding: 10px 10px; }
+  .mb-mband .v { font-size: 15px; }
+  .mb-sig-row .why { grid-column: 2 / -1; }
 }
 
 </style>
@@ -1169,12 +1205,12 @@ code{font-family:var(--md-ref-typeface-mono);font-size:.92em;background:var(--md
         <nav class="mb-navrail" style="position:static;height:auto;border-radius:var(--mb-card-radius);width:84px" aria-label="Example rail">
           <div class="mb-rail-grp"><a class="mb-rail-item" href="#" aria-current="page"><span class="mb-nav-ind"><svg class="ms"><use href="#ms-dashboard"/></svg></span>Dashboard</a></div>
           <div class="mb-rail-grp"><a class="mb-rail-item" href="#"><span class="mb-nav-ind"><svg class="ms"><use href="#ms-candlestick_chart"/></svg></span>Trade</a></div>
-          <div class="mb-rail-sep"></div><a class="mb-rail-pin" href="#">NC</a>
+          <div class="mb-rail-sep"></div><div class="mb-rail-pins-t"><svg class="ms"><use href="#ms-push_pin"/></svg>Pinned</div><a class="mb-rail-pin" href="#"><svg class="ms"><use href="#ms-layers"/></svg><span>NIFTY chain</span></a>
         </nav>
         <div class="mb-rail-fly on" style="position:static;display:block"><div class="t">Trade</div><a href="#"><svg class="ms"><use href="#ms-layers"/></svg>Option chain</a><a href="#" aria-current="page"><svg class="ms"><use href="#ms-filter_list"/></svg>Screener<small>g s</small></a></div>
         <ul class="mb-wl-list" style="width:300px;flex:none;background:var(--md-sys-color-surface);border-radius:var(--mb-card-radius);box-shadow:var(--mb-card-shadow)">
           <li class="mb-wl-row"><svg class="ms grip"><use href="#ms-drag_indicator"/></svg><div style="min-width:0"><div class="sym">RELIANCE <span class="mb-label paper" style="padding:0 5px;font-size:10.5px;line-height:16px">held</span></div><div class="sub">Reliance Industries · NSE</div></div><div class="px"><div>1,218.00</div><small><span class="mb-delta up">+2.66%</span> · 15:10 IST</small></div></li>
-          <li class="mb-wl-row open"><svg class="ms grip"><use href="#ms-drag_indicator"/></svg><div style="min-width:0"><div class="sym">NIFTY 27 OCT 24800 CE</div><div class="sub">Option · lot 75</div></div><div class="px"><div>68.20</div><small><span class="mb-delta down">−15.10%</span> · 3 pm snap</small></div><div class="mb-wl-acts"><button class="mb-bs buy" type="button" aria-label="Paper buy">B</button><button class="mb-bs sell" type="button" aria-label="Paper sell">S</button><button class="md-icon-btn" type="button" aria-label="Chart"><svg class="ms"><use href="#ms-show_chart"/></svg></button><button class="md-icon-btn" type="button" aria-label="More"><svg class="ms"><use href="#ms-more_vert"/></svg></button></div></li>
+          <li class="mb-wl-row open"><svg class="ms grip"><use href="#ms-drag_indicator"/></svg><div style="min-width:0"><div class="sym">NIFTY 27 OCT 24800 CE</div><div class="sub">Option · lot 75</div></div><div class="px"><div>68.20</div><small><span class="mb-delta down">−15.10%</span> · 3 pm snap</small></div><div class="mb-wl-acts"><button class="mb-bs buy" type="button" aria-label="Buy">B</button><button class="mb-bs sell" type="button" aria-label="Sell">S</button><button class="md-icon-btn" type="button" aria-label="Chart"><svg class="ms"><use href="#ms-show_chart"/></svg></button><button class="md-icon-btn" type="button" aria-label="More"><svg class="ms"><use href="#ms-more_vert"/></svg></button></div></li>
           <li class="mb-wl-row stale"><svg class="ms grip"><use href="#ms-drag_indicator"/></svg><div style="min-width:0"><div class="sym">BANKNIFTY 24 NOV 52000 PE</div><div class="sub">Option · lot 35</div></div><div class="px"><div>702.10</div><small><span class="mb-delta up">+4.10%</span> · EOD 8 Oct · stale</small></div></li>
         </ul>
       </div>
@@ -1185,25 +1221,28 @@ code{font-family:var(--md-ref-typeface-mono);font-size:.92em;background:var(--md
           <div class="mb-field-row"><div class="mb-field"><label for="sg-q">Lots (lot 75)</label><input class="mb-input" id="sg-q" value="1"></div><div class="mb-field"><label for="sg-l">Limit price</label><input class="mb-input" id="sg-l" placeholder="Market" disabled></div></div>
           <dl class="mb-order-sum"><dt>Premium</dt><dd>₹5,137.50</dd><dt>Charges (estimate)</dt><dd>₹25.88</dd><dt class="tot">Maximum loss</dt><dd class="tot">₹5,163.38</dd></dl>
           <ul class="mb-checks"><li class="ok"><span class="mb-mark ok"><svg class="ms"><use href="#ms-check"/></svg></span><span>Maximum loss ≤ ₹10,000 a trade<small>₹5,163</small></span></li><li class="fail"><span class="mb-mark no"><svg class="ms"><use href="#ms-close"/></svg></span><span>At risk ≤ ₹30,000<small>unlimited: a single short option</small></span></li></ul>
-          <div class="mb-alert paper"><svg class="ms"><use href="#ms-description"/></svg><div><b class="t">Paper order: no real order is placed</b><div class="s">Filled only from valid quotes by the strategies’ fill rules.</div></div><span></span></div>
-          <button class="md-btn filled buy" type="button">Place paper buy · 75 NIFTY 27 OCT 24800 CE</button>
+          <div class="mb-asof" style="white-space:normal"><svg class="ms"><use href="#ms-info"/></svg>No real order is placed: Omenix records it for your paper account.</div>
+          <button class="md-btn filled buy" type="button">Buy 75 NIFTY 27 OCT 23300 CE</button>
           <button class="md-btn filled sell" type="button" disabled>Blocked by a limit check</button>
         </div>
         <div style="display:grid;gap:12px">
-          <div class="mb-hcard on" style="position:static"><div class="top"><div><b>RELIANCE</b><small>Reliance Industries · NSE</small></div><div class="px">1,218.00<span class="mb-delta up">+2.66%</span></div></div><div class="held"><b>Long 40</b> at 1,214.60 · Manual (paper) · <span class="mb-delta up">+₹136</span></div><div class="acts"><button class="md-btn outlined small" type="button">Chart</button><button class="md-btn small buy" type="button">Paper buy</button><button class="md-btn small sell" type="button">Paper sell</button></div></div>
+          <div class="mb-hcard on" style="position:static"><div class="top"><div><b>RELIANCE</b><small>Reliance Industries · NSE</small></div><div class="px">1,218.00<span class="mb-delta up">+2.66%</span></div></div><div class="held"><b>Long 40</b> at 1,214.60 · Manual (paper) · <span class="mb-delta up">+₹136</span></div><div class="acts"><button class="md-btn outlined small" type="button">Chart</button><button class="md-btn small buy" type="button">Buy</button><button class="md-btn small sell" type="button">Sell</button></div></div>
           <div class="md-card" style="padding:8px;width:300px"><div class="mb-pal-group">F&amp;O contracts</div><div class="mb-pal-item" aria-selected="true"><span class="mb-avatar"><svg class="ms"><use href="#ms-layers"/></svg></span><span style="min-width:0"><b>NIFTY 27 OCT 24500 CE</b><small>Option · lot 75</small></span><span class="end">182.40</span></div></div>
           <div class="mb-menu on" style="position:static"><button type="button"><svg class="ms"><use href="#ms-show_chart"/></svg>Chart</button><button type="button"><svg class="ms"><use href="#ms-receipt_long"/></svg>Paper order<span class="mb-kbd">B</span></button></div>
-          <div class="mb-snack on" style="position:static;transform:none;max-width:300px">Paper order recorded: open until the next valid quotes.</div>
+          <div class="mb-snack on" style="position:static;transform:none;max-width:300px">Order recorded: open until the next valid quotes.</div>
         </div>
       </div>
-      <h3 class="md-title-small" style="margin:var(--mb-space-5) 0 var(--mb-space-2)">Home: quick search (trade from the result), idea card with score ring, account tile</h3>
+      <h3 class="md-title-small" style="margin:var(--mb-space-5) 0 var(--mb-space-2)">Picks panel row, family badges, glance, market band, "who trades" card (the stock tool's real labels)</h3>
       <div class="sg-row" style="align-items:flex-start">
-        <div style="width:min(520px,100%)"><div class="mb-qsearch"><label class="mb-qsearch-field"><svg class="ms"><use href="#ms-search"/></svg><input type="search" value="reliance" aria-label="Quick search example"><span class="md-segmented dense mb-qsearch-scope"><button type="button" aria-pressed="true">All</button><button type="button" aria-pressed="false">Stocks</button></span></label></div>
-          <div class="md-card" style="padding:6px;margin-top:4px"><div class="mb-qs-row" aria-selected="true"><span class="mb-avatar"><svg class="ms"><use href="#ms-apartment"/></svg></span><span><b>RELIANCE</b><small>Reliance Industries · NSE</small></span><span class="px">1,218.00<small><span class="mb-delta up">+2.66%</span> · 15:10 IST</small></span><span class="bs" style="display:flex;gap:4px"><button class="mb-bs buy" type="button" aria-label="Paper buy">B</button><button class="mb-bs sell" type="button" aria-label="Paper sell">S</button></span></div></div></div>
-        <article class="mb-idea" style="width:290px"><div class="mb-idea-top"><span class="mb-score" style="--v:82"><b>82</b></span><div class="who"><b>RELIANCE</b><small>Reliance Industries · NSE</small></div></div><div class="mb-idea-px">1,218.00 <span class="mb-delta up">+2.66%</span></div><div class="mb-idea-why"><span class="mb-label success"><svg class="ms"><use href="#ms-check"/></svg>Buy signal</span> 12 of 15 strategies buy at N+3</div><dl class="mb-idea-facts"><div><dt>Chance up</dt><dd>64%</dd></div><div><dt>Target</dt><dd>1,247</dd></div><div><dt>Range</dt><dd>1,198–1,262</dd></div></dl><div class="mb-idea-acts"><button class="md-btn filled buy" type="button">Paper buy</button><button class="md-btn outlined" type="button">Details</button></div></article>
-        <article class="mb-idea no" style="width:240px"><div class="mb-idea-top"><span class="mb-avatar danger"><svg class="ms"><use href="#ms-block"/></svg></span><div class="who"><b>F&amp;O Book 1: no trade</b><small>3 pm decision</small></div></div><div class="mb-idea-why"><span class="mb-label danger"><svg class="ms"><use href="#ms-close"/></svg>No trade</span> IV rank 18 below its 30 floor</div></article>
-        <a class="mb-acct" href="#" style="width:190px"><span class="n">Manual (paper)</span><span class="v">₹5,00,055</span><span class="d"><span class="mb-delta up">+₹1,262</span> today</span></a>
-        <a class="mb-acct book" href="#" style="width:190px"><span class="n">F&amp;O Book 2</span><span class="v">₹5,08,941</span><span class="d"><span class="mb-delta up">+₹464</span> today</span></a>
+        <ul class="mb-wl-list" style="width:300px;flex:none;background:var(--md-sys-color-surface);border-radius:var(--mb-card-radius);box-shadow:var(--mb-card-shadow)">
+          <li class="mb-sig-row"><span class="mb-score sm" style="--v:93"><b>14/15</b></span><div class="top"><a class="tk" href="#">NVDA</a><span class="mb-ap rule"><svg class="ms"><use href="#ms-rule"/></svg>Rule-based</span></div><div class="px">239.24<small><span class="mb-delta up">+0.14%</span> · 6 Oct close</small></div><div class="why"><b>Buy</b> at N+5 · Model + news · model 58.5% up</div><div class="cost"><span class="mb-label success"><svg class="ms"><use href="#ms-check"/></svg>Yes: +0.48% after costs</span></div><div class="proof"><svg class="ms"><use href="#ms-history"/></svg>Record here: 4 of 4 won, <span class="mb-delta up">+$103.48</span> · too few to rank</div><div class="act"><button class="md-btn small buy" type="button">Buy</button><button class="md-btn small sell" type="button">Sell</button></div></li>
+        </ul>
+        <div style="display:grid;gap:10px;min-width:0;flex:1 1 280px;max-width:100%">
+          <div class="sg-row"><span class="mb-ap manual"><svg class="ms"><use href="#ms-account_circle"/></svg>You</span><span class="mb-ap rule"><svg class="ms"><use href="#ms-rule"/></svg>Rule-based</span><span class="mb-ap ai"><svg class="ms"><use href="#ms-smart_toy"/></svg>AI-based</span><span class="mb-ap baseline"><svg class="ms"><use href="#ms-trending_flat"/></svg>Baselines</span><span class="mb-ap hybrid"><svg class="ms"><use href="#ms-bolt"/></svg>Hybrid (rule + AI)</span><span class="mb-mkt"><i></i><b>Closed</b><span class="t">opens Thu 8 Oct 09:15 IST</span></span><span class="mb-mkt open"><i></i><b>Open</b><span class="t">closes 15:30 IST</span></span><button class="md-btn small buy" type="button" disabled>Buy (closed)</button><button class="md-btn small sell" type="button" disabled>Sell (closed)</button></div>
+          <div class="mb-glance"><div><span class="mb-avatar paper"><svg class="ms"><use href="#ms-account_circle"/></svg></span><span class="l">Your paper account · open profit</span><span class="v"><span class="mb-delta up">+₹1,800.00</span></span></div><div><span class="mb-avatar warn"><svg class="ms"><use href="#ms-bolt"/></svg></span><span class="l">Top pick · 13 of 15 buy</span><span class="v">RELIANCE</span></div><div><span class="mb-avatar warn"><svg class="ms"><use href="#ms-notifications_active"/></svg></span><span class="l">Needs you</span><span class="v">4 items</span></div></div>
+          <div class="mb-mband"><div><div class="n">NIFTY 50</div><div class="v">22,776.10 <span class="mb-delta up">+0.98%</span></div><small class="muted">5 days −0.02%</small></div><div><div class="n">INDIA VIX</div><div class="v">13.61 <span class="mb-delta down">−7.92%</span></div></div><div><div class="n">Example</div><div class="v">—</div></div><div class="brd"><div class="n">Companies</div><span>3 of 3 rose</span></div></div>
+          <article class="mb-apcard" style="max-width:300px"><div class="h"><span class="mb-avatar"><svg class="ms"><use href="#ms-rule"/></svg></span><b>Rule-based</b><small>Written rules on the price model's forecast and the news.</small></div><div class="line"><span class="k">Head-to-head portfolio</span><div class="fig"><span class="d"><span class="mb-delta up">+₹1,015.81</span> net so far</span></div><span class="s">1 settled trade · too few to rank</span></div></article>
+        </div>
       </div>
     </section>
     <section class="sg-section" id="shell">

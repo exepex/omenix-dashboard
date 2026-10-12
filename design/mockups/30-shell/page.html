@@ -714,9 +714,10 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-appbar-name { font: 700 18px/1 var(--md-ref-typeface-plain); letter-spacing: -.3px; color: var(--md-sys-color-on-surface); white-space: nowrap; }
 .mb-appbar-name small { display: block; font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); letter-spacing: .2px; margin-top: 3px; }
 .mb-appbar-end { margin-left: auto; display: flex; align-items: center; gap: var(--mb-space-1); flex: none; }
-.mb-gsearch { display: flex; align-items: center; gap: 8px; height: 40px; width: 340px; flex: 0 1 340px; min-width: 0; padding: 0 8px 0 14px; border-radius: var(--md-sys-shape-corner-small); border: 1px solid transparent; background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-medium); cursor: text; text-align: left; }
+.mb-gsearch { display: flex; align-items: center; gap: 8px; height: 40px; width: auto; flex: 1 1 220px; max-width: 420px; min-width: 0; padding: 0 8px 0 14px; border-radius: var(--md-sys-shape-corner-small); border: 1px solid transparent; background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-medium); cursor: text; text-align: left; }
 .mb-gsearch:hover { border-color: var(--md-sys-color-outline-variant); }
 .mb-gsearch .ms { width: 20px; height: 20px; flex: none; }
+.mb-gsearch .sm { display: none; }
 .mb-gsearch > span:not(.mb-kbd) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mb-kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 3px; border: 1px solid var(--md-sys-color-outline-variant); border-bottom-width: 2px; background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface-variant); font: 600 11px/1 var(--md-ref-typeface-mono); white-space: nowrap; flex: none; }
 /* index strip: name, value, signed change; the as-of time in its tooltip */
@@ -727,6 +728,13 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-idx .v { font: 600 13.5px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
 .mb-idx .mb-delta { font-size: 12px; }
 .mb-idx.stale .v, .mb-idx.stale .mb-delta { color: var(--md-sys-color-on-surface-variant); }
+/* market status chip: open (green) or closed (grey), always with the word and the next time; your own buy and sell
+   are paused while it is closed */
+.mb-mkt { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-small); white-space: nowrap; flex: none; }
+.mb-mkt i { width: 8px; height: 8px; border-radius: 50%; background: var(--mb-color-neutral); flex: none; }
+.mb-mkt b { font-weight: 700; color: var(--md-sys-color-on-surface); }
+.mb-mkt.open { background: var(--mb-color-up-container); color: var(--mb-color-on-up-container); }
+.mb-mkt.open i { background: var(--mb-color-up); } .mb-mkt.open b { color: var(--mb-color-on-up-container); }
 .mb-me { width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); font: 700 13px/1 var(--md-ref-typeface-plain); display: inline-grid; place-items: center; cursor: pointer; margin-left: var(--mb-space-1); }
 .mb-badged { position: relative; }
 .mb-badged > .md-badge.count { position: absolute; top: 4px; right: 3px; font-size: 10px; min-width: 16px; }
@@ -741,7 +749,10 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-rail-item[aria-current="page"] { color: #fff; font-weight: 700; }
 .mb-rail-item[aria-current="page"] .mb-nav-ind { background: var(--mb-sidebar-active); box-shadow: var(--mb-sidebar-active-shadow); }
 .mb-rail-sep { width: 40px; height: 1px; background: color-mix(in srgb, var(--mb-sidebar-ink) 18%, transparent); margin: var(--mb-space-2) 0; flex: none; }
-.mb-rail-pin { width: 40px; height: 36px; border-radius: var(--md-sys-shape-corner-small); display: grid; place-items: center; color: var(--mb-sidebar-muted); text-decoration: none; font: 700 10.5px/1 var(--md-ref-typeface-plain); }
+.mb-rail-pins-t { display: flex; align-items: center; gap: 3px; font: 600 10px/14px var(--md-ref-typeface-plain); letter-spacing: .04em; text-transform: uppercase; color: var(--mb-sidebar-muted); margin-bottom: 2px; }
+.mb-rail-pins-t .ms { width: 12px; height: 12px; }
+.mb-rail-pin { width: 72px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 2px; border-radius: var(--md-sys-shape-corner-small); color: var(--mb-sidebar-ink); text-decoration: none; font: 500 10.5px/13px var(--md-ref-typeface-plain); text-align: center; overflow-wrap: anywhere; }
+.mb-rail-pin .ms { width: 18px; height: 18px; color: var(--mb-sidebar-muted); }
 .mb-rail-pin:hover { background: color-mix(in srgb, var(--mb-sidebar-ink) 12%, transparent); color: #fff; }
 .mb-rail-fly { display: none; position: absolute; left: calc(100% - 4px); top: -4px; z-index: 40; min-width: 230px; padding: var(--mb-space-2); border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); box-shadow: var(--md-sys-elevation-3); }
 .mb-rail-grp:hover > .mb-rail-fly, .mb-rail-grp:focus-within > .mb-rail-fly, .mb-rail-fly.on { display: block; }
@@ -753,7 +764,8 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-rail-fly a small { margin-left: auto; color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-small); }
 .mb-pf.rail-compact { grid-template-columns: var(--mb-navrail-compact) var(--mb-wl-width) minmax(0, 1fr); }
 .mb-pf.rail-compact.wl-off { grid-template-columns: var(--mb-navrail-compact) minmax(0, 1fr); }
-.mb-pf.rail-compact .mb-rail-item { width: 52px; font-size: 0; gap: 0; }
+.mb-pf.rail-compact .mb-rail-item, .mb-pf.rail-compact .mb-rail-pin { width: 52px; font-size: 0; gap: 0; }
+.mb-pf.rail-compact .mb-rail-pins-t { font-size: 0; }
 .mb-pf.rail-compact .mb-appbar-brand { width: var(--mb-navrail-compact); }
 
 /* watchlist panel (Kite-style): tabs 1-5, a filter field, rows with price, change and as-of; hover or tap shows B S and more */
@@ -788,10 +800,12 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-bs { width: 28px; height: 28px; border: 0; border-radius: 3px; display: inline-grid; place-items: center; font: 800 12.5px/1 var(--md-ref-typeface-plain); cursor: pointer; padding: 0; }
 .mb-bs.buy { background: var(--mb-color-up); color: var(--mb-color-on-up); }
 .mb-bs.sell { background: var(--mb-color-down); color: var(--mb-color-on-down); }
-.mb-bs:disabled { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface-variant); cursor: not-allowed; }
+.mb-bs:disabled { opacity: .45; cursor: not-allowed; }
 .md-btn.buy { background: var(--mb-color-up); color: var(--mb-color-on-up); }
 .md-btn.sell { background: var(--mb-color-down); color: var(--mb-color-on-down); }
-.md-btn.buy:disabled, .md-btn.sell:disabled { background: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent); color: color-mix(in srgb, var(--md-sys-color-on-surface) 50%, transparent); box-shadow: none; }
+/* locked (market closed): Buy stays green and Sell red, faded, with the reason in the tooltip */
+.md-btn.buy:disabled { background: var(--mb-color-up); color: var(--mb-color-on-up); opacity: .45; box-shadow: none; }
+.md-btn.sell:disabled { background: var(--mb-color-down); color: var(--mb-color-on-down); opacity: .45; box-shadow: none; }
 
 /* breadcrumbs, page head (breadcrumb · title · as-of · actions), as-of stamp */
 .mb-crumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 4px; margin: 0; padding: 0; list-style: none; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
@@ -893,8 +907,10 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 .mb-pf.compact .md-table th { padding-top: 6px; padding-bottom: 6px; }
 .mb-pf.compact .mb-wl-row { padding-top: 5px; padding-bottom: 5px; }
 
+@media (max-width: 1359px) { .mb-appbar-name { display: none; } }
+@media (max-width: 1279px) { .mb-mkt .t { display: none; } }
+@media (max-width: 1099px) { .mb-idx-strip { display: none; } }
 @media (max-width: 1279px) {
-  .mb-gsearch { width: 260px; flex-basis: 260px; }
   .mb-idx-strip .mb-idx:nth-child(n+3) { display: none; }
 }
 @media (max-width: 1199px) {
@@ -905,6 +921,12 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 }
 @media (max-width: 899px) {
   .mb-idx-strip { display: none; }
+  .mb-pf { --mb-appbar-height: 108px; grid-template-rows: auto minmax(0, 1fr); }
+  .mb-appbar { height: auto; flex-wrap: wrap; row-gap: 0; }
+  .mb-appbar-brand { height: 60px; }
+  .mb-gsearch { order: 9; flex: 1 0 calc(100% - 2 * var(--mb-gutter)); max-width: none; margin: 0 var(--mb-gutter) 8px; }
+  .mb-gsearch .mb-kbd { display: none; }
+  .mb-appbar > .md-segmented { margin-left: auto; }
 }
 @media (max-width: 599px) {
   .mb-pf, .mb-pf.wl-off, .mb-pf.rail-compact { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
@@ -912,8 +934,10 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
   .mb-appbar { height: auto; flex-wrap: wrap; row-gap: 0; padding: 0 var(--mb-space-2) 0 0; gap: 0 var(--mb-space-2); }
   .mb-appbar-brand { width: 52px; height: 56px; background: none; }
   .mb-appbar-brand .mb-brand-mark { width: 32px; height: 32px; }
-  .mb-gsearch { flex: 1 1 0; width: auto; height: 38px; padding: 0 10px; }
-  .mb-gsearch .mb-kbd { display: none; }
+  .mb-gsearch { order: 9; flex: 1 0 calc(100% - 2 * var(--mb-gutter)); width: auto; height: 40px; margin: 0 var(--mb-gutter) 8px; padding: 0 12px; }
+  .mb-gsearch .mb-kbd, .mb-gsearch .sm { display: none; }
+  .mb-gsearch .lg { display: block; }
+  .mb-appbar > .md-segmented { margin-left: auto; }
   .mb-appbar-end { margin-left: 0; }
   .mb-appbar-end .hide-phone { display: none; }
   .mb-idx-strip { order: 10; flex: 1 0 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px var(--mb-gutter) 6px; overflow: visible; border-top: 1px solid var(--md-sys-color-surface-container-high); }
@@ -939,66 +963,81 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
   .mb-drawer, .mb-drawer.open, .mb-veil, .mb-snack, .mb-rail-item, .mb-rail-item .mb-nav-ind { transition: none; }
 }
 
-/* ---- Home: quick search, idea cards, carousel, account tiles (owner feedback, 13 Oct 2026) -------------------
-   Quick search finds a stock, index or F&O contract and trades it from the result (B / S open the Paper order
-   window). Idea cards carry a 0-100 score ring, the signal in words and a quick Paper buy. Carousels scroll
-   sideways with snap; on a phone the next card peeks. */
-.mb-qsearch { position: relative; z-index: 15; }
-.mb-qsearch-field { display: flex; align-items: center; gap: 12px; height: 54px; padding: 0 8px 0 16px; border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface); box-shadow: var(--mb-card-shadow); transition: border-color var(--md-sys-motion-duration-short), box-shadow var(--md-sys-motion-duration-short); }
-.mb-qsearch-field:focus-within { border-color: var(--md-sys-color-primary); box-shadow: 0 0 0 1px var(--md-sys-color-primary), var(--md-sys-elevation-2); }
-.mb-qsearch-field > .ms { width: 24px; height: 24px; color: var(--md-sys-color-primary); }
-.mb-qsearch-field input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-large); outline: none; }
-.mb-qsearch-field input::placeholder { color: var(--md-sys-color-on-surface-variant); }
-.mb-qsearch-scope { flex: none; }
-.mb-qsearch-results { position: absolute; left: 0; right: 0; top: calc(100% + 4px); max-height: 440px; overflow-y: auto; padding: 6px; border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface); box-shadow: var(--md-sys-elevation-3); display: none; }
-.mb-qsearch.open .mb-qsearch-results { display: block; }
-.mb-qs-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 8px 10px; border-radius: var(--md-sys-shape-corner-small); cursor: pointer; }
-.mb-qs-row:hover, .mb-qs-row[aria-selected="true"] { background: var(--md-sys-color-surface-container-low); }
-.mb-qs-row .mb-avatar { width: 34px; height: 34px; } .mb-qs-row .mb-avatar .ms { width: 18px; height: 18px; }
-.mb-qs-row b { display: block; font-weight: 600; overflow-wrap: anywhere; }
-.mb-qs-row small { display: block; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-qs-row .px { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.mb-qs-row .bs { display: flex; gap: 4px; }
-.mb-qsearch-recent { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-qsearch-recent .md-chip { cursor: pointer; }
-
+/* ---- Signals panel and Home parts (owner feedback, 13 Oct 2026) ------------------------------------------------
+   The left panel lists the top signals by approach (rule-based, AI-based, hybrid) with B / S on every row, filter
+   chips and pages (no second search box). Home: a "today at a glance" line, the market band, approach cards (each
+   approach's separate paper accounts, never summed). The approach badge always carries an icon and the word. */
 /* score ring 0-100 (set --v); the number is always printed inside */
 .mb-score { --v: 0; width: 46px; height: 46px; border-radius: 50%; flex: none; display: grid; place-items: center; background: conic-gradient(var(--md-sys-color-primary) calc(var(--v) * 1%), var(--md-sys-color-surface-container-high) 0); }
-.mb-score b { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--md-sys-color-surface); font: 700 14px/1 var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); font-variant-numeric: tabular-nums; }
-.mb-score.sm { width: 36px; height: 36px; } .mb-score.sm b { width: 28px; height: 28px; font-size: 12px; }
+.mb-score b { width: 36px; letter-spacing: -.3px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--md-sys-color-surface); font: 700 14px/1 var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); font-variant-numeric: tabular-nums; }
+.mb-score.sm { width: 46px; height: 46px; } .mb-score.sm b { width: 38px; height: 38px; font-size: 11px; }
 
-/* carousel: a sideways row with snap and prev / next buttons in its head */
-.mb-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 2 * var(--mb-space-4)) / 3); gap: var(--mb-space-4); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; padding: 2px 2px var(--mb-space-3); margin: 0 -2px; overscroll-behavior-x: contain; }
-.mb-carousel > * { scroll-snap-align: start; min-width: 0; }
-.mb-carousel.two { grid-auto-columns: calc((100% - var(--mb-space-4)) / 2); }
+.mb-ap { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; border-radius: 3px; font: 600 11px/16px var(--md-ref-typeface-plain); white-space: nowrap; background: var(--mb-color-neutral-container); color: var(--mb-color-on-neutral-container); }
+.mb-ap .ms { width: 12px; height: 12px; }
+.mb-ap.manual { background: var(--mb-color-paper-container); color: var(--mb-color-on-paper-container); }
+.mb-ap.ai { background: var(--mb-color-info-container); color: var(--mb-color-on-info-container); }
+.mb-ap.rule { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+.mb-ap.hybrid { background: var(--mb-color-warn-container); color: var(--mb-color-on-warn-container); }
+.mb-wl-title { display: flex; align-items: center; gap: 6px; }
+.mb-wl-title h2 { font: 600 15px/20px var(--md-ref-typeface-plain); margin: 0; }
+.mb-wl-title .md-icon-btn { margin-left: auto; }
+.mb-wl-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mb-wl-note { display: flex; gap: 8px; align-items: flex-start; margin: 8px 12px; padding: 8px 10px; border-radius: var(--mb-panel-radius); background: var(--md-sys-color-surface-container-low); font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-wl-note .ms { width: 16px; height: 16px; flex: none; margin-top: 1px; }
+.mb-wl-note b { color: var(--md-sys-color-on-surface); }
+.mb-pager { justify-content: flex-end; gap: 4px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-pager > span { margin-right: auto; padding-left: 4px; }
+.mb-sig-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 3px 10px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-sig-row:hover, .mb-sig-row:focus-within { background: var(--md-sys-color-surface-container-low); }
+.mb-sig-row > .mb-score { grid-row: 1 / span 3; align-self: start; }
+.mb-sig-row .top { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-width: 0; }
+.mb-sig-row .top b, .mb-sig-row .top .tk { font: 700 13.5px/18px var(--md-ref-typeface-plain); overflow-wrap: anywhere; }
+.mb-sig-row .px { text-align: right; font: 600 13.5px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mb-sig-row .px small { display: block; font: 11px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-sig-row .px small .mb-delta { font-size: 11.5px; }
+.mb-sig-row .why { grid-column: 2 / span 2; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface); }
+.mb-sig-row .cost { grid-column: 2 / span 2; }
+.mb-sig-row .cost .mb-label { white-space: normal; }
+.mb-sig-row .proof { grid-column: 2 / -1; flex-wrap: wrap; display: flex; gap: 4px; align-items: center; font: 11.5px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); min-width: 0; }
+.mb-sig-row .proof .ms { width: 13px; height: 13px; flex: none; }
+.mb-sig-row .act { grid-column: 2 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
+.mb-sig-row .act .md-btn { height: 32px; }
+.mb-sig-row .act .md-btn:only-child { grid-column: 1 / -1; }
 
-/* idea card: what, why (the signal in words), how much, and a quick Paper order */
-.mb-idea { display: grid; gap: 10px; align-content: start; padding: var(--mb-space-4); border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); border-top: 3px solid var(--mb-verdict-ok-box); transition: box-shadow var(--md-sys-motion-duration-short); }
-.mb-idea:hover { box-shadow: var(--mb-card-shadow-hover); }
-.mb-idea.strong { border-top-color: var(--mb-verdict-strong-box); }
-.mb-idea.no { border-top-color: var(--mb-verdict-no-box); }
-.mb-idea-top { display: flex; align-items: flex-start; gap: 10px; }
-.mb-idea-top .who { min-width: 0; flex: 1; }
-.mb-idea-top .who b { display: block; font: 700 15px/20px var(--md-ref-typeface-plain); overflow-wrap: anywhere; }
-.mb-idea-top .who small { display: block; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-idea-px { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font: 600 15px/20px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
-.mb-idea-why { font: var(--md-sys-typescale-body-medium); color: var(--md-sys-color-on-surface); }
-.mb-idea-why b { font-weight: 700; }
-.mb-idea-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0; }
-.mb-idea-facts > div { padding: 6px 8px; border-radius: var(--mb-panel-radius); background: var(--md-sys-color-surface-container-low); min-width: 0; }
-.mb-idea-facts dt { font: 600 10.5px/14px var(--md-ref-typeface-plain); letter-spacing: .04em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
-.mb-idea-facts dd { margin: 0; font: 600 13px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.mb-idea-acts { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.mb-idea-acts .md-btn.buy, .mb-idea-acts .md-btn.sell { flex: 1; }
+/* today at a glance: three answers in one row (my money today, the best signal, what needs me), each actionable */
+.mb-glance { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mb-glance > div { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 2px 12px; align-items: start; align-content: start; padding: 14px 16px; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); min-width: 0; }
+.mb-glance .mb-avatar { grid-row: 1 / span 2; }
+.mb-glance .l { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-glance .v { font: 700 18px/24px var(--md-ref-typeface-plain); overflow-wrap: anywhere; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.mb-glance .v .md-btn { height: 28px; }
 
-/* account tile: one paper account, never summed with another */
-.mb-acct { display: grid; gap: 4px; padding: var(--mb-space-4); border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); text-decoration: none; color: var(--md-sys-color-on-surface); min-width: 0; border-left: 3px solid var(--md-sys-color-primary); }
-.mb-acct:hover { box-shadow: var(--mb-card-shadow-hover); }
-.mb-acct.book { border-left-color: var(--mb-chart-3); } .mb-acct.stock { border-left-color: var(--mb-chart-2); }
-.mb-acct .n { display: flex; align-items: center; gap: 6px; font: 600 12.5px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
-.mb-acct .v { font: 700 20px/26px var(--md-ref-typeface-plain); letter-spacing: -.3px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.mb-acct .d { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.mb-acct .d .mb-delta { font-size: 13px; }
+/* market band: session, indices with a trend line, breadth, movers */
+.mb-mband { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr); gap: 0; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); overflow: hidden; }
+.mb-mband > * { padding: 12px 16px; min-width: 0; border-left: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-mband > :first-child { border-left: 0; }
+.mb-mband .n { font: 600 11px/16px var(--md-ref-typeface-plain); letter-spacing: .05em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.mb-mband .v { font: 700 17px/22px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.mb-mband svg { width: 100%; height: 26px; display: block; margin-top: 4px; }
+.mb-mband .brd { display: grid; gap: 6px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-mband .bar { display: flex; height: 8px; border-radius: 2px; overflow: hidden; }
+.mb-mband .bar i { display: block; } .mb-mband .bar .a { background: var(--mb-color-up); } .mb-mband .bar .u { background: var(--md-sys-color-surface-container-highest); } .mb-mband .bar .d { background: var(--mb-color-down); }
+
+/* approach card: one approach (You, Rule-based, AI-based, Hybrid), its separate accounts as lines, never summed */
+.mb-apcard { display: grid; gap: 10px; align-content: start; padding: 16px; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); min-width: 0; }
+.mb-apcard .h { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 10px; align-items: center; }
+.mb-apcard .h .mb-avatar { grid-row: 1 / span 2; }
+.mb-apcard .h b { font: 600 15px/20px var(--md-ref-typeface-plain); }
+.mb-apcard .h small { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-apcard .line { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; padding-top: 8px; border-top: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-apcard .line .k { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-apcard .line .val { font: 700 17px/22px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.mb-apcard .line .fig { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.mb-apcard .line .d { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); white-space: nowrap; }
+.mb-apcard .line .d .mb-delta { font-size: 14px; }
+.mb-apcard .line .s { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-apcard .today { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); display: flex; gap: 6px; align-items: center; }
+.mb-apcard .today .ms { width: 14px; height: 14px; }
 
 /* basket (multi-leg paper order) legs inside the order window */
 .mb-legs { width: 100%; border-collapse: collapse; font: var(--md-sys-typescale-body-small); font-variant-numeric: tabular-nums; }
@@ -1006,15 +1045,12 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 .mb-legs td { padding: 6px; border-bottom: 1px solid var(--md-sys-color-surface-container-high); }
 .mb-legs .num { text-align: right; }
 
-@media (max-width: 1199px) { .mb-carousel { grid-auto-columns: calc((100% - var(--mb-space-4)) / 2); } }
+@media (max-width: 1199px) { .mb-mband { grid-template-columns: repeat(3, minmax(0, 1fr)); } .mb-mband > :last-child { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--md-sys-color-surface-container-high); } }
+@media (max-width: 899px) { .mb-glance { grid-template-columns: 1fr; } }
 @media (max-width: 599px) {
-  .mb-carousel, .mb-carousel.two { grid-auto-columns: 84%; gap: var(--mb-space-3); }
-  .mb-qsearch-field { height: 50px; padding-left: 12px; }
-  .mb-qsearch-scope { display: none; }
-  .mb-qs-row { grid-template-columns: minmax(0, 1fr) auto; }
-  .mb-qs-row .mb-avatar { display: none; }
-  .mb-qs-row .bs { grid-column: 1 / -1; }
-  .mb-qs-row .bs .mb-bs { flex: 1; width: auto; }
+  .mb-mband > * { padding: 10px 10px; }
+  .mb-mband .v { font-size: 15px; }
+  .mb-sig-row .why { grid-column: 2 / -1; }
 }
 
 </style>
@@ -1096,6 +1132,7 @@ footer{color:var(--md-sys-color-on-surface-variant);font-size:12px;text-align:ce
 .part p{margin:0;font-size:13.5px;color:var(--md-sys-color-on-surface-variant)}
 .part .try{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .inline-tk{display:flex;flex-wrap:wrap;gap:10px;font-size:13.5px}
+@media (max-width:599px){.src .ex{display:none}}
 .src td small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12px}
 .honest{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .honest li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:13.5px}
@@ -1201,18 +1238,18 @@ footer{color:var(--md-sys-color-on-surface-variant);font-size:12px;text-align:ce
   <symbol id="ms-warning" viewBox="0 -960 960 960"><path d="m40-120 440-760 440 760H40Zm138-80h604L480-720 178-200Zm302-40q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm-40-120h80v-200h-80v200Zm40-100Z"/></symbol>
 </svg>
 
-<script>const SHELL = {"_mock":true,"_note":"MOCK DATA for page design only (design/PLATFORM_DESIGN.md). Prices, positions, accounts and news are invented and consistent with each other; no value is a real quote. Research and paper trading only: nothing here places a real order.","page":"shell","spec":"design/PLATFORM_DESIGN.md sections 1-3, 5, 6","now":"2026-10-12T10:10:00Z","sources":{"stock_run":{"label":"Stock tool run","detail":"the stock tool's price check; it runs several times a session","max_age_h":4},"eod":{"label":"NSE end-of-day file","detail":"NSE's daily F&O file, published after the close (stale once a newer trading day's file is due: 78 hours covers a weekend)","max_age_h":78},"snap3pm":{"label":"3 pm option snapshot","detail":"the F&O tool's 3 pm NIFTY monthly option quotes (best bid and ask only)","max_age_h":26},"us_close":{"label":"Stock tool close","detail":"the stock tool's last US close price","max_age_h":80}},"limits_note":"Owner-changeable default (PLATFORM_DESIGN.md section 5): the Manual account starts at Rs 5 lakh with the same limits as the F&O books.","markets":{"india":{"label":"India","currency":"INR","zone":"IST","offset_min":330,"fno":true,"indices":["NIFTY","BANKNIFTY","INDIAVIX"],"items":{"RELIANCE":{"id":"RELIANCE","kind":"stock","sym":"RELIANCE","name":"Reliance Industries · NSE","last":1218.0,"chg_pct":2.66,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"held":{"account":"manual-in","qty":40,"avg":1214.6},"spark":[1181.03,1184.28,1187.27,1202.16,1200.3,1203.66,1206.24,1208.13,1209.45,1196.53,1197.71,1190.8,1173.59,1165.58,1162.73,1170.13,1166.77,1173.43,1178.37,1179.58,1184.5,1184.67,1190.4,1218.0]},"HDFCBANK":{"id":"HDFCBANK","kind":"stock","sym":"HDFCBANK","name":"HDFC Bank · NSE","last":711.45,"chg_pct":0.94,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"held":{"account":"stock-in","qty":140,"avg":711.5},"spark":[703.85,706.78,711.56,713.41,717.04,718.34,720.87,713.15,714.26,709.52,710.13,706.44,697.27,692.5,691.43,690.75,694.55,692.87,698.17,697.78,703.57,704.78,712.48,711.45]},"MARUTI":{"id":"MARUTI","kind":"stock","sym":"MARUTI","name":"Maruti Suzuki · NSE","last":11625.0,"chg_pct":0.81,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[11669.8,11761.5,11797.8,11740.64,11659.0,11743.5,11691.23,11562.47,11497.39,11495.39,11348.9,11311.17,11352.17,11351.87,11376.86,11438.38,11451.5,11503.46,11542.8,11602.27,11674.01,11716.03,11772.75,11625.0]},"INDIGO":{"id":"INDIGO","kind":"stock","sym":"INDIGO","name":"InterGlobe Aviation · NSE","last":5050.5,"chg_pct":-0.42,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[5053.56,5076.05,5096.79,5137.25,5141.7,5178.86,5171.7,5167.79,5132.21,5118.38,5103.36,5088.28,5034.14,4997.56,5002.14,4958.89,4971.87,4963.19,5012.09,5018.27,5054.77,5108.2,5126.3,5050.5]},"INFY":{"id":"INFY","kind":"stock","sym":"INFY","name":"Infosys · NSE","last":1486.2,"chg_pct":-1.12,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[1487.17,1503.07,1503.66,1526.04,1525.84,1535.74,1525.68,1533.83,1516.65,1523.2,1506.39,1492.02,1498.79,1490.22,1473.59,1477.68,1475.93,1472.8,1483.07,1500.04,1497.79,1513.3,1521.46,1486.2]},"TCS":{"id":"TCS","kind":"stock","sym":"TCS","name":"Tata Consultancy Services · NSE","last":3412.8,"chg_pct":0.36,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[3394.39,3407.55,3438.76,3432.75,3451.41,3457.82,3444.99,3456.39,3457.16,3434.11,3399.44,3382.53,3373.5,3342.11,3334.23,3349.69,3324.42,3331.02,3344.64,3375.35,3374.06,3420.83,3434.25,3412.8]},"ICICIBANK":{"id":"ICICIBANK","kind":"stock","sym":"ICICIBANK","name":"ICICI Bank · NSE","last":1268.4,"chg_pct":0.22,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[1263.17,1270.7,1277.1,1280.29,1281.85,1289.25,1282.9,1282.37,1285.72,1278.46,1264.59,1261.94,1257.27,1245.62,1247.63,1237.79,1238.14,1244.23,1246.74,1259.27,1261.71,1267.11,1282.02,1268.4]},"SBIN":{"id":"SBIN","kind":"stock","sym":"SBIN","name":"State Bank of India · NSE","last":812.65,"chg_pct":-0.58,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[816.54,820.65,818.85,824.43,825.83,834.12,831.69,826.86,832.72,820.52,815.82,819.49,810.58,810.6,805.19,799.36,802.7,806.92,802.58,813.86,814.24,820.56,823.06,812.65]},"KOTAKBANK":{"id":"KOTAKBANK","kind":"stock","sym":"KOTAKBANK","name":"Kotak Mahindra Bank · NSE","last":2104.3,"chg_pct":-0.21,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[2105.39,2109.81,2120.94,2121.54,2146.67,2137.18,2149.24,2130.9,2127.05,2130.89,2110.73,2106.47,2097.16,2078.7,2075.89,2068.49,2059.95,2083.79,2083.35,2101.89,2107.91,2119.87,2118.0,2104.3]},"AXISBANK":{"id":"AXISBANK","kind":"stock","sym":"AXISBANK","name":"Axis Bank · NSE","last":1162.9,"chg_pct":0.47,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[1153.31,1157.32,1161.72,1165.2,1170.55,1171.62,1180.49,1175.55,1167.79,1168.77,1166.83,1160.81,1142.65,1144.63,1140.54,1136.6,1135.18,1138.61,1140.95,1147.15,1150.65,1164.46,1172.96,1162.9]},"HCLTECH":{"id":"HCLTECH","kind":"stock","sym":"HCLTECH","name":"HCL Technologies · NSE","last":1702.15,"chg_pct":-0.64,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[1743.13,1737.06,1737.71,1738.59,1731.05,1739.0,1720.23,1718.25,1715.8,1703.04,1693.61,1690.71,1684.73,1689.43,1688.61,1687.04,1692.19,1719.56,1712.46,1730.23,1744.82,1749.02,1749.29,1702.15]},"WIPRO":{"id":"WIPRO","kind":"stock","sym":"WIPRO","name":"Wipro · NSE","last":268.35,"chg_pct":-0.89,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[267.93,269.43,272.56,272.52,273.97,274.68,276.6,276.28,275.38,274.43,272.95,269.13,270.26,266.88,267.1,266.87,265.09,267.79,267.79,269.32,269.78,272.52,272.24,268.35]},"NIFTY":{"id":"NIFTY","kind":"index","sym":"NIFTY 50","name":"Index · NSE","last":24512.35,"chg_pct":0.42,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[24794.74,24863.45,24827.99,24623.78,24489.57,24202.33,24188.58,23999.5,23948.56,23943.14,23981.58,23984.91,24189.88,24138.61,24252.77,24589.59,24648.48,24901.75,24858.84,24871.33,24849.59,24644.46,24701.47,24512.35]},"BANKNIFTY":{"id":"BANKNIFTY","kind":"index","sym":"BANKNIFTY","name":"Index · NSE","last":52218.6,"chg_pct":-0.18,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","fno":true,"spark":[52880.04,52893.77,53025.01,52931.25,53036.04,52926.67,52776.27,52693.28,51892.55,51655.65,51349.46,51448.74,51349.51,51092.44,51383.66,51534.59,51733.88,52187.42,52272.27,52599.54,52892.17,53065.76,53221.21,52218.6]},"INDIAVIX":{"id":"INDIAVIX","kind":"index","sym":"INDIA VIX","name":"Volatility index · NSE","last":13.21,"chg_pct":-2.65,"source":"stock_run","as_of":"2026-10-12T09:40:00Z","spark":[13.31,13.4,13.39,13.48,13.51,13.72,13.77,13.71,13.85,13.84,13.86,13.83,13.75,13.67,13.54,13.46,13.42,13.38,13.31,13.4,13.35,13.38,13.5,13.21]},"NIFTY-FUT-OCT":{"id":"NIFTY-FUT-OCT","kind":"future","sym":"NIFTY 27 OCT FUT","name":"Future · lot 75","last":24586.1,"chg_pct":0.39,"source":"eod","as_of":"2026-10-09T12:30:00Z","underlying":"NIFTY","lot":75},"NIFTY-24500CE-OCT":{"id":"NIFTY-24500CE-OCT","kind":"option","sym":"NIFTY 27 OCT 24500 CE","name":"Option · lot 75","last":182.4,"chg_pct":-12.3,"source":"snap3pm","as_of":"2026-10-12T09:30:00Z","underlying":"NIFTY","lot":75,"bid":181.6,"ask":183.1,"iv":12.8,"held":{"account":"fno-b2","qty":-75,"avg":214.0,"structure":"Short iron fly 24500 ±300"}},"NIFTY-24500PE-OCT":{"id":"NIFTY-24500PE-OCT","kind":"option","sym":"NIFTY 27 OCT 24500 PE","name":"Option · lot 75","last":151.75,"chg_pct":9.8,"source":"snap3pm","as_of":"2026-10-12T09:30:00Z","underlying":"NIFTY","lot":75,"bid":151.0,"ask":152.4,"iv":13.4,"held":{"account":"fno-b2","qty":-75,"avg":166.5,"structure":"Short iron fly 24500 ±300"}},"NIFTY-24800CE-OCT":{"id":"NIFTY-24800CE-OCT","kind":"option","sym":"NIFTY 27 OCT 24800 CE","name":"Option · lot 75","last":68.2,"chg_pct":-15.1,"source":"snap3pm","as_of":"2026-10-12T09:30:00Z","underlying":"NIFTY","lot":75,"bid":67.9,"ask":68.5,"iv":12.1},"NIFTY-24200PE-OCT":{"id":"NIFTY-24200PE-OCT","kind":"option","sym":"NIFTY 27 OCT 24200 PE","name":"Option · lot 75","last":61.35,"chg_pct":11.4,"source":"snap3pm","as_of":"2026-10-12T09:30:00Z","underlying":"NIFTY","lot":75,"bid":61.0,"ask":61.7,"iv":14.2},"BANKNIFTY-FUT-OCT":{"id":"BANKNIFTY-FUT-OCT","kind":"future","sym":"BANKNIFTY 27 OCT FUT","name":"Future · lot 35","last":52388.0,"chg_pct":-0.21,"source":"eod","as_of":"2026-10-09T12:30:00Z","underlying":"BANKNIFTY","lot":35},"BANKNIFTY-52000PE-NOV":{"id":"BANKNIFTY-52000PE-NOV","kind":"option","sym":"BANKNIFTY 24 NOV 52000 PE","name":"Option · lot 35","last":702.1,"chg_pct":4.1,"source":"eod","as_of":"2026-10-08T12:30:00Z","underlying":"BANKNIFTY","lot":35,"note":"No trades on 9 Oct: the last end-of-day price is from 8 Oct."},"RELIANCE-FUT-OCT":{"id":"RELIANCE-FUT-OCT","kind":"future","sym":"RELIANCE 27 OCT FUT","name":"Future · lot 500","last":1224.3,"chg_pct":2.58,"source":"eod","as_of":"2026-10-09T12:30:00Z","underlying":"RELIANCE","lot":500}},"watchlists":[{"name":"Core","items":["NIFTY","RELIANCE","HDFCBANK","MARUTI","INDIGO","INFY","TCS","ICICIBANK","SBIN","NIFTY-24800CE-OCT","NIFTY-24500PE-OCT"]},{"name":"F&O desk","items":["NIFTY","INDIAVIX","NIFTY-FUT-OCT","NIFTY-24500CE-OCT","NIFTY-24500PE-OCT","NIFTY-24800CE-OCT","NIFTY-24200PE-OCT","BANKNIFTY","BANKNIFTY-FUT-OCT","BANKNIFTY-52000PE-NOV","RELIANCE-FUT-OCT"]},{"name":"Banks","items":["BANKNIFTY","HDFCBANK","ICICIBANK","SBIN","KOTAKBANK","AXISBANK"]},{"name":"Results week","items":["INFY","TCS","HCLTECH","WIPRO"]},{"name":"List 5","items":[]}],"accounts":{"manual-in":{"name":"Manual (paper)","kind":"manual","currency":"INR","capital":500000,"cash":451334.77,"open_structures":0,"at_risk":0},"stock-in":{"name":"Stock tool paper portfolio","kind":"strategy","currency":"INR"},"fno-b1":{"name":"F&O Book 1","kind":"strategy","currency":"INR"},"fno-b2":{"name":"F&O Book 2","kind":"strategy","currency":"INR"},"fno-b3":{"name":"F&O Book 3","kind":"strategy","currency":"INR"}},"limits":{"max_loss_per_trade":10000,"max_open_structures":3,"max_at_risk":30000},"charges":{"label":"Mock rates (the C1 charges code supplies the real schedule)","equity_delivery":{"brokerage_flat":20,"stt_pct":0.1,"exchange_pct":0.00297,"sebi_pct":0.0001,"stamp_buy_pct":0.015,"gst_pct":18},"option":{"brokerage_flat":20,"stt_sell_pct":0.1,"exchange_pct":0.03503,"sebi_pct":0.0001,"stamp_buy_pct":0.003,"gst_pct":18}},"short_option_margin_per_lot":118000,"next_quotes":{"stock":"the stock tool's next price check (next session's first run, 13 Oct about 09:45 IST)","option":"the next 3 pm snapshot (13 Oct)"},"recent":["RELIANCE","NIFTY-24500CE-OCT","HDFCBANK"]},"us":{"label":"US","currency":"USD","zone":"ET","offset_min":-240,"fno":false,"indices":["SPX","NDX","VIX"],"items":{"AAPL":{"id":"AAPL","kind":"stock","sym":"AAPL","name":"Apple · NASDAQ","last":333.63,"chg_pct":0.22,"source":"us_close","as_of":"2026-10-09T20:00:00Z","held":{"account":"manual-us","qty":6,"avg":329.1},"spark":[331.22,332.79,334.43,337.63,336.85,339.78,338.12,336.86,335.78,335.44,334.79,333.54,328.39,330.32,327.78,325.3,326.73,326.36,330.52,329.98,330.71,332.35,335.33,333.63]},"NVDA":{"id":"NVDA","kind":"stock","sym":"NVDA","name":"Nvidia · NASDAQ","last":239.24,"chg_pct":0.14,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[236.76,239.06,240.51,242.1,242.34,242.75,243.11,242.79,240.92,240.01,238.56,239.05,237.7,234.72,234.29,235.9,235.32,233.72,235.77,238.27,239.05,239.3,242.03,239.24]},"JPM":{"id":"JPM","kind":"stock","sym":"JPM","name":"JPMorgan Chase · NYSE","last":331.28,"chg_pct":-0.33,"source":"us_close","as_of":"2026-10-09T20:00:00Z","held":{"account":"stock-us","qty":3,"avg":334.9},"spark":[331.34,334.44,335.78,334.48,337.45,339.14,339.74,339.02,338.01,334.25,333.33,330.55,331.5,330.14,326.6,325.9,325.55,325.59,326.51,328.24,333.48,334.42,334.5,331.28]},"DAL":{"id":"DAL","kind":"stock","sym":"DAL","name":"Delta Air Lines · NYSE","last":83.66,"chg_pct":1.2,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[81.69,81.02,82.18,81.78,82.49,82.68,83.51,84.07,84.46,84.27,83.58,83.79,83.88,83.16,82.16,82.54,81.18,81.82,81.36,80.99,81.52,81.85,82.32,83.66]},"MSFT":{"id":"MSFT","kind":"stock","sym":"MSFT","name":"Microsoft · NASDAQ","last":512.4,"chg_pct":-0.41,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[508.33,507.82,511.43,509.82,512.4,518.22,521.92,524.04,522.59,526.47,523.91,519.22,521.73,517.1,513.38,512.33,506.09,505.84,504.27,508.0,509.02,507.87,511.59,512.4]},"AMZN":{"id":"AMZN","kind":"stock","sym":"AMZN","name":"Amazon · NASDAQ","last":241.1,"chg_pct":0.88,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[234.53,234.89,236.73,237.18,240.24,241.01,242.57,243.54,244.2,241.85,242.62,241.78,240.1,240.43,238.97,238.23,235.46,236.32,234.81,235.75,236.47,236.79,237.9,241.1]},"GOOGL":{"id":"GOOGL","kind":"stock","sym":"GOOGL","name":"Alphabet · NASDAQ","last":268.75,"chg_pct":0.61,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[264.78,267.73,269.36,271.75,271.76,272.2,272.93,271.05,272.22,268.17,266.47,266.38,265.64,262.91,264.25,260.86,263.82,263.27,263.72,265.43,266.99,266.58,269.54,268.75]},"META":{"id":"META","kind":"stock","sym":"META","name":"Meta Platforms · NASDAQ","last":781.2,"chg_pct":-0.95,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[778.41,777.52,776.96,781.08,789.08,793.66,795.12,802.85,801.59,798.35,800.56,799.13,794.07,789.05,785.21,779.38,783.08,778.65,778.12,774.07,778.83,782.36,783.5,781.2]},"BAC":{"id":"BAC","kind":"stock","sym":"BAC","name":"Bank of America · NYSE","last":52.14,"chg_pct":-0.27,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[51.12,51.55,51.49,51.79,52.03,52.4,53.08,52.87,53.47,52.92,53.22,52.83,53.09,52.24,52.28,51.78,51.58,51.66,51.44,51.52,51.43,51.58,52.02,52.14]},"WFC":{"id":"WFC","kind":"stock","sym":"WFC","name":"Wells Fargo · NYSE","last":84.02,"chg_pct":0.12,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[82.76,82.22,82.66,83.29,83.69,84.0,84.53,84.85,84.96,85.7,85.78,84.77,85.04,84.65,83.97,82.95,83.27,82.87,82.34,81.95,82.58,83.02,83.15,84.02]},"SPX":{"id":"SPX","kind":"index","sym":"S&P 500","name":"Index","last":6812.4,"chg_pct":0.31,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[6779.61,6812.62,6801.3,6882.86,6929.67,6894.0,6935.09,6901.03,6900.4,6886.09,6783.63,6815.29,6753.92,6669.6,6684.14,6698.44,6677.09,6706.45,6716.96,6712.69,6807.41,6835.25,6874.19,6812.4]},"NDX":{"id":"NDX","kind":"index","sym":"NASDAQ COMP","name":"Index","last":23104.9,"chg_pct":0.52,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[23159.87,23297.8,23431.2,23454.41,23480.92,23240.67,23059.2,23019.41,22846.42,22885.89,22732.05,22635.03,22626.02,22500.72,22704.81,22702.71,22948.17,22990.2,23100.39,23074.7,23166.52,23326.8,23393.22,23104.9]},"VIX":{"id":"VIX","kind":"index","sym":"VIX","name":"Volatility index · Cboe","last":15.01,"chg_pct":-3.29,"source":"us_close","as_of":"2026-10-09T20:00:00Z","spark":[15.18,15.26,15.32,15.38,15.55,15.59,15.77,15.8,15.77,15.76,15.77,15.77,15.71,15.65,15.57,15.46,15.29,15.27,15.26,15.27,15.27,15.24,15.42,15.01]}},"watchlists":[{"name":"Core","items":["SPX","AAPL","NVDA","JPM","DAL","MSFT","AMZN"]},{"name":"Big tech","items":["NDX","AAPL","MSFT","NVDA","GOOGL","META","AMZN"]},{"name":"Banks","items":["JPM","BAC","WFC"]},{"name":"Airlines","items":["DAL"]},{"name":"List 5","items":[]}],"accounts":{"manual-us":{"name":"Manual (paper)","kind":"manual","currency":"USD","capital":6000,"cash":4025.4},"stock-us":{"name":"Stock tool paper portfolio","kind":"strategy","currency":"USD"}},"limits":{"max_loss_per_trade":null,"max_open_structures":null,"max_at_risk":null},"charges":{"label":"Mock rates (the stock tool's cost file supplies the real schedule)","equity":{"commission_flat":0,"sec_sell_pct":0.00278,"taf_per_share_sell":0.000166}},"next_quotes":{"stock":"the stock tool's next price check (Mon 12 Oct, first run after the 09:30 ET open)"},"recent":["AAPL","NVDA"]}},"search_extra":[{"kind":"screen","label":"High IV rank, rising open interest","sub":"Saved screen · F&O","market":"india"},{"kind":"screen","label":"Models agree 4 of 5, volume up","sub":"Saved screen · Stocks","market":"both"},{"kind":"strategy","label":"Rule: model + news","sub":"Stock strategy · Strategy lab","market":"both"},{"kind":"strategy","label":"F&O Book 2: short iron fly","sub":"F&O strategy book","market":"india"},{"kind":"news","label":"Reliance results date set for 16 Oct","sub":"News · exchange filing · 11:20 IST","market":"india"},{"kind":"news","label":"RBI policy meeting ends Wednesday","sub":"News · event · 09:05 IST","market":"india"},{"kind":"news","label":"Delta raises its quarterly outlook","sub":"News · company release · 9 Oct","market":"us"}],"notifications":{"india":[{"icon":"receipt_long","title":"Paper order filled: RELIANCE buy 40 at ₹1,214.60","sub":"Manual (paper) · stock tool run 09:45 IST","unread":true},{"icon":"notifications_active","title":"Alert: HDFCBANK crossed ₹710","sub":"Checked at the 15:10 run (alerts follow data updates, not live)","unread":true},{"icon":"description","title":"F&O 3 pm run published","sub":"Books 1-3 decided; Book 2 holds its iron fly · 15:22 IST","unread":true},{"icon":"dns","title":"NSE end-of-day file of 9 Oct imported","sub":"Data health · Fri 18:40 IST","unread":false}],"us":[{"icon":"notifications_active","title":"Alert: DAL closed above $83","sub":"Checked at the close run of 9 Oct (not live)","unread":true},{"icon":"dns","title":"Stock tool US close run ok","sub":"Data health · 9 Oct 16:20 ET","unread":false}]}}; const D = null;</script>
+<script>const SHELL = {"_mock":true,"_note":"EXAMPLE DATA copied from the application's own catalogue records (design/mockups/01-home, 03-company, 07-paper-portfolios: stock tool example files of 6-7 Oct 2026). F&O contract prices and the Manual account's starting cash are labelled examples. Research and paper trading only: nothing here places a real order.","page":"shell","spec":"design/PLATFORM_DESIGN.md sections 1-3, 5, 6; owner feedback 13 Oct 2026","now":"2026-10-07T12:00:00Z","sources":{"close":{"label":"Last close","detail":"the stock tool's daily close (its post-close run imports today's close at 17:45 IST or 18:15 ET)","max_age_h":30},"eod":{"label":"NSE end-of-day file","detail":"NSE's daily F&O file, published after the close","max_age_h":78},"snap3pm":{"label":"3 pm option snapshot","detail":"the F&O tool's 3 pm NIFTY monthly option quotes (best bid and ask only)","max_age_h":26}},"families":{"rule":{"label":"Rule-based","icon":"rule"},"ai":{"label":"AI-based","icon":"smart_toy"},"hybrid":{"label":"Hybrid (rule + AI)","icon":"bolt"},"baseline":{"label":"Baselines","icon":"trending_flat"},"manual":{"label":"You","icon":"account_circle"}},"family_text":{"manual":"Trades you place yourself.","rule":"Written rules decide; no AI in the decision. Stocks: rules on the price model's forecast and the news (for example “Model + news”). F&O: Book 1, the approved playbook.","ai":"An AI decides. Stocks: AI traders that read the prices and the news (for example “AI combined A”). F&O: Book 3, the fully AI system.","hybrid":"The AI decides, but only inside limits that the rules set. F&O only: Book 2. The stock tool has no hybrid strategy.","baseline":"Simple yardsticks a strategy has to beat (“Always buy”, “Follow yesterday”, “Model without news”); never in the head-to-head."},"pick_rules":{"best_expected_gain":"Best expected gain","highest_probability":"Highest probability"},"limits_note":"Owner-changeable default (PLATFORM_DESIGN.md section 5): Rs 5 lakh with the F&O books' limits.","markets":{"india":{"label":"India","exchange":"India (NSE)","currency":"INR","zone":"IST","offset_min":330,"fno":true,"indices":["NIFTY50","INDIAVIX"],"items":{"HDFCBANK":{"id":"HDFCBANK","kind":"stock","sym":"HDFCBANK","code":"HDFCBANK","name":"HDFC Bank · NSE","last":711.45,"chg_pct":0.94,"source":"close","as_of":"2026-10-06T10:00:00Z","state":"active","spark":[729.0,727.5,727.2,711.0,720.3,709.0,711.9,700.8,706.65,712.1,710.5,703.0,687.1,693.8,708.25,716.55,721.5,713.0,731.0,739.5,738.6,737.25,728.9,735.6,719.05,722.7,708.7,721.2,704.8,711.45],"fno":true},"INDIGO":{"id":"INDIGO","kind":"stock","sym":"INDIGO","code":"INDIGO","name":"InterGlobe Aviation (IndiGo) · NSE","last":5050.5,"chg_pct":0.0,"source":"close","as_of":"2026-10-06T10:00:00Z","state":"inactive","spark":null,"fno":false,"note":"No longer tracked by the stock tool (inactive): the price is its last recorded close."},"MARUTI":{"id":"MARUTI","kind":"stock","sym":"MARUTI","code":"MARUTI","name":"Maruti Suzuki · NSE","last":11625.0,"chg_pct":0.81,"source":"close","as_of":"2026-10-06T10:00:00Z","state":"active","spark":[13620.0,13678.0,13520.0,13440.0,13376.0,13547.0,12950.0,12849.0,12857.0,12694.0,12760.0,12641.0,12618.0,12590.0,12400.0,12231.0,12166.0,12338.0,12103.0,12153.0,12190.0,12230.0,11990.0,12065.0,12008.0,11877.0,11967.0,11386.0,11532.0,11625.0],"fno":true},"RELIANCE":{"id":"RELIANCE","kind":"stock","sym":"RELIANCE","code":"RELIANCE","name":"Reliance Industries · NSE","last":1218.0,"chg_pct":2.66,"source":"close","as_of":"2026-10-06T10:00:00Z","state":"active","spark":[1309.8,1317.0,1298.0,1282.2,1287.0,1277.0,1309.0,1313.1,1302.5,1322.0,1309.5,1294.9,1279.0,1274.0,1257.5,1235.3,1240.0,1243.9,1226.4,1247.4,1240.4,1248.0,1219.2,1226.0,1197.6,1182.0,1187.0,1167.7,1186.4,1218.0],"fno":true,"held":{"account":"manual-in","qty":50.0,"avg":1182.0}},"NIFTY50":{"id":"NIFTY50","kind":"index","sym":"NIFTY 50","code":"NIFTY50","name":"Index · NSE","last":22776.1,"chg_pct":0.98,"chg_5d_pct":-0.02,"source":"close","as_of":"2026-10-06T10:00:00Z","fno":true},"INDIAVIX":{"id":"INDIAVIX","kind":"index","sym":"INDIA VIX","code":"INDIAVIX","name":"Volatility index · NSE","last":13.61,"chg_pct":-7.92,"chg_5d_pct":-0.22,"source":"close","as_of":"2026-10-06T10:00:00Z","fno":false},"NIFTY26OCTFUT":{"id":"NIFTY26OCTFUT","kind":"future","sym":"NIFTY 27 OCT FUT","code":"NIFTY26OCTFUT","name":"Future · lot 75","last":22842.15,"chg_pct":0.95,"source":"eod","as_of":"2026-10-06T12:30:00Z","underlying":"NIFTY","lot":75,"example":"EXAMPLE value: the F&O tool's read model is not in this repository yet."},"NIFTY26OCT22800CE":{"id":"NIFTY26OCT22800CE","kind":"option","sym":"NIFTY 27 OCT 22800 CE","code":"NIFTY26OCT22800CE","name":"Option · lot 75","last":281.4,"chg_pct":21.3,"bid":280.6,"ask":282.1,"iv":13.1,"source":"snap3pm","as_of":"2026-10-07T09:30:00Z","underlying":"NIFTY","lot":75,"example":"EXAMPLE value: the F&O tool's read model is not in this repository yet."},"NIFTY26OCT22800PE":{"id":"NIFTY26OCT22800PE","kind":"option","sym":"NIFTY 27 OCT 22800 PE","code":"NIFTY26OCT22800PE","name":"Option · lot 75","last":292.75,"chg_pct":-24.6,"bid":292.0,"ask":293.5,"iv":13.6,"source":"snap3pm","as_of":"2026-10-07T09:30:00Z","underlying":"NIFTY","lot":75,"example":"EXAMPLE value: the F&O tool's read model is not in this repository yet."},"NIFTY26OCT23100CE":{"id":"NIFTY26OCT23100CE","kind":"option","sym":"NIFTY 27 OCT 23100 CE","code":"NIFTY26OCT23100CE","name":"Option · lot 75","last":158.2,"chg_pct":26.8,"bid":157.7,"ask":158.8,"iv":12.7,"source":"snap3pm","as_of":"2026-10-07T09:30:00Z","underlying":"NIFTY","lot":75,"example":"EXAMPLE value: the F&O tool's read model is not in this repository yet."},"NIFTY26OCT23300CE":{"id":"NIFTY26OCT23300CE","kind":"option","sym":"NIFTY 27 OCT 23300 CE","code":"NIFTY26OCT23300CE","name":"Option · lot 75","last":92.4,"chg_pct":29.5,"bid":92.0,"ask":92.8,"iv":12.4,"source":"snap3pm","as_of":"2026-10-07T09:30:00Z","underlying":"NIFTY","lot":75,"example":"EXAMPLE value: the F&O tool's read model is not in this repository yet."},"NIFTY26OCT22500PE":{"id":"NIFTY26OCT22500PE","kind":"option","sym":"NIFTY 27 OCT 22500 PE","code":"NIFTY26OCT22500PE","name":"Option · lot 75","last":168.35,"chg_pct":-27.1,"bid":167.8,"ask":168.9,"iv":14.4,"source":"snap3pm","as_of":"2026-10-07T09:30:00Z","underlying":"NIFTY","lot":75,"example":"EXAMPLE value: the F&O tool's read model is not in this repository yet."},"NIFTY26NOV22000PE":{"id":"NIFTY26NOV22000PE","kind":"option","sym":"NIFTY 23 NOV 22000 PE","code":"NIFTY26NOV22000PE","name":"Option · lot 75","last":196.1,"chg_pct":-9.4,"bid":null,"ask":null,"iv":null,"source":"eod","as_of":"2026-10-01T12:30:00Z","underlying":"NIFTY","lot":75,"example":"EXAMPLE value: the F&O tool's read model is not in this repository yet.","note":"No trades since 1 Oct: the last end-of-day price is old."}},"status":{"session_date":"2026-10-07","regime":"EVENT_HEAVY","runs":{"pre_open":{"at":"2026-10-07T02:10:00Z","ok":true},"intraday":[{"at":"2026-10-07T05:43:00Z","ok":true}],"post_close":{"at":null,"ok":null,"next_at":"2026-10-07T12:15:00Z"},"news":{"at":"2026-10-07T10:17:00Z","ok":true,"new_items":37}},"open_utc":"2026-10-07T03:45:00Z","close_utc":"2026-10-07T10:00:00Z","next_open_utc":"2026-10-08T03:45:00Z","example_open_now":"2026-10-07T05:43:00Z"},"watchlists":[{"name":"Tracked companies","items":["HDFCBANK","INDIGO","MARUTI","RELIANCE"]}],"accounts":{"manual-in":{"name":"Your paper account","kind":"manual","approach":"manual","currency":"INR","capital":500000.0,"cash":440900.0,"open_structures":0,"at_risk":0,"capital_note":"Proposed starting cash (owner-changeable); the trades in it are your real paper trades."},"h2h-rule-india":{"name":"Rule-based · stocks","kind":"strategy","approach":"rule","currency":"INR"},"h2h-ai-india":{"name":"AI-based · stocks","kind":"strategy","approach":"ai","currency":"INR"},"fno-b1":{"name":"Rule-based · F&O Book 1","kind":"strategy","approach":"rule","currency":"INR"},"fno-b2":{"name":"Hybrid (rule + AI) · F&O Book 2","kind":"strategy","approach":"hybrid","currency":"INR"},"fno-b3":{"name":"AI-based · F&O Book 3","kind":"strategy","approach":"ai","currency":"INR"}},"signals":[{"id":"RELIANCE","family":"ai","strategy_id":"ai.combined.opus.v1","strategy":"AI combined A","pick_rules":["best_expected_gain","highest_probability"],"horizon":5,"prob_up":0.605,"move_pct":3.705,"loss_pct":3.3976,"costs_pct":1.99,"exp_gain_pct":-1.0905,"amount":100000.0,"agree":{"buy":13,"of":15,"by_family":{"rule":{"buy":6,"of":8},"baseline":{"buy":3,"of":3},"ai":{"buy":4,"of":4}}},"record":{"trades":2,"win_rate":0.5,"net_pnl":-2151.8,"badge":"too_few_to_rank"}},{"id":"RELIANCE","family":"rule","strategy_id":"rule.model_news.v1","strategy":"Model + news","pick_rules":["best_expected_gain","highest_probability"],"horizon":5,"prob_up":0.575,"move_pct":3.3328,"loss_pct":3.1132,"costs_pct":1.99,"exp_gain_pct":-1.3967,"amount":100000.0,"agree":{"buy":13,"of":15,"by_family":{"rule":{"buy":6,"of":8},"baseline":{"buy":3,"of":3},"ai":{"buy":4,"of":4}}},"record":{"trades":3,"win_rate":0.3333,"net_pnl":-3764.15,"badge":"too_few_to_rank"}}],"no_pick":["HDFCBANK"],"default_amount":100000.0,"go_live":{"proven":false,"months_forward":0.2,"trades_needed":294,"beats_best_baseline":false},"recent":["HDFCBANK","MARUTI","RELIANCE"],"search_extra":[{"kind":"strategy","label":"Model + news","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + half news","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + double news","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + confirmed news only","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + major news only","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + news + global cues","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + news, calm markets only","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + news, 60% bar","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Always buy","sub":"Strategy · Baselines"},{"kind":"strategy","label":"Follow yesterday","sub":"Strategy · Baselines"},{"kind":"strategy","label":"Model without news","sub":"Strategy · Baselines"},{"kind":"strategy","label":"AI news & results","sub":"Strategy · AI-based"},{"kind":"strategy","label":"AI price pattern & mood","sub":"Strategy · AI-based"},{"kind":"strategy","label":"AI combined B","sub":"Strategy · AI-based"},{"kind":"strategy","label":"AI combined A","sub":"Strategy · AI-based"},{"kind":"news","label":"ICICI Bank Q2 Results FY27: NII, NIM and Asset Quality in Focus Before Oct 17","sub":"News · NiftyTrader · ICICIBANK"},{"kind":"news","label":"Trade Idea of The Day - Dr. Reddy's Laboratories Ltd Target Rs.45 - Religare Broking Ltd","sub":"News · Investment Guru India · DRREDDY"},{"kind":"news","label":"HDFC Life Insurance to host H1FY27 earnings call on Oct 15 at 4:15 pm","sub":"News · scanx.trade · HDFCLIFE"},{"kind":"news","label":"Oil India, BPCL, HPCL, IOCL, ONGC, Petronet LNG: Oil & Gas Q2 results preview","sub":"News · ET EnergyWorld · ONGC"},{"kind":"news","label":"Jio Platforms plans IPO. Reliance Industries stock sits 24.42 percent below its high","sub":"News · AD HOC NEWS · RELIANCE"},{"kind":"news","label":"Not just RIL, Jio's ₹11 trn IPO could benefit Airtel investors; here's why","sub":"News · Business Standard Markets · RELIANCE"},{"kind":"news","label":"Can strong Jio growth bring back momentum in Mukesh Ambani-led Reliance stock as Jio IPO buzz gathers pace?","sub":"News · ET Now · market"},{"kind":"news","label":"L&T Secures Power Transmission Orders Across Saudi Arabia, UAE, India","sub":"News · Energetica India Magazine · LT"},{"kind":"news","label":"Jio Platforms likely to launch IPO on October 21, seeks to raise $3.8 bn","sub":"News · Business Standard Companies · RELIANCE"},{"kind":"news","label":"Can a new CEO solve HDFC Bank's problems?","sub":"News · Finshots · HDFCBANK"},{"kind":"news","label":"West Asia Conflict: India condemns attack on MT On Peace vessel; MEA reiterates maritime security, 17 Indians injured","sub":"News · Organiser Weekly · market"},{"kind":"news","label":"Titan Q2 FY27: Growth Moderates to 25% From 41% as Jewellery Buyers Lag","sub":"News · NiftyTrader · market"}],"limits":{"max_loss_per_trade":10000,"max_open_structures":3,"max_at_risk":30000},"charges":{"label":"Example rates (the C1 charges code supplies the real schedule)","equity_delivery":{"brokerage_flat":20,"stt_pct":0.1,"exchange_pct":0.00297,"sebi_pct":0.0001,"stamp_buy_pct":0.015,"gst_pct":18},"option":{"brokerage_flat":20,"stt_sell_pct":0.1,"exchange_pct":0.03503,"sebi_pct":0.0001,"stamp_buy_pct":0.003,"gst_pct":18}},"short_option_margin_per_lot":118000,"next_quotes":{"stock":"the stock tool's next price check (8 Oct, first run after 09:15 IST)","option":"the next 3 pm snapshot (8 Oct)"},"fno_example":{"note":"EXAMPLE state, not today: how F&O signals look once a book's strategy has passed testing. EXAMPLE value: the F&O tool's read model is not in this repository yet.","rows":[{"basket":"IFLY-22800","family":"hybrid","strategy":"F&O Book 2 (example)","name":"NIFTY 27 Oct short iron fly 22800 ±300","pop":61,"max_loss":4132.5,"credit":18367.5},{"basket":"BCS-22800-23100","family":"rule","strategy":"F&O Book 1 (example)","name":"NIFTY 27 Oct bull call spread 22800 / 23100","pop":43,"max_loss":9330.0,"debit":9330.0}],"baskets":{"IFLY-22800":{"name":"NIFTY 27 Oct short iron fly 22800 ±300","kind":"credit","width":300,"pop":61,"breakevens":[22555.1,23044.9],"margin_per_lot":52000,"legs":[{"id":"NIFTY26OCT22800CE","side":"sell","lots":1},{"id":"NIFTY26OCT22800PE","side":"sell","lots":1},{"id":"NIFTY26OCT23100CE","side":"buy","lots":1},{"id":"NIFTY26OCT22500PE","side":"buy","lots":1}]},"BCS-22800-23100":{"name":"NIFTY 27 Oct bull call spread 22800 / 23100","kind":"debit","width":300,"pop":43,"breakevens":[22924.4],"margin_per_lot":0,"legs":[{"id":"NIFTY26OCT22800CE","side":"buy","lots":1},{"id":"NIFTY26OCT23100CE","side":"sell","lots":1}]}}},"fno_state":{"approved":false,"note":"No F&O strategy has passed testing yet: Experiment 1 has not run, so at 3 pm each F&O book recorded “no approved strategy”."}},"us":{"label":"US","exchange":"US (NYSE/Nasdaq)","currency":"USD","zone":"ET","offset_min":-240,"fno":false,"indices":["SPY","VIX"],"items":{"AAPL":{"id":"AAPL","kind":"stock","sym":"AAPL","code":"AAPL","name":"Apple · NASDAQ","last":333.63,"chg_pct":0.22,"source":"close","as_of":"2026-10-06T20:00:00Z","state":"active","spark":[309.9,313.45,314.58,319.7,316.85,325.13,324.96,328.21,319.97,316.22,315.34,326.57,332.27,333.08,331.34,332.41,337.0,336.13,338.98,339.75,337.02,335.92,341.07,338.4,329.4,333.02,330.32,333.69,332.89,333.63],"fno":false,"held":{"account":"manual-us","qty":3.0,"avg":330.8}},"DAL":{"id":"DAL","kind":"stock","sym":"DAL","code":"DAL","name":"Delta Air Lines · NYSE","last":83.66,"chg_pct":0.0,"source":"close","as_of":"2026-10-06T20:00:00Z","state":"inactive","spark":null,"fno":false,"note":"No longer tracked by the stock tool (inactive): the price is its last recorded close."},"JPM":{"id":"JPM","kind":"stock","sym":"JPM","code":"JPM","name":"JPMorgan · NYSE","last":331.28,"chg_pct":-0.33,"source":"close","as_of":"2026-10-06T20:00:00Z","state":"active","spark":[356.69,356.5,354.22,357.62,356.02,354.95,356.22,362.06,358.64,353.51,354.71,353.56,356.23,350.13,352.49,348.92,349.31,349.67,352.04,340.0,337.53,338.56,343.06,336.59,334.98,330.83,333.18,332.38,332.38,331.28],"fno":false},"NVDA":{"id":"NVDA","kind":"stock","sym":"NVDA","code":"NVDA","name":"Nvidia · NASDAQ","last":239.24,"chg_pct":0.14,"source":"close","as_of":"2026-10-06T20:00:00Z","state":"active","spark":[213.05,209.66,227.98,217.55,220.78,217.44,224.41,228.45,230.36,225.73,223.67,218.36,218.29,210.96,212.17,213.9,219.34,222.27,227.38,228.87,225.51,224.58,225.07,228.86,227.21,228.38,230.86,233.95,238.9,239.24],"fno":false},"SPY":{"id":"SPY","kind":"index","sym":"SPY","code":"SPY","name":"S&P 500 ETF · NYSE Arca","last":779.09,"chg_pct":0.55,"chg_5d_pct":1.95,"source":"close","as_of":"2026-10-06T20:00:00Z","fno":false},"VIX":{"id":"VIX","kind":"index","sym":"VIX","code":"VIX","name":"VIX · Cboe","last":15.01,"chg_pct":-3.29,"chg_5d_pct":-6.42,"source":"close","as_of":"2026-10-06T20:00:00Z","fno":false}},"status":{"session_date":"2026-10-07","regime":"TRENDING","runs":{"pre_open":{"at":"2026-10-07T11:45:00Z","ok":true},"intraday":[],"post_close":{"at":null,"ok":null,"next_at":"2026-10-07T22:15:00Z"},"news":{"at":"2026-10-07T08:47:00Z","ok":true,"new_items":52}},"open_utc":"2026-10-07T13:30:00Z","close_utc":"2026-10-07T20:00:00Z","next_open_utc":"2026-10-07T13:30:00Z","example_open_now":"2026-10-07T14:30:00Z"},"watchlists":[{"name":"Tracked companies","items":["AAPL","DAL","JPM","NVDA"]}],"accounts":{"manual-us":{"name":"Your paper account","kind":"manual","approach":"manual","currency":"USD","capital":6000.0,"cash":5007.6,"open_structures":0,"at_risk":0,"capital_note":"Proposed starting cash (owner-changeable); the trades in it are your real paper trades."},"h2h-rule-us":{"name":"Rule-based · stocks","kind":"strategy","approach":"rule","currency":"USD"},"h2h-ai-us":{"name":"AI-based · stocks","kind":"strategy","approach":"ai","currency":"USD"}},"signals":[{"id":"NVDA","family":"ai","strategy_id":"ai.combined.opus.v1","strategy":"AI combined A","pick_rules":["highest_probability"],"horizon":5,"prob_up":0.615,"move_pct":3.9597,"loss_pct":3.601,"costs_pct":0.234,"exp_gain_pct":0.8148,"amount":1000.0,"agree":{"buy":14,"of":15,"by_family":{"rule":{"buy":7,"of":8},"baseline":{"buy":3,"of":3},"ai":{"buy":4,"of":4}}},"record":{"trades":2,"win_rate":1.0,"net_pnl":44.26,"badge":"too_few_to_rank"}},{"id":"NVDA","family":"ai","strategy_id":"ai.combined.opus.v1","strategy":"AI combined A","pick_rules":["best_expected_gain"],"horizon":3,"prob_up":0.608,"move_pct":3.0544,"loss_pct":2.793,"costs_pct":0.234,"exp_gain_pct":0.5282,"amount":1000.0,"agree":{"buy":14,"of":15,"by_family":{"rule":{"buy":7,"of":8},"baseline":{"buy":3,"of":3},"ai":{"buy":4,"of":4}}},"record":{"trades":2,"win_rate":1.0,"net_pnl":44.26,"badge":"too_few_to_rank"}},{"id":"NVDA","family":"rule","strategy_id":"rule.model_news.v1","strategy":"Model + news","pick_rules":["best_expected_gain","highest_probability"],"horizon":5,"prob_up":0.585,"move_pct":3.5629,"loss_pct":3.2985,"costs_pct":0.234,"exp_gain_pct":0.4814,"amount":1000.0,"agree":{"buy":14,"of":15,"by_family":{"rule":{"buy":7,"of":8},"baseline":{"buy":3,"of":3},"ai":{"buy":4,"of":4}}},"record":{"trades":4,"win_rate":1.0,"net_pnl":103.48,"badge":"too_few_to_rank"}}],"no_pick":[],"default_amount":1000.0,"go_live":{"proven":false,"months_forward":0.2,"trades_needed":290,"beats_best_baseline":false},"recent":["AAPL","JPM","NVDA"],"search_extra":[{"kind":"strategy","label":"Model + news","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + half news","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + double news","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + confirmed news only","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + major news only","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + news + global cues","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + news, calm markets only","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Model + news, 60% bar","sub":"Strategy · Rule-based"},{"kind":"strategy","label":"Always buy","sub":"Strategy · Baselines"},{"kind":"strategy","label":"Follow yesterday","sub":"Strategy · Baselines"},{"kind":"strategy","label":"Model without news","sub":"Strategy · Baselines"},{"kind":"strategy","label":"AI news & results","sub":"Strategy · AI-based"},{"kind":"strategy","label":"AI price pattern & mood","sub":"Strategy · AI-based"},{"kind":"strategy","label":"AI combined B","sub":"Strategy · AI-based"},{"kind":"strategy","label":"AI combined A","sub":"Strategy · AI-based"},{"kind":"news","label":"GOOG, GOOGL Stock Notice: Alphabet Inc. Stock Plummeted 4% after AI Issues Disclosed - Securities Fraud Class Action Filed","sub":"News · PR Newswire · GOOGL"},{"kind":"news","label":"Nvidia share price jumps nearly 30 per cent in 2026 as world's most valuable company heads for USD 6 trill","sub":"News · The Economic Times · NVDA"},{"kind":"news","label":"Here are Tuesday's biggest analyst calls of the day: Nvidia, AMD, Procter & Gamble, Meta & more","sub":"News · CNBC · META, NVDA"},{"kind":"news","label":"House China committee chair urges Fed to review Hong Kong’s access to dollar lifeline","sub":"News · CNBC · market"},{"kind":"news","label":"Alphabet stock consolidates after Poland UOKiK fine risk emerges","sub":"News · Traders Union · GOOGL"},{"kind":"news","label":"Caterpillar: Upgrading To Buy Ahead Of Earnings, A Clear Line In The Sand (NYSE:CAT)","sub":"News · Seeking Alpha · CAT"},{"kind":"news","label":"Bank of America launches new tools and webinars to help small businesses fight rising fraud losses.","sub":"News · Pluang · BAC"},{"kind":"news","label":"Morgan Stanley cuts target for Apple stock from USD 360 to USD 355","sub":"News · AD HOC NEWS · AAPL"},{"kind":"news","label":"General Motors' Q3 US Sales Decline 6% Y/Y on Weak EV Demand","sub":"News · Zacks Investment Research · GM"},{"kind":"news","label":"Roundup: Shionogi Inc. Acquires IntraBio, Gate Bioscience extends Collaboration with Eli Lilly, Alector Enters Global License Agreement with Genentech","sub":"News · Pharmaceutical Executive · LLY"},{"kind":"news","label":"Barclays Adjusts Allstate Price Target to $221 From $226, Maintains Underweight Rating","sub":"News · marketscreener.com · ALL"},{"kind":"news","label":"Meta Threatened With Major Fines In Europe Over 'Addictive' Features","sub":"News · Investor's Business Daily · META"}],"limits":{"max_loss_per_trade":null,"max_open_structures":null,"max_at_risk":null},"charges":{"label":"Example rates (the stock tool's config/costs.yaml supplies the real schedule)","equity":{"commission_flat":0,"sec_sell_pct":0.00278,"taf_per_share_sell":0.000166}},"next_quotes":{"stock":"the stock tool's next price check (7 Oct, after the 09:30 ET open)"}}},"notifications":{"india":[{"icon":"schedule","title":"Post-close run due at 17:45 IST","sub":"Today's closes and settlements are not in yet: prices are the 6 Oct close","unread":true},{"icon":"event","title":"RBI policy decision today","sub":"A major event: the strategies widen their ranges","unread":true},{"icon":"newspaper","title":"News run 15:47 IST: 37 new items","sub":"1 promotional item on RELIANCE (it never supports a call)","unread":false}],"us":[{"icon":"schedule","title":"Pre-open run done at 07:45 ET","sub":"Post-close run due 18:15 ET","unread":true},{"icon":"newspaper","title":"News run 04:47 ET: 52 new items","sub":"1 rumour on NVDA (it never supports a call)","unread":false}]}}; const D = null;</script>
 <script>
-/* Omenix platform runtime, part 1 (files design/mockups/_platform/js/*.js, concatenated in file order by platform_build.py
-   into one script, split by purpose to keep every file small). The runtime of the design mockups (design/PLATFORM_DESIGN.md sections 2, 3, 5 and 6).
+/* Omenix platform runtime, part 1 of 7 (files design/mockups/_platform/js/*.js, concatenated in file order by platform_build.py
+   into one script). The runtime of the design mockups (design/PLATFORM_DESIGN.md sections 2, 3, 5 and 6).
    A page defines `const SHELL = ...30-shell/data.json...` and `const D = ...its own data.json...`, then this script,
    then calls PF.mount({screen, group, render(main, ctx)}). The shell draws the app bar (brand, global search, market
    switch, index strip, bell, theme, profile), the navigation rail (groups with flyouts, pinned screens), the
-   watchlist panel (5 lists, hover actions B S Chart Chain News More, drag to reorder), the hover card, the context
+   picks panel (today’s buy picks by strategy family with their real figures; filter chips, pages, B / S on every row), the hover card, the context
    menu, the command palette, the shortcuts list, the right drawer (Paper order window, quick view; a bottom sheet on
    phones) and the phone bottom tabs. Every class is a component of design/system/components.css; this file holds
    behaviour only. The URL hash holds the state (m, theme, wl, density, rail, drawer, pal, keys, hc, menu, fly, notif,
-   wlopen), so Back, Forward and bookmarks work and every screenshot state is a link. Paper only: the order window
+   wlopen, ap, pg, fno), so Back, Forward and bookmarks work and every screenshot state is a link. Paper only: the order window
    records a paper order in the dashboard's inbox; nothing here places, modifies or cancels a real order. */
 'use strict';
 const PF = (() => {
@@ -1226,25 +1263,30 @@ const icon = (id, cls = 'ms') => { const s = svgEl('svg', {class: cls, 'aria-hid
 const help = tip => el('button', {class: 'md-help', type: 'button', 'data-tip': tip, 'aria-label': 'Explain'}, '?');
 
 /* ---- state and the URL ------------------------------------------------------------------------------------- */
-const st = {m: 'india', theme: 'light', wl: 0, density: 'comfortable', rail: 'labels', wlOff: false, drawer: null, pal: null, keys: false, hc: null, menu: null, fly: null, notif: false, wlopen: false, qs: null};
+const st = {clock: 'now', m: 'india', theme: 'light', wl: 0, ap: 'all', pg: 0, fno: 'today', density: 'comfortable', rail: 'labels', wlOff: false, drawer: null, pal: null, keys: false, hc: null, menu: null, fly: null, notif: false, wlopen: false};
 let page = null, lastFocus = null;
 function readHash() {
   const h = new URLSearchParams(location.hash.slice(1));
   if (h.get('m') in S.markets) st.m = h.get('m');
+  st.clock = h.get('clock') === 'open' ? 'open' : 'now';
   if (['light', 'dark', 'system'].includes(h.get('theme'))) st.theme = h.get('theme');
-  const wl = +h.get('wl'); if (wl >= 1 && wl <= 5) st.wl = wl - 1;
+  if (['rule', 'ai', 'hybrid'].includes(h.get('ap'))) st.ap = h.get('ap');
+  st.pg = Math.max(0, (+h.get('pg') || 1) - 1); st.fno = h.get('fno') === 'example' ? 'example' : 'today';
   if (h.get('density') === 'compact') st.density = 'compact';
   if (h.get('rail') === 'icons') st.rail = 'icons';
   if (h.get('wloff') === '1') st.wlOff = true;
   st.drawer = h.get('drawer'); st.pal = h.get('pal'); st.keys = h.get('keys') === '1'; st.hc = h.get('hc'); st.menu = h.get('menu');
-  st.qs = h.get('qs'); st.fly = h.get('fly'); st.notif = h.get('notif') === '1'; st.wlopen = h.get('wlopen') === '1';
+  st.fly = h.get('fly'); st.notif = h.get('notif') === '1'; st.wlopen = h.get('wlopen') === '1';
   if (page && page.readHash) page.readHash(h);
 }
 function writeHash() {
   const h = new URLSearchParams();
   if (st.m !== 'india') h.set('m', st.m);
+  if (st.clock === 'open') h.set('clock', 'open');
   if (st.theme !== 'light') h.set('theme', st.theme);
-  if (st.wl) h.set('wl', st.wl + 1);
+  if (st.ap !== 'all') h.set('ap', st.ap);
+  if (st.pg) h.set('pg', st.pg + 1);
+  if (st.fno !== 'today') h.set('fno', st.fno);
   if (st.density !== 'comfortable') h.set('density', st.density);
   if (st.rail !== 'labels') h.set('rail', st.rail);
   if (st.wlOff) h.set('wloff', '1');
@@ -1281,18 +1323,29 @@ function asOf(it) {
 }
 const asOfEl = (it, withIcon = true) => { const a = asOf(it); return el('span', {class: 'mb-asof' + (a.stale ? ' stale' : ''), 'data-tip': a.tip}, withIcon ? icon(a.stale ? 'warning' : 'schedule') : null, a.short + (a.stale ? ' · stale' : '')); };
 const item = id => P().items[id];
+/* market session: open or closed now; your own buy and sell work only while it is open (owner, 13 Oct 2026). The
+   strategies keep paper trading on their own schedule. #clock=open shows the same page during the session (example). */
+function market(m = st.m) {
+  const T = P(m).status, now = Date.parse(st.clock === 'open' ? T.example_open_now : S.now), o = Date.parse(T.open_utc), c = Date.parse(T.close_utc), z = P(m).zone;
+  const at = iso => { const d = local(iso, m); return `${hm(d)} ${z}`; };
+  if (now >= o && now < c) return {open: true, word: 'Open', text: `closes ${at(T.close_utc)}`};
+  const next = now < o ? T.open_utc : T.next_open_utc;
+  return {open: false, word: 'Closed', text: `opens ${now < o ? 'today' : dateShort(next, m)} ${at(next)}`, next};
+}
+const tradeLock = () => { const k = market(); return k.open ? null : `Market closed: you can buy and sell again when it ${k.text}. The strategies keep paper trading on their own.`; };
 const isFno = it => it.kind === 'option' || it.kind === 'future';
 const tradable = it => it.kind !== 'index';
 const price = it => num(it.last, 2);
 const paperTag = () => el('span', {class: 'mb-tag paper', 'data-tip': 'Paper: research and paper trading only. No real order, no real money.'}, 'Paper');
-const mockTag = () => el('span', {class: 'mb-tag mock', 'data-tip': S._note}, 'Mock');
+const mockTag = () => el('span', {class: 'mb-tag mock', 'data-tip': S._note}, 'Example data');
 
+/* Omenix platform runtime, part 2 of 7: navigation model, the frame, the app bar, the navigation rail. Concatenated in file order by platform_build.py into one script. */
 /* ---- navigation (PLATFORM_DESIGN.md section 4; a screen without a mockup yet is marked "soon") ------------------ */
 const B = n => `../${n}/page.html`;
 const NAV = [
   {id: 'dashboard', label: 'Dashboard', icon: 'dashboard', items: [{id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: B('31-dashboard'), key: 'g h'}]},
   {id: 'markets', label: 'Markets', icon: 'monitoring', items: [{id: 'markets', label: 'Markets overview', icon: 'monitoring'}, {id: 'watchlists', label: 'Watchlists', icon: 'star'}, {id: 'chart', label: 'Chart', icon: 'show_chart'}, {id: 'calendar', label: 'Calendar', icon: 'calendar_month'}]},
-  {id: 'trade', label: 'Trade', icon: 'candlestick_chart', items: [{id: 'chain', label: 'Option chain', icon: 'layers', india: true}, {id: 'builder', label: 'Strategy builder', icon: 'calculate', india: true}, {id: 'screener', label: 'Screener', icon: 'filter_list', key: 'g s'}, {id: 'order', label: 'Paper order window', icon: 'receipt_long', action: 'order', key: 'B / S'}]},
+  {id: 'trade', label: 'Trade', icon: 'candlestick_chart', items: [{id: 'chain', label: 'Option chain', icon: 'layers', india: true}, {id: 'builder', label: 'Strategy builder', icon: 'calculate', india: true}, {id: 'screener', label: 'Screener', icon: 'filter_list', key: 'g s'}, {id: 'order', label: 'Order window', icon: 'receipt_long', action: 'order', key: 'B / S'}]},
   {id: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', items: [{id: 'positions', label: 'Positions', icon: 'account_balance_wallet', key: 'g p'}, {id: 'holdings', label: 'Holdings', icon: 'pie_chart'}, {id: 'funds', label: 'Accounts and funds', icon: 'payments'}, {id: 'orders', label: 'Orders', icon: 'receipt_long', key: 'g o'}, {id: 'reports', label: 'Reports', icon: 'bar_chart'}]},
   {id: 'strategies', label: 'Strategies', icon: 'science', items: [{id: 'lab', label: 'Strategy lab', icon: 'science'}, {id: 'track', label: 'Track record', icon: 'history'}, {id: 'scoreboards', label: 'Scoreboards', icon: 'leaderboard'}, {id: 'forecasts', label: 'Forecasts', icon: 'query_stats', india: true}]},
   {id: 'research', label: 'Research', icon: 'travel_explore', items: [{id: 'stock', label: 'Stock page', icon: 'apartment'}, {id: 'news', label: 'News', icon: 'newspaper'}, {id: 'events', label: 'Calendar', icon: 'event'}, {id: 'alerts', label: 'Alerts', icon: 'notifications'}]},
@@ -1302,7 +1355,7 @@ const NAV = [
   {id: 'help', label: 'Help', icon: 'help', items: [{id: 'help', label: 'Help and glossary', icon: 'help'}, {id: 'shortcuts', label: 'Keyboard shortcuts', icon: 'keyboard', action: 'keys', key: '?'}]},
   {id: 'settings', label: 'Settings', icon: 'settings', items: [{id: 'settings', label: 'Settings', icon: 'settings'}]},
 ];
-const PINS = [{label: 'Pinned: NIFTY option chain', short: 'NC', india: true, screen: 'chain'}, {label: 'Pinned: saved screen "High IV rank, rising open interest"', short: 'IV', india: true, screen: 'screener'}, {label: 'Pinned: Stock tool scoreboard (Rule vs AI)', short: 'RA', screen: 'scoreboards'}];
+const PINS = [{label: 'Pinned: NIFTY option chain', short: 'NIFTY chain', icon: 'layers', india: true, screen: 'chain'}, {label: 'Pinned: saved screen "High IV rank, rising open interest"', short: 'High IV', icon: 'filter_list', india: true, screen: 'screener'}, {label: 'Pinned: Stock tool scoreboard (Rule vs AI)', short: 'Rule vs AI', icon: 'leaderboard', screen: 'scoreboards'}];
 const shown = x => !x.india || P().fno;
 const allScreens = () => NAV.filter(Boolean).flatMap(g => g.items.filter(shown).map(i => ({...i, group: g.id})));
 const screen = id => allScreens().find(s => s.id === id);
@@ -1315,10 +1368,9 @@ function go(id) {
   if (s.href) { location.href = s.href + hashCarry(); return; }
   snack(`${s.label}: ${SOON}`);
 }
-const hashCarry = () => { const h = new URLSearchParams(); if (st.m !== 'india') h.set('m', st.m); if (st.theme !== 'light') h.set('theme', st.theme); if (st.density !== 'comfortable') h.set('density', st.density); const s = h.toString(); return s ? '#' + s : ''; };
-const firstTradable = () => { const ids = P().watchlists[st.wl].items.concat(P().watchlists[0].items); return ids.find(id => tradable(item(id))) || Object.keys(P().items)[0]; };
+const hashCarry = () => { const h = new URLSearchParams(); if (st.m !== 'india') h.set('m', st.m); if (st.clock === 'open') h.set('clock', 'open'); if (st.theme !== 'light') h.set('theme', st.theme); if (st.density !== 'comfortable') h.set('density', st.density); const s = h.toString(); return s ? '#' + s : ''; };
+const firstTradable = () => { const ids = P().signals.map(x => x.id); return ids.find(id => tradable(item(id))) || Object.keys(P().items)[0]; };
 
-/* Omenix platform runtime, part 2 of 6. Concatenated in file order by platform_build.py into one script. */
 /* ---- the frame ---------------------------------------------------------------------------------------------- */
 let F = {};
 function frame() {
@@ -1345,7 +1397,7 @@ function applySettings() {
 function renderAll() {
   applySettings();
   const inner = $('#page', F.main);
-  F.pf.replaceChildren(appbar(), navrail(), watchlist(), F.main, tabbar());
+  F.pf.replaceChildren(appbar(), navrail(), signalsPanel(), F.main, tabbar());
   inner.replaceChildren();
   page.render(inner, ctx());
   inner.append(el('footer', {}, 'Omenix · research and paper trading only: nothing here places a real order · ', el('b', {}, 'Mock data'), ` as of ${nowLabel()}`));
@@ -1358,13 +1410,14 @@ function appbar() {
   return el('header', {class: 'mb-appbar', id: 'appbar'},
     el('a', {class: 'mb-appbar-brand', href: B('31-dashboard') + hashCarry(), 'aria-label': 'Omenix: Dashboard'}, el('span', {class: 'mb-brand-mark'}, 'OM')),
     el('div', {class: 'mb-appbar-name'}, 'Omenix', el('small', {}, 'Research · Paper only')),
-    el('button', {class: 'mb-gsearch', type: 'button', onclick: () => openPal(''), 'aria-label': 'Search stocks, F&O, screens (slash)'}, icon('search'), el('span', {}, P().fno ? 'Search stocks, F&O, screens…' : 'Search stocks, screens, news…'), el('span', {class: 'mb-kbd'}, '/')),
+    el('button', {class: 'mb-gsearch', type: 'button', onclick: () => openPal(''), 'aria-label': 'Search stocks, F&O, screens (slash)'}, icon('search'), el('span', {class: 'lg'}, P().fno ? 'Search stocks, F&O, codes' : 'Search stocks'), el('span', {class: 'sm'}, 'Search…'), el('span', {class: 'mb-kbd'}, '/')),
     el('div', {class: 'md-segmented dense light', role: 'group', 'aria-label': 'Market'}, ...Object.entries(S.markets).map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(k === st.m), onclick: () => { if (st.m !== k) { st.m = k; st.wl = 0; closeAll(); renderAll(); } }}, v.label))),
-    el('div', {class: 'mb-idx-strip', 'aria-label': 'Indices'}, ...P().indices.map(id => { const it = item(id), a = asOf(it); return el('a', {class: 'mb-idx' + (a.stale ? ' stale' : ''), href: '#', 'data-tip': `${it.sym}: ${a.tip}`, onclick: e => { e.preventDefault(); go('markets'); }}, el('span', {class: 'n'}, it.sym), el('span', {class: 'v'}, price(it)), delta(it.chg_pct)); })),
+    (k => el('span', {class: 'mb-mkt' + (k.open ? ' open' : ''), role: 'status', 'data-tip': `${P().exchange}: ${k.word.toLowerCase()}, ${k.text}.${k.open ? ' You can buy and sell.' : ' Your buy and sell are paused until then; the strategies keep paper trading.'}${st.clock === 'open' ? ' (Example clock: during the session.)' : ''}`}, el('i', {'aria-hidden': 'true'}), el('b', {}, k.word), el('span', {class: 't'}, k.text)))(market()),
+    page.strip === false ? null : el('div', {class: 'mb-idx-strip', 'aria-label': 'Indices'}, ...P().indices.map(id => { const it = item(id), a = asOf(it); return el('a', {class: 'mb-idx' + (a.stale ? ' stale' : ''), href: '#', 'data-tip': `${it.sym}: ${a.tip}`, onclick: e => { e.preventDefault(); go('markets'); }}, el('span', {class: 'n'}, it.sym), el('span', {class: 'v'}, price(it)), delta(it.chg_pct)); })),
     el('div', {class: 'mb-appbar-end'},
-      el('button', {class: 'md-icon-btn hide-phone', type: 'button', 'aria-label': st.wlOff ? 'Show the watchlist' : 'Hide the watchlist', 'data-tip': (st.wlOff ? 'Show' : 'Hide') + ' the watchlist panel', onclick: () => { if (innerWidth < 1200) { st.wlopen = !st.wlopen; applySettings(); } else { st.wlOff = !st.wlOff; applySettings(); writeHash(); } }}, icon('dock_to_left')),
+      el('button', {class: 'md-icon-btn hide-phone', type: 'button', 'aria-label': st.wlOff ? 'Show today’s picks' : 'Hide today’s picks', 'data-tip': (st.wlOff ? 'Show' : 'Hide') + ' today’s picks panel', onclick: () => { if (innerWidth < 1200) { st.wlopen = !st.wlopen; applySettings(); } else { st.wlOff = !st.wlOff; applySettings(); writeHash(); } }}, icon('dock_to_left')),
       el('button', {class: 'md-icon-btn mb-badged', type: 'button', id: 'bell', 'aria-label': `Notifications, ${unread} unread`, onclick: e => openNotif(e.currentTarget)}, icon('notifications'), unread ? el('span', {class: 'md-badge count'}, unread) : null),
-      el('button', {class: 'md-icon-btn hide-phone', type: 'button', 'aria-label': 'Switch theme', 'data-tip': document.documentElement.dataset.theme === 'dark' ? 'Light theme' : 'Dark theme', onclick: () => { st.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; renderAll(); }}, icon(document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode')),
+      el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': 'Switch theme', 'data-tip': document.documentElement.dataset.theme === 'dark' ? 'Light theme' : 'Dark theme', onclick: () => { st.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; renderAll(); }}, icon(document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode')),
       el('button', {class: 'mb-me', type: 'button', id: 'me', 'aria-label': 'Profile and settings', onclick: e => openProfile(e.currentTarget)}, 'OW')));
 }
 
@@ -1381,44 +1434,59 @@ function navrail() {
     nav.append(el('div', {class: 'mb-rail-grp'}, el('a', {class: 'mb-rail-item', href: first.href ? first.href + hashCarry() : '#', 'aria-current': cur ? 'page' : null, 'aria-haspopup': items.length > 1 ? 'menu' : null, onclick: e => { if (!first.href) { e.preventDefault(); go(first.id); } }}, el('span', {class: 'mb-nav-ind'}, icon(g.icon)), el('span', {class: 'mb-nav-label'}, g.label)), items.length > 1 || !first.href ? fly : null));
   }
   const pins = PINS.filter(shown);
-  if (pins.length) { nav.append(el('div', {class: 'mb-rail-sep', role: 'separator'})); for (const p of pins) nav.append(el('a', {class: 'mb-rail-pin', href: '#', 'data-tip': p.label, 'aria-label': p.label, onclick: e => { e.preventDefault(); go(p.screen); }}, p.short)); }
+  if (pins.length) { nav.append(el('div', {class: 'mb-rail-sep', role: 'separator'})); nav.append(el('div', {class: 'mb-rail-pins-t'}, icon('push_pin'), 'Pinned')); for (const p of pins) nav.append(el('a', {class: 'mb-rail-pin', href: '#', 'data-tip': p.label, 'aria-label': p.label, onclick: e => { e.preventDefault(); go(p.screen); }}, icon(p.icon), el('span', {}, p.short))); }
   return nav;
 }
 
-/* watchlist panel */
-let dragId = null;
-function watchlist() {
-  const L = P().watchlists[st.wl];
-  const list = el('ul', {class: 'mb-wl-list', id: 'wl-list', 'aria-label': `Watchlist ${L.name}`});
-  for (const id of L.items) list.append(wlRow(item(id)));
-  if (!L.items.length) list.append(el('li', {class: 'quiet', style: 'margin:12px'}, `“${L.name}” is empty. Type in the field above to add stocks${P().fno ? ', F&O underlyings or contracts' : ''}; or use “Add all to watchlist” in the Screener.`));
-  const find = el('input', {type: 'search', placeholder: P().fno ? 'Search and add: infy, nifty 24500 ce' : 'Search and add: aapl, msft', 'aria-label': 'Filter or add to this watchlist', oninput: e => { const q = e.target.value.trim().toLowerCase(); for (const r of $$('.mb-wl-row', list)) r.hidden = q && !r.dataset.text.includes(q); }, onkeydown: e => { if (e.key === 'Enter') openPal(e.target.value); }});
-  return el('aside', {class: 'mb-wl', id: 'wl', 'aria-label': 'Watchlist'},
-    el('div', {class: 'mb-wl-head'}, el('label', {class: 'mb-wl-find'}, icon('search'), find),
-      el('div', {class: 'mb-wl-meta'}, el('span', {}, el('b', {}, L.name), ` · ${L.items.length} / 50`), el('span', {class: 'mb-asof', 'data-tip': 'Every row shows its own as-of time: these are end-of-day files, the 3 pm option snapshot and the stock tool’s runs, not a live feed.'}, icon('schedule'), 'not live'),
-        st.wlopen ? el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close the watchlist', onclick: () => { st.wlopen = false; applySettings(); renderTabs(); }}, icon('close')) : null)),
-    list,
-    el('div', {class: 'mb-wl-foot', role: 'tablist', 'aria-label': 'Watchlists'}, ...P().watchlists.map((w, i) => el('button', {type: 'button', role: 'tab', 'aria-pressed': String(i === st.wl), 'aria-selected': String(i === st.wl), 'data-tip': `${w.name} (${w.items.length})`, onclick: () => { st.wl = i; F.pf.replaceChild(watchlist(), $('#wl', F.pf)); writeHash(); }}, i + 1)),
-      el('button', {type: 'button', 'aria-label': 'Watchlist settings: columns, sort', 'data-tip': 'Sort, columns and list names (Settings)', onclick: () => snack('Watchlist settings: sort, columns and names live in Settings.')}, icon('tune'))));
+/* Omenix platform runtime, part 3 of 7: today's buy picks panel and the phone bottom tabs. Concatenated in file order by platform_build.py into one script. */
+/* signals panel (owner, 13 Oct 2026): the left bar lists today's buy picks of the strategies, by approach (rule-based,
+   AI-based, hybrid), with the real figures: how many strategies agree, the model's chance of a rise, the expected gain after
+   market costs (below costs is said in words) and the picking strategy's own record on that stock. Filter chips and
+   pages instead of another search box; every row trades with B / S. */
+const FAM = S.families, SIG_PAGE = 6;
+const apBadge = f => el('span', {class: 'mb-ap ' + f, 'data-tip': `${FAM[f].label}: ${S.family_text[f]}`}, icon(FAM[f].icon), FAM[f].label);
+const PICK = r => (r || []).map(k => S.pick_rules[k]).join(' and ');
+function sigRows() {
+  const keep = x => st.ap === 'all' || x.family === st.ap;
+  const ex = st.fno === 'example' && P().fno_example ? P().fno_example.rows.map(x => ({...x, kind: 'fno'})) : [];
+  return P().signals.filter(keep).map(x => ({...x, kind: 'stock'})).concat(ex.filter(keep));
 }
-function wlRow(it) {
-  const a = asOf(it), held = it.held;
-  const acts = el('div', {class: 'mb-wl-acts'},
-    el('button', {class: 'mb-bs buy', type: 'button', 'aria-label': `Paper buy ${it.sym}`, 'data-tip': tradable(it) ? 'Paper buy (B)' : 'An index cannot be traded: use its futures or options', disabled: !tradable(it), onclick: e => { e.stopPropagation(); openOrder(it.id, 'buy'); }}, 'B'),
-    el('button', {class: 'mb-bs sell', type: 'button', 'aria-label': `Paper sell ${it.sym}`, 'data-tip': tradable(it) ? 'Paper sell (S)' : 'An index cannot be traded', disabled: !tradable(it), onclick: e => { e.stopPropagation(); openOrder(it.id, 'sell'); }}, 'S'),
-    el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': 'Chart', 'data-tip': 'Chart', onclick: e => { e.stopPropagation(); go('chart'); }}, icon('show_chart')),
-    P().fno && (it.fno || isFno(it)) ? el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': 'Option chain', 'data-tip': 'Option chain', onclick: e => { e.stopPropagation(); go('chain'); }}, icon('layers')) : null,
-    el('button', {class: 'md-icon-btn', type: 'button', 'aria-label': `More actions for ${it.sym}`, 'aria-haspopup': 'menu', onclick: e => { e.stopPropagation(); openMenu(it.id, e.currentTarget); }}, icon('more_vert')));
-  const row = el('li', {class: 'mb-wl-row' + (a.stale ? ' stale' : ''), tabindex: '0', draggable: 'true', 'data-inst': it.id, 'data-text': (it.sym + ' ' + it.name).toLowerCase(), 'aria-label': `${it.sym}, ${price(it)}, ${sgn(it.chg_pct)}, ${a.short}${a.stale ? ', stale' : ''}`,
-      onclick: () => openHc(it.id, row), onkeydown: e => { if (e.key === 'Enter') openHc(it.id, row); },
-      ondragstart: e => { dragId = it.id; e.dataTransfer.effectAllowed = 'move'; }, ondragover: e => e.preventDefault(),
-      ondrop: e => { e.preventDefault(); const L = P().watchlists[st.wl].items; if (!dragId || dragId === it.id) return; L.splice(L.indexOf(dragId), 1); L.splice(L.indexOf(it.id), 0, dragId); dragId = null; F.pf.replaceChild(watchlist(), $('#wl', F.pf)); }},
-    icon('drag_indicator', 'ms grip'),
-    el('div', {style: 'min-width:0'}, el('div', {class: 'sym'}, it.sym, held ? el('span', {class: 'mb-label paper', style: 'padding:0 5px;font-size:10.5px;line-height:16px', 'data-tip': `Held in ${P().accounts[held.account].name}: ${held.qty} at ${num(held.avg)} (Paper)`}, 'held') : null), el('div', {class: 'sub'}, it.name)),
-    el('div', {class: 'px'}, el('div', {}, price(it)), el('small', {'data-tip': a.tip}, delta(it.chg_pct), ' · ' + a.short + (a.stale ? ' · stale' : ''))),
-    acts);
-  return row;
+function sigRow(x) {
+  if (x.kind === 'fno') return el('li', {class: 'mb-sig-row'}, el('span', {class: 'mb-avatar sm info'}, icon('layers')),
+    el('div', {class: 'top'}, el('b', {}, x.name), apBadge(x.family)),
+    el('div', {class: 'px'}, el('span', {class: 'mb-tag mock', 'data-tip': P().fno_example.note}, 'Example')),
+    el('div', {class: 'why'}, `Profit chance ${x.pop}% (risk-neutral) · max loss ${money(x.max_loss)} · ${x.credit ? 'credit ' + money(x.credit) : 'cost ' + money(x.debit)}`),
+    el('div', {class: 'act', 'data-tip': tradeLock()}, el('button', {class: 'md-btn small buy', type: 'button', disabled: !!tradeLock(), onclick: () => openDrawer('basket:' + x.basket)}, 'Buy basket')));
+  const it = item(x.id), a = asOf(it), clears = x.exp_gain_pct > 0, rec = x.record;
+  return el('li', {class: 'mb-sig-row', 'data-inst': x.id, tabindex: '0', 'aria-label': `${it.sym}: ${FAM[x.family].label} buy pick, ${x.agree.buy} of ${x.agree.of} strategies agree`},
+    el('span', {class: 'mb-score sm', style: `--v:${Math.round(x.agree.buy / x.agree.of * 100)}`, role: 'img', 'aria-label': `${x.agree.buy} of ${x.agree.of} strategies buy`, 'data-tip': `${x.agree.buy} of ${x.agree.of} strategies buy ${it.sym} at N+${x.horizon}: rule ${x.agree.by_family.rule.buy} of ${x.agree.by_family.rule.of}, AI ${x.agree.by_family.ai.buy} of ${x.agree.by_family.ai.of}, baselines ${x.agree.by_family.baseline.buy} of ${x.agree.by_family.baseline.of}.`}, el('b', {}, `${x.agree.buy}/${x.agree.of}`)),
+    el('div', {class: 'top'}, el('a', {class: 'tk', href: '#', 'data-inst': x.id, onclick: e => { e.preventDefault(); openDrawer('quick:' + x.id); }}, it.sym), apBadge(x.family)),
+    el('div', {class: 'px'}, num(it.last), el('small', {}, delta(it.chg_pct), ' · ' + a.short)),
+    el('div', {class: 'why'}, el('b', {}, 'Picked to buy'), ` at N+${x.horizon} · ${x.strategy} · model ${(x.prob_up * 100).toFixed(1)}% up`),
+    el('div', {class: 'cost'}, el('span', {class: 'mb-label ' + (clears ? 'success' : 'danger'), 'data-tip': `Expected gain after market costs of ${money(x.amount)}: ${(x.prob_up * 100).toFixed(1)}% × ${sgn(x.move_pct)} − ${((1 - x.prob_up) * 100).toFixed(1)}% × ${x.loss_pct}% − ${x.costs_pct}% costs. Picked by: ${PICK(x.pick_rules)}.`}, icon(clears ? 'check' : 'close'), clears ? `Yes: ${sgn(x.exp_gain_pct)} after costs` : `No: ${sgn(x.exp_gain_pct)} after costs, below costs`)),
+    el('div', {class: 'proof', 'data-tip': rec ? `${x.strategy} on ${it.sym} so far: ${rec.trades} settled paper trades, ${Math.round(rec.win_rate * rec.trades)} won, net ${money(rec.net_pnl, 2)}. Fewer than 20 is too few to rank.` : 'No settled trade of this strategy on this stock yet.'}, icon('history'), rec ? `Record here: ${Math.round(rec.win_rate * rec.trades)} of ${rec.trades} won, ` : 'No record here yet', rec ? moneyDelta(rec.net_pnl) : null, rec ? ' · too few to rank' : null),
+    el('div', {class: 'act', 'data-tip': tradeLock()}, el('button', {class: 'md-btn small buy', type: 'button', disabled: !!tradeLock(), onclick: () => openOrder(x.id, 'buy')}, 'Buy'), el('button', {class: 'md-btn small sell', type: 'button', disabled: !!tradeLock(), onclick: () => openOrder(x.id, 'sell')}, 'Sell')));
 }
+function signalsBody(where) {
+  const rows = sigRows(), pages = Math.max(1, Math.ceil(rows.length / SIG_PAGE)), G = P().go_live;
+  st.pg = Math.min(st.pg, pages - 1);
+  const shown = rows.slice(st.pg * SIG_PAGE, st.pg * SIG_PAGE + SIG_PAGE);
+  const chip = (k, label) => el('button', {class: 'md-chip filter small', type: 'button', 'aria-pressed': String(st.ap === k), onclick: () => { st.ap = k; st.pg = 0; renderAll(); }}, label);
+  const fs = P().fno_state;
+  return [
+    el('div', {class: 'mb-wl-head'},
+      el('div', {class: 'mb-wl-title'}, el('h2', {}, 'Today’s buy picks'), help(`The head-to-head picks of each strategy family for today's session, from the stock tool. Not proven yet: ${G.months_forward} of 2 months of forward paper trading and about ${G.trades_needed} more settled trades are needed before any signal can be called strong.`),
+        where === 'panel' && st.wlopen ? el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close the picks', onclick: () => { st.wlopen = false; applySettings(); renderTabs(); }}, icon('close')) : null),
+      el('div', {class: 'mb-wl-chips', role: 'group', 'aria-label': 'Who picked'}, chip('all', 'All'), chip('rule', FAM.rule.label), chip('ai', FAM.ai.label), P().fno ? chip('hybrid', 'Hybrid') : null),
+      el('div', {class: 'mb-wl-meta'}, el('span', {}, `Not proven yet · ${G.trades_needed} trades to go`))),
+    el('ul', {class: 'mb-wl-list', 'aria-label': 'Today’s buy picks'}, ...shown.map(sigRow), shown.length ? null : el('li', {class: 'quiet', style: 'margin:12px'}, st.ap === 'hybrid' ? 'No hybrid pick: the hybrid runs F&O only (Book 2), and no F&O strategy is approved yet.' : 'No pick from this approach today.')),
+    P().no_pick && P().no_pick.length && st.ap !== 'hybrid' ? el('div', {class: 'mb-wl-note'}, icon('remove'), el('span', {}, el('b', {}, P().no_pick.join(', ') + ': '), 'no strategy picks it today (no candidate clears the bar).')) : null,
+    fs && st.fno !== 'example' ? el('div', {class: 'mb-wl-note'}, icon('science'), el('span', {}, el('b', {}, 'F&O: no approved strategy yet. '), fs.note.replace(/^No F&O strategy has passed testing yet: /, ''))) : null,
+    el('div', {class: 'mb-wl-foot mb-pager'}, el('span', {}, rows.length ? `${st.pg * SIG_PAGE + 1}–${st.pg * SIG_PAGE + shown.length} of ${rows.length}` : '0 of 0'),
+      el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Previous page', disabled: st.pg === 0, onclick: () => { st.pg--; renderAll(); }}, icon('chevron_left')),
+      el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Next page', disabled: st.pg >= pages - 1, onclick: () => { st.pg++; renderAll(); }}, icon('chevron_right')))];
+}
+const signalsPanel = () => el('aside', {class: 'mb-wl mb-sig', id: 'wl', 'aria-label': 'Today’s buy picks'}, ...signalsBody('panel'));
 
 /* phone bottom tabs: Home · Watchlist · Orders · Portfolio · More */
 function tabbar() {
@@ -1426,14 +1494,14 @@ function tabbar() {
   const w = st.wlopen;
   return el('nav', {class: 'mb-navbar', id: 'tabs', 'aria-label': 'Main'},
     t('home', 'Home', 'home', !w && page.screen === 'dashboard', () => go('dashboard')),
-    t('wl', 'Watchlist', 'star', w, () => { st.wlopen = !st.wlopen; applySettings(); renderTabs(); }),
+    t('wl', 'Picks', 'bolt', w, () => { st.wlopen = !st.wlopen; applySettings(); renderTabs(); }),
     t('orders', 'Orders', 'receipt_long', !w && page.screen === 'orders', () => go('orders')),
     t('portfolio', 'Portfolio', 'account_balance_wallet', !w && page.group === 'portfolio' && page.screen !== 'orders', () => go('positions')),
     t('more', 'More', 'menu', !w && !['dashboard', 'orders'].includes(page.screen) && page.group !== 'portfolio', () => openDrawer('nav')));
 }
 const renderTabs = () => { const t = $('#tabs', F.pf); if (t) F.pf.replaceChild(tabbar(), t); };
 
-/* Omenix platform runtime, part 3 of 6. Concatenated in file order by platform_build.py into one script. */
+/* Omenix platform runtime, part 4 of 7: overlays: hover card, context menu, notifications, profile, command palette, shortcuts, snackbar. Concatenated in file order by platform_build.py into one script. */
 /* ---- overlays ----------------------------------------------------------------------------------------------- */
 function place(box, anchor, {side = 'right', gap = 8} = {}) {
   const r = anchor.getBoundingClientRect(), w = box.offsetWidth, h = box.offsetHeight;
@@ -1451,12 +1519,12 @@ function hcContent(it) {
   return [
     el('div', {class: 'top'}, el('div', {}, el('b', {}, it.sym), el('small', {}, it.name)), el('div', {class: 'px'}, price(it), delta(it.chg_pct))),
     el('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center'}, asOfEl(it), it.bid != null ? el('span', {class: 'mb-asof', 'data-tip': 'Best bid and ask of the 3 pm snapshot: no market depth is recorded.'}, `bid ${num(it.bid)} · ask ${num(it.ask)}`) : null, it.iv != null ? el('span', {class: 'mb-asof', 'data-tip': 'Implied volatility computed by us from the snapshot (labelled, not exchange data).'}, `IV ${it.iv.toFixed(1)}% (ours)`) : null),
-    held ? el('div', {class: 'held'}, el('b', {}, `${held.qty > 0 ? 'Long' : 'Short'} ${Math.abs(held.qty)}`), ` at ${num(held.avg)} · ${acc.name}${held.structure ? ' · ' + held.structure : ''} · `, moneyDelta(pnl), ' ', paperTag()) : el('div', {class: 'held'}, 'No paper position in this market.'),
+    held ? el('div', {class: 'held'}, el('b', {}, `${held.qty > 0 ? 'Long' : 'Short'} ${Math.abs(held.qty)}`), ` at ${num(held.avg)} · ${acc.name}${held.structure ? ' · ' + held.structure : ''} · `, moneyDelta(pnl)) : el('div', {class: 'held'}, 'No paper position in this market.'),
     el('div', {class: 'acts'},
       el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => go('chart')}, icon('show_chart'), 'Chart'),
       P().fno && (it.fno || isFno(it)) ? el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => go('chain')}, icon('layers'), 'Chain') : null,
-      tradable(it) ? el('button', {class: 'md-btn small buy', type: 'button', onclick: () => openOrder(it.id, 'buy')}, 'Paper buy') : null,
-      tradable(it) ? el('button', {class: 'md-btn small sell', type: 'button', onclick: () => openOrder(it.id, 'sell')}, 'Paper sell') : el('span', {class: 'muted', style: 'font-size:12px'}, 'Indices are not traded; use their futures or options.'))];
+      tradable(it) ? el('button', {class: 'md-btn small buy', type: 'button', disabled: !!tradeLock(), 'data-tip': tradeLock(), onclick: () => openOrder(it.id, 'buy')}, 'Buy') : null,
+      tradable(it) ? el('button', {class: 'md-btn small sell', type: 'button', disabled: !!tradeLock(), 'data-tip': tradeLock(), onclick: () => openOrder(it.id, 'sell')}, 'Sell') : el('span', {class: 'muted', style: 'font-size:12px'}, 'Indices are not traded; use their futures or options.'))];
 }
 function openHc(id, anchor) {
   const it = item(id); if (!it || !anchor) return;
@@ -1473,7 +1541,7 @@ function openMenu(id, anchor) {
   F.menu.replaceChildren(
     row('show_chart', 'Chart', () => go('chart')),
     P().fno && (it.fno || isFno(it)) ? row('layers', 'Option chain', () => go('chain')) : null,
-    tradable(it) ? row('receipt_long', 'Paper order', () => openOrder(id, 'buy'), 'B') : null,
+    tradable(it) ? row('receipt_long', 'Buy or sell', () => openOrder(id, 'buy'), 'B') : null,
     row('star', 'Add to another watchlist', () => snack(`${it.sym}: choose a list (1-5) in the watchlist settings.`)),
     row('newspaper', 'News', () => go('news')),
     row('open_in_new', 'Open details', () => openDrawer('quick:' + id)),
@@ -1498,16 +1566,16 @@ function openProfile(anchor) {
   F.menu.classList.add('on'); place(F.menu, anchor, {side: 'below'}); F.menu.style.left = Math.max(8, innerWidth - F.menu.offsetWidth - 8) + 'px';
 }
 /* B and S pair: paper buy and sell straight from a result row */
-const bsPair = (id, before = () => {}) => { const it = item(id); return el('span', {class: 'bs', style: 'display:inline-flex;gap:4px'},
-  el('button', {class: 'mb-bs buy', type: 'button', 'aria-label': `Paper buy ${it.sym}`, 'data-tip': 'Paper buy', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'buy'); }}, 'B'),
-  el('button', {class: 'mb-bs sell', type: 'button', 'aria-label': `Paper sell ${it.sym}`, 'data-tip': 'Paper sell', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'sell'); }}, 'S')); };
+const bsPair = (id, before = () => {}) => { const it = item(id), lock = tradeLock(); return el('span', {class: 'bs', style: 'display:inline-flex;gap:4px'},
+  el('button', {class: 'mb-bs buy', type: 'button', disabled: !!lock, 'aria-label': `Buy ${it.sym}`, 'data-tip': lock || 'Buy', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'buy'); }}, 'B'),
+  el('button', {class: 'mb-bs sell', type: 'button', disabled: !!lock, 'aria-label': `Sell ${it.sym}`, 'data-tip': lock || 'Sell', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'sell'); }}, 'S')); };
 /* command palette: stocks, F&O underlyings, contracts, screens, strategies, news, pages; recently viewed when empty */
 let palSel = 0, palRows = [];
 function palIndex() {
   const out = [];
-  for (const it of Object.values(P().items)) out.push({group: it.kind === 'stock' ? 'Stocks' : it.kind === 'index' ? 'Indices' : 'F&O contracts', label: it.sym, sub: it.name, ic: it.kind === 'stock' ? 'apartment' : it.kind === 'index' ? 'monitoring' : 'layers', end: [price(it), ' ', delta(it.chg_pct)], open: () => openDrawer('quick:' + it.id), id: it.id});
+  for (const it of Object.values(P().items)) out.push({group: it.kind === 'stock' ? 'Stocks' : it.kind === 'index' ? 'Indices' : 'F&O contracts', label: it.sym, sub: it.name + (isFno(it) ? ' · ' + it.code : ''), code: it.code, ic: it.kind === 'stock' ? 'apartment' : it.kind === 'index' ? 'monitoring' : 'layers', end: [price(it), ' ', delta(it.chg_pct)], open: () => openDrawer('quick:' + it.id), id: it.id});
   if (P().fno) for (const it of Object.values(P().items).filter(i => i.fno)) out.push({group: 'F&O underlyings', label: it.sym + ' options and futures', sub: 'Option chain · ' + it.name, ic: 'layers', open: () => go('chain')});
-  for (const x of S.search_extra.filter(x => x.market === 'both' || x.market === st.m)) out.push({group: {screen: 'Screens', strategy: 'Strategies', news: 'News'}[x.kind], label: x.label, sub: x.sub, ic: {screen: 'filter_list', strategy: 'science', news: 'newspaper'}[x.kind], open: () => go({screen: 'screener', strategy: 'lab', news: 'news'}[x.kind])});
+  for (const x of P().search_extra || []) out.push({group: {screen: 'Screens', strategy: 'Strategies', news: 'News'}[x.kind], label: x.label, sub: x.sub, ic: {screen: 'filter_list', strategy: 'science', news: 'newspaper'}[x.kind], open: () => go({screen: 'screener', strategy: 'lab', news: 'news'}[x.kind])});
   for (const s of allScreens()) out.push({group: 'Pages', label: s.label, sub: NAV.find(g => g && g.id === s.group).label + (s.key ? ' · ' + s.key : ''), ic: s.icon, open: () => go(s.id)});
   return out;
 }
@@ -1516,13 +1584,19 @@ function palResults(q) {
   const idx = palIndex(); q = q.trim().toLowerCase();
   let rows;
   if (!q) rows = P().recent.map(id => ({...idx.find(r => r.id === id), group: 'Recently viewed'})).concat(idx.filter(r => r.group === 'Pages').slice(0, 6));
-  else { const words = q.split(/\s+/); rows = idx.filter(r => words.every(w => (r.label + ' ' + r.sub).toLowerCase().includes(w))); }
+  else {
+    /* words in any order ("nifty 24500 ce", "24500 call"), or the exchange trading code typed whole ("NIFTY26OCT24500CE") */
+    const syn = w => ({call: 'ce', put: 'pe', calls: 'ce', puts: 'pe', future: 'fut', futures: 'fut'})[w] || w;
+    const words = q.split(/\s+/).map(syn), flat = q.replace(/\s+/g, '');
+    const hay = r => (r.label + ' ' + r.sub + ' ' + (r.code || '')).toLowerCase();
+    rows = idx.filter(r => (r.code && r.code.toLowerCase().includes(flat) && flat.length > 2) || words.every(w => hay(r).includes(w)));
+  }
   const by = {}; for (const r of rows) (by[r.group] ||= []).push(r);
   return GROUP_ORDER.filter(g => by[g]).flatMap(g => by[g].slice(0, 6));
 }
 function openPal(q = '') {
   closeHc(); closeMenu(); lastFocus = document.activeElement;
-  const input = el('input', {type: 'search', value: q, placeholder: P().fno ? 'Search stocks, F&O underlyings, contracts, screens, strategies, news' : 'Search stocks, screens, strategies, news', 'aria-label': 'Search', 'aria-controls': 'pal-list', oninput: e => palDraw(e.target.value), onkeydown: palKey});
+  const input = el('input', {type: 'search', value: q, placeholder: P().fno ? 'Symbol, company or option code: reliance, nifty 24500 ce, NIFTY26OCT24500CE' : 'Symbol or company: aapl, nvidia', 'aria-label': 'Search', 'aria-controls': 'pal-list', oninput: e => palDraw(e.target.value), onkeydown: palKey});
   F.pal.replaceChildren(el('div', {class: 'mb-modal-head'}, icon('search'), input, el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close', onclick: closePal}, icon('close'))), el('div', {class: 'mb-modal-body', id: 'pal-list', role: 'listbox'}),
     el('div', {class: 'mb-modal-foot'}, el('span', {}, el('span', {class: 'mb-kbd'}, '↑'), el('span', {class: 'mb-kbd'}, '↓'), 'move'), el('span', {}, el('span', {class: 'mb-kbd'}, 'Enter'), 'open'), el('span', {}, el('span', {class: 'mb-kbd'}, 'Esc'), 'close'), el('span', {}, `${P().label} market · prices are as-of, not live`)));
   F.pal.classList.add('on'); F.veil.classList.add('on'); st.pal = q || '1';
@@ -1548,7 +1622,7 @@ function openKeys() {
   const k = (...ks) => el('dt', {}, ...ks.map(x => el('span', {class: 'mb-kbd'}, x)));
   F.keys.replaceChildren(el('div', {class: 'mb-modal-head'}, icon('keyboard'), el('h2', {id: 'keys-title'}, 'Keyboard shortcuts'), el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close', onclick: closeKeys}, icon('close'))),
     el('div', {class: 'mb-modal-body'}, el('dl', {class: 'mb-keys'},
-      k('/'), el('dd', {}, 'Search everything (also Ctrl K)'), k('B'), el('dd', {}, 'Paper buy the focused row'), k('S'), el('dd', {}, 'Paper sell the focused row'), k('Esc'), el('dd', {}, 'Close the drawer, card or dialog'),
+      k('/'), el('dd', {}, 'Search everything (also Ctrl K)'), k('B'), el('dd', {}, 'Buy the focused row'), k('S'), el('dd', {}, 'Sell the focused row'), k('Esc'), el('dd', {}, 'Close the drawer, card or dialog'),
       k('g', 'h'), el('dd', {}, 'Dashboard'), k('g', 'p'), el('dd', {}, 'Portfolio: positions'), k('g', 'o'), el('dd', {}, 'Orders'), k('g', 's'), el('dd', {}, 'Screener'), k('?'), el('dd', {}, 'This list'))),
     el('div', {class: 'mb-modal-foot'}, el('span', {}, 'Every action also has a button: the keyboard is a shortcut, never the only way.')));
   F.keys.classList.add('on'); F.veil.classList.add('on'); st.keys = true; $('button', F.keys).focus();
@@ -1559,43 +1633,8 @@ let snackT = null;
 function snack(msg) { F.snack.replaceChildren(el('span', {}, msg), el('button', {class: 'md-btn text', type: 'button', onclick: () => F.snack.classList.remove('on')}, 'OK')); F.snack.classList.add('on'); clearTimeout(snackT); snackT = setTimeout(() => F.snack.classList.remove('on'), 5000); }
 
 
-/* Omenix platform runtime, part 4 of 6. Concatenated in file order by platform_build.py into one script. */
-/* ---- quick search block (Home): find a stock, index or F&O contract and trade it from the result ---------------- */
-function quickSearch() {
-  let scope = 'all', sel = 0, rows = [];
-  const box = el('div', {class: 'mb-qsearch', id: 'qsearch'});
-  const res = el('div', {class: 'mb-qsearch-results', role: 'listbox', id: 'qs-list', 'aria-label': 'Results'});
-  const input = el('input', {type: 'search', id: 'qs-input', autocomplete: 'off', placeholder: P().fno ? 'Search a stock, index or F&O contract to trade: reliance, nifty 24800 ce' : 'Search a stock or index to trade: apple, nvda', 'aria-label': 'Quick search to trade', 'aria-controls': 'qs-list', oninput: () => draw(), onfocus: () => { if (input.value) draw(); }, onkeydown: e => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); mark(Math.min(rows.length - 1, sel + 1)); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); mark(Math.max(0, sel - 1)); }
-    else if (e.key === 'Enter' && rows[sel]) { e.preventDefault(); openDrawer('quick:' + rows[sel].id); }
-    else if (e.key === 'Escape') { box.classList.remove('open'); }
-  }});
-  const scopes = [['all', 'All'], ['stock', 'Stocks'], ...(P().fno ? [['fno', 'F&O']] : [])];
-  const seg = el('div', {class: 'md-segmented dense mb-qsearch-scope', role: 'group', 'aria-label': 'Search in'}, ...scopes.map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(k === scope), onclick: e => { scope = k; $$('button', seg).forEach(b => b.setAttribute('aria-pressed', String(b === e.currentTarget))); draw(); input.focus(); }}, v)));
-  function match() {
-    const q = input.value.trim().toLowerCase(), words = q.split(/\s+/).filter(Boolean);
-    return Object.values(P().items).filter(it => (scope === 'all' || (scope === 'stock' ? !isFno(it) : isFno(it) || it.fno && it.kind === 'index')) && words.every(w => (it.sym + ' ' + it.name).toLowerCase().includes(w))).slice(0, 8);
-  }
-  function mark(i) { sel = i; $$('.mb-qs-row', res).forEach((n, j) => n.setAttribute('aria-selected', String(j === i))); }
-  function draw() {
-    const q = input.value.trim(); rows = q ? match() : []; sel = 0; st.qs = q || null;
-    box.classList.toggle('open', !!q);
-    res.replaceChildren(...rows.map((it, i) => el('div', {class: 'mb-qs-row', role: 'option', 'data-inst': it.id, 'aria-selected': String(i === 0), onclick: () => openDrawer('quick:' + it.id), onpointermove: () => mark(i)},
-      el('span', {class: 'mb-avatar ' + (isFno(it) ? 'info' : it.kind === 'index' ? 'neutral' : '')}, icon(isFno(it) ? 'layers' : it.kind === 'index' ? 'monitoring' : 'apartment')),
-      el('span', {style: 'min-width:0'}, el('b', {}, it.sym, it.held ? el('span', {class: 'mb-label paper', style: 'margin-left:6px;padding:0 5px;font-size:10.5px;line-height:16px'}, 'held') : null), el('small', {}, it.name)),
-      el('span', {class: 'px'}, price(it), el('small', {}, delta(it.chg_pct), ' · ', asOf(it).short + (asOf(it).stale ? ' · stale' : ''))),
-      tradable(it) ? bsPair(it.id, () => box.classList.remove('open')) : el('small', {class: 'muted', style: 'max-width:110px;white-space:normal'}, P().fno && it.fno ? 'Index: trade its options' : 'Index: not traded'))));
-    if (q && !rows.length) res.append(el('div', {class: 'quiet', style: 'margin:6px'}, `Nothing matches “${q}”${scope !== 'all' ? ' in this tab' : ''}.${!P().fno && /nifty|fut|\bce\b|\bpe\b/i.test(q) ? ' F&O is India only.' : ''}`));
-  }
-  document.addEventListener('click', e => { if (!box.contains(e.target)) box.classList.remove('open'); });
-  const recent = el('div', {class: 'mb-qsearch-recent'}, el('span', {}, 'Recent:'), ...P().recent.map(id => { const it = item(id); return el('button', {class: 'md-chip assist', type: 'button', 'data-inst': id, onclick: () => openDrawer('quick:' + id)}, it.sym, ' ', delta(it.chg_pct)); }));
-  box.append(el('label', {class: 'mb-qsearch-field'}, icon('search'), input, seg), res);
-  if (st.qs) { input.value = st.qs; setTimeout(draw, 0); }
-  return el('div', {}, box, recent);
-}
 
-/* Omenix platform runtime, part 5 of 6. Concatenated in file order by platform_build.py into one script. */
+/* Omenix platform runtime, part 5 of 7: the right drawer (quick view, all screens) and the order window. Concatenated in file order by platform_build.py into one script. */
 /* ---- the right drawer: Paper order window, quick view, phone "More" ------------------------------------------ */
 function openDrawer(view) {
   closeHc(); closeMenu(); closePal();
@@ -1685,29 +1724,32 @@ function orderView(id, side = 'buy') {
       else checks.push([o.qty <= owned, 'Shares held in Manual (no short selling)', `${o.qty} of ${owned}`]);
     }
     if (o.bracket) checks.push([o.sl != null && o.tgt != null && (o.side === 'buy' ? o.sl < px && o.tgt > px : o.sl > px && o.tgt < px), 'Stop-loss and target around the price', o.sl && o.tgt ? `${num(o.sl)} / ${num(o.tgt)}` : 'enter both']);
-    const ok = executable && checks.every(c => c[0]);
+    const lock = tradeLock();
+    if (lock) checks.unshift([false, 'Market open', lock.replace(/^Market closed: /, '')]);
+    const ok = !lock && executable && checks.every(c => c[0]);
+    const nextQ = Pm.next_quotes[it.kind === 'option' ? 'option' : 'stock'];
     sumBox.replaceChildren(...[
       !executable ? el('div', {class: 'mb-alert danger', role: 'alert'}, icon('block'), el('div', {}, el('b', {class: 't'}, 'Refused: no executable quote'), el('div', {class: 's'}, tradable(it) ? `Our data has no bid and ask for ${it.sym}. Paper F&O orders are filled only from the recorded NIFTY monthly option snapshots (3 pm); this contract has ${it.source === 'eod' ? 'end-of-day prices only' : 'no recorded quotes'}, so it is refused, never filled from a guessed price.` : 'An index is not an instrument: trade its futures or options.')), el('span')) : null,
       !executable ? null : el('dl', {class: 'mb-order-sum'},
-        el('dt', {}, o.type === 'limit' ? 'Limit price' : (it.kind === 'option' ? (o.side === 'buy' ? 'Ask at the 3 pm snapshot' : 'Bid at the 3 pm snapshot') : 'Last price (as-of)')), el('dd', {}, num(px)),
+        el('dt', {}, o.type === 'limit' ? 'Limit price' : (it.kind === 'option' ? `${o.side === 'buy' ? 'Ask' : 'Bid'} at the ${dateShort(it.as_of)} 3 pm snapshot` : `Last price, ${asOf(it).short}`)), el('dd', {}, num(px)),
         el('dt', {}, fno ? `Quantity (${o.qty} lot${o.qty === 1 ? '' : 's'} × ${lot})` : 'Quantity'), el('dd', {}, String(units)),
-        el('dt', {}, fno && it.kind === 'option' ? 'Premium' : 'Order value'), el('dd', {}, money(value, 2)),
+        el('dt', {}, (fno && it.kind === 'option' ? 'Premium' : 'Order value') + ' (estimate)'), el('dd', {}, money(value, 2)),
         el('dt', {}, 'Charges (estimate) ', help(`${Pm.charges.label}. ` + ch.rows.map(([k, v]) => `${k} ${money(v, 2)}`).join(' · '))), el('dd', {}, money(ch.total, 2)),
-        fno && executable ? [el('dt', {}, 'Maximum loss'), el('dd', {}, maxLoss === Infinity ? 'Unlimited' : money(maxLoss, 2))] : null,
+        fno && executable ? [el('dt', {}, 'Maximum loss (estimate)'), el('dd', {}, maxLoss === Infinity ? 'Unlimited' : money(maxLoss, 2))] : null,
         fno && executable ? [el('dt', {}, 'Margin estimate ', help('From our recorded margin source (labelled): for a bought option the premium paid; for a sold option a per-lot estimate. Mock value.')), el('dd', {}, money(margin, 0))] : null,
-        el('dt', {class: 'tot'}, o.side === 'buy' ? 'Cash after (Manual)' : 'Cash after (Manual)'), el('dd', {class: 'tot'}, money(acc.cash + (o.side === 'buy' ? -(value + ch.total) : (fno ? value - ch.total : value - ch.total)), 2))),
+        el('dt', {class: 'tot'}, 'Cash after (estimate)'), el('dd', {class: 'tot'}, money(acc.cash + (o.side === 'buy' ? -(value + ch.total) : (fno ? value - ch.total : value - ch.total)), 2))),
+      executable ? el('div', {class: 'mb-asof', style: 'white-space:normal;align-items:flex-start'}, icon('schedule'), `Estimates use ${it.kind === 'option' ? 'the ' + dateShort(it.as_of) + ' 3 pm quotes' : 'the ' + asOf(it).short + ' price'}. The fill uses ${nextQ}, so the paper fill price, charges and cash can differ.`) : null,
       el('div', {}, el('div', {class: 'mb-micro', style: 'margin-bottom:6px'}, 'Checks against the Manual account’s limits'),
         el('ul', {class: 'mb-checks'}, ...checks.map(([pass, t, d]) => el('li', {class: pass ? 'ok' : 'fail'}, el('span', {class: 'mb-mark ' + (pass ? 'ok' : 'no')}, icon(pass ? 'check' : 'close')), el('span', {}, t, el('span', {class: 'vh'}, pass ? ' passed' : ' failed'), el('small', {}, d)))))),
-      el('div', {class: 'mb-alert paper'}, icon('description'), el('div', {}, el('b', {class: 't'}, 'Paper order: no real order is placed'), el('div', {class: 's'}, `It goes to the dashboard’s inbox; the ${fno ? 'F&O tool' : 'stock tool'} imports it and fills it only from valid quotes with the strategies’ own fill rules, never from a guessed price.`)), el('span'))].filter(Boolean));
-    const nextQ = Pm.next_quotes[it.kind === 'option' ? 'option' : 'stock'];
+      el('div', {class: 'mb-asof', style: 'white-space:normal;align-items:flex-start'}, icon('info'), `No real order is placed: Omenix records it for your paper account; the ${fno ? 'F&O tool' : 'stock tool'} fills it only from valid quotes with the strategies’ own fill rules.`)].filter(Boolean));
     foot.replaceChildren(
-      el('button', {class: 'md-btn filled ' + o.side, type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Paper order recorded: ${o.side} ${units} ${it.sym}, ${o.type === 'limit' ? 'limit ' + num(o.limit) : 'market'}. Open until ${nextQ}.`); }}, icon(ok ? 'receipt_long' : 'block'), ok ? `Place paper ${o.side} · ${units} ${it.sym}` : (executable ? 'Blocked by a limit check' : 'Refused: no executable quote')),
+      el('button', {class: 'md-btn filled ' + o.side, type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Order recorded: ${o.side} ${units} ${it.sym}, ${o.type === 'limit' ? 'limit ' + num(o.limit) : 'market'}. Open until ${nextQ}.`); }}, icon(ok ? 'receipt_long' : lock ? 'lock' : 'block'), ok ? `${o.side === 'buy' ? 'Buy' : 'Sell'} ${units} ${it.sym}` : lock ? 'Market closed' : (executable ? 'Blocked by a limit check' : 'Refused: no executable quote')),
       el('div', {class: 'muted', style: 'font-size:12px;text-align:center'}, ok ? (o.type === 'market' ? `Fills at the next valid quotes: ${nextQ}.` : `Fills only if the next valid quotes reach ${num(o.limit)}: ${nextQ}.`) : 'Nothing is recorded until every check passes.'));
   }
   for (const [k, v] of [['buy', 'Buy'], ['sell', 'Sell']]) sideBtns.append(el('button', {type: 'button', class: k, 'data-side': k, 'aria-pressed': String(o.side === k), onclick: () => { o.side = k; draw(); }}, icon(k === 'buy' ? 'trending_up' : 'trending_down'), v));
   const accSel = el('select', {class: 'mb-input', id: 'o-acc', 'aria-label': 'Account'}, ...Object.entries(Pm.accounts).map(([k, a]) => el('option', {value: k, selected: k === manualId, disabled: a.kind !== 'manual'}, a.kind === 'manual' ? `${a.name} · cash ${money(a.cash)}` : `${a.name} (strategy book: not traded by hand)`)));
   draw();
-  return [drawerHead(`Paper ${fno ? 'F&O ' : ''}order`, null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, it.sym), el('span', {class: 'muted', style: 'font-size:13px'}, `${price(it)}`), delta(it.chg_pct), asOfEl(it), paperTag())),
+  return [drawerHead(`${fno ? 'F&O order' : 'Order'}`, null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, it.sym), el('span', {class: 'muted', style: 'font-size:13px'}, `${price(it)}`), delta(it.chg_pct), asOfEl(it))),
     el('div', {class: 'mb-drawer-body'},
       sideBtns,
       executable ? null : sumBox,
@@ -1719,10 +1761,10 @@ function orderView(id, side = 'buy') {
     foot];
 }
 
+/* Omenix platform runtime, part 6 of 7: the F&O basket order (all legs or none). Concatenated in file order by platform_build.py into one script. */
 /* Paper basket: a multi-leg F&O idea placed as one paper order (all legs or none), with the same limit checks */
-const BASKETS = {};
 function basketView(bid) {
-  const b = BASKETS[bid]; if (!b) return null;
+  const b = ((P().fno_example || {}).baskets || {})[bid]; if (!b) return null;
   const Pm = P(), manualId = Object.keys(Pm.accounts).find(k => Pm.accounts[k].kind === 'manual'), acc = Pm.accounts[manualId], L = Pm.limits;
   let lots = 1;
   const legs = b.legs.map(l => ({...l, it: item(l.id)}));
@@ -1737,32 +1779,35 @@ function basketView(bid) {
     const maxLoss = b.kind === 'debit' ? -net : (b.width - perUnit) * lot * lots;
     const maxProfit = b.kind === 'debit' ? (b.width + perUnit) * lot * lots : net;
     const margin = b.margin_per_lot * lots;
-    const checks = [[executable, 'Executable quotes for every leg', '3 pm snapshot of 12 Oct'],
+    const checks = [[executable, 'Executable quotes for every leg', `3 pm snapshot of ${dateShort(legs[0].it.as_of)}`],
       [maxLoss + ch <= L.max_loss_per_trade, `Maximum loss with charges ≤ ${money(L.max_loss_per_trade)} a trade`, money(maxLoss + ch)],
       [acc.open_structures + 1 <= L.max_open_structures, `Open structures ≤ ${L.max_open_structures}`, `${acc.open_structures} open + this one`],
       [acc.at_risk + maxLoss <= L.max_at_risk, `At risk ≤ ${money(L.max_at_risk)}`, `${money(acc.at_risk)} + ${money(maxLoss)}`],
       [margin <= acc.cash, 'Margin estimate within cash', `${money(margin)} of ${money(acc.cash)}`]];
-    const ok = checks.every(c => c[0]);
+    const lock = tradeLock();
+    if (lock) checks.unshift([false, 'Market open', lock.replace(/^Market closed: /, '')]);
+    const ok = !lock && checks.every(c => c[0]);
     box.replaceChildren(
       el('table', {class: 'mb-legs'}, el('thead', {}, el('tr', {}, el('th', {}, 'Leg'), el('th', {}, 'Side'), el('th', {class: 'num'}, 'Lots'), el('th', {class: 'num'}, 'Price'))),
         el('tbody', {}, ...legs.map(l => el('tr', {}, el('td', {}, l.it.sym.replace(/^NIFTY 27 OCT /, '')), el('td', {}, el('span', {class: 'mb-label ' + (l.side === 'buy' ? 'success' : 'danger')}, l.side === 'buy' ? 'Buy' : 'Sell')), el('td', {class: 'num'}, String(l.lots * lots)), el('td', {class: 'num'}, num(l.side === 'sell' ? l.it.bid : l.it.ask) + (l.side === 'sell' ? ' bid' : ' ask')))))),
       el('dl', {class: 'mb-order-sum'},
-        el('dt', {}, net >= 0 ? 'Net credit' : 'Net debit'), el('dd', {}, money(Math.abs(net), 2)),
+        el('dt', {}, (net >= 0 ? 'Net credit' : 'Net debit') + ' (estimate)'), el('dd', {}, money(Math.abs(net), 2)),
         el('dt', {}, 'Charges (estimate) ', help(Pm.charges.label + '. Four legs, each charged on its own premium.')), el('dd', {}, money(ch, 2)),
-        el('dt', {}, 'Maximum profit (before charges)'), el('dd', {}, money(maxProfit, 2)),
-        el('dt', {}, 'Maximum loss (before charges)'), el('dd', {}, money(maxLoss, 2)),
+        el('dt', {}, 'Maximum profit (estimate, before charges)'), el('dd', {}, money(maxProfit, 2)),
+        el('dt', {}, 'Maximum loss (estimate, before charges)'), el('dd', {}, money(maxLoss, 2)),
         el('dt', {}, 'Breakevens'), el('dd', {}, b.breakevens.map(x => num(x, 0)).join(' / ')),
         el('dt', {}, 'Margin estimate ', help('Hedged structure: from our recorded margin source (labelled). Mock value.')), el('dd', {}, money(margin)),
         el('dt', {class: 'tot'}, 'Probability of profit ', help('Risk-neutral, from the snapshot’s implied volatility: what option prices imply, not a forecast of ours.')), el('dd', {class: 'tot'}, b.pop + '% (risk-neutral)')),
+      el('div', {class: 'mb-asof', style: 'white-space:normal;align-items:flex-start'}, icon('schedule'), `Estimates use the ${dateShort(legs[0].it.as_of)} 3 pm quotes. The fill uses ${Pm.next_quotes.option}, so the real credit, losses and charges can differ.`),
       el('div', {}, el('div', {class: 'mb-micro', style: 'margin-bottom:6px'}, 'Checks against the Manual account’s limits'),
         el('ul', {class: 'mb-checks'}, ...checks.map(([pass, t, d]) => el('li', {class: pass ? 'ok' : 'fail'}, el('span', {class: 'mb-mark ' + (pass ? 'ok' : 'no')}, icon(pass ? 'check' : 'close')), el('span', {}, t, el('span', {class: 'vh'}, pass ? ' passed' : ' failed'), el('small', {}, d)))))),
-      el('div', {class: 'mb-alert paper'}, icon('description'), el('div', {}, el('b', {class: 't'}, 'Paper basket: no real order is placed'), el('div', {class: 's'}, 'All legs or none. The F&O tool fills them from the next 3 pm snapshot with the books’ own fill model, never from a guessed price.')), el('span')));
-    foot.replaceChildren(el('button', {class: 'md-btn filled buy', type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Paper basket recorded: ${b.name}, ${lots} lot${lots > 1 ? 's' : ''}. Open until ${Pm.next_quotes.option}.`); }}, icon(ok ? 'receipt_long' : 'block'), ok ? `Place paper basket · ${legs.length} legs` : 'Blocked by a limit check'),
+      el('div', {class: 'mb-asof', style: 'white-space:normal;align-items:flex-start'}, icon('info'), 'No real order is placed. All legs or none: the F&O tool fills them from the next 3 pm snapshot with the books’ own fill model.'));
+    foot.replaceChildren(el('button', {class: 'md-btn filled buy', type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Basket recorded: ${b.name}, ${lots} lot${lots > 1 ? 's' : ''}. Open until ${Pm.next_quotes.option}.`); }}, icon(ok ? 'receipt_long' : lock ? 'lock' : 'block'), ok ? `Place basket · ${legs.length} legs` : lock ? 'Market closed' : 'Blocked by a limit check'),
       el('div', {class: 'muted', style: 'font-size:12px;text-align:center'}, ok ? `Fills at the next valid quotes: ${Pm.next_quotes.option}.` : 'Nothing is recorded until every check passes.'));
   }
   const lotIn = el('input', {class: 'mb-input', type: 'number', min: '1', step: '1', value: '1', id: 'b-lots', oninput: e => { lots = Math.max(1, Math.floor(+e.target.value || 1)); draw(); }});
   draw();
-  return [drawerHead('Paper F&O basket', null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, b.name), paperTag())),
+  return [drawerHead('F&O basket order', null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, b.name))),
     el('div', {class: 'mb-drawer-body'},
       el('div', {class: 'mb-field'}, el('span', {class: 'l'}, 'Account'), el('div', {class: 'mb-input', style: 'display:flex;align-items:center'}, `${acc.name} · cash ${money(acc.cash)}`)),
       el('div', {class: 'mb-field-row'}, el('div', {class: 'mb-field'}, el('label', {for: 'b-lots'}, `Lots (lot ${legs[0].it.lot})`), lotIn), el('div', {class: 'mb-field'}, el('span', {class: 'l'}, 'Order type'), el('div', {class: 'mb-input', style: 'display:flex;align-items:center;font-size:14px'}, 'Market, all legs'))),
@@ -1772,7 +1817,7 @@ function basketView(bid) {
 }
 function openOrder(id, side) { const it = item(id); if (!it) return; openDrawer(`order:${id}:${side}`); }
 
-/* Omenix platform runtime, part 6 of 6. Concatenated in file order by platform_build.py into one script. */
+/* Omenix platform runtime, part 7 of 7: tooltip, global events, hash-driven states, the page API. Concatenated in file order by platform_build.py into one script. */
 /* ---- tooltip (hover, focus, tap; Escape closes) ------------------------------------------------------------- */
 let pinned = null;
 function showTip(t, text) { const tip = $('#tip'); tip.textContent = text; tip.classList.add('on'); const r = t.getBoundingClientRect(); let left = r.left + r.width / 2 - tip.offsetWidth / 2, top = r.top - tip.offsetHeight - 8; left = Math.max(8, Math.min(innerWidth - tip.offsetWidth - 8, left)); if (top < 8) top = r.bottom + 8; tip.style.left = left + 'px'; tip.style.top = top + 'px'; }
@@ -1818,7 +1863,7 @@ function bind() {
     if (e.key === '?') { e.preventDefault(); openKeys(); return; }
     if (gPending && Date.now() - gPending < 1200) { gPending = 0; const to = {h: 'dashboard', p: 'positions', o: 'orders', s: 'screener'}[e.key]; if (to) { e.preventDefault(); go(to); } return; }
     if (e.key === 'g') { gPending = Date.now(); return; }
-    if (e.key === 'b' || e.key === 's') { const r = e.target.closest('[data-inst]'); if (r && tradable(item(r.dataset.inst))) { e.preventDefault(); openOrder(r.dataset.inst, e.key === 'b' ? 'buy' : 'sell'); } }
+    if (e.key === 'b' || e.key === 's') { const r = e.target.closest('[data-inst]'); if (r && tradable(item(r.dataset.inst))) { e.preventDefault(); if (tradeLock()) { snack(tradeLock()); return; } openOrder(r.dataset.inst, e.key === 'b' ? 'buy' : 'sell'); } }
   });
   addEventListener('scroll', () => $('#appbar')?.classList.toggle('scrolled', scrollY > 4), {passive: true});
   addEventListener('hashchange', () => { readHash(); closeAll(); renderAll(); openFromHash(); });
@@ -1842,7 +1887,7 @@ function pagehead({crumbs = [], title, meta = [], actions = []}) {
     el('div', {style: 'min-width:0'}, el('h1', {}, title)), el('div', {class: 'mb-pagehead-meta'}, ...meta), el('div', {class: 'mb-pagehead-actions'}, ...actions));
 }
 const inst = (id, text) => { const it = item(id); return el('a', {class: 'tk', href: '#', 'data-inst': id, onclick: e => { e.preventDefault(); openDrawer('quick:' + id); }}, text || (it ? it.sym : id)); };
-function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, openOrder, openDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, quickSearch, bsPair, baskets: BASKETS, tradable, rerender: renderAll}; }
+function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, openOrder, openDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, bsPair, market, tradeLock, tradable, apBadge, signalsBody, rerender: renderAll}; }
 function mount(cfg) { page = cfg; frame(); readHash(); renderAll(); bind(); openFromHash(); }
 return {mount, el, icon, svgEl, money, num, sgn, delta, P, st};
 })();
@@ -1853,31 +1898,31 @@ PF.mount({screen: 'shell', group: null, render(main, c) {
   const {el, icon, inst, P} = c;
   const india = P.fno;
   main.append(c.pagehead({crumbs: [['Design system', '../../system/styleguide.html'], ['Platform shell']], title: 'Platform shell',
-    meta: [c.mockTag(), c.paperTag(), el('span', {class: 'mb-asof', 'data-tip': 'The mockups run on a fixed clock so every build gives the same page.'}, icon('schedule'), 'Mock clock ' + c.nowLabel())],
+    meta: [c.mockTag(), el('span', {class: 'mb-asof', 'data-tip': 'The mockups run on a fixed clock so every build gives the same page.'}, icon('schedule'), 'Mock clock ' + c.nowLabel())],
     actions: [el('button', {class: 'md-btn outlined', type: 'button', onclick: () => c.openPal('')}, icon('search'), 'Search', el('span', {class: 'mb-kbd'}, '/')),
-              el('button', {class: 'md-btn filled', type: 'button', onclick: () => c.openOrder(india ? 'RELIANCE' : 'AAPL', 'buy')}, icon('receipt_long'), 'Paper order')]}));
+              el('button', {class: 'md-btn filled', type: 'button', onclick: () => c.openOrder(india ? 'RELIANCE' : 'AAPL', 'buy')}, icon('receipt_long'), 'New order')]}));
 
   const part = (ic, tone, title, text, ...tries) => el('section', {class: 'card part'}, el('div', {class: 't'}, el('span', {class: 'mb-avatar ' + tone}, icon(ic)), el('h2', {}, title)), el('p', {}, text), el('div', {class: 'try'}, ...tries));
   const btn = (label, fn, cls = 'md-btn outlined small', ic) => el('button', {class: cls, type: 'button', onclick: fn}, ic ? icon(ic) : null, label);
-  const firstTk = india ? ['RELIANCE', 'NIFTY-24500CE-OCT', 'HDFCBANK', 'BANKNIFTY-52000PE-NOV'] : ['AAPL', 'JPM', 'NVDA'];
+  const firstTk = india ? ['RELIANCE', 'NIFTY26OCT22800CE', 'HDFCBANK', 'NIFTY26NOV22000PE'] : ['NVDA', 'AAPL', 'JPM'];
   main.append(el('div', {class: 'parts'},
-    part('search', 'primary', 'Global search', `One box for ${india ? 'stocks, F&O underlyings, contracts' : 'stocks'}, screens, strategies, news and pages. Recently viewed first. Press / or Ctrl K anywhere.`,
-      btn('Open search', () => c.openPal(''), undefined, 'search'), btn(india ? 'Try “nifty 24500”' : 'Try “apple”', () => c.openPal(india ? 'nifty 24500' : 'apple'))),
-    part('public', 'info', 'Market switch', india ? 'India shows stocks and F&O. Switch to US: every F&O element is absent there, not empty. Currencies are never summed.' : 'US shows stocks only: F&O is India only, so every F&O element is absent here. Switch to India to see it.',
+    part('search', 'primary', 'Global search', `The only search box: ${india ? 'a stock, an index, or an option by its words (nifty 22800 call) or its exchange code (NIFTY26OCT22800CE)' : 'a stock or company'}, plus strategies, news and pages. Every stock and contract result has B and S. Press / or Ctrl K anywhere.`,
+      btn('Open search', () => c.openPal(''), undefined, 'search'), btn(india ? 'Try “NIFTY26OCT22800CE”' : 'Try “nvidia”', () => c.openPal(india ? 'NIFTY26OCT22800CE' : 'nvidia'))),
+    part('public', 'info', 'Market switch and status', india ? 'Beside it: whether the market is open or closed, and when that changes; your own buy and sell are paused while it is closed. India shows stocks and F&O. Switch to US: every F&O element is absent there, not empty. Currencies are never summed.' : 'US shows stocks only: F&O is India only, so every F&O element is absent here. Switch to India to see it.',
       btn(india ? 'Switch to US' : 'Switch to India', () => { c.st.m = india ? 'us' : 'india'; c.st.wl = 0; c.rerender(); })),
     part('monitoring', 'neutral', 'Index strip', `${P.indices.map(id => c.item(id).sym).join(', ')}. Hover any index for its as-of time and source. Stale values turn grey and say “stale”.`,
       el('span', {class: 'muted', style: 'font-size:12.5px'}, 'Top bar, right of the market switch; on a phone, a row under the search.')),
     part('dashboard', 'primary', 'Navigation rail', 'Seven groups (Dashboard, Markets, Trade, Portfolio, Strategies, Research, Control) plus Assistant, Help and Settings. Hover or focus a group for its screens; pinned screens sit below.',
       btn(c.st.rail === 'icons' ? 'Show labels' : 'Icons only', () => { c.st.rail = c.st.rail === 'icons' ? 'labels' : 'icons'; c.rerender(); })),
-    part('star', 'warn', 'Watchlist panel', 'Kite-style, always visible on desktop: five lists, each mixing stocks' + (india ? ', F&O underlyings and contracts' : '') + '. Every row has price, change and as-of time; hover for B, S, Chart' + (india ? ', Chain' : '') + ' and more. Drag to reorder.',
-      btn('List 2', () => { c.st.wl = 1; c.rerender(); }), btn('Empty list 5', () => { c.st.wl = 4; c.rerender(); })),
-    part('open_in_new', 'info', 'Hover cards', 'Every ticker and contract is a link. Hover (or tap) for price, change, as-of, your position and Chart, Chain, Paper buy, Paper sell:',
+    part('bolt', 'warn', 'Today’s buy picks panel', 'Left bar on desktop, “Picks” tab on a phone: each approach’s pick for today (rule-based, AI-based, hybrid) with how many strategies agree, the model’s chance, Yes or No after market costs and the strategy’s record on that stock. Buy and Sell on every row while the market is open.',
+      btn('Rule-based only', () => { c.st.ap = 'rule'; c.rerender(); }), btn('All', () => { c.st.ap = 'all'; c.rerender(); })),
+    part('open_in_new', 'info', 'Hover cards', 'Every ticker and contract is a link. Hover (or tap) for price, change, as-of, your position and Chart, Chain, Buy, Sell:',
       el('div', {class: 'inline-tk'}, ...firstTk.map(id => inst(id)))),
-    part('more_vert', 'neutral', 'Context menu', 'The same small menu on every row: Chart, Option chain, Paper order, Add to watchlist, News, Open details, Set an alert.',
+    part('more_vert', 'neutral', 'Context menu', 'The same small menu on every row: Chart, Option chain, Buy or sell, Add to watchlist, News, Open details, Set an alert.',
       btn('Open a row menu', e => c.openMenu(firstTk[0], e.currentTarget), undefined, 'more_vert')),
-    part('receipt_long', 'paper', 'Paper order window', 'Manual paper account only; checks against its limits before confirming; F&O refused where our data has no executable quote. “Paper order: no real order is placed.”',
-      ...(india ? [btn('Stock buy', () => c.openOrder('RELIANCE', 'buy'), 'md-btn small buy'), btn('Option buy (passes)', () => c.openOrder('NIFTY-24800CE-OCT', 'buy')), btn('Option sell (blocked)', () => c.openOrder('NIFTY-24500CE-OCT', 'sell')), btn('Future (refused)', () => c.openOrder('BANKNIFTY-FUT-OCT', 'buy'))]
-                 : [btn('Stock buy', () => c.openOrder('AAPL', 'buy'), 'md-btn small buy'), btn('Sell held shares', () => c.openOrder('AAPL', 'sell'), 'md-btn small sell')])),
+    part('receipt_long', 'paper', 'Order window', 'Manual paper account only; checks against its limits before confirming; F&O refused where our data has no executable quote. “Paper order: no real order is placed.”',
+      ...(india ? [btn('Stock buy', () => c.openOrder('RELIANCE', 'buy'), 'md-btn small buy'), btn('Option buy (passes)', () => c.openOrder('NIFTY26OCT23300CE', 'buy')), btn('Option sell (blocked)', () => c.openOrder('NIFTY26OCT22800CE', 'sell')), btn('Future (refused)', () => c.openOrder('NIFTY26OCTFUT', 'buy'))]
+                 : [btn('Stock buy', () => c.openOrder('NVDA', 'buy'), 'md-btn small buy'), btn('Sell held shares', () => c.openOrder('AAPL', 'sell'), 'md-btn small sell')])),
     part('dock_to_left', 'primary', 'Right drawer and bottom sheet', 'Orders and quick views open without leaving the page: from the right on desktop, as a bottom sheet on a phone. Esc closes; focus returns where it was.',
       btn('Quick view', () => c.openDrawer('quick:' + firstTk[0]))),
     part('menu', 'neutral', 'Phone bottom tabs', 'Home, Watchlist, Orders, Portfolio, More. Search stays at the top of every screen; More lists every screen.',
@@ -1890,9 +1935,9 @@ PF.mount({screen: 'shell', group: null, render(main, c) {
   /* where the frame's prices come from */
   const srcRows = {};
   for (const it of Object.values(P.items)) (srcRows[it.source] ||= []).push(it);
-  const tbl = el('table', {class: 'md-table tbl src'}, el('thead', {}, el('tr', {}, el('th', {}, 'Source'), el('th', {}, 'Example'), el('th', {class: 'num'}, 'As of'))),
+  const tbl = el('table', {class: 'md-table tbl src'}, el('thead', {}, el('tr', {}, el('th', {}, 'Source'), el('th', {class: 'ex'}, 'Example'), el('th', {class: 'num'}, 'As of'))),
     el('tbody', {}, ...Object.entries(srcRows).map(([k, items]) => { const s = c.S.sources[k], ex = items.find(i => c.asOf(i).stale) || items[0];
-      return el('tr', {}, el('td', {}, el('b', {}, s.label), el('small', {}, `${s.detail}. Used for ${items.length} instrument${items.length === 1 ? '' : 's'} (${[...new Set(items.map(i => i.kind))].join(', ')}).`)), el('td', {}, inst(ex.id)), el('td', {class: 'num'}, c.asOfEl(ex))); })));
+      return el('tr', {}, el('td', {}, el('b', {}, s.label), el('small', {}, `${s.detail}. Used for ${items.length} instrument${items.length === 1 ? '' : 's'} (${[...new Set(items.map(i => i.kind))].join(', ')}).`)), el('td', {class: 'ex'}, inst(ex.id)), el('td', {class: 'num'}, c.asOfEl(ex))); })));
   main.append(el('div', {class: 'grid'},
     el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Where the prices in the frame come from'), el('span', {class: 'end'}, c.mockTag())), el('div', {class: 'md-table-wrap'}, tbl),
       el('p', {class: 'note'}, 'No live feed: a value is as fresh as its source. A value older than its source allows turns grey and says “stale”.')),

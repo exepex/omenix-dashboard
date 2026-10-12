@@ -1,4 +1,4 @@
-/* Omenix platform runtime, part 3 of 6. Concatenated in file order by platform_build.py into one script. */
+/* Omenix platform runtime, part 4 of 7: overlays: hover card, context menu, notifications, profile, command palette, shortcuts, snackbar. Concatenated in file order by platform_build.py into one script. */
 /* ---- overlays ----------------------------------------------------------------------------------------------- */
 function place(box, anchor, {side = 'right', gap = 8} = {}) {
   const r = anchor.getBoundingClientRect(), w = box.offsetWidth, h = box.offsetHeight;
@@ -16,12 +16,12 @@ function hcContent(it) {
   return [
     el('div', {class: 'top'}, el('div', {}, el('b', {}, it.sym), el('small', {}, it.name)), el('div', {class: 'px'}, price(it), delta(it.chg_pct))),
     el('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center'}, asOfEl(it), it.bid != null ? el('span', {class: 'mb-asof', 'data-tip': 'Best bid and ask of the 3 pm snapshot: no market depth is recorded.'}, `bid ${num(it.bid)} · ask ${num(it.ask)}`) : null, it.iv != null ? el('span', {class: 'mb-asof', 'data-tip': 'Implied volatility computed by us from the snapshot (labelled, not exchange data).'}, `IV ${it.iv.toFixed(1)}% (ours)`) : null),
-    held ? el('div', {class: 'held'}, el('b', {}, `${held.qty > 0 ? 'Long' : 'Short'} ${Math.abs(held.qty)}`), ` at ${num(held.avg)} · ${acc.name}${held.structure ? ' · ' + held.structure : ''} · `, moneyDelta(pnl), ' ', paperTag()) : el('div', {class: 'held'}, 'No paper position in this market.'),
+    held ? el('div', {class: 'held'}, el('b', {}, `${held.qty > 0 ? 'Long' : 'Short'} ${Math.abs(held.qty)}`), ` at ${num(held.avg)} · ${acc.name}${held.structure ? ' · ' + held.structure : ''} · `, moneyDelta(pnl)) : el('div', {class: 'held'}, 'No paper position in this market.'),
     el('div', {class: 'acts'},
       el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => go('chart')}, icon('show_chart'), 'Chart'),
       P().fno && (it.fno || isFno(it)) ? el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => go('chain')}, icon('layers'), 'Chain') : null,
-      tradable(it) ? el('button', {class: 'md-btn small buy', type: 'button', onclick: () => openOrder(it.id, 'buy')}, 'Paper buy') : null,
-      tradable(it) ? el('button', {class: 'md-btn small sell', type: 'button', onclick: () => openOrder(it.id, 'sell')}, 'Paper sell') : el('span', {class: 'muted', style: 'font-size:12px'}, 'Indices are not traded; use their futures or options.'))];
+      tradable(it) ? el('button', {class: 'md-btn small buy', type: 'button', disabled: !!tradeLock(), 'data-tip': tradeLock(), onclick: () => openOrder(it.id, 'buy')}, 'Buy') : null,
+      tradable(it) ? el('button', {class: 'md-btn small sell', type: 'button', disabled: !!tradeLock(), 'data-tip': tradeLock(), onclick: () => openOrder(it.id, 'sell')}, 'Sell') : el('span', {class: 'muted', style: 'font-size:12px'}, 'Indices are not traded; use their futures or options.'))];
 }
 function openHc(id, anchor) {
   const it = item(id); if (!it || !anchor) return;
@@ -38,7 +38,7 @@ function openMenu(id, anchor) {
   F.menu.replaceChildren(
     row('show_chart', 'Chart', () => go('chart')),
     P().fno && (it.fno || isFno(it)) ? row('layers', 'Option chain', () => go('chain')) : null,
-    tradable(it) ? row('receipt_long', 'Paper order', () => openOrder(id, 'buy'), 'B') : null,
+    tradable(it) ? row('receipt_long', 'Buy or sell', () => openOrder(id, 'buy'), 'B') : null,
     row('star', 'Add to another watchlist', () => snack(`${it.sym}: choose a list (1-5) in the watchlist settings.`)),
     row('newspaper', 'News', () => go('news')),
     row('open_in_new', 'Open details', () => openDrawer('quick:' + id)),
@@ -63,16 +63,16 @@ function openProfile(anchor) {
   F.menu.classList.add('on'); place(F.menu, anchor, {side: 'below'}); F.menu.style.left = Math.max(8, innerWidth - F.menu.offsetWidth - 8) + 'px';
 }
 /* B and S pair: paper buy and sell straight from a result row */
-const bsPair = (id, before = () => {}) => { const it = item(id); return el('span', {class: 'bs', style: 'display:inline-flex;gap:4px'},
-  el('button', {class: 'mb-bs buy', type: 'button', 'aria-label': `Paper buy ${it.sym}`, 'data-tip': 'Paper buy', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'buy'); }}, 'B'),
-  el('button', {class: 'mb-bs sell', type: 'button', 'aria-label': `Paper sell ${it.sym}`, 'data-tip': 'Paper sell', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'sell'); }}, 'S')); };
+const bsPair = (id, before = () => {}) => { const it = item(id), lock = tradeLock(); return el('span', {class: 'bs', style: 'display:inline-flex;gap:4px'},
+  el('button', {class: 'mb-bs buy', type: 'button', disabled: !!lock, 'aria-label': `Buy ${it.sym}`, 'data-tip': lock || 'Buy', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'buy'); }}, 'B'),
+  el('button', {class: 'mb-bs sell', type: 'button', disabled: !!lock, 'aria-label': `Sell ${it.sym}`, 'data-tip': lock || 'Sell', onclick: e => { e.stopPropagation(); before(); openOrder(id, 'sell'); }}, 'S')); };
 /* command palette: stocks, F&O underlyings, contracts, screens, strategies, news, pages; recently viewed when empty */
 let palSel = 0, palRows = [];
 function palIndex() {
   const out = [];
-  for (const it of Object.values(P().items)) out.push({group: it.kind === 'stock' ? 'Stocks' : it.kind === 'index' ? 'Indices' : 'F&O contracts', label: it.sym, sub: it.name, ic: it.kind === 'stock' ? 'apartment' : it.kind === 'index' ? 'monitoring' : 'layers', end: [price(it), ' ', delta(it.chg_pct)], open: () => openDrawer('quick:' + it.id), id: it.id});
+  for (const it of Object.values(P().items)) out.push({group: it.kind === 'stock' ? 'Stocks' : it.kind === 'index' ? 'Indices' : 'F&O contracts', label: it.sym, sub: it.name + (isFno(it) ? ' · ' + it.code : ''), code: it.code, ic: it.kind === 'stock' ? 'apartment' : it.kind === 'index' ? 'monitoring' : 'layers', end: [price(it), ' ', delta(it.chg_pct)], open: () => openDrawer('quick:' + it.id), id: it.id});
   if (P().fno) for (const it of Object.values(P().items).filter(i => i.fno)) out.push({group: 'F&O underlyings', label: it.sym + ' options and futures', sub: 'Option chain · ' + it.name, ic: 'layers', open: () => go('chain')});
-  for (const x of S.search_extra.filter(x => x.market === 'both' || x.market === st.m)) out.push({group: {screen: 'Screens', strategy: 'Strategies', news: 'News'}[x.kind], label: x.label, sub: x.sub, ic: {screen: 'filter_list', strategy: 'science', news: 'newspaper'}[x.kind], open: () => go({screen: 'screener', strategy: 'lab', news: 'news'}[x.kind])});
+  for (const x of P().search_extra || []) out.push({group: {screen: 'Screens', strategy: 'Strategies', news: 'News'}[x.kind], label: x.label, sub: x.sub, ic: {screen: 'filter_list', strategy: 'science', news: 'newspaper'}[x.kind], open: () => go({screen: 'screener', strategy: 'lab', news: 'news'}[x.kind])});
   for (const s of allScreens()) out.push({group: 'Pages', label: s.label, sub: NAV.find(g => g && g.id === s.group).label + (s.key ? ' · ' + s.key : ''), ic: s.icon, open: () => go(s.id)});
   return out;
 }
@@ -81,13 +81,19 @@ function palResults(q) {
   const idx = palIndex(); q = q.trim().toLowerCase();
   let rows;
   if (!q) rows = P().recent.map(id => ({...idx.find(r => r.id === id), group: 'Recently viewed'})).concat(idx.filter(r => r.group === 'Pages').slice(0, 6));
-  else { const words = q.split(/\s+/); rows = idx.filter(r => words.every(w => (r.label + ' ' + r.sub).toLowerCase().includes(w))); }
+  else {
+    /* words in any order ("nifty 24500 ce", "24500 call"), or the exchange trading code typed whole ("NIFTY26OCT24500CE") */
+    const syn = w => ({call: 'ce', put: 'pe', calls: 'ce', puts: 'pe', future: 'fut', futures: 'fut'})[w] || w;
+    const words = q.split(/\s+/).map(syn), flat = q.replace(/\s+/g, '');
+    const hay = r => (r.label + ' ' + r.sub + ' ' + (r.code || '')).toLowerCase();
+    rows = idx.filter(r => (r.code && r.code.toLowerCase().includes(flat) && flat.length > 2) || words.every(w => hay(r).includes(w)));
+  }
   const by = {}; for (const r of rows) (by[r.group] ||= []).push(r);
   return GROUP_ORDER.filter(g => by[g]).flatMap(g => by[g].slice(0, 6));
 }
 function openPal(q = '') {
   closeHc(); closeMenu(); lastFocus = document.activeElement;
-  const input = el('input', {type: 'search', value: q, placeholder: P().fno ? 'Search stocks, F&O underlyings, contracts, screens, strategies, news' : 'Search stocks, screens, strategies, news', 'aria-label': 'Search', 'aria-controls': 'pal-list', oninput: e => palDraw(e.target.value), onkeydown: palKey});
+  const input = el('input', {type: 'search', value: q, placeholder: P().fno ? 'Symbol, company or option code: reliance, nifty 24500 ce, NIFTY26OCT24500CE' : 'Symbol or company: aapl, nvidia', 'aria-label': 'Search', 'aria-controls': 'pal-list', oninput: e => palDraw(e.target.value), onkeydown: palKey});
   F.pal.replaceChildren(el('div', {class: 'mb-modal-head'}, icon('search'), input, el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close', onclick: closePal}, icon('close'))), el('div', {class: 'mb-modal-body', id: 'pal-list', role: 'listbox'}),
     el('div', {class: 'mb-modal-foot'}, el('span', {}, el('span', {class: 'mb-kbd'}, '↑'), el('span', {class: 'mb-kbd'}, '↓'), 'move'), el('span', {}, el('span', {class: 'mb-kbd'}, 'Enter'), 'open'), el('span', {}, el('span', {class: 'mb-kbd'}, 'Esc'), 'close'), el('span', {}, `${P().label} market · prices are as-of, not live`)));
   F.pal.classList.add('on'); F.veil.classList.add('on'); st.pal = q || '1';
@@ -113,7 +119,7 @@ function openKeys() {
   const k = (...ks) => el('dt', {}, ...ks.map(x => el('span', {class: 'mb-kbd'}, x)));
   F.keys.replaceChildren(el('div', {class: 'mb-modal-head'}, icon('keyboard'), el('h2', {id: 'keys-title'}, 'Keyboard shortcuts'), el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Close', onclick: closeKeys}, icon('close'))),
     el('div', {class: 'mb-modal-body'}, el('dl', {class: 'mb-keys'},
-      k('/'), el('dd', {}, 'Search everything (also Ctrl K)'), k('B'), el('dd', {}, 'Paper buy the focused row'), k('S'), el('dd', {}, 'Paper sell the focused row'), k('Esc'), el('dd', {}, 'Close the drawer, card or dialog'),
+      k('/'), el('dd', {}, 'Search everything (also Ctrl K)'), k('B'), el('dd', {}, 'Buy the focused row'), k('S'), el('dd', {}, 'Sell the focused row'), k('Esc'), el('dd', {}, 'Close the drawer, card or dialog'),
       k('g', 'h'), el('dd', {}, 'Dashboard'), k('g', 'p'), el('dd', {}, 'Portfolio: positions'), k('g', 'o'), el('dd', {}, 'Orders'), k('g', 's'), el('dd', {}, 'Screener'), k('?'), el('dd', {}, 'This list'))),
     el('div', {class: 'mb-modal-foot'}, el('span', {}, 'Every action also has a button: the keyboard is a shortcut, never the only way.')));
   F.keys.classList.add('on'); F.veil.classList.add('on'); st.keys = true; $('button', F.keys).focus();
@@ -122,5 +128,6 @@ function closeKeys() { F.keys.classList.remove('on'); st.keys = false; if (!F.dr
 /* snackbar */
 let snackT = null;
 function snack(msg) { F.snack.replaceChildren(el('span', {}, msg), el('button', {class: 'md-btn text', type: 'button', onclick: () => F.snack.classList.remove('on')}, 'OK')); F.snack.classList.add('on'); clearTimeout(snackT); snackT = setTimeout(() => F.snack.classList.remove('on'), 5000); }
+
 
 

@@ -1,56 +1,47 @@
-# 31-dashboard: rationale
+# 31-dashboard (Home): rationale
 
-Mockup order item 2 of `design/PLATFORM_DESIGN.md` section 9 (screen 1, "Dashboard, home after login"), redesigned
-from the owner's feedback of 13 Oct 2026. Supersedes the layout of `01-home` (kept unchanged: the web app and its
-tests read it). Status: **for the owner's review**.
+Mockup order item 2 of `design/PLATFORM_DESIGN.md` section 9 (screen 1: the home page after login). Supersedes the
+layout of `01-home` (kept unchanged for the web tests). Status: **third round, for the owner's review** (13 Oct 2026).
 
-Files: `data.json` (Mock), `template.html`, `build.py` (deterministic, `design/mockups/_platform/`), `page.html`,
-`notes.md`; screenshots from `node design/system/check_page.js` (no console errors, no external requests, no
-horizontal overflow): `shot-1280-full`, `shot-390-full`, `shot-390-viewport` (India, light), `shot-dark-*`,
-`shot-us-*` (no F&O element anywhere), and states `shot-quicksearch-*` (`#qs=nifty%2024`), `shot-us-quicksearch-*`,
-`shot-basket-*` (iron fly, credit), `shot-basket-debit-*` (bull call spread), `shot-idea-order-*` (Paper buy from an
-idea card).
+Files: `data.json` (composed from the application's own example records: notes.md), `template.html`, `build.py`,
+`page.html`, `notes.md` (the data contract). Screenshots: `shot-<width>-full` at 390, 768, 1024, 1280 and 1680 px,
+the same for `shot-dark-*` and `shot-us-*`; states `shot-trades-ai-*` (open trades, AI tab), `shot-pick-order-*`
+(Buy from a pick, India), `shot-us-pick-order-*` (US). `check_page.js` and `check_text.js` (twelve widths, India,
+US, dark): 0 findings.
 
-## The owner's ask
-> "Quick search ... buy and sell order even from the quick search ... key information which is relevant ... high
-> potential trades or high potential FNOs where user can quickly buy them right from the screen ... a slider or a
-> small section of stocks and a small section of FNOs ... elegant, sharp corners and more materialized ... think
-> from a user usage and user journey point of view." And: no informational blocks on top.
+## Questions the page answers, in the order a user asks them
+1. **How am I doing, what is the best move, what needs me?** "Today at a glance": your paper account's open profit,
+   the top pick with its Yes/No after costs and a Buy button, and how many items need you.
+2. **What is the market doing?** The market band at the top: NIFTY 50 and India VIX (S&P 500 ETF and VIX in the US)
+   with the day and 5-day change, the session ("event-heavy", closed, today's close arrives with the 17:45 IST run),
+   and how the tracked companies moved. The top bar's index strip is hidden here, so nothing repeats.
+3. **What could I buy now, and how good is it really?** Today's buy picks (left panel on desktops; on tablets and
+   phones in the page): who picked it, how many of 15 strategies agree, the model's chance, Yes/No after costs, the
+   picking strategy's record on that stock, Buy and Sell.
+4. **Who trades for me, and how is each doing?** One card per trader: You, Rule strategies, AI traders, Baselines
+   (yardsticks) and, in India, the F&O books, each with its own lines (never added together).
+5. **What is open?** Your trades first, then each family's trades grouped per stock ("3 trades: Model + news ·
+   N+4, N+5 · exits Wed 7 Oct (today), Thu 8 Oct · +₹3,024.00 each trade"), with B and S; tabs by who opened them.
+6. **What needs me today?** Trades exiting today, today's close not in yet, a major event today, promotional or
+   rumour news on a stock I follow.
+7. **What is coming?** The event calendar (results, RBI, holidays, F&O expiry) and the news with how far each story is
+   confirmed.
 
-## The journey, top to bottom (each section answers one question)
-1. **Where am I?** One line: "Dashboard", the session (NSE closed at 15:30, next session 09:15), "Updated 15:40
-   IST", Paper and Mock tags. No banner.
-2. **I know what I want.** The quick-search block: type "reliance" or "nifty 24800 ce", see price, change and as-of,
-   press **B** or **S** on the result (or Enter for the quick view). Tabs All · Stocks · F&O. Recent chips under it.
-   (Kite's search-and-trade, Groww's prominent search.)
-3. **How am I doing?** One tile per paper account with value and today's change; never summed, INR and USD never
-   mixed. On a phone the tiles swipe.
-4. **What could I do?** "Top stock ideas" and "Top F&O ideas" (India): swipeable cards with a 0-100 score ring, the
-   signal in words ("Buy signal: 12 of 15 strategies buy at N+3"), chance of a rise, target after costs, 80% range,
-   and one big **Paper buy** (stocks) or **Paper basket** (F&O: all legs in one paper order with the same limit
-   checks). A "No trade" decision stays in the F&O row in red with its reason, because "do nothing" is advice too.
-5. **What needs me?** Open positions with B and S and their P&L; "Needs attention" (near a stop, results ahead, a
-   fired alert); "At risk now" per account, linking to Risk.
-6. **What happened today?** Each tool's decision (tick, cross or dash plus the word) and a compact market card
-   (indices with sparklines, top gainers and losers, breadth).
-7. **What is coming?** The week's events (results, RBI, expiry) and three top news items with their verification.
+## Self-review (owner's question: "is it the best design you could make?")
+Honest answer: better, not best. Open weaknesses, in the order I would fix them:
+- No chart of the owner's own account over time (a broker's home usually has one); it needs a daily value history
+  of the Manual account, which no backend publishes yet.
+- The phone page is still long (all seven sections); a phone may want sections 4-7 folded by default.
+- "Who trades" carries descriptions that a returning user does not need every day; they could move into the "?"
+  help after the first visit.
+- With today's real data the page is thin (2 picks, 3 tracked companies); it is designed to page and scale, but the
+  owner sees the sparse truth.
 
-## Decisions (and why)
-- **Ideas say "Not proven yet · 16 of ~300 trades" in the section head, not a banner.** The owner's rule since
-  01-home: no signal is shown as strong until a strategy is proven, so every idea uses the lighter "okay" green
-  (YES-ok), never the dark "strong" green. Strong evidence: this is the stock tool's go-live bar.
-- **F&O ideas are NIFTY monthly structures only,** because paper F&O orders fill only from the recorded NIFTY
-  monthly 3 pm snapshot. The probability of profit says "RN" (risk-neutral: what prices imply, not our forecast).
-- **Ideas fit the limits.** Each F&O idea is sized to 1 lot inside the Rs 10,000 maximum loss; the basket checks
-  again with charges before it can be placed.
-- **B and S everywhere they help:** quick search, global search, positions, watchlist, hover card. Strategy books
-  are never traded by hand; B and S always trade the Manual account.
-- **Sharp 4 px corners, white cards on a grey page, coloured top or left rules** for idea cards and account tiles:
-  the "elegant, sharper, more Material" ask, without new colours (tokens only).
-- **Allocation donut left out (deviation from PLATFORM_DESIGN.md screen 1).** Per account it is mostly cash today,
-  and a market-wide donut would merge separate accounts; it belongs on Portfolio › Accounts and funds. Reasoning only.
-- **Market overview kept small** (three indices, movers, breadth): the full view is the Markets screen (39).
+## Fourth round (13 Oct 2026, owner)
+"Who trades" is now one card per approach, matching the owner's three-way comparison: You; Rule-based (stocks and F&O
+Book 1); AI-based (stocks and F&O Book 3); Hybrid (F&O Book 2; the stock tool has no hybrid); Baselines as the
+comparison line. Each line stays its own account or scoreboard. The market line says open or closed and when that
+changes; Buy (green) and Sell (red) are locked while closed. Strategy names never name the AI model.
 
-## Open points for the owner
-- The 0-100 score's formula (notes.md) needs agreement and has to be published by the backends.
-- Should "Top ideas" also show sell (avoid) candidates? Today it shows buys, plus F&O "no trade" decisions.
+## Supersedes
+`01-home`'s layout (01-home/rationale.md says so).

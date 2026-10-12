@@ -16,6 +16,7 @@
 .part p{margin:0;font-size:13.5px;color:var(--md-sys-color-on-surface-variant)}
 .part .try{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .inline-tk{display:flex;flex-wrap:wrap;gap:10px;font-size:13.5px}
+@media (max-width:599px){.src .ex{display:none}}
 .src td small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12px}
 .honest{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .honest li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:13.5px}
@@ -33,31 +34,31 @@ PF.mount({screen: 'shell', group: null, render(main, c) {
   const {el, icon, inst, P} = c;
   const india = P.fno;
   main.append(c.pagehead({crumbs: [['Design system', '../../system/styleguide.html'], ['Platform shell']], title: 'Platform shell',
-    meta: [c.mockTag(), c.paperTag(), el('span', {class: 'mb-asof', 'data-tip': 'The mockups run on a fixed clock so every build gives the same page.'}, icon('schedule'), 'Mock clock ' + c.nowLabel())],
+    meta: [c.mockTag(), el('span', {class: 'mb-asof', 'data-tip': 'The mockups run on a fixed clock so every build gives the same page.'}, icon('schedule'), 'Mock clock ' + c.nowLabel())],
     actions: [el('button', {class: 'md-btn outlined', type: 'button', onclick: () => c.openPal('')}, icon('search'), 'Search', el('span', {class: 'mb-kbd'}, '/')),
-              el('button', {class: 'md-btn filled', type: 'button', onclick: () => c.openOrder(india ? 'RELIANCE' : 'AAPL', 'buy')}, icon('receipt_long'), 'Paper order')]}));
+              el('button', {class: 'md-btn filled', type: 'button', onclick: () => c.openOrder(india ? 'RELIANCE' : 'AAPL', 'buy')}, icon('receipt_long'), 'New order')]}));
 
   const part = (ic, tone, title, text, ...tries) => el('section', {class: 'card part'}, el('div', {class: 't'}, el('span', {class: 'mb-avatar ' + tone}, icon(ic)), el('h2', {}, title)), el('p', {}, text), el('div', {class: 'try'}, ...tries));
   const btn = (label, fn, cls = 'md-btn outlined small', ic) => el('button', {class: cls, type: 'button', onclick: fn}, ic ? icon(ic) : null, label);
-  const firstTk = india ? ['RELIANCE', 'NIFTY-24500CE-OCT', 'HDFCBANK', 'BANKNIFTY-52000PE-NOV'] : ['AAPL', 'JPM', 'NVDA'];
+  const firstTk = india ? ['RELIANCE', 'NIFTY26OCT22800CE', 'HDFCBANK', 'NIFTY26NOV22000PE'] : ['NVDA', 'AAPL', 'JPM'];
   main.append(el('div', {class: 'parts'},
-    part('search', 'primary', 'Global search', `One box for ${india ? 'stocks, F&O underlyings, contracts' : 'stocks'}, screens, strategies, news and pages. Recently viewed first. Press / or Ctrl K anywhere.`,
-      btn('Open search', () => c.openPal(''), undefined, 'search'), btn(india ? 'Try “nifty 24500”' : 'Try “apple”', () => c.openPal(india ? 'nifty 24500' : 'apple'))),
-    part('public', 'info', 'Market switch', india ? 'India shows stocks and F&O. Switch to US: every F&O element is absent there, not empty. Currencies are never summed.' : 'US shows stocks only: F&O is India only, so every F&O element is absent here. Switch to India to see it.',
+    part('search', 'primary', 'Global search', `The only search box: ${india ? 'a stock, an index, or an option by its words (nifty 22800 call) or its exchange code (NIFTY26OCT22800CE)' : 'a stock or company'}, plus strategies, news and pages. Every stock and contract result has B and S. Press / or Ctrl K anywhere.`,
+      btn('Open search', () => c.openPal(''), undefined, 'search'), btn(india ? 'Try “NIFTY26OCT22800CE”' : 'Try “nvidia”', () => c.openPal(india ? 'NIFTY26OCT22800CE' : 'nvidia'))),
+    part('public', 'info', 'Market switch and status', india ? 'Beside it: whether the market is open or closed, and when that changes; your own buy and sell are paused while it is closed. India shows stocks and F&O. Switch to US: every F&O element is absent there, not empty. Currencies are never summed.' : 'US shows stocks only: F&O is India only, so every F&O element is absent here. Switch to India to see it.',
       btn(india ? 'Switch to US' : 'Switch to India', () => { c.st.m = india ? 'us' : 'india'; c.st.wl = 0; c.rerender(); })),
     part('monitoring', 'neutral', 'Index strip', `${P.indices.map(id => c.item(id).sym).join(', ')}. Hover any index for its as-of time and source. Stale values turn grey and say “stale”.`,
       el('span', {class: 'muted', style: 'font-size:12.5px'}, 'Top bar, right of the market switch; on a phone, a row under the search.')),
     part('dashboard', 'primary', 'Navigation rail', 'Seven groups (Dashboard, Markets, Trade, Portfolio, Strategies, Research, Control) plus Assistant, Help and Settings. Hover or focus a group for its screens; pinned screens sit below.',
       btn(c.st.rail === 'icons' ? 'Show labels' : 'Icons only', () => { c.st.rail = c.st.rail === 'icons' ? 'labels' : 'icons'; c.rerender(); })),
-    part('star', 'warn', 'Watchlist panel', 'Kite-style, always visible on desktop: five lists, each mixing stocks' + (india ? ', F&O underlyings and contracts' : '') + '. Every row has price, change and as-of time; hover for B, S, Chart' + (india ? ', Chain' : '') + ' and more. Drag to reorder.',
-      btn('List 2', () => { c.st.wl = 1; c.rerender(); }), btn('Empty list 5', () => { c.st.wl = 4; c.rerender(); })),
-    part('open_in_new', 'info', 'Hover cards', 'Every ticker and contract is a link. Hover (or tap) for price, change, as-of, your position and Chart, Chain, Paper buy, Paper sell:',
+    part('bolt', 'warn', 'Today’s buy picks panel', 'Left bar on desktop, “Picks” tab on a phone: each approach’s pick for today (rule-based, AI-based, hybrid) with how many strategies agree, the model’s chance, Yes or No after market costs and the strategy’s record on that stock. Buy and Sell on every row while the market is open.',
+      btn('Rule-based only', () => { c.st.ap = 'rule'; c.rerender(); }), btn('All', () => { c.st.ap = 'all'; c.rerender(); })),
+    part('open_in_new', 'info', 'Hover cards', 'Every ticker and contract is a link. Hover (or tap) for price, change, as-of, your position and Chart, Chain, Buy, Sell:',
       el('div', {class: 'inline-tk'}, ...firstTk.map(id => inst(id)))),
-    part('more_vert', 'neutral', 'Context menu', 'The same small menu on every row: Chart, Option chain, Paper order, Add to watchlist, News, Open details, Set an alert.',
+    part('more_vert', 'neutral', 'Context menu', 'The same small menu on every row: Chart, Option chain, Buy or sell, Add to watchlist, News, Open details, Set an alert.',
       btn('Open a row menu', e => c.openMenu(firstTk[0], e.currentTarget), undefined, 'more_vert')),
-    part('receipt_long', 'paper', 'Paper order window', 'Manual paper account only; checks against its limits before confirming; F&O refused where our data has no executable quote. “Paper order: no real order is placed.”',
-      ...(india ? [btn('Stock buy', () => c.openOrder('RELIANCE', 'buy'), 'md-btn small buy'), btn('Option buy (passes)', () => c.openOrder('NIFTY-24800CE-OCT', 'buy')), btn('Option sell (blocked)', () => c.openOrder('NIFTY-24500CE-OCT', 'sell')), btn('Future (refused)', () => c.openOrder('BANKNIFTY-FUT-OCT', 'buy'))]
-                 : [btn('Stock buy', () => c.openOrder('AAPL', 'buy'), 'md-btn small buy'), btn('Sell held shares', () => c.openOrder('AAPL', 'sell'), 'md-btn small sell')])),
+    part('receipt_long', 'paper', 'Order window', 'Manual paper account only; checks against its limits before confirming; F&O refused where our data has no executable quote. “Paper order: no real order is placed.”',
+      ...(india ? [btn('Stock buy', () => c.openOrder('RELIANCE', 'buy'), 'md-btn small buy'), btn('Option buy (passes)', () => c.openOrder('NIFTY26OCT23300CE', 'buy')), btn('Option sell (blocked)', () => c.openOrder('NIFTY26OCT22800CE', 'sell')), btn('Future (refused)', () => c.openOrder('NIFTY26OCTFUT', 'buy'))]
+                 : [btn('Stock buy', () => c.openOrder('NVDA', 'buy'), 'md-btn small buy'), btn('Sell held shares', () => c.openOrder('AAPL', 'sell'), 'md-btn small sell')])),
     part('dock_to_left', 'primary', 'Right drawer and bottom sheet', 'Orders and quick views open without leaving the page: from the right on desktop, as a bottom sheet on a phone. Esc closes; focus returns where it was.',
       btn('Quick view', () => c.openDrawer('quick:' + firstTk[0]))),
     part('menu', 'neutral', 'Phone bottom tabs', 'Home, Watchlist, Orders, Portfolio, More. Search stays at the top of every screen; More lists every screen.',
@@ -70,9 +71,9 @@ PF.mount({screen: 'shell', group: null, render(main, c) {
   /* where the frame's prices come from */
   const srcRows = {};
   for (const it of Object.values(P.items)) (srcRows[it.source] ||= []).push(it);
-  const tbl = el('table', {class: 'md-table tbl src'}, el('thead', {}, el('tr', {}, el('th', {}, 'Source'), el('th', {}, 'Example'), el('th', {class: 'num'}, 'As of'))),
+  const tbl = el('table', {class: 'md-table tbl src'}, el('thead', {}, el('tr', {}, el('th', {}, 'Source'), el('th', {class: 'ex'}, 'Example'), el('th', {class: 'num'}, 'As of'))),
     el('tbody', {}, ...Object.entries(srcRows).map(([k, items]) => { const s = c.S.sources[k], ex = items.find(i => c.asOf(i).stale) || items[0];
-      return el('tr', {}, el('td', {}, el('b', {}, s.label), el('small', {}, `${s.detail}. Used for ${items.length} instrument${items.length === 1 ? '' : 's'} (${[...new Set(items.map(i => i.kind))].join(', ')}).`)), el('td', {}, inst(ex.id)), el('td', {class: 'num'}, c.asOfEl(ex))); })));
+      return el('tr', {}, el('td', {}, el('b', {}, s.label), el('small', {}, `${s.detail}. Used for ${items.length} instrument${items.length === 1 ? '' : 's'} (${[...new Set(items.map(i => i.kind))].join(', ')}).`)), el('td', {class: 'ex'}, inst(ex.id)), el('td', {class: 'num'}, c.asOfEl(ex))); })));
   main.append(el('div', {class: 'grid'},
     el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Where the prices in the frame come from'), el('span', {class: 'end'}, c.mockTag())), el('div', {class: 'md-table-wrap'}, tbl),
       el('p', {class: 'note'}, 'No live feed: a value is as fresh as its source. A value older than its source allows turns grey and says “stale”.')),

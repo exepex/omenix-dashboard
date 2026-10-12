@@ -3,7 +3,8 @@
     from platform_build import run      # design/mockups/_platform on sys.path
     run(HERE)                           # in design/mockups/<nn-name>/build.py
 
-Reads the page's `data.json` (Mock payload, hand-kept: there is no backend catalogue for these screens yet) and the
+Reads the page's `data.json` (composed by `real_data.py` from the application's own example records when the page's
+build passes `compose`) and the
 shell's `30-shell/data.json` (watchlists, index strip, accounts, search, notifications), and writes `page.html` next
 to the page's `template.html`: the design system (design/system/, light tokens plus tokens-dark.css for the theme
 switch), the page layout helpers (design/mockups/_shared/shell.css) and the platform runtime (js/*.js of this
@@ -54,12 +55,17 @@ def render(template: str, shell: dict, data: dict | None) -> str:
     return inline_system(html, dark=True)
 
 
-def run(here: str, summary=None) -> None:
+def run(here: str, summary=None, compose=None) -> None:
+    """`compose()`, when given, returns the page's payload and is written to data.json first (deterministic)."""
     parser = argparse.ArgumentParser(description="Build this platform mockup into page.html")
     parser.add_argument("--out", default=here)
     args = parser.parse_args()
-    shell = json.loads(read(SHELL_DATA))
     own = os.path.join(here, "data.json")
+    if compose:
+        with open(own, "w", encoding="utf-8") as handle:
+            json.dump(compose(), handle, indent=1, ensure_ascii=False)
+            handle.write("\n")
+    shell = json.loads(read(SHELL_DATA))
     data = shell if os.path.abspath(own) == os.path.abspath(SHELL_DATA) else json.loads(read(own))
     assert data.get("_mock") is True, "every platform payload is labelled Mock"
     html = render(read(os.path.join(here, "template.html")), shell, None if data is shell else data)

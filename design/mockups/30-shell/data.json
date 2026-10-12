@@ -1,827 +1,699 @@
 {
  "_mock": true,
- "_note": "MOCK DATA for page design only (design/PLATFORM_DESIGN.md). Prices, positions, accounts and news are invented and consistent with each other; no value is a real quote. Research and paper trading only: nothing here places a real order.",
+ "_note": "EXAMPLE DATA copied from the application's own catalogue records (design/mockups/01-home, 03-company, 07-paper-portfolios: stock tool example files of 6-7 Oct 2026). F&O contract prices and the Manual account's starting cash are labelled examples. Research and paper trading only: nothing here places a real order.",
  "page": "shell",
- "spec": "design/PLATFORM_DESIGN.md sections 1-3, 5, 6",
- "now": "2026-10-12T10:10:00Z",
+ "spec": "design/PLATFORM_DESIGN.md sections 1-3, 5, 6; owner feedback 13 Oct 2026",
+ "now": "2026-10-07T12:00:00Z",
  "sources": {
-  "stock_run": {
-   "label": "Stock tool run",
-   "detail": "the stock tool's price check; it runs several times a session",
-   "max_age_h": 4
+  "close": {
+   "label": "Last close",
+   "detail": "the stock tool's daily close (its post-close run imports today's close at 17:45 IST or 18:15 ET)",
+   "max_age_h": 30
   },
   "eod": {
    "label": "NSE end-of-day file",
-   "detail": "NSE's daily F&O file, published after the close (stale once a newer trading day's file is due: 78 hours covers a weekend)",
+   "detail": "NSE's daily F&O file, published after the close",
    "max_age_h": 78
   },
   "snap3pm": {
    "label": "3 pm option snapshot",
    "detail": "the F&O tool's 3 pm NIFTY monthly option quotes (best bid and ask only)",
    "max_age_h": 26
-  },
-  "us_close": {
-   "label": "Stock tool close",
-   "detail": "the stock tool's last US close price",
-   "max_age_h": 80
   }
  },
- "limits_note": "Owner-changeable default (PLATFORM_DESIGN.md section 5): the Manual account starts at Rs 5 lakh with the same limits as the F&O books.",
+ "families": {
+  "rule": {
+   "label": "Rule-based",
+   "icon": "rule"
+  },
+  "ai": {
+   "label": "AI-based",
+   "icon": "smart_toy"
+  },
+  "hybrid": {
+   "label": "Hybrid (rule + AI)",
+   "icon": "bolt"
+  },
+  "baseline": {
+   "label": "Baselines",
+   "icon": "trending_flat"
+  },
+  "manual": {
+   "label": "You",
+   "icon": "account_circle"
+  }
+ },
+ "family_text": {
+  "manual": "Trades you place yourself.",
+  "rule": "Written rules decide; no AI in the decision. Stocks: rules on the price model's forecast and the news (for example “Model + news”). F&O: Book 1, the approved playbook.",
+  "ai": "An AI decides. Stocks: AI traders that read the prices and the news (for example “AI combined A”). F&O: Book 3, the fully AI system.",
+  "hybrid": "The AI decides, but only inside limits that the rules set. F&O only: Book 2. The stock tool has no hybrid strategy.",
+  "baseline": "Simple yardsticks a strategy has to beat (“Always buy”, “Follow yesterday”, “Model without news”); never in the head-to-head."
+ },
+ "pick_rules": {
+  "best_expected_gain": "Best expected gain",
+  "highest_probability": "Highest probability"
+ },
+ "limits_note": "Owner-changeable default (PLATFORM_DESIGN.md section 5): Rs 5 lakh with the F&O books' limits.",
  "markets": {
   "india": {
    "label": "India",
+   "exchange": "India (NSE)",
    "currency": "INR",
    "zone": "IST",
    "offset_min": 330,
    "fno": true,
    "indices": [
-    "NIFTY",
-    "BANKNIFTY",
+    "NIFTY50",
     "INDIAVIX"
    ],
    "items": {
-    "RELIANCE": {
-     "id": "RELIANCE",
-     "kind": "stock",
-     "sym": "RELIANCE",
-     "name": "Reliance Industries · NSE",
-     "last": 1218.0,
-     "chg_pct": 2.66,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "held": {
-      "account": "manual-in",
-      "qty": 40,
-      "avg": 1214.6
-     },
-     "spark": [
-      1181.03,
-      1184.28,
-      1187.27,
-      1202.16,
-      1200.3,
-      1203.66,
-      1206.24,
-      1208.13,
-      1209.45,
-      1196.53,
-      1197.71,
-      1190.8,
-      1173.59,
-      1165.58,
-      1162.73,
-      1170.13,
-      1166.77,
-      1173.43,
-      1178.37,
-      1179.58,
-      1184.5,
-      1184.67,
-      1190.4,
-      1218.0
-     ]
-    },
     "HDFCBANK": {
      "id": "HDFCBANK",
      "kind": "stock",
      "sym": "HDFCBANK",
+     "code": "HDFCBANK",
      "name": "HDFC Bank · NSE",
      "last": 711.45,
      "chg_pct": 0.94,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "held": {
-      "account": "stock-in",
-      "qty": 140,
-      "avg": 711.5
-     },
+     "source": "close",
+     "as_of": "2026-10-06T10:00:00Z",
+     "state": "active",
      "spark": [
-      703.85,
-      706.78,
-      711.56,
-      713.41,
-      717.04,
-      718.34,
-      720.87,
-      713.15,
-      714.26,
-      709.52,
-      710.13,
-      706.44,
-      697.27,
-      692.5,
-      691.43,
-      690.75,
-      694.55,
-      692.87,
-      698.17,
-      697.78,
-      703.57,
-      704.78,
-      712.48,
+      729.0,
+      727.5,
+      727.2,
+      711.0,
+      720.3,
+      709.0,
+      711.9,
+      700.8,
+      706.65,
+      712.1,
+      710.5,
+      703.0,
+      687.1,
+      693.8,
+      708.25,
+      716.55,
+      721.5,
+      713.0,
+      731.0,
+      739.5,
+      738.6,
+      737.25,
+      728.9,
+      735.6,
+      719.05,
+      722.7,
+      708.7,
+      721.2,
+      704.8,
       711.45
-     ]
-    },
-    "MARUTI": {
-     "id": "MARUTI",
-     "kind": "stock",
-     "sym": "MARUTI",
-     "name": "Maruti Suzuki · NSE",
-     "last": 11625.0,
-     "chg_pct": 0.81,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      11669.8,
-      11761.5,
-      11797.8,
-      11740.64,
-      11659.0,
-      11743.5,
-      11691.23,
-      11562.47,
-      11497.39,
-      11495.39,
-      11348.9,
-      11311.17,
-      11352.17,
-      11351.87,
-      11376.86,
-      11438.38,
-      11451.5,
-      11503.46,
-      11542.8,
-      11602.27,
-      11674.01,
-      11716.03,
-      11772.75,
-      11625.0
-     ]
+     ],
+     "fno": true
     },
     "INDIGO": {
      "id": "INDIGO",
      "kind": "stock",
      "sym": "INDIGO",
-     "name": "InterGlobe Aviation · NSE",
+     "code": "INDIGO",
+     "name": "InterGlobe Aviation (IndiGo) · NSE",
      "last": 5050.5,
-     "chg_pct": -0.42,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      5053.56,
-      5076.05,
-      5096.79,
-      5137.25,
-      5141.7,
-      5178.86,
-      5171.7,
-      5167.79,
-      5132.21,
-      5118.38,
-      5103.36,
-      5088.28,
-      5034.14,
-      4997.56,
-      5002.14,
-      4958.89,
-      4971.87,
-      4963.19,
-      5012.09,
-      5018.27,
-      5054.77,
-      5108.2,
-      5126.3,
-      5050.5
-     ]
+     "chg_pct": 0.0,
+     "source": "close",
+     "as_of": "2026-10-06T10:00:00Z",
+     "state": "inactive",
+     "spark": null,
+     "fno": false,
+     "note": "No longer tracked by the stock tool (inactive): the price is its last recorded close."
     },
-    "INFY": {
-     "id": "INFY",
+    "MARUTI": {
+     "id": "MARUTI",
      "kind": "stock",
-     "sym": "INFY",
-     "name": "Infosys · NSE",
-     "last": 1486.2,
-     "chg_pct": -1.12,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
+     "sym": "MARUTI",
+     "code": "MARUTI",
+     "name": "Maruti Suzuki · NSE",
+     "last": 11625.0,
+     "chg_pct": 0.81,
+     "source": "close",
+     "as_of": "2026-10-06T10:00:00Z",
+     "state": "active",
      "spark": [
-      1487.17,
-      1503.07,
-      1503.66,
-      1526.04,
-      1525.84,
-      1535.74,
-      1525.68,
-      1533.83,
-      1516.65,
-      1523.2,
-      1506.39,
-      1492.02,
-      1498.79,
-      1490.22,
-      1473.59,
-      1477.68,
-      1475.93,
-      1472.8,
-      1483.07,
-      1500.04,
-      1497.79,
-      1513.3,
-      1521.46,
-      1486.2
-     ]
+      13620.0,
+      13678.0,
+      13520.0,
+      13440.0,
+      13376.0,
+      13547.0,
+      12950.0,
+      12849.0,
+      12857.0,
+      12694.0,
+      12760.0,
+      12641.0,
+      12618.0,
+      12590.0,
+      12400.0,
+      12231.0,
+      12166.0,
+      12338.0,
+      12103.0,
+      12153.0,
+      12190.0,
+      12230.0,
+      11990.0,
+      12065.0,
+      12008.0,
+      11877.0,
+      11967.0,
+      11386.0,
+      11532.0,
+      11625.0
+     ],
+     "fno": true
     },
-    "TCS": {
-     "id": "TCS",
+    "RELIANCE": {
+     "id": "RELIANCE",
      "kind": "stock",
-     "sym": "TCS",
-     "name": "Tata Consultancy Services · NSE",
-     "last": 3412.8,
-     "chg_pct": 0.36,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
+     "sym": "RELIANCE",
+     "code": "RELIANCE",
+     "name": "Reliance Industries · NSE",
+     "last": 1218.0,
+     "chg_pct": 2.66,
+     "source": "close",
+     "as_of": "2026-10-06T10:00:00Z",
+     "state": "active",
      "spark": [
-      3394.39,
-      3407.55,
-      3438.76,
-      3432.75,
-      3451.41,
-      3457.82,
-      3444.99,
-      3456.39,
-      3457.16,
-      3434.11,
-      3399.44,
-      3382.53,
-      3373.5,
-      3342.11,
-      3334.23,
-      3349.69,
-      3324.42,
-      3331.02,
-      3344.64,
-      3375.35,
-      3374.06,
-      3420.83,
-      3434.25,
-      3412.8
-     ]
-    },
-    "ICICIBANK": {
-     "id": "ICICIBANK",
-     "kind": "stock",
-     "sym": "ICICIBANK",
-     "name": "ICICI Bank · NSE",
-     "last": 1268.4,
-     "chg_pct": 0.22,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
+      1309.8,
+      1317.0,
+      1298.0,
+      1282.2,
+      1287.0,
+      1277.0,
+      1309.0,
+      1313.1,
+      1302.5,
+      1322.0,
+      1309.5,
+      1294.9,
+      1279.0,
+      1274.0,
+      1257.5,
+      1235.3,
+      1240.0,
+      1243.9,
+      1226.4,
+      1247.4,
+      1240.4,
+      1248.0,
+      1219.2,
+      1226.0,
+      1197.6,
+      1182.0,
+      1187.0,
+      1167.7,
+      1186.4,
+      1218.0
+     ],
      "fno": true,
-     "spark": [
-      1263.17,
-      1270.7,
-      1277.1,
-      1280.29,
-      1281.85,
-      1289.25,
-      1282.9,
-      1282.37,
-      1285.72,
-      1278.46,
-      1264.59,
-      1261.94,
-      1257.27,
-      1245.62,
-      1247.63,
-      1237.79,
-      1238.14,
-      1244.23,
-      1246.74,
-      1259.27,
-      1261.71,
-      1267.11,
-      1282.02,
-      1268.4
-     ]
+     "held": {
+      "account": "manual-in",
+      "qty": 50.0,
+      "avg": 1182.0
+     }
     },
-    "SBIN": {
-     "id": "SBIN",
-     "kind": "stock",
-     "sym": "SBIN",
-     "name": "State Bank of India · NSE",
-     "last": 812.65,
-     "chg_pct": -0.58,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      816.54,
-      820.65,
-      818.85,
-      824.43,
-      825.83,
-      834.12,
-      831.69,
-      826.86,
-      832.72,
-      820.52,
-      815.82,
-      819.49,
-      810.58,
-      810.6,
-      805.19,
-      799.36,
-      802.7,
-      806.92,
-      802.58,
-      813.86,
-      814.24,
-      820.56,
-      823.06,
-      812.65
-     ]
-    },
-    "KOTAKBANK": {
-     "id": "KOTAKBANK",
-     "kind": "stock",
-     "sym": "KOTAKBANK",
-     "name": "Kotak Mahindra Bank · NSE",
-     "last": 2104.3,
-     "chg_pct": -0.21,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      2105.39,
-      2109.81,
-      2120.94,
-      2121.54,
-      2146.67,
-      2137.18,
-      2149.24,
-      2130.9,
-      2127.05,
-      2130.89,
-      2110.73,
-      2106.47,
-      2097.16,
-      2078.7,
-      2075.89,
-      2068.49,
-      2059.95,
-      2083.79,
-      2083.35,
-      2101.89,
-      2107.91,
-      2119.87,
-      2118.0,
-      2104.3
-     ]
-    },
-    "AXISBANK": {
-     "id": "AXISBANK",
-     "kind": "stock",
-     "sym": "AXISBANK",
-     "name": "Axis Bank · NSE",
-     "last": 1162.9,
-     "chg_pct": 0.47,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      1153.31,
-      1157.32,
-      1161.72,
-      1165.2,
-      1170.55,
-      1171.62,
-      1180.49,
-      1175.55,
-      1167.79,
-      1168.77,
-      1166.83,
-      1160.81,
-      1142.65,
-      1144.63,
-      1140.54,
-      1136.6,
-      1135.18,
-      1138.61,
-      1140.95,
-      1147.15,
-      1150.65,
-      1164.46,
-      1172.96,
-      1162.9
-     ]
-    },
-    "HCLTECH": {
-     "id": "HCLTECH",
-     "kind": "stock",
-     "sym": "HCLTECH",
-     "name": "HCL Technologies · NSE",
-     "last": 1702.15,
-     "chg_pct": -0.64,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      1743.13,
-      1737.06,
-      1737.71,
-      1738.59,
-      1731.05,
-      1739.0,
-      1720.23,
-      1718.25,
-      1715.8,
-      1703.04,
-      1693.61,
-      1690.71,
-      1684.73,
-      1689.43,
-      1688.61,
-      1687.04,
-      1692.19,
-      1719.56,
-      1712.46,
-      1730.23,
-      1744.82,
-      1749.02,
-      1749.29,
-      1702.15
-     ]
-    },
-    "WIPRO": {
-     "id": "WIPRO",
-     "kind": "stock",
-     "sym": "WIPRO",
-     "name": "Wipro · NSE",
-     "last": 268.35,
-     "chg_pct": -0.89,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      267.93,
-      269.43,
-      272.56,
-      272.52,
-      273.97,
-      274.68,
-      276.6,
-      276.28,
-      275.38,
-      274.43,
-      272.95,
-      269.13,
-      270.26,
-      266.88,
-      267.1,
-      266.87,
-      265.09,
-      267.79,
-      267.79,
-      269.32,
-      269.78,
-      272.52,
-      272.24,
-      268.35
-     ]
-    },
-    "NIFTY": {
-     "id": "NIFTY",
+    "NIFTY50": {
+     "id": "NIFTY50",
      "kind": "index",
      "sym": "NIFTY 50",
+     "code": "NIFTY50",
      "name": "Index · NSE",
-     "last": 24512.35,
-     "chg_pct": 0.42,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      24794.74,
-      24863.45,
-      24827.99,
-      24623.78,
-      24489.57,
-      24202.33,
-      24188.58,
-      23999.5,
-      23948.56,
-      23943.14,
-      23981.58,
-      23984.91,
-      24189.88,
-      24138.61,
-      24252.77,
-      24589.59,
-      24648.48,
-      24901.75,
-      24858.84,
-      24871.33,
-      24849.59,
-      24644.46,
-      24701.47,
-      24512.35
-     ]
-    },
-    "BANKNIFTY": {
-     "id": "BANKNIFTY",
-     "kind": "index",
-     "sym": "BANKNIFTY",
-     "name": "Index · NSE",
-     "last": 52218.6,
-     "chg_pct": -0.18,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "fno": true,
-     "spark": [
-      52880.04,
-      52893.77,
-      53025.01,
-      52931.25,
-      53036.04,
-      52926.67,
-      52776.27,
-      52693.28,
-      51892.55,
-      51655.65,
-      51349.46,
-      51448.74,
-      51349.51,
-      51092.44,
-      51383.66,
-      51534.59,
-      51733.88,
-      52187.42,
-      52272.27,
-      52599.54,
-      52892.17,
-      53065.76,
-      53221.21,
-      52218.6
-     ]
+     "last": 22776.1,
+     "chg_pct": 0.98,
+     "chg_5d_pct": -0.02,
+     "source": "close",
+     "as_of": "2026-10-06T10:00:00Z",
+     "fno": true
     },
     "INDIAVIX": {
      "id": "INDIAVIX",
      "kind": "index",
      "sym": "INDIA VIX",
+     "code": "INDIAVIX",
      "name": "Volatility index · NSE",
-     "last": 13.21,
-     "chg_pct": -2.65,
-     "source": "stock_run",
-     "as_of": "2026-10-12T09:40:00Z",
-     "spark": [
-      13.31,
-      13.4,
-      13.39,
-      13.48,
-      13.51,
-      13.72,
-      13.77,
-      13.71,
-      13.85,
-      13.84,
-      13.86,
-      13.83,
-      13.75,
-      13.67,
-      13.54,
-      13.46,
-      13.42,
-      13.38,
-      13.31,
-      13.4,
-      13.35,
-      13.38,
-      13.5,
-      13.21
-     ]
+     "last": 13.61,
+     "chg_pct": -7.92,
+     "chg_5d_pct": -0.22,
+     "source": "close",
+     "as_of": "2026-10-06T10:00:00Z",
+     "fno": false
     },
-    "NIFTY-FUT-OCT": {
-     "id": "NIFTY-FUT-OCT",
+    "NIFTY26OCTFUT": {
+     "id": "NIFTY26OCTFUT",
      "kind": "future",
      "sym": "NIFTY 27 OCT FUT",
+     "code": "NIFTY26OCTFUT",
      "name": "Future · lot 75",
-     "last": 24586.1,
-     "chg_pct": 0.39,
+     "last": 22842.15,
+     "chg_pct": 0.95,
      "source": "eod",
-     "as_of": "2026-10-09T12:30:00Z",
-     "underlying": "NIFTY",
-     "lot": 75
-    },
-    "NIFTY-24500CE-OCT": {
-     "id": "NIFTY-24500CE-OCT",
-     "kind": "option",
-     "sym": "NIFTY 27 OCT 24500 CE",
-     "name": "Option · lot 75",
-     "last": 182.4,
-     "chg_pct": -12.3,
-     "source": "snap3pm",
-     "as_of": "2026-10-12T09:30:00Z",
+     "as_of": "2026-10-06T12:30:00Z",
      "underlying": "NIFTY",
      "lot": 75,
-     "bid": 181.6,
-     "ask": 183.1,
-     "iv": 12.8,
-     "held": {
-      "account": "fno-b2",
-      "qty": -75,
-      "avg": 214.0,
-      "structure": "Short iron fly 24500 ±300"
-     }
+     "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
-    "NIFTY-24500PE-OCT": {
-     "id": "NIFTY-24500PE-OCT",
+    "NIFTY26OCT22800CE": {
+     "id": "NIFTY26OCT22800CE",
      "kind": "option",
-     "sym": "NIFTY 27 OCT 24500 PE",
+     "sym": "NIFTY 27 OCT 22800 CE",
+     "code": "NIFTY26OCT22800CE",
      "name": "Option · lot 75",
-     "last": 151.75,
-     "chg_pct": 9.8,
+     "last": 281.4,
+     "chg_pct": 21.3,
+     "bid": 280.6,
+     "ask": 282.1,
+     "iv": 13.1,
      "source": "snap3pm",
-     "as_of": "2026-10-12T09:30:00Z",
+     "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
      "lot": 75,
-     "bid": 151.0,
-     "ask": 152.4,
-     "iv": 13.4,
-     "held": {
-      "account": "fno-b2",
-      "qty": -75,
-      "avg": 166.5,
-      "structure": "Short iron fly 24500 ±300"
-     }
+     "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
-    "NIFTY-24800CE-OCT": {
-     "id": "NIFTY-24800CE-OCT",
+    "NIFTY26OCT22800PE": {
+     "id": "NIFTY26OCT22800PE",
      "kind": "option",
-     "sym": "NIFTY 27 OCT 24800 CE",
+     "sym": "NIFTY 27 OCT 22800 PE",
+     "code": "NIFTY26OCT22800PE",
      "name": "Option · lot 75",
-     "last": 68.2,
-     "chg_pct": -15.1,
+     "last": 292.75,
+     "chg_pct": -24.6,
+     "bid": 292.0,
+     "ask": 293.5,
+     "iv": 13.6,
      "source": "snap3pm",
-     "as_of": "2026-10-12T09:30:00Z",
+     "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
      "lot": 75,
-     "bid": 67.9,
-     "ask": 68.5,
-     "iv": 12.1
+     "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
-    "NIFTY-24200PE-OCT": {
-     "id": "NIFTY-24200PE-OCT",
+    "NIFTY26OCT23100CE": {
+     "id": "NIFTY26OCT23100CE",
      "kind": "option",
-     "sym": "NIFTY 27 OCT 24200 PE",
+     "sym": "NIFTY 27 OCT 23100 CE",
+     "code": "NIFTY26OCT23100CE",
      "name": "Option · lot 75",
-     "last": 61.35,
-     "chg_pct": 11.4,
+     "last": 158.2,
+     "chg_pct": 26.8,
+     "bid": 157.7,
+     "ask": 158.8,
+     "iv": 12.7,
      "source": "snap3pm",
-     "as_of": "2026-10-12T09:30:00Z",
+     "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
      "lot": 75,
-     "bid": 61.0,
-     "ask": 61.7,
-     "iv": 14.2
+     "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
-    "BANKNIFTY-FUT-OCT": {
-     "id": "BANKNIFTY-FUT-OCT",
-     "kind": "future",
-     "sym": "BANKNIFTY 27 OCT FUT",
-     "name": "Future · lot 35",
-     "last": 52388.0,
-     "chg_pct": -0.21,
-     "source": "eod",
-     "as_of": "2026-10-09T12:30:00Z",
-     "underlying": "BANKNIFTY",
-     "lot": 35
-    },
-    "BANKNIFTY-52000PE-NOV": {
-     "id": "BANKNIFTY-52000PE-NOV",
+    "NIFTY26OCT23300CE": {
+     "id": "NIFTY26OCT23300CE",
      "kind": "option",
-     "sym": "BANKNIFTY 24 NOV 52000 PE",
-     "name": "Option · lot 35",
-     "last": 702.1,
-     "chg_pct": 4.1,
-     "source": "eod",
-     "as_of": "2026-10-08T12:30:00Z",
-     "underlying": "BANKNIFTY",
-     "lot": 35,
-     "note": "No trades on 9 Oct: the last end-of-day price is from 8 Oct."
+     "sym": "NIFTY 27 OCT 23300 CE",
+     "code": "NIFTY26OCT23300CE",
+     "name": "Option · lot 75",
+     "last": 92.4,
+     "chg_pct": 29.5,
+     "bid": 92.0,
+     "ask": 92.8,
+     "iv": 12.4,
+     "source": "snap3pm",
+     "as_of": "2026-10-07T09:30:00Z",
+     "underlying": "NIFTY",
+     "lot": 75,
+     "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
-    "RELIANCE-FUT-OCT": {
-     "id": "RELIANCE-FUT-OCT",
-     "kind": "future",
-     "sym": "RELIANCE 27 OCT FUT",
-     "name": "Future · lot 500",
-     "last": 1224.3,
-     "chg_pct": 2.58,
+    "NIFTY26OCT22500PE": {
+     "id": "NIFTY26OCT22500PE",
+     "kind": "option",
+     "sym": "NIFTY 27 OCT 22500 PE",
+     "code": "NIFTY26OCT22500PE",
+     "name": "Option · lot 75",
+     "last": 168.35,
+     "chg_pct": -27.1,
+     "bid": 167.8,
+     "ask": 168.9,
+     "iv": 14.4,
+     "source": "snap3pm",
+     "as_of": "2026-10-07T09:30:00Z",
+     "underlying": "NIFTY",
+     "lot": 75,
+     "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
+    },
+    "NIFTY26NOV22000PE": {
+     "id": "NIFTY26NOV22000PE",
+     "kind": "option",
+     "sym": "NIFTY 23 NOV 22000 PE",
+     "code": "NIFTY26NOV22000PE",
+     "name": "Option · lot 75",
+     "last": 196.1,
+     "chg_pct": -9.4,
+     "bid": null,
+     "ask": null,
+     "iv": null,
      "source": "eod",
-     "as_of": "2026-10-09T12:30:00Z",
-     "underlying": "RELIANCE",
-     "lot": 500
+     "as_of": "2026-10-01T12:30:00Z",
+     "underlying": "NIFTY",
+     "lot": 75,
+     "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet.",
+     "note": "No trades since 1 Oct: the last end-of-day price is old."
     }
+   },
+   "status": {
+    "session_date": "2026-10-07",
+    "regime": "EVENT_HEAVY",
+    "runs": {
+     "pre_open": {
+      "at": "2026-10-07T02:10:00Z",
+      "ok": true
+     },
+     "intraday": [
+      {
+       "at": "2026-10-07T05:43:00Z",
+       "ok": true
+      }
+     ],
+     "post_close": {
+      "at": null,
+      "ok": null,
+      "next_at": "2026-10-07T12:15:00Z"
+     },
+     "news": {
+      "at": "2026-10-07T10:17:00Z",
+      "ok": true,
+      "new_items": 37
+     }
+    },
+    "open_utc": "2026-10-07T03:45:00Z",
+    "close_utc": "2026-10-07T10:00:00Z",
+    "next_open_utc": "2026-10-08T03:45:00Z",
+    "example_open_now": "2026-10-07T05:43:00Z"
    },
    "watchlists": [
     {
-     "name": "Core",
+     "name": "Tracked companies",
      "items": [
-      "NIFTY",
-      "RELIANCE",
       "HDFCBANK",
-      "MARUTI",
       "INDIGO",
-      "INFY",
-      "TCS",
-      "ICICIBANK",
-      "SBIN",
-      "NIFTY-24800CE-OCT",
-      "NIFTY-24500PE-OCT"
+      "MARUTI",
+      "RELIANCE"
      ]
-    },
-    {
-     "name": "F&O desk",
-     "items": [
-      "NIFTY",
-      "INDIAVIX",
-      "NIFTY-FUT-OCT",
-      "NIFTY-24500CE-OCT",
-      "NIFTY-24500PE-OCT",
-      "NIFTY-24800CE-OCT",
-      "NIFTY-24200PE-OCT",
-      "BANKNIFTY",
-      "BANKNIFTY-FUT-OCT",
-      "BANKNIFTY-52000PE-NOV",
-      "RELIANCE-FUT-OCT"
-     ]
-    },
-    {
-     "name": "Banks",
-     "items": [
-      "BANKNIFTY",
-      "HDFCBANK",
-      "ICICIBANK",
-      "SBIN",
-      "KOTAKBANK",
-      "AXISBANK"
-     ]
-    },
-    {
-     "name": "Results week",
-     "items": [
-      "INFY",
-      "TCS",
-      "HCLTECH",
-      "WIPRO"
-     ]
-    },
-    {
-     "name": "List 5",
-     "items": []
     }
    ],
    "accounts": {
     "manual-in": {
-     "name": "Manual (paper)",
+     "name": "Your paper account",
      "kind": "manual",
+     "approach": "manual",
      "currency": "INR",
-     "capital": 500000,
-     "cash": 451334.77,
+     "capital": 500000.0,
+     "cash": 440900.0,
      "open_structures": 0,
-     "at_risk": 0
+     "at_risk": 0,
+     "capital_note": "Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
     },
-    "stock-in": {
-     "name": "Stock tool paper portfolio",
+    "h2h-rule-india": {
+     "name": "Rule-based · stocks",
      "kind": "strategy",
+     "approach": "rule",
+     "currency": "INR"
+    },
+    "h2h-ai-india": {
+     "name": "AI-based · stocks",
+     "kind": "strategy",
+     "approach": "ai",
      "currency": "INR"
     },
     "fno-b1": {
-     "name": "F&O Book 1",
+     "name": "Rule-based · F&O Book 1",
      "kind": "strategy",
+     "approach": "rule",
      "currency": "INR"
     },
     "fno-b2": {
-     "name": "F&O Book 2",
+     "name": "Hybrid (rule + AI) · F&O Book 2",
      "kind": "strategy",
+     "approach": "hybrid",
      "currency": "INR"
     },
     "fno-b3": {
-     "name": "F&O Book 3",
+     "name": "AI-based · F&O Book 3",
      "kind": "strategy",
+     "approach": "ai",
      "currency": "INR"
     }
    },
+   "signals": [
+    {
+     "id": "RELIANCE",
+     "family": "ai",
+     "strategy_id": "ai.combined.opus.v1",
+     "strategy": "AI combined A",
+     "pick_rules": [
+      "best_expected_gain",
+      "highest_probability"
+     ],
+     "horizon": 5,
+     "prob_up": 0.605,
+     "move_pct": 3.705,
+     "loss_pct": 3.3976,
+     "costs_pct": 1.99,
+     "exp_gain_pct": -1.0905,
+     "amount": 100000.0,
+     "agree": {
+      "buy": 13,
+      "of": 15,
+      "by_family": {
+       "rule": {
+        "buy": 6,
+        "of": 8
+       },
+       "baseline": {
+        "buy": 3,
+        "of": 3
+       },
+       "ai": {
+        "buy": 4,
+        "of": 4
+       }
+      }
+     },
+     "record": {
+      "trades": 2,
+      "win_rate": 0.5,
+      "net_pnl": -2151.8,
+      "badge": "too_few_to_rank"
+     }
+    },
+    {
+     "id": "RELIANCE",
+     "family": "rule",
+     "strategy_id": "rule.model_news.v1",
+     "strategy": "Model + news",
+     "pick_rules": [
+      "best_expected_gain",
+      "highest_probability"
+     ],
+     "horizon": 5,
+     "prob_up": 0.575,
+     "move_pct": 3.3328,
+     "loss_pct": 3.1132,
+     "costs_pct": 1.99,
+     "exp_gain_pct": -1.3967,
+     "amount": 100000.0,
+     "agree": {
+      "buy": 13,
+      "of": 15,
+      "by_family": {
+       "rule": {
+        "buy": 6,
+        "of": 8
+       },
+       "baseline": {
+        "buy": 3,
+        "of": 3
+       },
+       "ai": {
+        "buy": 4,
+        "of": 4
+       }
+      }
+     },
+     "record": {
+      "trades": 3,
+      "win_rate": 0.3333,
+      "net_pnl": -3764.15,
+      "badge": "too_few_to_rank"
+     }
+    }
+   ],
+   "no_pick": [
+    "HDFCBANK"
+   ],
+   "default_amount": 100000.0,
+   "go_live": {
+    "proven": false,
+    "months_forward": 0.2,
+    "trades_needed": 294,
+    "beats_best_baseline": false
+   },
+   "recent": [
+    "HDFCBANK",
+    "MARUTI",
+    "RELIANCE"
+   ],
+   "search_extra": [
+    {
+     "kind": "strategy",
+     "label": "Model + news",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + half news",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + double news",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + confirmed news only",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + major news only",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + news + global cues",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + news, calm markets only",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + news, 60% bar",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Always buy",
+     "sub": "Strategy · Baselines"
+    },
+    {
+     "kind": "strategy",
+     "label": "Follow yesterday",
+     "sub": "Strategy · Baselines"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model without news",
+     "sub": "Strategy · Baselines"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI news & results",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI price pattern & mood",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI combined B",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI combined A",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "news",
+     "label": "ICICI Bank Q2 Results FY27: NII, NIM and Asset Quality in Focus Before Oct 17",
+     "sub": "News · NiftyTrader · ICICIBANK"
+    },
+    {
+     "kind": "news",
+     "label": "Trade Idea of The Day - Dr. Reddy's Laboratories Ltd Target Rs.45 - Religare Broking Ltd",
+     "sub": "News · Investment Guru India · DRREDDY"
+    },
+    {
+     "kind": "news",
+     "label": "HDFC Life Insurance to host H1FY27 earnings call on Oct 15 at 4:15 pm",
+     "sub": "News · scanx.trade · HDFCLIFE"
+    },
+    {
+     "kind": "news",
+     "label": "Oil India, BPCL, HPCL, IOCL, ONGC, Petronet LNG: Oil & Gas Q2 results preview",
+     "sub": "News · ET EnergyWorld · ONGC"
+    },
+    {
+     "kind": "news",
+     "label": "Jio Platforms plans IPO. Reliance Industries stock sits 24.42 percent below its high",
+     "sub": "News · AD HOC NEWS · RELIANCE"
+    },
+    {
+     "kind": "news",
+     "label": "Not just RIL, Jio's ₹11 trn IPO could benefit Airtel investors; here's why",
+     "sub": "News · Business Standard Markets · RELIANCE"
+    },
+    {
+     "kind": "news",
+     "label": "Can strong Jio growth bring back momentum in Mukesh Ambani-led Reliance stock as Jio IPO buzz gathers pace?",
+     "sub": "News · ET Now · market"
+    },
+    {
+     "kind": "news",
+     "label": "L&T Secures Power Transmission Orders Across Saudi Arabia, UAE, India",
+     "sub": "News · Energetica India Magazine · LT"
+    },
+    {
+     "kind": "news",
+     "label": "Jio Platforms likely to launch IPO on October 21, seeks to raise $3.8 bn",
+     "sub": "News · Business Standard Companies · RELIANCE"
+    },
+    {
+     "kind": "news",
+     "label": "Can a new CEO solve HDFC Bank's problems?",
+     "sub": "News · Finshots · HDFCBANK"
+    },
+    {
+     "kind": "news",
+     "label": "West Asia Conflict: India condemns attack on MT On Peace vessel; MEA reiterates maritime security, 17 Indians injured",
+     "sub": "News · Organiser Weekly · market"
+    },
+    {
+     "kind": "news",
+     "label": "Titan Q2 FY27: Growth Moderates to 25% From 41% as Jewellery Buyers Lag",
+     "sub": "News · NiftyTrader · market"
+    }
+   ],
    "limits": {
     "max_loss_per_trade": 10000,
     "max_open_structures": 3,
     "max_at_risk": 30000
    },
    "charges": {
-    "label": "Mock rates (the C1 charges code supplies the real schedule)",
+    "label": "Example rates (the C1 charges code supplies the real schedule)",
     "equity_delivery": {
      "brokerage_flat": 20,
      "stt_pct": 0.1,
@@ -841,24 +713,103 @@
    },
    "short_option_margin_per_lot": 118000,
    "next_quotes": {
-    "stock": "the stock tool's next price check (next session's first run, 13 Oct about 09:45 IST)",
-    "option": "the next 3 pm snapshot (13 Oct)"
+    "stock": "the stock tool's next price check (8 Oct, first run after 09:15 IST)",
+    "option": "the next 3 pm snapshot (8 Oct)"
    },
-   "recent": [
-    "RELIANCE",
-    "NIFTY-24500CE-OCT",
-    "HDFCBANK"
-   ]
+   "fno_example": {
+    "note": "EXAMPLE state, not today: how F&O signals look once a book's strategy has passed testing. EXAMPLE value: the F&O tool's read model is not in this repository yet.",
+    "rows": [
+     {
+      "basket": "IFLY-22800",
+      "family": "hybrid",
+      "strategy": "F&O Book 2 (example)",
+      "name": "NIFTY 27 Oct short iron fly 22800 ±300",
+      "pop": 61,
+      "max_loss": 4132.5,
+      "credit": 18367.5
+     },
+     {
+      "basket": "BCS-22800-23100",
+      "family": "rule",
+      "strategy": "F&O Book 1 (example)",
+      "name": "NIFTY 27 Oct bull call spread 22800 / 23100",
+      "pop": 43,
+      "max_loss": 9330.0,
+      "debit": 9330.0
+     }
+    ],
+    "baskets": {
+     "IFLY-22800": {
+      "name": "NIFTY 27 Oct short iron fly 22800 ±300",
+      "kind": "credit",
+      "width": 300,
+      "pop": 61,
+      "breakevens": [
+       22555.1,
+       23044.9
+      ],
+      "margin_per_lot": 52000,
+      "legs": [
+       {
+        "id": "NIFTY26OCT22800CE",
+        "side": "sell",
+        "lots": 1
+       },
+       {
+        "id": "NIFTY26OCT22800PE",
+        "side": "sell",
+        "lots": 1
+       },
+       {
+        "id": "NIFTY26OCT23100CE",
+        "side": "buy",
+        "lots": 1
+       },
+       {
+        "id": "NIFTY26OCT22500PE",
+        "side": "buy",
+        "lots": 1
+       }
+      ]
+     },
+     "BCS-22800-23100": {
+      "name": "NIFTY 27 Oct bull call spread 22800 / 23100",
+      "kind": "debit",
+      "width": 300,
+      "pop": 43,
+      "breakevens": [
+       22924.4
+      ],
+      "margin_per_lot": 0,
+      "legs": [
+       {
+        "id": "NIFTY26OCT22800CE",
+        "side": "buy",
+        "lots": 1
+       },
+       {
+        "id": "NIFTY26OCT23100CE",
+        "side": "sell",
+        "lots": 1
+       }
+      ]
+     }
+    }
+   },
+   "fno_state": {
+    "approved": false,
+    "note": "No F&O strategy has passed testing yet: Experiment 1 has not run, so at 3 pm each F&O book recorded “no approved strategy”."
+   }
   },
   "us": {
    "label": "US",
+   "exchange": "US (NYSE/Nasdaq)",
    "currency": "USD",
    "zone": "ET",
    "offset_min": -240,
    "fno": false,
    "indices": [
-    "SPX",
-    "NDX",
+    "SPY",
     "VIX"
    ],
    "items": {
@@ -866,546 +817,525 @@
      "id": "AAPL",
      "kind": "stock",
      "sym": "AAPL",
+     "code": "AAPL",
      "name": "Apple · NASDAQ",
      "last": 333.63,
      "chg_pct": 0.22,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
+     "source": "close",
+     "as_of": "2026-10-06T20:00:00Z",
+     "state": "active",
+     "spark": [
+      309.9,
+      313.45,
+      314.58,
+      319.7,
+      316.85,
+      325.13,
+      324.96,
+      328.21,
+      319.97,
+      316.22,
+      315.34,
+      326.57,
+      332.27,
+      333.08,
+      331.34,
+      332.41,
+      337.0,
+      336.13,
+      338.98,
+      339.75,
+      337.02,
+      335.92,
+      341.07,
+      338.4,
+      329.4,
+      333.02,
+      330.32,
+      333.69,
+      332.89,
+      333.63
+     ],
+     "fno": false,
      "held": {
       "account": "manual-us",
-      "qty": 6,
-      "avg": 329.1
-     },
-     "spark": [
-      331.22,
-      332.79,
-      334.43,
-      337.63,
-      336.85,
-      339.78,
-      338.12,
-      336.86,
-      335.78,
-      335.44,
-      334.79,
-      333.54,
-      328.39,
-      330.32,
-      327.78,
-      325.3,
-      326.73,
-      326.36,
-      330.52,
-      329.98,
-      330.71,
-      332.35,
-      335.33,
-      333.63
-     ]
-    },
-    "NVDA": {
-     "id": "NVDA",
-     "kind": "stock",
-     "sym": "NVDA",
-     "name": "Nvidia · NASDAQ",
-     "last": 239.24,
-     "chg_pct": 0.14,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      236.76,
-      239.06,
-      240.51,
-      242.1,
-      242.34,
-      242.75,
-      243.11,
-      242.79,
-      240.92,
-      240.01,
-      238.56,
-      239.05,
-      237.7,
-      234.72,
-      234.29,
-      235.9,
-      235.32,
-      233.72,
-      235.77,
-      238.27,
-      239.05,
-      239.3,
-      242.03,
-      239.24
-     ]
-    },
-    "JPM": {
-     "id": "JPM",
-     "kind": "stock",
-     "sym": "JPM",
-     "name": "JPMorgan Chase · NYSE",
-     "last": 331.28,
-     "chg_pct": -0.33,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "held": {
-      "account": "stock-us",
-      "qty": 3,
-      "avg": 334.9
-     },
-     "spark": [
-      331.34,
-      334.44,
-      335.78,
-      334.48,
-      337.45,
-      339.14,
-      339.74,
-      339.02,
-      338.01,
-      334.25,
-      333.33,
-      330.55,
-      331.5,
-      330.14,
-      326.6,
-      325.9,
-      325.55,
-      325.59,
-      326.51,
-      328.24,
-      333.48,
-      334.42,
-      334.5,
-      331.28
-     ]
+      "qty": 3.0,
+      "avg": 330.8
+     }
     },
     "DAL": {
      "id": "DAL",
      "kind": "stock",
      "sym": "DAL",
+     "code": "DAL",
      "name": "Delta Air Lines · NYSE",
      "last": 83.66,
-     "chg_pct": 1.2,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      81.69,
-      81.02,
-      82.18,
-      81.78,
-      82.49,
-      82.68,
-      83.51,
-      84.07,
-      84.46,
-      84.27,
-      83.58,
-      83.79,
-      83.88,
-      83.16,
-      82.16,
-      82.54,
-      81.18,
-      81.82,
-      81.36,
-      80.99,
-      81.52,
-      81.85,
-      82.32,
-      83.66
-     ]
+     "chg_pct": 0.0,
+     "source": "close",
+     "as_of": "2026-10-06T20:00:00Z",
+     "state": "inactive",
+     "spark": null,
+     "fno": false,
+     "note": "No longer tracked by the stock tool (inactive): the price is its last recorded close."
     },
-    "MSFT": {
-     "id": "MSFT",
+    "JPM": {
+     "id": "JPM",
      "kind": "stock",
-     "sym": "MSFT",
-     "name": "Microsoft · NASDAQ",
-     "last": 512.4,
-     "chg_pct": -0.41,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
+     "sym": "JPM",
+     "code": "JPM",
+     "name": "JPMorgan · NYSE",
+     "last": 331.28,
+     "chg_pct": -0.33,
+     "source": "close",
+     "as_of": "2026-10-06T20:00:00Z",
+     "state": "active",
      "spark": [
-      508.33,
-      507.82,
-      511.43,
-      509.82,
-      512.4,
-      518.22,
-      521.92,
-      524.04,
-      522.59,
-      526.47,
-      523.91,
-      519.22,
-      521.73,
-      517.1,
-      513.38,
-      512.33,
-      506.09,
-      505.84,
-      504.27,
-      508.0,
-      509.02,
-      507.87,
-      511.59,
-      512.4
-     ]
+      356.69,
+      356.5,
+      354.22,
+      357.62,
+      356.02,
+      354.95,
+      356.22,
+      362.06,
+      358.64,
+      353.51,
+      354.71,
+      353.56,
+      356.23,
+      350.13,
+      352.49,
+      348.92,
+      349.31,
+      349.67,
+      352.04,
+      340.0,
+      337.53,
+      338.56,
+      343.06,
+      336.59,
+      334.98,
+      330.83,
+      333.18,
+      332.38,
+      332.38,
+      331.28
+     ],
+     "fno": false
     },
-    "AMZN": {
-     "id": "AMZN",
+    "NVDA": {
+     "id": "NVDA",
      "kind": "stock",
-     "sym": "AMZN",
-     "name": "Amazon · NASDAQ",
-     "last": 241.1,
-     "chg_pct": 0.88,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
+     "sym": "NVDA",
+     "code": "NVDA",
+     "name": "Nvidia · NASDAQ",
+     "last": 239.24,
+     "chg_pct": 0.14,
+     "source": "close",
+     "as_of": "2026-10-06T20:00:00Z",
+     "state": "active",
      "spark": [
-      234.53,
-      234.89,
-      236.73,
-      237.18,
-      240.24,
-      241.01,
-      242.57,
-      243.54,
-      244.2,
-      241.85,
-      242.62,
-      241.78,
-      240.1,
-      240.43,
-      238.97,
-      238.23,
-      235.46,
-      236.32,
-      234.81,
-      235.75,
-      236.47,
-      236.79,
-      237.9,
-      241.1
-     ]
+      213.05,
+      209.66,
+      227.98,
+      217.55,
+      220.78,
+      217.44,
+      224.41,
+      228.45,
+      230.36,
+      225.73,
+      223.67,
+      218.36,
+      218.29,
+      210.96,
+      212.17,
+      213.9,
+      219.34,
+      222.27,
+      227.38,
+      228.87,
+      225.51,
+      224.58,
+      225.07,
+      228.86,
+      227.21,
+      228.38,
+      230.86,
+      233.95,
+      238.9,
+      239.24
+     ],
+     "fno": false
     },
-    "GOOGL": {
-     "id": "GOOGL",
-     "kind": "stock",
-     "sym": "GOOGL",
-     "name": "Alphabet · NASDAQ",
-     "last": 268.75,
-     "chg_pct": 0.61,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      264.78,
-      267.73,
-      269.36,
-      271.75,
-      271.76,
-      272.2,
-      272.93,
-      271.05,
-      272.22,
-      268.17,
-      266.47,
-      266.38,
-      265.64,
-      262.91,
-      264.25,
-      260.86,
-      263.82,
-      263.27,
-      263.72,
-      265.43,
-      266.99,
-      266.58,
-      269.54,
-      268.75
-     ]
-    },
-    "META": {
-     "id": "META",
-     "kind": "stock",
-     "sym": "META",
-     "name": "Meta Platforms · NASDAQ",
-     "last": 781.2,
-     "chg_pct": -0.95,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      778.41,
-      777.52,
-      776.96,
-      781.08,
-      789.08,
-      793.66,
-      795.12,
-      802.85,
-      801.59,
-      798.35,
-      800.56,
-      799.13,
-      794.07,
-      789.05,
-      785.21,
-      779.38,
-      783.08,
-      778.65,
-      778.12,
-      774.07,
-      778.83,
-      782.36,
-      783.5,
-      781.2
-     ]
-    },
-    "BAC": {
-     "id": "BAC",
-     "kind": "stock",
-     "sym": "BAC",
-     "name": "Bank of America · NYSE",
-     "last": 52.14,
-     "chg_pct": -0.27,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      51.12,
-      51.55,
-      51.49,
-      51.79,
-      52.03,
-      52.4,
-      53.08,
-      52.87,
-      53.47,
-      52.92,
-      53.22,
-      52.83,
-      53.09,
-      52.24,
-      52.28,
-      51.78,
-      51.58,
-      51.66,
-      51.44,
-      51.52,
-      51.43,
-      51.58,
-      52.02,
-      52.14
-     ]
-    },
-    "WFC": {
-     "id": "WFC",
-     "kind": "stock",
-     "sym": "WFC",
-     "name": "Wells Fargo · NYSE",
-     "last": 84.02,
-     "chg_pct": 0.12,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      82.76,
-      82.22,
-      82.66,
-      83.29,
-      83.69,
-      84.0,
-      84.53,
-      84.85,
-      84.96,
-      85.7,
-      85.78,
-      84.77,
-      85.04,
-      84.65,
-      83.97,
-      82.95,
-      83.27,
-      82.87,
-      82.34,
-      81.95,
-      82.58,
-      83.02,
-      83.15,
-      84.02
-     ]
-    },
-    "SPX": {
-     "id": "SPX",
+    "SPY": {
+     "id": "SPY",
      "kind": "index",
-     "sym": "S&P 500",
-     "name": "Index",
-     "last": 6812.4,
-     "chg_pct": 0.31,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      6779.61,
-      6812.62,
-      6801.3,
-      6882.86,
-      6929.67,
-      6894.0,
-      6935.09,
-      6901.03,
-      6900.4,
-      6886.09,
-      6783.63,
-      6815.29,
-      6753.92,
-      6669.6,
-      6684.14,
-      6698.44,
-      6677.09,
-      6706.45,
-      6716.96,
-      6712.69,
-      6807.41,
-      6835.25,
-      6874.19,
-      6812.4
-     ]
-    },
-    "NDX": {
-     "id": "NDX",
-     "kind": "index",
-     "sym": "NASDAQ COMP",
-     "name": "Index",
-     "last": 23104.9,
-     "chg_pct": 0.52,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      23159.87,
-      23297.8,
-      23431.2,
-      23454.41,
-      23480.92,
-      23240.67,
-      23059.2,
-      23019.41,
-      22846.42,
-      22885.89,
-      22732.05,
-      22635.03,
-      22626.02,
-      22500.72,
-      22704.81,
-      22702.71,
-      22948.17,
-      22990.2,
-      23100.39,
-      23074.7,
-      23166.52,
-      23326.8,
-      23393.22,
-      23104.9
-     ]
+     "sym": "SPY",
+     "code": "SPY",
+     "name": "S&P 500 ETF · NYSE Arca",
+     "last": 779.09,
+     "chg_pct": 0.55,
+     "chg_5d_pct": 1.95,
+     "source": "close",
+     "as_of": "2026-10-06T20:00:00Z",
+     "fno": false
     },
     "VIX": {
      "id": "VIX",
      "kind": "index",
      "sym": "VIX",
-     "name": "Volatility index · Cboe",
+     "code": "VIX",
+     "name": "VIX · Cboe",
      "last": 15.01,
      "chg_pct": -3.29,
-     "source": "us_close",
-     "as_of": "2026-10-09T20:00:00Z",
-     "spark": [
-      15.18,
-      15.26,
-      15.32,
-      15.38,
-      15.55,
-      15.59,
-      15.77,
-      15.8,
-      15.77,
-      15.76,
-      15.77,
-      15.77,
-      15.71,
-      15.65,
-      15.57,
-      15.46,
-      15.29,
-      15.27,
-      15.26,
-      15.27,
-      15.27,
-      15.24,
-      15.42,
-      15.01
-     ]
+     "chg_5d_pct": -6.42,
+     "source": "close",
+     "as_of": "2026-10-06T20:00:00Z",
+     "fno": false
     }
+   },
+   "status": {
+    "session_date": "2026-10-07",
+    "regime": "TRENDING",
+    "runs": {
+     "pre_open": {
+      "at": "2026-10-07T11:45:00Z",
+      "ok": true
+     },
+     "intraday": [],
+     "post_close": {
+      "at": null,
+      "ok": null,
+      "next_at": "2026-10-07T22:15:00Z"
+     },
+     "news": {
+      "at": "2026-10-07T08:47:00Z",
+      "ok": true,
+      "new_items": 52
+     }
+    },
+    "open_utc": "2026-10-07T13:30:00Z",
+    "close_utc": "2026-10-07T20:00:00Z",
+    "next_open_utc": "2026-10-07T13:30:00Z",
+    "example_open_now": "2026-10-07T14:30:00Z"
    },
    "watchlists": [
     {
-     "name": "Core",
+     "name": "Tracked companies",
      "items": [
-      "SPX",
       "AAPL",
-      "NVDA",
-      "JPM",
       "DAL",
-      "MSFT",
-      "AMZN"
-     ]
-    },
-    {
-     "name": "Big tech",
-     "items": [
-      "NDX",
-      "AAPL",
-      "MSFT",
-      "NVDA",
-      "GOOGL",
-      "META",
-      "AMZN"
-     ]
-    },
-    {
-     "name": "Banks",
-     "items": [
       "JPM",
-      "BAC",
-      "WFC"
+      "NVDA"
      ]
-    },
-    {
-     "name": "Airlines",
-     "items": [
-      "DAL"
-     ]
-    },
-    {
-     "name": "List 5",
-     "items": []
     }
    ],
    "accounts": {
     "manual-us": {
-     "name": "Manual (paper)",
+     "name": "Your paper account",
      "kind": "manual",
+     "approach": "manual",
      "currency": "USD",
-     "capital": 6000,
-     "cash": 4025.4
+     "capital": 6000.0,
+     "cash": 5007.6,
+     "open_structures": 0,
+     "at_risk": 0,
+     "capital_note": "Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
     },
-    "stock-us": {
-     "name": "Stock tool paper portfolio",
+    "h2h-rule-us": {
+     "name": "Rule-based · stocks",
      "kind": "strategy",
+     "approach": "rule",
+     "currency": "USD"
+    },
+    "h2h-ai-us": {
+     "name": "AI-based · stocks",
+     "kind": "strategy",
+     "approach": "ai",
      "currency": "USD"
     }
    },
+   "signals": [
+    {
+     "id": "NVDA",
+     "family": "ai",
+     "strategy_id": "ai.combined.opus.v1",
+     "strategy": "AI combined A",
+     "pick_rules": [
+      "highest_probability"
+     ],
+     "horizon": 5,
+     "prob_up": 0.615,
+     "move_pct": 3.9597,
+     "loss_pct": 3.601,
+     "costs_pct": 0.234,
+     "exp_gain_pct": 0.8148,
+     "amount": 1000.0,
+     "agree": {
+      "buy": 14,
+      "of": 15,
+      "by_family": {
+       "rule": {
+        "buy": 7,
+        "of": 8
+       },
+       "baseline": {
+        "buy": 3,
+        "of": 3
+       },
+       "ai": {
+        "buy": 4,
+        "of": 4
+       }
+      }
+     },
+     "record": {
+      "trades": 2,
+      "win_rate": 1.0,
+      "net_pnl": 44.26,
+      "badge": "too_few_to_rank"
+     }
+    },
+    {
+     "id": "NVDA",
+     "family": "ai",
+     "strategy_id": "ai.combined.opus.v1",
+     "strategy": "AI combined A",
+     "pick_rules": [
+      "best_expected_gain"
+     ],
+     "horizon": 3,
+     "prob_up": 0.608,
+     "move_pct": 3.0544,
+     "loss_pct": 2.793,
+     "costs_pct": 0.234,
+     "exp_gain_pct": 0.5282,
+     "amount": 1000.0,
+     "agree": {
+      "buy": 14,
+      "of": 15,
+      "by_family": {
+       "rule": {
+        "buy": 7,
+        "of": 8
+       },
+       "baseline": {
+        "buy": 3,
+        "of": 3
+       },
+       "ai": {
+        "buy": 4,
+        "of": 4
+       }
+      }
+     },
+     "record": {
+      "trades": 2,
+      "win_rate": 1.0,
+      "net_pnl": 44.26,
+      "badge": "too_few_to_rank"
+     }
+    },
+    {
+     "id": "NVDA",
+     "family": "rule",
+     "strategy_id": "rule.model_news.v1",
+     "strategy": "Model + news",
+     "pick_rules": [
+      "best_expected_gain",
+      "highest_probability"
+     ],
+     "horizon": 5,
+     "prob_up": 0.585,
+     "move_pct": 3.5629,
+     "loss_pct": 3.2985,
+     "costs_pct": 0.234,
+     "exp_gain_pct": 0.4814,
+     "amount": 1000.0,
+     "agree": {
+      "buy": 14,
+      "of": 15,
+      "by_family": {
+       "rule": {
+        "buy": 7,
+        "of": 8
+       },
+       "baseline": {
+        "buy": 3,
+        "of": 3
+       },
+       "ai": {
+        "buy": 4,
+        "of": 4
+       }
+      }
+     },
+     "record": {
+      "trades": 4,
+      "win_rate": 1.0,
+      "net_pnl": 103.48,
+      "badge": "too_few_to_rank"
+     }
+    }
+   ],
+   "no_pick": [],
+   "default_amount": 1000.0,
+   "go_live": {
+    "proven": false,
+    "months_forward": 0.2,
+    "trades_needed": 290,
+    "beats_best_baseline": false
+   },
+   "recent": [
+    "AAPL",
+    "JPM",
+    "NVDA"
+   ],
+   "search_extra": [
+    {
+     "kind": "strategy",
+     "label": "Model + news",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + half news",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + double news",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + confirmed news only",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + major news only",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + news + global cues",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + news, calm markets only",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model + news, 60% bar",
+     "sub": "Strategy · Rule-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "Always buy",
+     "sub": "Strategy · Baselines"
+    },
+    {
+     "kind": "strategy",
+     "label": "Follow yesterday",
+     "sub": "Strategy · Baselines"
+    },
+    {
+     "kind": "strategy",
+     "label": "Model without news",
+     "sub": "Strategy · Baselines"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI news & results",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI price pattern & mood",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI combined B",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "strategy",
+     "label": "AI combined A",
+     "sub": "Strategy · AI-based"
+    },
+    {
+     "kind": "news",
+     "label": "GOOG, GOOGL Stock Notice: Alphabet Inc. Stock Plummeted 4% after AI Issues Disclosed - Securities Fraud Class Action Filed",
+     "sub": "News · PR Newswire · GOOGL"
+    },
+    {
+     "kind": "news",
+     "label": "Nvidia share price jumps nearly 30 per cent in 2026 as world's most valuable company heads for USD 6 trill",
+     "sub": "News · The Economic Times · NVDA"
+    },
+    {
+     "kind": "news",
+     "label": "Here are Tuesday's biggest analyst calls of the day: Nvidia, AMD, Procter & Gamble, Meta & more",
+     "sub": "News · CNBC · META, NVDA"
+    },
+    {
+     "kind": "news",
+     "label": "House China committee chair urges Fed to review Hong Kong’s access to dollar lifeline",
+     "sub": "News · CNBC · market"
+    },
+    {
+     "kind": "news",
+     "label": "Alphabet stock consolidates after Poland UOKiK fine risk emerges",
+     "sub": "News · Traders Union · GOOGL"
+    },
+    {
+     "kind": "news",
+     "label": "Caterpillar: Upgrading To Buy Ahead Of Earnings, A Clear Line In The Sand (NYSE:CAT)",
+     "sub": "News · Seeking Alpha · CAT"
+    },
+    {
+     "kind": "news",
+     "label": "Bank of America launches new tools and webinars to help small businesses fight rising fraud losses.",
+     "sub": "News · Pluang · BAC"
+    },
+    {
+     "kind": "news",
+     "label": "Morgan Stanley cuts target for Apple stock from USD 360 to USD 355",
+     "sub": "News · AD HOC NEWS · AAPL"
+    },
+    {
+     "kind": "news",
+     "label": "General Motors' Q3 US Sales Decline 6% Y/Y on Weak EV Demand",
+     "sub": "News · Zacks Investment Research · GM"
+    },
+    {
+     "kind": "news",
+     "label": "Roundup: Shionogi Inc. Acquires IntraBio, Gate Bioscience extends Collaboration with Eli Lilly, Alector Enters Global License Agreement with Genentech",
+     "sub": "News · Pharmaceutical Executive · LLY"
+    },
+    {
+     "kind": "news",
+     "label": "Barclays Adjusts Allstate Price Target to $221 From $226, Maintains Underweight Rating",
+     "sub": "News · marketscreener.com · ALL"
+    },
+    {
+     "kind": "news",
+     "label": "Meta Threatened With Major Fines In Europe Over 'Addictive' Features",
+     "sub": "News · Investor's Business Daily · META"
+    }
+   ],
    "limits": {
     "max_loss_per_trade": null,
     "max_open_structures": null,
     "max_at_risk": null
    },
    "charges": {
-    "label": "Mock rates (the stock tool's cost file supplies the real schedule)",
+    "label": "Example rates (the stock tool's config/costs.yaml supplies the real schedule)",
     "equity": {
      "commission_flat": 0,
      "sec_sell_pct": 0.00278,
@@ -1413,96 +1343,42 @@
     }
    },
    "next_quotes": {
-    "stock": "the stock tool's next price check (Mon 12 Oct, first run after the 09:30 ET open)"
-   },
-   "recent": [
-    "AAPL",
-    "NVDA"
-   ]
+    "stock": "the stock tool's next price check (7 Oct, after the 09:30 ET open)"
+   }
   }
  },
- "search_extra": [
-  {
-   "kind": "screen",
-   "label": "High IV rank, rising open interest",
-   "sub": "Saved screen · F&O",
-   "market": "india"
-  },
-  {
-   "kind": "screen",
-   "label": "Models agree 4 of 5, volume up",
-   "sub": "Saved screen · Stocks",
-   "market": "both"
-  },
-  {
-   "kind": "strategy",
-   "label": "Rule: model + news",
-   "sub": "Stock strategy · Strategy lab",
-   "market": "both"
-  },
-  {
-   "kind": "strategy",
-   "label": "F&O Book 2: short iron fly",
-   "sub": "F&O strategy book",
-   "market": "india"
-  },
-  {
-   "kind": "news",
-   "label": "Reliance results date set for 16 Oct",
-   "sub": "News · exchange filing · 11:20 IST",
-   "market": "india"
-  },
-  {
-   "kind": "news",
-   "label": "RBI policy meeting ends Wednesday",
-   "sub": "News · event · 09:05 IST",
-   "market": "india"
-  },
-  {
-   "kind": "news",
-   "label": "Delta raises its quarterly outlook",
-   "sub": "News · company release · 9 Oct",
-   "market": "us"
-  }
- ],
  "notifications": {
   "india": [
    {
-    "icon": "receipt_long",
-    "title": "Paper order filled: RELIANCE buy 40 at ₹1,214.60",
-    "sub": "Manual (paper) · stock tool run 09:45 IST",
+    "icon": "schedule",
+    "title": "Post-close run due at 17:45 IST",
+    "sub": "Today's closes and settlements are not in yet: prices are the 6 Oct close",
     "unread": true
    },
    {
-    "icon": "notifications_active",
-    "title": "Alert: HDFCBANK crossed ₹710",
-    "sub": "Checked at the 15:10 run (alerts follow data updates, not live)",
+    "icon": "event",
+    "title": "RBI policy decision today",
+    "sub": "A major event: the strategies widen their ranges",
     "unread": true
    },
    {
-    "icon": "description",
-    "title": "F&O 3 pm run published",
-    "sub": "Books 1-3 decided; Book 2 holds its iron fly · 15:22 IST",
-    "unread": true
-   },
-   {
-    "icon": "dns",
-    "title": "NSE end-of-day file of 9 Oct imported",
-    "sub": "Data health · Fri 18:40 IST",
+    "icon": "newspaper",
+    "title": "News run 15:47 IST: 37 new items",
+    "sub": "1 promotional item on RELIANCE (it never supports a call)",
     "unread": false
    }
   ],
   "us": [
    {
-    "icon": "notifications_active",
-    "title": "Alert: DAL closed above $83",
-    "sub": "Checked at the close run of 9 Oct (not live)",
+    "icon": "schedule",
+    "title": "Pre-open run done at 07:45 ET",
+    "sub": "Post-close run due 18:15 ET",
     "unread": true
    },
    {
-    "icon": "dns",
-    "title": "Stock tool US close run ok",
-    "sub": "Data health · 9 Oct 16:20 ET",
+    "icon": "newspaper",
+    "title": "News run 04:47 ET: 52 new items",
+    "sub": "1 rumour on NVDA (it never supports a call)",
     "unread": false
    }
   ]

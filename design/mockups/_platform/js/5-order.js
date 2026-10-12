@@ -1,4 +1,4 @@
-/* Omenix platform runtime, part 5 of 6. Concatenated in file order by platform_build.py into one script. */
+/* Omenix platform runtime, part 5 of 7: the right drawer (quick view, all screens) and the order window. Concatenated in file order by platform_build.py into one script. */
 /* ---- the right drawer: Paper order window, quick view, phone "More" ------------------------------------------ */
 function openDrawer(view) {
   closeHc(); closeMenu(); closePal();
@@ -88,29 +88,32 @@ function orderView(id, side = 'buy') {
       else checks.push([o.qty <= owned, 'Shares held in Manual (no short selling)', `${o.qty} of ${owned}`]);
     }
     if (o.bracket) checks.push([o.sl != null && o.tgt != null && (o.side === 'buy' ? o.sl < px && o.tgt > px : o.sl > px && o.tgt < px), 'Stop-loss and target around the price', o.sl && o.tgt ? `${num(o.sl)} / ${num(o.tgt)}` : 'enter both']);
-    const ok = executable && checks.every(c => c[0]);
+    const lock = tradeLock();
+    if (lock) checks.unshift([false, 'Market open', lock.replace(/^Market closed: /, '')]);
+    const ok = !lock && executable && checks.every(c => c[0]);
+    const nextQ = Pm.next_quotes[it.kind === 'option' ? 'option' : 'stock'];
     sumBox.replaceChildren(...[
       !executable ? el('div', {class: 'mb-alert danger', role: 'alert'}, icon('block'), el('div', {}, el('b', {class: 't'}, 'Refused: no executable quote'), el('div', {class: 's'}, tradable(it) ? `Our data has no bid and ask for ${it.sym}. Paper F&O orders are filled only from the recorded NIFTY monthly option snapshots (3 pm); this contract has ${it.source === 'eod' ? 'end-of-day prices only' : 'no recorded quotes'}, so it is refused, never filled from a guessed price.` : 'An index is not an instrument: trade its futures or options.')), el('span')) : null,
       !executable ? null : el('dl', {class: 'mb-order-sum'},
-        el('dt', {}, o.type === 'limit' ? 'Limit price' : (it.kind === 'option' ? (o.side === 'buy' ? 'Ask at the 3 pm snapshot' : 'Bid at the 3 pm snapshot') : 'Last price (as-of)')), el('dd', {}, num(px)),
+        el('dt', {}, o.type === 'limit' ? 'Limit price' : (it.kind === 'option' ? `${o.side === 'buy' ? 'Ask' : 'Bid'} at the ${dateShort(it.as_of)} 3 pm snapshot` : `Last price, ${asOf(it).short}`)), el('dd', {}, num(px)),
         el('dt', {}, fno ? `Quantity (${o.qty} lot${o.qty === 1 ? '' : 's'} × ${lot})` : 'Quantity'), el('dd', {}, String(units)),
-        el('dt', {}, fno && it.kind === 'option' ? 'Premium' : 'Order value'), el('dd', {}, money(value, 2)),
+        el('dt', {}, (fno && it.kind === 'option' ? 'Premium' : 'Order value') + ' (estimate)'), el('dd', {}, money(value, 2)),
         el('dt', {}, 'Charges (estimate) ', help(`${Pm.charges.label}. ` + ch.rows.map(([k, v]) => `${k} ${money(v, 2)}`).join(' · '))), el('dd', {}, money(ch.total, 2)),
-        fno && executable ? [el('dt', {}, 'Maximum loss'), el('dd', {}, maxLoss === Infinity ? 'Unlimited' : money(maxLoss, 2))] : null,
+        fno && executable ? [el('dt', {}, 'Maximum loss (estimate)'), el('dd', {}, maxLoss === Infinity ? 'Unlimited' : money(maxLoss, 2))] : null,
         fno && executable ? [el('dt', {}, 'Margin estimate ', help('From our recorded margin source (labelled): for a bought option the premium paid; for a sold option a per-lot estimate. Mock value.')), el('dd', {}, money(margin, 0))] : null,
-        el('dt', {class: 'tot'}, o.side === 'buy' ? 'Cash after (Manual)' : 'Cash after (Manual)'), el('dd', {class: 'tot'}, money(acc.cash + (o.side === 'buy' ? -(value + ch.total) : (fno ? value - ch.total : value - ch.total)), 2))),
+        el('dt', {class: 'tot'}, 'Cash after (estimate)'), el('dd', {class: 'tot'}, money(acc.cash + (o.side === 'buy' ? -(value + ch.total) : (fno ? value - ch.total : value - ch.total)), 2))),
+      executable ? el('div', {class: 'mb-asof', style: 'white-space:normal;align-items:flex-start'}, icon('schedule'), `Estimates use ${it.kind === 'option' ? 'the ' + dateShort(it.as_of) + ' 3 pm quotes' : 'the ' + asOf(it).short + ' price'}. The fill uses ${nextQ}, so the paper fill price, charges and cash can differ.`) : null,
       el('div', {}, el('div', {class: 'mb-micro', style: 'margin-bottom:6px'}, 'Checks against the Manual account’s limits'),
         el('ul', {class: 'mb-checks'}, ...checks.map(([pass, t, d]) => el('li', {class: pass ? 'ok' : 'fail'}, el('span', {class: 'mb-mark ' + (pass ? 'ok' : 'no')}, icon(pass ? 'check' : 'close')), el('span', {}, t, el('span', {class: 'vh'}, pass ? ' passed' : ' failed'), el('small', {}, d)))))),
-      el('div', {class: 'mb-alert paper'}, icon('description'), el('div', {}, el('b', {class: 't'}, 'Paper order: no real order is placed'), el('div', {class: 's'}, `It goes to the dashboard’s inbox; the ${fno ? 'F&O tool' : 'stock tool'} imports it and fills it only from valid quotes with the strategies’ own fill rules, never from a guessed price.`)), el('span'))].filter(Boolean));
-    const nextQ = Pm.next_quotes[it.kind === 'option' ? 'option' : 'stock'];
+      el('div', {class: 'mb-asof', style: 'white-space:normal;align-items:flex-start'}, icon('info'), `No real order is placed: Omenix records it for your paper account; the ${fno ? 'F&O tool' : 'stock tool'} fills it only from valid quotes with the strategies’ own fill rules.`)].filter(Boolean));
     foot.replaceChildren(
-      el('button', {class: 'md-btn filled ' + o.side, type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Paper order recorded: ${o.side} ${units} ${it.sym}, ${o.type === 'limit' ? 'limit ' + num(o.limit) : 'market'}. Open until ${nextQ}.`); }}, icon(ok ? 'receipt_long' : 'block'), ok ? `Place paper ${o.side} · ${units} ${it.sym}` : (executable ? 'Blocked by a limit check' : 'Refused: no executable quote')),
+      el('button', {class: 'md-btn filled ' + o.side, type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Order recorded: ${o.side} ${units} ${it.sym}, ${o.type === 'limit' ? 'limit ' + num(o.limit) : 'market'}. Open until ${nextQ}.`); }}, icon(ok ? 'receipt_long' : lock ? 'lock' : 'block'), ok ? `${o.side === 'buy' ? 'Buy' : 'Sell'} ${units} ${it.sym}` : lock ? 'Market closed' : (executable ? 'Blocked by a limit check' : 'Refused: no executable quote')),
       el('div', {class: 'muted', style: 'font-size:12px;text-align:center'}, ok ? (o.type === 'market' ? `Fills at the next valid quotes: ${nextQ}.` : `Fills only if the next valid quotes reach ${num(o.limit)}: ${nextQ}.`) : 'Nothing is recorded until every check passes.'));
   }
   for (const [k, v] of [['buy', 'Buy'], ['sell', 'Sell']]) sideBtns.append(el('button', {type: 'button', class: k, 'data-side': k, 'aria-pressed': String(o.side === k), onclick: () => { o.side = k; draw(); }}, icon(k === 'buy' ? 'trending_up' : 'trending_down'), v));
   const accSel = el('select', {class: 'mb-input', id: 'o-acc', 'aria-label': 'Account'}, ...Object.entries(Pm.accounts).map(([k, a]) => el('option', {value: k, selected: k === manualId, disabled: a.kind !== 'manual'}, a.kind === 'manual' ? `${a.name} · cash ${money(a.cash)}` : `${a.name} (strategy book: not traded by hand)`)));
   draw();
-  return [drawerHead(`Paper ${fno ? 'F&O ' : ''}order`, null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, it.sym), el('span', {class: 'muted', style: 'font-size:13px'}, `${price(it)}`), delta(it.chg_pct), asOfEl(it), paperTag())),
+  return [drawerHead(`${fno ? 'F&O order' : 'Order'}`, null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, it.sym), el('span', {class: 'muted', style: 'font-size:13px'}, `${price(it)}`), delta(it.chg_pct), asOfEl(it))),
     el('div', {class: 'mb-drawer-body'},
       sideBtns,
       executable ? null : sumBox,
@@ -121,57 +124,4 @@ function orderView(id, side = 'buy') {
       executable ? sumBox : null),
     foot];
 }
-
-/* Paper basket: a multi-leg F&O idea placed as one paper order (all legs or none), with the same limit checks */
-const BASKETS = {};
-function basketView(bid) {
-  const b = BASKETS[bid]; if (!b) return null;
-  const Pm = P(), manualId = Object.keys(Pm.accounts).find(k => Pm.accounts[k].kind === 'manual'), acc = Pm.accounts[manualId], L = Pm.limits;
-  let lots = 1;
-  const legs = b.legs.map(l => ({...l, it: item(l.id)}));
-  const box = el('div', {style: 'display:grid;gap:12px'}), foot = el('div', {class: 'mb-drawer-foot'});
-  const executable = legs.every(l => l.it.kind === 'option' && l.it.source === 'snap3pm');
-  function draw() {
-    const lot = legs[0].it.lot;
-    const perUnit = legs.reduce((a, l) => a + (l.side === 'sell' ? l.it.bid : -l.it.ask) * l.lots, 0);
-    const net = perUnit * lot * lots;
-    const ch = legs.reduce((a, l) => a + charges(l.it, l.side, (l.side === 'sell' ? l.it.bid : l.it.ask) * lot * l.lots * lots).total, 0);
-    /* the structure's own maximum loss and profit (as on the idea card); the limit check adds the charges */
-    const maxLoss = b.kind === 'debit' ? -net : (b.width - perUnit) * lot * lots;
-    const maxProfit = b.kind === 'debit' ? (b.width + perUnit) * lot * lots : net;
-    const margin = b.margin_per_lot * lots;
-    const checks = [[executable, 'Executable quotes for every leg', '3 pm snapshot of 12 Oct'],
-      [maxLoss + ch <= L.max_loss_per_trade, `Maximum loss with charges ≤ ${money(L.max_loss_per_trade)} a trade`, money(maxLoss + ch)],
-      [acc.open_structures + 1 <= L.max_open_structures, `Open structures ≤ ${L.max_open_structures}`, `${acc.open_structures} open + this one`],
-      [acc.at_risk + maxLoss <= L.max_at_risk, `At risk ≤ ${money(L.max_at_risk)}`, `${money(acc.at_risk)} + ${money(maxLoss)}`],
-      [margin <= acc.cash, 'Margin estimate within cash', `${money(margin)} of ${money(acc.cash)}`]];
-    const ok = checks.every(c => c[0]);
-    box.replaceChildren(
-      el('table', {class: 'mb-legs'}, el('thead', {}, el('tr', {}, el('th', {}, 'Leg'), el('th', {}, 'Side'), el('th', {class: 'num'}, 'Lots'), el('th', {class: 'num'}, 'Price'))),
-        el('tbody', {}, ...legs.map(l => el('tr', {}, el('td', {}, l.it.sym.replace(/^NIFTY 27 OCT /, '')), el('td', {}, el('span', {class: 'mb-label ' + (l.side === 'buy' ? 'success' : 'danger')}, l.side === 'buy' ? 'Buy' : 'Sell')), el('td', {class: 'num'}, String(l.lots * lots)), el('td', {class: 'num'}, num(l.side === 'sell' ? l.it.bid : l.it.ask) + (l.side === 'sell' ? ' bid' : ' ask')))))),
-      el('dl', {class: 'mb-order-sum'},
-        el('dt', {}, net >= 0 ? 'Net credit' : 'Net debit'), el('dd', {}, money(Math.abs(net), 2)),
-        el('dt', {}, 'Charges (estimate) ', help(Pm.charges.label + '. Four legs, each charged on its own premium.')), el('dd', {}, money(ch, 2)),
-        el('dt', {}, 'Maximum profit (before charges)'), el('dd', {}, money(maxProfit, 2)),
-        el('dt', {}, 'Maximum loss (before charges)'), el('dd', {}, money(maxLoss, 2)),
-        el('dt', {}, 'Breakevens'), el('dd', {}, b.breakevens.map(x => num(x, 0)).join(' / ')),
-        el('dt', {}, 'Margin estimate ', help('Hedged structure: from our recorded margin source (labelled). Mock value.')), el('dd', {}, money(margin)),
-        el('dt', {class: 'tot'}, 'Probability of profit ', help('Risk-neutral, from the snapshot’s implied volatility: what option prices imply, not a forecast of ours.')), el('dd', {class: 'tot'}, b.pop + '% (risk-neutral)')),
-      el('div', {}, el('div', {class: 'mb-micro', style: 'margin-bottom:6px'}, 'Checks against the Manual account’s limits'),
-        el('ul', {class: 'mb-checks'}, ...checks.map(([pass, t, d]) => el('li', {class: pass ? 'ok' : 'fail'}, el('span', {class: 'mb-mark ' + (pass ? 'ok' : 'no')}, icon(pass ? 'check' : 'close')), el('span', {}, t, el('span', {class: 'vh'}, pass ? ' passed' : ' failed'), el('small', {}, d)))))),
-      el('div', {class: 'mb-alert paper'}, icon('description'), el('div', {}, el('b', {class: 't'}, 'Paper basket: no real order is placed'), el('div', {class: 's'}, 'All legs or none. The F&O tool fills them from the next 3 pm snapshot with the books’ own fill model, never from a guessed price.')), el('span')));
-    foot.replaceChildren(el('button', {class: 'md-btn filled buy', type: 'button', disabled: !ok, style: 'height:44px', onclick: () => { closeDrawer(); snack(`Paper basket recorded: ${b.name}, ${lots} lot${lots > 1 ? 's' : ''}. Open until ${Pm.next_quotes.option}.`); }}, icon(ok ? 'receipt_long' : 'block'), ok ? `Place paper basket · ${legs.length} legs` : 'Blocked by a limit check'),
-      el('div', {class: 'muted', style: 'font-size:12px;text-align:center'}, ok ? `Fills at the next valid quotes: ${Pm.next_quotes.option}.` : 'Nothing is recorded until every check passes.'));
-  }
-  const lotIn = el('input', {class: 'mb-input', type: 'number', min: '1', step: '1', value: '1', id: 'b-lots', oninput: e => { lots = Math.max(1, Math.floor(+e.target.value || 1)); draw(); }});
-  draw();
-  return [drawerHead('Paper F&O basket', null, el('div', {style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px'}, el('b', {style: 'font-size:15px'}, b.name), paperTag())),
-    el('div', {class: 'mb-drawer-body'},
-      el('div', {class: 'mb-field'}, el('span', {class: 'l'}, 'Account'), el('div', {class: 'mb-input', style: 'display:flex;align-items:center'}, `${acc.name} · cash ${money(acc.cash)}`)),
-      el('div', {class: 'mb-field-row'}, el('div', {class: 'mb-field'}, el('label', {for: 'b-lots'}, `Lots (lot ${legs[0].it.lot})`), lotIn), el('div', {class: 'mb-field'}, el('span', {class: 'l'}, 'Order type'), el('div', {class: 'mb-input', style: 'display:flex;align-items:center;font-size:14px'}, 'Market, all legs'))),
-      box,
-      el('button', {class: 'md-btn outlined', type: 'button', onclick: () => go('builder')}, icon('calculate'), 'Adjust in the Strategy builder')),
-    foot];
-}
-function openOrder(id, side) { const it = item(id); if (!it) return; openDrawer(`order:${id}:${side}`); }
 

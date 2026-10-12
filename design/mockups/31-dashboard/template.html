@@ -3,56 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Omenix · Dashboard</title>
-<meta name="description" content="Omenix home after login: quick search to trade any stock or F&O contract, your paper accounts, top stock and F&O ideas with quick paper orders, open positions, what needs attention, today's decisions, the market, events and news. Mock data, research and paper trading only.">
+<title>Omenix · Home</title>
+<meta name="description" content="Omenix home after login: today at a glance, the market, today's buy picks of the strategies with one-click paper orders, how each strategy family and your own paper account are doing, open paper trades by who opened them, what needs you, what is coming and the news. The stock tool's own example records; research and paper trading only.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
 <style>
 /* 31-dashboard page layout only; every component is from design/system/components.css. Tokens only. */
-.sec{margin-top:24px}
-.sec-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.sec{margin-top:20px}
+.sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
 .sec-head h2{font:600 17px/1.3 var(--md-ref-typeface-plain);margin:0}
-.sec-head .end{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex-wrap:wrap}
-.sec-head .go{font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px;text-decoration:none}
+.sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 240px}
+.sec-head .go{margin-left:auto;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;white-space:nowrap}
 .sec-head .go .ms{width:16px;height:16px}
-.accts.mb-carousel{grid-auto-flow:row;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));grid-auto-columns:auto;gap:12px;overflow:visible;padding-bottom:2px}
-.sess{white-space:normal;height:auto;min-height:30px;padding-top:4px;padding-bottom:4px}
-.hello{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap;padding:20px 0 14px}
-.hello h1{font:700 24px/1.2 var(--md-ref-typeface-plain);letter-spacing:-.4px;margin:0}
-.hello .meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--mb-color-neutral)} .dot.open{background:var(--mb-color-up)}
+.top{padding-top:16px}
+.aps{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.home-sig{display:none;padding:0;overflow:hidden}
 .pos{list-style:none;margin:0;padding:0}
-.pos li{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.3fr) minmax(0,1.2fr) auto;gap:4px 16px;align-items:center;padding:12px 4px;border-top:1px solid var(--md-sys-color-surface-container-high)}
+.pos li{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,1fr) auto;gap:4px 14px;align-items:center;padding:10px 2px;border-top:1px solid var(--md-sys-color-surface-container-high)}
 .pos li:first-child{border-top:0}
-.pos .w b{display:block} .pos .w small,.pos .q small,.pos .p small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.pos .w{min-width:0} .pos .w .nm{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.pos .w small,.pos .q small,.pos .p small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
 .pos .q,.pos .p{font-variant-numeric:tabular-nums;text-align:right}
-.pos .p .mb-delta{font-size:14px}
 .pos .a{display:flex;gap:4px;justify-content:flex-end}
-.pos .flag{grid-column:1/-1;font-size:12.5px;color:var(--mb-color-on-warn-container);display:flex;gap:6px;align-items:center}
-.pos .flag .ms{width:15px;height:15px}
-.att{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.tabs{margin-bottom:8px;flex-wrap:wrap;max-width:100%}
+.pager{display:flex;justify-content:flex-end;align-items:center;gap:4px;margin-top:6px;font-size:12.5px;color:var(--md-sys-color-on-surface-variant)}
+.pager span{margin-right:auto}
+.att{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .att li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;font-size:13.5px}
-.att li b{display:block;font-weight:600} .att li small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12.5px}
-.risk{display:grid;gap:10px}
-.risk .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;font-size:13px}
-.risk .r .md-progress{grid-column:1/-1}
-.dec{list-style:none;margin:0;padding:0}
-.dec li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}
-.dec li:first-child{border-top:0}
-.dec b{display:block;font-weight:600} .dec small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12.5px}
-.idx{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}
-.idx:first-child{border-top:0}
-.idx b{display:block} .idx small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12px}
-.idx svg{width:90px;height:28px;display:block}
-.idx .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
-.movers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.movers .mb-micro{margin-bottom:4px}
-.movers div.m{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:3px 0}
-.breadth{margin-top:14px;font-size:12.5px;color:var(--md-sys-color-on-surface-variant)}
-.breadth .bar{display:flex;height:8px;border-radius:2px;overflow:hidden;margin:6px 0}
-.breadth .bar i{display:block} .breadth .bar .a{background:var(--mb-color-up)} .breadth .bar .d{background:var(--mb-color-down)} .breadth .bar .u{background:var(--md-sys-color-surface-container-highest)}
+.att li b{display:block;font-weight:600} .att li small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12.5px;overflow-wrap:anywhere}
 .ev{list-style:none;margin:0;padding:0}
-.ev li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}
+.ev li{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}
 .ev li:first-child{border-top:0}
 .ev .d{text-align:center;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);padding:4px 0;line-height:1.15}
 .ev .d b{display:block;font-size:17px} .ev .d small{font-size:11px;color:var(--md-sys-color-on-surface-variant);text-transform:uppercase;letter-spacing:.05em}
@@ -60,15 +40,11 @@
 .news{list-style:none;margin:0;padding:0}
 .news li{padding:10px 0;border-top:1px solid var(--md-sys-color-surface-container-high);display:grid;gap:4px}
 .news li:first-child{border-top:0}
-.news .m{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
-.proof{font-size:12px;color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:6px}
-.proof .ms{width:14px;height:14px}
-@media (max-width:1000px){.pos li{grid-template-columns:minmax(0,1fr) auto}.pos .q{display:none}.pos .a{grid-column:1/-1;justify-content:flex-start}}
-@media (max-width:599px){
-  .hello{padding-top:14px}.hello h1{font-size:21px}
-  .accts.mb-carousel{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:62%;overflow-x:auto;padding-bottom:8px}
-  .movers{grid-template-columns:1fr}
-}
+.news .m{display:flex;gap:6px 8px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.mv{display:flex;flex-wrap:wrap;gap:4px 12px}
+@media (max-width:1199px){.home-sig{display:block}}
+@media (max-width:760px){.pos li{grid-template-columns:minmax(0,1fr) auto}.pos .q{display:none}.pos .a{grid-column:1/-1;justify-content:flex-start}}
+@media (max-width:599px){.top{padding-top:12px}.ev li{grid-template-columns:44px minmax(0,1fr)}.ev li .mb-label{grid-column:2;justify-self:start}}
 </style>
 </head>
 <body>
@@ -76,111 +52,90 @@
 <script>const SHELL = /*__SHELL__*/null; const D = /*__DATA__*/null;</script>
 <!--@@PLATFORM_JS@@-->
 <script>
-PF.mount({screen: 'dashboard', group: 'dashboard', render(main, c) {
-  const {el, icon, inst, money, num, delta, moneyDelta, item, P} = c;
-  const M = D.markets[c.m], india = P.fno, acctName = id => (P.accounts[id] || {}).name || id;
-  /* the multi-leg F&O ideas are paper baskets for the order window */
-  for (const k of Object.keys(c.baskets)) delete c.baskets[k];
-  for (const f of M.fno_ideas.filter(f => f.basket)) c.baskets[f.basket] = f;
-  const head = (title, ...end) => el('div', {class: 'sec-head'}, el('h2', {}, title), el('span', {class: 'end'}, ...end));
-  const goLink = (label, screen) => el('a', {class: 'go', href: '#', onclick: e => { e.preventDefault(); c.go(screen); }}, label, icon('chevron_right'));
-  const proof = () => el('span', {class: 'proof', 'data-tip': `Not proven yet: ${D.proof.settled_trades} of about ${D.proof.needed} settled paper trades and ${D.proof.months_forward} of ${D.proof.months_needed} months of forward trading. Until then no signal is shown as strong.`}, icon('science'), `Not proven yet · ${D.proof.settled_trades} of ~${D.proof.needed} trades`);
-  const carousel = (id, cards, cls = '') => { const row = el('div', {class: 'mb-carousel ' + cls, id, role: 'list'}, ...cards.map(x => { x.setAttribute('role', 'listitem'); return x; }));
-    const nav = d => el('button', {class: 'md-icon-btn small outlined', type: 'button', 'aria-label': d < 0 ? 'Previous' : 'Next', onclick: () => row.scrollBy({left: d * (row.firstElementChild.offsetWidth + 16), behavior: 'smooth'})}, icon(d < 0 ? 'chevron_left' : 'chevron_right'));
-    return [row, nav(-1), nav(1)]; };
+let OWNER = 'all', PPG = 0;  /* positions tab and page, kept in the URL as "own" and "ppg" */
+const PPG_SIZE = 6;
+PF.mount({screen: 'dashboard', group: 'dashboard', strip: false,
+  readHash(h) { OWNER = ['manual', 'rule', 'ai', 'hybrid', 'baseline'].includes(h.get('own')) ? h.get('own') : 'all'; PPG = Math.max(0, (+h.get('ppg') || 1) - 1); },
+  writeHash(h) { if (OWNER !== 'all') h.set('own', OWNER); if (PPG) h.set('ppg', PPG + 1); },
+  render(main, c) {
+  const {el, icon, inst, money, num, delta, moneyDelta, item, P, S} = c;
+  const M = D.markets[c.m], FAM = S.families, TXT = S.family_text, session = M.session.date;
+  const head = (title, sub, go) => el('div', {class: 'sec-head'}, el('h2', {}, title), sub ? el('span', {class: 'sub'}, sub) : null, go ? el('a', {class: 'go', href: '#', onclick: e => { e.preventDefault(); c.go(go[1]); }}, go[0], icon('chevron_right')) : null);
+  main.append(el('h1', {class: 'vh'}, 'Home'));
 
-  /* 1. hello: where am I (no banner: the session and freshness as chips) */
-  main.append(el('div', {class: 'hello'}, el('h1', {}, 'Dashboard'),
-    el('div', {class: 'meta'}, el('span', {class: 'md-chip sess'}, el('span', {class: 'dot' + (M.session.state === 'open' ? ' open' : '')}), M.session.text),
-      el('span', {class: 'mb-asof', 'data-tip': 'Each section shows its own as-of time: the stock tool runs several times a day, the F&O tool after its 3 pm run.'}, icon('schedule'), 'Updated ' + c.nowLabel()), c.paperTag(), c.mockTag())));
+  /* 1. today at a glance: how am I doing, what is the best pick, what needs me (each one click from acting) */
+  const mine = M.groups.find(g => g.family === 'manual').lines[0];
+  const best = P.signals[0], bi = best && item(best.id);
+  main.append(el('div', {class: 'mb-glance top', role: 'region', 'aria-label': 'Today at a glance'},
+    el('div', {}, el('span', {class: 'mb-avatar paper'}, icon('account_circle')), el('span', {class: 'l'}, 'Your paper account · open profit'),
+      el('span', {class: 'v'}, moneyDelta(mine.pnl, 2), el('span', {class: 'muted', style: 'font-size:13px;font-weight:500'}, 'value ' + money(mine.value)))),
+    best ? el('div', {}, el('span', {class: 'mb-avatar ' + (best.exp_gain_pct > 0 ? 'success' : 'danger')}, icon('bolt')), el('span', {class: 'l'}, `Top pick · ${best.agree.buy} of ${best.agree.of} strategies buy`),
+      el('span', {class: 'v'}, inst(best.id), el('span', {class: 'mb-label ' + (best.exp_gain_pct > 0 ? 'success' : 'danger')}, icon(best.exp_gain_pct > 0 ? 'check' : 'close'), best.exp_gain_pct > 0 ? `Yes: ${c.sgn(best.exp_gain_pct)} after costs` : `No: ${c.sgn(best.exp_gain_pct)} after costs`), el('button', {class: 'md-btn small buy', type: 'button', disabled: !!c.tradeLock(), 'data-tip': c.tradeLock(), onclick: () => c.openOrder(best.id, 'buy')}, 'Buy')))
+      : el('div', {}, el('span', {class: 'mb-avatar neutral'}, icon('bolt')), el('span', {class: 'l'}, 'Top pick'), el('span', {class: 'v'}, 'No pick today')),
+    el('div', {}, el('span', {class: 'mb-avatar warn'}, icon('notifications_active')), el('span', {class: 'l'}, 'Needs you'),
+      el('span', {class: 'v'}, `${M.attention.length} item${M.attention.length === 1 ? '' : 's'}`, el('a', {class: 'md-btn small outlined', href: '#needs', onclick: e => { e.preventDefault(); document.getElementById('needs').scrollIntoView({behavior: 'smooth'}); }}, 'See')))));
 
-  /* 2. quick search: find and trade */
-  main.append(c.quickSearch());
+  /* 2. the market, on top (the top bar's index strip is not repeated on this page) */
+  const spark = it => { const v = it.spark; if (!v) return null; const lo = Math.min(...v), hi = Math.max(...v); const s = c.svgEl('svg', {viewBox: '0 0 120 26', preserveAspectRatio: 'none', 'aria-hidden': 'true'}); s.append(c.svgEl('polyline', {points: v.map((y, i) => `${(i / (v.length - 1) * 120).toFixed(1)},${(23 - (y - lo) / (hi - lo || 1) * 20).toFixed(1)}`).join(' '), fill: 'none', stroke: v[v.length - 1] >= v[0] ? 'var(--mb-color-up)' : 'var(--mb-color-down)', 'stroke-width': '1.8', 'vector-effect': 'non-scaling-stroke'})); return s; };
+  const stocks = Object.values(P.items).filter(i => i.kind === 'stock' && i.state === 'active').sort((x, y) => y.chg_pct - x.chg_pct);
+  const regime = {EVENT_HEAVY: 'Event-heavy session', TRENDING: 'Trending market', CALM: 'Calm market'}[M.session.regime] || M.session.regime;
+  const idx = P.indices.map(id => item(id));
+  main.append(el('section', {class: 'sec', 'aria-label': 'Market'}, head('Market', (k => `${P.exchange} · ${regime} · ${k.open ? `open, ${k.text}; prices are the last close until the next price check` : `closed, ${k.text}; today’s close arrives with the ${c.when(M.session.post_close_at)} run`}`)(c.market()), ['Markets', 'markets']),
+    el('div', {class: 'mb-mband'},
+      ...idx.map(it => el('a', {href: '#', style: 'text-decoration:none;color:inherit', 'data-tip': c.asOf(it).tip, onclick: e => { e.preventDefault(); c.openDrawer('quick:' + it.id); }},
+        el('div', {class: 'n'}, it.sym), el('div', {class: 'v'}, num(it.last), ' ', delta(it.chg_pct)), el('small', {class: 'muted'}, `5 days ${c.sgn(it.chg_5d_pct)} · ${c.asOf(it).short}`))),
+      el('div', {class: 'brd'}, el('div', {class: 'n'}, 'The stock tool’s companies'),
+        el('span', {class: 'mv'}, ...stocks.map(s => el('span', {}, inst(s.id), ' ', delta(s.chg_pct)))),
+        el('span', {}, `${stocks.filter(s => s.chg_pct > 0).length} of ${stocks.length} tracked companies rose on the last close`)))));
 
-  /* 3. my paper accounts (one tile each, never summed) */
-  main.append(el('section', {class: 'sec', 'aria-label': 'Your paper accounts'}, head('Your paper accounts', el('span', {'data-tip': 'Each paper account is its own experiment: never added together, and INR and USD are never mixed.'}, 'Separate accounts, never summed'), goLink('Accounts and funds', 'funds')),
-    el('div', {class: 'accts mb-carousel'}, ...M.accounts.map(a => el('a', {class: 'mb-acct ' + (a.kind === 'book' ? 'book' : a.kind === 'stock' ? 'stock' : ''), href: '#', onclick: e => { e.preventDefault(); c.go('funds'); }},
-      el('span', {class: 'n'}, a.name), el('span', {class: 'v'}, money(a.value)),
-      el('span', {class: 'd'}, moneyDelta(a.day), 'today'), el('span', {class: 'd'}, `${a.note} · cash ${money(a.cash)}`))))));
+  /* 3. today's buy picks: in the left panel on wide screens; here on tablets and phones (never both at once) */
+  main.append(el('section', {class: 'sec card home-sig', 'aria-label': 'Today’s buy picks'}, ...c.signalsBody('home')));
 
-  /* 4. top ideas: stocks (and F&O, India only), each with a quick paper order */
-  const stockCard = s => { const it = item(s.id);
-    return el('article', {class: 'mb-idea'},
-      el('div', {class: 'mb-idea-top'}, el('span', {class: 'mb-score', style: `--v:${s.score}`, 'data-tip': D.score_note, role: 'img', 'aria-label': `Score ${s.score} of 100`}, el('b', {}, s.score)),
-        el('div', {class: 'who'}, el('b', {}, inst(s.id)), el('small', {}, it.name))),
-      el('div', {class: 'mb-idea-px'}, c.num(it.last), delta(it.chg_pct), c.asOfEl(it)),
-      el('div', {class: 'mb-idea-why'}, el('span', {class: 'mb-label success', style: 'margin-right:6px'}, icon('check'), 'Buy signal'), s.why),
-      el('dl', {class: 'mb-idea-facts'},
-        el('div', {}, el('dt', {}, 'Chance up · N+' + s.horizon), el('dd', {}, Math.round(s.prob * 100) + '%')),
-        el('div', {}, el('dt', {}, 'Target'), el('dd', {}, num(s.target, 0) + ' ', el('span', {class: 'mb-delta up'}, '+' + s.exp_pct.toFixed(1) + '%'))),
-        el('div', {}, el('dt', {}, 'Range 80%'), el('dd', {}, `${num(s.range[0], 0)}–${num(s.range[1], 0)}`))),
-      el('div', {class: 'mb-idea-acts'}, el('button', {class: 'md-btn filled buy', type: 'button', onclick: () => c.openOrder(s.id, 'buy')}, 'Paper buy'),
-        el('button', {class: 'md-btn outlined', type: 'button', onclick: () => c.openDrawer('quick:' + s.id)}, 'Details')),
-      el('div', {class: 'muted', style: 'font-size:12px'}, `${s.agree[0]} of ${s.agree[1]} strategies agree · target after market costs`)); };
-  const [sRow, sPrev, sNext] = carousel('ideas-stocks', M.stock_ideas.map(stockCard));
-  main.append(el('section', {class: 'sec', 'aria-label': 'Top stock ideas'}, head('Top stock ideas', proof(), sPrev, sNext, goLink('Screener', 'screener')), sRow));
-  if (india && M.fno_ideas.length) {
-    const fnoCard = f => f.verdict === 'no'
-      ? el('article', {class: 'mb-idea no'}, el('div', {class: 'mb-idea-top'}, el('span', {class: 'mb-avatar danger'}, icon('block')), el('div', {class: 'who'}, el('b', {}, f.name), el('small', {}, f.source))),
-          el('div', {class: 'mb-idea-why'}, el('span', {class: 'mb-label danger', style: 'margin-right:6px'}, icon('close'), 'No trade'), f.why), el('div', {class: 'mb-idea-acts'}, el('button', {class: 'md-btn outlined', type: 'button', onclick: () => c.go('scoreboards')}, 'Why: decision record')))
-      : el('article', {class: 'mb-idea'},
-          el('div', {class: 'mb-idea-top'}, el('span', {class: 'mb-score', style: `--v:${f.score}`, 'data-tip': D.score_note, role: 'img', 'aria-label': `Score ${f.score} of 100`}, el('b', {}, f.score)), el('div', {class: 'who'}, el('b', {}, f.name), el('small', {}, f.source))),
-          el('div', {class: 'mb-idea-why'}, el('span', {class: 'mb-label success', style: 'margin-right:6px'}, icon('check'), 'Trade'), f.why),
-          el('dl', {class: 'mb-idea-facts'},
-            el('div', {'data-tip': 'Risk-neutral: what option prices imply, not our forecast.'}, el('dt', {}, 'Profit chance'), el('dd', {}, f.pop + '% RN')),
-            el('div', {}, el('dt', {}, f.kind === 'credit' ? 'Credit' : 'Cost'), el('dd', {}, money(f.kind === 'credit' ? f.credit : f.debit))),
-            el('div', {}, el('dt', {}, 'Max loss'), el('dd', {}, money(f.max_loss)))),
-          el('div', {class: 'mb-idea-acts'}, el('button', {class: 'md-btn filled buy', type: 'button', onclick: () => c.openDrawer('basket:' + f.basket)}, 'Paper basket'),
-            el('button', {class: 'md-btn outlined', type: 'button', onclick: () => c.go('builder')}, 'Builder')),
-          el('div', {class: 'muted', style: 'font-size:12px'}, `1 lot · ${f.legs.length} legs · 3 pm quotes · within your ₹10,000 loss limit`));
-    const [fRow, fPrev, fNext] = carousel('ideas-fno', M.fno_ideas.map(fnoCard), 'two');
-    main.append(el('section', {class: 'sec', 'aria-label': 'Top F&O ideas'}, head('Top F&O ideas', el('span', {'data-tip': 'Paper F&O orders fill only from the recorded NIFTY monthly 3 pm snapshot, so ideas are NIFTY monthly structures.'}, 'NIFTY monthly · 3 pm snapshot'), fPrev, fNext, goLink('Option chain', 'chain')), fRow));
-  }
+  /* 4. who trades and how it is going: your account, each strategy family, the F&O books; never summed */
+  main.append(el('section', {class: 'sec', 'aria-label': 'Who trades'}, head('Who trades, and how it is going', 'You, and each approach: rule-based, AI-based' + (P.fno ? ', hybrid (rule + AI)' : '') + ', with the baselines as the comparison line. Each line is its own paper account or scoreboard; nothing is added together.', ['Accounts and funds', 'funds']),
+    el('div', {class: 'aps'}, ...M.groups.map(g => el('article', {class: 'mb-apcard'},
+      el('div', {class: 'h'}, el('span', {class: 'mb-avatar ' + ({manual: 'paper', ai: 'info', rule: '', baseline: 'neutral', hybrid: 'warn'}[g.family])}, icon(FAM[g.family].icon)), el('b', {}, FAM[g.family].label), el('small', {}, TXT[g.family])),
+      ...g.lines.map(l => el('div', {class: 'line'}, el('span', {class: 'k'}, l.label), el('div', {class: 'fig'}, l.value != null ? el('span', {class: 'val'}, money(l.value)) : null, el('span', {class: 'd'}, moneyDelta(l.pnl, 2), ' ' + l.pnl_label)), el('span', {class: 's'}, l.sub))),
+      g.note ? el('div', {class: 'today'}, icon('info'), g.note) : null)))));
 
-  /* 5. positions and what needs attention */
-  const posRow = p => {
-    if (p.structure) return el('li', {}, el('div', {class: 'w'}, el('b', {}, p.structure), el('small', {}, `${acctName(p.account)} · ${p.legs.length} legs · ${p.days_left} days left`)),
-      el('div', {class: 'q'}, el('span', {}, 'max loss ' + money(p.max_loss)), el('small', {}, p.exit_rule)),
-      el('div', {class: 'p'}, moneyDelta(p.unrealised), el('small', {}, moneyDelta(p.day), ' today')),
-      el('div', {class: 'a'}, el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => c.go('positions')}, 'Legs')));
-    const it = item(p.id), cost = p.avg * p.qty;
-    return el('li', {}, el('div', {class: 'w'}, el('b', {}, inst(p.id)), el('small', {}, `${acctName(p.account)}${p.exit ? ' · exits ' + p.exit : ''}`)),
-      el('div', {class: 'q'}, el('span', {}, `${p.qty} × ${num(p.avg)}`), el('small', {}, 'last ' + num(it.last) + ' · ' + c.asOf(it).short)),
-      el('div', {class: 'p'}, moneyDelta(p.unrealised), el('small', {}, c.sgn(p.unrealised / cost * 100) + ' · ', moneyDelta(p.day), ' today')),
-      el('div', {class: 'a'}, c.bsPair(p.id)),
-      p.flag ? el('div', {class: 'flag'}, icon('warning'), p.flag) : null); };
-  const attention = el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Needs attention'), el('span', {class: 'end'}, `${M.attention.length}`)),
-    el('ul', {class: 'att'}, ...M.attention.map(a => el('li', {}, el('span', {class: 'mb-avatar sm ' + a.tone}, icon(a.icon)), el('span', {}, el('b', {}, a.title), el('small', {}, a.sub))))));
-  const risk = india ? el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'At risk now'), c.help('The sum of the maximum losses of each account’s open F&O structures against its ₹30,000 limit. Per account, never added across accounts.'), el('span', {class: 'end'}, goLink('Risk', 'risk'))),
-    el('div', {class: 'risk'}, ...M.at_risk.map(r => el('div', {class: 'r'}, el('span', {}, acctName(r.account)), el('b', {}, `${money(r.used)} / ${money(r.limit)}`), el('div', {class: 'md-progress', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': r.limit, 'aria-valuenow': r.used, 'aria-label': acctName(r.account) + ' at risk'}, el('i', {style: `width:${Math.max(1, r.used / r.limit * 100).toFixed(1)}%`})))))) : null;
+  /* 5. open paper trades by who opened them, paged; and what needs you */
+  /* strategies' open trades grouped per stock and family (each strategy is its own experiment: P&L shown per trade, never summed) */
+  const grouped = {};
+  for (const t of M.strategy_trades) (grouped[t.id + '|' + t.family] ||= {id: t.id, family: t.family, trades: []}).trades.push(t);
+  const all = M.own.map(p => ({...p, own: true})).concat(Object.values(grouped));
+  const count = k => all.filter(p => k === 'all' || p.family === k).length;
+  const tabs = el('div', {class: 'md-segmented dense tabs', role: 'group', 'aria-label': 'Who opened the trade'}, ...[['all', 'All'], ['manual', 'Yours'], ['rule', 'Rule-based'], ['ai', 'AI-based'], ...(P.fno ? [['hybrid', 'Hybrid']] : []), ['baseline', 'Baselines']].map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(OWNER === k), onclick: () => { OWNER = k; PPG = 0; c.rerender(); }}, `${v} ${count(k)}`)));
+  const rows = all.filter(p => OWNER === 'all' || p.family === OWNER), pages = Math.max(1, Math.ceil(rows.length / PPG_SIZE)); PPG = Math.min(PPG, pages - 1);
+  const uniq = xs => [...new Set(xs)];
+  const posRow = p => { const it = item(p.id);
+    if (p.own) return el('li', {}, el('div', {class: 'w'}, el('div', {class: 'nm'}, inst(p.id), c.apBadge('manual')), el('small', {}, `${p.strategy} · ${p.source}`)),
+      el('div', {class: 'q'}, el('span', {}, `${num(p.qty, 0)} × ${num(p.avg)}`), el('small', {}, 'last ' + num(it.last) + ' · ' + c.asOf(it).short)),
+      el('div', {class: 'p'}, moneyDelta(p.unrealised, 2), el('small', {}, c.sgn(p.unrealised / (p.avg * p.qty) * 100))),
+      el('div', {class: 'a'}, c.bsPair(p.id)));
+    const T = p.trades, pnl = uniq(T.map(t => t.unrealised)), exits = uniq(T.map(t => t.exit)).sort();
+    return el('li', {}, el('div', {class: 'w'}, el('div', {class: 'nm'}, inst(p.id), c.apBadge(p.family)),
+        el('small', {}, `${T.length} trade${T.length > 1 ? 's' : ''}: ${uniq(T.map(t => t.strategy)).join(', ')} · N+${uniq(T.map(t => t.horizon)).join(', N+')}`)),
+      el('div', {class: 'q'}, el('span', {}, `${money(T[0].amount)} each`), el('small', {}, 'exits ' + exits.map(d => c.dateShort(d + 'T06:00:00Z') + (d === session ? ' (today)' : '')).join(', '))),
+      el('div', {class: 'p'}, pnl.length === 1 ? moneyDelta(pnl[0], 2) : el('span', {}, moneyDelta(Math.min(...pnl), 2), ' to ', moneyDelta(Math.max(...pnl), 2)), el('small', {}, T.length > 1 ? 'each trade' : c.sgn(T[0].unrealised / T[0].amount * 100))),
+      el('div', {class: 'a'}, c.bsPair(p.id))); };
   main.append(el('div', {class: 'grid sec'},
-    el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Open positions'), el('span', {class: 'end'}, `${M.positions.length} across ${new Set(M.positions.map(p => p.account)).size} accounts`, goLink('Portfolio', 'positions'))),
-      el('ul', {class: 'pos'}, ...M.positions.map(posRow)),
-      el('p', {class: 'note'}, 'Each position stays in its own paper account; nothing is summed. B and S trade your Manual account; strategy books are not traded by hand.')),
-    el('div', {class: 'col'}, attention, risk)));
+    el('section', {class: 'card', 'aria-label': 'Open paper trades'}, head('Open paper trades', 'Yours first, then each strategy family’s trades by stock. B and S trade your own account.', ['Portfolio', 'positions']), tabs,
+      el('ul', {class: 'pos'}, ...rows.slice(PPG * PPG_SIZE, PPG * PPG_SIZE + PPG_SIZE).map(posRow), rows.length ? null : el('li', {class: 'quiet'}, 'Nothing open here.')),
+      el('div', {class: 'pager'}, el('span', {}, rows.length ? `${PPG * PPG_SIZE + 1}–${Math.min(rows.length, PPG * PPG_SIZE + PPG_SIZE)} of ${rows.length}` : ''),
+        el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Previous page', disabled: PPG === 0, onclick: () => { PPG--; c.rerender(); }}, icon('chevron_left')),
+        el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Next page', disabled: PPG >= pages - 1, onclick: () => { PPG++; c.rerender(); }}, icon('chevron_right')))),
+    el('section', {class: 'card', id: 'needs', 'aria-label': 'Needs you'}, head('Needs you', 'Things to look at today.'),
+      el('ul', {class: 'att'}, ...M.attention.map(a => el('li', {}, el('span', {class: 'mb-avatar sm ' + a.tone}, icon(a.icon)), el('span', {}, el('b', {}, a.title), el('small', {}, a.sub))))))));
 
-  /* 6. today's decisions and the market */
-  const spark = it => { const v = it.spark || [], lo = Math.min(...v), hi = Math.max(...v); const s = c.svgEl('svg', {viewBox: '0 0 90 28', preserveAspectRatio: 'none', 'aria-hidden': 'true'}); s.append(c.svgEl('polyline', {points: v.map((y, i) => `${(i / (v.length - 1) * 90).toFixed(1)},${(25 - (y - lo) / (hi - lo || 1) * 22).toFixed(1)}`).join(' '), fill: 'none', stroke: it.chg_pct >= 0 ? 'var(--mb-color-up)' : 'var(--mb-color-down)', 'stroke-width': '1.8', 'vector-effect': 'non-scaling-stroke'})); return s; };
-  const stocks = Object.values(P.items).filter(i => i.kind === 'stock').sort((a, b) => b.chg_pct - a.chg_pct);
-  const b = M.breadth, tot = b.adv + b.dec + b.unch;
-  const vmark = v => el('span', {class: 'mb-mark ' + (v === 'yes' ? 'ok' : v === 'no' ? 'no' : 'na')}, icon(v === 'yes' ? 'check' : v === 'no' ? 'close' : 'remove'));
-  main.append(el('div', {class: 'grid even sec'},
-    el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Today’s decisions'), el('span', {class: 'end'}, goLink('Strategies', 'scoreboards'))),
-      el('ul', {class: 'dec'}, ...M.decisions.map(d => el('li', {}, vmark(d.verdict), el('span', {}, el('b', {}, `${d.who}: ${d.what}`), el('small', {}, d.detail)), el('span', {class: 'mb-asof'}, c.when(d.at)))))),
-    el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Market'), el('span', {class: 'end'}, goLink('Markets', 'markets'))),
-      el('div', {}, ...P.indices.map(id => { const it = item(id); return el('div', {class: 'idx'}, el('span', {}, el('b', {}, inst(id)), el('small', {}, c.asOf(it).short)), spark(it), el('span', {class: 'v'}, num(it.last), el('br'), delta(it.chg_pct))); })),
-      el('div', {class: 'movers'}, el('div', {}, el('div', {class: 'mb-micro'}, 'Top gainers'), ...stocks.slice(0, 3).map(i => el('div', {class: 'm'}, inst(i.id), delta(i.chg_pct)))),
-        el('div', {}, el('div', {class: 'mb-micro'}, 'Top losers'), ...stocks.slice(-3).reverse().map(i => el('div', {class: 'm'}, inst(i.id), delta(i.chg_pct))))),
-      el('div', {class: 'breadth'}, el('div', {class: 'bar', role: 'img', 'aria-label': `${b.adv} advances, ${b.dec} declines, ${b.unch} unchanged`}, el('i', {class: 'a', style: `width:${b.adv / tot * 100}%`}), el('i', {class: 'u', style: `width:${b.unch / tot * 100}%`}), el('i', {class: 'd', style: `width:${b.dec / tot * 100}%`})),
-        el('span', {}, `▲ ${b.adv.toLocaleString('en-IN')} advances · ▼ ${b.dec.toLocaleString('en-IN')} declines · ${b.unch} unchanged · ${b.source}`)))));
-
-  /* 7. this week and news */
+  /* 6. what is coming and what is said */
   const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const KIND = {rbi_policy: 'Policy', earnings: 'Results', holiday: 'Holiday', fno_expiry: 'F&O expiry', fomc: 'Fed', jobs_report: 'Jobs data', cpi: 'Inflation'};
+  const STATUS = {confirmed_primary: 'confirmed', corroborated: 'corroborated', single_source: 'single source', unverified: 'unverified', rumour: 'rumour', promotional: 'promotional', contradicted: 'contradicted', not_checked: 'not checked yet'};
   main.append(el('div', {class: 'grid even sec'},
-    el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Coming up'), el('span', {class: 'end'}, goLink('Calendar', 'events'))),
-      el('ul', {class: 'ev'}, ...M.events.map(e => { const d = new Date(e.date + 'T00:00:00Z'); return el('li', {}, el('span', {class: 'd'}, el('b', {}, d.getUTCDate()), el('small', {}, MON[d.getUTCMonth()])), el('span', {}, el('b', {}, e.inst ? inst(e.inst, e.title) : e.title), el('small', {}, `${c.dateShort(e.date + 'T06:00:00Z')} · ${e.time}`)), el('span', {class: 'mb-label neutral'}, e.kind)); }))),
-    el('section', {class: 'card'}, el('div', {class: 'head'}, el('h2', {}, 'Top news'), el('span', {class: 'end'}, goLink('News', 'news'))),
-      el('ul', {class: 'news'}, ...M.news.map(n => el('li', {}, el('b', {}, n.title), el('span', {class: 'm'}, inst(n.inst), el('span', {class: 'md-badge ' + n.status}, n.status.replace('_', ' ')), `${n.src} · ${c.when(n.at)}`)))))));
+    el('section', {class: 'card'}, head('Coming up', 'Results, policy, holidays and expiry from the stock tool’s event calendar.', ['Calendar', 'events']),
+      el('ul', {class: 'ev'}, ...M.events.map(e => { const d = new Date(e.date + 'T00:00:00Z'); return el('li', {}, el('span', {class: 'd'}, el('b', {}, d.getUTCDate()), el('small', {}, MON[d.getUTCMonth()])), el('span', {}, el('b', {}, e.inst ? inst(e.inst, e.title) : e.title), el('small', {}, c.dateShort(e.date + 'T06:00:00Z') + (e.date === session ? ' · today' : '') + (e.major ? ' · major' : ''))), el('span', {class: 'mb-label neutral'}, KIND[e.kind] || e.kind)); }))),
+    el('section', {class: 'card'}, head('Top news', 'From the news run, with how far each story is confirmed.', ['News', 'news']),
+      el('ul', {class: 'news'}, ...M.news.map(n => el('li', {}, el('b', {}, n.title), el('span', {class: 'm'}, ...n.tickers.map(t => P.items[t] ? inst(t) : el('span', {}, t)), el('span', {class: 'md-badge ' + n.status}, STATUS[n.status] || n.status), `${n.src} · ${c.when(n.at)}`)))))));
 }});
 </script>
 </body>
