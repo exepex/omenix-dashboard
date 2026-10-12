@@ -150,14 +150,14 @@
 
   /* ---- Shape ---------------------------------------------------------------------------- */
   --md-sys-shape-corner-none: 0;
-  --md-sys-shape-corner-extra-small: 6px;
-  --md-sys-shape-corner-small: 8px;
-  --md-sys-shape-corner-medium: 12px;
-  --md-sys-shape-corner-large: 16px;
-  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-small: 2px;
+  --md-sys-shape-corner-small: 4px;
+  --md-sys-shape-corner-medium: 4px;
+  --md-sys-shape-corner-large: 8px;
+  --md-sys-shape-corner-extra-large: 12px;
   --md-sys-shape-corner-full: 9999px;
-  --mb-card-radius: 12px;        /* cards */
-  --mb-panel-radius: 10px;       /* tiles and columns inside a card */
+  --mb-card-radius: 4px;         /* cards: sharp corners (owner, 13 Oct 2026) */
+  --mb-panel-radius: 4px;        /* tiles and columns inside a card */
   --mb-card-border: 1px solid transparent;   /* cards are lifted by a shadow, not a hairline */
   --mb-card-shadow: 0 2px 8px rgba(47, 51, 73, .08), 0 0 1px rgba(47, 51, 73, .14);
   --mb-card-shadow-hover: 0 6px 18px rgba(47, 51, 73, .12), 0 0 1px rgba(47, 51, 73, .14);

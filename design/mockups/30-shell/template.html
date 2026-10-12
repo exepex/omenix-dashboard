@@ -36,8 +36,6 @@ PF.mount({screen: 'shell', group: null, render(main, c) {
     meta: [c.mockTag(), c.paperTag(), el('span', {class: 'mb-asof', 'data-tip': 'The mockups run on a fixed clock so every build gives the same page.'}, icon('schedule'), 'Mock clock ' + c.nowLabel())],
     actions: [el('button', {class: 'md-btn outlined', type: 'button', onclick: () => c.openPal('')}, icon('search'), 'Search', el('span', {class: 'mb-kbd'}, '/')),
               el('button', {class: 'md-btn filled', type: 'button', onclick: () => c.openOrder(india ? 'RELIANCE' : 'AAPL', 'buy')}, icon('receipt_long'), 'Paper order')]}));
-  main.append(el('div', {class: 'mb-alert paper'}, icon('info'), el('div', {}, el('b', {class: 't'}, 'The frame every screen sits in'),
-    el('div', {class: 's'}, 'Top: search, market, indices, alerts, theme, profile. Left: the navigation rail and your watchlist. Right: a drawer for paper orders and quick views. On a phone: bottom tabs and a bottom sheet. Prices are as-of times, never live; every order is Paper.')), el('span')));
 
   const part = (ic, tone, title, text, ...tries) => el('section', {class: 'card part'}, el('div', {class: 't'}, el('span', {class: 'mb-avatar ' + tone}, icon(ic)), el('h2', {}, title)), el('p', {}, text), el('div', {class: 'try'}, ...tries));
   const btn = (label, fn, cls = 'md-btn outlined small', ic) => el('button', {class: cls, type: 'button', onclick: fn}, ic ? icon(ic) : null, label);

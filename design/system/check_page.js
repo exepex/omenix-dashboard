@@ -1,6 +1,7 @@
 // Playwright check of a built page with the pre-installed Chromium (no `playwright install`):
 //   node design/system/check_page.js <page.html> <out-dir> <prefix> [hover-selector]
-// At 1280 and 390 px: console errors/warnings, page errors, any non-file request, horizontal
+// At 1280 and 390 px: console errors/warnings, page errors, any non-file request, horizontal (cards inside a sideways
+// .mb-carousel scroller are exempt from the edge check, like table wrappers),
 // overflow and elements past the viewport edge; writes <prefix>-1280-full.png, <prefix>-390-full.png
 // and <prefix>-390-viewport.png (and <prefix>-1280-hover.png when a hover selector is given).
 const { chromium } = require('playwright');
@@ -19,7 +20,7 @@ const [,, file, outDir, prefix, hoverSel] = process.argv;
     await page.waitForTimeout(600);
     const sw = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth));
     if (sw > w) errs.push(`${tag} horizontal overflow: ${sw} > ${w}`);
-    const wide = await page.evaluate(vw => Array.from(document.querySelectorAll('body *')).filter(el => { const r = el.getBoundingClientRect(); return r.right > vw + 1 && r.width > 0 && getComputedStyle(el).position !== 'fixed' && !el.closest('.md-table-wrap, .tblwrap, .md-pre, pre, .tape') && el.id !== 'tip'; }).slice(0, 6).map(el => el.tagName + '.' + el.className + ' ' + Math.round(el.getBoundingClientRect().right)), w);
+    const wide = await page.evaluate(vw => Array.from(document.querySelectorAll('body *')).filter(el => { const r = el.getBoundingClientRect(); return r.right > vw + 1 && r.width > 0 && getComputedStyle(el).position !== 'fixed' && !el.closest('.md-table-wrap, .tblwrap, .md-pre, pre, .tape, .mb-carousel') && el.id !== 'tip'; }).slice(0, 6).map(el => el.tagName + '.' + el.className + ' ' + Math.round(el.getBoundingClientRect().right)), w);
     if (wide.length) errs.push(`${tag} elements past the edge: ${wide.join(' | ')}`);
     await page.screenshot({ path: path.join(outDir, `${prefix}-${tag}-full.png`), fullPage: true });
     if (mobile) await page.screenshot({ path: path.join(outDir, `${prefix}-${tag}-viewport.png`), fullPage: false });
