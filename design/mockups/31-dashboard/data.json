@@ -1,0 +1,652 @@
+{
+ "_mock": true,
+ "_note": "MOCK DATA for page design only (design/PLATFORM_DESIGN.md section 4, screen 1). Accounts, positions, ideas, decisions, events and news are invented and consistent with 30-shell/data.json (prices) and with each other. Not advice; research and paper trading only.",
+ "page": "dashboard",
+ "spec": "design/PLATFORM_DESIGN.md section 4 #1; owner feedback 13 Oct 2026 (quick search, quick orders, top ideas, no banners)",
+ "score_note": "Idea score 0-100: how strongly the tool's own evidence points this way today after costs. Stocks: strategies agreeing (half) and the buyers' average chance of a rise (half). F&O: probability of profit and reward to risk. A ranking aid, not a proven edge.",
+ "markets": {
+  "india": {
+   "session": {
+    "state": "closed",
+    "text": "NSE closed at 15:30 IST · next session Tue 13 Oct 09:15"
+   },
+   "accounts": [
+    {
+     "id": "manual-in",
+     "name": "Manual (paper)",
+     "kind": "manual",
+     "value": 500054.77,
+     "day": 1262.37,
+     "cash": 451334.77,
+     "note": "Your own trades"
+    },
+    {
+     "id": "stock-in",
+     "name": "Stock tool portfolio",
+     "kind": "stock",
+     "value": 1012480.0,
+     "day": 1342.17,
+     "cash": 228400.0,
+     "note": "3 open trades"
+    },
+    {
+     "id": "fno-b1",
+     "name": "F&O Book 1",
+     "kind": "book",
+     "value": 503210.0,
+     "day": 0.0,
+     "cash": 503210.0,
+     "note": "No open structure"
+    },
+    {
+     "id": "fno-b2",
+     "name": "F&O Book 2",
+     "kind": "book",
+     "value": 508940.5,
+     "day": 463.95,
+     "cash": 448210.0,
+     "note": "1 iron fly open"
+    },
+    {
+     "id": "fno-b3",
+     "name": "F&O Book 3",
+     "kind": "book",
+     "value": 496150.0,
+     "day": 0.0,
+     "cash": 496150.0,
+     "note": "No open structure"
+    }
+   ],
+   "positions": [
+    {
+     "id": "RELIANCE",
+     "account": "manual-in",
+     "qty": 40,
+     "avg": 1214.6,
+     "unrealised": 136.0,
+     "day": 1262.37,
+     "note": null
+    },
+    {
+     "id": "HDFCBANK",
+     "account": "stock-in",
+     "qty": 140,
+     "avg": 711.5,
+     "unrealised": -7.0,
+     "day": 927.55,
+     "exit": "Wed 14 Oct",
+     "target": 726.0,
+     "stop": 698.0
+    },
+    {
+     "id": "MARUTI",
+     "account": "stock-in",
+     "qty": 9,
+     "avg": 11480.0,
+     "unrealised": 1305.0,
+     "day": 840.65,
+     "exit": "Thu 15 Oct",
+     "target": 11790.0,
+     "stop": 11310.0
+    },
+    {
+     "id": "INDIGO",
+     "account": "stock-in",
+     "qty": 20,
+     "avg": 5120.0,
+     "unrealised": -1390.0,
+     "day": -426.03,
+     "exit": "Tue 13 Oct",
+     "target": 5260.0,
+     "stop": 5020.0,
+     "flag": "Near its stop: 0.6% above ₹5,020"
+    },
+    {
+     "id": "FLY-B2",
+     "structure": "NIFTY 27 Oct short iron fly 24500 ±300",
+     "account": "fno-b2",
+     "legs": [
+      {
+       "id": "NIFTY-24500CE-OCT",
+       "qty": -75,
+       "avg": 214.0
+      },
+      {
+       "id": "NIFTY-24500PE-OCT",
+       "qty": -75,
+       "avg": 166.5
+      },
+      {
+       "id": "NIFTY-24800CE-OCT",
+       "qty": 75,
+       "avg": 82.0
+      },
+      {
+       "id": "NIFTY-24200PE-OCT",
+       "qty": 75,
+       "avg": 70.0
+      }
+     ],
+     "unrealised": 1792.5,
+     "day": 463.95,
+     "max_loss": 5362.5,
+     "days_left": 15,
+     "exit_rule": "Exit at 50% of credit or 2 sessions before expiry"
+    }
+   ],
+   "at_risk": [
+    {
+     "account": "manual-in",
+     "used": 0.0,
+     "limit": 30000
+    },
+    {
+     "account": "fno-b1",
+     "used": 0.0,
+     "limit": 30000
+    },
+    {
+     "account": "fno-b2",
+     "used": 5362.5,
+     "limit": 30000
+    },
+    {
+     "account": "fno-b3",
+     "used": 0.0,
+     "limit": 30000
+    }
+   ],
+   "attention": [
+    {
+     "icon": "warning",
+     "tone": "warn",
+     "inst": "INDIGO",
+     "title": "INDIGO is near its stop",
+     "sub": "₹5,050.50, 0.6% above the ₹5,020 stop · Stock tool portfolio · checked 15:10 IST"
+    },
+    {
+     "icon": "event",
+     "tone": "info",
+     "inst": "RELIANCE",
+     "title": "RELIANCE results on Fri 16 Oct",
+     "sub": "You hold 40 in Manual (paper): results can move the price beyond its usual range"
+    },
+    {
+     "icon": "notifications_active",
+     "tone": "primary",
+     "inst": "HDFCBANK",
+     "title": "Alert: HDFCBANK crossed ₹710",
+     "sub": "Your price alert · checked at the 15:10 run (not live)"
+    }
+   ],
+   "stock_ideas": [
+    {
+     "id": "RELIANCE",
+     "score": 82,
+     "side": "buy",
+     "agree": [
+      12,
+      15
+     ],
+     "prob": 0.64,
+     "horizon": 3,
+     "exp_pct": 2.4,
+     "target": 1247.0,
+     "range": [
+      1198,
+      1262
+     ],
+     "why": "12 of 15 strategies buy at N+3; results on 16 Oct"
+    },
+    {
+     "id": "HDFCBANK",
+     "score": 74,
+     "side": "buy",
+     "agree": [
+      10,
+      15
+     ],
+     "prob": 0.61,
+     "horizon": 2,
+     "exp_pct": 1.6,
+     "target": 723.0,
+     "range": [
+      702,
+      731
+     ],
+     "why": "10 of 15 buy at N+2; corroborated deposit-growth news"
+    },
+    {
+     "id": "MARUTI",
+     "score": 69,
+     "side": "buy",
+     "agree": [
+      9,
+      15
+     ],
+     "prob": 0.59,
+     "horizon": 3,
+     "exp_pct": 1.1,
+     "target": 11753.0,
+     "range": [
+      11420,
+      11880
+     ],
+     "why": "9 of 15 buy at N+3; festive sales data due"
+    },
+    {
+     "id": "ICICIBANK",
+     "score": 63,
+     "side": "buy",
+     "agree": [
+      8,
+      15
+     ],
+     "prob": 0.57,
+     "horizon": 1,
+     "exp_pct": 0.8,
+     "target": 1278.5,
+     "range": [
+      1252,
+      1286
+     ],
+     "why": "8 of 15 buy at N+1; follows the bank index"
+    }
+   ],
+   "fno_ideas": [
+    {
+     "basket": "IFLY-24500",
+     "name": "NIFTY 27 Oct short iron fly 24500 ±300",
+     "score": 71,
+     "verdict": "yes",
+     "source": "F&O Book 2's 3 pm decision (Book 2 holds the same structure)",
+     "why": "IV 12.8% above the 30-day realised 10.9%; no event before expiry except RBI on Wed",
+     "pop": 58,
+     "credit": 15180.0,
+     "max_loss": 7320.0,
+     "breakevens": [
+      24297.6,
+      24702.4
+     ],
+     "margin_per_lot": 48000,
+     "width": 300,
+     "kind": "credit",
+     "legs": [
+      {
+       "id": "NIFTY-24500CE-OCT",
+       "side": "sell",
+       "lots": 1
+      },
+      {
+       "id": "NIFTY-24500PE-OCT",
+       "side": "sell",
+       "lots": 1
+      },
+      {
+       "id": "NIFTY-24800CE-OCT",
+       "side": "buy",
+       "lots": 1
+      },
+      {
+       "id": "NIFTY-24200PE-OCT",
+       "side": "buy",
+       "lots": 1
+      }
+     ]
+    },
+    {
+     "basket": "BCS-24500-24800",
+     "name": "NIFTY 27 Oct bull call spread 24500 / 24800",
+     "score": 64,
+     "verdict": "yes",
+     "source": "F&O tool forecast: NIFTY above 24,500 on 27 Oct, 57%",
+     "why": "Forecast beats its baselines on 41 scored days; defined risk",
+     "pop": 46,
+     "debit": 8640.0,
+     "max_loss": 8640.0,
+     "max_profit": 13860.0,
+     "breakevens": [
+      24615.2
+     ],
+     "margin_per_lot": 0,
+     "width": 300,
+     "kind": "debit",
+     "legs": [
+      {
+       "id": "NIFTY-24500CE-OCT",
+       "side": "buy",
+       "lots": 1
+      },
+      {
+       "id": "NIFTY-24800CE-OCT",
+       "side": "sell",
+       "lots": 1
+      }
+     ]
+    },
+    {
+     "basket": null,
+     "name": "F&O Book 1: no trade today",
+     "score": null,
+     "verdict": "no",
+     "source": "Book 1's 3 pm decision",
+     "why": "IV rank 18 is below its 30 entry floor: selling premium this cheap does not clear costs",
+     "pop": null
+    }
+   ],
+   "decisions": [
+    {
+     "who": "Stock tool",
+     "what": "4 buy picks",
+     "detail": "Top: RELIANCE at N+3 (12 of 15)",
+     "at": "2026-10-12T09:40:00Z",
+     "verdict": "yes"
+    },
+    {
+     "who": "F&O Book 1",
+     "what": "No trade",
+     "detail": "IV rank 18 < 30 entry floor",
+     "at": "2026-10-12T09:52:00Z",
+     "verdict": "no"
+    },
+    {
+     "who": "F&O Book 2",
+     "what": "Hold iron fly",
+     "detail": "Exit rules not met: 34% of credit kept",
+     "at": "2026-10-12T09:52:00Z",
+     "verdict": "hold"
+    },
+    {
+     "who": "F&O Book 3",
+     "what": "No trade",
+     "detail": "Event filter: RBI decision on Wed 14 Oct",
+     "at": "2026-10-12T09:52:00Z",
+     "verdict": "no"
+    }
+   ],
+   "breadth": {
+    "adv": 1412,
+    "dec": 1108,
+    "unch": 96,
+    "source": "NSE end-of-day file, Fri 9 Oct"
+   },
+   "events": [
+    {
+     "date": "2026-10-14",
+     "time": "10:00",
+     "title": "RBI policy decision",
+     "kind": "Macro",
+     "inst": null
+    },
+    {
+     "date": "2026-10-15",
+     "time": "after close",
+     "title": "Infosys results",
+     "kind": "Results",
+     "inst": "INFY"
+    },
+    {
+     "date": "2026-10-15",
+     "time": "after close",
+     "title": "TCS results",
+     "kind": "Results",
+     "inst": "TCS"
+    },
+    {
+     "date": "2026-10-16",
+     "time": "after close",
+     "title": "Reliance results",
+     "kind": "Results",
+     "inst": "RELIANCE"
+    },
+    {
+     "date": "2026-10-27",
+     "time": "15:30",
+     "title": "NIFTY and BANKNIFTY monthly expiry",
+     "kind": "F&O expiry",
+     "inst": "NIFTY"
+    }
+   ],
+   "news": [
+    {
+     "title": "Reliance sets 16 Oct for its September-quarter results",
+     "src": "Exchange filing",
+     "status": "confirmed_primary",
+     "at": "2026-10-12T05:50:00Z",
+     "inst": "RELIANCE"
+    },
+    {
+     "title": "HDFC Bank deposits grew 14% in the quarter, update shows",
+     "src": "Two outlets",
+     "status": "corroborated",
+     "at": "2026-10-12T04:10:00Z",
+     "inst": "HDFCBANK"
+    },
+    {
+     "title": "IndiGo adds winter routes; fuel costs rise",
+     "src": "One outlet",
+     "status": "single_source",
+     "at": "2026-10-11T13:20:00Z",
+     "inst": "INDIGO"
+    }
+   ]
+  },
+  "us": {
+   "session": {
+    "state": "closed",
+    "text": "NYSE opens 09:30 ET today (Mon 12 Oct) · last data: Fri close"
+   },
+   "accounts": [
+    {
+     "id": "manual-us",
+     "name": "Manual (paper)",
+     "kind": "manual",
+     "value": 6027.18,
+     "day": 4.39,
+     "cash": 4025.4,
+     "note": "Your own trades"
+    },
+    {
+     "id": "stock-us",
+     "name": "Stock tool portfolio",
+     "kind": "stock",
+     "value": 12410.55,
+     "day": -1.95,
+     "cash": 10426.13,
+     "note": "2 open trades"
+    }
+   ],
+   "positions": [
+    {
+     "id": "AAPL",
+     "account": "manual-us",
+     "qty": 6,
+     "avg": 329.1,
+     "unrealised": 27.18,
+     "day": 4.39
+    },
+    {
+     "id": "JPM",
+     "account": "stock-us",
+     "qty": 3,
+     "avg": 334.9,
+     "unrealised": -10.86,
+     "day": -3.29,
+     "exit": "Tue 13 Oct",
+     "target": 341.0,
+     "stop": 327.5
+    },
+    {
+     "id": "NVDA",
+     "account": "stock-us",
+     "qty": 4,
+     "avg": 236.1,
+     "unrealised": 12.56,
+     "day": 1.34,
+     "exit": "Wed 14 Oct",
+     "target": 246.0,
+     "stop": 229.0
+    }
+   ],
+   "at_risk": [],
+   "attention": [
+    {
+     "icon": "event",
+     "tone": "info",
+     "inst": "JPM",
+     "title": "JPM results on Tue 13 Oct, before the open",
+     "sub": "The stock tool's trade exits that day · Stock tool portfolio"
+    },
+    {
+     "icon": "notifications_active",
+     "tone": "primary",
+     "inst": "DAL",
+     "title": "Alert: DAL closed above $83",
+     "sub": "Your price alert · checked at the close run of 9 Oct (not live)"
+    }
+   ],
+   "stock_ideas": [
+    {
+     "id": "NVDA",
+     "score": 77,
+     "side": "buy",
+     "agree": [
+      11,
+      15
+     ],
+     "prob": 0.62,
+     "horizon": 3,
+     "exp_pct": 2.1,
+     "target": 244.3,
+     "range": [
+      232.0,
+      248.5
+     ],
+     "why": "11 of 15 strategies buy at N+3"
+    },
+    {
+     "id": "AAPL",
+     "score": 71,
+     "side": "buy",
+     "agree": [
+      10,
+      15
+     ],
+     "prob": 0.6,
+     "horizon": 2,
+     "exp_pct": 1.3,
+     "target": 337.9,
+     "range": [
+      327.0,
+      341.5
+     ],
+     "why": "10 of 15 buy at N+2; product event Tue"
+    },
+    {
+     "id": "DAL",
+     "score": 66,
+     "side": "buy",
+     "agree": [
+      9,
+      15
+     ],
+     "prob": 0.58,
+     "horizon": 1,
+     "exp_pct": 1.0,
+     "target": 84.5,
+     "range": [
+      81.9,
+      85.6
+     ],
+     "why": "9 of 15 buy at N+1 after raised outlook"
+    },
+    {
+     "id": "MSFT",
+     "score": 58,
+     "side": "buy",
+     "agree": [
+      8,
+      15
+     ],
+     "prob": 0.56,
+     "horizon": 5,
+     "exp_pct": 0.7,
+     "target": 516.0,
+     "range": [
+      498.0,
+      528.0
+     ],
+     "why": "8 of 15 buy at N+5"
+    }
+   ],
+   "fno_ideas": [],
+   "decisions": [
+    {
+     "who": "Stock tool",
+     "what": "3 buy picks",
+     "detail": "Top: NVDA at N+3 (11 of 15)",
+     "at": "2026-10-09T20:20:00Z",
+     "verdict": "yes"
+    }
+   ],
+   "breadth": {
+    "adv": 1764,
+    "dec": 1201,
+    "unch": 74,
+    "source": "Stock tool universe, Fri 9 Oct close"
+   },
+   "events": [
+    {
+     "date": "2026-10-13",
+     "time": "before open",
+     "title": "JPMorgan results",
+     "kind": "Results",
+     "inst": "JPM"
+    },
+    {
+     "date": "2026-10-14",
+     "time": "08:30",
+     "title": "US CPI (September)",
+     "kind": "Macro",
+     "inst": null
+    },
+    {
+     "date": "2026-10-16",
+     "time": "after close",
+     "title": "Netflix results",
+     "kind": "Results",
+     "inst": null
+    }
+   ],
+   "news": [
+    {
+     "title": "Delta raises its quarterly outlook on strong premium demand",
+     "src": "Company release",
+     "status": "confirmed_primary",
+     "at": "2026-10-09T11:00:00Z",
+     "inst": "DAL"
+    },
+    {
+     "title": "Nvidia supplier reports record server orders",
+     "src": "Two outlets",
+     "status": "corroborated",
+     "at": "2026-10-09T15:30:00Z",
+     "inst": "NVDA"
+    },
+    {
+     "title": "Apple said to plan a Tuesday product event",
+     "src": "One outlet",
+     "status": "single_source",
+     "at": "2026-10-10T14:00:00Z",
+     "inst": "AAPL"
+    }
+   ]
+  }
+ },
+ "proof": {
+  "settled_trades": 16,
+  "needed": 300,
+  "months_forward": 0.2,
+  "months_needed": 2
+ }
+}
