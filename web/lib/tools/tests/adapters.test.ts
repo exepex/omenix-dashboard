@@ -1,0 +1,186 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { allowlistedFetch } from "../http.ts";
+import { GithubDispatcher } from "../dispatch.ts";
+import { SlackOwnerNotifier, ownerReportText } from "../notify.ts";
+import { YahooSecResolver } from "../resolver.ts";
+import { MotherDuckInboxStore, MotherDuckReadStore } from "../motherduck.ts";
+import { redact } from "../text.ts";
+
+type Call = { url: string; init?: RequestInit };
+function recorder(answer: (url: string) => Response) {
+  const calls: Call[] = [];
+  const fetcher = async (url: string, init?: RequestInit) => {
+    calls.push({ url, init });
+    return answer(url);
+  };
+  return { calls, fetcher };
+}
+
+test("outbound fetch is limited to the HTTPS allowlist", async () => {
+  const { calls, fetcher } = recorder(() => new Response("{}"));
+  const safe = allowlistedFetch(fetcher);
+  await safe("https://slack.com/api/views.open");
+  for (const url of ["http://slack.com/api", "https://evil.example.com/", "https://slack.com.evil.example/", "https://user:pw@slack.com/"]) {
+    await assert.rejects(() => safe(url), /allowlist/);
+  }
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].init?.redirect, "error");
+});
+
+test("the dispatch posts workflow_dispatch of onboard.yml on main with the token only in the header", async () => {
+  const { calls, fetcher } = recorder(() => new Response(null, { status: 204 }));
+  const dispatcher = new GithubDispatcher({ token: "github_pat_TOKEN123", repository: "contactexepex/agentic-stock-prediction", workflow: "onboard.yml", ref: "main" }, fetcher);
+  assert.deepEqual(await dispatcher.dispatch(), { ok: true, reason: null });
+  assert.equal(calls[0].url, "https://api.github.com/repos/contactexepex/agentic-stock-prediction/actions/workflows/onboard.yml/dispatches");
+  assert.equal(calls[0].init?.body, JSON.stringify({ ref: "main" }));
+  assert.equal((calls[0].init?.headers as Record<string, string>).Authorization, "Bearer github_pat_TOKEN123");
+  const missing = new GithubDispatcher({ token: null, repository: "a/b", workflow: "onboard.yml", ref: "main" }, fetcher);
+  assert.equal((await missing.dispatch()).ok, false);
+  const refused = new GithubDispatcher({ token: "t", repository: "a/b", workflow: "onboard.yml", ref: "main" }, async () => new Response("", { status: 422 }));
+  assert.deepEqual(await refused.dispatch(), { ok: false, reason: "GitHub answered 422" });
+});
+
+test("the owner report is posted to #market-brief, escaped so user text cannot ping or link", async () => {
+  const { calls, fetcher } = recorder(() => Response.json({ ok: true }));
+  const notifier = new SlackOwnerNotifier("xoxb-test", "C0C6REB7QS2", fetcher);
+  const report = { command_id: "cmd-1", tool: "add_company", channel: "slack" as const, actor: "slack:U07ABCD123",
+    result: "refused" as const, refusal_code: "validation_failed" as const, message: "<!channel> see <https://evil.example|here>" };
+  assert.equal(await notifier.notify(report), true);
+  const body = JSON.parse(String(calls[0].init?.body));
+  assert.equal(body.channel, "C0C6REB7QS2");
+  assert.match(body.text, /for the owner/);
+  assert.doesNotMatch(body.text, /<!channel>|<https/);
+  assert.match(ownerReportText(report), /&lt;!channel&gt;/);
+  assert.equal(await new SlackOwnerNotifier(null, "C0C6REB7QS2", fetcher).notify(report), false);
+});
+
+const yahoo = (quotes: unknown[]) => Response.json({ quotes });
+const secMap = Response.json({ fields: ["cik", "name", "ticker", "exchange"], data: [[789019, "MICROSOFT CORP", "MSFT", "Nasdaq"], [1067983, "BERKSHIRE HATHAWAY INC", "BRK-B", "NYSE"]] });
+
+test("the resolver previews a US stock with its CIK and refuses ETFs and other exchanges", async () => {
+  const { fetcher } = recorder((url) => url.includes("sec.gov") ? secMap.clone() : yahoo([
+    { symbol: "MSFT", longname: "Microsoft Corporation", exchange: "NMS", quoteType: "EQUITY", sectorDisp: "Technology" },
+  ]));
+  const resolved = await new YahooSecResolver(fetcher, "market-brief research").resolve("us", "MSFT", null);
+  assert.deepEqual(resolved, { ok: true, preview: { market: "us", symbol: "MSFT", name: "Microsoft Corporation", exchange: "NASDAQ",
+    sector: "Technology", yahoo: "MSFT", nse_symbol: null, cik: "0000789019", amount: 1000, amount_is_default: true, currency: "USD" } });
+  const brk = recorder((url) => url.includes("sec.gov") ? secMap.clone() : yahoo([{ symbol: "BRK-B", longname: "Berkshire Hathaway Inc.", exchange: "NYQ", quoteType: "EQUITY" }]));
+  const berkshire = await new YahooSecResolver(brk.fetcher, "ua").resolve("us", "BRK.B", 2000);
+  assert.equal(berkshire.ok && berkshire.preview.cik, "0001067983");
+  assert.equal(berkshire.ok && berkshire.preview.amount, 2000);
+  const etf = recorder(() => yahoo([{ symbol: "SPY", longname: "SPDR S&P 500 ETF Trust", exchange: "PCX", quoteType: "ETF" }]));
+  assert.deepEqual(await new YahooSecResolver(etf.fetcher, null).resolve("us", "SPY", null),
+    { ok: false, code: "validation_failed", message: "SPY is an ETF; only common stocks can be added" });
+  const otc = recorder(() => yahoo([{ symbol: "ABCD", longname: "Abcd Inc", exchange: "PNK", quoteType: "EQUITY" }]));
+  assert.equal((await new YahooSecResolver(otc.fetcher, null).resolve("us", "ABCD", null)).ok, false);
+});
+
+test("the resolver previews an NSE stock and refuses BSE-only symbols", async () => {
+  const nse = recorder(() => yahoo([{ symbol: "HDFCBANK.NS", longname: "HDFC Bank Limited", exchange: "NSI", quoteType: "EQUITY", sector: "Financial Services" }]));
+  const resolved = await new YahooSecResolver(nse.fetcher, null).resolve("india", "HDFCBANK", null);
+  assert.equal(resolved.ok && resolved.preview.exchange, "NSE");
+  assert.equal(resolved.ok && resolved.preview.nse_symbol, "HDFCBANK");
+  assert.equal(resolved.ok && resolved.preview.amount, 100000);
+  assert.equal(nse.calls.some((call) => call.url.includes("sec.gov")), false);
+  const bse = recorder(() => yahoo([{ symbol: "ABCLTD.BO", longname: "Abc Ltd", exchange: "BSE", quoteType: "EQUITY" }]));
+  assert.deepEqual(await new YahooSecResolver(bse.fetcher, null).resolve("india", "ABCLTD", null),
+    { ok: false, code: "validation_failed", message: "ABCLTD is listed on BSE only; only NSE stocks can be added" });
+});
+
+test("MotherDuck stores send one parameterised statement per read and never take a table name from input", async () => {
+  const seen: { text: string; values: unknown[] }[] = [];
+  const query = async (text: string, values: unknown[]) => {
+    seen.push({ text, values });
+    return { rows: [{ market: "us", page_key: "_", as_of: new Date("2026-10-07T01:00:00Z"), cutoff: null, built_at: null,
+      schema_version: "1", source_commit: null, payload_sha256: null, payload: "{\"a\":1}" }] };
+  };
+  const store = new MotherDuckReadStore(query);
+  const row = await store.readModel("home", "us", "_");
+  assert.deepEqual(row?.payload, { a: 1 });
+  assert.equal(row?.as_of, "2026-10-07T01:00:00.000Z");
+  assert.match(seen[0].text, /FROM rm\.home WHERE market = \$1 AND page_key = \$2$/);
+  assert.deepEqual(seen[0].values, ["us", "_"]);
+  await assert.rejects(() => store.readModel("home; DROP TABLE x", "us", "_"), /unknown read model/);
+});
+
+test("company commands go to B1's inbox.company_commands, paper trades to inbox.requests; a key is claimed once", async () => {
+  const calls: { text: string; values: unknown[] }[] = [];
+  const claimed = new Set<string>();
+  const query = async (text: string, values: unknown[]) => {
+    calls.push({ text, values });
+    if (text.startsWith("INSERT INTO")) {
+      const key = String(values[0]);
+      if (claimed.has(key)) return { rows: [] };
+      claimed.add(key);
+      return { rows: [{ inbox_id: key }] };
+    }
+    return { rows: [{ inbox_id: "key-000001", tool: "reactivate_company", submitted_by: "slack:U1", command_id: "cmd-1",
+      args_sha256: "f".repeat(64) }] };
+  };
+  const inbox = new MotherDuckInboxStore(query);
+  const company = { inbox_id: "key-000001", kind: "watchlist_events", tool: "reactivate_company", market: "us", arguments: { ticker: "AAPL" },
+    preview: null, channel: "slack" as const, submitted_by: "slack:U1", agent: "slack-gateway", command_id: "cmd-1",
+    submitted_at: "2026-10-07T10:00:00Z", args_sha256: "f".repeat(64), slack_channel: null, slack_ts: null };
+  const budget = { sinceIso: "2026-10-07T00:00:00Z", limit: 20 };
+  assert.deepEqual(await inbox.claimRequest(company, budget), { claimed: true, existing: null });
+  assert.match(calls[0].text, /^INSERT INTO inbox\.company_commands \(inbox_id, market, tool, arguments, actor, channel, submitted_at, command_id,/);
+  assert.deepEqual(calls[0].values.slice(0, 8), ["key-000001", "us", "reactivate_company", "{\"ticker\":\"AAPL\"}", "slack:U1", "slack",
+    "2026-10-07T10:00:00Z", "cmd-1"], "B1's eight columns, actor = submitted_by");
+  const again = await inbox.claimRequest(company, budget);
+  assert.equal(again.claimed, false);
+  assert.equal(again.existing?.command_id, "cmd-1");
+  const trade = { ...company, inbox_id: "key-000002", kind: "portfolio_trades", tool: "add_paper_trade" };
+  assert.deepEqual(await inbox.claimRequest(trade, budget), { claimed: true, existing: null });
+  assert.match(calls.at(-1)!.text, /^INSERT INTO inbox\.requests /);
+  for (const call of calls.filter((item) => item.text.startsWith("INSERT INTO"))) {
+    assert.match(call.text, /NOT EXISTS \(SELECT 1 FROM inbox\.(requests|company_commands) WHERE inbox_id = \$1\)/);
+    assert.match(call.text, /UNION ALL SELECT agent, submitted_at FROM inbox\.requests\) WHERE agent = \$\d+ AND submitted_at >= CAST\(\$\d+ AS TIMESTAMPTZ\)\) < CAST\(\$\d+ AS INTEGER\) ON CONFLICT \(inbox_id\) DO NOTHING RETURNING inbox_id$/);
+  }
+});
+
+test("redaction removes configured secrets and common token shapes", () => {
+  const text = redact("a md-SECRET-value-123 b xoxb-12345-67890-abcdefghij c ghp_abcdefghijklmnopqrstuvwxyz1234 d sk-ant-api03-abcdefghijk", ["md-SECRET-value-123"]);
+  assert.equal(text, "a [redacted] b [redacted] c [redacted] d [redacted]");
+});
+
+test("a concurrent claim that loses on the primary key answers with the stored row (issue #109)", async () => {
+  const query = async (text: string) => {
+    if (text.startsWith("INSERT INTO")) throw new Error("Constraint Error: Duplicate key \"inbox_id: key-000001\"");
+    return { rows: [{ inbox_id: "key-000001", tool: "reactivate_company", submitted_by: "slack:U1", command_id: "cmd-1",
+      args_sha256: "f".repeat(64) }] };
+  };
+  const row = { inbox_id: "key-000001", kind: "watchlist_events", tool: "reactivate_company", market: "us", arguments: {},
+    preview: null, channel: "slack" as const, submitted_by: "slack:U1", agent: "slack-gateway", command_id: "cmd-2",
+    submitted_at: "2026-10-07T10:00:00Z", args_sha256: "f".repeat(64), slack_channel: null, slack_ts: null };
+  const result = await new MotherDuckInboxStore(query).claimRequest(row, { sinceIso: "2026-10-07T00:00:00Z", limit: 20 });
+  assert.deepEqual(result, { claimed: false, existing: { inbox_id: "key-000001", tool: "reactivate_company", submitted_by: "slack:U1",
+    command_id: "cmd-1", args_sha256: "f".repeat(64) } });
+  const broken = new MotherDuckInboxStore(async () => { throw new Error("connection lost"); });
+  await assert.rejects(() => broken.claimRequest(row, { sinceIso: "2026-10-07T00:00:00Z", limit: 20 }), /connection lost/);
+  const noRow = new MotherDuckInboxStore(async (text: string) => {
+    if (text.startsWith("INSERT INTO")) throw new Error("insert failed");
+    return { rows: [] };
+  });
+  await assert.rejects(() => noRow.claimRequest(row, { sinceIso: "2026-10-07T00:00:00Z", limit: 20 }), /insert failed/,
+    "an INSERT error with no stored row is rethrown");
+  const lookupFails = new MotherDuckInboxStore(async (text: string) => {
+    throw new Error(text.startsWith("INSERT INTO") ? "insert failed" : "lookup failed");
+  });
+  await assert.rejects(() => lookupFails.claimRequest(row, { sinceIso: "2026-10-07T00:00:00Z", limit: 20 }), /insert failed/,
+    "a failed lookup keeps the INSERT's own error");
+});
+
+test("findRequest looks a key up in both inbox tables with the claim's lookup statement (issue #123)", async () => {
+  const calls: { text: string; values: unknown[] }[] = [];
+  const stored = { inbox_id: "key-000001", tool: "reactivate_company", submitted_by: "slack:U1", command_id: "cmd-1",
+    args_sha256: "f".repeat(64) };
+  const inbox = new MotherDuckInboxStore(async (text: string, values: unknown[] = []) => {
+    calls.push({ text, values });
+    return { rows: values[0] === "key-000001" ? [stored] : [] };
+  });
+  assert.deepEqual(await inbox.findRequest("key-000001"), stored);
+  assert.equal(await inbox.findRequest("key-000002"), null);
+  assert.match(calls[0].text, /FROM inbox\.company_commands WHERE inbox_id = \$1 UNION ALL .* FROM inbox\.requests WHERE inbox_id = \$1$/);
+  assert.deepEqual(calls[0].values, ["key-000001"]);
+});

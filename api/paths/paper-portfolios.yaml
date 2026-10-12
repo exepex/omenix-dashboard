@@ -1,0 +1,159 @@
+# B13: the Paper portfolios page (design/mockups/07-paper-portfolios; docs/ws/b13.md). Research only: a paper trade is
+# a record, never an order.
+/api/v1/markets/{market}/portfolios:
+  get:
+    tags: [portfolio]
+    operationId: getPaperPortfolios
+    summary: The head-to-head portfolios, the open head-to-head trades with their latest intraday check, every paper trade in one place (the accuracy view indexed per entry session) and the owner's own paper portfolio
+    x-read-model: rm.portfolio
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: The Paper portfolios read model
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperPortfoliosResponse'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/portfolios/sessions/{date}:
+  get:
+    tags: [portfolio]
+    operationId: getPortfolioSession
+    summary: >-
+      Every accuracy-view paper trade entered on one session (open, closed or not entered) with the session's counts;
+      the last 60 entry sessions (the index is all_trades.sessions of GET /portfolios), others 404
+    x-read-model: rm.portfolio
+    parameters:
+      - $ref: '#/components/parameters/Market'
+      - name: date
+        in: path
+        required: true
+        description: The entry session D (YYYY-MM-DD); page_key = `trades:<date>`
+        schema: {$ref: '#/components/schemas/IsoDate'}
+    responses:
+      '200':
+        description: One entry session's accuracy-view trades
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PortfolioSessionResponse'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/portfolios/open/{hold}:
+  get:
+    tags: [portfolio]
+    operationId: getPortfolioHold
+    summary: >-
+      Every open accuracy-view paper trade of one hold (k sessions after the entry session) with the hold's split per
+      family (UX3); a hold without open trades has no page, so 404 (the index is all_trades.open_holds of GET /portfolios)
+    x-read-model: rm.portfolio
+    parameters:
+      - $ref: '#/components/parameters/Market'
+      - name: hold
+        in: path
+        required: true
+        description: The hold k (1-5); page_key = `open:<k>`
+        schema: {type: integer, minimum: 1, maximum: 5}
+    responses:
+      '200':
+        description: One hold's open accuracy-view trades
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PortfolioHoldResponse'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/portfolios/finished/{date}:
+  get:
+    tags: [portfolio]
+    operationId: getPortfolioFinished
+    summary: >-
+      Every accuracy-view paper trade that exited on one session, with the session's counts per family (UX3); the last
+      10 sessions with such trades (the index is all_trades.finished_sessions of GET /portfolios), others 404
+    x-read-model: rm.portfolio
+    parameters:
+      - $ref: '#/components/parameters/Market'
+      - name: date
+        in: path
+        required: true
+        description: The exit session (YYYY-MM-DD); page_key = `finished:<date>`
+        schema: {$ref: '#/components/schemas/IsoDate'}
+    responses:
+      '200':
+        description: One exit session's accuracy-view trades
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PortfolioFinishedResponse'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/paper-trades:
+  post:
+    tags: [portfolio]
+    operationId: createPaperTrade
+    summary: Submit one of the owner's paper trades (pending until the next import validates and stores it)
+    description: |
+      The add-trade form of the Paper portfolios page. A thin call into the governed tool layer (`add_paper_trade`,
+      mcp/tools.yaml; agent `dashboard`, identity from Vercel Authentication, never from the body), which appends one
+      row to the append-only inbox (`inbox.requests`) and logs the call; `scripts/portfolio.py import-inbox` validates
+      it with the same checks as `add-trade` and appends it to data/<market>/portfolio_trades/. Nothing is sent to any
+      broker. Pending means in the inbox, not yet recorded. JSON only; a cross-site Origin is refused. Repeating a request with the same Idempotency-Key and body
+      returns the first receipt; the same key with another body is a conflict. Refused in gateway mode.
+    parameters:
+      - $ref: '#/components/parameters/Market'
+      - $ref: '#/components/parameters/IdempotencyKey'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/PaperTradeSubmission'}
+    responses:
+      '202':
+        description: Pending in the inbox until the import writes it to the record
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperTradeReceipt'}
+      '200':
+        description: The receipt of an earlier request with the same key and body
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperTradeReceipt'}
+      '403':
+        description: Refused for this caller (a cross-site Origin, before the tool layer and not logged; or the channel)
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperTradeReceipt'}
+          application/problem+json:
+            schema: {$ref: '#/components/schemas/Problem'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '409':
+        description: The Idempotency-Key was already used for another request; nothing was written
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperTradeReceipt'}
+      '415':
+        description: The body is not application/json
+        content:
+          application/problem+json:
+            schema: {$ref: '#/components/schemas/Problem'}
+      '422':
+        description: The body failed validation (no Idempotency-Key, not a JSON object, unknown fields, or the tool layer's checks); logged in the command log
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperTradeReceipt'}
+      '429':
+        description: The dashboard agent's daily write budget is used up
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperTradeReceipt'}
+      '503':
+        description: The inbox or command log is unavailable, or the dashboard agent is switched off; nothing was written
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PaperTradeReceipt'}

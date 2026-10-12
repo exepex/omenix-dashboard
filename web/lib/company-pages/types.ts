@@ -1,0 +1,165 @@
+// The company pages' payloads as this UI reads them (api/schemas/company.yaml: CompanyPage, StockStrategiesPage,
+// LifecyclePage). The shared blocks come from lib/ui/types.ts (B7); the rest are the 03/04 mockups' fields. Stored
+// measures may be null (a missing bar, a trade not entered), so numbers are nullable where the schema says so.
+import type { Family } from "../ui/constants.ts";
+import type { Pick, PickCandidate } from "../ui/costs.ts";
+import type {
+  AgreementMap, CompanyRecord, GoLive, IsoDate, IsoTime, OpenTrade, PageBase, StrategyMap, TradeCheck as SharedCheck,
+} from "../ui/types.ts";
+
+export type { Family };
+export type { AgreementRow, OpenTrade } from "../ui/types.ts";
+
+export interface Bar { date: IsoDate; open: number; high: number; low: number; close: number; volume: number | null; adjusted?: boolean }
+
+export interface Prediction {
+  id: string; strategy_id: string; family: Family; ticker: string; made_at: IsoTime; as_of_date: IsoDate;
+  session_date: IsoDate; exit_date: IsoDate; horizon_days: number; direction: "up" | "down"; prob_up: number | null;
+  qualifies: boolean; base_close?: number | null; target_price: number | null; lo50: number | null; hi50: number | null;
+  lo80: number | null; hi80: number | null; range_widen?: number | null; threshold?: number | null; confidence?: number | null;
+  model_prob?: number | null; agent_adjustment?: number | null; adjustment_reason?: string | null; reason?: string | null;
+  evidence_ids?: string[] | null; regime?: string | null; quality?: string | null;
+}
+
+export interface TradeCheck extends SharedCheck {
+  id?: string; check_id?: string; prediction_id?: string; strategy_id?: string; view?: string; horizon_days?: number;
+  session_date?: IsoDate; entry_price?: number | null; target_price?: number | null; to_target_pct?: number | null;
+  high_since_entry_pct?: number | null; low_since_entry_pct?: number | null; target_reached?: boolean | null;
+  target_reached_session?: number | null; sessions_left?: number | null;
+}
+
+export interface SettledTrade {
+  id: string; trade_id: string; prediction_id: string; strategy_id: string; family: Family; view: string;
+  pick_rule: string | null; horizon_days: number; made_at?: IsoTime; entry_date: IsoDate; exit_date: IsoDate;
+  exit_date_actual: IsoDate | null; status: string; flags: string[] | null; amount: number | null; currency?: string;
+  entry_price: number | null; exit_price: number | null; quantity: number | null; gross_pnl: number | null;
+  costs: number | null; net_pnl: number | null; return_pct: number | null; prob_up: number | null;
+  target_price: number | null; range_hit: boolean | null; target_reached: boolean | null;
+  target_reached_session: number | null; max_favourable_pct: number | null; max_adverse_pct: number | null;
+  move_pct: number | null; market_pct: number | null; sector_pct: number | null; news_pct: number | null;
+  company_pct: number | null; reason_code: string | null; reason_codes: string[] | null;
+  reason_detail?: { benchmark?: string | null; benchmark_pct?: number | null; beta?: number | null; sector_source?: string | null; note?: string | null } | null;
+  settled_at?: IsoTime;
+}
+
+export interface AiReason {
+  id: string; trade_id: string | null; strategy_id: string | null; session_date: IsoDate; kind: string;
+  rank: number | null; text: string; cited_ids: string[]; created_at?: IsoTime;
+}
+
+export interface NewsItem {
+  id: string; title: string; source: string | null; url: string | null; published_at: IsoTime | null;
+  first_seen_at: IsoTime; status: string | null; independent_origins: number | null; primary_ids: string[] | null;
+  enrichment: { event_type?: string | null; materiality?: string | null; sentiment?: number | null; priced_in?: boolean | null } | null;
+  headline_history: Array<{ title: string; seen_at: IsoTime }> | null;
+}
+
+export interface ResultsDigest {
+  id: string; fiscal_label: string | null; release_date: IsoDate | null; release_timing: string | null;
+  period_end: IsoDate | null; basis: string | null; currency: string | null; status: string; numbers_as_of: IsoTime | null;
+  numbers: Record<string, number | null | undefined> & { derived?: unknown };
+  consensus: { eps_estimate?: number | null; eps_reported?: number | null; surprise_pct?: number | null } | null;
+  reaction: { from: IsoDate; to: IsoDate; stock_pct: number | null; benchmark_pct: number | null; excess_pct: number | null } | null;
+  bullets: Array<{ topic?: string; text?: string; quote?: string }> | null;
+  sources: Array<{ id: string; kind: string; doc?: string | null; url?: string | null }> | null;
+}
+
+export interface CalendarEvent {
+  date: IsoDate; type: string; name: string; ticker: string | null; timing: string | null;
+  reaction_sessions: IsoDate[] | null; major: boolean | null; provisional: boolean | null; release?: string | null;
+}
+
+export interface LifecycleEvent {
+  id: string; event: string; effective_from: IsoTime; recorded_at: IsoTime; amount: number | null;
+  reason: string | null; requested_by: string | null; channel: string; supersedes?: string | null;
+}
+
+export interface PickCandidateRow extends PickCandidate {
+  prediction_id?: string | null; prob_up?: number | null; move_pct?: number | null; loss_pct?: number | null;
+  costs_pct?: number | null; expected_gain_pct?: number | null; gain_per_session_pct?: number | null; eligible?: boolean | null;
+}
+
+export interface HeadToHeadPick extends Pick {
+  id: string; family: Family; pick_rule: string; status: string; strategy_id: string | null;
+  strongest_basis: string | null; prediction_id: string | null; session_date?: IsoDate;
+  ranking?: Array<{ strategy_id: string; rank: number; basis?: string; settled_trades: number; net_pnl: number }>;
+  candidates?: PickCandidateRow[];
+}
+
+export interface ScoreRow {
+  strategy_id: string | null; horizon_days: number | "all"; trades: number; net_pnl: number | null; mean_return_pct?: number | null;
+  win_rate?: number | null; avg_target_error_pct?: number | null; sample_badge?: string | null;
+  luck_test?: {
+    method: string; n: number; m?: number | null; low_pct: number | null; high_pct: number | null;
+    corrected_low_pct?: number | null; corrected_high_pct?: number | null; corrected?: boolean | null;
+  } | null;
+}
+
+/** ranges.py's published range of one horizon for the as-of date (B12's rm.stock `published_ranges`, schema
+ *  PublishedRange): shown whatever the strategies' live_from. */
+/** The run that wrote a range or score (schema ForecastRun, B12 for B17's evening run): `evening` = a preview on the
+ *  day's close, never traded; `pre_open` = the revision of record; null or absent on older rows reads as pre_open. */
+export type ForecastRun = "evening" | "pre_open" | null;
+
+export interface PublishedRange {
+  id: string; made_at?: IsoTime | null; as_of_date: IsoDate; session_date?: IsoDate | null; exit_date: IsoDate | null;
+  horizon_days: number; base_close?: number | null; target_price: number | null; lo50: number | null; hi50: number | null;
+  lo80: number | null; hi80: number | null; regime?: string | null; run?: ForecastRun;
+}
+
+/** One stored ranges.py run of the forecast history (schema HistoryRange): target_price = base_close x exp(center);
+ *  `change` against the previous run of the same horizon (null for the first). */
+export interface HistoryRange {
+  id: string; ticker: string; made_at: IsoTime; as_of_date: IsoDate; session_date: IsoDate; exit_date: IsoDate;
+  horizon_days: number; base_close: number; target_price: number; center?: number | null; sigma_h?: number | null;
+  lo50: number; hi50: number; lo80: number; hi80: number; regime?: string | null; calibration_id?: string | null;
+  inputs: string[]; notes: string[]; run?: ForecastRun;
+  change: { from_id: string; from_made_at: IsoTime; target_pct: number | null; width80_pct: number | null; changed: string[] } | null;
+}
+
+export interface ScoreDriver { feature: string; points: number; text?: string | null }
+
+/** One stored signal-model run (schema HistoryScore): the points per group add up to 100 x (prob_up - base_rate);
+ *  change.prob_up is a fraction (0.01 = one percentage point). */
+export interface HistoryScore {
+  id: string; ticker: string; computed_at: IsoTime; as_of_date: IsoDate; entry_date: IsoDate; exit_date: IsoDate;
+  horizon_days: number; prob_up: number | null; prob_model?: number | null; base_rate?: number | null;
+  news_score?: number | null; model_version: string | null; model_id?: string | null; trained_until?: string | null;
+  groups: Record<string, number>; drivers_up: ScoreDriver[]; drivers_down: ScoreDriver[]; news_items?: number | null;
+  news_ids: string[]; run?: ForecastRun;
+  change: {
+    from_id: string; from_computed_at: IsoTime; prob_up: number | null; groups: Record<string, number>;
+    news_added: string[]; news_dropped: string[]; changed: string[];
+  } | null;
+}
+
+/** rm.stock `forecast_history` (B12, owner 2026-10-10): every stored run of the last 10 as-of dates. */
+export interface ForecastHistory { ranges: HistoryRange[]; scores: HistoryScore[] }
+
+export interface CompanyPayload extends PageBase {
+  horizons: number[]; default_horizon: number | "all"; reference_strategy: string; go_live: GoLive | null;
+  strategies: StrategyMap; companies: CompanyRecord[]; ticker: string; company: CompanyRecord;
+  lifecycle: LifecycleEvent[]; agreement: AgreementMap; head_to_head: HeadToHeadPick[]; predictions: Prediction[];
+  open_trades: OpenTrade[]; trade_checks: TradeCheck[]; settled: SettledTrade[]; reasons: AiReason[];
+  news: NewsItem[]; results: ResultsDigest[]; events: CalendarEvent[]; bars: Bar[]; on_company: ScoreRow[];
+  /** Absent in payloads built before B12 added it; then the reference strategy's predictions stand in. */
+  published_ranges?: PublishedRange[] | null;
+  /** Absent in payloads built before B12 added it. */
+  forecast_history?: ForecastHistory | null;
+}
+
+export interface StockStrategiesPayload extends PageBase {
+  horizons: number[]; default_horizon: number | "all"; ticker: string; company: CompanyRecord; agreement: AgreementMap;
+  head_to_head: HeadToHeadPick[]; predictions: Prediction[]; on_company: ScoreRow[]; overall: ScoreRow[];
+  go_live: GoLive | null; strategies: StrategyMap;
+}
+
+export interface LifecyclePayload {
+  market: string; ticker: string; session_date: IsoDate; predictions: Prediction[]; head_to_head: HeadToHeadPick[];
+  trade_checks: TradeCheck[]; settled: SettledTrade[]; reasons: AiReason[];
+  /** UX3's "Full story" additions (absent in read models built before UX3). */
+  checks_attribution?: Array<{ check_at: IsoTime; session_date: IsoDate; move_pct: number | null; market_pct: number | null; market_pull_pct?: number | null; sector_pct: number | null; own_pct: number | null; beta: number | null; sector_source: string | null }>;
+  deviation_notes?: Array<{ check_at: IsoTime; session_date: IsoDate; text: string }>;
+  lessons?: Array<{ id: string; prediction_id: string; ticker: string; horizon_days: number | null; lesson: string | null; written_at: IsoTime | null }>;
+  prediction_reasons?: Array<{ prediction_id: string; reason: string }>;
+}
