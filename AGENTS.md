@@ -9,7 +9,7 @@ follows the same rules (see `CLAUDE.md`). The F&O backend `exepex/trading` has t
   (`contactexepex/agentic-stock-prediction`, India and US) and Omenix F&O (`exepex/trading`, India only).
 - A professional broker-style platform (Kite, Dhan and Groww mix, Material look, light default, desktop and phone),
   but **research and paper trading only**: nothing here places, modifies or cancels a real order; every signal and
-  money figure is labelled Paper.
+  money figure is labelled Paper; buttons say Buy and Sell only (owner, 13 Oct 2026).
 - Backends publish data; this repository only reads and shows it. Never write to a backend repository or its data.
 
 ## How to work (always)

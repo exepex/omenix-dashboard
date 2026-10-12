@@ -3,7 +3,7 @@
 Shared look of every cockpit page: tokens, components, icons and the app shell. One light scheme. Since 2026-10-08
 it follows the owner's direction for the design track: the look of modern admin templates (the owner pointed at
 Pixinvent's Materialize with its semi-dark vertical menu and at Aurora) applied to a broker-style cockpit, with the
-owner's own rules kept (NO red; YES green, darker when strong; never colour alone; Paper on every signal). A soft
+owner's own rules kept (NO red; YES green, darker when strong; never colour alone; Paper on every signal and money figure; buttons say Buy and Sell only). A soft
 light-grey page, white cards lifted by a faint shadow (no hairlines), one periwinkle-indigo accent, a dark navy
 sidebar with labels, icon tiles on KPI cards, label badges (tint plus ink), segmented tabs (4 px corners since 13 Oct 2026), gradient area charts,
 generous spacing. The previous scheme ("terminal light", 2026-10-07: hairline cards, ticker tape, dense stat strips)

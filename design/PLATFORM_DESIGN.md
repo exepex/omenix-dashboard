@@ -21,7 +21,7 @@ Owner's choices (12 Oct 2026):
 | A broker platform has | Omenix has | Design consequence |
 |---|---|---|
 | Streaming live prices | End-of-day NSE files; the 3 pm NIFTY option quotes; the stock tool's prices and runs several times a day | Every price carries its **as-of time**; stale data is greyed and says so. A live feed would be a separate, priced decision |
-| Real orders | **Paper only, never real** (hard line) | The order window records **paper** trades; "Paper" is shown on the button, the confirmation and every result |
+| Real orders | **Paper only, never real** (hard line) | The order window records **paper** trades; the buttons say **Buy** and **Sell** only (owner, 13 Oct 2026), and the brand ("Paper only") and the order window ("No real order is placed") say it once |
 | Market depth (order book levels) | Best bid/ask only (and only in 3 pm snapshots) | No market-depth widget; the quote card shows bid/ask with its time |
 | Mutual funds, IPOs, bonds | Not in scope | Not shown |
 
@@ -68,12 +68,12 @@ Owner's choices (12 Oct 2026):
 
 1. **Every thing is a link.** Each entity has its own page or panel, reachable from anywhere it appears: stock,
    F&O underlying, contract, structure, strategy, paper account, news item, event. Hovering any ticker or contract
-   shows a **hover card** with price, change, as-of time, position held, and buttons for Chart, Chain, Paper buy and
-   Paper sell.
+   shows a **hover card** with price, change, as-of time, position held, and buttons for Chart, Chain, Buy and
+   Sell.
 2. **Breadcrumbs** on every page, for example Markets › NIFTY › Option chain › 26 Nov.
 3. **The URL holds the state** (filters, tabs, selected expiry, chart range). Back and forward always work, and any
    view can be bookmarked.
-4. **Context actions on every row:** the same small menu everywhere (Chart, Option chain, Paper order, Add to
+4. **Context actions on every row:** the same small menu everywhere (Chart, Option chain, Buy or sell, Add to
    watchlist, News, Open details).
 5. **Keyboard shortcuts:**
    - `/` search; `B` and `S` paper order for the focused row; `Esc` closes the drawer;
@@ -95,7 +95,7 @@ Assistant, Help and Settings.
 | 1 | **Dashboard** (home after login) | "How am I doing, what changed, what needs attention?" | Portfolio value and day P&L per paper account (no cross-currency sum); allocation donut (stocks, F&O, cash); open positions top 5; today's decisions (strategies and books); market overview strip; alerts; top news; events today and this week | everything below |
 | 2 | **Markets overview** | "What is the market doing?" | Indices with sparklines; top gainers, losers and most active; sector heatmap; advance/decline breadth; India VIX; FII/DII flows (after A8); events calendar; F&O: PCR, max-pain, IV levels (India) | stock pages, option chains, News, Calendar |
 | 3 | **Watchlists** (full page) | Manage lists, compare at a glance | Five tabs, columns chosen by the user, sparkline column, bulk add from the screener | stock pages, chain, Paper order |
-| 4 | **Stock page** | Everything about one stock | Header (price, change, as-of, Paper Buy and Sell); tabs: Overview (chart, key stats, 52-week range), Signals (models' agreement, probability, horizon picks), Strategies (rule vs AI on this stock), News, Events (results dates), Your positions; **F&O tab** if it has derivatives (India) | chart, chain, Screener, News |
+| 4 | **Stock page** | Everything about one stock | Header (price, change, as-of, Buy and Sell); tabs: Overview (chart, key stats, 52-week range), Signals (models' agreement, probability, horizon picks), Strategies (rule vs AI on this stock), News, Events (results dates), Your positions; **F&O tab** if it has derivatives (India) | chart, chain, Screener, News |
 | 5 | **Chart** (full screen) | Study price | Candles, line or area; ranges 1M to 5Y; moving averages and volume; event markers (results, RBI, Budget, expiries); our trades marked on the chart | stock page, Paper order |
 | 6 | **Option chain** (India, Dhan-style) | Read options for an underlying and expiry | Calls and puts around the money, centred on spot; per strike: OI and change, volume, last price (EOD), IV, Greeks (computed by us, labelled), bid/ask with time where recorded (NIFTY 3 pm); PCR, max pain, IV smile; expiry chips; "Add legs to builder" | Strategy builder, Paper order, IV history |
 | 7 | **Strategy builder and payoff** (India F&O) | Build and check a multi-leg paper trade before placing it | Pick legs from the chain or a template (iron fly, condor, spreads, strangle); payoff at expiry and today; maximum profit and loss; breakevens; margin estimate (from our recorded margin source, labelled); probability of profit (risk-neutral, labelled as such); **checks against the owner's limits before placing** | Paper order (basket), chain |

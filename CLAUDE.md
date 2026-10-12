@@ -2,7 +2,8 @@
 
 The owner's one private web dashboard for two research tools: **stock prediction** (`contactexepex/agentic-stock-prediction`,
 India and US) and **F&O** (`exepex/trading`, **India only**; there is no US F&O). Research and paper trading only:
-nothing here places, modifies or cancels real orders, and every money figure is labelled Paper.
+nothing here places, modifies or cancels real orders, and every money figure is labelled Paper; buttons say Buy and
+Sell only (owner, 13 Oct 2026).
 
 ## The three repositories (owner decision, 12 Oct 2026)
 
@@ -50,7 +51,8 @@ Work on `main`; `git pull --no-rebase origin main` before every push (several se
 
 - Use only the design system's tokens and components; no page-local colours.
 - Owner's colour rules: verdict NO is red, YES is green (darker when strong); never colour alone (glyph and word too);
-  **Paper** on every signal and money figure.
+  **Paper** on every signal and money figure, but **buttons say Buy and Sell only** (owner, 13 Oct 2026: the app says once,
+  in the brand and in the order window, that no real order is placed).
 - Every mockup: `design/mockups/<nn-name>/` with `data.json` (example payload, labelled Mock), `template.html`,
   `build.py` (deterministic), `notes.md` (data used and where it comes from), `rationale.md`, and screenshots at
   1280 and 390 px from `node design/system/check_page.js` (no console errors, no external requests, no horizontal
