@@ -1,0 +1,45 @@
+name: platform-tests
+
+# Story X1 (exepex/trading docs/stories/X-cross-repository.md): the Azure PostgreSQL setup in platform/sql and its role
+# matrix, run against a disposable postgres:16 container. It never reaches the real server: no secrets, no network
+# besides the container; platform/tests/ci.sh refuses an Azure host name.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: platform-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roles:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust   # throwaway container: no password exists anywhere
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 2s
+          --health-timeout 5s
+          --health-retries 30
+    env:
+      PGHOST: localhost
+      PGPORT: "5432"
+    steps:
+      - uses: actions/checkout@v4
+      - name: psql client
+        run: |
+          command -v psql || { sudo apt-get update -q && sudo apt-get install -y -q postgresql-client; }
+          psql --version
+          psql -X -U postgres -d postgres -Atc "SELECT version()"
+      - name: Setup, idempotence, role matrix and drift tests
+        run: platform/tests/ci.sh
