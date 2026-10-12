@@ -18,12 +18,33 @@ nothing here places, modifies or cancels real orders, and every money figure is 
 - Backends only publish data; this repository only reads it. Never write to a backend repository or its data.
 - Until the cutover, production still deploys from the stock repository's `web/` (frozen, so the two stay identical).
 
-## How to work with the owner
+## How to work with the owner (always; same rules as `exepex/trading`)
 
-Same rules as the backends: never hold back; be brutally honest and mark recommendations as strong evidence, some
-evidence or reasoning only; plain words and real numbers; find root causes, never patches; check every review with
-evidence before accepting or rejecting it; secrets never in files or chat; keep a conversation log in
-`conversations/YYYY-MM-DD.md` (IST date) and commit it.
+This is the owner's personal research platform; wrong screens or numbers cost real money later, so:
+
+- **Never hold back.** Share every relevant fact, risk, idea and doubt, including what the owner may not want to hear.
+- **Be brutally honest.** Disagree openly and say why. Never agree just to please. Never present a guess as a fact:
+  mark each recommendation as strong evidence, some evidence, or reasoning only.
+- **Keep it simple, precise and concise.** Plain words, real numbers, short answers; explain any jargon you must use.
+- **Get past blockers.** Find another legitimate way (another source, a test, a workaround, a clear question to the
+  owner). If it truly cannot be done, say so plainly and why. Never skip it silently or hide it.
+- **No patches.** Find the root cause, validate it with data and tests, then fix the design.
+- **No blind acceptance or rejection of reviews.** Check every review comment and piece of feedback (owner, Claude,
+  ChatGPT, the judge) with your own reasoning and evidence. Every acceptance and rejection states its reason and
+  evidence; partial agreement is fine.
+- **Everything for the other AI goes in the repository:** ChatGPT writes `reviews/chatgpt/review_<n>_<name>.md`,
+  Claude `reviews/claude/response_<n>_<name>.md`, each folder with a README index.
+- **Own limits too.** If a limit shapes an answer, say so openly and give everything that can be given.
+- **Every built story is judged** by the independent judge (`docs/JUDGE.md`); done only on PASS.
+- Hard lines: no real orders, nothing illegal, secrets never in files or chat.
+- Keep a conversation log in `conversations/YYYY-MM-DD.md` (IST date): quote the owner's messages as written,
+  condense replies, keep "Decisions so far" and "Open questions"; commit and push. Never include e-mail addresses,
+  API keys or tokens.
+- AI agents other than Claude read `AGENTS.md` (same rules, plus the roles).
+
+## Branch
+
+Work on `main`; `git pull --no-rebase origin main` before every push (several sessions push here in parallel).
 
 ## Design rules (from `design/system/README.md`; it is the reference)
 
@@ -51,6 +72,8 @@ evidence before accepting or rejecting it; secrets never in files or chat; keep 
   assistant's model) sits behind an interface, so swapping it is one new adapter, not edits across screens; screens
   depend on typed read-model contracts, never on SQL or a vendor SDK. Choose the simplest pattern that keeps parts
   swappable (KISS).
-- `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build` must pass before pushing.
+- Before every push: `node tools/check_code_size.mjs` (the 350-line limit; inherited files over it are listed in
+  `tools/code_size_allowlist.txt` with their current size, which may only shrink) and
+  `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build` must pass.
 - Secrets only in Vercel's environment variables. Automatic deployments are off (`web/vercel.json`); the owner
   deploys by hand.
