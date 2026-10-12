@@ -46,6 +46,11 @@ evidence before accepting or rejecting it; secrets never in files or chat; keep 
   the "why"). **No file and no class over 350 lines** (TypeScript, JavaScript, Python; generated files such as
   `registry.generated.ts` excepted). Anything that would pass 350 lines is broken down, never squeezed. Files inherited
   over the limit are broken down when their screen is rebuilt; new or rewritten files must meet it.
+- **Design for change (owner, 12 Oct 2026):** flexible, modular, scalable, production quality; high cohesion and loose
+  coupling through design patterns. Every data source (each backend's read models, the database driver, Slack, the
+  assistant's model) sits behind an interface, so swapping it is one new adapter, not edits across screens; screens
+  depend on typed read-model contracts, never on SQL or a vendor SDK. Choose the simplest pattern that keeps parts
+  swappable (KISS).
 - `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build` must pass before pushing.
 - Secrets only in Vercel's environment variables. Automatic deployments are off (`web/vercel.json`); the owner
   deploys by hand.
