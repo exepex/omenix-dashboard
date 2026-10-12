@@ -1,5 +1,9 @@
 # Assistant mockup: rationale
 
+> **Superseded in part (12 Oct 2026):** this page's shell (sidebar, top bar, phone bar) is replaced by the platform shell of
+> `design/PLATFORM_DESIGN.md`, drawn in `design/mockups/30-shell/`. The page's content stays valid until its platform mockup
+> (folders 31-40) is drawn. Kept unchanged: the web app and its tests read this folder.
+
 Page 11 of docs/SPEC.md section 6 ("chat with sources and as-of times; also a side panel on every page"; F11; the
 `explain` tool of F10, `mcp/tools.yaml`), designed in the design track from W1's data catalogue after W1 answered the
 track's data request 6 with the `assistant_answer` entity (three answers per market, each composed from the

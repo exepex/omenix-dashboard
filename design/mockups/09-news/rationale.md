@@ -1,5 +1,9 @@
 # News mockup: rationale
 
+> **Superseded in part (12 Oct 2026):** this page's shell (sidebar, top bar, phone bar) is replaced by the platform shell of
+> `design/PLATFORM_DESIGN.md`, drawn in `design/mockups/30-shell/`. The page's content stays valid until its platform mockup
+> (folders 31-40) is drawn. Kept unchanged: the web app and its tests read this folder.
+
 Page 9 of docs/SPEC.md section 6 ("news by company with verification status and impact category", read model
 `rm.news`), designed in the design track on the owner's rules of 2026-10-08, which replace the earlier decision to
 fold the news into Home and the Company page. Status: **built on the owner's instructions** (2026-10-08) and rebuilt the same day on W1's data request 8 (56

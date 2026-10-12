@@ -3,7 +3,7 @@
     from system import inline_system          # design/system on sys.path
     html = inline_system(template_html, icons=["check", "close"])
 
-Markers in a template: ``<!--@@SYSTEM_CSS@@-->`` becomes a <style> with tokens.css + components.css,
+Markers in a template: ``<!--@@SYSTEM_CSS@@-->`` becomes a <style> with tokens.css (+ tokens-dark.css with dark=True) + components.css,
 ``<!--@@ICONS@@-->`` becomes the Material Symbols sprite (all icons, or the subset given). Both files are
 read at build time, so a page never carries a stale copy of the system knowingly.
 """
@@ -23,6 +23,10 @@ def tokens_css() -> str:
     css = (HERE / "tokens.css").read_text()
     extra = os.environ.get("MB_TOKENS_EXTRA")
     return css + ("\n" + Path(extra).read_text() if extra else "")
+
+
+def dark_css() -> str:
+    return (HERE / "tokens-dark.css").read_text()
 
 
 def components_css() -> str:
@@ -47,8 +51,10 @@ def icons_sprite(names: list[str] | None = None) -> str:
     return header + "\n".join(symbols[n] for n in names) + "\n</svg>\n"
 
 
-def inline_system(html: str, icons: list[str] | None = None) -> str:
-    css = f"<style>\n{tokens_css()}\n{components_css()}\n</style>"
+def inline_system(html: str, icons: list[str] | None = None, dark: bool = False) -> str:
+    """`dark=True` also inlines tokens-dark.css after tokens.css (pages with a theme switch: data-theme on <html>)."""
+    tokens = tokens_css() + ("\n" + dark_css() if dark else "")
+    css = f"<style>\n{tokens}\n{components_css()}\n</style>"
     out = html.replace(MARK_CSS, css).replace(MARK_ICONS, icons_sprite(icons))
     for mark in (MARK_CSS, MARK_ICONS):
         assert mark not in out

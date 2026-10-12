@@ -1,5 +1,9 @@
 # Rule vs AI mockup: rationale
 
+> **Superseded in part (12 Oct 2026):** this page's shell (sidebar, top bar, phone bar) is replaced by the platform shell of
+> `design/PLATFORM_DESIGN.md`, drawn in `design/mockups/30-shell/`. The page's content stays valid until its platform mockup
+> (folders 31-40) is drawn. Kept unchanged: the web app and its tests read this folder.
+
 Page 6 of docs/SPEC.md section 6 (the head-to-head view of F1, F6.1-F6.2, F7.1; decisions 41-43, 50-51), designed in
 the design track from W1's data catalogue. Status: **built on the owner's delegated authority** (2026-10-08, the owner
 away: "go with your recommendation, notify the orchestrator"; the owner asked that the rule-versus-AI comparison be

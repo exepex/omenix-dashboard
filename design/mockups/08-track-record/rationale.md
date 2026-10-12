@@ -1,5 +1,9 @@
 # Track record mockup: rationale
 
+> **Superseded in part (12 Oct 2026):** this page's shell (sidebar, top bar, phone bar) is replaced by the platform shell of
+> `design/PLATFORM_DESIGN.md`, drawn in `design/mockups/30-shell/`. The page's content stays valid until its platform mockup
+> (folders 31-40) is drawn. Kept unchanged: the web app and its tests read this folder.
+
 Page 8 of docs/SPEC.md section 6 ("prediction accuracy over time, calibration, scoring bases apart"; decision 17;
 read model `rm.track_record`), designed in the design track from W1's data catalogue, after W1 answered the track's
 data request 5 with the `track_record` entity (the dashboard's read model, one payload per market). Status: **built
