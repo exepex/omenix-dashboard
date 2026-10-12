@@ -91,16 +91,19 @@ by the admin itself gets no grants and stays invisible to the runtime roles.
 
 ## Named exceptions (what PostgreSQL lets every role do, and what limits it)
 
-Found by the judge (judge 3) and confirmed by `tests/ci.sh` step 4 with real attempts. Each is checked by the role
-matrix as `known:`: it prints **OPEN** while the server allows it (never counted as a pass) and PASS once closed.
-`sql/15_server_wide.sql` tries to close 1 and 2 on every apply and prints what is still open; the owner's
-`owner/apply_real.sh` records whether Azure's admin may close them. In CI (a non-superuser admin, like Azure's) they
-stay open; CI step 6 shows they close where the admin owns the objects, and that the admin cannot lock itself out.
+Found by the judge (judges 3 and 5) and confirmed by `tests/ci.sh` step 4 with real attempts. Each is checked by the
+role matrix as `known:`: it prints **OPEN** while the server allows it (never counted as a pass) and PASS once closed.
+On every apply, `sql/12_large_objects.sql` (run in **every** database the admin can reach, because function rights are
+per database) and `sql/15_server_wide.sql` try to close 1 and 2 and print, per database, what is still open; the
+owner's `owner/apply_real.sh` records whether Azure's admin may close them. `tests/large_objects.sh` counts large
+objects in **every** database that accepts connections (the owner's matrix run includes it). In CI (a non-superuser
+admin, like Azure's) they stay open; CI step 6a shows that a large object made in `postgres` is caught even when
+`omenix` is closed, and step 6b that they close where the admin owns the objects, without locking the admin out.
 
 | # | Exception | Why it is open | Harm from a leaked runtime credential | Mitigation and detection |
 |---|---|---|---|---|
-| 1 | Create **large objects** in `omenix` (`lo_create`, `lo_creat`, `lo_from_bytea`) | PostgreSQL has no privilege for creating large objects; only revoking `EXECUTE` on these functions from `PUBLIC` stops it, and the functions belong to the bootstrap superuser (on Azure: `azuresu`), so the admin may not be allowed | Fill the 32 GiB disk (the server stops accepting writes) | Storage alert above 80 percent (`owner/protect_server.sh`); the matrix's strict check "no large object exists" (`pg_largeobject_metadata` is empty) fails as soon as one exists |
-| 2 | **Connect to other databases** (`postgres`, `template1`, any Azure adds) and create **temporary tables** in `postgres` | PostgreSQL grants `CONNECT` and `TEMPORARY` to `PUBLIC` on these databases; their owner (not the admin unless Azure makes it so) can revoke | Temporary tables use disk until the session ends; reading `postgres` shows nothing of ours | Storage alert; `15_server_wide.sql` revokes when allowed |
+| 1 | Create **large objects** in `omenix` and in every other database it may connect to (`lo_create`, `lo_creat`, `lo_from_bytea`) | PostgreSQL has no privilege for creating large objects; only revoking `EXECUTE` on these functions from `PUBLIC` stops it, **in each database separately**, and the functions belong to the bootstrap superuser (on Azure: `azuresu`), so the admin may not be allowed | Fill the 32 GiB disk (the server stops accepting writes); the objects persist after the session | Storage alert above 80 percent (`owner/protect_server.sh`, a server-wide metric, so it covers every database); `tests/large_objects.sh` counts large objects in every database and fails on any; the matrix's strict check covers `omenix` per role |
+| 2 | **Connect to other databases** (`postgres`, `template1`, any Azure adds), create **temporary tables** in `postgres`, and there create **persistent large objects** (exception 1) unless they are closed in that database too | PostgreSQL grants `CONNECT` and `TEMPORARY` to `PUBLIC` on these databases; their owner (not the admin unless Azure makes it so) can revoke | **Disk fill, as for exception 1**: large objects in `postgres` persist; temporary tables use disk until the session ends. Reading `postgres` shows nothing of ours | Storage alert; `tests/large_objects.sh` (every database); `15_server_wide.sql` revokes CONNECT and TEMPORARY when allowed, `12_large_objects.sql` closes large objects per database when allowed |
 | 3 | **Switch off its own statement timeout**, for its session (`SET statement_timeout = 0`) or persistently (`ALTER ROLE CURRENT_USER SET statement_timeout = 0`) | `statement_timeout` is a user setting; PostgreSQL 16 has no setting a non-superuser cannot override for itself | Unbounded queries on a 1-vCore server (slow or unavailable dashboard) | The persistent change shows in the catalog snapshot (a `role setting` line) and fails the matrix's timeout check (CI drift test as the role itself); `apply.sh` (`RESET ALL`) removes it. The session change leaves no trace. Enforceable limit, not built (reasoning only): a scheduled watchdog run by the admin (for example `pg_cron`, if allowed on Azure) that ends runtime-role queries older than the timeout with `pg_terminate_backend`; CPU alerting is the cheaper first step |
 | 4 | **Change or remove its own password** (`ALTER ROLE CURRENT_USER PASSWORD ...`) | Every role may change its own password in PostgreSQL | Lock its own deployment out (denial of service), not escalate | The deployment's connections then fail, which trips the failed-connection alert; the owner resets the password as admin |
 
@@ -128,7 +131,8 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 |---|---|
 | `sql/00_roles.sql` | the seven roles, attributes, connection limits, timeouts; removes stray memberships; the admin's SET-only membership in the owner roles |
 | `sql/10_database.sql` | database `omenix`; only the seven roles may connect |
-| `sql/15_server_wide.sql` | tries to close named exceptions 1 and 2 (other databases, large objects) and prints what is still open |
+| `sql/12_large_objects.sql` | run in every database the admin can reach: tries to close large-object creation (named exception 1) and prints what stays open there |
+| `sql/15_server_wide.sql` | tries to close CONNECT and TEMPORARY for PUBLIC on the other databases (named exception 2) and prints what stays open |
 | `sql/20_schemas.sql` | schemas `stock`, `fno`, `app` and their owners; no `CREATE` on `public` |
 | `sql/30_grants.sql` | schema `USAGE` for exactly the runtime roles that need it |
 | `sql/40_default_privileges.sql` | grants every future table and sequence gets from its owner role; no `EXECUTE` for anyone else on its functions |
@@ -139,6 +143,7 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `tests/catalog_snapshot.sql`, `tests/expected_catalog.txt` | normalised listing of roles, memberships, ACLs and default privileges, and its declared content |
 | `tests/reference_catalog.txt`, `tests/catalog_difference.txt` | the listing the original script gives, and the only allowed difference from it |
 | `tests/fixtures_up.sql`, `tests/fixtures_down.sql` | probe table `x1_probe` and function `x1_probe_f` in each schema, created by the owner roles |
+| `tests/large_objects.sh` | counts large objects in every database that accepts connections (as the admin); fails on any |
 | `tests/ci.sh` | the whole test on a disposable PostgreSQL 16 (CI: `.github/workflows/platform-tests.yml`) |
 | `owner/` | the owner's scripts for the real server; checklist in `owner/CHECKLIST_X1.md` |
 | `evidence/` | outputs of the owner's scripts, committed by the owner |

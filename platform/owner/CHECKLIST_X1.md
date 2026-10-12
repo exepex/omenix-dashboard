@@ -32,8 +32,10 @@ objects); whether Azure's admin is allowed to is unknown until this run, and the
 - [ ] `platform/owner/apply_real.sh`: asks the admin name and password (hidden), prints the changes it is about to
       make (expected: the three `acl default functions` lines), applies `platform/sql/00..40`, and compares the result
       with `expected_catalog.txt`.
-- [ ] Read the block `still open for PUBLIC`: each row is a named exception the admin could not close (`0 rows` = all
-      closed). Warnings such as `no privileges could be revoked` belong to it. Both outcomes are fine to commit.
+- [ ] Read the lines `database …: large-object functions still open for PUBLIC: …` (one per database) and the block
+      `still open for PUBLIC` (other databases): each is a named exception the admin could not close (`none` /
+      `0 rows` = closed). Warnings such as `no privileges could be revoked` belong to them. Both outcomes are fine to
+      commit.
 - [ ] If anything that uses the `postgres` database stops working after a successful revoke (nothing of ours does),
       undo it as admin: `GRANT CONNECT, TEMPORARY ON DATABASE postgres TO PUBLIC;`.
 - [ ] Pass = `RESULT: catalog identical to expected_catalog.txt after apply: yes`. Commit the evidence file.
@@ -48,7 +50,8 @@ objects); whether Azure's admin is allowed to is unknown until this run, and the
     after a failure;
   - compares the server's catalog with `platform/tests/expected_catalog.txt`.
 - [ ] Optional, also the owner roles: `X1_INCLUDE_OWNERS=1 platform/owner/run_real_matrix.sh` (asks their passwords).
-- [ ] Pass = last line `RESULT: matrix passed: yes; snapshot identical: yes; open named exceptions: N`. `OPEN` lines
+- [ ] Pass = last line `RESULT: matrix passed: yes; snapshot identical: yes; no large objects anywhere: yes; open named
+      exceptions: N`. The large-object count covers every database that accepts connections. `OPEN` lines
       are the named exceptions of `platform/README.md` that the server does not enforce (expected: up to 8 per role,
       fewer if step 1 closed some); they are listed, never counted as passes.
   If the snapshot differs, do not change anything: commit the file and hand it over. A difference that only names

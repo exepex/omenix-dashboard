@@ -11,8 +11,9 @@
 #   3. platform/sql on an empty server yields the same catalog, and a second run changes nothing (idempotent);
 #   4. the role matrix passes for all seven roles;
 #   5. the matrix catches drift (each injected drift makes it fail), and platform/sql removes the drift again;
-#   6. the named exceptions are real (step 4 confirms them with real attempts), and they close where the admin is
-#      allowed to close them (15_server_wide.sql), without locking the admin out.
+#   6. the named exceptions are real (step 4 confirms them with real attempts); a large object made in another
+#      database is detected even when omenix is closed (6a); and they close where the admin is allowed to close them
+#      (12_large_objects.sql in every database, 15_server_wide.sql), without locking the admin out (6b).
 # Like Azure, the admin is a non-superuser with only CREATEDB and CREATEROLE (role x1_admin, created here).
 # Connection: PGHOST/PGPORT of a server where X1_SUPERUSER (default postgres) logs in without a password (trust).
 set -euo pipefail
@@ -35,6 +36,7 @@ reset() {
   # Undo step 6 of an earlier run: template databases back to the superuser, PostgreSQL's default PUBLIC rights.
   su_sql -c "ALTER DATABASE postgres OWNER TO $superuser" -c "ALTER DATABASE template1 OWNER TO $superuser" \
     -c "GRANT CONNECT, TEMPORARY ON DATABASE postgres TO PUBLIC" -c "GRANT CONNECT ON DATABASE template1 TO PUBLIC"
+  for db in postgres template1; do lo_functions "$db" GRANT TO; done
   if [ "$(su_sql -At -c "SELECT count(*) FROM pg_roles WHERE rolname = 'x1_admin'")" = 1 ]; then
     su_sql -c "REVOKE ALL ON DATABASE postgres, template1 FROM x1_admin"
   fi
@@ -43,6 +45,14 @@ reset() {
   done
   su_sql -c "CREATE ROLE x1_admin LOGIN CREATEDB CREATEROLE"
 }
+# GRANT/REVOKE EXECUTE on the three large-object-creating functions to/from PUBLIC in one database, as the superuser.
+lo_functions() {
+  local f
+  for f in 'lo_create(oid)' 'lo_creat(integer)' 'lo_from_bytea(oid, bytea)'; do
+    su_sql -d "$1" -c "$2 EXECUTE ON FUNCTION pg_catalog.$f $3 PUBLIC"
+  done
+}
+large_objects() { PGUSER=x1_admin "$here/large_objects.sh"; }
 apply_platform() { PGOPTIONS="-c client_min_messages=warning" admin "$platform/sql/apply.sh" > /dev/null; }
 
 echo "== 0. owner scripts read their expected server settings from platform/README.md"
@@ -91,7 +101,9 @@ for r in stock_writer dashboard_app; do
   admin_sql omenix -c "SET ROLE $r" -c "SELECT lo_unlink($lo)" > /dev/null 2>&1 \
     || su_sql -d omenix -c "SELECT lo_unlink($lo)" > /dev/null
 done
+large_objects > "$work/lo.txt" || { cat "$work/lo.txt"; echo "FAILED: large objects found" >&2; exit 1; }
 echo "ok: named exceptions confirmed by real attempts (template1 connect, temp table in postgres, large object)"
+echo "ok: no large object in any database; open per database: $(grep -c '^OPEN' "$work/lo.txt")"
 
 echo "== 5. drift is caught (catalog and matrix) and removed by platform/sql"
 # Each drift: who applies it (an owner role via SET ROLE, the admin, or login:<role> = the role itself) | SQL | the role
@@ -143,25 +155,40 @@ while IFS='|' read -r who sql victim; do
   "$here/role_matrix.sh" > "$work/matrix.txt" || { cat "$work/matrix.txt"; echo "FAILED: matrix after repair" >&2; exit 1; }
 done <<< "$drifts"
 
-echo "== 6. where the admin may close them, the named exceptions close"
+echo "== 6a. exception 1 closed in omenix only, exception 2 open: a large object elsewhere is still caught"
+lo_functions omenix REVOKE FROM
+grep -q "^PASS  dashboard_app .*lo_from_bytea" <("$here/role_matrix.sh" dashboard_app) \
+  || { echo "FAILED: large objects should be closed in omenix now" >&2; exit 1; }
+lo="$(PGUSER=dashboard_app psql -X -q -A -t -d postgres -c "SELECT lo_from_bytea(0, 'x1'::bytea)")" \
+  || { echo "FAILED: expected dashboard_app to create a large object in postgres" >&2; exit 1; }
+if large_objects > "$work/lo6a.txt"; then
+  cat "$work/lo6a.txt"; echo "FAILED: a large object in postgres was not detected" >&2; exit 1
+fi
+grep '^FAIL' "$work/lo6a.txt"
+grep -q '^OPEN  database postgres' "$work/lo6a.txt" || { echo "FAILED: postgres should be reported OPEN" >&2; exit 1; }
+su_sql -c "SELECT lo_unlink($lo)" > /dev/null
+echo "ok: with omenix closed, a large object made in postgres is detected"
+
+echo "== 6b. where the admin may close them, the named exceptions close"
 # Like an Azure admin that owns the template databases; the large-object functions can only be revoked by a
 # superuser here (PostgreSQL's bootstrap superuser owns them), standing in for a server where the admin can.
 su_sql -c "ALTER DATABASE postgres OWNER TO x1_admin" -c "ALTER DATABASE template1 OWNER TO x1_admin"
-for f in 'lo_create(oid)' 'lo_creat(integer)' 'lo_from_bytea(oid, bytea)'; do
-  su_sql -d omenix -c "REVOKE EXECUTE ON FUNCTION pg_catalog.$f FROM PUBLIC"
-done
+for db in postgres template1; do lo_functions "$db" REVOKE FROM; done
 PGOPTIONS="-c client_min_messages=warning" admin "$platform/sql/apply.sh" > "$work/apply6.txt"
 grep -q '(0 rows)' "$work/apply6.txt" || { cat "$work/apply6.txt"; echo "FAILED: 15_server_wide.sql left something open" >&2; exit 1; }
+if grep 'still open for PUBLIC: lo_' "$work/apply6.txt"; then echo "FAILED: 12_large_objects.sql left something open" >&2; exit 1; fi
 admin_sql postgres -c "SELECT 1" > /dev/null || { echo "FAILED: the admin locked itself out of postgres" >&2; exit 1; }
 for r in stock_writer dashboard_app; do
   if PGUSER=$r psql -X -q -d template1 -c "SELECT 1" > /dev/null 2>&1; then echo "FAILED: $r still reaches template1" >&2; exit 1; fi
   if PGUSER=$r psql -X -q -d postgres -c "SELECT 1" > /dev/null 2>&1; then echo "FAILED: $r still reaches postgres" >&2; exit 1; fi
 done
+large_objects > "$work/lo6b.txt" || { cat "$work/lo6b.txt"; echo "FAILED: large objects after closing" >&2; exit 1; }
+if grep '^OPEN' "$work/lo6b.txt"; then echo "FAILED: large-object functions still open somewhere" >&2; exit 1; fi
 "$here/role_matrix.sh" > "$work/matrix6.txt" || { cat "$work/matrix6.txt"; echo "FAILED: matrix after closing" >&2; exit 1; }
 open_left="$(grep '^OPEN  ' "$work/matrix6.txt" | grep -v -e 'statement_timeout' -e 'PASSWORD' || true)"
 [ -z "$open_left" ] || { echo "$open_left"; echo "FAILED: exceptions still open after closing" >&2; exit 1; }
 grep '^role matrix:' "$work/matrix6.txt"
-echo "ok: large objects and other databases closed; only the self-change exceptions (timeout, password) stay open"
+echo "ok: large objects (every database) and other databases closed; only the self-change exceptions stay open"
 
 admin_sql omenix -f "$here/fixtures_down.sql"
 reset

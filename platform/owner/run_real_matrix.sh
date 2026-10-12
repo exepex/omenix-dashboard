@@ -28,6 +28,9 @@ trap cleanup EXIT
   rm -f "$evidence_dir/.snapshot.$$"
   echo "snapshot identical: $snapshot_ok"
   echo
+  echo "== large objects in every database (named exceptions 1 and 2)"
+  PGUSER="$X1_ADMIN" PGPASSWORD="$admin_password" "$platform/tests/large_objects.sh" && lo_ok=yes || lo_ok=no
+  echo
   admin_psql -d omenix -f "$platform/tests/fixtures_up.sql" || die "could not create the probe tables"
   roles="stock_writer fno_writer dashboard_app stock_inbox_reader"
   if [ "${X1_INCLUDE_OWNERS:-0}" = "1" ]; then roles="stock_owner fno_owner app_owner $roles"; fi
@@ -36,6 +39,6 @@ trap cleanup EXIT
   open_count="$(grep -c '^OPEN  ' "$evidence_dir/.snapshot.$$.matrix")"
   rm -f "$evidence_dir/.snapshot.$$.matrix"
   echo
-  echo "RESULT: matrix passed: $matrix_ok; snapshot identical: $snapshot_ok; open named exceptions: $open_count (see platform/README.md)"
+  echo "RESULT: matrix passed: $matrix_ok; snapshot identical: $snapshot_ok; no large objects anywhere: $lo_ok; open named exceptions: $open_count (see platform/README.md)"
 } 2>&1 | tee "$out"
 echo "Saved: $out  (read it, then commit it: git add platform/evidence && git commit -m 'X1 evidence: real-server role matrix')"
