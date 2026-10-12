@@ -188,6 +188,12 @@
   --mb-rail-width: 76px;        /* collapsed menu, icons only (600-1199px) */
   --mb-navbar-height: 72px;     /* navigation bar (phone) */
   --mb-topbar-height: 64px;
+  /* platform shell (design/PLATFORM_DESIGN.md section 2): app bar, navigation rail, watchlist panel, right drawer */
+  --mb-appbar-height: 60px;
+  --mb-navrail-width: 84px;     /* rail with labels under the icons; 64px when compact (icons only) */
+  --mb-navrail-compact: 64px;
+  --mb-wl-width: 300px;         /* watchlist panel (>= 1200px; an overlay below) */
+  --mb-drawer-width: 420px;     /* right drawer: Paper order window, quick views (a bottom sheet on phones) */
 
   /* ---- Motion --------------------------------------------------------------------------- */
   --md-sys-motion-duration-short: 120ms;

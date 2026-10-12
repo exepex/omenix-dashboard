@@ -229,6 +229,51 @@ code{font-family:var(--md-ref-typeface-mono);font-size:.92em;background:var(--md
       <div class="sg-icons" id="icons-grid"></div>
     </section>
 
+
+    <section class="sg-section" id="platform">
+      <h2>Platform shell (PLATFORM_DESIGN.md)</h2>
+      <p class="lede">The broker-style frame of the redesign (12 Oct 2026): app bar with global search, market switch and index strip; dark navy navigation rail with labels under the icons and group flyouts; Kite-style watchlist panel; right drawer that is a bottom sheet on phones; hover card; command palette; context menu; snackbar. Live in <code>design/mockups/30-shell/page.html</code> (behaviour in <code>design/mockups/_platform/platform.js</code>). Shown here as static pieces.</p>
+      <h3 class="md-title-small" style="margin:var(--mb-space-4) 0 var(--mb-space-2)">App bar pieces: search, index strip, as-of stamps, keys, breadcrumbs</h3>
+      <div class="sg-row">
+        <button class="mb-gsearch" type="button"><svg class="ms"><use href="#ms-search"/></svg><span>Search stocks, F&amp;O, screens…</span><span class="mb-kbd">/</span></button>
+        <span class="mb-idx-strip"><a class="mb-idx" href="#"><span class="n">NIFTY 50</span><span class="v">24,512.35</span><span class="mb-delta up">+0.42%</span></a><a class="mb-idx stale" href="#"><span class="n">BANKNIFTY</span><span class="v">52,218.60</span><span class="mb-delta down">−0.18%</span></a></span>
+        <span class="mb-asof"><svg class="ms"><use href="#ms-schedule"/></svg>15:10 IST</span><span class="mb-asof stale"><svg class="ms"><use href="#ms-warning"/></svg>EOD 8 Oct · stale</span>
+        <span class="mb-kbd">g</span><span class="mb-kbd">h</span><span class="mb-kbd">Esc</span>
+        <ol class="mb-crumbs"><li><a href="#">Markets</a></li><li><a href="#">NIFTY</a></li><li><span aria-current="page">Option chain</span></li></ol>
+      </div>
+      <h3 class="md-title-small" style="margin:var(--mb-space-5) 0 var(--mb-space-2)">Navigation rail, watchlist rows, B and S</h3>
+      <div class="sg-row" style="align-items:flex-start">
+        <nav class="mb-navrail" style="position:static;height:auto;border-radius:var(--mb-card-radius);width:84px" aria-label="Example rail">
+          <div class="mb-rail-grp"><a class="mb-rail-item" href="#" aria-current="page"><span class="mb-nav-ind"><svg class="ms"><use href="#ms-dashboard"/></svg></span>Dashboard</a></div>
+          <div class="mb-rail-grp"><a class="mb-rail-item" href="#"><span class="mb-nav-ind"><svg class="ms"><use href="#ms-candlestick_chart"/></svg></span>Trade</a></div>
+          <div class="mb-rail-sep"></div><a class="mb-rail-pin" href="#">NC</a>
+        </nav>
+        <div class="mb-rail-fly on" style="position:static;display:block"><div class="t">Trade</div><a href="#"><svg class="ms"><use href="#ms-layers"/></svg>Option chain</a><a href="#" aria-current="page"><svg class="ms"><use href="#ms-filter_list"/></svg>Screener<small>g s</small></a></div>
+        <ul class="mb-wl-list" style="width:300px;flex:none;background:var(--md-sys-color-surface);border-radius:var(--mb-card-radius);box-shadow:var(--mb-card-shadow)">
+          <li class="mb-wl-row"><svg class="ms grip"><use href="#ms-drag_indicator"/></svg><div style="min-width:0"><div class="sym">RELIANCE <span class="mb-label paper" style="padding:0 5px;font-size:10.5px;line-height:16px">held</span></div><div class="sub">Reliance Industries · NSE</div></div><div class="px"><div>1,218.00</div><small><span class="mb-delta up">+2.66%</span> · 15:10 IST</small></div></li>
+          <li class="mb-wl-row open"><svg class="ms grip"><use href="#ms-drag_indicator"/></svg><div style="min-width:0"><div class="sym">NIFTY 27 OCT 24800 CE</div><div class="sub">Option · lot 75</div></div><div class="px"><div>68.20</div><small><span class="mb-delta down">−15.10%</span> · 3 pm snap</small></div><div class="mb-wl-acts"><button class="mb-bs buy" type="button" aria-label="Paper buy">B</button><button class="mb-bs sell" type="button" aria-label="Paper sell">S</button><button class="md-icon-btn" type="button" aria-label="Chart"><svg class="ms"><use href="#ms-show_chart"/></svg></button><button class="md-icon-btn" type="button" aria-label="More"><svg class="ms"><use href="#ms-more_vert"/></svg></button></div></li>
+          <li class="mb-wl-row stale"><svg class="ms grip"><use href="#ms-drag_indicator"/></svg><div style="min-width:0"><div class="sym">BANKNIFTY 24 NOV 52000 PE</div><div class="sub">Option · lot 35</div></div><div class="px"><div>702.10</div><small><span class="mb-delta up">+4.10%</span> · EOD 8 Oct · stale</small></div></li>
+        </ul>
+      </div>
+      <h3 class="md-title-small" style="margin:var(--mb-space-5) 0 var(--mb-space-2)">Paper order window parts, hover card, palette row, menu</h3>
+      <div class="sg-row" style="align-items:flex-start">
+        <div class="md-card" style="width:360px;display:grid;gap:12px">
+          <div class="mb-order-side"><button class="buy" type="button" aria-pressed="true"><svg class="ms"><use href="#ms-trending_up"/></svg>Buy</button><button class="sell" type="button" aria-pressed="false"><svg class="ms"><use href="#ms-trending_down"/></svg>Sell</button></div>
+          <div class="mb-field-row"><div class="mb-field"><label for="sg-q">Lots (lot 75)</label><input class="mb-input" id="sg-q" value="1"></div><div class="mb-field"><label for="sg-l">Limit price</label><input class="mb-input" id="sg-l" placeholder="Market" disabled></div></div>
+          <dl class="mb-order-sum"><dt>Premium</dt><dd>₹5,137.50</dd><dt>Charges (estimate)</dt><dd>₹25.88</dd><dt class="tot">Maximum loss</dt><dd class="tot">₹5,163.38</dd></dl>
+          <ul class="mb-checks"><li class="ok"><span class="mb-mark ok"><svg class="ms"><use href="#ms-check"/></svg></span><span>Maximum loss ≤ ₹10,000 a trade<small>₹5,163</small></span></li><li class="fail"><span class="mb-mark no"><svg class="ms"><use href="#ms-close"/></svg></span><span>At risk ≤ ₹30,000<small>unlimited: a single short option</small></span></li></ul>
+          <div class="mb-alert paper"><svg class="ms"><use href="#ms-description"/></svg><div><b class="t">Paper order: no real order is placed</b><div class="s">Filled only from valid quotes by the strategies’ fill rules.</div></div><span></span></div>
+          <button class="md-btn filled buy" type="button">Place paper buy · 75 NIFTY 27 OCT 24800 CE</button>
+          <button class="md-btn filled sell" type="button" disabled>Blocked by a limit check</button>
+        </div>
+        <div style="display:grid;gap:12px">
+          <div class="mb-hcard on" style="position:static"><div class="top"><div><b>RELIANCE</b><small>Reliance Industries · NSE</small></div><div class="px">1,218.00<span class="mb-delta up">+2.66%</span></div></div><div class="held"><b>Long 40</b> at 1,214.60 · Manual (paper) · <span class="mb-delta up">+₹136</span></div><div class="acts"><button class="md-btn outlined small" type="button">Chart</button><button class="md-btn small buy" type="button">Paper buy</button><button class="md-btn small sell" type="button">Paper sell</button></div></div>
+          <div class="md-card" style="padding:8px;width:300px"><div class="mb-pal-group">F&amp;O contracts</div><div class="mb-pal-item" aria-selected="true"><span class="mb-avatar"><svg class="ms"><use href="#ms-layers"/></svg></span><span style="min-width:0"><b>NIFTY 27 OCT 24500 CE</b><small>Option · lot 75</small></span><span class="end">182.40</span></div></div>
+          <div class="mb-menu on" style="position:static"><button type="button"><svg class="ms"><use href="#ms-show_chart"/></svg>Chart</button><button type="button"><svg class="ms"><use href="#ms-receipt_long"/></svg>Paper order<span class="mb-kbd">B</span></button></div>
+          <div class="mb-snack on" style="position:static;transform:none;max-width:300px">Paper order recorded: open until the next valid quotes.</div>
+        </div>
+      </div>
+    </section>
     <section class="sg-section" id="shell">
       <h2>App shell</h2>
       <p class="lede">This page sits in the shell: a dark navy sidebar with labels from 1200px (the active page as a gradient pill), a collapsed icon rail between 600 and 1199px, a bottom navigation bar plus a drawer on phones, and a white top bar with the page title and the India/US segmented control. Sections not built yet are marked "soon" and explain themselves on hover.</p>

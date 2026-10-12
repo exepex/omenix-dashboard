@@ -1,5 +1,9 @@
 # Companies mockup: rationale
 
+> **Superseded in part (12 Oct 2026):** this page's shell (sidebar, top bar, phone bar) is replaced by the platform shell of
+> `design/PLATFORM_DESIGN.md`, drawn in `design/mockups/30-shell/`. The page's content stays valid until its platform mockup
+> (folders 31-40) is drawn. Kept unchanged: the web app and its tests read this folder.
+
 Page 10 of docs/SPEC.md section 6 (F8 company lifecycle, F10 governed tools; decisions 12-15, 20, 26, 33, 44),
 designed in the design track from W1's data catalogue. Status: **built on the owner's delegated authority**
 (2026-10-08, the owner away: "go with your recommendation, notify the orchestrator"; the owner asked that
