@@ -64,6 +64,22 @@ URL format: `postgresql://<role>:<password>@omenix-pg.postgres.database.azure.co
 or `SET ROLE` to it). Only then do the default privileges below give the runtime roles their access. A table created
 by the admin itself gets no grants and stays invisible to the runtime roles.
 
+## Scope: infrastructure only; dashboard tables come later (follow-up for W7)
+
+Owner scope note (12 Oct 2026): the dashboard's screens are being redesigned (`design/PLATFORM_DESIGN.md`: manual
+paper orders, a screener, an option chain), so its tables and APIs may still change. X1 therefore creates **no
+table** in any schema and **no table-specific grant**. What exists for `app` is only what the owner's original script
+set up: the schema, `USAGE` for `dashboard_app` and `stock_inbox_reader`, and default privileges (`dashboard_app`:
+SELECT, INSERT, UPDATE; `stock_inbox_reader`: SELECT) for whatever tables `app_owner` creates later. The original
+script names no `app` table. `dashboard_app` reads the backends' tables only through the default privileges of
+`stock` and `fno`.
+
+**Follow-up for W7 (after the mockups are final):** define the `app` tables (for example the inbox and the assistant
+log) and decide, table by table, whether the schema-wide defaults for `app` are right or should become narrower
+grants (for example `stock_inbox_reader` reading only the inbox, `dashboard_app` inserting only where it must). Add
+those checks to `tests/role_matrix.txt`. The test tables `x1_probe` (created and dropped by the tests) and the
+restore test's temporary marker (in `fno`) are not dashboard tables.
+
 ## Files
 
 | Path | What |

@@ -41,7 +41,10 @@ they are listed in `platform/README.md` ("Equivalence with what the owner ran").
    owner role, is not caught by this matrix; each table story (P3, K1, W2) should run the matrix plus its own checks.
 5. **Open firewall** (reasoning only): `0.0.0.0-255.255.255.255` lets anyone try passwords. Mitigations are TLS, least
    privilege and long random passwords; failed-login alerting and a resource lock are recommended, not done.
-6. The restore and az scripts were syntax-checked and their logic (TLS check, matrix, snapshot) run against a local
+6. **`app` defaults are schema-wide** (owner scope note, 12 Oct 2026): kept exactly as the original script set them;
+   no `app` table is created or named and no table-specific grant exists. Narrowing per table is the W7 follow-up in
+   `platform/README.md`. The restore test's temporary marker lives in `fno`, not `app`.
+7. The restore and az scripts were syntax-checked and their logic (TLS check, matrix, snapshot) run against a local
    TLS-only PostgreSQL 16; the `az` calls themselves were never executed (no Azure access by design).
 
 ## Test results (builder)

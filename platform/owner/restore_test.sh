@@ -3,7 +3,7 @@
 # Run on the owner's Mac from the repository root:   X1_RG=<resource group> platform/owner/restore_test.sh
 # Takes about 30-60 minutes (most of it Azure working). Cost: the scratch server is billed by the hour while it
 # exists (same size as omenix-pg); see platform/README.md "Restore test cost". Steps:
-#   1. writes a marker row (a random token and the time) into a new table app.x1_restore_marker on omenix-pg;
+#   1. writes a marker row (a random token and the time) into a new table fno.x1_restore_marker on omenix-pg;
 #   2. waits 15 minutes so the marker is in the backed-up log, then restores omenix-pg to a point 5 minutes after the
 #      marker, as a new server named omenix-pg-x1restore (point-in-time restore);
 #   3. checks on the scratch server: the marker row is there with the same token, and the catalog snapshot equals
@@ -37,9 +37,9 @@ utc_plus() {  # minutes -> ISO time (macOS date or GNU date)
   echo "earliest restore point: $(az postgres flexible-server show -g "$X1_RG" -n "$server" --query backup.earliestRestoreDate -o tsv)"
 
   echo; echo "== 1. marker on $server"
-  admin_psql -d omenix -c "SET ROLE app_owner" \
-    -c "CREATE TABLE IF NOT EXISTS app.x1_restore_marker (token text PRIMARY KEY, written_at timestamptz NOT NULL DEFAULT now())" \
-    -c "INSERT INTO app.x1_restore_marker (token) VALUES ('$token')" || die "could not write the marker"
+  admin_psql -d omenix -c "SET ROLE fno_owner" \
+    -c "CREATE TABLE IF NOT EXISTS fno.x1_restore_marker (token text PRIMARY KEY, written_at timestamptz NOT NULL DEFAULT now())" \
+    -c "INSERT INTO fno.x1_restore_marker (token) VALUES ('$token')" || die "could not write the marker"
   echo "marker token $token written at $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
   restore_time="$(utc_plus 5)"
 
@@ -62,7 +62,7 @@ utc_plus() {  # minutes -> ISO time (macOS date or GNU date)
       --start-ip-address "$my_ip" --end-ip-address "$my_ip" -o none && echo "opened the scratch firewall to this Mac only"
   fi
   scratch_host="$scratch.postgres.database.azure.com"
-  got="$(PGHOST="$scratch_host" admin_psql -d omenix -A -t -c "SELECT token FROM app.x1_restore_marker WHERE token = '$token'")"
+  got="$(PGHOST="$scratch_host" admin_psql -d omenix -A -t -c "SELECT token FROM fno.x1_restore_marker WHERE token = '$token'")"
   if [ "$got" = "$token" ]; then marker_ok=yes; else marker_ok=no; fi
   echo "marker row on the scratch server: $marker_ok"
   PGHOST="$scratch_host" admin_psql -d omenix -A -t -f "$platform/tests/catalog_snapshot.sql" > "$evidence_dir/.restore.$$"
@@ -80,7 +80,7 @@ utc_plus() {  # minutes -> ISO time (macOS date or GNU date)
   echo "scratch server gone: $gone; it existed for about $(( (deleted_at - started + 3599) / 3600 )) billed hour(s)"
 
   echo; echo "== 5. drop the marker on $server"
-  admin_psql -d omenix -c "SET ROLE app_owner" -c "DROP TABLE app.x1_restore_marker" && echo "marker table dropped"
+  admin_psql -d omenix -c "SET ROLE fno_owner" -c "DROP TABLE fno.x1_restore_marker" && echo "marker table dropped"
 
   echo; echo "RESULT: marker restored: $marker_ok; catalog identical: $catalog_ok; scratch server deleted: $gone"
   echo "COST: fill in from Azure Cost Management a day later (resource $scratch): ____"

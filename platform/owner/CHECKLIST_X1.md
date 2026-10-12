@@ -62,7 +62,7 @@ file before committing it.
 - [ ] Check first that no server called `omenix-pg-x1restore` exists (the script stops if it does).
 - [ ] `platform/owner/restore_test.sh`
   - asks the admin name and password (hidden);
-  - writes one marker row with a random token into a new table `app.x1_restore_marker` on `omenix-pg`;
+  - writes one marker row with a random token into a new table `fno.x1_restore_marker` on `omenix-pg`;
   - waits 15 minutes (Azure's log backup can lag up to about 5), then restores `omenix-pg` to 5 minutes after the
     marker as the new server `omenix-pg-x1restore` (Azure takes about 10-30 minutes);
   - Azure does not copy firewall rules to a restored server, so the script opens the scratch server to **your Mac's
@@ -73,7 +73,7 @@ file before committing it.
 - [ ] Pass = `RESULT: marker restored: yes; catalog identical: yes; scratch server deleted: yes`.
 - [ ] If the script stops part-way: delete the scratch server in the portal (or
       `az postgres flexible-server delete -g "$X1_RG" -n omenix-pg-x1restore --yes`) so it stops costing money, and
-      drop the marker as admin: `SET ROLE app_owner; DROP TABLE IF EXISTS app.x1_restore_marker;`.
+      drop the marker as admin: `SET ROLE fno_owner; DROP TABLE IF EXISTS fno.x1_restore_marker;`.
 - [ ] A day later: Azure portal, Cost Management, Cost analysis, filter resource `omenix-pg-x1restore`; write the
       amount into the `COST:` line of the evidence file. Commit it.
 
