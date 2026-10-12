@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Track record</title>
+<title>Omenix · Track record</title>
 <meta name="description" content="Track record page of the personal stock cockpit: whether the signal model has shown skill, the forecaster's calls scored per basis (never pooled) with hit rates, Wilson intervals, Brier and log loss, calibration by confidence band, ranges held, and the weekly review's back-test. Research only, Paper until proven.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -253,7 +253,7 @@ function legend(m) {
 let calRo;
 function render() {
   const p = P(market), t = T(market), page = $('#page'); page.innerHTML = '';
-  document.title = `Market brief · Track record · ${LABEL[market]}`; $('#title').textContent = 'Track record';
+  document.title = `Omenix · Track record · ${LABEL[market]}`; $('#title').textContent = 'Track record';
   sideFoot(market); marketSeg(() => { basisKey = null; render(); });
   page.append(pageHead(market, 'Track record', `${p.name} · the forecaster’s calls scored per basis, never pooled · as of ${fmtD(t.as_of, false)} · research only`));
   page.append(skillBand(market), kpis(market));

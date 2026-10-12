@@ -6,7 +6,7 @@ import type { InputSpec } from "../tools/types.ts";
 import type { HistoryTurn } from "./types.ts";
 import { CITED_KINDS, READ_TOOLS, TOOL_RESULT_MAX_CHARS } from "./constants.ts";
 
-export const SYSTEM_PROMPT = `You answer questions about market-brief, a research project that makes small paper \
+export const SYSTEM_PROMPT = `You answer questions about Omenix, a research project that makes small paper \
 predictions and paper trades for an India and a US watchlist and scores them. Everything in it is a paper record; \
 nothing is ever traded and nothing in it is investment advice.
 

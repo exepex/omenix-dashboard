@@ -103,7 +103,7 @@ let onMarketChange = () => {};
 function shell(current, title, opts={}) {
   const navItem = ([ico, label, href]) => el('a', {class:'mb-nav-item', href: href === current ? '#' : href, 'aria-current': href === current ? 'page' : null}, el('span', {class:'mb-nav-ind'}, icon('ms-'+ico)), el('span', {class:'mb-nav-label'}, label));
   const sidebar = $('#sidebar');
-  sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, 'MB'), el('span', {}, 'Market brief', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
+  sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, 'OM'), el('span', {}, 'Omenix', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
   const menuBtn = $('#menu-btn'), scrim = $('#scrim');
   const toggleMenu = on => { sidebar.classList.toggle('open', on); menuBtn.setAttribute('aria-expanded', String(on)); };
   menuBtn.addEventListener('click', () => toggleMenu(!sidebar.classList.contains('open')));

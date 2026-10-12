@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Companies</title>
+<title>Omenix · Companies</title>
 <meta name="description" content="Companies page of the personal stock cockpit: the watchlist as data. Active companies with price, amount per paper trade and actions; inactive companies with their price and news since, and Reactivate; pending and recent requests; the lifecycle history. Add, deactivate, reactivate, change the amount, delete with a typed confirmation. Research only.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -205,7 +205,7 @@ function legend() {
 
 function render() {
   const p = P(market);
-  document.title = `Market brief · Companies · ${LABEL[market]}`; $('#title').textContent = `Companies · ${p.name}`;
+  document.title = `Omenix · Companies · ${LABEL[market]}`; $('#title').textContent = `Companies · ${p.name}`;
   sideFoot(market); marketSeg(() => render());
   const page = $('#page'); page.innerHTML = '';
   page.append(pageHead(market, 'Companies', `the watchlist as data: ${p.companies.length} compan${p.companies.length === 1 ? 'y' : 'ies'} · ${p.name} · data as of the ${fmtD(p.as_of, false)} close · research only`), kpis(p));

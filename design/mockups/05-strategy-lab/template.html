@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Strategy lab</title>
+<title>Omenix · Strategy lab</title>
 <meta name="description" content="Strategy lab of the personal stock cockpit: every rule strategy, baseline and AI trader on one scoreboard with profit after costs, win rate and the luck test, each strategy explained in plain words with its position against the go-live bar, cumulative profit lines, and heatmaps by horizon, company, regime and reason. Back-test and forward results apart. Research only, every signal Paper.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -350,7 +350,7 @@ function legend() {
 let cumRo;
 function render() {
   const p = P(market); if (!selected || !p.strategies[selected]) { const {ids, byId} = ranking(p); selected = ids.find(id => byId[id]) || p.reference_strategy; }
-  document.title = `Market brief · Strategy lab · ${LABEL[market]}`; $('#title').textContent = `Strategy lab · ${p.name}`;
+  document.title = `Omenix · Strategy lab · ${LABEL[market]}`; $('#title').textContent = `Strategy lab · ${p.name}`;
   sideFoot(market); marketSeg(() => { selected = null; render(); });
   const page = $('#page'); page.innerHTML = '';
   page.append(pageHead(market, 'Strategy lab', `${Object.keys(p.strategies).length} strategies on one scoreboard: ${Object.values(p.strategies).filter(s => s.family === 'rule').length} rule strategies, ${Object.values(p.strategies).filter(s => s.family === 'baseline').length} baselines, ${Object.values(p.strategies).filter(s => s.family === 'ai').length} AI traders · ${p.name} · data as of the ${fmtD(p.as_of, false)} close · research only`), paperBand(market, p.go_live, Object.keys(p.strategies).length), controls(p), kpis(p));

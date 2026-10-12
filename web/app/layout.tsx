@@ -17,7 +17,7 @@ import "../styles/page.css";
 import "../styles/app.css";
 
 export const metadata: Metadata = {
-  title: { default: "Market brief", template: "Market brief · %s" },
+  title: { default: "Omenix", template: "Omenix · %s" },
   description: "Personal research cockpit: paper strategies, AI traders and their track record per market. Research only, every signal Paper; nothing here is investment advice.",
   robots: { index: false, follow: false },
   // Favicon: a small rising chart line, inlined as a data URI (no extra route through the gateway).

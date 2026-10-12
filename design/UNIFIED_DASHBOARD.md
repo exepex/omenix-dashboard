@@ -1,8 +1,10 @@
-# One dashboard for stocks and F&O: screen structure (proposal)
+# Omenix: one dashboard for stocks and F&O, screen structure (proposal)
 
 Status: **proposed 12 Oct 2026, for the owner's approval**, before any mockup is drawn. Owner's direction: "when a
 user logs in to any brokerage account ... they see their positions open, whether it's stocks or whether it's future
-and options ... future and options we are tracking only for India." This replaces the separate `/fno` screens of
+and options ... future and options we are tracking only for India." Later the same day: "we would be creating screener for both
+future and options and stocks ... We are building the application as a professional stockbroker tool ... even if it
+is a research tool", and the app is named **Omenix** (renamed from "Market brief" on 12 Oct 2026). This replaces the separate `/fno` screens of
 `exepex/trading` design section 13.2 (that section is updated once this proposal is approved).
 
 ## 1. Principles
@@ -30,6 +32,7 @@ and options ... future and options we are tracking only for India." This replace
 | | **Accounts** | paper portfolios | Book 1, 2, 3: cash, margin, equity curve, brake distance | **new** (absorbs 07's account view) |
 | | **Activity** | picks, entries, exits, settlements | daily decisions (including "no trade" and its reasons), fills, exits, pending exits | **new** |
 | Research | **Watchlist**, **Companies**, **Company** pages | yes | (not applicable) | existing |
+| | **Screener** | filter the stock universe (price, change, volume, sector, size, the models' agreement and probability, news) | filter F&O underlyings and contracts (implied volatility and its rank, open interest and its change, put-call ratio, futures basis, volume, days to expiry, events) | **new**, tabs Stocks · F&O (F&O tab India only) |
 | | **Options desk** | (not applicable) | NIFTY chain snapshot, implied vs realised volatility, India VIX, events calendar, 3 pm spreads | **new** |
 | | **News** | yes | market-wide items tagged for F&O | existing, filter added |
 | Strategies | **Strategy lab**, **Track record** | yes | (stock-only) | existing |
@@ -65,6 +68,28 @@ US Home: the same layout without any F&O element.
   (pending exit, protection unverified). It expands to show its legs (strike, CE/PE, buy/sell, lots, entry, mark).
 - Phone: the table becomes cards; legs fold under each F&O card.
 
+## 4a. Screener
+
+- **One screen with two tabs:** Stocks, and F&O (India only).
+- **Saved screens:** for example "high IV rank, rising open interest", or "models agree 4 of 5, volume up".
+- **Columns are chosen by the owner** from the list, and sorting works on any column. Each result row links to its
+  Company page (stocks) or to the Options desk (F&O).
+
+**Honest limits (reasoning from the data we have):**
+- **F&O data is end of day.** It comes from NSE's daily F&O files, which cover every F&O underlying, not only NIFTY,
+  and are updated after the close.
+- **Quotes exist only for NIFTY.** The 3 pm bid/ask quotes are recorded only for NIFTY monthly options.
+- **No live screener yet.** A screener refreshing during market hours needs a live data feed and its rate limits,
+  which is a separate decision.
+- **Screener results are research, not trades.** The approved F&O design trades only NIFTY monthly structures, so a
+  stock-option or BANKNIFTY result does not open a paper trade unless a tested strategy for it is approved through
+  the research loop.
+
+**Backend work this needs:**
+- The stock tool publishes its screener universe rows.
+- The F&O tool publishes F&O screener rows from the daily files: a new story in `exepex/trading`'s plan, plus an
+  "IV rank" history built from the files.
+
 ## 5. Data contract for mixed screens
 
 Each backend keeps its own read models. Mixed screens (Home, Positions, Accounts, Activity, Risk, Data health) need
@@ -77,7 +102,7 @@ story to each backend's publisher (in `exepex/trading`, P1-P2) and to the stock 
 
 `01-home` (redesigned, India and US), `13-positions`, `14-accounts`, `15-activity`, `16-options-desk`,
 `17-scoreboards` (stock Rule vs AI tab plus F&O A and B tabs), `18-forecasts`, `19-risk`, `20-judge-evidence`,
-`21-data-health`. Existing stock mockups stay as they are except for the navigation and the News filter.
+`21-data-health`, `22-screener` (Stocks and F&O tabs). Existing stock mockups stay as they are except for the navigation and the News filter.
 
 ## 7. Questions for the owner
 

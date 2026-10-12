@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Stock strategies</title>
+<title>Omenix · Stock strategies</title>
 <meta name="description" content="Stock strategies page of the personal stock cockpit: for one company, who agrees at each horizon, today's head-to-head picks and why, the best strategy on this company and overall, and every strategy ranked by profit after costs with its prediction for today. Research only, every signal Paper.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -222,7 +222,7 @@ function legend() {
 
 function render() {
   const p = P(market), c = p.company, cur = p.currency; if (horizon == null) horizon = p.default_horizon;
-  document.title = `Market brief · Stock strategies · ${c.ticker}`; $('#title').textContent = `Stock strategies · ${c.ticker}`;
+  document.title = `Omenix · Stock strategies · ${c.ticker}`; $('#title').textContent = `Stock strategies · ${c.ticker}`;
   sideFoot(market); marketSeg(() => { horizon = null; render(); });
   const page = $('#page'); page.innerHTML = '';
   const head = pageHead(market, `${c.ticker} · ${c.name}`, `${c.sector} · ${p.name} · ${money(cur, c.amount)} per paper trade${c.amount_overridden ? ' (override)' : ''} · data as of the ${fmtD(p.as_of, false)} close · research only`);

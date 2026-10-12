@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Company</title>
+<title>Omenix · Company</title>
 <meta name="description" content="Company page of the personal stock cockpit: what the strategies say today, the price chart with the predicted targets and ranges and the paper trades on it, today's path of the open trades, settled results and why each moved, news with verification status, the results digest, coming events, and the company's watchlist settings. Research only, every signal Paper.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -459,7 +459,7 @@ function legend() {
 let ro;
 function render() {
   const p = P(market), c = CP(market), co = c.company; if (horizon == null) horizon = p.default_horizon;
-  document.title = `Market brief · ${co.ticker} · ${LABEL[market]}`; $('#title').textContent = `${co.ticker} · ${co.name}`;
+  document.title = `Omenix · ${co.ticker} · ${LABEL[market]}`; $('#title').textContent = `${co.ticker} · ${co.name}`;
   $('#ask').href = `${PAGES.assistant}#${market}/${co.ticker}`;
   sideFoot(market); marketSeg(() => { ticker = null; horizon = null; render(); });
   if (!hashParts()[1] || hashParts()[1] !== co.ticker) history.replaceState(null, '', `#${market}/${co.ticker}`);

@@ -103,10 +103,10 @@ function Shell({ market, children, chat }: { market: Market; children: ReactNode
       <nav className={`mb-sidebar${menuOpen ? " open" : ""}`} aria-label="Pages" id="sidebar" inert={phone && !menuOpen}>
         <div className="mb-sidebar-brand">
           <span className="mb-brand-mark" aria-hidden="true">
-            MB
+            OM
           </span>
           <span>
-            Market brief<small>research cockpit</small>
+            Omenix<small>research cockpit</small>
           </span>
         </div>
         <div className="mb-sidebar-section">Pages</div>

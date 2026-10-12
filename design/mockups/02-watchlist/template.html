@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Watchlist</title>
+<title>Omenix · Watchlist</title>
 <meta name="description" content="Watchlist of the personal stock cockpit: the market's active companies with price, move, how many strategies would buy them at the chosen horizon, today's published range and open paper trades; filter by sector, sort, open a company. Research only, every signal Paper.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -142,7 +142,7 @@ let tableHost;
 function renderTable() { const rows = rowsOf(market); tableHost.innerHTML = ''; tableHost.append(table(market, rows)); makeFocusable(tableHost); }
 function render() {
   const p = P(market); if (horizon == null) horizon = p.default_horizon;
-  document.title = `Market brief · Watchlist · ${LABEL[market]}`; $('#title').textContent = `Watchlist · ${p.name}`;
+  document.title = `Omenix · Watchlist · ${LABEL[market]}`; $('#title').textContent = `Watchlist · ${p.name}`;
   sideFoot(market); marketSeg(() => { horizon = null; sector = null; render(); });
   const rows = rowsOf(market);
   const page = $('#page'); page.innerHTML = '';

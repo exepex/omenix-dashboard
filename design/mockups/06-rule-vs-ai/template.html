@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Rule vs AI</title>
+<title>Omenix · Rule vs AI</title>
 <meta name="description" content="Rule vs AI page of the personal stock cockpit: the head-to-head paper trades of the strongest rule strategy against the strongest AI trader on identical company-days, per market and per company, with profit after costs, win rate and target error, today's picks, gain-pick vs probability-pick, and the why from the end-of-day analyst and the weekly research review. Research only, every signal Paper.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -260,7 +260,7 @@ function legend() {
 let ro;
 function render() {
   const p = P(market);
-  document.title = `Market brief · Rule vs AI · ${LABEL[market]}`; $('#title').textContent = `Rule vs AI · ${p.name}`;
+  document.title = `Omenix · Rule vs AI · ${LABEL[market]}`; $('#title').textContent = `Rule vs AI · ${p.name}`;
   sideFoot(market); marketSeg(() => render());
   const page = $('#page'); page.innerHTML = '';
   const bar = el('div', {class:'ctrls'}); const sg = el('div', {class:'md-segmented dense light', role:'group', 'aria-label':'Costs'}); for (const [k, t] of [['market', 'Market cost'], ['your', 'Your cost']]) sg.append(el('button', {type:'button', 'aria-pressed': String(k === cost), onclick: () => { cost = k; render(); }}, t)); bar.append(el('span', {class:'c'}, 'Costs', help('Market cost: brokerage, taxes and fees (the ranking view). Your cost adds your own broker’s charges; the go-live bar uses it (decision 50). The switch changes the scorecard, the slice tables, the matches and the per-company sums (per-trade your-cost figures from the cost views); the cumulative lines and the EOD analyst stay on market cost.'), sg));

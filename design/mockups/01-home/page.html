@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Home</title>
+<title>Omenix · Home</title>
 <meta name="description" content="Home of the personal stock cockpit, per market: companies ranked by how many strategies would buy them at the chosen horizon, today's head-to-head paper trades, rule vs AI, open paper trades, alerts, the news that can carry a call and the last runs. Research only, every signal Paper.">
 <style>
-/* market-brief cockpit: design tokens, scheme v2 "modern admin light" (2026-10-08).
+/* Omenix cockpit: design tokens, scheme v2 "modern admin light" (2026-10-08).
    The owner asked for the look of modern admin templates (Pixinvent Materialize with its semi-dark vertical
    menu, Aurora) applied to a broker-style cockpit: a soft light-grey page, white cards lifted by a faint shadow
    (no hairline borders), one periwinkle-indigo accent, a dark navy sidebar with labels, icon tiles on the KPI
@@ -225,7 +225,7 @@
 .md-numeric { font-variant-numeric: tabular-nums; }
 .md-micro { font: 500 11px/16px var(--md-ref-typeface-plain); letter-spacing: .06em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
 
-/* market-brief cockpit: components on tokens.css, scheme v2 "modern admin light". Plain CSS, no JS
+/* Omenix cockpit: components on tokens.css, scheme v2 "modern admin light". Plain CSS, no JS
    required (the tooltip and the phone drawer need the page's own small script, see README).
    Prefix: md- for M3 components, mb- for the cockpit's own (app shell, provenance tags, odds meter,
    KPI card, labels). Load after tokens.css. */
@@ -791,7 +791,7 @@ let horizon = null;
 const NAV = [['home','Home','#'], ['format_list_bulleted','Watchlist','../02-watchlist/page.html'], ['science','Strategy lab','../05-strategy-lab/page.html'], ['layers','Rule vs AI','../06-rule-vs-ai/page.html'], ['account_balance_wallet','Paper portfolios','../07-paper-portfolios/page.html'], ['query_stats','Track record','../08-track-record/page.html'], ['newspaper','News','../09-news/page.html'], ['apartment','Companies','../10-companies/page.html'], ['bolt','Assistant','../11-assistant/page.html'], ['help','Help','../12-help/page.html']];
 const navItem = ([ico, label, href]) => el('a', {class:'mb-nav-item', href, 'aria-current': href === '#' ? 'page' : null}, el('span', {class:'mb-nav-ind'}, icon('ms-'+ico)), el('span', {class:'mb-nav-label'}, label));
 const sidebar = $('#sidebar');
-sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, 'MB'), el('span', {}, 'Market brief', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
+sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, 'OM'), el('span', {}, 'Omenix', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
 const menuBtn = $('#menu-btn'), scrim = $('#scrim');
 const toggleMenu = on => { sidebar.classList.toggle('open', on); menuBtn.setAttribute('aria-expanded', String(on)); };
 menuBtn.addEventListener('click', () => toggleMenu(!sidebar.classList.contains('open')));
@@ -1107,7 +1107,7 @@ function legend() {
 function render() {
   const p = P(market);
   if (horizon == null) horizon = p.default_horizon;
-  document.title = `Market brief · Home · ${LABEL[market]}`;
+  document.title = `Omenix · Home · ${LABEL[market]}`;
   $('#title').textContent = `Home · ${p.name}`;
   $('#side-foot').innerHTML = ''; $('#side-foot').append(el('b', {}, p.status.paper_label), el('br'), `${LABEL[market]} · data as of ${fmtD(p.as_of, false)}`);
   marketSeg();

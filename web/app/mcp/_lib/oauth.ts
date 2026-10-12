@@ -32,7 +32,7 @@ function oauthError(error: string, description: string, status = 400): Response 
 
 function page(text: string, status: number): Response {
   const safe = text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
-  return new Response(`<!doctype html><meta charset="utf-8"><title>market-brief</title><p>${safe}</p>`, {
+  return new Response(`<!doctype html><meta charset="utf-8"><title>Omenix</title><p>${safe}</p>`, {
     status, headers: { "Content-Type": "text/html; charset=utf-8", ...noStore },
   });
 }
@@ -40,7 +40,7 @@ function page(text: string, status: number): Response {
 export function protectedResourceMetadata(cfg: McpConfig): Response {
   return json({
     resource: resourceUrl(cfg), authorization_servers: [cfg.baseUrl], bearer_methods_supported: ["header"],
-    scopes_supported: ["mcp"], resource_name: "market-brief (research only)",
+    scopes_supported: ["mcp"], resource_name: "Omenix (research only)",
   });
 }
 

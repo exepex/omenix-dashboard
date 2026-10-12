@@ -1,4 +1,4 @@
-/* market-brief cockpit: components on tokens.css, scheme v2 "modern admin light". Plain CSS, no JS
+/* Omenix cockpit: components on tokens.css, scheme v2 "modern admin light". Plain CSS, no JS
    required (the tooltip and the phone drawer need the page's own small script, see README).
    Prefix: md- for M3 components, mb- for the cockpit's own (app shell, provenance tags, odds meter,
    KPI card, labels). Load after tokens.css. */

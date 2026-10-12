@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Company</title>
+<title>Omenix · Company</title>
 <meta name="description" content="Company page of the personal stock cockpit: what the strategies say today, the price chart with the predicted targets and ranges and the paper trades on it, today's path of the open trades, settled results and why each moved, news with verification status, the results digest, coming events, and the company's watchlist settings. Research only, every signal Paper.">
 <style>
-/* market-brief cockpit: design tokens, scheme v2 "modern admin light" (2026-10-08).
+/* Omenix cockpit: design tokens, scheme v2 "modern admin light" (2026-10-08).
    The owner asked for the look of modern admin templates (Pixinvent Materialize with its semi-dark vertical
    menu, Aurora) applied to a broker-style cockpit: a soft light-grey page, white cards lifted by a faint shadow
    (no hairline borders), one periwinkle-indigo accent, a dark navy sidebar with labels, icon tiles on the KPI
@@ -225,7 +225,7 @@
 .md-numeric { font-variant-numeric: tabular-nums; }
 .md-micro { font: 500 11px/16px var(--md-ref-typeface-plain); letter-spacing: .06em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
 
-/* market-brief cockpit: components on tokens.css, scheme v2 "modern admin light". Plain CSS, no JS
+/* Omenix cockpit: components on tokens.css, scheme v2 "modern admin light". Plain CSS, no JS
    required (the tooltip and the phone drawer need the page's own small script, see README).
    Prefix: md- for M3 components, mb- for the cockpit's own (app shell, provenance tags, odds meter,
    KPI card, labels). Load after tokens.css. */
@@ -858,7 +858,7 @@ let onMarketChange = () => {};
 function shell(current, title, opts={}) {
   const navItem = ([ico, label, href]) => el('a', {class:'mb-nav-item', href: href === current ? '#' : href, 'aria-current': href === current ? 'page' : null}, el('span', {class:'mb-nav-ind'}, icon('ms-'+ico)), el('span', {class:'mb-nav-label'}, label));
   const sidebar = $('#sidebar');
-  sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, 'MB'), el('span', {}, 'Market brief', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
+  sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, 'OM'), el('span', {}, 'Omenix', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
   const menuBtn = $('#menu-btn'), scrim = $('#scrim');
   const toggleMenu = on => { sidebar.classList.toggle('open', on); menuBtn.setAttribute('aria-expanded', String(on)); };
   menuBtn.addEventListener('click', () => toggleMenu(!sidebar.classList.contains('open')));
@@ -1219,7 +1219,7 @@ function legend() {
 let ro;
 function render() {
   const p = P(market), c = CP(market), co = c.company; if (horizon == null) horizon = p.default_horizon;
-  document.title = `Market brief · ${co.ticker} · ${LABEL[market]}`; $('#title').textContent = `${co.ticker} · ${co.name}`;
+  document.title = `Omenix · ${co.ticker} · ${LABEL[market]}`; $('#title').textContent = `${co.ticker} · ${co.name}`;
   $('#ask').href = `${PAGES.assistant}#${market}/${co.ticker}`;
   sideFoot(market); marketSeg(() => { ticker = null; horizon = null; render(); });
   if (!hashParts()[1] || hashParts()[1] !== co.ticker) history.replaceState(null, '', `#${market}/${co.ticker}`);

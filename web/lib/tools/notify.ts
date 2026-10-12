@@ -6,7 +6,7 @@ import { slackEscape } from "./text.ts";
 
 export function ownerReportText(report: OwnerReport): string {
   const lines = [
-    `:warning: market-brief, for the owner: a command was ${report.result}`,
+    `:warning: Omenix, for the owner: a command was ${report.result}`,
     `• tool: ${report.tool ?? "(none)"} · channel: ${report.channel} · from: ${report.actor}`,
     report.refusal_code ? `• code: ${report.refusal_code}` : null,
     report.message ? `• why: ${report.message.slice(0, 500)}` : null,

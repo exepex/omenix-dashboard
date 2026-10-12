@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Help</title>
+<title>Omenix · Help</title>
 <meta name="description" content="Help page of the personal stock cockpit: how to read it in plain words. What Paper means and the go-live bar, horizons and chances, targets and ranges, the strategies and their families, the scores and the luck test, head-to-head picks and costs, news statuses, intraday checks, and what each page is for. Research only, nothing here is advice.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -68,7 +68,7 @@ const dl = rows => { const d = el('dl'); for (const [t, s] of rows) d.append(el(
 
 function render() {
   const p = P(market), cur = p.currency, g = p.go_live_detail, page = $('#page'); page.innerHTML = '';
-  document.title = `Market brief · Help · ${LABEL[market]}`; $('#title').textContent = 'Help';
+  document.title = `Omenix · Help · ${LABEL[market]}`; $('#title').textContent = 'Help';
   sideFoot(market); marketSeg(() => render());
   page.append(pageHead(market, 'How to read the cockpit', `in plain words · the examples below use ${p.name}'s numbers · research only, nothing here is advice`));
   const toc = el('nav', {class:'toc', 'aria-label':'On this page'}); for (const [id, t] of SECTIONS) toc.append(el('a', {class:'md-chip assist', href: '#' + id}, t)); page.append(toc);

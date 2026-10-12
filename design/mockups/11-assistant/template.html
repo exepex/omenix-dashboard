@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market brief · Assistant</title>
+<title>Omenix · Assistant</title>
 <meta name="description" content="Assistant page of the personal stock cockpit: ask the stored data in plain words; every answer cites the record ids and as-of times it used, says 'not in the data' when it is not, and never advises a real trade. Research only.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
@@ -149,7 +149,7 @@ function budgetCard(m) {
 
 function render() {
   const p = P(market), page = $('#page'); page.innerHTML = '';
-  document.title = `Market brief · Assistant · ${LABEL[market]}`; $('#title').textContent = 'Assistant';
+  document.title = `Omenix · Assistant · ${LABEL[market]}`; $('#title').textContent = 'Assistant';
   sideFoot(market); marketSeg(() => render());
   page.append(pageHead(market, 'Assistant', `${p.name} · ask the stored data in plain words · answers cite ids and as-of times · never advice · research only`));
   const g = el('div', {class:'grid asst'});

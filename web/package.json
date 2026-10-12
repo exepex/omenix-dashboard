@@ -1,8 +1,8 @@
 {
-  "name": "market-brief-web",
+  "name": "omenix-web",
   "version": "0.1.0",
   "private": true,
-  "description": "market-brief cockpit and gateway (Next.js App Router). Research only: no tool places, routes or simulates a broker order.",
+  "description": "Omenix cockpit and gateway (Next.js App Router). Research only: no tool places, routes or simulates a broker order.",
   "engines": {
     "node": ">=22.18.0"
   },
