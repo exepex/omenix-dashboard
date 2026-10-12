@@ -6,8 +6,8 @@
 Reads the page's `data.json` (Mock payload, hand-kept: there is no backend catalogue for these screens yet) and the
 shell's `30-shell/data.json` (watchlists, index strip, accounts, search, notifications), and writes `page.html` next
 to the page's `template.html`: the design system (design/system/, light tokens plus tokens-dark.css for the theme
-switch), the page layout helpers (design/mockups/_shared/shell.css) and the platform runtime (platform.js of this
-folder) are inlined. Markers: `<!--@@SYSTEM_CSS@@-->`, `<!--@@ICONS@@-->`, `<!--@@SHARED_CSS@@-->`,
+switch), the page layout helpers (design/mockups/_shared/shell.css) and the platform runtime (js/*.js of this
+folder, concatenated in file order) are inlined. Markers: `<!--@@SYSTEM_CSS@@-->`, `<!--@@ICONS@@-->`, `<!--@@SHARED_CSS@@-->`,
 `<!--@@PLATFORM_JS@@-->`, `/*__SHELL__*/null` and `/*__DATA__*/null`. Deterministic: nothing reads the wall clock
 (the payloads carry their own `now`), so two builds give the same bytes. No request leaves the page.
 """
@@ -33,6 +33,12 @@ def read(path: str) -> str:
         return handle.read()
 
 
+def runtime() -> str:
+    """The platform runtime: design/mockups/_platform/js/*.js concatenated in file order (one closure, split by purpose)."""
+    folder = os.path.join(HERE, "js")
+    return "".join(read(os.path.join(folder, name)) for name in sorted(os.listdir(folder)) if name.endswith(".js"))
+
+
 def payload(obj) -> str:
     return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
@@ -40,7 +46,7 @@ def payload(obj) -> str:
 def render(template: str, shell: dict, data: dict | None) -> str:
     html = (template
             .replace("<!--@@SHARED_CSS@@-->", f"<style>\n{read(os.path.join(MOCKUPS, '_shared', 'shell.css'))}\n</style>")
-            .replace("<!--@@PLATFORM_JS@@-->", f"<script>\n{read(os.path.join(HERE, 'platform.js'))}\n</script>")
+            .replace("<!--@@PLATFORM_JS@@-->", f"<script>\n{runtime()}\n</script>")
             .replace("/*__SHELL__*/null", payload(shell))
             .replace("/*__DATA__*/null", payload(data)))
     for mark in MARKS:
