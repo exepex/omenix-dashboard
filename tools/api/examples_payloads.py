@@ -53,8 +53,10 @@ def session(x: Mock, market):
         return {"": ("closed: before the 7 Oct open in the US", payload)}
     # 2.6: India states whether NSE has issued the hours; the second state is a labelled Example (8 Nov 2026 muhurat,
     # announced, its timings circular not issued yet)
+    # post_close_at stays a time: unknown hours do not make the run that brings the close unknown (the 07:10 IST market
+    # run on 9 Nov; trading 803ca61)
     pending = {**payload, "session_date": "2026-11-08", "open_utc": None, "close_utc": None, "next_open_utc": None,
-               "regime": None, "post_close_at": None, "major_event_names": [], "hours_status": "not_issued"}
+               "regime": None, "post_close_at": "2026-11-09T01:40:00Z", "major_event_names": [], "hours_status": "not_issued"}
     return {"": ("closed: after the close in India", {**payload, "hours_status": "known"}),
             "_hours_not_issued": ("Example state: the 8 Nov muhurat session announced, its hours not issued yet", pending)}
 
