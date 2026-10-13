@@ -122,6 +122,8 @@ test("the detector knows families and id shapes, not a list: each of these is on
     ["DeepSeek-R1", "DeepSeek-R1"],
     ["the Claude app", "Claude"],
     ["on the claude API", "claude"],
+    ["set in the Anthropic console", "Anthropic"],
+    ["an OpenAI key", "OpenAI"],
   ]) assert.equal(modelNameIn(text), token, text);
   for (const clean of ["Model + news", "a fable about markets", "claude_app", "Hybrid", "O2 margin", "Model + news, 60% bar"]) assert.equal(modelNameIn(clean), null, clean);
 });

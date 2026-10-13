@@ -54,6 +54,26 @@ Evidence:
 
 **Strong evidence.**
 
+## No vendor names either (orchestrator, for the owner)
+
+- The Spend tip now says "the AI provider's console", not "the Anthropic console".
+- The detector also counts the AI vendors' names (Anthropic, OpenAI) as brands, so the gate fails on them on every
+  page. Tests added.
+
+## A flaky-looking failure, root-caused (some evidence)
+
+One full harness run failed `home-open` once, with React error #418 (hydration text mismatch) and the trade controls
+still locked. Repeated runs did not reproduce it: 3 alone and 6 in parallel under load.
+
+- **Cause (reasoning, from the code).** The `#clock=open` hash is read in an effect and applied as an urgent update.
+  The clock time, market status and trade lock all derive from it. Home's sections stream in after the frame. If one
+  arrives after that update, React hydrates it against the open clock, while its server HTML was rendered closed:
+  a text mismatch.
+- **Fix** (`components/frame/use-frame-state.ts`). The hash state is applied in `startTransition`, React's
+  documented way to let pending sections hydrate before an update reaches them.
+- **Evidence.** The full harness passes after the fix. I cannot force the race on demand, so the cause is not proven
+  by reproduction. If it recurs, the report will show it.
+
 ## Note: Home's events
 
 Not touched. The judge is checking W11's fixture resync (b23daca).

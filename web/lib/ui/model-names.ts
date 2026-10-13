@@ -3,10 +3,11 @@
 // "-", "_", "." or a space ("Fable 5", "fable-5", "FABLE 5.1", "claude_opus_4", "GPT-4o-mini", "o3"), also inside a
 // dotted id ("ai.combined.opus.v1"). A family that is also an ordinary word (opus, sonnet, haiku, fable, gemini, ...)
 // counts only in such a shape or as a bracketed aside naming it alone ("AI combined (Opus)"), so "magnum opus" stays.
-// Brand names that are no ordinary word count alone, "Claude" among them (owner decision, 13 Oct 2026). Pure.
+// Brand names that are no ordinary word count alone, "Claude" among them, and so do the AI vendors' names (owner
+// decisions, 13 Oct 2026: no model or vendor name on any screen). Pure.
 
-/** Names that are no ordinary word: a model on their own. */
-const BRANDS = ["claude", "chatgpt", "gpt", "deepseek", "qwen", "mixtral", "codestral", "ministral", "command-r"];
+/** Names that are no ordinary word: a model or an AI vendor on their own. */
+const BRANDS = ["anthropic", "openai", "claude", "chatgpt", "gpt", "deepseek", "qwen", "mixtral", "codestral", "ministral", "command-r"];
 /** Names that are also ordinary words: a model only with a version or size after them, or alone in brackets. */
 const WORDS = ["opus", "sonnet", "haiku", "fable", "gemini", "gemma", "llama", "mistral", "grok", "phi", "bard", "kimi", "glm"];
 const VARIANTS = ["mini", "nano", "pro", "turbo", "flash", "lite", "ultra", "preview", "instant", "latest", "coder", "vision"];
