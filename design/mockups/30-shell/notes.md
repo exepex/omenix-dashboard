@@ -1,5 +1,9 @@
 # 30-shell: data contract (what every element needs)
 
+**Status: signed off 13 Oct 2026 (owner), as of commit cadf1d2.** This is the signed-off API contract for the app frame
+(app bar, rail, picks panel, search, order window, overlays). Change it only for a very solid reason, brought to the
+owner first (through the orchestrator); record each change and its reason here.
+
 **Data source of this mockup:** `data.json` is composed by `design/mockups/_platform/real_data.py` from the
 application's own example records (the stock tool's catalogue examples in `01-home`, `03-company` and
 `07-paper-portfolios`, the same files the web tests read): companies, prices, strategies, picks, agreement, own trades,
