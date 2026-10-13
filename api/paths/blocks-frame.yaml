@@ -1,0 +1,316 @@
+# Block endpoints of the frame (30-shell): reference data, the market chip, the index strip, the bell, search, the
+# hover card and the order window's stock-side inputs. Each operation states the blocks it feeds (x-feeds).
+/api/v1/frame/markets:
+  get:
+    tags: [blocks]
+    operationId: getFrameMarkets
+    summary: 'The market switch: both markets with currency, zone and whether F&O exists'
+    x-status: planned
+    x-publisher: dashboard
+    x-read-model: 'config (no table)'
+    x-freshness: 'static: per deploy'
+    x-cache: 'private, max-age=86400; changes only with a deploy'
+    x-empty: 'never empty: both markets are always listed'
+    x-feeds: [s30.market-switch]
+    responses:
+      '200':
+        description: 'The FrameMarkets block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FrameMarketsResponse'}
+            examples:
+              all: {$ref: '#/components/examples/getFrameMarkets_all'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/approaches:
+  get:
+    tags: [blocks]
+    operationId: getApproaches
+    summary: 'Who decides: the five approaches with this market''s descriptions and the pick-rule labels'
+    x-status: planned
+    x-publisher: dashboard
+    x-read-model: 'config (no table)'
+    x-freshness: 'static: per deploy'
+    x-cache: 'private, max-age=86400; changes only with a deploy'
+    x-empty: 'never empty'
+    x-feeds: [s30.approaches, s30.picks-row]
+    x-shared: 'one vocabulary: the approaches'' names and the pick-rule names label the picks rows'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Approaches block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ApproachesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getApproaches_india'}
+              us: {$ref: '#/components/examples/getApproaches_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/price-sources:
+  get:
+    tags: [blocks]
+    operationId: getPriceSources
+    summary: 'Freshness rules of each recorded price source (close; in India also eod and snap3pm)'
+    x-status: planned
+    x-publisher: dashboard
+    x-read-model: 'config (no table)'
+    x-freshness: 'static: per deploy'
+    x-cache: 'private, max-age=86400; changes only with a deploy'
+    x-empty: 'never empty: close always exists'
+    x-feeds: [s30.freshness]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The PriceSources block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PriceSourcesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getPriceSources_india'}
+              us: {$ref: '#/components/examples/getPriceSources_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/session:
+  get:
+    tags: [blocks]
+    operationId: getSession
+    summary: 'Today''s session: open, close, next open, regime and when the post-close run is due'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key session (interim: projected from rm.status)'
+    x-freshness: 'stock_age; each stock run'
+    x-cache: 'tag rm:blocks:<market>:session, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'non-trading day: open_utc and close_utc null, next_open_utc set'
+    x-feeds: [h31.band, s30.lock, s30.status-chip]
+    x-shared: 'one session record: the top bar''s chip and lock and Home''s band show the same times (serving it twice would duplicate one fact)'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Session block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SessionResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getSession_india'}
+              us: {$ref: '#/components/examples/getSession_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/indices:
+  get:
+    tags: [blocks]
+    operationId: getIndices
+    summary: 'The benchmark and volatility index at their last close (index strip, market band)'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key indices (interim: projected from rm.status)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:indices, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'an index without a stored close makes the block 503 (never a made-up level)'
+    x-feeds: [h31.band, s30.index-strip]
+    x-shared: 'one pair of levels: the top bar''s strip and Home''s band show the same closes, never both at once'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Indices block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/IndicesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getIndices_india'}
+              us: {$ref: '#/components/examples/getIndices_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/notifications:
+  get:
+    tags: [blocks]
+    operationId: getNotifications
+    summary: 'The bell: run events of both backends and the dashboard''s alerts'
+    x-status: planned
+    x-publisher: dashboard
+    x-read-model: 'composed by the dashboard''s alert rules'
+    x-freshness: 'inputs; each run'
+    x-cache: 'recomputed when an input tag changes (rm:blocks:<market>:session, fno current publication); browser private, no-cache + ETag'
+    x-empty: 'notifications empty: the bell shows no badge'
+    x-feeds: [s30.bell]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Notifications block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/NotificationsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getNotifications_india'}
+              us: {$ref: '#/components/examples/getNotifications_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/search:
+  get:
+    tags: [blocks]
+    operationId: searchInstruments
+    summary: 'Search the stock tool''s records: stocks, indices, strategies, news'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key search_index (the route filters by q)'
+    x-freshness: 'stock_age; each stock run'
+    x-cache: 'the index row is cached by tag rm:blocks:<market>:search_index; responses private, max-age=60'
+    x-empty: 'every list empty: "No match" (pages still come from the dashboard''s own navigation)'
+    x-feeds: [s30.search]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+      - {name: q, in: query, required: true, description: 'Words or a code, e.g. reliance, nifty 22800 call, NIFTY26OCT22800CE', schema: {type: string, minLength: 1, maxLength: 60}}
+    responses:
+      '200':
+        description: 'The Search block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SearchResponse'}
+            examples:
+              india: {$ref: '#/components/examples/searchInstruments_india'}
+              india_strategies: {$ref: '#/components/examples/searchInstruments_india_strategies'}
+              us: {$ref: '#/components/examples/searchInstruments_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/instruments/{id}:
+  get:
+    tags: [blocks]
+    operationId: getInstrument
+    summary: 'One stock or index for the hover card, quick view and the order window''s price basis'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key instrument:<id> (interim: rm.companies + rm.bars)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:instrument:<id>, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'unknown id: 404'
+    x-feeds: [s30.hover, s30.order-price]
+    x-shared: 'one price: the hover card shows it; the order window''s price basis is the same price'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+      - {name: id, in: path, required: true, description: A stock or index id of the market, schema: {$ref: '#/components/schemas/InstrumentRef'}}
+    responses:
+      '200':
+        description: 'The Instrument block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/InstrumentResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getInstrument_india'}
+              india_inactive: {$ref: '#/components/examples/getInstrument_india_inactive'}
+              us: {$ref: '#/components/examples/getInstrument_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/accounts:
+  get:
+    tags: [blocks]
+    operationId: getAccounts
+    summary: 'The Manual paper account (cash, value, open profit) and the stock strategies'' accounts (listed, not tradable)'
+    x-status: planned
+    x-publisher: dashboard
+    x-read-model: 'app.manual_account (proposed, MA1-proposed) with marks from rm.blocks positions'
+    x-freshness: 'inputs; post-close marks and each recorded trade'
+    x-cache: 'recomputed when the account or rm:blocks:<market>:positions changes; browser private, no-cache + ETag'
+    x-empty: 'never empty: the Manual account always exists (its starting cash)'
+    x-feeds: [h31.glance-account, h31.who-trades, s30.defaults, s30.order-account]
+    x-shared: 'one account: the order window, the glance and the You card all show the Manual account''s own figures'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Accounts block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AccountsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getAccounts_india'}
+              us: {$ref: '#/components/examples/getAccounts_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/positions:
+  get:
+    tags: [blocks]
+    operationId: getPositions
+    summary: 'The Manual account''s open positions, marked to the last close'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key positions (interim: rm.portfolio owner positions)'
+    x-freshness: 'stock_age; post-close run and each recorded trade'
+    x-cache: 'tag rm:blocks:<market>:positions, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'own empty: "Nothing open here"'
+    x-feeds: [h31.glance-account, h31.trades-yours, s30.defaults, s30.hover]
+    x-shared: 'one list of the owner''s positions: Home''s rows, the glance line and every hover card''s held quantity'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Positions block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PositionsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getPositions_india'}
+              us: {$ref: '#/components/examples/getPositions_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/order-rules:
+  get:
+    tags: [blocks]
+    operationId: getOrderRules
+    summary: 'The stock order window''s charge estimate and when a stock order would fill'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key order_rules (config/costs.yaml, run timetable)'
+    x-freshness: 'stock_age; on config change'
+    x-cache: 'tag rm:blocks:<market>:order_rules, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'never empty'
+    x-feeds: [s30.order-charges, s30.order-fill]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The OrderRules block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OrderRulesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getOrderRules_india'}
+              us: {$ref: '#/components/examples/getOrderRules_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}

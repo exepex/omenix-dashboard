@@ -1,0 +1,30 @@
+name: api-contract
+
+# Story W10: the API contract (api/) of the frame and Home block endpoints. Bundles api/, validates it as OpenAPI 3.1,
+# checks every example against its schema and against the signed-off mockups' data, the data catalog, the screen rules
+# and the element map of 30-shell/notes.md and 31-dashboard/notes.md. No secrets, no network besides pip.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the pinned checkers
+        run: pip install -r tools/api/requirements.txt
+      - name: Mapping (notes.md elements <-> endpoint fields, independence)
+        run: python3 tools/api/check_mapping.py
+      - name: Contract (OpenAPI 3.1, examples, catalog, screen rules, planted breaks)
+        run: python3 tools/api/check_contract.py
+      - name: Catalog is current
+        run: python3 tools/api/render_catalog.py --check
