@@ -46,9 +46,11 @@ Steps 3 and 4 are not rerun with the fixed scripts.
 The restore script was meant to drop its marker table `fno.x1_restore_marker` on `omenix-pg` when it ended. That
 drop ran in an EXIT trap set inside a `{ ...; } | tee` block, and bash 3.2 (the macOS default) never runs such a trap.
 The evidence file shows it: no "marker table dropped" line after step 5. Reproduced in `mirror.gcr.io/library/bash:3.2`
-(strong evidence). So the table, with one row holding the random token and no secret, stayed on `omenix-pg`. **The
-owner dropped it by hand** (13 Oct 2026, reported via the orchestrator) with
-`SET ROLE fno_owner; DROP TABLE IF EXISTS fno.x1_restore_marker;`.
+(strong evidence). So the table, with one row holding the random token and no secret, stayed on `omenix-pg`.
+**Correction (14 Oct 2026):** an earlier line here said the owner dropped it on 13 Oct. That drop had not run: the
+owner's read-back of `fno_writer`'s grants after migration 002 still listed the table. **The owner dropped it on
+14 Oct 2026** as `fno_owner` with `DROP TABLE IF EXISTS fno.x1_restore_marker;` (output `DROP TABLE`), and
+`select to_regclass('fno.x1_restore_marker')` then returned empty.
 
 Root cause fixed for every owner script: the body stays in the main shell, with output recorded through
 `record_evidence` (`owner/lib.sh`), so traps run on every bash. Tests: `tests/bash32_trap_test.sh` runs the pattern,
