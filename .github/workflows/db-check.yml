@@ -22,7 +22,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     env:
       PGHOST: omenix-pg.postgres.database.azure.com
       PGPORT: "5432"

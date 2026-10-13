@@ -61,4 +61,14 @@ grep -q "$check_line" "$work/out.txt" && echo "ok: the report states that passwo
   || { echo "FAILED: password limitation not stated"; failed=1; }
 grep -q '^RESULT: OK$' "$work/out.txt" && echo "ok: clean again after cleanup" || { echo "FAILED: not clean after cleanup"; failed=1; }
 
+# 5. A server that cannot be reached is UNKNOWN (exit 2), never OK, and is raised as such.
+: > "$FAKE_GH_LOG"
+PGUSER=db_monitor PGPORT=1 PGCONNECT_TIMEOUT=3 "$platform/monitor/run.sh" > "$work/out.txt" 2>&1
+code=$?
+if [ "$code" -eq 2 ] && grep -q '^RESULT: UNKNOWN (could not connect' "$work/out.txt" && grep -q 'could NOT check the server' "$FAKE_GH_LOG"; then
+  echo "ok: an unreachable server gives UNKNOWN (exit 2) and raises an alert saying so"
+else
+  echo "FAILED: unreachable server: exit $code"; cat "$work/out.txt"; failed=1
+fi
+
 [ "$failed" -eq 0 ] && echo "monitor tests: all passed"

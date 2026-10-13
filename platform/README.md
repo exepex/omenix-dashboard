@@ -146,14 +146,20 @@ also opens the issue "Database check: alert", or comments on it if it is already
 token; repository watchers get it by e-mail. Each condition is planted in a disposable database by
 `tests/monitor_test.sh` (CI step 7), which checks that the alert fires.
 
-**Owner setup, once:**
-1. `git pull`, then run `platform/owner/apply_real.sh`. It creates `db_monitor` and its CONNECT grants, and should
-   end with `catalog identical ... yes`.
-2. As admin in psql, run `\password db_monitor` and type a long random password of letters and digits.
-3. Add it on GitHub: Settings > Secrets and variables > Actions > New repository secret, named
-   `OMENIX_DB_MONITOR_PASSWORD`.
-4. Under Actions > db-check, click Run workflow. Expected result: `RESULT: OK`. Until the secret exists, each run
-   only prints a notice.
+**Owner setup, once: one script** (`owner/CHECKLIST_MONITOR.md`). `owner/setup_monitor.sh` asks only for the admin
+name and password (hidden). It then:
+- applies `platform/sql`, which creates `db_monitor`;
+- generates the monitor's 40-character password, which nobody types or sees;
+- stores it in the database as a SCRAM-SHA-256 verifier computed on the Mac (`owner/scram_verifier.py`), so the plain
+  password never reaches the server;
+- runs the first check;
+- saves the password as the secret with `gh` (stdin only) and starts the workflow.
+
+Re-running it rotates the password. Until the secret exists, each scheduled run only prints a notice.
+
+**Three outcomes, never a silent pass:** `RESULT: OK` (exit 0), `RESULT: ALERT` (exit 1, a finding) or
+`RESULT: UNKNOWN` (exit 2: it could not connect, or part of the check could not run). The last two both fail the run
+and raise the issue, which says plainly when the server could NOT be checked.
 
 **Limits (reasoning only unless marked):**
 - GitHub disables scheduled workflows in a public repository after 60 days without repository activity.
@@ -199,7 +205,8 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `tests/large_objects.sh` | counts large objects in every database that accepts connections (as the admin); fails on any |
 | `tests/owner_scripts_test.sh` | tests the owner scripts' Azure handling with a fake `az`: both firewall-rule flag forms (current `--server-name`, older `--name`), an az failure shown as "ERROR, could not read", and IP addresses redacted from evidence |
 | `owner/az.sh` | az helpers shared by the owner scripts: firewall-rule calls for both az flag forms, and reads that report a failure as an error, never as a value |
-| `monitor/db_check.sh`, `monitor/alert.sh`, `monitor/run.sh` | the scheduled check (issue #2): report, GitHub alert, entry point |
+| `monitor/db_check.sh`, `monitor/alert.sh`, `monitor/run.sh` | the scheduled check (issue #2): report (OK, ALERT or UNKNOWN), GitHub alert, entry point |
+| `owner/setup_monitor.sh`, `owner/scram_verifier.py`, `owner/CHECKLIST_MONITOR.md` | the owner's one-script setup of the check |
 | `tests/monitor_test.sh` | plants each watched condition and checks that the alert fires (CI step 7) |
 | `tests/ci.sh` | the whole test on a disposable PostgreSQL 16 (CI: `.github/workflows/platform-tests.yml`) |
 | `owner/` | the owner's scripts for the real server; checklist in `owner/CHECKLIST_X1.md` |
