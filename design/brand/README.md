@@ -32,5 +32,9 @@ The owner's finalised logo set. SVG is the source; PNGs are exact pixel sizes. C
    mark-gradient-1024, avatar-white-1024, oauth-app-logo-white-120.
 2. The lockup PNGs named -600 and -2048 were all 205 x 44 px. Re-rendered at 600 and 2048 px wide.
 
+All 21 SVGs were then replaced by the logo session's regenerated set (exepex/trading branch claude/pensive-fermat-erk186,
+54b035b, `docs/brand/omenix-logo/`): the generator itself is fixed (paint on the strokes, one userSpaceOnUse gradient,
+whole-number sizes). Same pictures; `src/export_final.mjs` there rebuilds every PNG size.
+
 Re-render any PNG from its SVG with `node design/brand/render.js <in.svg> <out.png> <width>` (pre-installed Chromium).
 All other files are byte-for-byte as delivered.
