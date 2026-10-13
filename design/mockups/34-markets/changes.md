@@ -70,3 +70,6 @@ listed here.
   | Diversified | y1 -12.48 → -10.87 |
   - Mover: the first loser's 20-day average volume 101959.0 → 394213.0
     (its volumes before a split are now divided by the split factor). Nothing else changed.
+
+- **13 Oct 2026: data correction, demergers (follows 33's demerger adjustment; data fix).** Breadth: all high 11 → 12; all near_high 54 → 56; all up_1m 692 → 695. Sectors:
+  Fast Moving Consumer Goods 1-year 20.06 → 20.1; Metals & Mining 1-year 3.28 → 8.49. Nothing else changed.

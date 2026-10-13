@@ -43,3 +43,16 @@ listed here.
     | Down 10%+ in a month | 653 → 648 |
     | RSI under 30 | 265 → 248 |
     | Big moves today, High delivery | unchanged (165, 145) |
+
+- **13 Oct 2026: data correction, demergers (orchestrator's decision; judge 42 addendum 2; data fix, not a contract change).**
+  - Root cause: a demerger lowers the share price on its ex-date (e.g. INDIAGLYCO 1,111.70 → 236.20 on 2 Sep 2026),
+    and NSE's files never adjust past prices, so 1-year changes and 52-week highs mixed before and after.
+  - Fix: prices before a demerger's ex-date are scaled by the ex-date open ÷ the previous close. On that day NSE runs
+    a special pre-open call auction, and the open is the price it discovers: NSE's own reference, not an estimate.
+    Some evidence: NSE's practice, circular not re-read. 16 demergers are in the year. TMPV and HEGAM did not trade on
+    their ex-date, so they stay unadjusted and are marked "not adjusted" in `source/actions.csv`. DALMIASUG's factor
+    is 1.0 (its open equalled the previous close).
+  - Effect: 50 values on 13 stocks (13 52-week high, 12 1-year %, 7 52-week low, 7 RSI 14, 6 3-month %, 3 1-month %, 2 1-week %).
+    Examples: INDIAGLYCO 1 year −64.52% → +75.32%; DCMSRIND −76.31% → −20.05%; VEDL −43.86% → +50.02%. Every value
+    is in `changes_2026-10-13_demergers.csv`.
+  - Screen counts: Near 52-week high 54 → 56; Up 10%+ in a month 247 → 250; Down 10%+ in a month 648 → 646; RSI under 30 248 → 246.
