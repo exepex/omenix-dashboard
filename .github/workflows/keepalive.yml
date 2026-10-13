@@ -1,0 +1,23 @@
+name: keepalive
+
+# GitHub pauses scheduled workflows in a public repository after 60 days without repository activity, which would
+# stop db-check silently. Monthly: if main has had no commit for 45 days, commit platform/monitor/keepalive.txt
+# (platform/monitor/keepalive.sh). Kept apart from db-check so that db-check never holds write access to the code.
+on:
+  schedule:
+    - cron: "41 6 1 * *"   # 06:41 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Commit only if the repository has been idle for 45 days
+        run: |
+          platform/monitor/keepalive.sh
+          git push origin HEAD:main

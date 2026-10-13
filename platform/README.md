@@ -68,7 +68,7 @@ who failed), and an email alert when storage is above 80 percent (metric `storag
 | `fno_writer` | read and write rows in `fno` tables | `FNO_DB_URL`, `exepex/trading`'s cloud environment |
 | `dashboard_app` | read `stock` and `fno`; read, insert and update `app` (no delete) | `OMENIX_DB_URL`, the dashboard's Vercel projects |
 | `stock_inbox_reader` | read `app` | `STOCK_INBOX_DB_URL`, stock backend's cloud environment |
-| `db_monitor` | connect and read catalogs and large-object sizes only (no schema, table or function access); limit 2 connections, 30 s timeout | `OMENIX_DB_MONITOR_PASSWORD`, this repository's GitHub Actions secret (the scheduled check below) |
+| `db_monitor` | connect and read catalogs and large-object sizes only: no row data, no schema, table or function access (catalog metadata such as table names and row counts is visible, as to every role); limit 2 connections, 30 s timeout | `OMENIX_DB_MONITOR_PASSWORD`, this repository's GitHub Actions secret (the scheduled check below; it also holds `FNO_SLACK_BOT_TOKEN` for the private details) |
 | `stock_owner`, `fno_owner`, `app_owner` | create and change tables in their own schema | nowhere: the owner's password manager only, used by hand for migrations |
 | server admin | create roles and databases | nowhere: the owner's password manager only |
 
@@ -135,35 +135,64 @@ What it watches, hourly, read-only (`platform/monitor/`, workflow `.github/workf
 
 **Where it runs and why:** a scheduled GitHub Actions workflow in this repository, chosen over a scheduled Claude
 routine. It is deterministic, costs nothing on a public repository and needs no model run.
-- **Credential:** only `db_monitor`'s password, as the repository secret `OMENIX_DB_MONITOR_PASSWORD`. Host and role
-  name are in the workflow, since they are not secret. No admin credential is stored anywhere.
-- **Fork safety:** the workflow never runs on pull requests, so a fork cannot reach the secret.
-- **What is public:** the run logs are public, so the report holds only role names, database names, counts, sizes and
-  catalog lines (no secret, IP addresses redacted).
+- **Credentials:** two repository secrets, set by the owner's script.
+  - `OMENIX_DB_MONITOR_PASSWORD`: `db_monitor`'s password.
+  - `FNO_SLACK_BOT_TOKEN`: the bot that already posts to the owner's #fno-desk, used for the private details.
 
-**Alert:** on a finding the run fails, and GitHub e-mails the owner about failed scheduled runs. `monitor/alert.sh`
-also opens the issue "Database check: alert", or comments on it if it is already open, using the workflow's own
-token; repository watchers get it by e-mail. Each condition is planted in a disposable database by
-`tests/monitor_test.sh` (CI step 7), which checks that the alert fires.
+  Also one repository variable, `DB_CHECK_ENABLED=true`. Host and role name are in the workflow, since they are not
+  secret. No admin credential is stored anywhere.
+- **Fork safety:** the workflow never runs on pull requests, so a fork cannot reach a secret.
 
-**Owner setup, once: one script** (`owner/CHECKLIST_MONITOR.md`). `owner/setup_monitor.sh` asks only for the admin
-name and password (hidden). It then:
+**Public and private (judge 36; the repository is public, so its run logs and issues are world-readable):**
+- **Public:** the log and the alert issue carry only one line: status, counts and the check time, e.g.
+  `Database check ALERT: 1 finding(s), unknown parts: 0, checked 2026-10-13 11:22 UTC`. They also say whether the
+  details reached Slack. They name nothing that would tell an attacker what is misconfigured.
+- **Private:** the details (which database, which role, which setting or grant, how many bytes) go only to Slack
+  #fno-desk (`C0C89E8QCCD`, fixed in `monitor/notify_slack.sh`; no other channel). The token is sent to Slack in a
+  header read from stdin, never on a command line.
+- **If Slack refuses** or the token is missing, the public alert says the details were not delivered. The run still
+  fails, so it is never a silent pass.
+- **Residual risk (reasoning only):** the Slack token now lives in this public repository's Actions secrets as well
+  as in `exepex/trading`. Anyone who can change this repository's workflows (only its writers) could read it, and a
+  leaked token can post to channels the bot is in. This is the price of a private channel without new
+  infrastructure. The alternatives are e-mail through the Azure action group, which Actions cannot reach, or making
+  the repository private.
+
+**Alerts, and never a silent pass:**
+- **Results:** `RESULT: OK` (exit 0), `RESULT: ALERT` (exit 1, a finding) or `RESULT: UNKNOWN` (exit 2: no
+  connection, part of the check could not run, or the secret is missing while `DB_CHECK_ENABLED=true`, which judge 36
+  raised as a lost secret going unseen). ALERT and UNKNOWN both fail the run (GitHub e-mails the owner) and open the
+  issue "Database check: alert", or comment on it if open.
+- **Before setup:** before `DB_CHECK_ENABLED` is set, a run without the secret only prints a notice.
+- **Tests:** each condition is planted in a disposable database by `tests/monitor_test.sh` (CI step 7). It checks
+  that the alert fires, that nothing in the public log or issue names a detail, and that the details reach the Slack
+  sender.
+
+**Is it still running?** A stopped check is a silent pass of another kind:
+- **Heartbeat:** every Monday the 03:xx UTC run, when OK, posts a heartbeat to #fno-desk with the time of the last
+  successful check. If the Monday message stops coming, the check has stopped.
+- **Keep-alive:** GitHub pauses scheduled workflows in a public repository after 60 days without repository
+  activity. The monthly workflow `keepalive` (`monitor/keepalive.sh`) commits `platform/monitor/keepalive.txt` only
+  when `main` has had no commit for 45 days. It is kept apart from `db-check`, so that `db-check` never has write
+  access to the code.
+
+**What `db_monitor` can see:** no row data of any table. Like every PostgreSQL role, it does see catalog metadata:
+table and column names, row counts from the statistics views, role names and settings. It cannot enter `stock`,
+`fno` or `app`.
+
+**Owner setup, once: one script** (`owner/CHECKLIST_MONITOR.md`). `owner/setup_monitor.sh` asks for the admin name and
+password and the #fno-desk bot token, all at hidden prompts; Enter keeps an already saved token. It then:
 - applies `platform/sql`, which creates `db_monitor`;
 - generates the monitor's 40-character password, which nobody types or sees;
 - stores it in the database as a SCRAM-SHA-256 verifier computed on the Mac (`owner/scram_verifier.py`), so the plain
   password never reaches the server;
-- runs the first check;
-- saves the password as the secret with `gh` (stdin only) and starts the workflow.
+- runs the first check (details on the screen only, not in the evidence file);
+- saves both secrets with `gh` (stdin only), sets `DB_CHECK_ENABLED=true` and starts the workflow.
 
-Re-running it rotates the password. Until the secret exists, each scheduled run only prints a notice.
-
-**Three outcomes, never a silent pass:** `RESULT: OK` (exit 0), `RESULT: ALERT` (exit 1, a finding) or
-`RESULT: UNKNOWN` (exit 2: it could not connect, or part of the check could not run). The last two both fail the run
-and raise the issue, which says plainly when the server could NOT be checked.
+Re-running it rotates the password.
 
 **Limits (reasoning only unless marked):**
-- GitHub disables scheduled workflows in a public repository after 60 days without repository activity.
-- A finding is reported once an hour while it lasts, each time as a comment on the same issue.
+- A finding is reported once an hour while it lasts, each time as a comment on the same issue and a Slack message.
 - The check sees a persistent setting, not one switched off for a single session (exception 3).
 - A leaked `db_monitor` password has the same named exceptions as any role (it could create large objects), and no
   more.
@@ -205,7 +234,8 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `tests/large_objects.sh` | counts large objects in every database that accepts connections (as the admin); fails on any |
 | `tests/owner_scripts_test.sh` | tests the owner scripts' Azure handling with a fake `az`: both firewall-rule flag forms (current `--server-name`, older `--name`), an az failure shown as "ERROR, could not read", and IP addresses redacted from evidence |
 | `owner/az.sh` | az helpers shared by the owner scripts: firewall-rule calls for both az flag forms, and reads that report a failure as an error, never as a value |
-| `monitor/db_check.sh`, `monitor/alert.sh`, `monitor/run.sh` | the scheduled check (issue #2): report (OK, ALERT or UNKNOWN), GitHub alert, entry point |
+| `monitor/db_check.sh`, `monitor/run.sh`, `monitor/alert.sh`, `monitor/notify_slack.sh` | the scheduled check (issue #2): detailed report (OK, ALERT or UNKNOWN); entry point that prints only a summary; public GitHub alert (summary only); private details and weekly heartbeat to #fno-desk |
+| `monitor/keepalive.sh` | monthly keep-alive commit when the repository has been idle 45 days (workflow `keepalive`) |
 | `owner/setup_monitor.sh`, `owner/scram_verifier.py`, `owner/CHECKLIST_MONITOR.md` | the owner's one-script setup of the check |
 | `tests/monitor_test.sh` | plants each watched condition and checks that the alert fires (CI step 7) |
 | `tests/ci.sh` | the whole test on a disposable PostgreSQL 16 (CI: `.github/workflows/platform-tests.yml`) |
