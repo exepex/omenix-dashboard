@@ -77,6 +77,15 @@ check "IPv6 addresses redacted" "! printf '%s' \"\$redacted\" | grep -Eq '2001:d
 check "redacted text keeps its shape" "[ \"\$(printf '%s' \"\$redacted\" | grep -c '<IP address>')\" = 4 ]"
 check "times and host names kept" "printf '%s' \"\$redacted\" | grep -q '01:38 UTC, at 22:58:01' && printf '%s' \"\$redacted\" | grep -q 'omenix-pg.postgres.database.azure.com'"
 
+# Judge 30: the first (sed) version also ate SQL casts and the public range bounds. Each line must come out unchanged.
+kept="SELECT lo_from_bytea(0, 'x1'::bytea) and x::date and y::double precision and z::int
+firewall rules = 0.0.0.0-255.255.255.255 (README says 0.0.0.0-255.255.255.255)
+version 1.2.3.4.5, v16.4.1.2, 999.1.1.1, 300.1.2.3"
+check "SQL casts, range bounds, versions and invalid octets kept" \
+  "[ \"\$( . '$owner/lib.sh'; printf '%s\n' \"\$kept\" | redact_ips)\" = \"\$kept\" ]"
+check "IPv6 with :: and the loopback ::1 redacted" \
+  "[ \"\$( . '$owner/lib.sh'; printf '%s\n' 'host \"::1\" and fe80::1ff:fe23:4567:890a end' | redact_ips)\" = 'host \"<IP address>\" and <IP address> end' ]"
+
 # check_tls.sh end to end with a fake psql: the evidence file is complete (RESULT line written) and holds no IP.
 cat > "$work/bin/psql" <<'EOF'
 #!/usr/bin/env bash

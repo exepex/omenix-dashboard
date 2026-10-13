@@ -8,6 +8,12 @@ The owner ran `platform/owner/` steps 1 to 6 on the Mac against `omenix-pg` and 
 - the admin login is shown as `<admin>`, as the catalog snapshot prints it;
 - the Azure CLI's install path in one of its own Python warnings (step 6) is shown as `<az install>`.
 
+Correction (judge 30): the first scrubber also replaced text that is not an address. Five lines came out wrong:
+`'x1'::bytea` in four lines of `x1-real-matrix.txt`, and the firewall range `0.0.0.0-255.255.255.255` in
+`x1-server.txt`. All six files were regenerated from the Drive originals with the fixed scrubber
+(`owner/redact_ips.awk`: valid whole-word addresses only). Only those five lines changed; the two real addresses in
+the TLS file stay redacted.
+
 No password, token, connection string, subscription ID, e-mail or human user name is in these files. The only host
 name is the server's.
 

@@ -28,7 +28,7 @@ PASS  stock_writer       deny        42501     SELECT pg_read_file('PG_VERSION')
 PASS  stock_writer       value=true  00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
 PASS  stock_writer       value=false 00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
 PASS  stock_writer       value=false 00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
-OPEN  stock_writer       known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  stock_writer       known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'::bytea)   (known exception: create a large object (stored on disk, outlives the session))
 OPEN  stock_writer       known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
 OPEN  stock_writer       known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
 OPEN  stock_writer       known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
@@ -107,7 +107,7 @@ PASS  fno_writer         deny        42501     SELECT pg_read_file('PG_VERSION')
 PASS  fno_writer         value=false 00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
 PASS  fno_writer         value=true  00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
 PASS  fno_writer         value=false 00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
-OPEN  fno_writer         known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  fno_writer         known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'::bytea)   (known exception: create a large object (stored on disk, outlives the session))
 OPEN  fno_writer         known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
 OPEN  fno_writer         known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
 OPEN  fno_writer         known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
@@ -186,7 +186,7 @@ PASS  dashboard_app      deny        42501     SELECT pg_read_file('PG_VERSION')
 PASS  dashboard_app      value=true  00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
 PASS  dashboard_app      value=true  00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
 PASS  dashboard_app      value=true  00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
-OPEN  dashboard_app      known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  dashboard_app      known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'::bytea)   (known exception: create a large object (stored on disk, outlives the session))
 OPEN  dashboard_app      known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
 OPEN  dashboard_app      known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
 OPEN  dashboard_app      known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
@@ -265,7 +265,7 @@ PASS  stock_inbox_reader deny        42501     SELECT pg_read_file('PG_VERSION')
 PASS  stock_inbox_reader value=false 00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
 PASS  stock_inbox_reader value=false 00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
 PASS  stock_inbox_reader value=true  00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
-OPEN  stock_inbox_reader known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  stock_inbox_reader known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'::bytea)   (known exception: create a large object (stored on disk, outlives the session))
 OPEN  stock_inbox_reader known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
 OPEN  stock_inbox_reader known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
 OPEN  stock_inbox_reader known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
