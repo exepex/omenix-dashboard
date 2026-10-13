@@ -215,7 +215,9 @@ missing", an error.
   - `SessionIndiaResponse` requires `hours_status`. The US may omit it (it then means known).
   - This is additive: version 2.6.0, and no signed-off field changed meaning.
 - **Example:** `getSessionIndia_india_hours_not_issued` is a labelled Example state: session_date `2026-11-08`, the
-  three times null, `regime` and `post_close_at` null. India's main example now says `hours_status: known`.
+  three times null, `regime` null, and `post_close_at` `2026-11-09T01:40:00Z`: unknown hours do not make the run that
+  brings the close unknown (the 07:10 IST run on 9 Nov). The F&O builder found this in trading 803ca61; my first version
+  had `post_close_at` null, against the field's own rule. India's main example now says `hours_status: known`.
 - **Planted breaks:** "hours not issued but an open time given" and "India's session without hours_status". Both are
   caught; that makes 66.
 - **App:**
