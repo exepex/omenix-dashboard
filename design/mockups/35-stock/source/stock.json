@@ -2153,6 +2153,143 @@
      "trained_until": "2026-10-01"
     }
    ],
+   "model_market": {
+    "as_of_date": "2026-10-12",
+    "chances": {
+     "1": {
+      "ADANIPORTS": 0.4715,
+      "DRREDDY": 0.4711,
+      "HDFCBANK": 0.4699,
+      "HDFCLIFE": 0.4711,
+      "HINDALCO": 0.4711,
+      "HINDUNILVR": 0.4711,
+      "ICICIBANK": 0.4709,
+      "INDIGO": 0.4711,
+      "INFY": 0.4711,
+      "ITC": 0.4711,
+      "LT": 0.4712,
+      "M&M": 0.472,
+      "MARUTI": 0.4711,
+      "ONGC": 0.4711,
+      "RELIANCE": 0.473,
+      "SBILIFE": 0.4711,
+      "SUNPHARMA": 0.4711,
+      "TATASTEEL": 0.4711,
+      "TCS": 0.4723,
+      "ULTRACEMCO": 0.4711
+     },
+     "2": {
+      "ADANIPORTS": 0.4693,
+      "DRREDDY": 0.4672,
+      "HDFCBANK": 0.4693,
+      "HDFCLIFE": 0.4695,
+      "HINDALCO": 0.4705,
+      "HINDUNILVR": 0.4706,
+      "ICICIBANK": 0.4699,
+      "INDIGO": 0.4727,
+      "INFY": 0.4683,
+      "ITC": 0.4706,
+      "LT": 0.4718,
+      "M&M": 0.4707,
+      "MARUTI": 0.47,
+      "ONGC": 0.4681,
+      "RELIANCE": 0.4724,
+      "SBILIFE": 0.4693,
+      "SUNPHARMA": 0.4683,
+      "TATASTEEL": 0.4717,
+      "TCS": 0.4704,
+      "ULTRACEMCO": 0.4717
+     },
+     "3": {
+      "ADANIPORTS": 0.4684,
+      "DRREDDY": 0.4679,
+      "HDFCBANK": 0.4668,
+      "HDFCLIFE": 0.4679,
+      "HINDALCO": 0.4679,
+      "HINDUNILVR": 0.4679,
+      "ICICIBANK": 0.4678,
+      "INDIGO": 0.4679,
+      "INFY": 0.4679,
+      "ITC": 0.4679,
+      "LT": 0.468,
+      "M&M": 0.4689,
+      "MARUTI": 0.4679,
+      "ONGC": 0.4679,
+      "RELIANCE": 0.4699,
+      "SBILIFE": 0.4679,
+      "SUNPHARMA": 0.4679,
+      "TATASTEEL": 0.468,
+      "TCS": 0.4692,
+      "ULTRACEMCO": 0.4679
+     },
+     "4": {
+      "ADANIPORTS": 0.4709,
+      "DRREDDY": 0.4704,
+      "HDFCBANK": 0.4693,
+      "HDFCLIFE": 0.4704,
+      "HINDALCO": 0.4704,
+      "HINDUNILVR": 0.4704,
+      "ICICIBANK": 0.4703,
+      "INDIGO": 0.4704,
+      "INFY": 0.4704,
+      "ITC": 0.4704,
+      "LT": 0.4706,
+      "M&M": 0.4714,
+      "MARUTI": 0.4704,
+      "ONGC": 0.4704,
+      "RELIANCE": 0.4724,
+      "SBILIFE": 0.4704,
+      "SUNPHARMA": 0.4704,
+      "TATASTEEL": 0.4705,
+      "TCS": 0.4717,
+      "ULTRACEMCO": 0.4704
+     },
+     "5": {
+      "ADANIPORTS": 0.4663,
+      "DRREDDY": 0.4659,
+      "HDFCBANK": 0.4647,
+      "HDFCLIFE": 0.4659,
+      "HINDALCO": 0.4659,
+      "HINDUNILVR": 0.4659,
+      "ICICIBANK": 0.4658,
+      "INDIGO": 0.4659,
+      "INFY": 0.4659,
+      "ITC": 0.4659,
+      "LT": 0.466,
+      "M&M": 0.4669,
+      "MARUTI": 0.4659,
+      "ONGC": 0.4659,
+      "RELIANCE": 0.4679,
+      "SBILIFE": 0.4659,
+      "SUNPHARMA": 0.4659,
+      "TATASTEEL": 0.4659,
+      "TCS": 0.4672,
+      "ULTRACEMCO": 0.4659
+     }
+    },
+    "versions": {
+     "1": {
+      "platt_slope": 0.0,
+      "version": "india-1d-open_to_close-logit-v1-2026-10-01"
+     },
+     "2": {
+      "platt_slope": 0.05515757339928238,
+      "version": "india-2d-n_plus_k-logit-v1-2026-10-01"
+     },
+     "3": {
+      "platt_slope": 0.0,
+      "version": "india-3d-n_plus_k-logit-v1-2026-10-01"
+     },
+     "4": {
+      "platt_slope": 0.0,
+      "version": "india-4d-n_plus_k-logit-v1-2026-10-01"
+     },
+     "5": {
+      "platt_slope": 0.0,
+      "version": "india-5d-n_plus_k-logit-v1-2026-10-01"
+     }
+    }
+   },
    "news": [
     {
      "cluster_id": "RELIANCE-078c74204931c3d4",
@@ -18158,6 +18295,143 @@
      "trained_until": "2026-10-01"
     }
    ],
+   "model_market": {
+    "as_of_date": "2026-10-12",
+    "chances": {
+     "1": {
+      "AAPL": 0.5159,
+      "ALL": 0.5217,
+      "BAC": 0.5218,
+      "CAT": 0.5184,
+      "COST": 0.52,
+      "CVX": 0.5187,
+      "DAL": 0.5204,
+      "DE": 0.5205,
+      "GM": 0.5189,
+      "GOOGL": 0.5193,
+      "JPM": 0.5211,
+      "LLY": 0.5184,
+      "META": 0.5196,
+      "MRK": 0.5201,
+      "NVDA": 0.5205,
+      "PGR": 0.5193,
+      "TSLA": 0.5187,
+      "UAL": 0.5208,
+      "WMT": 0.5183,
+      "XOM": 0.5187
+     },
+     "2": {
+      "AAPL": 0.5275,
+      "ALL": 0.53,
+      "BAC": 0.53,
+      "CAT": 0.53,
+      "COST": 0.53,
+      "CVX": 0.53,
+      "DAL": 0.5301,
+      "DE": 0.53,
+      "GM": 0.53,
+      "GOOGL": 0.53,
+      "JPM": 0.53,
+      "LLY": 0.53,
+      "META": 0.53,
+      "MRK": 0.53,
+      "NVDA": 0.5297,
+      "PGR": 0.53,
+      "TSLA": 0.5305,
+      "UAL": 0.53,
+      "WMT": 0.53,
+      "XOM": 0.53
+     },
+     "3": {
+      "AAPL": 0.5346,
+      "ALL": 0.5392,
+      "BAC": 0.5396,
+      "CAT": 0.537,
+      "COST": 0.5379,
+      "CVX": 0.5374,
+      "DAL": 0.5381,
+      "DE": 0.5381,
+      "GM": 0.537,
+      "GOOGL": 0.5372,
+      "JPM": 0.5392,
+      "LLY": 0.5368,
+      "META": 0.5369,
+      "MRK": 0.5382,
+      "NVDA": 0.5376,
+      "PGR": 0.5378,
+      "TSLA": 0.5369,
+      "UAL": 0.5378,
+      "WMT": 0.5371,
+      "XOM": 0.5374
+     },
+     "4": {
+      "AAPL": 0.5286,
+      "ALL": 0.5394,
+      "BAC": 0.5433,
+      "CAT": 0.5327,
+      "COST": 0.5332,
+      "CVX": 0.5296,
+      "DAL": 0.5379,
+      "DE": 0.5361,
+      "GM": 0.5324,
+      "GOOGL": 0.533,
+      "JPM": 0.541,
+      "LLY": 0.5304,
+      "META": 0.5302,
+      "MRK": 0.5342,
+      "NVDA": 0.5372,
+      "PGR": 0.5317,
+      "TSLA": 0.5321,
+      "UAL": 0.5382,
+      "WMT": 0.5299,
+      "XOM": 0.5291
+     },
+     "5": {
+      "AAPL": 0.5421,
+      "ALL": 0.5478,
+      "BAC": 0.5495,
+      "CAT": 0.545,
+      "COST": 0.5452,
+      "CVX": 0.5437,
+      "DAL": 0.5469,
+      "DE": 0.5473,
+      "GM": 0.5445,
+      "GOOGL": 0.5447,
+      "JPM": 0.5484,
+      "LLY": 0.5438,
+      "META": 0.5442,
+      "MRK": 0.5465,
+      "NVDA": 0.5465,
+      "PGR": 0.5446,
+      "TSLA": 0.5441,
+      "UAL": 0.5468,
+      "WMT": 0.5441,
+      "XOM": 0.5435
+     }
+    },
+    "versions": {
+     "1": {
+      "platt_slope": 0.08683768144028438,
+      "version": "us-1d-open_to_close-logit-v1-2026-10-01"
+     },
+     "2": {
+      "platt_slope": 0.0,
+      "version": "us-2d-n_plus_k-logit-v1-2026-10-01"
+     },
+     "3": {
+      "platt_slope": 0.048900382252500346,
+      "version": "us-3d-n_plus_k-logit-v1-2026-10-01"
+     },
+     "4": {
+      "platt_slope": 0.17635754868752576,
+      "version": "us-4d-n_plus_k-logit-v1-2026-10-01"
+     },
+     "5": {
+      "platt_slope": 0.09899531423103906,
+      "version": "us-5d-n_plus_k-logit-v1-2026-10-01"
+     }
+    }
+   },
    "news": [
     {
      "cluster_id": "NVDA-e2569af65fee1d73",

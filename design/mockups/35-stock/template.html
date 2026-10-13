@@ -138,6 +138,14 @@ function overview(main, c, S) {
   main.append(el('div', {class: 'grid2'}, chart, figures), el('div', {class: 'sec'}, quarters));
 }
 
+/* How much the model's chance says about this company: how many companies get the same number (orchestrator, 13 Oct 2026) */
+function peerNote(c, P, prob) {
+  if (!P) return null;
+  const pc = v => `${fmt(v * 100, 1)}%`, flat = P.slope === 0;
+  return c.el('small', {class: 'peer', 'data-tip': `On ${day(c, P.as_of)} all ${P.n} tracked companies got between ${pc(P.lo)} and ${pc(P.hi)}; ${P.common_n} of them got exactly ${pc(P.common)}, and this company ${pc(prob)}${P.same > 1 ? ` (with ${P.same - 1} others)` : ''}. ${flat ? 'Its calibration step flattens the chart and price signals (slope 0), so only the base rate and news move the number.' : `Its calibration slope is ${fmt(P.slope, 2)}, so the signals move the number only a little.`} The model has no settled track record yet: not proven.`},
+    `all ${P.n}: ${pc(P.lo)}–${pc(P.hi)} · not proven`);
+}
+
 /* Our strategies: the view for the next sessions, the AI team's reasoning, costs, open paper trades */
 function tools(main, c, S) {
   const {el} = c, T = S.tools, q = S.quote.close;
@@ -145,12 +153,12 @@ function tools(main, c, S) {
   const lo = Math.min(...T.horizons.map(h => h.lo80)), hi = Math.max(...T.horizons.map(h => h.hi80)), pct = v => ((v - lo) / (hi - lo) * 100).toFixed(1);
   const view = el('section', {class: 'card', 'aria-label': 'What our tools think'}, head(c, 'What our tools think', `for the session of ${day(c, T.session)}, made before the open (${c.when(T.made_at)})`),
     el('div', {class: 'scroll'}, el('table', {class: 'md-table mb-fan stack'}, el('thead', {}, el('tr', {}, el('th', {}, 'Exit'), el('th', {class: 'num'}, 'Chance up'), el('th', {}, 'Strategies buying'), el('th', {}, 'Expected range (50% · 80%)'))),
-      el('tbody', {}, ...T.horizons.map(h => el('tr', {}, el('td', {'data-k': 'Exit'}, `N+${h.h}`, el('small', {}, day(c, h.target_date))), el('td', {class: 'num', 'data-k': 'Chance up'}, h.prob == null ? '—' : `${fmt(h.prob * 100, 1)}%`),
+      el('tbody', {}, ...T.horizons.map(h => el('tr', {}, el('td', {'data-k': 'Exit'}, `N+${h.h}`, el('small', {}, day(c, h.target_date))), el('td', {class: 'num', 'data-k': 'Chance up'}, h.prob == null ? '—' : `${fmt(h.prob * 100, 1)}%`, peerNote(c, h.peers, h.prob)),
         el('td', {'data-k': 'Strategies buying'}, el('b', {}, `${h.buy} of ${h.of}`), el('small', {}, famText(h))),
         el('td', {'data-k': 'Expected range'}, el('span', {class: 'mb-fanbar', role: 'img', 'aria-label': `50%: ${fmt(h.lo50)} to ${fmt(h.hi50)}; 80%: ${fmt(h.lo80)} to ${fmt(h.hi80)}`},
           el('i', {class: 'b80', style: `left:${pct(h.lo80)}%;width:${pct(h.hi80) - pct(h.lo80)}%`}), el('i', {class: 'b50', style: `left:${pct(h.lo50)}%;width:${pct(h.hi50) - pct(h.lo50)}%`}), el('i', {class: 'now', style: `left:${pct(q)}%`})),
           el('small', {}, `${fmt(h.lo50, 0)}–${fmt(h.hi50, 0)} · ${fmt(h.lo80, 0)}–${fmt(h.hi80, 0)}`))))))),
-    el('p', {class: 'muted small', style: 'margin:8px 0 0'}, `Chance up: the stock tool’s model. Expected range: where the price should end with 50% and 80% likelihood (the line marks today’s ${fmt(q)}). Strategies buy only when their own rule clears its bar.`));
+    el('p', {class: 'muted small', style: 'margin:8px 0 0'}, `Chance up: the stock tool’s model; today it gives most companies nearly the same number, so it says little about this one, and it is not proven (no settled track record). Expected range: where the price should end with 50% and 80% likelihood (the line marks today’s ${fmt(q)}). Strategies buy only when their own rule clears its bar.`));
   const A = T.ai_team;
   const ai = el('section', {class: 'card ai', 'aria-label': 'The AI team'}, head(c, 'The AI team’s reading', A ? `made ${c.when(A.made_at)}` : 'none recorded'),
     A ? [el('span', {class: 'mb-label ' + (A.decision_5d === 'abstain' ? 'neutral' : 'info')}, c.icon('smart_toy'), `N+1: ${A.decision_1d || '—'} · N+5: ${A.decision_5d || '—'}`),
