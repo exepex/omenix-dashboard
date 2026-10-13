@@ -1,6 +1,8 @@
 # 33-screener: data contract (what every element needs)
 
-**Status: for the owner's review** (13 Oct 2026). Not signed off.
+**Status: signed off 13 Oct 2026 (owner), as of commit e28b43d.** This is the signed-off API contract for the
+screener. Change it only for a very solid reason, brought to the owner first (through the orchestrator); record each
+change and its reason in `changes.md` next to it.
 
 ## Data: real, not examples
 - **India stocks**: NSE's own daily files. `source/equity.csv` has one row per stock that traded on Mon 12 Oct 2026

@@ -197,3 +197,15 @@ Assistant, Help and Settings.
 8. **02-markets**
 9. **11-reports**
 10. The rest.
+
+**Built so far** (folders in `design/mockups/`, numbered from 30 in the order built; the owner moved the screener and
+markets ahead on 13 Oct 2026). A signed-off screen's `notes.md` is its frozen API contract; later changes, with their
+reasons, go in its `changes.md`.
+
+| Folder | Screen | Status |
+|---|---|---|
+| `30-shell` | the app frame (00-shell) | signed off 13 Oct 2026, as of cadf1d2 |
+| `31-dashboard` | Home (01-dashboard) | signed off 13 Oct 2026, as of e8cd360 |
+| `32-option-chain` | NIFTY option chain (06-option-chain), real NSE data | paused, second version with the owner |
+| `33-screener` | Screener (08-screener), real NSE data | signed off 13 Oct 2026, as of e28b43d |
+| `34-markets` | Markets overview (02-markets), real NSE data | signed off 13 Oct 2026, as of 59b606d |

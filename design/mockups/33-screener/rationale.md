@@ -1,7 +1,7 @@
 # 33-screener: rationale
 
 Screen 8 of `design/PLATFORM_DESIGN.md` section 4. The owner moved the screener ahead of the option chain (32, paused)
-on 13 Oct 2026. Status: **for the owner's review**.
+on 13 Oct 2026. Status: **signed off 13 Oct 2026 (owner)**; its notes.md is the frozen contract.
 
 **Owner's decisions (13 Oct 2026):**
 - the whole market, with the tools' signals where they follow a company;

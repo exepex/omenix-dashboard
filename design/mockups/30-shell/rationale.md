@@ -1,9 +1,10 @@
 # 30-shell: rationale
 
 Mockup order item 1 of `design/PLATFORM_DESIGN.md` section 9 ("00-shell"; numbered **30** because 00-12 are the
-existing mockups, which the web tests read, and 13-22 were proposed by `UNIFIED_DASHBOARD.md`). Platform mockups:
-30 shell, 31 Home, then 32 option chain, 33 strategy builder, 34 stock page, 35 portfolio, 36 orders, 37 order window,
-38 screener, 39 markets, 40 reports. Status: **third round, for the owner's review** (13 Oct 2026).
+existing mockups, which the web tests read, and 13-22 were proposed by `UNIFIED_DASHBOARD.md`). Platform mockups take
+the next free number in the order they are built; the list with each one's status is in `design/PLATFORM_DESIGN.md`
+section 9. Status: **signed off 13 Oct 2026 (owner)**, as of commit cadf1d2; its notes.md is the frozen contract
+(later changes with reasons: `changes.md`).
 
 Files: `data.json` (composed from the application's own example records, see notes.md), `template.html`, `build.py`
 (deterministic), `page.html`, `notes.md` (the data contract), screenshots from `node design/system/check_page.js`:
