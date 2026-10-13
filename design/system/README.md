@@ -23,6 +23,16 @@ screenshots `styleguide-1280-full.png`, `styleguide-390-full.png`, `styleguide-3
 | `check_page.js` | Playwright check of a built page at 1280 and 390 px, or the widths in `MB_WIDTHS` (for example 390,768,1024,1280,1680: phone, tablet, laptop, desktop, large), for console errors, external requests and horizontal overflow, with screenshots; uses the pre-installed Chromium |
 | `check_text.js` | Clipped, overflowing or overlapping text at twelve widths (390-1680 px): `node design/system/check_text.js <page.html> [hash ...]`; platform mockups pass their states (`m=india`, `m=us`, `theme=dark`). A screen is done only at 0 findings |
 
+## Rules for every screen (owner, 13 Oct 2026)
+- **Positive and negative cases (owner, 13 Oct 2026):** every mockup shows each element in its good case, its bad case
+  and its empty case (e.g. a family winning, a family losing, no settled trade yet; a suggestion, one refused, none).
+  Where today's real data has only one case, add the others as states labelled Example, so the API contract and the
+  developer see every shape the data can take.
+- **Built for beginners (owner, 13 Oct 2026):** plain words, a picture for each number, a one-line "what this means"
+  and "how to read it" where a beginner could misread; no jargon without its meaning.
+- **Strategy internals stay private (owner, 13 Oct 2026):** screens and APIs show what a strategy family decided (buys,
+  holds, results), never how it decides (its data, filters or rules).
+
 ## Palette (one scheme; contrast is WCAG on the colour named)
 | Role | Hex | Use | Contrast |
 |---|---|---|---|

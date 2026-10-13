@@ -67,6 +67,14 @@ Work on `main`; `git pull --no-rebase origin main` before every push (several se
   Baselines) total stock profit or loss, the sum of that group's own strategies' paper results, labelled as a total;
   groups are never added together, and the F&O book stays its own line.
 - F&O appears only in the India market; in the US market every F&O element is absent (not empty, absent).
+- **Positive and negative cases (owner, 13 Oct 2026):** every mockup shows each element in its good case, its bad case
+  and its empty case (e.g. a family winning, a family losing, no settled trade yet; a suggestion, one refused, none).
+  Where today's real data has only one case, add the others as states labelled Example, so the API contract and the
+  developer see every shape the data can take.
+- **Built for beginners (owner, 13 Oct 2026):** plain words, a picture for each number, a one-line "what this means"
+  and "how to read it" where a beginner could misread; no jargon without its meaning.
+- **Strategy internals stay private (owner, 13 Oct 2026):** screens and APIs show what a strategy family decided (buys,
+  holds, results), never how it decides (its data, filters or rules).
 
 ## Code
 

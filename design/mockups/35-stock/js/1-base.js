@@ -1,6 +1,8 @@
 /* 35-stock page runtime (owner's feedback of 13 Oct 2026). Split by purpose: 1 state and helpers, 2 header, 3 price
    chart, 4 overview, 5 our strategies, 6 news and results, 7 F&O. Every colour is a design-system token. */
-let TAB = 'overview', PER = '1y', CMP = false, SEC = false, RES = 'q', LOC = 'en-IN';   /* URL: tab, per, cmp, sec, res */
+let TAB = 'overview', PER = '1y', CMP = false, SEC = false, RES = 'q', EX = null, LOC = 'en-IN';   /* URL: tab, per, cmp, sec, res, ex */
+/* EX: null for today's real records, or 'win' / 'lose' for the labelled example of a winning or a losing case (owner,
+   13 Oct 2026: every mockup shows the positive and the negative case, so the API carries both) */
 const TABS = [['overview', 'Overview'], ['tools', 'Our strategies'], ['news', 'News'], ['results', 'Results and filings'], ['fno', 'F&O']];
 const SPANS = {'5d': ['5D', 5], '1m': ['1M', 21], '3m': ['3M', 63], '6m': ['6M', 126], '1y': ['1Y', 250], '2y': ['2Y', 504]};
 const STATUS = {confirmed_primary: ['confirmed', 'success'], corroborated: ['corroborated', 'success'], single_source: ['single source', 'neutral'], unverified: ['unverified', 'warn'], rumour: ['rumour', 'danger'], promotional: ['promotional', 'danger'], contradicted: ['contradicted', 'danger'], not_checked: ['not checked yet', 'neutral']};

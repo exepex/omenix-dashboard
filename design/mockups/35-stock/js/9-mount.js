@@ -1,9 +1,9 @@
 /* Mount last: every function and state the render uses is defined by now (files 1-7). */
 PF.mount({screen: 'stock', group: 'research', strip: false, dataLabel: 'Real records of 13 Oct 2026',
   readHash(h) { TAB = TABS.some(t => t[0] === h.get('tab')) ? h.get('tab') : 'overview'; PER = SPANS[h.get('per')] ? h.get('per') : '1y';
-    CMP = h.get('cmp') === '1'; SEC = h.get('sec') === '1'; RES = h.get('res') === 'y' ? 'y' : 'q'; PF.st.wlOff = h.get('wloff') !== '0'; },
+    CMP = h.get('cmp') === '1'; SEC = h.get('sec') === '1'; RES = h.get('res') === 'y' ? 'y' : 'q'; EX = ['win', 'lose'].includes(h.get('ex')) ? h.get('ex') : null; PF.st.wlOff = h.get('wloff') !== '0'; },
   writeHash(h) { if (TAB !== 'overview') h.set('tab', TAB); if (PER !== '1y') h.set('per', PER); if (CMP) h.set('cmp', '1'); if (SEC) h.set('sec', '1');
-    if (RES === 'y') h.set('res', 'y'); if (!PF.st.wlOff) h.set('wloff', '0'); },
+    if (RES === 'y') h.set('res', 'y'); if (EX) h.set('ex', EX); if (!PF.st.wlOff) h.set('wloff', '0'); },
   render(main, c) {
     const S = D.markets[c.m], {el} = c, it = c.item(S.ticker);
     LOC = c.m === 'india' ? 'en-IN' : 'en-US';

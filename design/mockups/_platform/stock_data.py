@@ -11,6 +11,7 @@ strategies' agreement by family, the futures build-up and ATM IV. Strategies are
 from __future__ import annotations
 
 import csv
+import math
 import gzip
 import json
 import os
@@ -18,6 +19,7 @@ from datetime import date
 
 from real_data import FAMILY, display_names
 from screener_data import SRC as SCREENER, atm_iv, buildup
+import stock_fno
 import stock_views as V
 
 SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "35-stock", "source")
@@ -117,14 +119,14 @@ def tools(m: str, M: dict) -> dict:
             f["buy"] += int(v["qualifies"] and v["direction"] == "up")
         prob = next((s["prob_up"] for s in M["model"] if s["horizon_days"] == h), None)
         horizons.append({"h": h, "target_date": r["target_date"], "prob": prob, "peers": peers(M, h, prob), "lo80": r["lo80"], "lo50": r["lo50"], "hi50": r["hi50"], "hi80": r["hi80"],
+                         "mid": round(r["base_close"] * math.exp(r["center"] or 0), 2),
                          "buy": sum(f["buy"] for f in fam.values()), "of": sum(f["of"] for f in fam.values()), "family": fam})
     R = M["reasoning"] or {}
     cost = M["costs"][0] if M["costs"] else None
     return {"session": M["views"][0]["session_date"] if M["views"] else None, "made_at": max((v["made_at"] for v in M["views"]), default=None),
             "horizons": horizons, "families": {k: {"label": v[0], "long": v[2]} for k, v in FAMILY.items()},
             "ai_team": {k: R.get(k) for k in ("as_of_date", "made_at", "bull_case", "bear_case", "verdict", "decision_1d", "decision_5d")} if R else None,
-            "cost": {"round_trip_pct": cost["market_cost_pct"], "your_pct": cost["your_cost_pct"], "amount": cost["amount"], "lines": cost["market_cost_lines"]} if cost else None,
-            "names": {v["strategy_id"]: names.get(v["strategy_id"], v["strategy_id"]) for v in M["views"]}}
+            "cost": {"round_trip_pct": cost["market_cost_pct"], "your_pct": cost["your_cost_pct"], "amount": cost["amount"], "lines": cost["market_cost_lines"]} if cost else None}
 
 
 def trades(m: str, M: dict) -> list:
@@ -181,9 +183,20 @@ def fno(ticker: str) -> dict | None:
             "history": {"dates": [x["date"] for x in rows], "fut": [float(x["fut_close"]) for x in rows], "oi": [int(x["fut_oi_all"]) for x in rows], "iv": ivs}}
 
 
+def fno_block(t: str) -> dict | None:
+    """The near future's facts and history, the listed futures with their codes, the option chain and the examples."""
+    F = fno(t)
+    if not F:
+        return None
+    futures = [{**x, "code": stock_fno.code(t, x["expiry"])} for x in V.expiries(t)]
+    chains = stock_fno.chain(t, F["date"])
+    return {**F, "expiries": futures, "chain": chains, "examples": stock_fno.examples(t, futures, chains, F["lot"])}
+
+
 def stock_payload() -> dict:
     src = json.load(open(os.path.join(SRC, "stock.json")))
     tracked = json.load(open(os.path.join(SCREENER, "tracked.json")))["markets"]
+    plain = json.load(open(os.path.join(SRC, "ai_plain.json")))
     names, industries = {}, {}
     for r in csv.DictReader(open(os.path.join(SCREENER, "names.csv"))):
         names[r["symbol"]], industries[r["symbol"]] = r["name"], r.get("nifty500_industry")
@@ -200,10 +213,11 @@ def stock_payload() -> dict:
             "quote": q, "chart": {**C, "sector": V.sector(industries.get(t), C["dates"]) if m == "india" else None},
             "quarters": quarters[-6:], "valuation": valuation(q["close"], quarters), "results": results(m, M, quarters),
             "risk": V.risk(C["close"], C["bench"], f.get("beta_1y")), "families": V.families(M["views"], T["horizons"]),
-            "holders": V.holders(M["views"], M["open_trades"]), "gaps": V.gaps(m),
+            "holders": V.holders(M["views"], M["open_trades"]), "gaps": V.gaps(m), "examples": V.example_records(m), "example_marks": V.example_marks(C["dates"], C["close"]),
+            "ai_plain": {**plain[m], "note": plain["_note"]},
             "stats": {"hi52": max(b[2] for b in bars[-250:]), "lo52": min(b[3] for b in bars[-250:]), "vol_avg20": round(sum(b[5] for b in bars[-21:-1]) / 20),
                       "beta": f.get("beta_1y"), "rsi": f.get("rsi_14"), "atr_pct": f.get("atr_pct"), "vol_10d": f.get("realized_vol_10d"),
                       "days_to_results": f.get("days_to_earnings"), "as_of": f.get("as_of_date")},
             "tools": T, "trades": trades(m, M), "news": news(M), "corporate": corporate(m, M),
-            "fno": {**fno(t), "expiries": V.expiries(t)} if m == "india" and fno(t) else None}
+            "fno": fno_block(t) if m == "india" else None}
     return out

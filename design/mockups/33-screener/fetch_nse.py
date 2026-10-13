@@ -4,7 +4,8 @@
 
 Writes into source/:
 - equity.csv: one row per EQ/BE stock that traded on the last day, reduced from a year of NSE's daily equity file
-  (UDiFF `BhavCopy_NSE_CM_*`; prices and volumes adjusted for splits and bonus issues, the actions used in actions.csv): closes 1 week, 1 month, 3 months and 1 year back, 52-week high and low, volume and
+  (UDiFF `BhavCopy_NSE_CM_*`; a renamed stock's history joined under its new symbol, from NSE's `symbolchange.csv`,
+  the joins used in renames.csv; prices and volumes adjusted for splits and bonus issues, the actions used in actions.csv): closes 1 week, 1 month, 3 months and 1 year back, 52-week high and low, volume and
   its 20-day average, RSI 14, the last 21 closes;
 - delivery.csv: the last day's delivery % per stock (`sec_bhavdata_full_<DDMMYYYY>.csv`);
 - names.csv: company names (`EQUITY_L.csv`) and Nifty 500 industries (`ind_nifty500list.csv`);
@@ -82,7 +83,8 @@ def equity(last: dt.date) -> None:
         for r in rows:
             if r["SctySrs"] in ("EQ", "BE"):
                 series[r["TckrSymb"]].append((r["TradDt"], r["SctySrs"], float(r["ClsPric"]), float(r["HghPric"]), float(r["LwPric"]), int(float(r["TtlTradgVol"])), float(r["OpnPric"])))
-    series = adjusted(series, last)
+    series, renamed = joined(series, last)
+    series = adjusted(series, last, renamed)
     back = lambda s, n: s[-1 - n][2] if len(s) > n else ""
     with open(os.path.join(OUT, "equity.csv"), "w", newline="") as handle:
         out = csv.writer(handle)
@@ -97,15 +99,36 @@ def equity(last: dt.date) -> None:
                           rsi14([x[2] for x in s]), len(s), ";".join("%g" % x[2] for x in s[-21:])])
 
 
-def adjusted(series: dict, last: dt.date) -> dict:
+def joined(series: dict, last: dt.date) -> tuple:
+    """A stock renamed within the year (NSE's symbolchange.csv, e.g. HEG to HEGAM on 22 Sep 2026) keeps one history under
+    its new symbol: the old symbol's sessions before the change, then the new one's. Returns the series and {old: new}."""
+    first, renamed = (last - dt.timedelta(days=372)).isoformat(), {}
+    rows = csv.DictReader(io.StringIO(get("/content/equities/symbolchange.csv").decode("utf-8", "replace")))
+    changes = sorted((dt.datetime.strptime(r["EFFECTIVE DATE"].strip(), "%d-%b-%Y").date().isoformat(), r["OLD SYMBOL"].strip(), r["NEW SYMBOL"].strip())
+                     for r in rows if r.get("EFFECTIVE DATE", "").strip())
+    with open(os.path.join(OUT, "renames.csv"), "w", newline="") as handle:
+        out = csv.writer(handle)
+        out.writerow(["old_symbol", "new_symbol", "effective_date", "old_sessions_joined"])
+        for day, old, new in changes:
+            if not first <= day <= last.isoformat() or old not in series:
+                continue
+            before = [x for x in series.pop(old) if x[0] < day]
+            series[new] = before + [x for x in series.get(new, []) if x[0] >= day]
+            renamed = {o: (new if n == old else n) for o, n in renamed.items()} | {old: new}
+            out.writerow([old, new, day, len(before)])
+    return series, renamed
+
+
+def adjusted(series: dict, last: dt.date, renamed: dict) -> dict:
     """Prices adjusted for the year's splits, bonus issues and demergers (NSE's corporate actions; the bulk list, then one lookup
     per symbol with an unexplained jump); the actions used are written to actions.csv."""
     span = f"&from_date={last - dt.timedelta(days=372):%d-%m-%Y}&to_date={last:%d-%m-%Y}"
-    acts = nse_actions.actions(json.loads(get(nse_actions.API + span)))
+    acts = [[renamed.get(a[0], a[0]), *a[1:]] for a in nse_actions.actions(json.loads(get(nse_actions.API + span)))]
     for sym in nse_actions.unexplained(series, acts):
         # no date span here: with one, NSE answers [] for some symbols (BANKNIFTY1); the window is applied below
         acts += nse_actions.actions(json.loads(get(nse_actions.API + "&symbol=" + urllib.parse.quote(sym))))
     first = (last - dt.timedelta(days=372)).isoformat()
+    acts = [(renamed.get(a[0], a[0]), *a[1:]) for a in acts]   # an action listed under the old symbol follows the rename
     acts = nse_actions.demerger_factors(sorted({tuple(a) for a in acts if first <= a[1] <= last.isoformat()}), series)
     with open(os.path.join(OUT, "actions.csv"), "w", newline="") as handle:
         out = csv.writer(handle)

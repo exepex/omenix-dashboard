@@ -1,0 +1,25 @@
+{
+ "_note": "EXAMPLE wording, written by hand for this mockup from the AI team's recorded reasoning of 13 Oct 2026 (source/stock.json, agent_reasoning). The AI team does not record a plain summary for beginners yet: a data gap for the stock tool.",
+ "india": {
+  "summary": "It sees no clear reason to buy or sell RELIANCE this week.",
+  "up": [
+   "The price is near its lowest in 18 months.",
+   "News about the Jio listing is confirmed by several outlets."
+  ],
+  "down": [
+   "It fell 9% in the last month.",
+   "Last quarter's profit was 25% lower than a year earlier.",
+   "Results come out within the week and can move the price either way."
+  ]
+ },
+ "us": {
+  "summary": "The good news looks already priced in, and a director sold shares.",
+  "up": [
+   "A large chip order (talks with SpaceX) is reported by several outlets."
+  ],
+  "down": [
+   "A director sold shares worth $947 million.",
+   "It fell 2% in the last five days."
+  ]
+ }
+}

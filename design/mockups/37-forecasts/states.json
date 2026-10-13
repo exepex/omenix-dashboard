@@ -1,0 +1,12 @@
+{
+ "page": "page.html",
+ "states": [
+  {"id": "real", "section": "1. Real today (13 Oct 2026)", "title": "REAL: no forecast exists, so the contest is empty: the reason, the five steps it waits for (G1 in review, G2-G5 not started), when the first scores come (10 and 20 trading days after the first forecast), every block in its empty state.", "hash": "", "widths": [1280, 1024, 768, 390], "full": true},
+  {"id": "start", "section": "2. Examples (made-up numbers)", "title": "EXAMPLE: the first forecast made on Mon 2 Nov 2026; first scores on 17 Nov (fear gauge) and 2 Dec (the other four), counted on NSE's calendar.", "hash": "ex=start", "widths": [1280, 390], "full": true},
+  {"id": "early", "section": "2. Examples (made-up numbers)", "title": "EXAMPLE, too early to tell: day 45. Rule-based 25 of 40 settled days, Hybrid joined on day 30 (0 of 40), AI team not running yet; every cell says Not proven yet with the days still needed.", "hash": "ex=early", "widths": [1280, 390], "full": true},
+  {"id": "early-q4", "section": "2. Examples (made-up numbers)", "title": "EXAMPLE, too early, the fear-gauge question: 35 settled days, the miss-score line has begun, Hybrid's 6 days, AI team not running.", "hash": "ex=early&q=4", "widths": [1280], "full": true},
+  {"id": "review", "section": "2. Examples (made-up numbers)", "title": "EXAMPLE after the first review (day 150): Hybrid winning (better, proven, on 3 of 10 yardstick tests), AI team losing (worse, proven, on 2; too sure of itself), Rule-based mostly no clear difference; head-to-head bars, calibration, latest settled days with hits and misses.", "hash": "ex=review", "widths": [1280, 390], "full": true},
+  {"id": "review-q5", "section": "2. Examples (made-up numbers)", "title": "EXAMPLE after the review, question 5 (calmer than priced), with all the numbers open: exact and estimated option-price days scored apart, one day without an answer (never scored).", "hash": "ex=review&q=5", "widths": [1280], "full": true},
+  {"id": "review-ai", "section": "2. Examples (made-up numbers)", "title": "EXAMPLE: AI team's calibration on question 1: its dots are flatter than the line, so it is too sure of itself.", "hash": "ex=review&who=book3_ai", "widths": [1280], "full": true}
+ ]
+}

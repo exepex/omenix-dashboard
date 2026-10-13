@@ -56,3 +56,17 @@ listed here.
     Examples: INDIAGLYCO 1 year −64.52% → +75.32%; DCMSRIND −76.31% → −20.05%; VEDL −43.86% → +50.02%. Every value
     is in `changes_2026-10-13_demergers.csv`.
   - Screen counts: Near 52-week high 54 → 56; Up 10%+ in a month 247 → 250; Down 10%+ in a month 648 → 646; RSI under 30 248 → 246.
+
+- **13 Oct 2026: data correction, renamed stocks (judge's P6 round 2, relayed by the orchestrator; data fix, not a contract change).**
+  - Root cause: NSE's daily files list a stock under its symbol of that day. A stock renamed within the year (HEG to
+    HEGAM on 22 Sep 2026, TATAMOTORS to TMPV on 24 Oct 2025) had its history split across two symbols. The example
+    builder kept only the new one, so 1-year changes and 52-week ranges were missing or short, and P6's real build
+    (which joins renames) differed.
+  - Fix: `fetch_nse.py` joins each rename of the year from NSE's `symbolchange.csv`: the old symbol's sessions before
+    the change, then the new one's. Corporate actions listed under the old symbol follow the rename. The joins used are
+    in `source/renames.csv`: 56 renames, ETFs included.
+  - Effect, checked against NSE:
+    - TMPV 1 year: — → −32.69% (284.45 against 422.58);
+    - HEGAM 1 year: — → +26.84% (231.29 against 182.35).
+    - Their demergers (TMPV 14 Oct 2025, HEGAM 7 Sep 2026) are now adjusted. The earlier entry's "did not trade on their ex-date" was this same cause: they traded under their old symbols.
+  - In all: 123 values on 55 stocks, plus each one's session count (50 1-year %, 28 52-week high, 19 52-week low, 15 RSI 14, 6 3-month %, 3 1-month %, 2 20-day average volume). Every value is in `changes_2026-10-13_renames.csv`.
