@@ -32,7 +32,7 @@ from check_semantics import check_flows, check_home_events, check_views  # noqa:
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 54  # planted breaks in planted()
+PLANTED = 55  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"

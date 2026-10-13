@@ -38,6 +38,8 @@ def check_links(doc: dict, stored: dict, problems: list[str]) -> None:
 
 def check_followed(found: dict, stored: dict, problems: list[str]) -> None:
     followed, rows = set(stored[FOLLOWED]["companies"]), stored[TABLE]["rows"]
+    if stored[FOLLOWED]["as_of"] > stored[TABLE]["as_of"][:10]:  # a list from after the close would rewrite history
+        problems.append(f"{FOLLOWED}: the list of {stored[FOLLOWED]['as_of']} is later than the close {stored[TABLE]['as_of'][:10]} it counts")
     tagged = {r["s"] for r in rows if "ours" in r["u"]}
     if tagged != followed:
         problems.append(f"{TABLE}: rows tagged ours {sorted(tagged ^ followed)} differ from the stock tool's followed list")
@@ -71,6 +73,7 @@ def check_stored(doc: dict, errors, found: dict, problems: list[str], stored: di
 
 BREAKS = (  # label, stored part, change: each must make check_stored fail
     ("a followed company missing from the stock tool's list", FOLLOWED, lambda v: v["companies"].pop()),
+    ("a followed list dated after the close it counts", FOLLOWED, lambda v: v.update(as_of="2026-10-13")),
     ("counts in the stock tool's list (it owns only the list)", FOLLOWED, lambda v: v.update(ours={"n": 20})),
     ("an NSE row tagged ours that the stock tool does not follow", TABLE, lambda v: next(r for r in v["rows"] if "ours" not in r["u"])["u"].append("ours")),
     ("a stored table whose total is not its rows", TABLE, lambda v: v.update(total=v["total"] - 1)),
