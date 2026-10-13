@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Omenix · Forecast contest</title>
-<meta name="description" content="Which family reads NIFTY best: every trading day Rule-based, Hybrid and AI team give the chance of five things happening, each checked against simple yardsticks and scored when the answer is known. Today no forecast exists yet; the labelled Example states show a family winning, one losing and too early to tell. India, F&O only. Research and paper only.">
+<meta name="description" content="Which family reads NIFTY best: every trading day Rule-based, Hybrid and AI team give the chance of five things happening, each checked against simple yardsticks and scored when the answer is known. A leaderboard, the race of all families on one chart by day, week and month, where each wins and loses, and why. Today no forecast exists yet; the labelled Example states show a family winning, one losing and too early to tell. India, F&O only. Research and paper only.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
 <style>
@@ -67,6 +67,38 @@
 .qcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
 .qcards .mb-fact b{font-size:13.5px;line-height:1.35}
 .scroll{overflow-x:auto}
+.leaders{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.leader{display:grid;gap:6px;align-content:start;padding:14px 16px;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-surface-container-high);min-width:0}
+.leader.first{border:2px solid var(--mb-color-up);background:color-mix(in srgb,var(--mb-color-up-container) 35%,var(--md-sys-color-surface-container-lowest))}
+.leader.idle{border-style:dashed}.leader small{font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.leader .lh{display:flex;align-items:center;gap:8px}.leader .rank{font:700 13px/24px var(--md-ref-typeface-plain);min-width:34px;height:24px;text-align:center;border-radius:12px;background:var(--md-sys-color-surface-container-high)}
+.leader.first .rank{background:var(--mb-color-up);color:var(--md-sys-color-on-primary)}
+.leader .big{display:flex;align-items:center;gap:4px;font:700 22px/1.2 var(--md-ref-typeface-plain);font-variant-numeric:tabular-nums}.leader .big svg{width:22px;height:22px;fill:currentColor}
+.big.pos{color:var(--mb-color-up)}.big.neg{color:var(--mb-color-down)}
+.lfacts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.lfacts .mb-fact b{font-size:15px}
+.leader .why{margin:2px 0 0;font-size:13px}.lver{display:flex;flex-wrap:wrap;gap:8px}
+svg.plot.spark{width:100%;height:40px;display:block}
+.plot .ref{font-size:11px}.plot .end{font:600 12px var(--md-ref-typeface-plain)}.plot .end.l1{fill:var(--mb-chart-1)}.plot .end.l2{fill:var(--mb-chart-2)}.plot .end.l3{fill:var(--mb-chart-3)}
+.plot .bar.l1{fill:var(--mb-chart-1)}.plot .bar.l2{fill:var(--mb-chart-2)}.plot .bar.l3{fill:var(--mb-chart-3)}
+svg.plot.race{width:100%;height:auto;display:block;margin-top:8px;touch-action:pan-y}.plot .cross{stroke:var(--md-sys-color-outline);stroke-width:1}
+.keys i.kz{background:var(--md-sys-color-on-surface-variant);height:1px}
+.pchart{position:relative}.xtip{position:absolute;top:4px;left:56px;padding:4px 8px;border-radius:4px;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font-size:12px;pointer-events:none;max-width:calc(100% - 64px)}.xtip[hidden]{display:none}
+.sub3{font:600 14px/1.3 var(--md-ref-typeface-plain);margin:0 0 8px}
+.split{display:grid;gap:10px}.srow{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 10px;align-items:center}.srow small{grid-column:2;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.sbar{position:relative;height:16px;border-radius:3px;background:var(--md-sys-color-surface-container)}.sbar i{position:absolute;top:0;bottom:0;border-radius:3px}.sbar .gain{background:var(--mb-color-up)}.sbar .loss{background:var(--mb-color-down)}
+.sbar::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--md-sys-color-on-surface-variant)}
+.habits td:first-child{min-width:170px}
+.hb{display:grid;grid-template-columns:minmax(60px,1fr) 40px;gap:6px;align-items:center}.hb .track{position:relative;height:10px;border-radius:3px;background:var(--md-sys-color-surface-container)}
+.hb .track i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}.hb .track i.good{background:var(--mb-chart-1)}.hb .track i.bad{background:var(--mb-color-down)}.hb b{font-size:12px;text-align:right}
+.vs-cell b{display:flex;align-items:center;gap:4px}.vs-cell b svg{width:16px;height:16px;fill:currentColor}.vs-cell.up b{color:var(--mb-color-up)}.vs-cell.down b{color:var(--mb-color-down)}
+.tc{display:grid;grid-template-columns:minmax(50px,1fr) 38px;gap:6px;align-items:center}.tc .track{position:relative;height:10px;border-radius:3px;background:var(--md-sys-color-surface-container)}
+.tc .track::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--md-sys-color-on-surface-variant)}
+.tc .track i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}.tc i.l1{background:var(--mb-chart-1)}.tc i.l2{background:var(--mb-chart-2)}.tc i.l3{background:var(--mb-chart-3)}.tc i.y{background:var(--md-sys-color-outline)}.tc b{font-size:12.5px;text-align:right}
+.settled li.miss3{grid-template-columns:110px minmax(0,1fr)}.settled li.note{display:block}
+table.heat td{min-width:100px}table.heat td,table.heat th{padding:8px 4px}
+@media (max-width:1099px){table.heat thead{display:none}table.heat,table.heat tbody{display:block}table.heat td[data-k]::before{content:attr(data-k);display:block;font-size:11px;color:var(--md-sys-color-on-surface-variant)}table.heat tr{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.heat td,table.heat th{display:block;border:0}table.heat th[scope=row]{grid-column:1 / -1;width:auto}table.heat td{min-width:0}table.heat td[data-k]::before{font-size:11px}}
+@media (max-width:599px){svg.plot.race .end{font-size:11px}}table.heat .mb-heat-tile .cellv{font-size:12px;margin-top:4px}
+
 .src{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
 .md-table td small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
 @media (max-width:899px){table.stack thead{display:none}table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:auto}table.stack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.stack td{border:0;padding:2px 0;text-align:left}table.stack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}table.stack td small{display:inline;margin-left:6px}}
@@ -75,7 +107,7 @@
 @media (max-width:899px){table.board thead{display:none}table.board,table.board tbody,table.board tr,table.board td,table.board th{display:block;width:auto}
   table.board tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.board td,table.board th{border:0;padding:4px 0}
   table.board td[data-k]::before{content:attr(data-k);display:block;font-size:11.5px;color:var(--md-sys-color-on-surface-variant)}}
-@media (max-width:599px){.chance{grid-template-columns:minmax(0,1fr) 52px;gap:4px 10px}.chance>.who{grid-column:1 / -1}.chance .na{grid-column:1 / -1}.firsts{grid-template-columns:1fr}.settled li{grid-template-columns:52px minmax(0,1fr)}.settled li>:last-child{grid-column:2}
+@media (max-width:599px){.srow,.settled li.miss3{grid-template-columns:1fr}.srow small{grid-column:1}.lfacts{grid-template-columns:1fr 1fr}.chance{grid-template-columns:minmax(0,1fr) 52px;gap:4px 10px}.chance>.who{grid-column:1 / -1}.chance .na{grid-column:1 / -1}.firsts{grid-template-columns:1fr}.settled li{grid-template-columns:52px minmax(0,1fr)}.settled li>:last-child{grid-column:2}
   .steps li{grid-template-columns:110px 28px minmax(0,1fr)}.md-table th,.md-table td{padding:8px 6px;white-space:normal}}
 </style>
 </head>
