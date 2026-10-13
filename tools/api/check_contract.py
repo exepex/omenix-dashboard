@@ -26,14 +26,14 @@ from referencing.jsonschema import DRAFT202012
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 import examples  # noqa: E402
-from check_stored import check_stored, planted as planted_stored  # noqa: E402
+from check_stored import check_stored, planted as planted_stored, planted_pages  # noqa: E402
 from check_calendar import check_calendar, planted as planted_calendar  # noqa: E402
 from check_chain import check_chain, planted as planted_chain  # noqa: E402
 from check_semantics import check_flows, check_home_events, check_views  # noqa: E402
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 58  # planted breaks in planted()
+PLANTED = 60  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -280,6 +280,7 @@ def main() -> int:
     validate = lambda ref, value: errors(doc, ref, value)  # noqa: E731
     stored = check_stored(doc, validate, found, problems)
     planted_stored(doc, validate, found, stored, problems)
+    planted_pages(doc, stored, problems)
     planted_chain(doc, validate, found, problems)
     series = check_calendar(found, problems)
     planted_calendar(found, problems)

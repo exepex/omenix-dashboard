@@ -19,6 +19,7 @@ import bundle  # noqa: E402
 import examples_home as home  # noqa: E402
 import examples_chain as chain  # noqa: E402
 import examples_payloads as frame  # noqa: E402
+import examples_pages as pages  # noqa: E402
 import examples_screens as screens  # noqa: E402
 
 SHELL = bundle.REPO / "design/mockups/30-shell/data.json"
@@ -65,11 +66,11 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
 SCREEN_BUILDERS = {  # the same, for api/examples/blocks-33-34.json
     "getScreenerSummaryIndia": (screens.screener_summary, "screener_summary", "screener", ["india"]),
     "getScreenerSummaryUs": (screens.screener_summary, "screener_summary", "screener", ["us"]),
-    "getScreenerStocksIndia": (screens.screener_stocks, "screener_stocks", "screener", ["india"]),
-    "getScreenerStocksUs": (screens.screener_stocks, "screener_stocks", "screener", ["us"]),
+    "getScreenerStocksIndia": (pages.screener_stocks, "screener_stocks", "screener", ["india"]),
+    "getScreenerStocksUs": (pages.screener_stocks, "screener_stocks", "screener", ["us"]),
     "getScreenerTools": (screens.screener_tools, "screener_tools", "screener", ["india", "us"]),
     "getFnoScreenerSummary": (screens.fno_screener_summary, "fno_screener_summary", "screener", ["india"]),
-    "getFnoScreenerRows": (screens.fno_screener_rows, "fno_screener_rows", "screener", ["india"]),
+    "getFnoScreenerRows": (pages.fno_screener_rows, "fno_screener_rows", "screener", ["india"]),
     "getOverviewIndicesIndia": (screens.overview_indices, "overview_indices", "markets", ["india"]),
     "getOverviewIndicesUs": (screens.overview_indices, "overview_indices", "markets", ["us"]),
     "getIndiaSectors": (screens.india_sectors, "overview_sectors", "markets", ["india"]),

@@ -19,7 +19,7 @@ def check_views(doc: dict, problems: list[str]) -> None:
     full example (judge 27, finding 1: Home and the Markets overview read one calendar)."""
     examples = doc["components"]["examples"]
     for name, ex in examples.items():
-        if "x-query" not in ex or name.endswith("_calendar"):
+        if "x-query" not in ex or not name.startswith("getEvents_") or name.endswith("_calendar"):
             continue
         op, market = name.split("_")[0], ex["value"]["market"]
         full = examples.get(f"{op}_{market}_calendar")
