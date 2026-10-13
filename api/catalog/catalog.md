@@ -144,6 +144,12 @@ One endpoint per independent screen block; where one record feeds several blocks
 | `K5-proposed` | **no: to be written** | 46 | One rm.blocks row per block and market, in the stock envelope, from records the stock tool already stores: the tools' view of its followed companies (strategy_predictions at N+5, model_scores, features days_to_results), the US screener rows and counts of its 20 companies (daily prices; returns, 52-week range, volume ratio and RSI computed the screener's way), the US benchmarks and sector funds, world quotes (prices), India's FII/DII and NSDL flows, US Treasury par yields (macro), and the regime record's major_event_names on the session block |
 | `NSE1-proposed` | **no: to be written** | 156 | After each NSE session, read NSE's own daily files (equity BhavCopy, security-wise delivery, EQUITY_L and the Nifty 500 list, F&O BhavCopy, the index close file) and publish one row per block, atomically like P3: the stock rows and their counts per universe, the F&O underlyings (nearest monthly future, ATM IV computed the F&O tool's way, build-up, put-call ratio, move priced in) and their counts, the broad and sector index rows (with NSE's P/E, P/B, dividend yield) and the Nifty 500 industries; plus the dashboard's publication-aware read path for it. exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story" |
 
+## Open questions (owner)
+
+- Who publishes NSE's daily files (publisher `nse_ingest`, story `NSE1-proposed`): exepex/trading or `platform/`?
+- Should the stock tool publish a year of daily FII/DII flows (5 days today: 1D and 1W totals only)?
+- Events: 34's data has no `major` flag; it is derived from the regime record's `major_event_names` until published.
+
 ## Fields
 
 ### `GET /api/v1/markets/india/fno/search` (searchFnoContracts)

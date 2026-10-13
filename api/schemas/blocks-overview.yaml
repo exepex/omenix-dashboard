@@ -102,7 +102,9 @@ Flows:
   type: object
   description: >-
     What big investors did (India): FII/FPI and DII net buying in the cash market per day (NSE, provisional) and
-    NSDL's FPI equity net. Each series is its own; the screen's period total adds one series over its own days only
+    NSDL's FPI equity net. Each series is its own; the screen's period total adds one series over its own days only.
+    Open question for the owner (W11): the stock tool's records give 5 days, enough for 1D and 1W totals only; a year
+    of daily flows would allow 1M, 3M and 1Y
   x-catalog: {publisher: stock, source: "the stock tool's flows (NSE FII/DII, provisional) and fpi (NSDL) records", freshness: next morning, story: K5-proposed, status: published}
   x-element: [h34.flows]
   required: [currency, days, nsdl]
