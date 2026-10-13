@@ -51,4 +51,4 @@ az monitor metrics alert create -g "$X1_RG" -n omenix-pg-storage --scopes "$serv
 az monitor metrics alert show -g "$X1_RG" -n omenix-pg-storage \
   --query "{name:name, enabled:enabled, window:windowSize, every:evaluationFrequency, metric:criteria.allOf[0].metricName, aggregation:criteria.allOf[0].timeAggregation, operator:criteria.allOf[0].operator, threshold:criteria.allOf[0].threshold}" -o yaml
 echo; echo "RESULT: lock, action group and both alerts in place"
-echo "Saved: $out"
+echo "Saved: platform/evidence/$(basename "$out")"

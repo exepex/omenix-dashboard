@@ -49,4 +49,4 @@ tls_line="$(PGUSER=dashboard_app psql -X -d omenix -A -F ' ' -t 2>&1 \
   && tls_ok=yes || tls_ok=no
 printf '%s\n' "$tls_line" | redact_ips   # an error from psql would quote the server's IP
 echo; echo "RESULT: require_secure_transport on: $rst_ok; non-TLS refused: $plain_refused; verified TLS connection works: $tls_ok"
-echo "Saved: $out"
+echo "Saved: platform/evidence/$(basename "$out")"
