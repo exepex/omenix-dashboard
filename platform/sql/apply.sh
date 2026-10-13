@@ -11,7 +11,9 @@ run postgres 00_roles.sql
 run postgres 10_database.sql
 # Step 12 runs in every database the admin may connect to (function rights are per database). A database the admin
 # cannot reach (e.g. one Azure keeps for itself) is reported and skipped; any SQL error still stops the run.
-for db in $(psql -X -A -t -d omenix -c "SELECT datname FROM pg_database WHERE datallowconn AND has_database_privilege(datname, 'CONNECT') ORDER BY datname"); do
+# The list goes into a variable first: set -e checks a plain assignment, not a $(...) inside a "for ... in" list.
+dbs="$(psql -X -A -t -d omenix -c "SELECT datname FROM pg_database WHERE datallowconn AND has_database_privilege(datname, 'CONNECT') ORDER BY datname")"
+for db in $dbs; do
   rc=0
   psql -X -q -A -t -v ON_ERROR_STOP=1 -d "$db" -f "$here/12_large_objects.sql" || rc=$?
   if [ "$rc" -eq 2 ]; then echo "database $db: not reachable by the admin, large objects not checked"

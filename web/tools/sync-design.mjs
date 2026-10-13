@@ -5,6 +5,8 @@
 //   web/lib/shell/fixture/shell.generated.json      <- mockups/30-shell/data.json (the app frame's fixture adapter, W8)
 //   web/lib/home/fixture/blocks.generated.json      <- api/examples/blocks.json (Home's block examples, W9: the W10
 //                                                     contract's examples, taken from 30-shell and 31-dashboard)
+//   web/lib/legal/pages.generated.json              <- mockups/36-legal/app.json (the privacy and terms pages)
+//   web/app/icon.svg, favicon.ico, apple-icon.png   <- brand/favicon/ (the logo tile; Next.js serves them as the icons)
 // Run from web/: `node tools/sync-design.mjs`; `--check` exits 1 when a copy is out of date (lib/ui/tests/design-sync.test.ts).
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -27,12 +29,16 @@ export function expectedCopies() {
       `export const ICON_SPRITE = ${JSON.stringify(sprite)};\n`,
     "lib/shell/fixture/shell.generated.json": read("mockups/30-shell/data.json"),
     "lib/home/fixture/blocks.generated.json": readFileSync(join(design, "..", "api", "examples", "blocks.json"), "utf8"),
+    "lib/legal/pages.generated.json": read("mockups/36-legal/app.json"),
+    "app/icon.svg": read("brand/favicon/tile.svg"),
+    "app/favicon.ico": readFileSync(join(design, "brand", "favicon", "favicon.ico")),
+    "app/apple-icon.png": readFileSync(join(design, "brand", "favicon", "apple-touch-icon-180.png")),
   };
 }
 
 export function staleCopies() {
   return Object.entries(expectedCopies())
-    .filter(([path, text]) => !existsSync(join(web, path)) || readFileSync(join(web, path), "utf8") !== text)
+    .filter(([path, content]) => !existsSync(join(web, path)) || !readFileSync(join(web, path)).equals(Buffer.from(content)))
     .map(([path]) => path);
 }
 

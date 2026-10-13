@@ -7,7 +7,8 @@ SELECT 'CREATE DATABASE omenix' WHERE NOT EXISTS (SELECT 1 FROM pg_database WHER
 BEGIN;
 -- Nobody gets anything by default; the revoke list also clears any drift on the seven roles.
 REVOKE ALL ON DATABASE omenix
-  FROM PUBLIC, stock_owner, fno_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader;
+  FROM PUBLIC, stock_owner, fno_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader,
+       db_monitor;
 GRANT CONNECT ON DATABASE omenix
-  TO stock_owner, fno_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader;
+  TO stock_owner, fno_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader, db_monitor;
 COMMIT;

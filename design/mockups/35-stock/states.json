@@ -1,0 +1,163 @@
+{
+ "page": "page.html",
+ "states": [
+  {
+   "id": "overview",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "Overview: price, the last price check, results in 3 days, your paper position, Buy and Sell; the chart, key figures in words, the last quarters.",
+   "hash": "",
+   "widths": [
+    1280,
+    1024,
+    768,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "compare",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "Two years against NIFTY 50.",
+   "hash": "per=2y&cmp=1",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "tools",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "Our strategies: chance up, strategies buying by family, the expected range for each of the next 5 sessions; the AI team’s reading; open paper trades.",
+   "hash": "tab=tools",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "tools-phone",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "Our strategies on a phone: each session’s view stacked, with its labels.",
+   "hash": "tab=tools",
+   "widths": [
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "news",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "News: the latest stories, each with how far it is confirmed.",
+   "hash": "tab=news",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "results",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "Results and filings: past surprises, the next results; pledges, block deals, announcements, delivery.",
+   "hash": "tab=results",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "fno",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "F&O: the future, its build-up, IV against its 3-month range, the move priced in; three months of history.",
+   "hash": "tab=fno",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "buy",
+   "section": "2. Acting on it",
+   "title": "Buy from the stock page: the order window at the last price check.",
+   "hash": "drawer=order:RELIANCE:buy",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "sell",
+   "section": "2. Acting on it",
+   "title": "Sell part of your position.",
+   "hash": "drawer=order:RELIANCE:sell",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "us",
+   "section": "3. NVDA (US), themes, widths",
+   "title": "NVDA (US market closed): no F&O tab.",
+   "hash": "m=us",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "us-tools",
+   "section": "3. NVDA (US), themes, widths",
+   "title": "NVDA: our strategies and the AI team.",
+   "hash": "m=us&tab=tools",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "us-results",
+   "section": "3. NVDA (US), themes, widths",
+   "title": "NVDA: results, insider filing, short interest, top holders.",
+   "hash": "m=us&tab=results",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "us-closed",
+   "section": "3. NVDA (US), themes, widths",
+   "title": "Market closed: Buy and Sell are grey with the reason.",
+   "hash": "m=us",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "hover": ".head .acts"
+    }
+   ]
+  },
+  {
+   "id": "dark",
+   "section": "3. NVDA (US), themes, widths",
+   "title": "Dark theme.",
+   "hash": "theme=dark",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "tablet",
+   "section": "3. NVDA (US), themes, widths",
+   "title": "Tablet 768 px.",
+   "hash": "tab=tools",
+   "widths": [
+    768
+   ]
+  }
+ ]
+}

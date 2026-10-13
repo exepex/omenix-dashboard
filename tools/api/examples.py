@@ -50,7 +50,7 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getGroups": (home.groups, "groups", "home", ["india", "us"]),
     "getStrategyTrades": (home.strategy_trades, "strategy_trades", "home", ["india", "us"]),
     "getAttention": (home.attention, "attention", "home", ["india", "us"]),
-    "getEvents": (lambda x, m: screens.home_events(x.screens, m, x.H), "events", "home", ["india", "us"]),  # one calendar
+    "getEvents": (lambda x, m: screens.home_events(x.screens, m, x.H, x.S), "events", "home", ["india", "us"]),  # one calendar
     "getTopNews": (home.top_news, "top_news", "home", ["india", "us"]),
     "searchFnoContracts": (frame.fno_search, "contracts", "shell", ["india"]),
     "getFnoPicks": (home.fno_picks, "today", "shell", ["india"]),

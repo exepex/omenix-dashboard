@@ -2,6 +2,7 @@
 // its source field (`data-src`, lib/home/sources.ts) and must equal exactly that field of the data the app renders
 // (the adapters' own output), with its sign and in that market's currency. A figure the screen added up has no field
 // that holds it, so it fails, whatever other value it happens to equal; a money figure without a source fails too.
+import { readFileSync } from "node:fs";
 import { fixtureHomeData } from "../../../lib/home/fixture-source.ts";
 import { resolveSource } from "../../../lib/home/sources.ts";
 import { fixtureShellData } from "../../../lib/shell/fixture-source.ts";
@@ -11,6 +12,16 @@ const SYMBOL = { india: "₹", us: "$" };
 /** Quoted text: a news headline ("Jio's ₹11 trn IPO") and the needs-you line quoting it are the publisher's words. */
 const QUOTED = ".news li > b, .att small";
 const MONEY = /([+\u2212-])?\s?([₹$])\s?([\d,]+(?:\.\d+)?)/g;
+
+/** The signed-off Home (31-dashboard/data.json): its "Coming up" rows are the frozen contract (31 row 6). */
+const SIGNED = JSON.parse(readFileSync(new URL("../../../../design/mockups/31-dashboard/data.json", import.meta.url), "utf8"));
+
+/** Home's "Coming up" must show exactly the signed-off rows, in order: the day of the month and the title. */
+export async function comingUpProblems(page, market) {
+  const want = SIGNED.markets[market].events.map((e) => `${Number(e.date.slice(8))} ${e.title}`);
+  const got = await page.$$eval('.home section[aria-label="Coming up"] li', (l) => l.map((x) => `${x.querySelector(".d b").textContent} ${x.querySelector(":scope > span:last-child > b").textContent}`));
+  return got.join(" | ") === want.join(" | ") ? [] : [`Coming up: ${got.join(" | ")}, signed off: ${want.join(" | ")}`];
+}
 
 /** The block payloads a source name can point into, exactly as the app's adapters give them for a market. */
 export async function sourceBlocks(market) {
@@ -99,7 +110,7 @@ export async function homeMoneyChecks(page, { market }) {
 
 /** India: the F&O book lines in every group card; the hybrid empty state; the tabs; the needs-you link. */
 export async function indiaChecks(page, ctx) {
-  const problems = await homeMoneyChecks(page, ctx);
+  const problems = [...(await homeMoneyChecks(page, ctx)), ...(await comingUpProblems(page, "india"))];
   const cards = await page.$$eval(".home .mb-apcard", (n) => n.map((x) => x.innerText));
   if (cards.length !== 4) problems.push(`${cards.length} group cards, not 4 (You, Rule-based, Hybrid, AI team)`);
   if (cards.filter((c) => c.includes("F&O: total profit / loss")).length !== 3) problems.push("not every group card has its own F&O book line");
@@ -114,7 +125,7 @@ export async function indiaChecks(page, ctx) {
 
 /** The US: no F&O element in Home at all; dollars only. */
 export async function usChecks(page, ctx) {
-  const problems = await homeMoneyChecks(page, ctx);
+  const problems = [...(await homeMoneyChecks(page, ctx)), ...(await comingUpProblems(page, "us"))];
   if ((await page.$eval(".home", (n) => n.innerText)).includes("F&O")) problems.push("an F&O element on the US Home");
   return problems;
 }

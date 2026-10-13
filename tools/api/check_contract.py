@@ -26,10 +26,11 @@ from referencing.jsonschema import DRAFT202012
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 import examples  # noqa: E402
+from check_semantics import check_flows, check_home_events, check_views  # noqa: E402
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 31  # planted breaks in planted()
+PLANTED = 32  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -197,29 +198,6 @@ def walk_nodes(node, trail):
             yield from walk_nodes(sub, f"{trail}/{i}")
 
 
-def check_views(doc: dict, problems: list[str]) -> None:
-    """A screen's view of a shared record (an example with x-query) must be exactly that query applied to the record's
-    full example (judge 27, finding 1: Home and the Markets overview read one calendar)."""
-    from examples_screens import view
-    examples = doc["components"]["examples"]
-    for name, ex in examples.items():
-        if "x-query" not in ex or name.endswith("_calendar"):
-            continue
-        op, market = name.split("_")[0], ex["value"]["market"]
-        full = examples.get(f"{op}_{market}_calendar")
-        if full is None or ex["value"]["payload"]["events"] != view(full["value"]["payload"]["events"], ex["x-query"]):
-            problems.append(f"example {name}: not its query {ex['x-query']} applied to {op}_{market}_calendar")
-
-
-def check_flows(found: dict, problems: list[str]) -> None:
-    """34 row 8: a period total exists only when the days cover the period, and equals the sum of those days."""
-    from examples_screens import flow_totals
-    for key, value in found.get("getFlows", {}).items():
-        payload = value["payload"]
-        if payload["totals"] != flow_totals(payload["days"]):
-            problems.append(f"flows example {key}: the period totals are not the covered sums of its days (null when not covered)")
-
-
 def planted(doc: dict, found: dict, problems: list[str]) -> None:
     """Each planted break must make validation fail; a pass means the rule does not bite."""
     def must_fail(label, op_id, key, change):
@@ -274,6 +252,17 @@ def planted(doc: dict, found: dict, problems: list[str]) -> None:
     check_views(broken, caught)
     if not caught:
         problems.append("planted break not caught: the two screens' calendars disagree")
+    # judge 32: Home's query without market_first (the plain 6 nearest) changes the signed-off Home
+    from examples_screens import view
+    nearest = copy.deepcopy(doc)
+    exs = nearest["components"]["examples"]
+    for name in ("getEvents_india", "getEvents_india_home20"):
+        query = {**exs[name]["x-query"], "market_first": False}
+        exs[name]["value"]["payload"]["events"] = view(exs["getEvents_india_calendar"]["value"]["payload"]["events"], query)
+    caught = []
+    check_home_events(nearest, caught)
+    if len(caught) < 2:
+        problems.append("planted break not caught: Home's plain 6 nearest (signed-off list and real calendar)")
 
 
 def main() -> int:
@@ -288,6 +277,7 @@ def main() -> int:
     check_rules(doc, found, problems)
     check_flows(found, problems)
     check_views(doc, problems)
+    check_home_events(doc, problems)
     ops = list(block_operations(doc))
     print(f"contract: {len(doc['paths'])} paths ({len(ops)} block endpoints), {sum(len(v) for v in found.values())} block examples, "
           f"{schemas} block schemas, {leaves} catalogued leaf fields, {PLANTED} planted breaks")

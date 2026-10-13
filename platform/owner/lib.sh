@@ -20,14 +20,10 @@ die() { echo "STOPPED: $*" >&2; exit 1; }
 # an IP address is passed through redact_ips before it is printed.
 record_evidence() { exec > >(tee "$1") 2>&1; }
 
-# Replace IPv4 and IPv6 addresses with <IP address> in text bound for an evidence file: a server's refusal quotes the
-# client's public IP ("no pg_hba.conf entry for host ..."), and psql's own errors quote the server's. IPv6 is matched
-# only in its full 8-group form or with "::", so times such as 22:58:01 are left alone.
-redact_ips() {
-  sed -E -e 's/[0-9]{1,3}(\.[0-9]{1,3}){3}/<IP address>/g' \
-         -e 's/[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){7}/<IP address>/g' \
-         -e 's/[0-9A-Fa-f:]*::[0-9A-Fa-f:]*[0-9A-Fa-f]/<IP address>/g'
-}
+# Replace IPv4 and IPv6 address literals with <IP address> in text bound for an evidence file (rules and reasons in
+# redact_ips.awk: valid whole-word addresses only; SQL casts, times and the 0.0.0.0/255.255.255.255 bounds stay).
+owner_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"    # this file's folder, however the script was started
+redact_ips() { awk -f "$owner_dir/redact_ips.awk"; }
 
 need_psql16() {
   command -v psql > /dev/null || die "psql not found (brew install libpq, then add its bin folder to PATH)"

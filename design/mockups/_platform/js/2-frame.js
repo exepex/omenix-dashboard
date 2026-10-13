@@ -7,7 +7,7 @@ const NAV = [
   {id: 'trade', label: 'Trade', icon: 'candlestick_chart', items: [{id: 'chain', label: 'Option chain', icon: 'layers', india: true, href: B('32-option-chain'), key: 'g c'}, {id: 'builder', label: 'Strategy builder', icon: 'calculate', india: true}, {id: 'screener', label: 'Screener', icon: 'filter_list', href: B('33-screener'), key: 'g s'}, {id: 'order', label: 'Order window', icon: 'receipt_long', action: 'order', key: 'B / S'}]},
   {id: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', items: [{id: 'positions', label: 'Positions', icon: 'account_balance_wallet', key: 'g p'}, {id: 'holdings', label: 'Holdings', icon: 'pie_chart'}, {id: 'funds', label: 'Accounts and funds', icon: 'payments'}, {id: 'orders', label: 'Orders', icon: 'receipt_long', key: 'g o'}, {id: 'reports', label: 'Reports', icon: 'bar_chart'}]},
   {id: 'strategies', label: 'Strategies', icon: 'science', items: [{id: 'lab', label: 'Strategy lab', icon: 'science'}, {id: 'track', label: 'Track record', icon: 'history'}, {id: 'scoreboards', label: 'Scoreboards', icon: 'leaderboard'}, {id: 'forecasts', label: 'Forecasts', icon: 'query_stats', india: true}]},
-  {id: 'research', label: 'Research', icon: 'travel_explore', items: [{id: 'stock', label: 'Stock page', icon: 'apartment'}, {id: 'news', label: 'News', icon: 'newspaper'}, {id: 'events', label: 'Calendar', icon: 'event'}, {id: 'alerts', label: 'Alerts', icon: 'notifications'}]},
+  {id: 'research', label: 'Research', icon: 'travel_explore', items: [{id: 'stock', label: 'Stock page', icon: 'apartment', href: B('35-stock')},{id: 'news', label: 'News', icon: 'newspaper'}, {id: 'events', label: 'Calendar', icon: 'event'}, {id: 'alerts', label: 'Alerts', icon: 'notifications'}]},
   {id: 'control', label: 'Control', icon: 'shield', items: [{id: 'risk', label: 'Risk', icon: 'shield'}, {id: 'judge', label: 'Judge and evidence', icon: 'gavel'}, {id: 'health', label: 'Data health', icon: 'dns'}]},
   null,
   {id: 'assistant', label: 'Assistant', icon: 'smart_toy', items: [{id: 'assistant', label: 'Assistant', icon: 'smart_toy'}]},
@@ -59,7 +59,8 @@ function renderAll() {
   F.pf.replaceChildren(appbar(), navrail(), signalsPanel(), F.main, tabbar());
   inner.replaceChildren();
   page.render(inner, ctx());
-  inner.append(el('footer', {}, 'Omenix · research and paper trading only: nothing here places a real order · ', el('b', {}, page.dataLabel || 'Example data'), ` as of ${nowLabel()}`));
+  inner.append(el('footer', {}, 'Omenix · research and paper trading only: nothing here places a real order · ', el('b', {}, page.dataLabel || 'Example data'), ` as of ${nowLabel()}`,
+    el('div', {class: 'legal'}, el('a', {href: '../36-legal/privacy.html'}, 'Privacy policy'), ' · ', el('a', {href: '../36-legal/terms.html'}, 'Terms of service'))));
   writeHash();
 }
 
@@ -67,7 +68,7 @@ function renderAll() {
 function appbar() {
   const unread = (S.notifications[st.m] || []).filter(n => n.unread).length;
   return el('header', {class: 'mb-appbar', id: 'appbar'},
-    el('a', {class: 'mb-appbar-brand', href: B('31-dashboard') + hashCarry(), 'aria-label': 'Omenix: Dashboard'}, el('span', {class: 'mb-brand-mark'}, 'OM')),
+    el('a', {class: 'mb-appbar-brand', href: B('31-dashboard') + hashCarry(), 'aria-label': 'Omenix: Dashboard'}, brandMark()),
     el('div', {class: 'mb-appbar-name'}, 'Omenix', el('small', {}, 'Research · Paper only')),
     el('button', {class: 'mb-gsearch', type: 'button', onclick: () => openPal(''), 'aria-label': 'Search stocks, F&O, screens (slash)'}, icon('search'), el('span', {class: 'lg'}, P().fno ? 'Search stocks, F&O, codes' : 'Search stocks'), el('span', {class: 'sm'}, 'Search…'), el('span', {class: 'mb-kbd'}, '/')),
     el('div', {class: 'md-segmented dense light', role: 'group', 'aria-label': 'Market'}, ...Object.entries(S.markets).map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(k === st.m), onclick: () => { if (st.m !== k) { st.m = k; st.wl = 0; closeAll(); renderAll(); } }}, v.label))),

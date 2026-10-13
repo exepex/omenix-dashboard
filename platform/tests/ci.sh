@@ -13,7 +13,8 @@
 #   5. the matrix catches drift (each injected drift makes it fail), and platform/sql removes the drift again;
 #   6. the named exceptions are real (step 4 confirms them with real attempts); a large object made in another
 #      database is detected even when omenix is closed (6a); and they close where the admin is allowed to close them
-#      (12_large_objects.sql in every database, 15_server_wide.sql), without locking the admin out (6b).
+#      (12_large_objects.sql in every database, 15_server_wide.sql), without locking the admin out (6b);
+#   7. the scheduled check (monitor/, issue #2) raises an alert for each planted condition and none on a clean server.
 # Like Azure, the admin is a non-superuser with only CREATEDB and CREATEROLE (role x1_admin, created here).
 # Connection: PGHOST/PGPORT of a server where X1_SUPERUSER (default postgres) logs in without a password (trust).
 set -euo pipefail
@@ -37,10 +38,13 @@ reset() {
   su_sql -c "ALTER DATABASE postgres OWNER TO $superuser" -c "ALTER DATABASE template1 OWNER TO $superuser" \
     -c "GRANT CONNECT, TEMPORARY ON DATABASE postgres TO PUBLIC" -c "GRANT CONNECT ON DATABASE template1 TO PUBLIC"
   for db in postgres template1; do lo_functions "$db" GRANT TO; done
-  if [ "$(su_sql -At -c "SELECT count(*) FROM pg_roles WHERE rolname = 'x1_admin'")" = 1 ]; then
-    su_sql -c "REVOKE ALL ON DATABASE postgres, template1 FROM x1_admin"
-  fi
-  for r in stock_owner fno_owner app_owner stock_writer fno_writer dashboard_app stock_inbox_reader x1_admin azure_pg_admin; do
+  for r in x1_admin db_monitor; do
+    if [ "$(su_sql -At -c "SELECT count(*) FROM pg_roles WHERE rolname = '$r'")" = 1 ]; then
+      su_sql -c "REVOKE ALL ON DATABASE postgres, template1 FROM $r"
+    fi
+  done
+  for r in stock_owner fno_owner app_owner stock_writer fno_writer dashboard_app stock_inbox_reader db_monitor x1_admin \
+           azure_pg_admin; do
     su_sql -c "DROP ROLE IF EXISTS $r"
   done
   su_sql -c "CREATE ROLE x1_admin LOGIN CREATEDB CREATEROLE"
@@ -107,7 +111,7 @@ apply_platform
 snapshot again
 same_as_expected again "second run of platform/sql changes nothing"
 
-echo "== 4. role matrix, all seven roles"
+echo "== 4. role matrix, all eight roles"
 admin_sql omenix -f "$here/fixtures_up.sql"
 "$here/role_matrix.sh" > "$work/matrix.txt" || { cat "$work/matrix.txt"; echo "FAILED: role matrix" >&2; exit 1; }
 grep '^role matrix:' "$work/matrix.txt"
@@ -211,5 +215,13 @@ grep '^role matrix:' "$work/matrix6.txt"
 echo "ok: large objects (every database) and other databases closed; only the self-change exceptions stay open"
 
 admin_sql omenix -f "$here/fixtures_down.sql"
+
+echo "== 7. the scheduled check (issue #2) alerts on each planted condition, and only then"
+reset
+apply_platform
+X1_SUPERUSER="$superuser" "$here/monitor_test.sh" > "$work/monitor.txt" \
+  || { cat "$work/monitor.txt"; echo "FAILED: scheduled check tests" >&2; exit 1; }
+grep '^ok:' "$work/monitor.txt"
+
 reset
 echo "X1 platform tests: all passed"

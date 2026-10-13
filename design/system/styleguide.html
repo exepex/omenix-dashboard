@@ -64,6 +64,7 @@
   --mb-sidebar-ink: #d7d8e5;         /* 8.8:1 on the sidebar */
   --mb-sidebar-muted: #9fa2b7;       /* 4.9:1 */
   --mb-sidebar-active: linear-gradient(72deg, #5a5ee6 0%, #7a7df0 100%);
+  --mb-brand-tile: linear-gradient(to top right, #5a5ee6, #7a7df0); /* the logo tile (design/brand/), same colours as the active rail item */
   --mb-sidebar-active-shadow: 0 4px 12px rgba(90, 94, 230, .45);
 
   /* ---- Semantic tokens (finance) --------------------------------------------------------
@@ -253,7 +254,7 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 .mb-app { min-height: 100vh; display: grid; grid-template-columns: var(--mb-sidebar-width) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
 .mb-sidebar, .mb-rail { grid-row: 1 / span 2; background: var(--mb-sidebar-bg); color: var(--mb-sidebar-ink); display: flex; flex-direction: column; gap: 2px; padding: var(--mb-space-4) var(--mb-space-3); position: sticky; top: 0; height: 100vh; overflow-y: auto; }
 .mb-sidebar-brand, .mb-rail-brand { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 var(--mb-space-2); margin-bottom: var(--mb-space-4); color: #fff; font: var(--md-sys-typescale-title-medium); letter-spacing: .2px; }
-.mb-sidebar-brand .mb-brand-mark, .mb-rail-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-sidebar-active); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; font: 700 13px/1 var(--md-ref-typeface-plain); color: #fff; flex: none; }
+.mb-sidebar-brand .mb-brand-mark, .mb-rail-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-brand-tile); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; color: #fff; flex: none; }
 .mb-sidebar-brand small { display: block; font: var(--md-sys-typescale-label-small); color: var(--mb-sidebar-muted); letter-spacing: .3px; }
 .mb-sidebar-section { font: var(--md-sys-typescale-label-small); letter-spacing: .08em; text-transform: uppercase; color: var(--mb-sidebar-muted); padding: var(--mb-space-4) var(--mb-space-3) var(--mb-space-1); }
 .mb-nav-item { display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 var(--mb-space-3); border: 0; border-radius: var(--md-sys-shape-corner-small); background: none; color: var(--mb-sidebar-ink); text-decoration: none; cursor: pointer; font: var(--md-sys-typescale-label-large); letter-spacing: var(--md-sys-typescale-label-large-tracking); white-space: nowrap; transition: background var(--md-sys-motion-duration-short); }
@@ -526,7 +527,8 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-appbar { grid-column: 1 / -1; grid-row: 1; position: sticky; top: 0; z-index: 25; height: var(--mb-appbar-height); display: flex; align-items: center; gap: var(--mb-space-3); padding: 0 var(--mb-space-4) 0 0; background: var(--md-sys-color-surface); box-shadow: 0 1px 0 var(--md-sys-color-surface-container-high); }
 .mb-appbar.scrolled { box-shadow: var(--md-sys-elevation-2); }
 .mb-appbar-brand { width: var(--mb-navrail-width); height: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--mb-sidebar-bg); color: #fff; text-decoration: none; flex: none; font: var(--md-sys-typescale-title-medium); }
-.mb-appbar-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-sidebar-active); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; font: 700 13px/1 var(--md-ref-typeface-plain); color: #fff; }
+.mb-appbar-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-brand-tile); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; color: #fff; }
+.mb-brand-mark .mb-logo { width: 72%; height: 72%; display: block; }   /* the logo's own margin inside its tile (design/brand/desktop/tile.svg) */
 .mb-appbar-name { font: 700 18px/1 var(--md-ref-typeface-plain); letter-spacing: -.3px; color: var(--md-sys-color-on-surface); white-space: nowrap; }
 .mb-appbar-name small { display: block; font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); letter-spacing: .2px; margin-top: 3px; }
 .mb-appbar-end { margin-left: auto; display: flex; align-items: center; gap: var(--mb-space-1); flex: none; }
@@ -578,7 +580,8 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-rail-fly a:hover, .mb-rail-fly a:focus-visible { background: var(--md-sys-color-surface-container); }
 .mb-rail-fly a[aria-current="page"] { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font-weight: 600; }
 .mb-rail-fly a small { margin-left: auto; color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-small); }
-.mb-pf.rail-compact { grid-template-columns: var(--mb-navrail-compact) var(--mb-wl-width) minmax(0, 1fr); }
+.mb-pf { --mb-rail-now: var(--mb-navrail-width); }   /* the rail's current width: full, or icons only */
+.mb-pf.rail-compact { --mb-rail-now: var(--mb-navrail-compact); grid-template-columns: var(--mb-navrail-compact) var(--mb-wl-width) minmax(0, 1fr); }
 .mb-pf.rail-compact.wl-off { grid-template-columns: var(--mb-navrail-compact) minmax(0, 1fr); }
 .mb-pf.rail-compact .mb-rail-item, .mb-pf.rail-compact .mb-rail-pin { width: 52px; font-size: 0; gap: 0; }
 .mb-pf.rail-compact .mb-rail-pins-t { font-size: 0; }
@@ -729,9 +732,9 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
   .mb-idx-strip .mb-idx:nth-child(n+3) { display: none; }
 }
 @media (max-width: 1199px) {
-  .mb-pf, .mb-pf.wl-off, .mb-pf.rail-compact { grid-template-columns: var(--mb-navrail-width) minmax(0, 1fr); }
+  .mb-pf, .mb-pf.wl-off, .mb-pf.rail-compact { grid-template-columns: var(--mb-rail-now) minmax(0, 1fr); }
   .mb-pf > .mb-wl { display: none; }
-  .mb-pf.wl-on > .mb-wl { display: flex; position: fixed; left: var(--mb-navrail-width); top: var(--mb-appbar-height); bottom: 0; height: auto; width: var(--mb-wl-width); z-index: 30; box-shadow: var(--md-sys-elevation-3); }
+  .mb-pf.wl-on > .mb-wl { display: flex; position: fixed; left: var(--mb-rail-now); top: var(--mb-appbar-height); bottom: 0; height: auto; width: var(--mb-wl-width); z-index: 30; box-shadow: var(--md-sys-elevation-3); }
   .mb-appbar-name { display: none; }
 }
 @media (max-width: 899px) {
@@ -878,6 +881,13 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 
 @media (max-width: 1199px) { .mb-mband { grid-template-columns: repeat(3, minmax(0, 1fr)); } .mb-mband > :last-child { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--md-sys-color-surface-container-high); } }
 @media (max-width: 899px) { .mb-glance { grid-template-columns: 1fr; } }
+/* tablets (600-899 px): the rail stays, so the two-row app bar keeps the rail's navy column under the brand and the
+   wrapped search starts where the page does, never over the rail (owner, 13 Oct 2026: the search overlapped the side
+   menu). Phones have no rail, so their search keeps the full width. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .mb-appbar { background: linear-gradient(to right, var(--mb-sidebar-bg) var(--mb-rail-now), var(--md-sys-color-surface) var(--mb-rail-now)); }
+  .mb-gsearch { flex-basis: calc(100% - var(--mb-rail-now) - 2 * var(--mb-gutter-desktop)); margin: 0 var(--mb-gutter-desktop) 8px calc(var(--mb-rail-now) + var(--mb-gutter-desktop)); }
+}
 @media (max-width: 599px) {
   .mb-mband > * { padding: 10px 10px; }
   .mb-mband .v { font-size: 15px; }
@@ -1019,6 +1029,16 @@ button.mb-scr-tile { cursor: pointer; } button.mb-scr-tile:hover { border-color:
 ul.mb-flows li { grid-template-columns: 76px minmax(0, 1fr) minmax(0, 1fr); gap: 4px 16px; }
 @media (max-width: 599px) { ul.mb-flows li { grid-template-columns: 1fr; } }
 
+/* ---- stock page (design/mockups/35-stock; PLATFORM_DESIGN.md section 4 screen 4) ---------------------------------
+   .mb-fanbar: an expected price range on one scale shared by its rows: .b80 (80% range), .b50 (50% range, inside it)
+   and .now (today's price); the numbers are always written beside it. */
+.mb-fanbar { position: relative; display: block; width: 100%; min-width: 120px; height: 14px; border-radius: 3px; background: var(--md-sys-color-surface-container); margin: 4px 0 2px; }
+.mb-fanbar i { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
+.mb-fanbar .b80 { background: var(--mb-chart-band-80); }
+.mb-fanbar .b50 { top: 3px; bottom: 3px; background: var(--mb-chart-1); opacity: .55; }
+.mb-fanbar .now { width: 2px; margin-left: -1px; top: -3px; bottom: -3px; background: var(--md-sys-color-on-surface); border-radius: 1px; }
+.mb-fan td small { display: block; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+
 </style>
 <style>
 /* style-guide-only layout */
@@ -1139,12 +1159,14 @@ code{font-family:var(--md-ref-typeface-mono);font-size:.92em;background:var(--md
   <symbol id="ms-verified_user" viewBox="0 -960 960 960"><path d="m438-338 226-226-57-57-169 169-84-84-57 57 141 141Zm42 258q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></symbol>
   <symbol id="ms-view_column" viewBox="0 -960 960 960"><path d="M121-280v-400q0-33 23.5-56.5T201-760h559q33 0 56.5 23.5T840-680v400q0 33-23.5 56.5T760-200H201q-33 0-56.5-23.5T121-280Zm79 0h133v-400H200v400Zm213 0h133v-400H413v400Zm213 0h133v-400H626v400Z"/></symbol>
   <symbol id="ms-warning" viewBox="0 -960 960 960"><path d="m40-120 440-760 440 760H40Zm138-80h604L480-720 178-200Zm302-40q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm-40-120h80v-200h-80v200Zm40-100Z"/></symbol>
+  <!-- Omenix's own logo mark (design/brand/mark/mark-white.svg; stroke follows currentColor). Use: <svg class="mb-logo"><use href="#mb-logo"/></svg>. -->
+  <symbol id="mb-logo" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"><path d="M52.3 29.15 A20.5 20.5 0 1 1 36.96 12.11"/><path d="M21 45 L33 31 L39 36 L57 11"/></g></symbol>
 </svg>
 
 <div id="tip" class="md-tooltip" role="tooltip"></div>
 <div class="mb-app">
   <nav class="mb-rail" aria-label="Sections">
-    <div class="mb-rail-brand" aria-hidden="true">OM</div>
+    <div class="mb-rail-brand" aria-hidden="true"><span class="mb-brand-mark"><svg class="mb-logo" aria-hidden="true"><use href="#mb-logo"/></svg></span></div>
     <a class="mb-nav-item" href="#" aria-current="page"><span class="mb-nav-ind"><svg class="ms"><use href="#ms-home"/></svg></span>Home</a>
     <a class="mb-nav-item coming" href="#" data-tip="Coming: not built yet"><span class="mb-nav-ind"><svg class="ms"><use href="#ms-format_list_bulleted"/></svg></span>Watchlist</a>
     <a class="mb-nav-item coming" href="#" data-tip="Coming: not built yet"><span class="mb-nav-ind"><svg class="ms"><use href="#ms-account_balance_wallet"/></svg></span>Portfolio</a>
@@ -1402,6 +1424,7 @@ code{font-family:var(--md-ref-typeface-mono);font-size:.92em;background:var(--md
           <div class="mb-scr-presets"><span class="lbl">Ready-made screens</span><button class="md-chip filter" type="button" aria-pressed="true">Near 52-week high <span class="n">50</span></button><button class="md-chip filter" type="button" aria-pressed="false">RSI under 30 <span class="n">265</span></button></div>
           <div class="mb-heat"><div class="mb-heat-tile up s1"><span class="n">Nifty Media</span><b>+6.44%</b><small>P/E 42.9</small></div><div class="mb-heat-tile down s1"><span class="n">Nifty IT</span><b>−1.95%</b><small>P/E 17.7</small></div><div class="mb-heat-tile down s3"><span class="n">Nifty Metal</span><b>−10.76%</b><small>P/E 15.7</small></div><div class="mb-heat-tile plain"><span class="n">USD/INR</span><b>96.78</b><small>11 Oct</small></div></div>
           <div style="max-width:420px;display:grid;gap:6px"><span class="mb-flowbar out"><i style="width:28%"></i><span>−₹3,569 cr</span></span><span class="mb-flowbar in"><i style="width:37%"></i><span>+₹4,743 cr</span></span></div>
+          <div style="max-width:320px"><span class="mb-fanbar" role="img" aria-label="Expected range"><i class="b80" style="left:0%;width:100%"></i><i class="b50" style="left:23%;width:49%"></i><i class="now" style="left:52%"></i></span><small class="muted">1,124–1,185 · 1,094–1,217 (50% · 80%)</small></div>
           <div class="mb-scr-wrap" style="max-width:640px"><table class="md-table mb-scr"><thead><tr><th>Stock</th><th class="num">Price</th><th>52-week range</th><th>Our tools</th></tr></thead><tbody><tr><td><div class="nm"><b>RELIANCE</b><span class="mb-tag">F&amp;O</span><span class="mb-tag paper">Ours</span></div><small>Reliance Industries Limited</small></td><td class="num">1,158.90</td><td><span class="mb-pos52"><span class="track"><i style="left:1%"></i></span><small>1%</small></span></td><td><span class="mb-scr-tools"><b>1 of 12 buy</b><small>results in 3 days</small></span></td></tr></tbody></table></div>
         </div>
       </div>

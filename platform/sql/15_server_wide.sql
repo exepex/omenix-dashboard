@@ -3,14 +3,25 @@
 -- large objects are step 12, per database). Run as the server admin connected to "omenix" (apply.sh). Idempotent.
 -- Each revoke is tried only while the right is still open. Where the admin may not change an object (it is not its
 -- owner, e.g. a non-superuser admin and the bootstrap superuser's functions), PostgreSQL refuses or ignores the revoke;
--- that is reported, not fatal. The last query prints what is still open; the role matrix reports it as OPEN. Before revoking anything from PUBLIC on a database, the
--- admin grants itself CONNECT and TEMPORARY there, so it never locks itself out.
+-- that is reported, not fatal. The last query prints what is still open; the role matrix reports it as OPEN. Before
+-- revoking anything from PUBLIC on a database, the admin grants itself CONNECT and TEMPORARY there, so it never locks
+-- itself out. db_monitor (issue #2) gets CONNECT on every database that accepts connections, wherever the admin may
+-- grant it, because it counts large objects in each.
 \set ON_ERROR_STOP 1
 SET client_min_messages = notice;
 DO $$
 DECLARE
   d text;
 BEGIN
+  FOR d IN SELECT datname FROM pg_database WHERE datname <> 'omenix' AND datallowconn ORDER BY datname LOOP
+    BEGIN
+      SET LOCAL client_min_messages = error;
+      EXECUTE format('GRANT CONNECT ON DATABASE %I TO db_monitor', d);
+      SET LOCAL client_min_messages = notice;
+    EXCEPTION WHEN insufficient_privilege THEN
+      RAISE NOTICE 'database %: the admin may not grant db_monitor CONNECT (%)', d, SQLERRM;
+    END;
+  END LOOP;
   FOR d IN
     SELECT datname FROM pg_database
     WHERE datname <> 'omenix' AND datallowconn
