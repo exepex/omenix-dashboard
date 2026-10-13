@@ -16,7 +16,8 @@ design-sync tool read: `design/system/`, `design/mockups/`, `config/warehouse.ya
 the copies are byte-identical to the source at commit `0435bd1`; typecheck, all 303 tests and the production build
 pass.
 
-**Until the cutover** (migration plan phase 6) the live dashboard still deploys from the stock repository's `web/`.
+**Until the cutover** (migration plan phase 6) the live dashboard still deploys from the stock repository's `web/`. The
+public gateway project (`omenix-gateway.vercel.app`) deploys from this repository's `main` since 13 Oct 2026 (owner).
 Changes to the dashboard should be made in only one place at a time; see the migration plan.
 
 ## Layout
@@ -47,17 +48,22 @@ only in Vercel's environment variables, never in this repository.
 
 ### Public pages for Google's OAuth consent screen (Drive uploader)
 
-The dashboard project is behind Vercel Authentication, so Google can only reach the **gateway** project. Steps:
+The dashboard project (`omenix-dashboard.vercel.app`) is behind Vercel Authentication, so Google can only reach the
+**gateway** project, `https://omenix-gateway.vercel.app` (public; on 13 Oct 2026 it still ran a build without these pages).
 
-1. In the gateway project's environment variables set `MB_CONTACT_EMAIL` (the contact shown on the pages) and,
-   for domain verification, `MB_GOOGLE_SITE_VERIFICATION` (the `content` value of Search Console's "HTML tag"
-   method). Both are read when the app is built (the pages are static), so set them **before** deploying.
-2. Deploy the gateway project from this repository's `main` (`web/`). Until the cutover, the production
-   *dashboard* still deploys from the stock repository's frozen `web/` (CLAUDE.md); the gateway pages need only
-   this repository.
-3. In Google Cloud Console (OAuth consent screen, Branding): home page `https://<gateway-host>/`, privacy policy
-   `https://<gateway-host>/privacy`, terms of service `https://<gateway-host>/terms`, authorised domain
-   `<gateway-host>`, app logo `design/brand/google-cloud/oauth-app-logo-120.png`.
-4. Verify the domain in Google Search Console with the HTML-tag method (step 1's variable), then redeploy.
+**Owner's decision first:** deploying the gateway from this repository's `main` also moves its Slack and MCP code here
+before the cutover (a partial cutover). Check that Settings → Git names `exepex/omenix-dashboard` with root `web` and
+that its Slack and MCP environment variables are set. Steps:
+
+1. In Google Search Console add a **URL prefix** property `https://omenix-gateway.vercel.app/`, choose the
+   **HTML tag** method and copy its `content` value. Then, in the gateway project's environment variables, set
+   `MB_GOOGLE_SITE_VERIFICATION` to that value and `MB_CONTACT_EMAIL` to the contact shown on the pages. Both are read
+   when the app is built (the pages are static), so set them **before** deploying.
+2. Deploy the gateway project from this repository's `main` (`web/`; done 13 Oct 2026, owner's decision). The
+   *dashboard* project still deploys from the stock repository's frozen `web/` until the cutover (CLAUDE.md).
+3. In Google Cloud Console (OAuth consent screen, Branding): home page `https://omenix-gateway.vercel.app/`, privacy policy
+   `https://omenix-gateway.vercel.app/privacy`, terms of service `https://omenix-gateway.vercel.app/terms`, authorised domain
+   `omenix-gateway.vercel.app`, app logo `design/brand/google-cloud/oauth-app-logo-120.png`.
+4. Press **Verify** in Search Console (the tag is on the deployed home page), then wait 24 hours before resubmitting.
 
 Text and look: `design/mockups/36-legal` (`data.json`, `build.py`); copied into the app by `web/tools/sync-design.mjs`.

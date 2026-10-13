@@ -29,6 +29,7 @@ Steps 3 and 4 are not rerun with the fixed scripts.
 | `2026-10-13-x1-server.txt` | 4, server settings | before the az firewall-rule fix (`742443d`) |
 | `2026-10-13-x1-restore.txt` | 5, restore test | before the bash 3.2 trap fix (see "Left on the server" below); nothing needed scrubbing |
 | `2026-10-13-x1-protect.txt` | 6, delete lock and alerts | current at the time |
+| `<date>-x1-azure-dbs.txt` | 4b, can `dashboard_app` enter Azure's own databases (issue #3) | **not yet**: runs with the firewall read-back (issue #1) |
 
 ## Per criterion
 

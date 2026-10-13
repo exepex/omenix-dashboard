@@ -1,0 +1,167 @@
+# Block endpoints of the option chain (32-option-chain, story W13). India only: every path is under
+# /api/v1/markets/india/fno/, publisher exepex/trading (fno), not published yet (story TR-CHAIN-proposed).
+/api/v1/markets/india/fno/chain/underlying:
+  get:
+    tags: [blocks]
+    operationId: getChainUnderlying
+    summary: 'NIFTY at the close, its lot and India VIX'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'NSE''s daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool''s way (fno/analytics.py)', freshness: 'daily, after the NSE F&O file', story: TR-CHAIN-proposed, status: planned}
+    x-read-model: 'fno.pages_history page chain_underlying (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); browser private, no-cache + ETag'
+    x-empty: 'never empty on a trading day'
+    x-feeds: [c32.header, c32.mood, c32.nifty]
+    x-shared: 'one record of the day''s index file: the header names its underlying, the NIFTY and mood cards (one "in one look" row) show its closes'
+    responses:
+      '200':
+        description: 'The ChainUnderlying block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ChainUnderlyingResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getChainUnderlying_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/chain/expiries:
+  get:
+    tags: [blocks]
+    operationId: getChainExpiries
+    summary: 'Every NIFTY expiry with its range priced in, position walls, max pain and put-call ratio'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'NSE''s daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool''s way (fno/analytics.py)', freshness: 'daily, after the NSE F&O file', story: TR-CHAIN-proposed, status: planned}
+    x-read-model: 'fno.pages_history page chain_expiries (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); browser private, no-cache + ETag'
+    x-empty: 'never empty on a trading day'
+    x-feeds: [c32.chain-simple, c32.expiries, c32.mood, c32.positions, c32.range]
+    x-shared: 'one summary per expiry: the chip picks it, the range, positions and mood cards show it, the chain marks its ATM strike'
+    responses:
+      '200':
+        description: 'The ChainExpiries block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ChainExpiriesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getChainExpiries_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/chain/rows:
+  get:
+    tags: [blocks]
+    operationId: getChainRows
+    summary: 'One expiry''s calls and puts by strike: close, open interest, volume, IV, Greeks, break-even, chance'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'NSE''s daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool''s way (fno/analytics.py)', freshness: 'daily, after the NSE F&O file', story: TR-CHAIN-proposed, status: planned}
+    x-read-model: 'fno.pages_history page chain_rows:<expiry> (proposed; the route picks the strikes)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); browser private, no-cache + ETag'
+    x-empty: 'an unknown expiry is 404; rows are never empty for a listed expiry'
+    x-feeds: [c32.chain-detailed, c32.chain-greeks, c32.chain-simple, c32.contract, c32.header, c32.iv-chart, c32.oi-chart, c32.strikes, c32.tray]
+    x-shared: 'one table of the expiry''s contracts: the chain shows it, the two charts plot its columns, the contract view and the tray read one of its rows, the header its lot'
+    parameters:
+      - {name: expiry, in: query, required: true, description: An expiry of the expiries block, schema: {type: string, format: date}}
+      - {name: strikes, in: query, description: 'near (21 nearest the money, default), band (within 5%), all (within 10%)', schema: {type: string, enum: [near, band, all], default: near}}
+    responses:
+      '200':
+        description: 'The ChainRows block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ChainRowsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getChainRows_india'}
+              india_weekly_band: {$ref: '#/components/examples/getChainRows_india_weekly_band'}
+              india_all: {$ref: '#/components/examples/getChainRows_india_all'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/chain/history:
+  get:
+    tags: [blocks]
+    operationId: getChainHistory
+    summary: 'Daily NIFTY, India VIX and put-call ratio series, with the coverage of each history-dependent figure'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'NSE''s daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool''s way (fno/analytics.py)', freshness: 'daily, after the NSE F&O file', story: TR-CHAIN-proposed, status: planned}
+    x-read-model: 'fno.pages_history page chain_history (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); browser private, no-cache + ETag'
+    x-empty: 'never empty; a figure the days do not cover is null with its days'
+    x-feeds: [c32.mood, c32.nifty]
+    responses:
+      '200':
+        description: 'The ChainHistory block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ChainHistoryResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getChainHistory_india'}
+              india_short: {$ref: '#/components/examples/getChainHistory_india_short'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/chain/contracts/{code}/history:
+  get:
+    tags: [blocks]
+    operationId: getContractHistory
+    summary: 'One contract''s daily close and open interest since listing, with each period''s coverage'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'NSE''s daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool''s way (fno/analytics.py)', freshness: 'daily, after the NSE F&O file', story: TR-CHAIN-proposed, status: planned}
+    x-read-model: 'fno.pages_history page chain_contract:<code> (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); browser private, no-cache + ETag'
+    x-empty: 'history is kept for every contract NSE lists (owner default, 13 Oct 2026; the mockup kept 21 strikes an expiry); 404 only for a code NSE does not list'
+    x-feeds: [c32.history]
+    parameters:
+      - {name: code, in: path, required: true, description: 'An NSE NIFTY option code, e.g. NIFTY26OCT22350CE', schema: {$ref: '#/components/schemas/InstrumentRef'}}
+    responses:
+      '200':
+        description: 'The ContractHistory block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ContractHistoryResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getContractHistory_india'}
+              india_long: {$ref: '#/components/examples/getContractHistory_india_long'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/chain/sources:
+  get:
+    tags: [blocks]
+    operationId: getChainSources
+    summary: 'Where the chain''s figures come from, the quotes'' status and the F&O books'' state'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'NSE''s daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool''s way (fno/analytics.py)', freshness: 'daily, after the NSE F&O file', story: TR-CHAIN-proposed, status: planned}
+    x-read-model: 'fno.pages_history page chain_sources (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); browser private, no-cache + ETag'
+    x-empty: 'never empty'
+    x-feeds: [c32.buysell, c32.sources]
+    x-shared: 'one status of the 3 pm quotes: the source chip states it, Buy and Sell stay grey while it is not_published'
+    responses:
+      '200':
+        description: 'The ChainSources block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ChainSourcesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getChainSources_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}

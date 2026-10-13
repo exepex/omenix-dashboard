@@ -44,7 +44,9 @@ K5-proposed:
     tools' view of its followed companies (strategy_predictions at N+5, model_scores, features days_to_results), the
     US screener rows and counts of its 20 companies (daily prices; returns, 52-week range, volume ratio and RSI computed
     the screener's way), the US benchmarks and sector funds, world quotes (prices), India's FII/DII and NSDL flows,
-    US Treasury par yields (macro), and the regime record's major_event_names on the session block
+    US Treasury par yields (macro), and the regime record's major_event_names on the session block; also the list of
+    India companies it follows (FollowedCompaniesIndia), which exepex/trading reads. Acceptance: its stored parts pass
+    tools/api/check_stored.py
 TR-NSE-proposed:
   exists: false
   repo: trading
@@ -55,4 +57,21 @@ TR-NSE-proposed:
     publishes one page per block in its P3 publication: the stock rows and their counts per universe, the F&O
     underlyings (nearest monthly future, ATM IV computed its way, build-up, put-call ratio, move priced in) and their
     counts, the broad and sector index rows (with NSE's P/E, P/B, dividend yield) and the Nifty 500 industries.
-    exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story"
+    exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story".
+    The "ours" tag and counts come from the stock tool's FollowedCompaniesIndia list over its own NSE rows. Past closes
+    are adjusted for splits and bonuses from NSE's corporate-actions file before any period change, 52-week range, RSI
+    or 1Y close series is computed. Acceptance: its stored tables and summary pass tools/api/check_stored.py (the tables
+    are built there, not kept as files); and a known split (judge 42): KOTAKBANK's 1Y change on 12 Oct 2026 is about
+    +3 % (5:1 split; NSE closes 2,152.10 on 13 Oct 2025, 443.40 on 12 Oct 2026), not −79 %
+TR-CHAIN-proposed:
+  exists: false
+  repo: trading
+  title: "The NIFTY option chain published by exepex/trading (W13; to be added in exepex/trading)"
+  scope: >-
+    After each NSE session, one page per chain block in the P3 publication, from NSE's daily F&O and index files and
+    the A3 panel: NIFTY's close and India VIX; every expiry with its stats (straddle range, walls, max pain,
+    put-call ratio); each expiry's strikes with their lot (close, change, OI and its change, volume, IV, Greeks, break-even, chance,
+    computed with fno/analytics.py); the NIFTY, VIX and put-call ratio series with coverage; each contract's history;
+    the sources and the 3 pm quotes' status (A4). 32-option-chain/notes.md: "The F&O tool needs a publishing story".
+    Acceptance includes (judge 38): every expiry's computed figures recompute from its full strike set as
+    tools/api/check_chain.py does (range, ATM, straddle, break-evens, put-call ratio, walls, max pain, monthly)

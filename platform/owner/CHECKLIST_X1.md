@@ -80,6 +80,17 @@ objects); whether Azure's admin is allowed to is unknown until this run, and the
       hand the file over, do not edit the README to match.
 - [ ] Commit the evidence file.
 
+## 4b. Exception 2 in practice: can a runtime role enter Azure's own databases? (30 seconds; issue #3)
+
+`pg_hba` rules can name users, so the monitor being refused does not prove it for every role. This tries a real
+connection as `dashboard_app`.
+- [ ] `platform/owner/probe_azure_dbs.sh`: psql asks `dashboard_app`'s password, at a hidden prompt.
+  - The script first checks the password against `omenix`, so a typo cannot pass as a refusal.
+  - It then tries `azure_maintenance` and `azure_sys`, and records each as OPEN (it got in), CLOSED (Azure's access
+    rules refuse it) or UNCLEAR (any other error, which proves nothing).
+- [ ] Pass = a `RESULT:` line. The answer is evidence either way. Commit the evidence file
+      (`<date>-x1-azure-dbs.txt`; IP addresses are already replaced).
+
 ## 5. Criterion 4: backup restore to a scratch server, then delete it (30-60 minutes, about USD 0.03-0.06)
 
 - [ ] Check first that no server called `omenix-pg-x1restore` exists (the script stops if it does).

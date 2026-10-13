@@ -214,7 +214,40 @@ UsScreenerSummaryRule:
   properties: {payload: {properties: {universes: {required: [ours], properties: {all: false, n500: false, fno: false, ours: {properties: {screens: {properties: {delivery: false}}}}}}}}}
 UsScreenerStocksRule:
   description: 'US rows belong only to the stock tool''s companies: no F&O or Nifty 500 tag, and no NSE delivery figure (dl absent, not null)'
-  properties: {payload: {properties: {rows: {items: {properties: {u: {items: {const: ours}}, dl: false}}}}}}
+  properties: {payload: {$ref: '#/components/schemas/UsStockRows'}}
 IndiaScreenerStocksRule:
   description: 'India rows carry NSE''s delivery figure (dl; null when NSE gives none)'
-  properties: {payload: {properties: {rows: {items: {required: [dl]}}}}}
+  properties: {payload: {$ref: '#/components/schemas/IndiaStockRows'}}
+UsStockRows:
+  description: The US rule on a list of stock rows (a served page or a stored table)
+  properties: {rows: {items: {properties: {u: {items: {const: ours}}, dl: false}}}}
+IndiaStockRows:
+  description: The India rule on a list of stock rows (a served page or a stored table)
+  properties: {rows: {items: {required: [dl]}}}
+
+# ---------- W13: the option chain (32), India only ----------
+ChainUnderlyingResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainUnderlying'}}}
+ChainExpiriesResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainExpiries'}}}
+ChainRowsResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainRows'}}}
+    - $ref: '#/components/schemas/MarketCurrency'
+ChainHistoryResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainHistory'}}}
+ContractHistoryResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ContractHistory'}}}
+ChainSourcesResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainSources'}}}

@@ -8,6 +8,8 @@ Everything recorded up to the clock (UTC), from data/<market>/:
 - features, model_scores, ranges, strategy_predictions, cost_views, agent_reasoning: the tools' latest view (the AI
   team's reasoning is copied as written; no model is named: strategies are listed by id, the dashboard names them);
 - trade_checks: the strategies' open paper trades in the company, at the last check;
+- model_market: every company's model chance on the same day and the model version's calibration slope (page honesty:
+  how many companies get the same chance);
 - news_clusters, news_verified, news (headlines), news_claims: the 40 latest stories of the last 30 days with how far each is confirmed;
 - events, earnings_estimates, financials (India) or fundamentals (US), delivery (India), announcements and deals
   (India), holdings (pledges in India, 13F filers in the US), insiders and short_interest (US).
@@ -109,6 +111,21 @@ def company(root, m, t, until):
     return out
 
 
+def model_market(root, m, until):
+    """Every company's model chance on the latest scoring day, per horizon, and the calibration slope of the model
+    version in use (0 means calibration flattens the features: only the base rate and news move the chance)."""
+    scores = records(root, m, "model_scores", until)
+    asof = max((r["as_of_date"] for r in scores), default=None)
+    chances = {}
+    for r in scores:
+        if r["as_of_date"] == asof:
+            chances.setdefault(str(r["horizon_days"]), {})[r["ticker"]] = r["prob_up"]
+    versions = {}
+    for r in sorted(records(root, m, "model_versions", until), key=lambda r: r["fitted_at"]):
+        versions[str(r["horizon_days"])] = {"version": r["id"], "platt_slope": r.get("platt_slope")}
+    return {"as_of_date": asof, "chances": chances, "versions": versions}
+
+
 def day_minus(until, days):
     import datetime as dt
     return (dt.date.fromisoformat(until[:10]) - dt.timedelta(days=days)).isoformat()
@@ -118,7 +135,8 @@ if __name__ == "__main__":
     root, until, india, us = sys.argv[1:5]
     data = {"until": until, "source": "contactexepex/agentic-stock-prediction data/<market>/ (published records)", "markets": {}}
     for m, t in (("india", india), ("us", us)):
-        data["markets"][m] = {"ticker": t, "prices": prices(root, m, [t, BENCH[m]], until), "benchmark": BENCH[m], **company(root, m, t, until)}
+        data["markets"][m] = {"ticker": t, "prices": prices(root, m, [t, BENCH[m]], until), "benchmark": BENCH[m], **company(root, m, t, until),
+                             "model_market": model_market(root, m, until)}
     text = json.dumps(data, indent=1, sort_keys=True, default=str)
     assert not MODEL_WORDS.search(text.replace(".sonnet.", ".").replace(".opus.", ".")), "a model name in the copied text"
     os.makedirs(os.path.dirname(OUT), exist_ok=True)

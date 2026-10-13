@@ -4,7 +4,7 @@
 
 Writes source/nifty_fo.csv.gz (NIFTY futures and options from NSE's daily F&O file, UDiFF format: contracts expiring
 from the day after the last date up to 31 Dec of that year, strikes within 10% of the last close) and source/index.csv
-(NIFTY 50 and India VIX from NSE's daily index file). A day without a file (a holiday) is skipped and printed.
+(NIFTY 50 and India VIX from NSE's daily index file). Days are NSE's sessions (_platform/nse_calendar.py); a session without a file is skipped and printed.
 """
 import csv
 import datetime as dt
@@ -14,6 +14,8 @@ import os
 import sys
 import urllib.request
 import zipfile
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "_platform"))
+from nse_calendar import sessions  # noqa: E402  (NSE's sessions, never weekdays: the 1 Feb 2026 Sunday Budget session)
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "source")
 FO = "https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_{:%Y%m%d}_F_0000.csv.zip"
@@ -27,16 +29,14 @@ def get(url: str) -> bytes:
 
 
 def main(first: str, last: str) -> None:
-    fo, ix, day = [], [], dt.date.fromisoformat(first)
-    while day <= dt.date.fromisoformat(last):
-        if day.weekday() < 5:
-            try:
-                z = zipfile.ZipFile(io.BytesIO(get(FO.format(day))))
-                fo += [r for r in csv.DictReader(io.TextIOWrapper(z.open(z.namelist()[0]), "utf-8")) if r["TckrSymb"] == "NIFTY"]
-                ix += [[day.isoformat(), r[0], r[2], r[3], r[4], r[5], r[7]] for r in csv.reader(io.StringIO(get(IX.format(day)).decode())) if r and r[0] in ("Nifty 50", "India VIX")]
-            except Exception as error:   # holidays have no file
-                print(day, "skipped:", error)
-        day += dt.timedelta(days=1)
+    fo, ix = [], []
+    for day in sessions(dt.date.fromisoformat(first), dt.date.fromisoformat(last)):
+        try:
+            z = zipfile.ZipFile(io.BytesIO(get(FO.format(day))))
+            fo += [r for r in csv.DictReader(io.TextIOWrapper(z.open(z.namelist()[0]), "utf-8")) if r["TckrSymb"] == "NIFTY"]
+            ix += [[day.isoformat(), r[0], r[2], r[3], r[4], r[5], r[7]] for r in csv.reader(io.StringIO(get(IX.format(day)).decode())) if r and r[0] in ("Nifty 50", "India VIX")]
+        except Exception as error:   # a session without a file
+            print(day, "skipped:", error)
     spot = float(next(r["UndrlygPric"] for r in fo if r["TradDt"] == last))
     keep = [r for r in fo if last < r["XpryDt"] <= f"{last[:4]}-12-31" and (not r["OptnTp"] or abs(float(r["StrkPric"]) / spot - 1) <= 0.10)]
     os.makedirs(OUT, exist_ok=True)

@@ -107,7 +107,8 @@ test("gateway mode serves the public pages by GET or HEAD, exact paths only; / i
     for (const method of ["POST", "PUT", "DELETE"]) assert.deepEqual(gatewayDecision(path, method, true), { action: "not_found" }, `${method} ${path}`);
     assert.deepEqual(gatewayDecision(path, "GET", false), { action: "next" }, `dashboard: ${path} as usual`);
   }
-  for (const path of ["/privacy/", "/privacy/x", "/terms.html", "/Privacy", "/x/terms"]) {
+  assert.deepEqual(gatewayDecision("/google293a50223fd80c15.html", "GET", true), { action: "next" }, "Search Console file");
+  for (const path of ["/privacy/", "/privacy/x", "/terms.html", "/Privacy", "/x/terms", "/google123.html", "/x/google293a50223fd80c15.html"]) {
     assert.deepEqual(gatewayDecision(path, "GET", true), { action: "not_found" }, path);
   }
 });

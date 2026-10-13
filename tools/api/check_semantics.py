@@ -49,3 +49,4 @@ def check_flows(found: dict, problems: list[str]) -> None:
         payload = value["payload"]
         if payload["totals"] != flow_totals(payload["days"]):
             problems.append(f"flows example {key}: the period totals are not the covered sums of its days (null when not covered)")
+

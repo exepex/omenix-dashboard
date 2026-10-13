@@ -1,0 +1,62 @@
+# What publishers STORE where it differs from what the dashboard's route serves (W11 follow-ups, 13 Oct 2026): a whole
+# table the route pages (x-stored on the operation), or an input one publisher writes and another reads to build the
+# block (x-inputs). The served schemas (blocks-screener.yaml) stay as they are. tools/api/check_stored.py builds every
+# part from the mockups' data, validates it here, and checks the served examples against it; the publishing stories
+# name it as their acceptance check.
+#   x-stored-by: who writes the part, where, and under which story
+
+FollowedCompaniesIndia:
+  type: object
+  additionalProperties: false
+  description: >-
+    The NSE symbols of the India companies the stock tool follows: the one input it owns for the screener. exepex/trading
+    reads it to tag its NSE rows "ours" and to count the "ours" universe over its own NSE rows (delivery, 52-week range,
+    volume: inputs only NSE's files give). Orchestrator decision, 13 Oct 2026 (judge 40); it replaces the earlier split
+    in which the stock tool stored the counts
+  x-stored-by: {publisher: stock, read_model: 'rm.blocks page_key followed_companies (K5-proposed)', story: K5-proposed, status: planned}
+  required: [as_of, companies]
+  properties:
+    as_of: {type: string, format: date, description: 'The day the list holds from. The counts and tags of a close use the latest list dated on or before that close, never a later one (check_stored: as_of is not after the table''s close)'}
+    companies:
+      type: array
+      minItems: 1
+      uniqueItems: true
+      items: {type: string, pattern: '^[A-Z0-9&-]+$', description: NSE symbol}
+
+ScreenerStocksTable:
+  type: object
+  additionalProperties: false
+  description: >-
+    The whole day's stock table as a publisher stores it: every row (no page), total = the number of rows. The route
+    filters, sorts and pages it into the served ScreenerStocks (page_size at most 100)
+  required: [as_of, currency, total, rows]
+  properties:
+    as_of: {type: string, format: date-time}
+    currency: {$ref: '#/components/schemas/Currency'}
+    total: {type: integer, minimum: 0, description: Equals the number of rows (check_stored)}
+    rows: {type: array, items: {$ref: '#/components/schemas/ScreenerStock'}}
+ScreenerStocksTableIndia:
+  description: India's table, from NSE's files
+  x-stored-by: {publisher: fno, read_model: 'fno.pages_history page screener_stocks (proposed)', story: TR-NSE-proposed, status: planned}
+  allOf:
+    - $ref: '#/components/schemas/ScreenerStocksTable'
+    - {properties: {currency: {const: INR}}}
+    - $ref: '#/components/schemas/IndiaStockRows'
+ScreenerStocksTableUs:
+  description: The US table, the stock tool's 20 companies
+  x-stored-by: {publisher: stock, read_model: 'rm.blocks page_key screener_stocks (K5-proposed)', story: K5-proposed, status: planned}
+  allOf:
+    - $ref: '#/components/schemas/ScreenerStocksTable'
+    - {properties: {currency: {const: USD}}}
+    - $ref: '#/components/schemas/UsStockRows'
+FnoScreenerTable:
+  type: object
+  additionalProperties: false
+  description: Every F&O underlying of the day as exepex/trading stores it (no page); the route pages it into FnoScreenerRows
+  x-stored-by: {publisher: fno, read_model: 'fno.pages_history page fno_screener_rows (proposed)', story: TR-NSE-proposed, status: planned}
+  required: [as_of, currency, total, rows]
+  properties:
+    as_of: {type: string, format: date-time}
+    currency: {type: string, const: INR}
+    total: {type: integer, minimum: 0, description: Equals the number of rows (check_stored)}
+    rows: {type: array, items: {$ref: '#/components/schemas/FnoScreenerRow'}}

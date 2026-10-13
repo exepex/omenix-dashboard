@@ -23,7 +23,13 @@ for entry in $dbs; do
                      FROM unnest(ARRAY['lo_create(oid)', 'lo_creat(integer)', 'lo_from_bytea(oid,bytea)']) AS f
                      WHERE has_function_privilege('public', 'pg_catalog.' || f, 'EXECUTE')), 'none')" 2>/dev/null)"
   if [ -z "$line" ]; then
-    if [ "$public_connect" = t ]; then
+    # Why could this role not connect? A refusal by the server's own access rules (Azure keeps some databases to
+    # itself even where PUBLIC has CONNECT on paper) means plain roles such as the runtime roles cannot reach it
+    # either: exception 2 is closed there in practice (issue #3). Any other error means it could not be counted.
+    why="$(psql -X -A -t -d "$db" -c "SELECT 1" 2>&1 >/dev/null | head -1)"
+    if [ "$public_connect" = t ] && printf '%s' "$why" | grep -qE 'no pg_hba\.conf entry|permission denied for database|not permitted to log in|pg_hba\.conf rejects connection'; then
+      echo "CLOSED  database $db: the server refuses this role at connection, so plain roles cannot reach it"
+    elif [ "$public_connect" = t ]; then
       echo "FAIL  database $db: every role may connect but this role cannot, so its large objects cannot be counted"
       found=1
     else

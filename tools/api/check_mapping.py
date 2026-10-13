@@ -25,7 +25,8 @@ from walk import block_fields, block_operations  # noqa: E402
 NOTES = {"30-shell": bundle.REPO / "design/mockups/30-shell/notes.md",
          "31-dashboard": bundle.REPO / "design/mockups/31-dashboard/notes.md",
          "33-screener": bundle.REPO / "design/mockups/33-screener/notes.md",
-         "34-markets": bundle.REPO / "design/mockups/34-markets/notes.md"}
+         "34-markets": bundle.REPO / "design/mockups/34-markets/notes.md",
+         "32-option-chain": bundle.REPO / "design/mockups/32-option-chain/notes.md"}
 # 33 and 34 hold their contract in one "## Elements" table; their other sections (data, findings, decisions) are prose
 ELEMENTS_TABLE_ONLY = {"33-screener", "34-markets"}
 ELEMENTS = bundle.API / "catalog/elements.yaml"

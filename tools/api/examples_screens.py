@@ -30,7 +30,7 @@ def _same(label, ours, theirs):
         raise ValueError(f"{label}: the screener's rows give {ours}, the Markets mockup shows {theirs}")
 
 
-def _counts(rows, market):
+def counts(rows, market):
     up, down = sum(1 for r in rows if (r["d1"] or 0) > 0), sum(1 for r in rows if (r["d1"] or 0) < 0)
     near = lambda r, k, f: r[k] and (r["p"] >= r[k] * f if k == "h" else r["p"] <= r[k] * f)  # noqa: E731
     return {"n": len(rows), "up": up, "down": down, "flat": len(rows) - up - down,
@@ -46,15 +46,32 @@ def _counts(rows, market):
 
 def screener_summary(x: Screens, market):
     unis = ("all", "n500", "fno", "ours") if market == "india" else ("ours",)
-    out = {u: _counts(x.rows(market, u), market) for u in unis}
+    out = {u: counts(x.rows(market, u), market) for u in unis}
     for u, theirs in x.K["markets"][market]["breadth"].items():
         _same(f"breadth {market} {u}", {k: v for k, v in out[u].items() if k != "screens"}, theirs)
     return {"": ("counts per universe (the Markets breadth equals them)", {"as_of": x.as_of(market), "universes": out})}
 
 
+def _row(r, market):
+    return {k: r[k] for k in ROW_KEYS if k != "dl" or market == "india"}  # dl: NSE only
+
+
 def _page(x, market, rows, total, size=PAGE):
     return {"as_of": x.as_of(market), "currency": "INR" if market == "india" else "USD", "total": total, "page": 1, "page_size": size,
-            "rows": [{k: r[k] for k in ROW_KEYS if k != "dl" or market == "india"} for r in rows[:size]]}  # dl: NSE only
+            "rows": [_row(r, market) for r in rows[:size]]}
+
+
+def followed_india(x: Screens) -> dict:
+    """The stock tool's own input to India's screener: the companies it follows (its published signals)."""
+    return {"as_of": x.C["day"], "companies": sorted(x.C["markets"]["india"]["signals"])}
+
+
+def stored_tables(x: Screens) -> dict:
+    """The paged blocks as their publishers store them: every row of the day, no page."""
+    table = lambda m, rows: {"as_of": x.as_of(m), "currency": "INR" if m == "india" else "USD", "total": len(rows), "rows": rows}  # noqa: E731
+    return {"ScreenerStocksTableIndia": table("india", [_row(r, "india") for r in x.rows("india")]),
+            "ScreenerStocksTableUs": table("us", [_row(r, "us") for r in x.rows("us")]),
+            "FnoScreenerTable": table("india", [{k: r[k] for k in FNO_KEYS} for r in x.C["markets"]["india"]["fno"]])}
 
 
 def screener_stocks(x: Screens, market):
