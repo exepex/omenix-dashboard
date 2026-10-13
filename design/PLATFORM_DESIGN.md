@@ -206,6 +206,6 @@ reasons, go in its `changes.md`.
 |---|---|---|
 | `30-shell` | the app frame (00-shell) | signed off 13 Oct 2026, as of cadf1d2 |
 | `31-dashboard` | Home (01-dashboard) | signed off 13 Oct 2026, as of e8cd360 |
-| `32-option-chain` | NIFTY option chain (06-option-chain), real NSE data | paused, second version with the owner |
+| `32-option-chain` | NIFTY option chain (06-option-chain), real NSE data | signed off 13 Oct 2026, as of 9d9c401 |
 | `33-screener` | Screener (08-screener), real NSE data | signed off 13 Oct 2026, as of e28b43d |
 | `34-markets` | Markets overview (02-markets), real NSE data | signed off 13 Oct 2026, as of 59b606d |

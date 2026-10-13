@@ -1,6 +1,8 @@
 # 32-option-chain: data contract (what every element needs)
 
-**Status: paused** (13 Oct 2026: the screener comes first). Not signed off.
+**Status: signed off 13 Oct 2026 (owner), as of commit 9d9c401.** This is the signed-off API contract for the option
+chain. Change it only for a very solid reason, brought to the owner first (through the orchestrator); record each
+change and its reason in `changes.md` next to it.
 
 **Data source: real NSE data, not examples.** `source/nifty_fo.csv.gz` holds the NIFTY rows of NSE's daily F&O file
 (UDiFF bhavcopy, `BhavCopy_NSE_FO_0_0_0_<YYYYMMDD>_F_0000.csv.zip`) for every trading day from 1 Jun to 12 Oct 2026
