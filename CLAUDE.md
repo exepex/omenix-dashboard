@@ -17,11 +17,13 @@ Sell only (owner, 13 Oct 2026).
   repository's `web/` and `design/` are frozen until the cutover (owner decision (a), 12 Oct 2026) and are removed
   after it (`exepex/trading` `docs/MIGRATION_PLAN.md`).
 - Backends only publish data; this repository only reads it. Never write to a backend repository or its data.
-- Which Vercel project deploys from where (owner, 13 Oct 2026, a partial cutover):
+- Both Vercel projects deploy from **this repository's `main`**, root `web/`, by hand only (owner, 13 Oct 2026):
   - **omenix-gateway** (public, `MB_GATEWAY=1`; `omenix-gateway.vercel.app`: Slack, MCP, the daily brief and the public
-    home, privacy and terms pages) deploys from **this repository's `main`** (`web/`).
-  - **omenix-dashboard** (behind Vercel Authentication; the dashboard) still deploys from the stock repository's `web/`
-    until the cutover. That copy stays frozen, so the two stay identical.
+    home, privacy and terms pages).
+  - **omenix-dashboard** (behind Vercel Authentication, `MB_GATEWAY` unset; the dashboard). It switched its Git source
+    from the stock repository's `web/` to this repository (owner decision for W2; no separate preview project); the
+    switch, its environment variable names and the smoke test are in `docs/W2_OWNER_STEPS.md`. The stock
+    repository's `web/` is no longer deployed and stays frozen until it is removed.
 
 ## How to work with the owner (always; same rules as `exepex/trading`)
 
