@@ -14,7 +14,7 @@ import { sourceName } from "../../lib/ui/sources.ts";
 import { useFrame } from "../frame/frame-context.tsx";
 import { Chg, Num } from "../ui/figures.tsx";
 import { Icon } from "../ui/icon.tsx";
-import { Line } from "./chart.tsx";
+import { ZoomLine } from "./chart.tsx";
 import { Head } from "./nav.tsx";
 
 const L = "en-IN";
@@ -35,8 +35,7 @@ export function Vix({ indices, state }: { indices: OverviewIndices; state: Marke
         {`${above ? "Above" : "Below"} its 3-month middle (`}<span data-derived={at("closes")}>{mid.toLocaleString(L, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
         {`): options ${above ? "cost more" : "cost less"} than usual. Its year: `}<Num value={vix.lo52} src={at("lo52")} locale={L} />{" to "}<Num value={vix.hi52} src={at("hi52")} locale={L} />.
       </p>
-      <Line vals={vals} label={`India VIX, the last ${vals.length - 1} sessions`} height={120} neutral />
-      <div className="axis"><span>{`${vals.length - 1} sessions ago`}</span><span>today</span></div>
+      <ZoomLine vals={vals} label={`India VIX, the last ${vals.length - 1} sessions`} locale={L} height={120} neutral />
     </section>
   );
 }

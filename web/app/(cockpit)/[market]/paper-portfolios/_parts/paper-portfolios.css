@@ -66,9 +66,6 @@
 .p-portfolios .pp-q{font:var(--md-sys-typescale-title-large);margin:40px 0 0;letter-spacing:-.01em}
 .p-portfolios .pp-q small{display:block;font:var(--md-sys-typescale-body-medium);color:var(--md-sys-color-on-surface-variant);margin-top:4px}
 .p-portfolios .ms.ok,.p-portfolios .ok{color:var(--mb-color-up)} .p-portfolios .ms.bad,.p-portfolios .bad{color:var(--mb-color-down)}
-.p-portfolios .pp-info{border:0;background:none;color:var(--md-sys-color-on-surface-variant);cursor:pointer;border-radius:999px;width:32px;height:32px;display:inline-grid;place-items:center;vertical-align:middle;padding:0;flex:none}
-.p-portfolios .pp-info:hover,.p-portfolios .pp-info:focus-visible{background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-primary)}
-.p-portfolios .pp-info .ms{width:18px;height:18px}
 .p-portfolios .pp-side{display:inline-flex;align-items:center;gap:8px;font:600 13px/20px var(--md-ref-typeface-plain);white-space:nowrap}
 .p-portfolios .pp-side i{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
 .p-portfolios .pp-side.rule i{background:var(--mb-chart-1)} .p-portfolios .pp-side.baseline i{background:var(--mb-chart-2)} .p-portfolios .pp-side.ai i{background:var(--mb-chart-3)}
@@ -134,7 +131,7 @@
 .p-portfolios .pp-why-line{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);background:var(--md-sys-color-surface-container-low);border-radius:8px;padding:8px 12px}
 .p-portfolios .pp-why-line>span{flex:1 1 280px} .p-portfolios .pp-why-line>span>.ms{width:16px;height:16px;color:var(--md-sys-color-primary);margin-right:8px;vertical-align:-3px}
 .p-portfolios .pp-note{display:inline-flex;gap:4px;align-items:center;border:0;border-radius:999px;padding:2px 12px;background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container);font:var(--md-sys-typescale-label-medium);cursor:pointer} .p-portfolios .pp-note .ms{width:14px;height:14px}
-.p-portfolios .pp-story{display:inline-flex;align-items:center;font:var(--md-sys-typescale-label-large);color:var(--md-sys-color-primary);text-decoration:none;white-space:nowrap} .p-portfolios .pp-story .ms{width:18px;height:18px}
+.p-portfolios .pp-story{display:inline-flex;align-items:center;font:var(--md-sys-typescale-label-large);color:var(--md-sys-color-primary);white-space:nowrap} .p-portfolios .pp-story .ms{width:18px;height:18px}
 .p-portfolios .pp-i{width:40px;text-align:right} .p-portfolios .pp-more td{padding:8px!important}
 .p-portfolios tbody.pp-row.flag>tr:first-child td{background:var(--mb-color-down-container)}
 .p-portfolios .pp-only-s{display:none}

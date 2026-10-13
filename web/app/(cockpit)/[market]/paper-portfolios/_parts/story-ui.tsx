@@ -12,7 +12,7 @@ export function SideTag({ side, short = false }: { side: Side; short?: boolean }
 /** The ⓘ button: its text shows in the app's tooltip layer on hover, focus or tap. */
 export function InfoTip({ tip, label = "Details" }: { tip: string; label?: string }) {
   return (
-    <button className="pp-info" type="button" data-tip={tip} aria-label={label}>
+    <button className="md-icon-btn small" type="button" data-tip={tip} aria-label={label}>
       <Icon name="info" />
     </button>
   );

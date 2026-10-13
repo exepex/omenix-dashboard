@@ -3,34 +3,23 @@
 // filled = below) with volume, the session being predicted (D) and the N+1..N+5 exit slots where the published
 // strategy's 50% and 80% ranges draw a fan from the last close, its targets as dots on a dashed line, the selected
 // horizon's target as a tag on the price axis, the spread of every strategy's target at that horizon, and the paper
-// trades as triangles (entries below, exits above, hollow = still open). Hover or the arrow keys read each day;
-// Escape clears. Drawn at the container's width, redrawn on resize. Geometry: lib/company-pages/chart-geometry.ts.
-import { useEffect, useMemo, useRef, useState } from "react";
+// trades as triangles (entries below, exits above, hollow = still open). Hover, a tap or the arrow keys read each day
+// with the crosshair; Escape clears. Zoom and pan (W14): the shared chart zoom (components/charts/zoom.tsx); on a phone
+// it opens on the last 30 sessions. Drawn at the container's width, redrawn on resize. Geometry:
+// lib/company-pages/chart-geometry.ts.
+import { useMemo, useRef, useState } from "react";
+import { Crosshair, ZoomBar, useChartZoom } from "../../../../../../components/charts/zoom.tsx";
 import { Card, CardHead, PaperTag } from "../../../../../../components/ui/primitives.tsx";
 import { DASH, fmtDate, fmtDateYear, holdLabel, money, price, signed } from "../../../../../../lib/ui/format.ts";
 import { LOCALE } from "../../../../../../lib/ui/constants.ts";
-import { barAt, chartGeometry } from "../../../../../../lib/company-pages/chart-geometry.ts";
+import { useWidth } from "../../../../../../lib/ui/use-width.ts";
+import { PHONE_SESSIONS, PHONE_WIDTH, barAt, chartGeometry } from "../../../../../../lib/company-pages/chart-geometry.ts";
 import { horizonsOf, publishedRanges, tradeMarks } from "../../../../../../lib/company-pages/company-logic.ts";
 import type { CompanyPayload } from "../../../../../../lib/company-pages/types.ts";
 import type { PageCtx } from "./context.ts";
 import { plural } from "./labels.ts";
 
 const horizonList = (rows: Array<{ horizon_days: number }>) => horizonsOf(rows).map((k) => `N+${k}`).join(", ");
-
-export function useWidth<T extends HTMLElement>(): [React.RefObject<T | null>, number] {
-  const ref = useRef<T>(null);
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const measure = () => setWidth((w) => (Math.abs(w - node.clientWidth) > 2 ? node.clientWidth : w));
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(node);
-    return () => ro.disconnect();
-  }, []);
-  return [ref, width];
-}
 
 function Mark({ x, y, up, cls, tip, count }: { x: number; y: number; up: boolean; cls: string; tip: string; count: number }) {
   return (
@@ -52,9 +41,13 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
   const lastClose = p.bars.length ? p.bars[p.bars.length - 1].close : null;
   const tagText = price(cur, lastClose);
   const tagW = Math.round(tagText.length * 6.6 + 12);
+  const plotRef = useRef<SVGRectElement>(null);
+  const view = useChartZoom(p.bars.length, hostRef, plotRef, width && width < PHONE_WIDTH ? PHONE_SESSIONS : undefined);
+  const { start, end } = view.win;
+  const future = end === p.bars.length;
   const g = useMemo(
-    () => (width ? chartGeometry({ bars: p.bars, width, horizons: p.horizons, horizon, reference, atHorizon, tagWidth: tagW }) : null),
-    [p.bars, p.horizons, width, horizon, reference, atHorizon, tagW],
+    () => (width ? chartGeometry({ bars: p.bars.slice(start, end), width, horizons: p.horizons, horizon, reference, atHorizon, tagWidth: tagW, future }) : null),
+    [p.bars, start, end, future, p.horizons, width, horizon, reference, atHorizon, tagW],
   );
   const marks = useMemo(() => tradeMarks(p.settled, p.open_trades), [p.settled, p.open_trades]);
   const n = p.bars.length;
@@ -63,7 +56,7 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
   const head = (
     <CardHead
       title="Price with today’s targets and ranges"
-      help="Daily candles of the stored sessions (hollow = closed above the open, filled = below). To the right of the last close: the likely closing prices for 1- to 5-day holds (dots on a dashed line), their 50% and 80% ranges as the shaded fan, and at the selected horizon the spread of every strategy’s target (the thin bar). Triangles mark the paper trades: entries below, exits above, hollow = still open. Hover or use the arrow keys for each day’s prices."
+      help="Daily candles of the stored sessions (hollow = closed above the open, filled = below). To the right of the last close: the likely closing prices for 1- to 5-day holds (dots on a dashed line), their 50% and 80% ranges as the shaded fan, and at the selected horizon the spread of every strategy’s target (the thin bar). Triangles mark the paper trades: entries below, exits above, hollow = still open. Hover, tap or use the arrow keys for each day’s prices. Zoom with the buttons, Ctrl + scroll or a pinch; drag to move in time."
       end={n ? (<span className="ctl">{n} sessions to {fmtDate(p.bars[n - 1].date)}<span className="muted">·</span><PaperTag label={p.status.paper_label} /></span>) : undefined}
     />
   );
@@ -103,14 +96,20 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
         tip={`${ts.length} open paper ${plural(ts.length, "trade")} entered ${fmtDate(d)} at ${price(cur, ts[0].entry_price)}: ${horizonList(ts)}; still running.`} />);
     }
     const onKey = (e: React.KeyboardEvent) => {
+      if (view.onKey(e)) return;
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         e.preventDefault();
         setHover((h) => (h === null ? nb - 1 : Math.max(0, Math.min(nb - 1, h + (e.key === "ArrowRight" ? 1 : -1)))));
       } else if (e.key === "Escape" || e.key === "Home") setHover(null);
     };
-    const onMove = (e: React.PointerEvent) => {
+    const read = (e: React.PointerEvent) => {
       const r = svgRef.current?.getBoundingClientRect();
       if (r) setHover(barAt(g, (e.clientX - r.left) * (W / r.width)));
+    };
+    const onMove = (e: React.PointerEvent) => (view.gestures.onPointerMove(e) ? setHover(null) : read(e));
+    const onDown = (e: React.PointerEvent) => {
+      view.gestures.onPointerDown(e);
+      read(e);
     };
     const hb = hover !== null && hover < nb ? bars[hover] : null;
     const prev = hover !== null && hover > 0 ? bars[hover - 1] : null;
@@ -120,7 +119,7 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
     body = (
       <>
         <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" tabIndex={0} onKeyDown={onKey} onBlur={() => setHover(null)}
-          aria-label={`${p.company.name} daily prices, ${nb} sessions, with today’s targets and ranges. Use the left and right arrow keys to read each day.`}>
+          aria-label={`${p.company.name} daily prices, ${nb} sessions shown, with today’s targets and ranges. Use the left and right arrow keys to read each day, plus and minus to zoom, 0 to reset.`}>
           <g className="grid">{g.ticks.map((v) => <line key={v} x1={L} x2={W - R} y1={y(v)} y2={y(v)} />)}</g>
           <g className="vol">{bars.map((b, i) => <rect key={b.date} x={x(i) - bw / 2} y={vy(b.volume ?? 0)} width={bw} height={H - AX - vy(b.volume ?? 0)} />)}</g>
           <line className="vl" x1={x(nb)} x2={x(nb)} y1={T} y2={PB} />
@@ -161,18 +160,21 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
             <text x={x(nb)} y={H - 6} textAnchor="middle">D</text>
             {g.targets.filter((t) => g.labelAll || t.on).map((t) => <text key={t.k} className={t.on ? "on" : undefined} x={t.x} y={H - 6} textAnchor="middle">+{t.k}</text>)}
           </g>
-          <g className="last">
-            <line x1={L} x2={W - R} y1={g.lastY} y2={g.lastY} />
-            <rect x={W - R + 2} y={g.lastY - 9} width={tagW} height={18} rx={4} />
-            <text x={W - R + 2 + tagW / 2} y={g.lastY + 4} textAnchor="middle">{price(cur, last.close)}</text>
-          </g>
+          {future ? (
+            <g className="last">
+              <line x1={L} x2={W - R} y1={g.lastY} y2={g.lastY} />
+              <rect x={W - R + 2} y={g.lastY - 9} width={tagW} height={18} rx={4} />
+              <text x={W - R + 2 + tagW / 2} y={g.lastY + 4} textAnchor="middle">{price(cur, last.close)}</text>
+            </g>
+          ) : null}
           {hb ? (
             <g className="hover">
-              <line x1={x(hover!)} x2={x(hover!)} y1={T} y2={H - AX} />
+              <Crosshair x={x(hover!)} y={y(hb.close)} top={T} bottom={H - AX} left={L} right={W - R} date={fmtDate(hb.date)} value={price(cur, hb.close)} />
               <circle r={4} cx={x(hover!)} cy={y(hb.close)} />
             </g>
           ) : null}
-          <rect className="hit" x={L} y={T} width={W - L - R} height={H - T - AX} onPointerMove={onMove} onPointerLeave={() => setHover(null)} />
+          <rect ref={plotRef} className="hit" x={L} y={T} width={W - L - R} height={H - T - AX} onPointerDown={onDown} onPointerMove={onMove}
+            onPointerUp={view.gestures.onPointerUp} onPointerCancel={view.gestures.onPointerUp} onPointerLeave={(e) => e.pointerType === "mouse" && setHover(null)} />
         </svg>
         <div className={"ctip" + (hb ? " on" : "")} role="status" aria-live="polite"
           style={hb ? { ...(x(hover!) > W * 0.6 ? { right: Math.max(0, W - x(hover!) + 14) } : { left: x(hover!) + 14 }), top: Math.max(0, y(hb.close) - 40) } : undefined}>
@@ -209,7 +211,10 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
   return (
     <Card label="Price chart">
       {head}
-      <div className="chart" ref={hostRef}>{body}</div>
+      <ZoomBar view={view} unit="sessions">
+        {future ? null : <span className="mb-zoom-span">Today’s targets and ranges show when the newest day is in view.</span>}
+      </ZoomBar>
+      <div className={"chart" + (view.moving ? " panning" : "")} data-zoom ref={hostRef}>{body}</div>
       {legend}
     </Card>
   );

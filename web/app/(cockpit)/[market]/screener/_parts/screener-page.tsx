@@ -1,16 +1,13 @@
 // The Screener's layout (story W12): the head with the tabs, then the Stocks tab (at a glance, the screens, which stocks
 // and over which period, the results) or the F&O tab (India only). Each part loads its own blocks (blocks.tsx).
-import { Suspense, type ReactNode } from "react";
+import { Part } from "../../../../../components/blocks/part.tsx";
 import { PicksHiddenHere } from "../../../../../components/frame/picks-hidden.tsx";
 import { StocksBar } from "../../../../../components/screener/stocks-bar.tsx";
-import { LoadingState } from "../../../../../components/ui/states.tsx";
 import type { Market } from "../../../../../lib/data/constants.ts";
 import type { ScreenerState } from "../../../../../lib/screener/state.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
 import { FnoLookBlock, FnoResultsBlock, HeadBlock, ResultsBlock, StocksLookBlock } from "./blocks.tsx";
 import "./screener.css";
-
-const Part = ({ label, children }: { label: string; children: ReactNode }) => <Suspense fallback={<LoadingState label={`Loading ${label}`} cards={1} />}>{children}</Suspense>;
 
 export function ScreenerPage({ market, state }: { market: Market; state: ScreenerState }) {
   const india = market === "india";
@@ -27,8 +24,7 @@ export function ScreenerPage({ market, state }: { market: Market; state: Screene
       ) : (
         <>
           <Part label="today in one look"><StocksLookBlock market={market} state={state} /></Part>
-          <StocksBar state={state} india={india} />
-          <Part label="the results"><ResultsBlock market={market} state={state} /></Part>
+          <Part label="the results" lead={<StocksBar state={state} india={india} />}><ResultsBlock market={market} state={state} /></Part>
         </>
       )}
     </div>

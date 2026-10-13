@@ -6,6 +6,9 @@ function hideTip() { if (!pinned) $('#tip').classList.remove('on'); }
 
 /* ---- global events ------------------------------------------------------------------------------------------ */
 function closeTop() {
+  // Escape closes the rail's open flyout first (W14): its group is shut until the pointer comes back; focus returns to its rail item
+  const grp = document.activeElement && document.activeElement.closest('.mb-rail-grp');
+  if (grp && grp.querySelector('.mb-rail-fly') && !grp.classList.contains('shut')) { grp.classList.add('shut'); grp.querySelector('.mb-rail-item').focus(); return; }
   if (F.menu.classList.contains('on')) return closeMenu();
   if (F.hc.classList.contains('on')) return closeHc();
   if (F.pal.classList.contains('on')) return closePal();

@@ -6,11 +6,11 @@
 .mb-news .ni .kind{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);margin-right:6px}
 .mb-news .ni .kind.mkt{color:var(--md-sys-color-primary)}
 .mb-news .ni h3{font-size:14.5px;line-height:1.35;margin:2px 0 3px;font-weight:600}
-.mb-news .ni h3 a{color:inherit;text-decoration:none} .mb-news .ni h3 a:hover,.mb-news .ni h3 a:focus-visible{text-decoration:underline}
+.mb-news .ni h3 a{color:inherit}
 .mb-news .ni .sum{font-size:13px;line-height:1.5;color:var(--md-sys-color-on-surface-variant);margin:0 0 4px}
 .mb-news .ni .meta{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
 .mb-news .ni .meta .tk{display:inline-block}
-.mb-news .ni .go{display:inline-flex;align-items:center;gap:3px;font-weight:600;color:var(--md-sys-color-primary);text-decoration:none;white-space:nowrap}
+.mb-news .ni .go{display:inline-flex;align-items:center;gap:3px;font-weight:600;color:var(--md-sys-color-primary);white-space:nowrap}
 .mb-news .ni .go:hover,.mb-news .ni .go:focus-visible{text-decoration:underline}
 /* the feed */
 .mb-news .feed{display:grid;gap:0}

@@ -5,12 +5,14 @@ import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { stateSearch, type ScreenerState } from "../../lib/screener/state.ts";
 import { Icon } from "../ui/icon.tsx";
+import { useBlockTransition } from "../ui/pending.tsx";
 
-/** Moves to a changed state (scroll kept). */
+/** Moves to a changed state (scroll kept); the block holding the control shows its loader until the view lands (W14). */
 export function useScreenerNav(state: ScreenerState) {
   const router = useRouter();
   const pathname = usePathname();
-  return (change: Partial<ScreenerState>) => router.push(`${pathname}${stateSearch({ ...state, ...change })}`, { scroll: false });
+  const start = useBlockTransition();
+  return (change: Partial<ScreenerState>) => start(() => router.push(`${pathname}${stateSearch({ ...state, ...change })}`, { scroll: false }));
 }
 
 /** A ready-made screen's chip with its count. */

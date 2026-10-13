@@ -1,7 +1,9 @@
 // Geometry of the company page's price chart (design/mockups/03-company/template.html drawChart): candles and volume
 // of the stored sessions, then FUT wider slots for the N+1..N+5 exit sessions where the published ranges' fan
 // (50% and 80% ranges from the last close), its targets and the spread of every strategy's target at the selected
-// horizon are drawn. Pure: the component renders the returned numbers as SVG.
+// horizon are drawn. Pure: the component renders the returned numbers as SVG. The bars are the zoomed window the reader
+// looks at (components/charts/zoom.tsx; on a phone it opens on the last PHONE_SESSIONS); the future slots and the fan
+// are drawn only while the window holds the newest session (`future`), since they start from the last close.
 import { niceTicks } from "../ui/scales.ts";
 import type { RangeRow } from "./company-logic.ts";
 import type { Bar, Prediction } from "./types.ts";
@@ -11,6 +13,7 @@ export interface ChartInput {
   reference: RangeRow[];     // the published ranges (company-logic publishedRanges), one per horizon
   atHorizon: Prediction[];   // every strategy's prediction at the selected horizon with a target
   tagWidth: number;          // width of the last-close tag text, measured by the caller
+  future?: boolean;          // the window holds the newest session: draw the exit slots and the fan (default true)
 }
 
 export interface ChartGeometry {
@@ -32,17 +35,17 @@ const hasRange = (r: RangeRow): r is RangeRow & { lo50: number; hi50: number; lo
   r.lo50 != null && r.hi50 != null && r.lo80 != null && r.hi80 != null && r.target_price != null;
 
 export function chartGeometry(input: ChartInput): ChartGeometry | null {
-  const W = Math.max(280, input.width), phone = W < PHONE_WIDTH;
-  const bars = (phone ? input.bars.slice(-PHONE_SESSIONS) : input.bars).filter(b => b.high != null && b.low != null);
+  const W = Math.max(280, input.width), phone = W < PHONE_WIDTH, future = input.future ?? true;
+  const bars = input.bars.filter(b => b.high != null && b.low != null);
   const n = bars.length;
   if (!n) return null;
   const H = phone ? 300 : 360, L = 6, T = 14, AX = 22, VH = phone ? 36 : 48, PB = H - AX - VH - 8;
   const R = Math.max(phone ? 50 : 62, input.tagWidth + 8);
-  const FS = phone ? 2.4 : 2.2, step = (W - L - R) / (n + FUTURE_SLOTS * FS + 0.5);
+  const FS = phone ? 2.4 : 2.2, step = (W - L - R) / (n + (future ? FUTURE_SLOTS * FS : 0) + 0.5);
   const x = (i: number) => L + (i < n ? (i + 0.5) * step : (n - 0.5) * step + (i - n + 1) * step * FS);
   const bw = Math.max(2, Math.min(12, step * 0.62)), labelAll = step * FS >= 22;
-  const ref = input.horizons.map(k => input.reference.find(r => r.horizon_days === k)).filter((r): r is RangeRow => !!r).filter(hasRange);
-  const at = input.atHorizon.filter(r => r.target_price != null);
+  const ref = !future ? [] : input.horizons.map(k => input.reference.find(r => r.horizon_days === k)).filter((r): r is RangeRow => !!r).filter(hasRange);
+  const at = future ? input.atHorizon.filter(r => r.target_price != null) : [];
   let lo = Math.min(...bars.map(b => b.low)), hi = Math.max(...bars.map(b => b.high));
   for (const r of ref) { lo = Math.min(lo, r.lo80); hi = Math.max(hi, r.hi80); }
   for (const r of at) { lo = Math.min(lo, r.target_price as number); hi = Math.max(hi, r.target_price as number); }
@@ -79,7 +82,10 @@ export function chartGeometry(input: ChartInput): ChartGeometry | null {
     lastMon = mo;
     if (i === 0 && phone) return;
     const label = MON[Number(b.date.slice(5, 7)) - 1] + (i === 0 || b.date.slice(5, 7) === "01" ? " " + b.date.slice(0, 4) : "");
-    monthTicks.push({ i, x: i === 0 ? Math.max(L, x(i) - 4) : x(i), label, anchor: i === 0 ? "start" : "middle" });
+    const at = i === 0 ? Math.max(L, x(i) - 4) : x(i), prev = monthTicks[monthTicks.length - 1];
+    // A zoomed window can start days before a month's turn: the first label then gives way to the next (W14).
+    if (prev && at - prev.x < prev.label.length * 6.6 + 8) monthTicks.pop();
+    monthTicks.push({ i, x: at, label, anchor: i === 0 ? "start" : "middle" });
   });
   const indexOf = new Map(bars.map((b, i) => [b.date, i] as [string, number]));
   return { W, H, L, R, T, AX, PB, phone, bars, step, bw, labelAll, lo, hi, x, y, vy, ticks: niceTicks(lo, hi, 5), lastY, targetTagY,

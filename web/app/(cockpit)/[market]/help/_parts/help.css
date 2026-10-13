@@ -1,6 +1,5 @@
 /* Help page (SPEC section 6 page 12; design/mockups/12-help/template.html): page-local layout only, every colour a token. */
 .toc{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
-.toc a{text-decoration:none}
 .card.help{margin-top:16px}
 .help h2{scroll-margin-top:80px}
 .help p{font-size:14px;line-height:1.6;margin:0 0 10px;max-width:78ch} .help p b,.help p a{display:inline-block}

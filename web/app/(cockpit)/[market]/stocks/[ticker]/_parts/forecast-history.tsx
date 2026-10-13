@@ -14,7 +14,7 @@ import {
 } from "../../../../../../lib/company-pages/history-logic.ts";
 import type { CompanyPayload, HistoryRange, HistoryScore } from "../../../../../../lib/company-pages/types.ts";
 import type { PageCtx } from "./context.ts";
-import { useWidth } from "./price-chart.tsx";
+import { useWidth } from "../../../../../../lib/ui/use-width.ts";
 
 const SHOWN = 6;
 

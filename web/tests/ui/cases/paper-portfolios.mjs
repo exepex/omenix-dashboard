@@ -122,7 +122,7 @@ export const cases = [
       }
       // identical trades of two benchmarks are one line marked ×2, with both strategies named
       if (!(await page.$$eval(".pp-x", (xs) => xs.some((x) => x.textContent === "×2")))) problems.push("no merged ×2 line");
-      const tips = await page.$$eval(".pp-hold .pp-info", (bs) => bs.map((b) => b.getAttribute("data-tip") ?? ""));
+      const tips = await page.$$eval(".pp-hold .md-icon-btn[data-tip]", (bs) => bs.map((b) => b.getAttribute("data-tip") ?? ""));
       if (!tips.some((t) => t.startsWith("Expected: ") && t.includes("Sells at the close of"))) problems.push("row popover words");
       return problems;
     },

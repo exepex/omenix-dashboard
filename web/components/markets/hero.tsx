@@ -9,7 +9,7 @@ import { dateShort } from "../../lib/shell/clock.ts";
 import { sourceName } from "../../lib/ui/sources.ts";
 import { useFrame } from "../frame/frame-context.tsx";
 import { Chg, Num } from "../ui/figures.tsx";
-import { Line, Spark } from "./chart.tsx";
+import { Spark, ZoomLine } from "./chart.tsx";
 import { useMarketsNav } from "./nav.tsx";
 
 const at = (i: number, f: string) => sourceName("indices", `indices[${i}].${f}`);
@@ -35,8 +35,8 @@ function MainCard({ q, i, state, locale }: { q: OverviewQuote; i: number; state:
     <section className="card" aria-label={q.name}>
       <div className="sec-head"><h2>{q.name}</h2><span className="sub">{`close of ${dateShort(`${q.as_of}T10:00:00Z`, shell)} · not live`}</span></div>
       <div className="big"><Num value={q.close} src={at(i, "close")} locale={locale} /><Chg value={q[state.per]} src={at(i, state.per)} /><span className="muted small">{PERIOD_WORDS[state.per]}</span></div>
-      <Line vals={vals} label={`${q.name}, the last ${PERIOD_LABEL[state.per]}`} neutral={isVolatility(q)} />
-      <div className="axis"><span>{`${vals.length - 1} sessions ago`}</span><span data-derived={at(i, "closes")}>{`low ${f(Math.min(...known))} · high ${f(Math.max(...known))}`}</span><span>today</span></div>
+      <ZoomLine vals={vals} label={`${q.name}, the last ${PERIOD_LABEL[state.per]}`} locale={locale} neutral={isVolatility(q)}
+        middle={<span data-derived={at(i, "closes")}>{`low ${f(Math.min(...known))} · high ${f(Math.max(...known))}`}</span>} />
       <div className="mb-pos52" style={{ marginTop: 10 }} role="img" aria-label={`${p}% of the way from the 52-week low to the high`}>
         <small>52-week low <Num value={q.lo52} src={at(i, "lo52")} locale={locale} /></small>
         <span className="track"><i style={{ left: `${p ?? 0}%` }} /></span>

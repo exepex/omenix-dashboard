@@ -6,22 +6,10 @@ import type { ReactNode } from "react";
 import type { ApiState } from "../../lib/ui/use-api.ts";
 import type { Envelope, Problem } from "../../lib/ui/types.ts";
 import { Icon } from "./icon.tsx";
+import { LoadingState } from "./loading.tsx";
 
-/** A loading placeholder: grey card shapes, announced politely to screen readers. */
-export function LoadingState({ label = "Loading the page data", cards = 3 }: { label?: string; cards?: number }) {
-  return (
-    <div className="mb-state loading" role="status" aria-live="polite" aria-busy="true">
-      <span className="mb-sr">{label}…</span>
-      {Array.from({ length: cards }, (_, i) => (
-        <div key={i} className="card mb-skeleton" aria-hidden="true">
-          <div className="mb-skeleton-line w40" />
-          <div className="mb-skeleton-line" />
-          <div className="mb-skeleton-line w70" />
-        </div>
-      ))}
-    </div>
-  );
-}
+// The loading state lives with the other loaders (loading.tsx, W14); pages keep importing it from here.
+export { LoadingState };
 
 const PLAIN: Record<number, string> = {
   0: "The data service did not answer.",

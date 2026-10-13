@@ -1,17 +1,14 @@
 // The Markets overview's layout (story W12), in the order a reader asks: what did the market do, was the move broad and
 // which sectors led, who moved and what big investors did, how nervous is it (India) or what rates say (US), the world
 // and what is coming. Each part loads its own blocks (blocks.tsx).
-import { Suspense, type ReactNode } from "react";
+import { Part } from "../../../../../components/blocks/part.tsx";
 import { PicksHiddenHere } from "../../../../../components/frame/picks-hidden.tsx";
 import { MarketsSources } from "../../../../../components/markets/markets-head.tsx";
-import { LoadingState } from "../../../../../components/ui/states.tsx";
 import type { Market } from "../../../../../lib/data/constants.ts";
 import type { MarketsState } from "../../../../../lib/overview/state.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
 import { BreadthSectorsBlock, HeadBlock, HeroBlock, MoversFlowsBlock, VolRatesBlock, WorldEventsBlock } from "./blocks.tsx";
 import "./markets.css";
-
-const Part = ({ label, children }: { label: string; children: ReactNode }) => <Suspense fallback={<LoadingState label={`Loading ${label}`} cards={1} />}>{children}</Suspense>;
 
 export function MarketsPage({ market, state }: { market: Market; state: MarketsState }) {
   return (

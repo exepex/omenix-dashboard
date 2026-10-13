@@ -8,7 +8,7 @@
 .mb-watchlist .wl .ag .mb-agbar i{display:block;height:100%}
 .mb-watchlist .wl .ot b{font-weight:600} .mb-watchlist .wl .ot small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12px}
 .mb-watchlist .wl .open{text-align:right} .mb-watchlist .wl .open a{display:inline-flex;align-items:center;gap:2px;font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap}
-.mb-watchlist .wl th .sort{all:unset;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:2px;font:inherit;color:inherit;border-radius:4px} .mb-watchlist .wl th .sort:hover{color:var(--md-sys-color-on-surface)} .mb-watchlist .wl th .sort:focus-visible{outline:2px solid var(--md-sys-color-primary);outline-offset:2px} .mb-watchlist .wl th .ms{width:14px;height:14px;vertical-align:-2px}
+.mb-watchlist .wl th .sort{all:unset;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:2px;font:inherit;color:inherit;border-radius:4px;text-decoration:underline dotted;text-underline-offset:3px} .mb-watchlist .wl th .sort:hover{color:var(--md-sys-color-on-surface)} .mb-watchlist .wl th .sort:focus-visible{outline:2px solid var(--md-sys-color-primary);outline-offset:2px} .mb-watchlist .wl th .ms{width:14px;height:14px;vertical-align:-2px}
 .mb-watchlist .wl th .sep{color:var(--md-sys-color-outline-variant);margin:0 4px}
 .mb-watchlist .wl tr.row:hover td{background:color-mix(in srgb, var(--md-sys-color-primary) 4%, transparent)}
 .mb-watchlist .wl tr.row td{cursor:pointer}

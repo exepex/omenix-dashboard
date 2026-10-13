@@ -1,12 +1,15 @@
 "use client";
 // The navigation rail (story W8; 30-shell "Navigation rail, flyouts, pinned"): groups with their screens in a flyout on
 // hover or focus, the current group marked, pinned screens below. India-only screens are absent in the US. A screen
-// the app does not have yet says so ("soon"), as in the mockup.
+// the app does not have yet says so ("soon"), as in the mockup. A flyout closes on a move to another screen, on Escape
+// and on a click elsewhere (use-flyouts.ts, W14).
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 import { SOON, currentGroup, currentScreen, navGroups, pins, screenHref, type NavGroup, type NavScreen } from "../../lib/shell/nav.ts";
 import { Icon } from "../ui/icon.tsx";
 import { useFrame } from "./frame-context.tsx";
+import { useFlyouts, type Flyouts } from "./use-flyouts.ts";
 
 function ScreenLink({ s }: { s: NavScreen }) {
   const { market, go } = useFrame();
@@ -23,8 +26,19 @@ function ScreenLink({ s }: { s: NavScreen }) {
       </Link>
     );
   }
+  // A screen not built yet is visible and disabled (W14): no address, no action, out of the Tab order; the reason is its
+  // tooltip and the "soon" beside it.
+  if (soon) {
+    return (
+      <a role="menuitem" aria-disabled="true" tabIndex={-1} data-tip={SOON}>
+        <Icon name={s.icon} />
+        {s.label}
+        {extra}
+      </a>
+    );
+  }
   return (
-    <a href="#" role="menuitem" aria-disabled={soon ? "true" : undefined} data-tip={soon ? SOON : undefined} onClick={(e) => { e.preventDefault(); go(s); }}>
+    <a href="#" role="menuitem" onClick={(e) => { e.preventDefault(); go(s); }}>
       <Icon name={s.icon} />
       {s.label}
       {extra}
@@ -32,7 +46,7 @@ function ScreenLink({ s }: { s: NavScreen }) {
   );
 }
 
-function Group({ g }: { g: NavGroup }) {
+function Group({ g, fly }: { g: NavGroup; fly: Flyouts }) {
   const { market, go } = useFrame();
   const pathname = usePathname() ?? "";
   const first = g.items.find((i) => i.page) ?? g.items[0];
@@ -48,7 +62,7 @@ function Group({ g }: { g: NavGroup }) {
   const current = currentGroup(pathname) === g.id ? "page" : undefined;
   const popup = g.items.length > 1 ? "menu" : undefined;
   return (
-    <div className="mb-rail-grp">
+    <div className={fly.isShut(g.id) ? "mb-rail-grp shut" : "mb-rail-grp"} onPointerEnter={() => fly.reopen(g.id)} onFocus={(e) => fly.onFocusGroup(g.id, e)} onKeyDown={(e) => fly.onKeyGroup(g.id, e)}>
       {href ? (
         <Link className="mb-rail-item" href={href} aria-current={current} aria-haspopup={popup}>
           {inner}
@@ -73,9 +87,12 @@ function Group({ g }: { g: NavGroup }) {
 export function NavRail() {
   const { shell, go } = useFrame();
   const pinned = pins(shell.fno);
+  const groups = useMemo(() => navGroups(shell.fno), [shell.fno]);
+  const ids = useMemo(() => groups.flatMap((g) => (g ? [g.id] : [])), [groups]);
+  const fly = useFlyouts(ids);
   return (
     <nav className="mb-navrail" aria-label="Screens">
-      {navGroups(shell.fno).map((g, i) => (g ? <Group key={g.id} g={g} /> : <div key={`sep${i}`} className="mb-rail-sep" role="separator" />))}
+      {groups.map((g, i) => (g ? <Group key={g.id} g={g} fly={fly} /> : <div key={`sep${i}`} className="mb-rail-sep" role="separator" />))}
       {pinned.length ? (
         <>
           <div className="mb-rail-sep" role="separator" />

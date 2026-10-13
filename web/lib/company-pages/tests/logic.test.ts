@@ -64,7 +64,7 @@ test("the next company event is the company's own first event", () => {
   assert.equal(nextCompanyEvent([], "RELIANCE"), null);
 });
 
-test("chart geometry: every bar inside the plot, the fan starts at the last close, phone keeps 30 sessions", () => {
+test("chart geometry: every bar inside the plot, the fan starts at the last close", () => {
   const ref = reliance.predictions.filter((r: { strategy_id: string }) => r.strategy_id === india.reference_strategy);
   const at = reliance.predictions.filter((r: { horizon_days: number }) => r.horizon_days === 1);
   const g = chartGeometry({ bars: reliance.bars, width: 1000, horizons: india.horizons, horizon: 1, reference: ref, atHorizon: at, tagWidth: 60 });
@@ -74,10 +74,22 @@ test("chart geometry: every bar inside the plot, the fan starts at the last clos
   assert.equal(g.targets.filter(t => t.on).length, 1);
   assert.ok(g.spread && g.spread.count === at.filter((r: { target_price: number | null }) => r.target_price != null).length);
   assert.ok(g.x(g.bars.length + 5) < g.W - g.R / 2, "the N+5 slot stays inside the chart, before the tag middle (as the mockup draws it)");
-  const phone = chartGeometry({ bars: reliance.bars, width: 390, horizons: india.horizons, horizon: 1, reference: ref, atHorizon: at, tagWidth: 60 });
-  assert.ok(phone && phone.phone && phone.bars.length === Math.min(30, reliance.bars.length));
+  const phone = chartGeometry({ bars: reliance.bars.slice(-30), width: 390, horizons: india.horizons, horizon: 1, reference: ref, atHorizon: at, tagWidth: 60 });
+  assert.ok(phone && phone.phone && phone.bars.length === Math.min(30, reliance.bars.length), "the phone draws the window it is given");
   assert.equal(barAt(g, -1000), 0);
   assert.equal(barAt(g, 1e6), g.bars.length - 1);
+});
+
+test("chart geometry of a zoomed window without the newest session: no exit slots, no fan, the window fills the plot (W14)", () => {
+  const ref = reliance.predictions.filter((r: { strategy_id: string }) => r.strategy_id === india.reference_strategy);
+  const at = reliance.predictions.filter((r: { horizon_days: number }) => r.horizon_days === 1);
+  const past = reliance.bars.slice(10, 30);
+  const g = chartGeometry({ bars: past, width: 1000, horizons: india.horizons, horizon: 1, reference: ref, atHorizon: at, tagWidth: 60, future: false });
+  assert.ok(g && g.fan80 === null && g.targets.length === 0 && g.spread === null && g.targetTagY === null);
+  assert.ok(g.x(past.length - 1) > g.W - g.R - 2 * g.step, "the last bar of the window reaches the price axis");
+  const lo = Math.min(...past.map((b: { low: number }) => b.low)), hi = Math.max(...past.map((b: { high: number }) => b.high));
+  assert.ok(g.lo <= lo && g.hi >= hi && g.hi - g.lo < (hi - lo) * 1.2, "the price scale fits the window, not the whole history");
+  for (let k = 1; k < g.monthTicks.length; k++) assert.ok(g.monthTicks[k].x - g.monthTicks[k - 1].x >= g.monthTicks[k - 1].label.length * 6.6 + 8, "month labels never overlap");
 });
 
 test("chart geometry without predictions or bars", () => {

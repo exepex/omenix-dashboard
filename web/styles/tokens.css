@@ -202,6 +202,7 @@
   --md-sys-motion-easing-standard: cubic-bezier(.2, 0, 0, 1);
 
   /* ---- Focus ring ----------------------------------------------------------------------- */
+  --mb-loader-delay: 250ms;  /* a loader shows only when an answer takes longer than this (no flicker; W14) */
   --mb-focus-ring: 0 0 0 2px var(--md-sys-color-surface), 0 0 0 4px var(--md-sys-color-primary);
 }
 

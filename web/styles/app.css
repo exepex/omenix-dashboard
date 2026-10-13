@@ -18,11 +18,6 @@
 /* states */
 .mb-state{margin-top:16px}
 .mb-state.loading{display:grid;gap:16px}
-.mb-skeleton{min-height:120px}
-.mb-skeleton-line{height:12px;border-radius:6px;background:var(--md-sys-color-surface-container-high);margin:10px 0;width:100%}
-.mb-skeleton-line.w40{width:40%;height:16px} .mb-skeleton-line.w70{width:70%}
-@media (prefers-reduced-motion: no-preference){ .mb-skeleton-line{animation:mb-pulse 1.4s ease-in-out infinite} }
-@keyframes mb-pulse{50%{opacity:.45}}
 .mb-alert.mb-state .act{white-space:nowrap}
 .mb-state-links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px}
 .mb-state-links a{color:inherit;font-weight:600;display:inline-flex;align-items:center;gap:4px;overflow-wrap:anywhere}
@@ -45,7 +40,7 @@
 .mb-stratlist{display:grid;gap:12px}
 .mb-stratlist ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px;font-size:13px}
 .tbl tr.row{cursor:pointer}
-.md-table th .sort{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:2px;font:inherit}
+.md-table th .sort{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:2px;font:inherit;text-decoration:underline dotted;text-underline-offset:3px}
 .md-table th .sort:focus-visible{box-shadow:var(--mb-focus-ring);border-radius:4px}
 .md-table th .sort .ms{width:14px;height:14px}
 
@@ -99,7 +94,7 @@
 .mb-expected { color: var(--md-sys-color-on-surface-variant); white-space: nowrap; }
 .mb-expected b { font-weight: 600; color: var(--md-sys-color-on-surface); }
 /* The "Technical details" toggle (L5) */
-details.mb-tech > summary { cursor: pointer; color: var(--md-sys-color-on-surface-variant); }
+details.mb-tech > summary { color: var(--md-sys-color-on-surface-variant); }
 details.mb-tech[open] > summary { margin-bottom: var(--mb-space-2); }
 /* A pick's expected-value label is a sentence now (W2): it wraps inside the pick row instead of pushing it wider */
 .pk .gain{min-width:0;max-width:100%}
