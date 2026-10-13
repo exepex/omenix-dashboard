@@ -13,7 +13,8 @@ import { Tk } from "../frame/parts.tsx";
 import { Segmented } from "../ui/controls.tsx";
 import { Chg, Num } from "../ui/figures.tsx";
 import { Icon } from "../ui/icon.tsx";
-import { Head, useMarketsNav } from "./nav.tsx";
+import { SectionHead } from "../blocks/section-head.tsx";
+import { useMarketsNav } from "./nav.tsx";
 
 const L = "en-IN";
 const crore = (x: number) => `${x < 0 ? "−" : "+"}₹${Math.abs(x).toLocaleString(L, { maximumFractionDigits: 0 })} cr`;
@@ -25,7 +26,7 @@ export function Movers({ movers, state, india, locale }: { movers: ScreenerStock
   const at = (i: number, k: string) => sourceName("movers", `rows[${i}].${k}`);
   return (
     <section className="card" aria-label="Movers">
-      <Head title="Who moved most today?" sub={india ? (state.mu === "all" ? "all NSE stocks that usually trade 1,00,000+ shares, priced ₹20+" : "within the Nifty 500") : "our 20 companies"} go={<a className="go" href="#" onClick={(e) => { e.preventDefault(); go("screener"); }}>Screener<Icon name="chevron_right" /></a>} />
+      <SectionHead title="Who moved most today?" sub={india ? (state.mu === "all" ? "all NSE stocks that usually trade 1,00,000+ shares, priced ₹20+" : "within the Nifty 500") : "our 20 companies"} end={<a className="go" href="#" onClick={(e) => { e.preventDefault(); go("screener"); }}>Screener<Icon name="chevron_right" /></a>} />
       <div className="bar" style={{ marginTop: 0 }}>
         <Segmented label="List" options={[{ value: "gainers" as const, label: "Gainers" }, { value: "losers" as const, label: "Losers" }, { value: "active" as const, label: "Most traded" }]} value={state.mov} onChange={(mov) => to({ mov })} light={false} />
         {india ? <Segmented label="From" options={[{ value: "n500" as const, label: "Nifty 500" }, { value: "all" as const, label: "All NSE" }]} value={state.mu} onChange={(mu) => to({ mu })} light={false} /> : null}
@@ -84,7 +85,7 @@ export function FlowsCard({ flows, state }: { flows: Flows; state: MarketsState 
   const days = flows.days.map((d, i) => ({ d, i })).reverse();
   return (
     <section className="card" aria-label="Institutional flows">
-      <Head title="What did big investors do?" sub="net buying (+) or selling (−) in the cash market, ₹ crore" />
+      <SectionHead title="What did big investors do?" sub="net buying (+) or selling (−) in the cash market, ₹ crore" />
       <ul className="list mb-flows">
         {days.map(({ d, i }) => (
           <li key={d.date}>

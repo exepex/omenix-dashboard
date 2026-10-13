@@ -12,8 +12,3 @@ export function useMarketsNav(state: MarketsState) {
   const start = useBlockTransition();
   return (change: Partial<MarketsState>) => start(() => router.push(`${pathname}${marketsSearch({ ...state, ...change })}`, { scroll: false }));
 }
-
-/** A section head: title, what it answers, an optional link. */
-export function Head({ title, sub, go }: { title: string; sub?: string; go?: React.ReactNode }) {
-  return <div className="sec-head"><h2>{title}</h2>{sub ? <span className="sub">{sub}</span> : null}{go}</div>;
-}

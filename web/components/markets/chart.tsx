@@ -33,14 +33,14 @@ const PAD_R = 64, PAD_B = 22, PAD_T = 6;
 
 /** A period's closes drawn at the card's width, with zoom, pan and the crosshair; `middle` sits between the axis ends. */
 export function ZoomLine({ vals, label, locale, height = 160, neutral = false, middle }: { vals: (number | null)[]; label: string; locale: string; height?: number; neutral?: boolean; middle?: ReactNode }) {
-  const [hostRef, width] = useWidth<HTMLDivElement>();
+  const [hostRef, width, host] = useWidth<HTMLDivElement>();
   const plotRef = useRef<SVGRectElement>(null);
-  const view = useChartZoom(vals.length, hostRef, plotRef);
+  const view = useChartZoom(vals.length, host, plotRef);
   const [hover, setHover] = useState<number | null>(null);
   const { start, end } = view.win;
   const shown = useMemo(() => vals.slice(start, end), [vals, start, end]);
   const pts = known(shown);
-  const n = vals.length, W = Math.max(200, width), H = height + PAD_B, right = W - PAD_R;
+  const n = vals.length, W = Math.max(200, width ?? 0), H = height + PAD_B, right = W - PAD_R;
   const fmt = (v: number) => v.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const lo = pts.length ? Math.min(...pts.map((p) => p[1])) : 0, hi = pts.length ? Math.max(...pts.map((p) => p[1])) : 1;
   const x = (i: number) => (i / Math.max(1, shown.length - 1)) * right;

@@ -76,7 +76,7 @@ export function ForecastHistoryCard({ p, ctx, horizon, onHorizon }: { p: Company
   const { ranges, scores } = useMemo(() => historyAt(p.forecast_history, horizon), [p.forecast_history, horizon]);
   const entries = useMemo(() => historyEntries(ranges, scores), [ranges, scores]);
   const anyEvening = hasEvening(ranges, scores);
-  const g = useMemo(() => historyGeometry(ranges, scores, width, offsetMinutes(p.status.session.local_time)), [ranges, scores, width, p.status.session.local_time]);
+  const g = useMemo(() => historyGeometry(ranges, scores, width ?? 0, offsetMinutes(p.status.session.local_time)), [ranges, scores, width, p.status.session.local_time]);
   const head = (
     <CardHead
       title="Forecast history: how each run changed"

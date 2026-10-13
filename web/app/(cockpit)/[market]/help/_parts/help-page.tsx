@@ -30,7 +30,7 @@ import {
   WHY_NO_BUY_SELL_ANCHOR,
   type Family,
 } from "../../../../../lib/ui/constants.ts";
-import { horizonWords, money, moneyDecimals, pct } from "../../../../../lib/ui/format.ts";
+import { horizonWords, money, moneyDecimals } from "../../../../../lib/ui/format.ts";
 import { agreementExample, aiHorizons, goLiveChecks, referenceGoLive, type CompaniesForHelp, type LabForHelp } from "../../../../../lib/ui/help.ts";
 import { pagePath } from "../../../../../lib/ui/routes.ts";
 import { usePage } from "../../../../../lib/ui/use-api.ts";
@@ -122,7 +122,6 @@ function Paper({ market, lab }: { market: Market; lab: LabForHelp | null }) {
 function Horizons({ lab, companies }: { lab: LabForHelp | null; companies: CompaniesForHelp | null }) {
   const horizons = lab?.horizons ?? [1, 2, 3, 4, 5];
   const first = horizons[0], last = horizons[horizons.length - 1];
-  const ref = lab ? lab.strategies[lab.reference_strategy] : null;
   const ex = companies ? agreementExample(companies) : null;
   const cur = lab?.currency ?? "INR";
   return (
@@ -136,7 +135,7 @@ function Horizons({ lab, companies }: { lab: LabForHelp | null; companies: Compa
           <Odds p={0.57} tip="A sample: 57% chance of a rise." />
           <span className="l muted">(sample value)</span>
         </span>
-        . A rule strategy buys only when the chance clears its own bar (the reference strategy’s bar is {ref?.threshold != null ? pct(ref.threshold) : "set per strategy"}); below it, &quot;no trade&quot;.
+        . A strategy buys only when it judges the chance high enough; otherwise it shows &quot;no trade&quot;.
       </p>
       <p>
         The <b>target</b> is the expected exit close. The <b>50% and 80% ranges</b> are where the close is expected to land that often. The range bar draws them around the last close:{" "}
@@ -155,9 +154,9 @@ function Horizons({ lab, companies }: { lab: LabForHelp | null; companies: Compa
 }
 
 const FAMILY_NOTE: Record<Family, string> = {
-  rule: "Fixed rules on the signal model and verified news. Each differs from the reference in exactly one setting, so a difference in results points to that setting.",
+  rule: "Fixed rules that never change after their first live day; their results are compared side by side.",
   baseline: "Yardsticks, not contenders: a strategy must beat the best of them after your cost to go live.",
-  ai: `AI traders that read the day’s evidence and write a probability and a reason of at most ${REASON_MAX_WORDS} words; two see the signal model, two are blind to it.`,
+  ai: `AI traders that write a probability and a reason of at most ${REASON_MAX_WORDS} words for each pick.`,
 };
 
 function Strategies({ market, lab, problem }: { market: Market; lab: LabForHelp | null; problem: ReactNode }) {
@@ -169,12 +168,11 @@ function Strategies({ market, lab, problem }: { market: Market; lab: LabForHelp 
     );
   }
   const all = Object.values(lab.strategies);
-  const ref = lab.reference_strategy;
   const lab_ = pagePath(market, "lab");
   return (
     <HelpCard id="strategies" title="The strategies">
       <p>
-        {all.length} strategies, in three families, predict or abstain for every active company every session (the AI traders at {aiHorizons(lab.strategies).map((k) => `N+${k}`).join(", ")} only). Hover a name for what it does; click it for its page in the Strategy lab.
+        {all.length} strategies, in three families, predict or abstain for every active company every session (the AI traders at {aiHorizons(lab.strategies).map((k) => `N+${k}`).join(", ")} only). Click a name for its results in the Strategy lab. The pages show what each strategy decided and how it did, never how it decides.
       </p>
       <div className="fam">
         {(["rule", "baseline", "ai"] as Family[]).map((f) => {
@@ -192,18 +190,9 @@ function Strategies({ market, lab, problem }: { market: Market; lab: LabForHelp 
               <ul>
                 {list.map((s) => (
                   <li key={s.id}>
-                    <Link className="tk" href={`${lab_}#${encodeURIComponent(s.id)}`} data-tip={s.description}>
+                    <Link className="tk" href={`${lab_}#${encodeURIComponent(s.id)}`}>
                       {s.name}
                     </Link>
-                    <small className="muted">
-                      {s.id === ref
-                        ? "the reference"
-                        : s.differs_in
-                          ? `differs in ${s.differs_in.replace(/_/g, " ")}${s.compared_to && s.compared_to !== ref ? ` from ${lab.strategies[s.compared_to]?.name ?? s.compared_to}` : ""}`
-                          : s.threshold != null
-                            ? `bar ${pct(s.threshold)}`
-                            : "no probability"}
-                    </small>
                   </li>
                 ))}
               </ul>

@@ -4,11 +4,6 @@
 :where(.markets) .bar .grow{flex:1 1 auto}
 :where(.markets) .bar .md-segmented,:where(.markets) .card .md-segmented{flex-wrap:wrap;max-width:100%}
 :where(.markets) .sec{margin-top:22px}
-:where(.markets) .sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
-:where(.markets) .sec-head h2{font:600 17px/1.3 var(--md-ref-typeface-plain);margin:0}
-:where(.markets) .sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 240px}
-:where(.markets) .sec-head .go{margin-left:auto;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px;white-space:nowrap}
-:where(.markets) .sec-head .go .ms{width:16px;height:16px}
 :where(.markets) .hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}
 :where(.markets) .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 :where(.markets) .big{font:700 28px/1.15 var(--md-ref-typeface-plain);font-variant-numeric:tabular-nums;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}

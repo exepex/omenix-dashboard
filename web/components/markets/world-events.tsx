@@ -12,7 +12,7 @@ import { useFrame } from "../frame/frame-context.tsx";
 import { Tk } from "../frame/parts.tsx";
 import { Chg, Num } from "../ui/figures.tsx";
 import { Icon } from "../ui/icon.tsx";
-import { Head } from "./nav.tsx";
+import { SectionHead } from "../blocks/section-head.tsx";
 
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -22,7 +22,7 @@ export function WorldCard({ world, state, india, locale }: { world: World; state
   const at = (i: number, f: string) => sourceName("world", `quotes[${i}].${f}`);
   return (
     <section className="card" aria-label="World">
-      <Head title={india ? "World cues, currency and commodities" : "World, currencies and commodities"} sub="each at its own last close" />
+      <SectionHead title={india ? "World cues, currency and commodities" : "World, currencies and commodities"} sub="each at its own last close" />
       <div className="mb-heat">
         {world.quotes.map((w, i) => (
           <div key={w.name} className="mb-heat-tile plain" data-tip={`${w.name}: close on ${day(w.as_of)}`}>
@@ -41,7 +41,7 @@ export function EventsCard({ events, missing, india }: { events: Events; missing
   const { shell, item } = useFrame();
   return (
     <section className="card" aria-label="Coming up">
-      <Head title="What is coming?" sub={india ? "results, dividends and NIFTY expiries" : "results, dividends, filings and the economy"} />
+      <SectionHead title="What is coming?" sub={india ? "results, dividends and NIFTY expiries" : "results, dividends, filings and the economy"} />
       <ul className="list ev">
         {events.events.slice(0, 12).map((e, i) => {
           const d = new Date(`${e.date}T00:00:00Z`);

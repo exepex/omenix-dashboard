@@ -210,6 +210,7 @@
   --md-sys-motion-easing-standard: cubic-bezier(.2, 0, 0, 1);
 
   /* ---- Focus ring ----------------------------------------------------------------------- */
+  --mb-loader-delay: 250ms;  /* a loader shows only when an answer takes longer than this (no flicker; W14) */
   --mb-focus-ring: 0 0 0 2px var(--md-sys-color-surface), 0 0 0 4px var(--md-sys-color-primary);
 }
 
@@ -425,7 +426,10 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; background: var(--md-sys-color-surface-container-low); color: var(--md-sys-color-on-surface); -webkit-text-size-adjust: 100%; }
 body { font: var(--md-sys-typescale-body-medium); letter-spacing: var(--md-sys-typescale-body-medium-tracking); font-family: var(--md-ref-typeface-plain); }
-a { color: var(--md-sys-color-primary); }
+a { color: var(--md-sys-color-primary); text-decoration-thickness: 1px; text-underline-offset: 2px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+a:hover { text-decoration-color: currentColor; }
+summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+summary:hover { text-decoration-color: currentColor; }
 button { font: inherit; color: inherit; letter-spacing: inherit; }
 :focus-visible { outline: none; box-shadow: var(--mb-focus-ring); border-radius: var(--md-sys-shape-corner-extra-small); }
 .vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -521,11 +525,10 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 .md-btn.filled { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); box-shadow: 0 2px 6px rgba(90,94,230,.35); }
 .md-btn.tonal { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
 .md-btn.outlined { border: 1px solid var(--md-sys-color-outline-variant); color: var(--md-sys-color-on-surface); background: var(--md-sys-color-surface); }
-.md-btn.text { padding: 0 var(--mb-space-3); }
+.md-btn.text { padding: 0 var(--mb-space-3); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 50%, transparent); }
+.md-btn.text:hover, .md-btn.text:focus-visible { text-decoration-color: currentColor; }
 .md-btn.small { height: 32px; padding: 0 var(--mb-space-3); font: var(--md-sys-typescale-label-medium); }
-.md-btn:disabled, .md-btn[aria-disabled="true"] { cursor: not-allowed; color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent); background: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent); border-color: transparent; box-shadow: none; }
-.md-btn.text:disabled { background: transparent; }
-.md-icon-btn { width: 40px; height: 40px; border-radius: var(--md-sys-shape-corner-full); border: 0; background: transparent; color: var(--md-sys-color-on-surface-variant); display: inline-grid; place-items: center; cursor: pointer; position: relative; padding: 0; }
+.md-icon-btn { width: 40px; height: 40px; border-radius: var(--md-sys-shape-corner-full); border: 1px solid var(--md-sys-color-outline-variant); background: transparent; color: var(--md-sys-color-on-surface-variant); display: inline-grid; place-items: center; cursor: pointer; position: relative; padding: 0; }
 .md-icon-btn .ms { width: 24px; height: 24px; }
 .md-icon-btn::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0; }
 .md-icon-btn:hover::before { opacity: var(--md-sys-state-hover-opacity); }
@@ -546,10 +549,10 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 .md-segmented.light > [aria-pressed="true"] { background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); box-shadow: var(--mb-card-shadow); }
 
 /* ---- Chips ---------------------------------------------------------------------------- */
-.md-chip { display: inline-flex; align-items: center; gap: var(--mb-space-2); height: 30px; padding: 0 var(--mb-space-3); border-radius: var(--md-sys-shape-corner-small); border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-medium); letter-spacing: var(--md-sys-typescale-label-medium-tracking); white-space: nowrap; cursor: default; }
+.md-chip { display: inline-flex; align-items: center; gap: var(--mb-space-2); height: 30px; padding: 0 var(--mb-space-3); border-radius: var(--md-sys-shape-corner-small); border: 1px solid transparent; background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-medium); letter-spacing: var(--md-sys-typescale-label-medium-tracking); white-space: nowrap; cursor: default; }
 .md-chip .ms { width: 16px; height: 16px; margin-left: -4px; color: var(--md-sys-color-primary); }
-.md-chip.assist { cursor: pointer; }
-.md-chip.filter { cursor: pointer; }
+button.md-chip, a.md-chip, .md-chip.assist, .md-chip.filter { cursor: pointer; border-color: var(--md-sys-color-outline); background: var(--md-sys-color-surface); text-decoration: none; }
+button.md-chip:hover, a.md-chip:hover, .md-chip.assist:hover, .md-chip.filter:hover { border-color: var(--md-sys-color-primary); }
 .md-chip.filter[aria-pressed="true"] { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-color: transparent; }
 .md-chip.small { height: 24px; padding: 0 var(--mb-space-2); font: var(--md-sys-typescale-label-small); } .md-chip.small .ms { width: 14px; height: 14px; margin-left: -2px; }
 .md-chip .sw { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
@@ -724,7 +727,7 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 3px; border: 1px solid var(--md-sys-color-outline-variant); border-bottom-width: 2px; background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface-variant); font: 600 11px/1 var(--md-ref-typeface-mono); white-space: nowrap; flex: none; }
 /* index strip: name, value, signed change; the as-of time in its tooltip */
 .mb-idx-strip { display: flex; align-items: center; gap: var(--mb-space-1); min-width: 0; overflow: hidden; }
-.mb-idx { display: grid; grid-template-columns: auto auto; gap: 0 8px; align-items: baseline; padding: 4px 10px; border-radius: var(--md-sys-shape-corner-small); text-decoration: none; color: var(--md-sys-color-on-surface); white-space: nowrap; }
+.mb-idx { display: grid; grid-template-columns: auto auto; gap: 0 8px; align-items: baseline; padding: 3px 9px; border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-small); text-decoration: none; color: var(--md-sys-color-on-surface); white-space: nowrap; }
 .mb-idx:hover { background: var(--md-sys-color-surface-container-low); }
 .mb-idx .n { grid-column: 1 / span 2; font: 600 10.5px/14px var(--md-ref-typeface-plain); letter-spacing: .05em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
 .mb-idx .v { font: 600 13.5px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
@@ -803,15 +806,13 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-bs { width: 28px; height: 28px; border: 0; border-radius: 3px; display: inline-grid; place-items: center; font: 800 12.5px/1 var(--md-ref-typeface-plain); cursor: pointer; padding: 0; }
 .mb-bs.buy { background: var(--mb-color-up); color: var(--mb-color-on-up); }
 .mb-bs.sell { background: var(--mb-color-down); color: var(--mb-color-on-down); }
-.mb-bs:disabled { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface-variant); cursor: not-allowed; }
 .md-btn.buy { background: var(--mb-color-up); color: var(--mb-color-on-up); }
 .md-btn.sell { background: var(--mb-color-down); color: var(--mb-color-on-down); }
-/* locked (market closed, or a check fails): plain grey, clearly not clickable; the reason is in the tooltip. Active: Buy green, Sell red */
-.md-btn.buy:disabled, .md-btn.sell:disabled { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface-variant); opacity: 1; box-shadow: none; cursor: not-allowed; }
+/* locked (market closed, or a check fails): the shared disabled look (Interaction section); the reason is in the tooltip. Active: Buy green, Sell red */
 
 /* breadcrumbs, page head (breadcrumb · title · as-of · actions), as-of stamp */
 .mb-crumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 4px; margin: 0; padding: 0; list-style: none; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-crumbs a { color: var(--md-sys-color-on-surface-variant); text-decoration: none; } .mb-crumbs a:hover { color: var(--md-sys-color-primary); text-decoration: underline; }
+.mb-crumbs a { color: var(--md-sys-color-on-surface-variant); } .mb-crumbs a:hover { color: var(--md-sys-color-primary); text-decoration: underline; }
 .mb-crumbs li + li::before { content: "›"; margin-right: 4px; color: var(--md-sys-color-outline); }
 .mb-crumbs [aria-current="page"] { color: var(--md-sys-color-on-surface); font-weight: 600; }
 .mb-pagehead { display: flex; align-items: flex-end; flex-wrap: wrap; gap: var(--mb-space-2) var(--mb-space-4); padding: var(--mb-space-5) 0 var(--mb-space-4); }
@@ -1054,7 +1055,7 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 .mb-apcard-more li.idle { color: var(--md-sys-color-on-surface-variant); }
 .mb-apcard-more p { margin: 6px 0 0; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
 .mb-apcard-count { border-top: 1px solid var(--md-sys-color-surface-container-high); padding-top: 10px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
-.mb-apcard-go { margin-top: auto; display: inline-flex; align-items: center; gap: 2px; font: 600 13px/18px var(--md-ref-typeface-plain); text-decoration: none; }
+.mb-apcard-go { margin-top: auto; display: inline-flex; align-items: center; gap: 2px; font: 600 13px/18px var(--md-ref-typeface-plain); }
 .mb-apcard-go .ms { width: 16px; height: 16px; }
 
 /* basket (multi-leg paper order) legs inside the order window */
@@ -1169,8 +1170,6 @@ button.mb-scr-tile { cursor: pointer; } button.mb-scr-tile:hover { border-color:
 .mb-scr-filters .mb-field > span { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
 .mb-scr-wrap { container-type: inline-size; background: var(--md-sys-color-surface-container-lowest); border-radius: var(--mb-card-radius); box-shadow: var(--mb-card-shadow); }
 .mb-scr th { position: sticky; top: var(--mb-appbar-height); z-index: 2; }
-.mb-scr th button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
-.mb-scr th button:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
 .mb-scr th .ms { width: 14px; height: 14px; }
 .mb-scr td small { display: block; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
 .mb-scr td .nm, .mb-scr-cards .nm { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
@@ -1241,6 +1240,72 @@ body.mb-legal { margin: 0; background: var(--md-sys-color-surface-container-low)
 .mb-legal-doc h1.mb-legal-hero { display: flex; align-items: center; gap: var(--mb-space-4); font: var(--md-sys-typescale-display-small); font-weight: 700; }
 .mb-legal-hero .mb-brand-mark { width: 96px; height: 96px; border-radius: 11px; background: var(--mb-brand-tile); display: grid; place-items: center; color: #fff; flex: none; }
 
+/* ---- Interaction, loading, chart zoom (owner's UI feedback, 13 Oct 2026; story W14) ------------------------------
+   A control looks like one: a button has a fill or a border, a link an underline (or a border when it is drawn as a
+   button); hover and focus strengthen it. A disabled control keeps its border, dashed, on a quiet tile, with the
+   not-allowed cursor: visibly an action that cannot be taken now, never mistaken for a label and never clickable
+   (the app also sets aria-disabled and takes it out of the Tab order; the reason is its tooltip). A plain label
+   (.md-chip span, .mb-label, .mb-tag) has no button border and no pointer cursor. */
+:is(.md-btn, .md-icon-btn, .mb-bs, .md-chip, .mb-idx):is(:disabled, [aria-disabled="true"]) { border: 1px dashed var(--md-sys-color-outline); background: var(--md-sys-color-surface-container-low); color: var(--md-sys-color-on-surface-variant); box-shadow: none; opacity: 1; cursor: not-allowed; text-decoration: none; }
+:is(.md-btn, .md-icon-btn):is(:disabled, [aria-disabled="true"])::before { opacity: 0; }
+.md-segmented > :is(:disabled, [aria-disabled="true"]) { outline: 1px dashed var(--md-sys-color-outline); outline-offset: -3px; }
+a[aria-disabled="true"] { color: var(--md-sys-color-on-surface-variant); text-decoration: underline dashed; text-decoration-color: var(--md-sys-color-outline); cursor: not-allowed; }
+.md-icon-btn:hover, .md-icon-btn:focus-visible, .mb-idx:hover { border-color: var(--md-sys-color-primary); }
+.md-btn.outlined:hover { border-color: var(--md-sys-color-primary); }
+/* Loading. Every loader waits --mb-loader-delay before it shows (.mb-delayed), so a quick answer never flickers. The
+   page loader: a thin bar under the app bar plus grey card shapes (Next.js loading UI on the first load and on every
+   move to another screen). A block's loader: the block stays in place, faded, with a "Loading…" chip on top, only
+   inside the block whose link or button asked for data; the rest of the screen stays usable. */
+@keyframes mb-appear { to { opacity: 1; visibility: visible; } }
+@keyframes mb-spin { to { transform: rotate(360deg); } }
+@keyframes mb-sweep { from { transform: translateX(-100%); } to { transform: translateX(260%); } }
+@keyframes mb-pulse { 50% { opacity: .45; } }
+.mb-delayed { opacity: 0; visibility: hidden; animation: mb-appear 0s linear var(--mb-loader-delay) forwards; }
+.mb-spinner { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid var(--md-sys-color-surface-container-highest); border-top-color: var(--md-sys-color-primary); animation: mb-spin .8s linear infinite; flex: none; }
+.mb-loader-chip { display: inline-flex; align-items: center; gap: var(--mb-space-2); padding: 8px 14px; border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); box-shadow: var(--md-sys-elevation-2); font: var(--md-sys-typescale-label-large); }
+.mb-pageload-bar { position: fixed; left: 0; right: 0; top: var(--mb-appbar-height); z-index: 30; height: 3px; overflow: hidden; background: var(--md-sys-color-primary-container); }
+.mb-pageload-bar::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: var(--md-sys-color-primary); animation: mb-sweep 1.1s ease-in-out infinite; }
+.mb-skeleton { min-height: 120px; }
+.mb-skeleton-line { height: 12px; border-radius: 6px; background: var(--md-sys-color-surface-container-high); margin: 10px 0; width: 100%; }
+.mb-skeleton-line.w40 { width: 40%; height: 16px; } .mb-skeleton-line.w70 { width: 70%; }
+.mb-skeleton-line { animation: mb-pulse 1.4s ease-in-out infinite; }
+.mb-block { position: relative; min-width: 0; }
+.mb-block-veil { position: absolute; inset: 0; z-index: 6; display: grid; justify-items: center; align-content: start; padding-top: min(64px, 25%); border-radius: inherit; background: color-mix(in srgb, var(--md-sys-color-surface) 62%, transparent); }
+.mb-block-veil .mb-loader-chip { position: sticky; top: calc(var(--mb-appbar-height) + var(--mb-space-6)); }
+.mb-block[aria-busy="true"] > :not(.mb-block-veil) { pointer-events: none; }
+/* The navigation rail's flyout closes on a move to another screen, on Escape and on a click elsewhere; it opens again
+   when the pointer comes back or the keyboard moves into the group (the app sets .shut). */
+.mb-rail-grp.shut > .mb-rail-fly { display: none; }
+/* Chart zoom: the toolbar (zoom in, zoom out, reset, with what is shown), the crosshair with its date and price tags. */
+.mb-zoom { display: inline-flex; align-items: center; gap: var(--mb-space-1); flex-wrap: wrap; }
+.mb-zoom .md-icon-btn { width: 30px; height: 30px; border-radius: var(--md-sys-shape-corner-small); }
+.mb-zoom .md-icon-btn .ms { width: 18px; height: 18px; }
+.mb-zoom-span { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); margin-left: var(--mb-space-1); white-space: nowrap; }
+[data-zoom] svg { touch-action: pan-y; }
+[data-zoom] svg .hit { cursor: crosshair; }
+[data-zoom].panning svg .hit { cursor: grabbing; }
+.mb-xhair line { stroke: var(--md-sys-color-on-surface-variant); stroke-width: 1; stroke-dasharray: 3 3; }
+.mb-xhair rect { fill: var(--md-sys-color-inverse-surface); }
+.mb-xhair text { fill: var(--md-sys-color-inverse-on-surface); font: 600 11px/1 var(--md-ref-typeface-plain); }
+@media (prefers-reduced-motion: reduce) {
+  .mb-spinner, .mb-pageload-bar::after, .mb-skeleton-line { animation: none; }
+  .mb-pageload-bar::after { width: 100%; opacity: .5; }
+}
+/* One sortable table header for every table (W14, judge 65: was three page copies): the header's words are the button,
+   with a dotted underline so they read as a control; aria-sort sits on the th. */
+.md-table th .sort, .mb-scr th button { all: unset; cursor: pointer; user-select: none; display: inline-flex; align-items: center; gap: 2px; font: inherit; color: inherit; border-radius: 4px; text-decoration: underline dotted; text-underline-offset: 3px; }
+.md-table th .sort:hover, .mb-scr th button:hover { color: var(--md-sys-color-on-surface); }
+.md-table th .sort:focus-visible, .mb-scr th button:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.md-table th .sort .ms { width: 14px; height: 14px; }
+/* One section head for the pages built of sections (Home, Markets; was two page copies): a title, a line on what it
+   answers, and a "see all" link (.go) at the end; .head .go is the mockups' card-head link of the same look. */
+.sec-head { display: flex; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.sec-head h2 { font: 600 17px/1.3 var(--md-ref-typeface-plain); margin: 0; }
+.sec-head .sub { font-size: 12.5px; color: var(--md-sys-color-on-surface-variant); flex: 1 1 240px; }
+.sec-head .go, .head .go { font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; }
+.sec-head .go { margin-left: auto; }
+.sec-head .go .ms, .head .go .ms { width: 16px; height: 16px; }
+
 </style>
 <style>
 /* Shared page CSS of the design-track mockups (scheme v2 "modern admin light"): cards, card heads, labels, page
@@ -1249,7 +1314,7 @@ body{font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}
 .card{background:var(--md-sys-color-surface-container-lowest);border-radius:var(--mb-card-radius);box-shadow:var(--mb-card-shadow);padding:20px 22px;min-width:0}
 .muted{color:var(--md-sys-color-on-surface-variant)}
 .note{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);margin:12px 0 0;overflow-wrap:anywhere}
-.tk{font-weight:700;color:var(--md-sys-color-primary);text-decoration:none} .tk:hover{text-decoration:underline}
+.tk{font-weight:700;color:var(--md-sys-color-primary)}
 .quiet{font-size:13px;color:var(--md-sys-color-on-surface-variant);padding:12px 14px;border:1px dashed var(--md-sys-color-outline-variant);border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low)}
 .h-lab{font-weight:700;color:var(--md-sys-color-on-primary-container);background:var(--md-sys-color-primary-container);border-radius:6px;padding:1px 7px;font-size:12px;white-space:nowrap}
 .mb-odds svg{width:60px} .mb-odds b{min-width:0}
@@ -1276,8 +1341,6 @@ body{font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}
 .head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .head h2{font:600 16px/1.3 var(--md-ref-typeface-plain);margin:0}
 .head .end{margin-left:auto;display:inline-flex;align-items:center;gap:10px;font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex-wrap:wrap}
-.head .go{font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px;text-decoration:none}
-.head .go .ms{width:16px;height:16px}
 .sub2{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);margin:-8px 0 12px}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 0}
 .toolbar .md-chip.filter{cursor:pointer}
@@ -1315,7 +1378,6 @@ footer{color:var(--md-sys-color-on-surface-variant);font-size:12px;text-align:ce
 <style>
 /* 37-forecasts page layout only; every component is from design/system/components.css. Tokens only. */
 .sec{margin-top:16px}
-.sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
 .sec-head h2{font:600 16px/1.3 var(--md-ref-typeface-plain);margin:0}
 .sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 220px}
 .muted{color:var(--md-sys-color-on-surface-variant)} .small{font-size:12.5px}
@@ -1514,6 +1576,7 @@ table.heat td{min-width:100px}table.heat td,table.heat th{padding:8px 4px}
   <symbol id="ms-receipt_long" viewBox="0 -960 960 960"><path d="M240-80q-50 0-85-35t-35-85v-120h120v-560l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v680q0 50-35 85t-85 35H240Zm480-80q17 0 28.5-11.5T760-200v-560H320v440h360v120q0 17 11.5 28.5T720-160ZM360-600v-80h240v80H360Zm0 120v-80h240v80H360Zm320-120q-17 0-28.5-11.5T640-640q0-17 11.5-28.5T680-680q17 0 28.5 11.5T720-640q0 17-11.5 28.5T680-600Zm0 120q-17 0-28.5-11.5T640-520q0-17 11.5-28.5T680-560q17 0 28.5 11.5T720-520q0 17-11.5 28.5T680-480ZM240-160h360v-80H200v40q0 17 11.5 28.5T240-160Zm-40 0v-80 80Z"/></symbol>
   <symbol id="ms-refresh" viewBox="0 -960 960 960"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></symbol>
   <symbol id="ms-remove" viewBox="0 -960 960 960"><path d="M200-440v-80h560v80H200Z"/></symbol>
+  <symbol id="ms-restart_alt" viewBox="0 -960 960 960"><path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/></symbol>
   <symbol id="ms-rule" viewBox="0 -960 960 960"><path d="m576-160-56-56 104-104-104-104 56-56 104 104 104-104 56 56-104 104 104 104-56 56-104-104-104 104Zm79-360L513-662l56-56 85 85 170-170 56 57-225 226ZM80-280v-80h360v80H80Zm0-320v-80h360v80H80Z"/></symbol>
   <symbol id="ms-schedule" viewBox="0 -960 960 960"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></symbol>
   <symbol id="ms-science" viewBox="0 -960 960 960"><path d="M200-120q-51 0-72.5-45.5T138-250l222-270v-240h-40q-17 0-28.5-11.5T280-800q0-17 11.5-28.5T320-840h320q17 0 28.5 11.5T680-800q0 17-11.5 28.5T640-760h-40v240l222 270q32 39 10.5 84.5T760-120H200Zm0-80h560L520-492v-268h-80v268L200-200Zm280-280Z"/></symbol>
@@ -1536,6 +1599,8 @@ table.heat td{min-width:100px}table.heat td,table.heat th{padding:8px 4px}
   <symbol id="ms-verified_user" viewBox="0 -960 960 960"><path d="m438-338 226-226-57-57-169 169-84-84-57 57 141 141Zm42 258q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></symbol>
   <symbol id="ms-view_column" viewBox="0 -960 960 960"><path d="M121-280v-400q0-33 23.5-56.5T201-760h559q33 0 56.5 23.5T840-680v400q0 33-23.5 56.5T760-200H201q-33 0-56.5-23.5T121-280Zm79 0h133v-400H200v400Zm213 0h133v-400H413v400Zm213 0h133v-400H626v400Z"/></symbol>
   <symbol id="ms-warning" viewBox="0 -960 960 960"><path d="m40-120 440-760 440 760H40Zm138-80h604L480-720 178-200Zm302-40q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm-40-120h80v-200h-80v200Zm40-100Z"/></symbol>
+  <symbol id="ms-zoom_in" viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Zm-40-60v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"/></symbol>
+  <symbol id="ms-zoom_out" viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400ZM280-540v-80h200v80H280Z"/></symbol>
   <!-- Omenix's own logo mark (design/brand/mark/mark-white.svg; stroke follows currentColor). Use: <svg class="mb-logo"><use href="#mb-logo"/></svg>. -->
   <symbol id="mb-logo" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"><path d="M52.3 29.15 A20.5 20.5 0 1 1 36.96 12.11"/><path d="M21 45 L33 31 L39 36 L57 11"/></g></symbol>
 </svg>
@@ -1741,8 +1806,8 @@ function navrail() {
     const first = items.find(i => i.href) || items[0];
     const cur = page.group === g.id;
     const fly = el('div', {class: 'mb-rail-fly' + (st.fly === g.id ? ' on' : ''), role: 'menu', 'aria-label': g.label}, el('div', {class: 't'}, g.label),
-      ...items.map(i => el('a', {href: i.href ? i.href + hashCarry() : '#', role: 'menuitem', 'aria-current': page.screen === i.id ? 'page' : null, 'aria-disabled': !i.href && !i.action ? 'true' : null, 'data-tip': !i.href && !i.action ? SOON : null, onclick: e => { if (!i.href) { e.preventDefault(); go(i.id); } }}, icon(i.icon), i.label, i.key ? el('small', {}, i.key) : !i.href && !i.action ? el('small', {}, 'soon') : null)));
-    nav.append(el('div', {class: 'mb-rail-grp'}, el('a', {class: 'mb-rail-item', href: first.href ? first.href + hashCarry() : '#', 'aria-current': cur ? 'page' : null, 'aria-haspopup': items.length > 1 ? 'menu' : null, onclick: e => { if (!first.href) { e.preventDefault(); go(first.id); } }}, el('span', {class: 'mb-nav-ind'}, icon(g.icon)), el('span', {class: 'mb-nav-label'}, g.label)), items.length > 1 || !first.href ? fly : null));
+      ...items.map(i => el('a', {href: i.href ? i.href + hashCarry() : i.action ? '#' : null, tabindex: !i.href && !i.action ? '-1' : null, role: 'menuitem', 'aria-current': page.screen === i.id ? 'page' : null, 'aria-disabled': !i.href && !i.action ? 'true' : null, 'data-tip': !i.href && !i.action ? SOON : null, onclick: e => { if (!i.href) { e.preventDefault(); if (i.action) go(i.id); } }}, icon(i.icon), i.label, i.key ? el('small', {}, i.key) : !i.href && !i.action ? el('small', {}, 'soon') : null)));
+    nav.append(el('div', {class: 'mb-rail-grp', onpointerenter: e => e.currentTarget.classList.remove('shut')}, el('a', {class: 'mb-rail-item', href: first.href ? first.href + hashCarry() : '#', 'aria-current': cur ? 'page' : null, 'aria-haspopup': items.length > 1 ? 'menu' : null, onclick: e => { if (!first.href) { e.preventDefault(); go(first.id); } }}, el('span', {class: 'mb-nav-ind'}, icon(g.icon)), el('span', {class: 'mb-nav-label'}, g.label)), items.length > 1 || !first.href ? fly : null));
   }
   const pins = PINS.filter(shown);
   if (pins.length) { nav.append(el('div', {class: 'mb-rail-sep', role: 'separator'})); nav.append(el('div', {class: 'mb-rail-pins-t'}, icon('push_pin'), 'Pinned')); for (const p of pins) nav.append(el('a', {class: 'mb-rail-pin', href: '#', 'data-tip': p.label, 'aria-label': p.label, onclick: e => { e.preventDefault(); go(p.screen); }}, icon(p.icon), el('span', {}, p.short))); }
@@ -2136,6 +2201,9 @@ function hideTip() { if (!pinned) $('#tip').classList.remove('on'); }
 
 /* ---- global events ------------------------------------------------------------------------------------------ */
 function closeTop() {
+  // Escape closes the rail's open flyout first (W14): its group is shut until the pointer comes back; focus returns to its rail item
+  const grp = document.activeElement && document.activeElement.closest('.mb-rail-grp');
+  if (grp && grp.querySelector('.mb-rail-fly') && !grp.classList.contains('shut')) { grp.classList.add('shut'); grp.querySelector('.mb-rail-item').focus(); return; }
   if (F.menu.classList.contains('on')) return closeMenu();
   if (F.hc.classList.contains('on')) return closeHc();
   if (F.pal.classList.contains('on')) return closePal();

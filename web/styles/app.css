@@ -40,9 +40,6 @@
 .mb-stratlist{display:grid;gap:12px}
 .mb-stratlist ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px;font-size:13px}
 .tbl tr.row{cursor:pointer}
-.md-table th .sort{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:2px;font:inherit;text-decoration:underline dotted;text-underline-offset:3px}
-.md-table th .sort:focus-visible{box-shadow:var(--mb-focus-ring);border-radius:4px}
-.md-table th .sort .ms{width:14px;height:14px}
 
 /* charts */
 .chart{position:relative}

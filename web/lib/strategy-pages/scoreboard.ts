@@ -72,15 +72,12 @@ export interface ScoreboardRow {
   go_live?: RowGoLive | null;
 }
 
+/** A registry entry as the Strategy lab's API serves it: what the strategy decided and how it did, never how it decides
+ *  (no description, parameters, threshold or compared setting; lib/strategy-pages/public-strategies.ts). */
 export interface Strategy {
   id: string;
   family: Family;
   name: string;
-  description?: string;
-  compared_to?: string | null;
-  differs_in?: string | null;
-  parameters?: Record<string, unknown>;
-  threshold: number | null;
   horizons: number[];
   live_from?: string | null;
   live: boolean;

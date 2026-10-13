@@ -32,7 +32,7 @@ function Mark({ x, y, up, cls, tip, count }: { x: number; y: number; up: boolean
 
 export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCtx; horizon: number }) {
   const cur = ctx.currency;
-  const [hostRef, width] = useWidth<HTMLDivElement>();
+  const [hostRef, width, host] = useWidth<HTMLDivElement>();
   const [hover, setHover] = useState<number | null>(null);
   const reference = useMemo(() => publishedRanges(p), [p]);
   // Horizons whose published range is B17's evening preview (on the day's close, never traded).
@@ -42,7 +42,7 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
   const tagText = price(cur, lastClose);
   const tagW = Math.round(tagText.length * 6.6 + 12);
   const plotRef = useRef<SVGRectElement>(null);
-  const view = useChartZoom(p.bars.length, hostRef, plotRef, width && width < PHONE_WIDTH ? PHONE_SESSIONS : undefined);
+  const view = useChartZoom(p.bars.length, host, plotRef, width && width < PHONE_WIDTH ? PHONE_SESSIONS : undefined);
   const { start, end } = view.win;
   const future = end === p.bars.length;
   const g = useMemo(

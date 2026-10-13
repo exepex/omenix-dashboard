@@ -11,7 +11,8 @@ import { signed } from "../../lib/ui/format.ts";
 import { sourceName } from "../../lib/ui/sources.ts";
 import { Segmented } from "../ui/controls.tsx";
 import { Num } from "../ui/figures.tsx";
-import { Head, useMarketsNav } from "./nav.tsx";
+import { SectionHead } from "../blocks/section-head.tsx";
+import { useMarketsNav } from "./nav.tsx";
 
 function reading(b: UniverseCounts): string | null {
   if (b.n < 100) return null;
@@ -29,7 +30,7 @@ export function Breadth({ summary, state, india, locale }: { summary: ScreenerSu
   const all = summary.universes.all;
   return (
     <section className="card" aria-label="Breadth">
-      <Head title="Is the move broad?" sub={india ? "how many stocks rose or fell today" : "our 20 companies only (no whole-market US file)"} />
+      <SectionHead title="Is the move broad?" sub={india ? "how many stocks rose or fell today" : "our 20 companies only (no whole-market US file)"} />
       {india && all ? <Segmented label="Which stocks" options={[{ value: "all" as const, label: `All NSE (${all.n.toLocaleString(locale)})` }, { value: "n500" as const, label: "Nifty 500" }]} value={state.br} onChange={(br) => to({ br })} light={false} /> : null}
       <div className="big" style={{ marginTop: 12 }}>{n("up")} up · {n("down")} down</div>
       <span className="mb-breadth" role="img" aria-label={`${b.up} up, ${b.flat} unchanged, ${b.down} down`} style={{ margin: "8px 0" }}>
@@ -66,7 +67,7 @@ export function Sectors({ sectors, state, locale }: { sectors: IndiaSectors | Us
   const shown = tiles(sectors, state, locale).sort((a, b) => (b.v ?? -1e9) - (a.v ?? -1e9));
   return (
     <section className="card" aria-label="Sectors">
-      <Head title="Which sectors led?" sub={`change ${PERIOD_WORDS[state.per]}, best first`} />
+      <SectionHead title="Which sectors led?" sub={`change ${PERIOD_WORDS[state.per]}, best first`} />
       {"funds" in sectors ? (
         <span className="muted small">US sector funds (SPDR and others), as the stock tool records them</span>
       ) : (

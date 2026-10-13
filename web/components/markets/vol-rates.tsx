@@ -15,7 +15,7 @@ import { useFrame } from "../frame/frame-context.tsx";
 import { Chg, Num } from "../ui/figures.tsx";
 import { Icon } from "../ui/icon.tsx";
 import { ZoomLine } from "./chart.tsx";
-import { Head } from "./nav.tsx";
+import { SectionHead } from "../blocks/section-head.tsx";
 
 const L = "en-IN";
 
@@ -29,7 +29,7 @@ export function Vix({ indices, state }: { indices: OverviewIndices; state: Marke
   const at = (f: string) => sourceName("indices", `indices[${i}].${f}`);
   return (
     <section className="card" aria-label="India VIX">
-      <Head title="How nervous is the market?" sub="India VIX: the volatility NIFTY options price in for the next 30 days" />
+      <SectionHead title="How nervous is the market?" sub="India VIX: the volatility NIFTY options price in for the next 30 days" />
       <div className="big"><Num value={vix.close} src={at("close")} locale={L} /><Chg value={vix.d1} src={at("d1")} /><span className="muted small">today</span></div>
       <p className="small" style={{ margin: "4px 0 0" }}>
         {`${above ? "Above" : "Below"} its 3-month middle (`}<span data-derived={at("closes")}>{mid.toLocaleString(L, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
@@ -49,7 +49,7 @@ export function IndexOptions({ rows }: { rows: FnoScreenerRows }) {
   const byName = rows.rows.map((r, i) => ({ r, i })).sort((a, b) => a.r.s.localeCompare(b.r.s));
   return (
     <section className="card" aria-label="Index options">
-      <Head title="What do index options say?" sub={expiry ? `nearest monthly expiry, ${dateShort(`${expiry}T10:00:00Z`, shell)}` : undefined} go={<a className="go" href="#" onClick={(e) => { e.preventDefault(); snack(`NIFTY option chain: ${SOON}`); }}>NIFTY chain<Icon name="chevron_right" /></a>} />
+      <SectionHead title="What do index options say?" sub={expiry ? `nearest monthly expiry, ${dateShort(`${expiry}T10:00:00Z`, shell)}` : undefined} end={<a className="go" href="#" onClick={(e) => { e.preventDefault(); snack(`NIFTY option chain: ${SOON}`); }}>NIFTY chain<Icon name="chevron_right" /></a>} />
       <ul className="list">
         {byName.map(({ r, i }) => {
           const [, label, toneName, icon] = buildupOf(r.b);
@@ -79,7 +79,7 @@ export function Yields({ rates }: { rates: Rates }) {
   const axis = [0, Math.floor(Y.length / 2), Y.length - 1];
   return (
     <section className="card" aria-label="Treasury yields">
-      <Head title="What do interest rates say?" sub={`US Treasury par yields, ${dateShort(`${Y[0].date}T20:00:00Z`, shell)}`} />
+      <SectionHead title="What do interest rates say?" sub={`US Treasury par yields, ${dateShort(`${Y[0].date}T20:00:00Z`, shell)}`} />
       {i10 >= 0 && i2 >= 0 ? (
         <p className="small" style={{ margin: "0 0 6px" }}>
           10-year <span data-src={at(i10)}>{Y[i10].value}</span>% against 2-year <span data-src={at(i2)}>{Y[i2].value}</span>%: {curveWords(Y[i10].value, Y[i2].value)}.

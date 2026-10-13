@@ -9,7 +9,7 @@ import {
   figure, luckOf, luckScale, luckVerdict, niceTicks, rowsOf, type LuckTest, type ScoreboardRow,
 } from "../scoreboard.ts";
 import {
-  colouredSeries, compactProfit, cumulativeSeries, defaultSelection, fmtParam, heatShares, heatWeeks, kpiPicks,
+  colouredSeries, compactProfit, cumulativeSeries, defaultSelection, heatShares, heatWeeks, kpiPicks,
   ranking, type StrategyLabPayload,
 } from "../strategy-lab.ts";
 import {
@@ -131,12 +131,6 @@ test("cumulative series carry each running total flat between its dates", () => 
   assert.deepEqual(series.find((s) => s.id === "b")!.points, [0, -3, -3]);
   assert.deepEqual(colouredSeries(series, "b", ["b", "a"]), ["b", "a"]);
   assert.equal(cumulativeSeries([line("a", "2026-10-01", 5)], "accuracy", "backtest").dates.length, 0);
-});
-
-test("strategy settings in words", () => {
-  assert.equal(fmtParam(["confirmed_primary", "corroborated"]), "confirmed primary, corroborated");
-  assert.equal(fmtParam(false), "no");
-  assert.equal(fmtParam(0.5), "0.5");
 });
 
 test("track record words and verdict colours", () => {

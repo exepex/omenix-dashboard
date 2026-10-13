@@ -1,0 +1,41 @@
+# Inherited CSS rule blocks copied into more than one file (W14, judge 65). This list may only shrink: a new copy fails
+# web/lib/ui/tests/duplicates.test.ts; when a page is rebuilt, move its copy into design/system/components.css and remove
+# the line. Format: <first 12 hex of sha256 of the sorted declarations> <the files>.
+031fe3c31793 app/(cockpit)/[market]/_home/home.css | app/(cockpit)/[market]/markets/_parts/markets.css
+eac69be8a426 app/(cockpit)/[market]/_home/home.css | app/(cockpit)/[market]/news/_parts/news.css
+77107583b4a9 app/(cockpit)/[market]/assistant/_parts/assistant.css | app/(cockpit)/[market]/track-record/_parts/track-record.css
+9465d5d40cdd app/(cockpit)/[market]/companies/_parts/companies.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+ca05da60b139 app/(cockpit)/[market]/companies/_parts/companies.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+f22386edd56f app/(cockpit)/[market]/companies/_parts/companies.css | app/(cockpit)/[market]/watchlist/_parts/watchlist.css
+5da19f222ea5 app/(cockpit)/[market]/help/_parts/help.css | app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/strategies/_parts/strategies.css
+2aa771a8a21a app/(cockpit)/[market]/help/_parts/help.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+19e43eacef92 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+5d994fffac45 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+7fbb1c6bf1e0 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+50964da2cf11 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | components/blocks/company-command-dialog.css
+16af91ae997b app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | components/blocks/company-command-dialog.css
+188d8a258018 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | components/blocks/company-command-dialog.css
+0991f56f8871 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/stocks/[ticker]/lifecycle/[date]/_parts/lifecycle.css
+e56b53d29828 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/stocks/[ticker]/lifecycle/[date]/_parts/lifecycle.css
+49ee5f2236d7 app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | components/blocks/company-command-dialog.css
+6c99b7e9d4e2 app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+01239a35a11c app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+1eb1ca11a188 app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+b2b6e23e4388 app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+b9794c2ad74d app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+3ae0191c00ed app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css
+a4fd4d8c84c9 app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+73925a1faec4 app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+a5e8d0670d07 app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+acd7b987c4b0 app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+d1f8650775a9 app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+76d137257dc9 app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | app/(cockpit)/[market]/track-record/_parts/track-record.css
+4062effd0b7e styles/app.css | app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css | app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css | app/(cockpit)/[market]/stocks/[ticker]/_parts/company.css | app/(cockpit)/[market]/stocks/[ticker]/lifecycle/[date]/_parts/lifecycle.css | app/(cockpit)/[market]/stocks/[ticker]/strategies/_parts/strategies.css
+2cb0043241fb styles/app.css | app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai.css
+bbb8e03c237b styles/app.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+c995274ed05b styles/app.css | app/(cockpit)/[market]/watchlist/_parts/watchlist.css
+1e3d7970f5a5 styles/app.css | styles/page.css
+a271935cc3b9 styles/components.css | app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios.css
+e3d411e84817 styles/components.css | app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab.css
+9b62aa15c591 styles/components.css | styles/page.css
+21f59c54b9ac styles/page.css | app/(cockpit)/[market]/stocks/[ticker]/strategies/_parts/strategies.css

@@ -9,6 +9,7 @@ import { dateShort } from "../../lib/shell/clock.ts";
 import { sourceName } from "../../lib/ui/sources.ts";
 import { useFrame } from "../frame/frame-context.tsx";
 import { Chg, Num } from "../ui/figures.tsx";
+import { SectionHead } from "../blocks/section-head.tsx";
 import { Spark, ZoomLine } from "./chart.tsx";
 import { useMarketsNav } from "./nav.tsx";
 
@@ -33,7 +34,7 @@ function MainCard({ q, i, state, locale }: { q: OverviewQuote; i: number; state:
   const p = pos52(q);
   return (
     <section className="card" aria-label={q.name}>
-      <div className="sec-head"><h2>{q.name}</h2><span className="sub">{`close of ${dateShort(`${q.as_of}T10:00:00Z`, shell)} · not live`}</span></div>
+      <SectionHead title={q.name} sub={`close of ${dateShort(`${q.as_of}T10:00:00Z`, shell)} · not live`} />
       <div className="big"><Num value={q.close} src={at(i, "close")} locale={locale} /><Chg value={q[state.per]} src={at(i, state.per)} /><span className="muted small">{PERIOD_WORDS[state.per]}</span></div>
       <ZoomLine vals={vals} label={`${q.name}, the last ${PERIOD_LABEL[state.per]}`} locale={locale} neutral={isVolatility(q)}
         middle={<span data-derived={at(i, "closes")}>{`low ${f(Math.min(...known))} · high ${f(Math.max(...known))}`}</span>} />
@@ -55,7 +56,7 @@ export function Hero({ indices, state, india, locale }: { indices: OverviewIndic
     <div className="hero">
       <MainCard q={main.q} i={main.i} state={state} locale={locale} />
       <section className="card" aria-label="Indices">
-        <div className="sec-head"><h2>{india ? "Broad indices" : "Benchmarks"}</h2><span className="sub">Tap one to chart it</span></div>
+        <SectionHead title={india ? "Broad indices" : "Benchmarks"} sub="Tap one to chart it" />
         <ul className="list">
           {rows.map(({ q, i }) => (
             <li key={q.name}>

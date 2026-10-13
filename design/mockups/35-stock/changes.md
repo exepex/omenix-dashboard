@@ -12,3 +12,11 @@ listed here, each approved by the owner.
      7 India states, and it fails on the version before the fix.
   2. **Display names only.** The payload no longer carries the strategies' internal ids (the `tools.names` map of id
      to display name, unused on screen). Strategies are served by family and display name only.
+
+- **13 Oct 2026: W14 (owner's UI feedback), look only; no data, row or contract change.**
+  - The design system now owns the section head (`.sec-head`), the sortable header and the interaction rules. Links
+    and "see all" links are underlined; buttons and filter chips are bordered; disabled controls are dashed; a plain
+    chip is a borderless label. The page's own copies of those rules were removed.
+  - Rebuilt with `build.py`. Checks: `check_page.js` (no console errors, no external requests, no overflow) and
+    `check_text.js` (0 findings).
+  - Claims: `reviews/claude/response_30_w14-ui.md`.

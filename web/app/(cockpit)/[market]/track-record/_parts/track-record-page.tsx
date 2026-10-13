@@ -15,12 +15,11 @@ import { DASH, fmtDate, fmtDateYear, fmtLocal, pct, signed } from "../../../../.
 import { pagePath } from "../../../../../lib/ui/routes.ts";
 import type { PageBase } from "../../../../../lib/ui/types.ts";
 import { usePage } from "../../../../../lib/ui/use-api.ts";
-import {
-  aucWords, BASELINE, BASELINES_ARE_STANDARD, BASIS_WORDS, brierWords, calibrationLayout, groupByKey, horizonRows, intervalClass, keyWords, selectedBasis,
-  symmetricSpan, tooFew, verdictKind, weeklyOf,
-} from "../../../../../lib/strategy-pages/track-record.ts";
+import { aucWords, BASELINE, BASELINES_ARE_STANDARD, BASIS_WORDS, brierWords, calibrationLayout, groupByKey, horizonRows, intervalClass, keyWords,
+  selectedBasis, symmetricSpan, tooFew, verdictKind, weeklyOf } from "../../../../../lib/strategy-pages/track-record.ts";
 import type { BacktestScore, CallBasisBlock, ReliabilityBand, TrackRecordPayload } from "../../../../../lib/strategy-pages/track-record-types.ts";
-import { CiBar, useWidth } from "../../_b16/parts.tsx";
+import { useWidth } from "../../../../../lib/ui/use-width.ts";
+import { CiBar } from "../../_b16/parts.tsx";
 import "./track-record.css";
 
 type Payload = PageBase & TrackRecordPayload;

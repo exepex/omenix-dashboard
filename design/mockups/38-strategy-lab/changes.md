@@ -23,3 +23,11 @@ or to the contract needs the owner's sign-off again, a data correction does not.
     rounded to the rupee first and the total summed from the parts shown. New check `check_totals.js` (9 lines add up;
     it fails on the old build).
   - What the screen shows and how it is laid out are unchanged, so no new owner sign-off is needed (orchestrator).
+
+- **13 Oct 2026: W14 (owner's UI feedback), look only; no data, row or contract change.**
+  - The design system now owns the section head (`.sec-head`), the sortable header and the interaction rules. Links
+    and "see all" links are underlined; buttons and filter chips are bordered; disabled controls are dashed; a plain
+    chip is a borderless label. The page's own copies of those rules were removed.
+  - Rebuilt with `build.py`. Checks: `check_page.js` (no console errors, no external requests, no overflow) and
+    `check_text.js` (0 findings).
+  - Claims: `reviews/claude/response_30_w14-ui.md`.

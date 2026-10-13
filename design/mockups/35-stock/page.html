@@ -1170,8 +1170,6 @@ button.mb-scr-tile { cursor: pointer; } button.mb-scr-tile:hover { border-color:
 .mb-scr-filters .mb-field > span { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
 .mb-scr-wrap { container-type: inline-size; background: var(--md-sys-color-surface-container-lowest); border-radius: var(--mb-card-radius); box-shadow: var(--mb-card-shadow); }
 .mb-scr th { position: sticky; top: var(--mb-appbar-height); z-index: 2; }
-.mb-scr th button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; text-decoration: underline dotted; text-underline-offset: 3px; }
-.mb-scr th button:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
 .mb-scr th .ms { width: 14px; height: 14px; }
 .mb-scr td small { display: block; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
 .mb-scr td .nm, .mb-scr-cards .nm { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
@@ -1293,6 +1291,20 @@ a[aria-disabled="true"] { color: var(--md-sys-color-on-surface-variant); text-de
   .mb-spinner, .mb-pageload-bar::after, .mb-skeleton-line { animation: none; }
   .mb-pageload-bar::after { width: 100%; opacity: .5; }
 }
+/* One sortable table header for every table (W14, judge 65: was three page copies): the header's words are the button,
+   with a dotted underline so they read as a control; aria-sort sits on the th. */
+.md-table th .sort, .mb-scr th button { all: unset; cursor: pointer; user-select: none; display: inline-flex; align-items: center; gap: 2px; font: inherit; color: inherit; border-radius: 4px; text-decoration: underline dotted; text-underline-offset: 3px; }
+.md-table th .sort:hover, .mb-scr th button:hover { color: var(--md-sys-color-on-surface); }
+.md-table th .sort:focus-visible, .mb-scr th button:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.md-table th .sort .ms { width: 14px; height: 14px; }
+/* One section head for the pages built of sections (Home, Markets; was two page copies): a title, a line on what it
+   answers, and a "see all" link (.go) at the end; .head .go is the mockups' card-head link of the same look. */
+.sec-head { display: flex; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.sec-head h2 { font: 600 17px/1.3 var(--md-ref-typeface-plain); margin: 0; }
+.sec-head .sub { font-size: 12.5px; color: var(--md-sys-color-on-surface-variant); flex: 1 1 240px; }
+.sec-head .go, .head .go { font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; }
+.sec-head .go { margin-left: auto; }
+.sec-head .go .ms, .head .go .ms { width: 16px; height: 16px; }
 
 </style>
 <style>
@@ -1329,8 +1341,6 @@ body{font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}
 .head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .head h2{font:600 16px/1.3 var(--md-ref-typeface-plain);margin:0}
 .head .end{margin-left:auto;display:inline-flex;align-items:center;gap:10px;font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex-wrap:wrap}
-.head .go{font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px}
-.head .go .ms{width:16px;height:16px}
 .sub2{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);margin:-8px 0 12px}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 0}
 .toolbar .md-chip.filter{cursor:pointer}
@@ -1377,7 +1387,6 @@ footer{color:var(--md-sys-color-on-surface-variant);font-size:12px;text-align:ce
 .grid2.even{grid-template-columns:repeat(2,minmax(0,1fr))}
 .facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .sec{margin-top:16px}
-.sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
 .sec-head h2{font:600 16px/1.3 var(--md-ref-typeface-plain);margin:0}
 .sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 220px}
 .axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);margin-top:4px;gap:8px}

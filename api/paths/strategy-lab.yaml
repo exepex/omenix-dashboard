@@ -4,6 +4,10 @@
     tags: [record]
     operationId: getStrategyLab
     summary: Every strategy's scoreboard rows (forward and back-test bases, never pooled), heatmap cells and cumulative lines
+    description: >-
+      Strategy internals stay private (owner, 13 Oct 2026): each StrategyEntry is served without description,
+      parameters, threshold, differs_in and compared_to (what a strategy decided and how it did, never how it decides;
+      web/lib/strategy-pages/public-strategies.ts)
     x-read-model: rm.strategies
     parameters:
       - $ref: '#/components/parameters/Market'

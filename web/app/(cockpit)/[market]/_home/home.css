@@ -1,11 +1,6 @@
 /* Home (story W9): the page layout of the signed-off mockup design/mockups/31-dashboard/template.html. Every component
    is from design/system/components.css; layout only, tokens only. */
 .home .sec{margin-top:20px}
-.home .sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
-.home .sec-head h2{font:600 17px/1.3 var(--md-ref-typeface-plain);margin:0}
-.home .sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 240px}
-.home .sec-head .go{margin-left:auto;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px;white-space:nowrap}
-.home .sec-head .go .ms{width:16px;height:16px}
 .home .top{padding-top:16px}
 .home .home-sig{display:none;padding:0;overflow:hidden}
 .home .pos{list-style:none;margin:0;padding:0}

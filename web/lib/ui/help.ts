@@ -4,7 +4,8 @@
 // horizons, scope strategy: the your-cost go-live detail); from the Companies payload the market's default amount and
 // the first active company by ticker with its N+1 agreement (the example). Pure; tested in tests/help.test.ts.
 import type { Family } from "./constants.ts";
-import type { BuySplit, GoLive, PageBase, StrategyMap } from "./types.ts";
+import type { Strategy } from "../strategy-pages/scoreboard.ts";
+import type { BuySplit, GoLive, PageBase } from "./types.ts";
 
 export interface GoLiveDetail extends GoLive {
   best_baseline_net_pnl?: number | null;
@@ -18,7 +19,8 @@ export interface GoLiveDetail extends GoLive {
 export interface LabForHelp extends PageBase {
   reference_strategy: string;
   go_live: GoLive;
-  strategies: StrategyMap;
+  /** As GET /strategies serves them: without the strategies' internals (lib/strategy-pages/public-strategies.ts). */
+  strategies: Record<string, Strategy>;
   rows: {
     strategy_id: string;
     scope: string;
@@ -69,7 +71,7 @@ export function agreementExample(companies: CompaniesForHelp): { ticker: string;
 }
 
 /** The horizons the AI traders predict (the union of their registry horizons). */
-export function aiHorizons(strategies: StrategyMap): number[] {
+export function aiHorizons(strategies: Record<string, Strategy>): number[] {
   const all = Object.values(strategies).filter((s) => s.family === ("ai" as Family)).flatMap((s) => s.horizons ?? []);
   return [...new Set(all)].sort((a, b) => a - b);
 }

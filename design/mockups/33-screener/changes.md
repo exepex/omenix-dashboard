@@ -70,3 +70,11 @@ listed here.
     - HEGAM 1 year: — → +26.84% (231.29 against 182.35).
     - Their demergers (TMPV 14 Oct 2025, HEGAM 7 Sep 2026) are now adjusted. The earlier entry's "did not trade on their ex-date" was this same cause: they traded under their old symbols.
   - In all: 123 values on 55 stocks, plus each one's session count (50 1-year %, 28 52-week high, 19 52-week low, 15 RSI 14, 6 3-month %, 3 1-month %, 2 20-day average volume). Every value is in `changes_2026-10-13_renames.csv`.
+
+- **13 Oct 2026: W14 (owner's UI feedback), look only; no data, row or contract change.**
+  - The design system now owns the section head (`.sec-head`), the sortable header and the interaction rules. Links
+    and "see all" links are underlined; buttons and filter chips are bordered; disabled controls are dashed; a plain
+    chip is a borderless label. The page's own copies of those rules were removed.
+  - Rebuilt with `build.py`. Checks: `check_page.js` (no console errors, no external requests, no overflow) and
+    `check_text.js` (0 findings).
+  - Claims: `reviews/claude/response_30_w14-ui.md`.

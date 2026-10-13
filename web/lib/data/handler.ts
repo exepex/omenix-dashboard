@@ -23,6 +23,8 @@ export interface PageSpec {
   /** The rm table (a constant of the page's module, never from input). */
   table: string;
   serve: ServeMode;
+  /** What of the stored payload a reader may see (e.g. the Strategy lab without strategy internals); default all. */
+  project?: (payload: unknown) => unknown;
 }
 
 export interface ReadDeps {
@@ -95,7 +97,8 @@ export function respond(
   request: Request, spec: PageSpec, row: StoredRow, now: Date, syncedAt: string | null = null,
 ): Response {
   if (notModified(request, row)) return new Response(null, { status: 304, headers: headers(row) });
-  return Response.json(serve(row, spec.serve, now, syncedAt), { headers: headers(row) });
+  const body = serve(row, spec.serve, now, syncedAt);
+  return Response.json(spec.project ? { ...body, payload: spec.project(body.payload) } : body, { headers: headers(row) });
 }
 
 export async function readPage(

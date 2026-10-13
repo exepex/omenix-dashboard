@@ -26,8 +26,8 @@ export interface ChartZoom {
 }
 
 /** The window over `n` points (opening on the last `initial`), with its gestures. `plot` is the hit area whose width
- *  is the drawn window; the wheel listener sits on `host` (React's wheel handler cannot stop the page scroll). */
-export function useChartZoom(n: number, host: RefObject<HTMLElement | null>, plot: RefObject<Element | null>, initial?: number): ChartZoom {
+ *  is the drawn window; the wheel listener sits on the `host` element (React's wheel handler cannot stop the page scroll). */
+export function useChartZoom(n: number, host: HTMLElement | null, plot: RefObject<Element | null>, initial?: number): ChartZoom {
   const [win, setWin] = useState<ChartWindow>(() => initialWindow(n, initial));
   const [moving, setMoving] = useState(false);
   const pointers = useRef(new Map<number, number>());
@@ -42,16 +42,15 @@ export function useChartZoom(n: number, host: RefObject<HTMLElement | null>, plo
   const pan = (points: number) => setWin((w) => panWindow(w, n, points));
   const reset = () => setWin(initialWindow(n, initial));
   useEffect(() => {
-    const node = host.current;
-    if (!node) return;
+    if (!host) return;
     const onWheel = (e: WheelEvent) => {
       if (!e.ctrlKey && !e.metaKey) return; // a plain wheel scrolls the page
       e.preventDefault();
       const at = fraction(e.clientX);
       setWin((w) => zoomWindow(w, n, wheelFactor(e.deltaY), Math.max(0, Math.min(1, at))));
     };
-    node.addEventListener("wheel", onWheel, { passive: false });
-    return () => node.removeEventListener("wheel", onWheel);
+    host.addEventListener("wheel", onWheel, { passive: false });
+    return () => host.removeEventListener("wheel", onWheel);
   });
   const begin = (w: ChartWindow) => {
     const xs = [...pointers.current.values()];

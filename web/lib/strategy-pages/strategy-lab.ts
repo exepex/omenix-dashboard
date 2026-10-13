@@ -66,22 +66,6 @@ export const REASON: Readonly<Record<string, string>> = {
   range_missed: "range missed",
 };
 
-export const KEYNAME: Readonly<Record<string, string>> = {
-  signal: "signal", news_weight: "news weight", news_statuses: "news statuses", news_materiality: "news materiality",
-  cross_market: "global cues", regime_filter: "regime filter", model: "model", inputs: "inputs",
-  sees_model_score: "sees the model score",
-};
-
-export const keyName = (key: string): string => KEYNAME[key] ?? key.replace(/_/g, " ");
-
-/** A strategy setting in words: lists joined, booleans yes/no, underscores as spaces. */
-export function fmtParam(value: unknown): string {
-  if (Array.isArray(value)) return value.map((item) => String(item).replace(/_/g, " ")).join(", ");
-  if (value === true) return "yes";
-  if (value === false) return "no";
-  return String(value).replace(/_/g, " ");
-}
-
 /** Every registry strategy in ranking order: by profit after market cost (decision 50: the ranking never changes
  * with the cost switch), then trades, then id; strategies without a row follow by family, then id. */
 export function ranking(payload: StrategyLabPayload, slice: Slice): { ids: string[]; byId: Map<string, ScoreboardRow> } {

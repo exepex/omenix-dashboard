@@ -1,8 +1,8 @@
 "use client";
 // Small parts B16's pages share (05 Strategy lab, 06 Rule vs AI, 07 Paper portfolios, 08 Track record), drawn as the
-// mockups draw them: the luck-test bar, an interval bar, a host-width hook for the charts that redraw at the card's
-// width, and the cost switch. Their CSS sits in each page's stylesheet (scoped per page). Private folder: no route.
-import { useEffect, useState, type ReactNode } from "react";
+// mockups draw them: the luck-test bar, an interval bar and the cost switch (the charts' width hook is
+// lib/ui/use-width.ts). Their CSS sits in each page's stylesheet (scoped per page). Private folder: no route.
+import type { ReactNode } from "react";
 import { Segmented } from "../../../../components/ui/controls.tsx";
 import { HelpTip } from "../../../../components/ui/icon.tsx";
 import { Label } from "../../../../components/ui/primitives.tsx";
@@ -11,21 +11,6 @@ import { DASH, signed } from "../../../../lib/ui/format.ts";
 import {
   figure, luckOf, luckScale, luckVerdict, tooFewToRank, type CostView, type ScoreboardRow,
 } from "../../../../lib/strategy-pages/scoreboard.ts";
-
-/** A callback ref and the width of the element it is attached to, updated on resize (null before the first layout).
- * A callback ref, so an element that appears later (e.g. a chart once its data exists) is measured too. */
-export function useWidth<T extends HTMLElement>(): [(node: T | null) => void, number | null] {
-  const [node, setNode] = useState<T | null>(null);
-  const [width, setWidth] = useState<number | null>(null);
-  useEffect(() => {
-    if (!node) return;
-    setWidth(node.clientWidth);
-    const observer = new ResizeObserver(() => setWidth((old) => (old === null || Math.abs(old - node.clientWidth) > 2 ? node.clientWidth : old)));
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [node]);
-  return [setNode, width];
-}
 
 const VERDICT_TONE = { edge: "success", loss: "danger", "luck?": "neutral" } as const;
 

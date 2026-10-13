@@ -75,3 +75,11 @@ listed here.
   Fast Moving Consumer Goods 1-year 20.06 → 20.1; Metals & Mining 1-year 3.28 → 8.49. Nothing else changed.
 
 - **13 Oct 2026: data correction, renamed stocks (follows 33's rename join; data fix).** Breadth: all near_low 247 → 240; all up_1m 695 → 697; Nifty 500 near_low 54 → 53. Sectors: Capital Goods 1-month −3.82 → −3.94, 3-month −0.4 → −0.21, 1-year 25.24 → 25.26; Automobile and Auto Components 1-year 10.71 → 9.6; Information Technology 1-year −12.34 → −12.81. Nothing else changed.
+
+- **13 Oct 2026: W14 (owner's UI feedback), look only; no data, row or contract change.**
+  - The design system now owns the section head (`.sec-head`), the sortable header and the interaction rules. Links
+    and "see all" links are underlined; buttons and filter chips are bordered; disabled controls are dashed; a plain
+    chip is a borderless label. The page's own copies of those rules were removed.
+  - Rebuilt with `build.py`. Checks: `check_page.js` (no console errors, no external requests, no overflow) and
+    `check_text.js` (0 findings).
+  - Claims: `reviews/claude/response_30_w14-ui.md`.

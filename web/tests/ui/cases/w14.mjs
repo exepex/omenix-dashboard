@@ -5,6 +5,7 @@
 // order and does nothing on a click. The rail's flyout closes on a move, on Escape and on a click elsewhere. Price
 // charts zoom, pan, reset and read each point with the crosshair.
 import { affordanceFindings } from "../affordance.mjs";
+import { mockupPayload } from "../fixtures.mjs";
 import { cases as assistant } from "./assistant.mjs";
 import { cases as companies } from "./companies.mjs";
 import { cases as company } from "./company.mjs";
@@ -22,6 +23,31 @@ const SIGNED_OFF = [
 ];
 // The other built pages, each in its own page case's set-up (its fixture answers and routes), with the look check.
 const OTHER_PAGES = ["company-reliance", "strategies-reliance", "lifecycle-reliance", "paper-portfolio-v3-india", "rule-vs-ai-india", "track-record-india", "watchlist-india", "news-india", "companies-india", "assistant-india", "help-india"];
+
+// Strategy internals stay private (owner, 13 Oct 2026). The fixture still carries them (the mockup's registry), so
+// these cases prove the pages never draw them even if an answer did; the API drops them as well
+// (lib/strategy-pages/tests/public-strategies.test.ts).
+const INTERNAL_WORDS = [/news weight/i, /regime filter/i, /news statuses/i, /news materiality/i, /global cues: /i, /signal: model/i, /sees the model score/i,
+  /blind to the model score/i, /differs in /i, /changes one setting/i, /chance of a rise is at least/i, /\bbar \d+%/, /the reference strategy’s bar/i, /no chance threshold/i];
+const DESCRIPTIONS = Object.values(mockupPayload("05-strategy-lab", "india").strategies).map((s) => s.description).filter(Boolean);
+const LAB_PICKS = ["rule.model_news.v1", "rule.model_news_strict.v1", "rule.model_news_calm.v1", "base.model_only.v1", "ai.combined.opus.v1"];
+
+async function noInternals(page) {
+  const problems = [];
+  const scan = async (where) => {
+    const html = await page.evaluate(() => document.querySelector(".mb-pf-main")?.innerHTML ?? "");
+    for (const re of INTERNAL_WORDS) if (re.test(html)) problems.push(`${where}: shows "${html.match(re)[0]}"`);
+    for (const d of DESCRIPTIONS) if (html.includes(d.slice(0, 40))) problems.push(`${where}: shows a strategy description ("${d.slice(0, 40)}…")`);
+  };
+  if (page.url().includes("strategy-lab")) {
+    for (const id of LAB_PICKS) {
+      await page.evaluate((h) => { window.location.hash = h; }, encodeURIComponent(id));
+      await page.waitForTimeout(150);
+      await scan(id);
+    }
+  } else await scan("help");
+  return problems;
+}
 
 const looks = async (page) => (await affordanceFindings(page)).map((f) => `look: ${f}`);
 
@@ -159,6 +185,8 @@ export const cases = [
     if (!base) throw new Error(`w14: no page case ${name}`);
     return { ...base, name: `w14-look-${name}`, mockup: undefined, expectText: undefined, widths: [1280, 390], check: looks };
   }),
+  { name: "w14-no-internals-lab", path: "/india/strategy-lab", widths: [1280], waitFor: ".p-lab .lb", check: noInternals },
+  { name: "w14-no-internals-help", path: "/india/help", widths: [1280], waitFor: "#strategies", check: noInternals },
   { name: "w14-block-loader", path: "/india/screener", widths: [1280, 390], waitFor: ".mb-scr-presets", check: blockLoader },
   { name: "w14-page-loader", path: "/india/screener", widths: [1280], waitFor: ".mb-scr-look", check: pageLoader },
   { name: "w14-disabled", path: "/india", widths: [1280, 390], waitFor: ".home .mb-apcard", check: disabledLook },
