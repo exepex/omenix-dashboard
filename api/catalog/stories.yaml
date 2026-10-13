@@ -56,3 +56,13 @@ TR-NSE-proposed:
     underlyings (nearest monthly future, ATM IV computed its way, build-up, put-call ratio, move priced in) and their
     counts, the broad and sector index rows (with NSE's P/E, P/B, dividend yield) and the Nifty 500 industries.
     exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story"
+TR-CHAIN-proposed:
+  exists: false
+  repo: trading
+  title: "The NIFTY option chain published by exepex/trading (W13; to be added in exepex/trading)"
+  scope: >-
+    After each NSE session, one page per chain block in the P3 publication, from NSE's daily F&O and index files and
+    the A3 panel: NIFTY's close and India VIX; every expiry with its stats (straddle range, walls, max pain,
+    put-call ratio); each expiry's strikes with their lot (close, change, OI and its change, volume, IV, Greeks, break-even, chance,
+    computed with fno/analytics.py); the NIFTY, VIX and put-call ratio series with coverage; each contract's history;
+    the sources and the 3 pm quotes' status (A4). 32-option-chain/notes.md: "The F&O tool needs a publishing story"

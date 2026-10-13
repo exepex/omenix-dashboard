@@ -12,6 +12,12 @@ One endpoint per independent screen block; where one record feeds several blocks
 
 | Endpoint | Publisher | Published today? | Feeds | Read model | Freshness | Cache | Empty state | Shared because |
 |---|---|---|---|---|---|---|---|---|
+| `GET /api/v1/markets/india/fno/chain/underlying` | exepex/trading | **no: no backend publishes it** | `c32.header`, `c32.mood`, `c32.nifty` | fno.pages_history page chain_underlying (proposed) | fno_calendar; daily | keyed by publication_id (fno.current_publication); browser private, no-cache + ETag | never empty on a trading day | one record of the day's index file: the header names its underlying, the NIFTY and mood cards (one "in one look" row) show its closes |
+| `GET /api/v1/markets/india/fno/chain/expiries` | exepex/trading | **no: no backend publishes it** | `c32.chain-simple`, `c32.expiries`, `c32.mood`, `c32.positions`, `c32.range` | fno.pages_history page chain_expiries (proposed) | fno_calendar; daily | keyed by publication_id (fno.current_publication); browser private, no-cache + ETag | never empty on a trading day | one summary per expiry: the chip picks it, the range, positions and mood cards show it, the chain marks its ATM strike |
+| `GET /api/v1/markets/india/fno/chain/rows` | exepex/trading | **no: no backend publishes it** | `c32.chain-detailed`, `c32.chain-greeks`, `c32.chain-simple`, `c32.contract`, `c32.header`, `c32.iv-chart`, `c32.oi-chart`, `c32.strikes`, `c32.tray` | fno.pages_history page chain_rows:<expiry> (proposed; the route picks the strikes) | fno_calendar; daily | keyed by publication_id (fno.current_publication); browser private, no-cache + ETag | an unknown expiry is 404; rows are never empty for a listed expiry | one table of the expiry's contracts: the chain shows it, the two charts plot its columns, the contract view and the tray read one of its rows, the header its lot |
+| `GET /api/v1/markets/india/fno/chain/history` | exepex/trading | **no: no backend publishes it** | `c32.mood`, `c32.nifty` | fno.pages_history page chain_history (proposed) | fno_calendar; daily | keyed by publication_id (fno.current_publication); browser private, no-cache + ETag | never empty; a figure the days do not cover is null with its days |  |
+| `GET /api/v1/markets/india/fno/chain/contracts/{code}/history` | exepex/trading | **no: no backend publishes it** | `c32.history` | fno.pages_history page chain_contract:<code> (proposed) | fno_calendar; daily | keyed by publication_id (fno.current_publication); browser private, no-cache + ETag | an unknown code is 404 |  |
+| `GET /api/v1/markets/india/fno/chain/sources` | exepex/trading | **no: no backend publishes it** | `c32.buysell`, `c32.sources` | fno.pages_history page chain_sources (proposed) | fno_calendar; daily | keyed by publication_id (fno.current_publication); browser private, no-cache + ETag | never empty | one status of the 3 pm quotes: the source chip states it, Buy and Sell stay grey while it is not_published |
 | `GET /api/v1/markets/india/fno/search` | exepex/trading | **no: no backend publishes it** | `s30.search` | fno.pages_history page contracts (proposed P1 page; the route filters by q) | fno_calendar; end-of-day file and 3 pm snapshot | keyed by publication_id (a new current publication invalidates it); responses private, max-age=60 | contracts empty |  |
 | `GET /api/v1/markets/india/fno/picks` | exepex/trading | **no: no backend publishes it** | `h31.picks-inline`, `s30.order-margin`, `s30.picks-fno` | fno.pages_history page today (P1) | fno_calendar; 3 pm run | keyed by publication_id; browser private, no-cache + ETag | fno_state.approved false, rows empty, the note says why (today: Experiment 1 has not run) | one decision record: the panel shows the rows; the order window opens the same row's basket (legs, margin) |
 | `GET /api/v1/markets/india/fno/contracts/{code}` | exepex/trading | **no: no backend publishes it** | `s30.hover`, `s30.order-price`, `s30.order-refusal` | fno.pages_history page quotes (proposed P1 page) | fno_calendar; 3 pm snapshot or end-of-day file | keyed by publication_id; browser private, no-cache + ETag | unknown code: 404; no snapshot quote: bid, ask and iv null (the order window refuses it) | one quote: the hover card shows it; the order window prices and refuses on the same quote |
@@ -126,23 +132,41 @@ One endpoint per independent screen block; where one record feeds several blocks
 | `h34.world` | 34 · World, currencies, commodities | `/api/v1/markets/{market}/overview/world` |
 | `h34.coming-up` | 34 · What is coming? | `/api/v1/markets/{market}/events` |
 | `h34.sources` | 34 · Source chips | none: dashboard text per source, beside each block's envelope (as_of, freshness) |
+| `c32.header` | 32 · Header | `/api/v1/markets/india/fno/chain/rows`, `/api/v1/markets/india/fno/chain/underlying` |
+| `c32.nifty` | 32 · NIFTY card | `/api/v1/markets/india/fno/chain/history`, `/api/v1/markets/india/fno/chain/underlying` |
+| `c32.range` | 32 · Range priced in | `/api/v1/markets/india/fno/chain/expiries` |
+| `c32.positions` | 32 · Where traders hold positions | `/api/v1/markets/india/fno/chain/expiries` |
+| `c32.mood` | 32 · Mood and fear | `/api/v1/markets/india/fno/chain/expiries`, `/api/v1/markets/india/fno/chain/history`, `/api/v1/markets/india/fno/chain/underlying` |
+| `c32.sources` | 32 · Source chips | `/api/v1/markets/india/fno/chain/sources` |
+| `c32.expiries` | 32 · Expiry chips | `/api/v1/markets/india/fno/chain/expiries` |
+| `c32.chain-simple` | 32 · Chain, Simple | `/api/v1/markets/india/fno/chain/expiries`, `/api/v1/markets/india/fno/chain/rows` |
+| `c32.chain-detailed` | 32 · Chain, Detailed | `/api/v1/markets/india/fno/chain/rows` |
+| `c32.chain-greeks` | 32 · Chain, Greeks | `/api/v1/markets/india/fno/chain/rows` |
+| `c32.strikes` | 32 · Strikes | `/api/v1/markets/india/fno/chain/rows` |
+| `c32.tray` | 32 · Combination tray | `/api/v1/markets/india/fno/chain/rows` |
+| `c32.oi-chart` | 32 · Open interest chart | `/api/v1/markets/india/fno/chain/rows` |
+| `c32.iv-chart` | 32 · IV chart | `/api/v1/markets/india/fno/chain/rows` |
+| `c32.contract` | 32 · Contract view | `/api/v1/markets/india/fno/chain/rows` |
+| `c32.history` | 32 · Contract history | `/api/v1/markets/india/fno/chain/contracts/{code}/history` |
+| `c32.buysell` | 32 · Buy / Sell | `/api/v1/markets/india/fno/chain/sources` |
 
 ## Stories
 
 | Story | Exists | Fields not yet published | What it covers |
 |---|---|---|---|
-| `W2` | yes | 77 | Azure read path for F&O: publication-aware reads, contract checks, F&O freshness |
+| `W2` | yes | 119 | Azure read path for F&O: publication-aware reads, contract checks, F&O freshness |
 | `W6` | yes | 140 | Stock reads on Azure and parity |
 | `W8` | yes | 70 | The signed-off app frame in the real app (frame config, the bell rules, fixture adapter) |
 | `W9` | yes | 5 | The signed-off Home screen in the real app (the needs-you rules) |
 | `P1` | yes | 29 | F&O read-model contract: pages today, positions, risk, scoreboard_b, ... |
-| `P3` | yes | 22 | Atomic publisher to Azure: fno.pages_history, fno.current_publication, run status |
+| `P3` | yes | 34 | Atomic publisher to Azure: fno.pages_history, fno.current_publication, run status |
 | `C2` | yes | 4 | Risk manager: the owner limits |
 | `K4-proposed` | **no: to be written** | 17 | One read-model row per block and market (rm.blocks, page_key = the block: session, indices, tracked_moves, search_index, instrument:<id>, positions, order_rules, picks, groups, strategy_trades, events, top_news) in the stock envelope, built from the records the stock tool already publishes (rm.status, rm.home, rm.companies, rm.bars, rm.portfolio, rm.strategies, rm.trades, rm.news) plus the new values the contract marks planned (next_open_utc, the group totals, the market event calendar, the order rules); written through K1's publication pattern. Until it lands, the dashboard routes may project the same fields from the existing rows (x-read-model "interim") |
 | `P1-extension-proposed` | **no: to be written** | 35 | Three more P1 pages (a minor version): contracts (the searchable NIFTY futures and options list with codes, lots and last prices: A3, A5), quotes (per contract last, bid, ask, IV, source and as-of: A4's canonical 3 pm snapshot, A2's end-of-day reader) and order_rules (C1's option charge schedule, C2's limits, the margin estimate, the next snapshot time); built by P2 and published by P3 |
 | `MA1-proposed` | **no: to be written** | 13 | The owner's own paper account per market (capital Rs 5 lakh / US $5,000, owner-changeable; cash; positions from the owner's recorded trades; India: open structures and at-risk against the F&O limits), stored in the app schema (W7 pattern) and read by the accounts block; named as "a later story" in W8's out-of-scope list |
 | `K5-proposed` | **no: to be written** | 51 | One rm.blocks row per block and market, in the stock envelope, from records the stock tool already stores: the tools' view of its followed companies (strategy_predictions at N+5, model_scores, features days_to_results), the US screener rows and counts of its 20 companies (daily prices; returns, 52-week range, volume ratio and RSI computed the screener's way), the US benchmarks and sector funds, world quotes (prices), India's FII/DII and NSDL flows, US Treasury par yields (macro), and the regime record's major_event_names on the session block |
 | `TR-NSE-proposed` | **no: to be written** | 114 | Owner, 13 Oct 2026: exepex/trading publishes NSE's daily files. After each NSE session it reads NSE's own files (equity BhavCopy, security-wise delivery, EQUITY_L and the Nifty 500 list, F&O BhavCopy, the index close file) and publishes one page per block in its P3 publication: the stock rows and their counts per universe, the F&O underlyings (nearest monthly future, ATM IV computed its way, build-up, put-call ratio, move priced in) and their counts, the broad and sector index rows (with NSE's P/E, P/B, dividend yield) and the Nifty 500 industries. exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story" |
+| `TR-CHAIN-proposed` | **no: to be written** | 66 | After each NSE session, one page per chain block in the P3 publication, from NSE's daily F&O and index files and the A3 panel: NIFTY's close and India VIX; every expiry with its stats (straddle range, walls, max pain, put-call ratio); each expiry's strikes with their lot (close, change, OI and its change, volume, IV, Greeks, break-even, chance, computed with fno/analytics.py); the NIFTY, VIX and put-call ratio series with coverage; each contract's history; the sources and the 3 pm quotes' status (A4). 32-option-chain/notes.md: "The F&O tool needs a publishing story" |
 
 ## Open questions (owner)
 
@@ -150,6 +174,156 @@ One endpoint per independent screen block; where one record feeds several blocks
 - Events: 34's data has no `major` flag; it is derived from the regime record's `major_event_names` until published.
 
 ## Fields
+
+### `GET /api/v1/markets/india/fno/chain/underlying` (getChainUnderlying)
+
+| Field | Elements | Publisher | Source | Unit | Freshness | Story | Status |
+|---|---|---|---|---|---|---|---|
+| `payload.sym` | c32.header, c32.nifty | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | text | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.spot` | c32.nifty | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.chg` | c32.nifty | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.chg_pct` | c32.nifty | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | percent points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.vix` | c32.mood | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.as_of` | c32.nifty | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | UTC time | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `envelope.publisher` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.state` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.rule` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.built_at` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | UTC time | each request | `W2` | not yet published |
+| `envelope.freshness.age_minutes` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | minutes | each request | `W2` | not yet published |
+| `envelope.freshness.reason` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.paper` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.product` | s30.freshness | exepex/trading | fno.pages_history.product | enum | each publication | `P3` | not yet published |
+| `envelope.publication_id` | s30.freshness | exepex/trading | fno.current_publication.publication_id | id | each publication | `P3` | not yet published |
+
+### `GET /api/v1/markets/india/fno/chain/expiries` (getChainExpiries)
+
+| Field | Elements | Publisher | Source | Unit | Freshness | Story | Status |
+|---|---|---|---|---|---|---|---|
+| `payload.as_of` | c32.expiries | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | UTC time | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].expiry` | c32.expiries | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | date | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].days` | c32.expiries, c32.range | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | calendar days | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].monthly` | c32.expiries | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | yes/no | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].future` | c32.expiries | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.pcr` | c32.mood | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | ratio | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.max_pain` | c32.positions | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.atm` | c32.chain-simple | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.atm_iv` | c32.range | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | percent points (annualised) | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.straddle` | c32.range | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.range[]` | c32.range | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.call_wall` | c32.positions | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.put_wall` | c32.positions | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.call_add` | c32.positions | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiries[].stats.put_add` | c32.positions | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `envelope.publisher` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.state` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.rule` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.built_at` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | UTC time | each request | `W2` | not yet published |
+| `envelope.freshness.age_minutes` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | minutes | each request | `W2` | not yet published |
+| `envelope.freshness.reason` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.paper` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.product` | s30.freshness | exepex/trading | fno.pages_history.product | enum | each publication | `P3` | not yet published |
+| `envelope.publication_id` | s30.freshness | exepex/trading | fno.current_publication.publication_id | id | each publication | `P3` | not yet published |
+
+### `GET /api/v1/markets/india/fno/chain/rows` (getChainRows)
+
+| Field | Elements | Publisher | Source | Unit | Freshness | Story | Status |
+|---|---|---|---|---|---|---|---|
+| `payload.as_of` | c32.chain-simple | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | UTC time | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.currency` | c32.chain-simple | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | enum | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.lot` | c32.header, c32.chain-simple | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | units per lot | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.expiry` | c32.chain-simple | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | date | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.strikes` | c32.strikes | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | enum | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].strike` | c32.chain-simple | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.code` | c32.tray, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | NSE trading symbol | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.close` | c32.chain-simple, c32.tray, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | INR (₹ a unit; × lot = ₹ a lot) | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.chg` | c32.chain-simple | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | INR | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.chg_pct` | c32.chain-simple, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | percent points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.oi` | c32.chain-simple, c32.oi-chart, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | units | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.oi_chg` | c32.chain-detailed, c32.oi-chart, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | units | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.volume` | c32.chain-detailed, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | units | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.iv` | c32.chain-detailed, c32.chain-greeks, c32.iv-chart, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | percent points (annualised) | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.greeks.delta` | c32.chain-greeks, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | ratio | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.greeks.gamma` | c32.chain-greeks, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | per index point | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.greeks.theta` | c32.chain-greeks, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | INR a day | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.greeks.vega` | c32.chain-greeks, c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | INR per IV point | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.breakeven` | c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.rows[].CE.chance` | c32.contract | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | percent (risk-neutral; not a forecast) | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `envelope.publisher` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.state` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.rule` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.built_at` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | UTC time | each request | `W2` | not yet published |
+| `envelope.freshness.age_minutes` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | minutes | each request | `W2` | not yet published |
+| `envelope.freshness.reason` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.paper` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.product` | s30.freshness | exepex/trading | fno.pages_history.product | enum | each publication | `P3` | not yet published |
+| `envelope.publication_id` | s30.freshness | exepex/trading | fno.current_publication.publication_id | id | each publication | `P3` | not yet published |
+
+### `GET /api/v1/markets/india/fno/chain/history` (getChainHistory)
+
+| Field | Elements | Publisher | Source | Unit | Freshness | Story | Status |
+|---|---|---|---|---|---|---|---|
+| `payload.dates[]` | c32.nifty, c32.mood | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | date | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.nifty[]` | c32.nifty | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.vix[]` | c32.mood | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | index points | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.pcr.*[]` | c32.mood | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | ratio | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.coverage.nifty.d5.days_in_period` | c32.nifty | exepex/trading | computed from the series (ours) | sessions | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.coverage.nifty.d5.days` | c32.nifty | exepex/trading | computed from the series (ours) | sessions | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.coverage.nifty.d5.complete` | c32.nifty | exepex/trading | computed from the series (ours) | yes/no | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.coverage.nifty.d5.value` | c32.nifty | exepex/trading | computed from the series (ours) | percent points (a change) or index points (a middle) | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `envelope.publisher` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.state` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.rule` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.built_at` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | UTC time | each request | `W2` | not yet published |
+| `envelope.freshness.age_minutes` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | minutes | each request | `W2` | not yet published |
+| `envelope.freshness.reason` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.paper` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.product` | s30.freshness | exepex/trading | fno.pages_history.product | enum | each publication | `P3` | not yet published |
+| `envelope.publication_id` | s30.freshness | exepex/trading | fno.current_publication.publication_id | id | each publication | `P3` | not yet published |
+
+### `GET /api/v1/markets/india/fno/chain/contracts/{code}/history` (getContractHistory)
+
+| Field | Elements | Publisher | Source | Unit | Freshness | Story | Status |
+|---|---|---|---|---|---|---|---|
+| `payload.code` | c32.history | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | NSE trading symbol | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.dates[]` | c32.history | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | date | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.close[]` | c32.history | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | INR | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.oi[]` | c32.history | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | units | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.periods.d5.days_in_period` | c32.history | exepex/trading | computed from the contract's sessions (ours) | sessions | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.periods.d5.days` | c32.history | exepex/trading | computed from the contract's sessions (ours) | sessions | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.periods.d5.complete` | c32.history | exepex/trading | computed from the contract's sessions (ours) | yes/no | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `envelope.publisher` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.state` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.rule` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.built_at` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | UTC time | each request | `W2` | not yet published |
+| `envelope.freshness.age_minutes` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | minutes | each request | `W2` | not yet published |
+| `envelope.freshness.reason` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.paper` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.product` | s30.freshness | exepex/trading | fno.pages_history.product | enum | each publication | `P3` | not yet published |
+| `envelope.publication_id` | s30.freshness | exepex/trading | fno.current_publication.publication_id | id | each publication | `P3` | not yet published |
+
+### `GET /api/v1/markets/india/fno/chain/sources` (getChainSources)
+
+| Field | Elements | Publisher | Source | Unit | Freshness | Story | Status |
+|---|---|---|---|---|---|---|---|
+| `payload.source.eod` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | text | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.source.index` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | text | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.source.as_of` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | UTC time | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.source.history_from` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | date | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.quotes.status` | c32.sources, c32.buysell | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | enum | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.quotes.started` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | date | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.quotes.text` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | text | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.computed.iv` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | text | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.computed.chance` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | text | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `payload.books` | c32.sources | exepex/trading | NSE's daily F&O file (UDiFF bhavcopy) and index file, computed the F&O tool's way (fno/analytics.py) | text | daily, after the NSE F&O file | `TR-CHAIN-proposed` | not yet published |
+| `envelope.publisher` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.state` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.rule` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | enum | each request | `W2` | not yet published |
+| `envelope.freshness.built_at` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | UTC time | each request | `W2` | not yet published |
+| `envelope.freshness.age_minutes` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | minutes | each request | `W2` | not yet published |
+| `envelope.freshness.reason` | s30.freshness | dashboard | the route's serve step (web/lib/data; story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.paper` | s30.freshness | dashboard | the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks) | text | each request | `W2` | not yet published |
+| `envelope.product` | s30.freshness | exepex/trading | fno.pages_history.product | enum | each publication | `P3` | not yet published |
+| `envelope.publication_id` | s30.freshness | exepex/trading | fno.current_publication.publication_id | id | each publication | `P3` | not yet published |
 
 ### `GET /api/v1/markets/india/fno/search` (searchFnoContracts)
 

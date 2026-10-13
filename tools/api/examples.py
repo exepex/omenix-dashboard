@@ -17,6 +17,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 import examples_home as home  # noqa: E402
+import examples_chain as chain  # noqa: E402
 import examples_payloads as frame  # noqa: E402
 import examples_screens as screens  # noqa: E402
 
@@ -24,14 +25,17 @@ SHELL = bundle.REPO / "design/mockups/30-shell/data.json"
 HOME = bundle.REPO / "design/mockups/31-dashboard/data.json"
 SCREENER = bundle.REPO / "design/mockups/33-screener/data.json"
 MARKETS = bundle.REPO / "design/mockups/34-markets/data.json"
+CHAIN = bundle.REPO / "design/mockups/32-option-chain/data.json"
 OUT = bundle.API / "examples/blocks.json"
 OUT_SCREENS = bundle.API / "examples/blocks-33-34.json"
+OUT_CHAIN = bundle.API / "examples/blocks-32.json"
 # the data each example comes from: its mockup folder, the source_commit its envelope names (the "signed off ... as of
 # commit" of its notes.md) and the description
 DATA = {"shell": ("30-shell", "cadf1d2", "signed off as of cadf1d2"), "home": ("31-dashboard", "e8cd360", "signed off as of e8cd360"),
         "screener": ("33-screener", "e28b43d", "signed off as of e28b43d; real NSE files and stock-tool records of 12 Oct 2026"),
-        "markets": ("34-markets", "59b606d", "signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026")}
-SCHEMA_VERSION = {"blocks": "2.1.0", "screens": "2.2.0"}
+        "markets": ("34-markets", "59b606d", "signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026"),
+        "chain": ("32-option-chain", "9d9c401", "signed off as of 9d9c401; real NSE files of 12 Oct 2026")}
+SCHEMA_VERSION = {"blocks": "2.1.0", "screens": "2.2.0", "chain": "2.3.0"}
 RULE = {"stock": "stock_age", "fno": "fno_calendar", "dashboard": "static"}
 BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getFrameMarkets": (frame.frame_markets, "markets", "shell", ["_all"]),
@@ -74,6 +78,14 @@ SCREEN_BUILDERS = {  # the same, for api/examples/blocks-33-34.json
     "getRates": (screens.rates, "rates", "markets", ["us"]),
     "getWorld": (screens.world, "world", "markets", ["india", "us"]),
     "getEvents": (lambda x, m: screens.events(x, m, x.home), "events", "markets", ["india", "us"]),
+}
+CHAIN_BUILDERS = {  # the same, for api/examples/blocks-32.json (India only)
+    "getChainUnderlying": (chain.underlying, "chain_underlying", "chain", ["india"]),
+    "getChainExpiries": (chain.expiries, "chain_expiries", "chain", ["india"]),
+    "getChainRows": (chain.rows, "chain_rows", "chain", ["india"]),
+    "getChainHistory": (chain.history, "chain_history", "chain", ["india"]),
+    "getContractHistory": (chain.contract_history, "chain_contract", "chain", ["india"]),
+    "getChainSources": (chain.sources, "chain_sources", "chain", ["india"]),
 }
 
 
@@ -121,6 +133,8 @@ def rendered() -> dict[Path, str]:
     shell.screens, screen.home = screen, shell.H  # the events calendar joins 31's and 34's records
     files = {OUT: build(BUILDERS, shell, ("2026-10-06", shell.S["now"]), SCHEMA_VERSION["blocks"]),
              OUT_SCREENS: build(SCREEN_BUILDERS, screen, (screen.C["day"], screen.C["clock"]["now"]), SCHEMA_VERSION["screens"])}
+    opt = chain.Chain(load(CHAIN))
+    files[OUT_CHAIN] = build(CHAIN_BUILDERS, opt, (opt.C["day"], opt.C["clock"]["now"]), SCHEMA_VERSION["chain"])
     return {path: json.dumps(value, indent=1, ensure_ascii=False) + "\n" for path, value in files.items()}
 
 

@@ -218,3 +218,30 @@ UsScreenerStocksRule:
 IndiaScreenerStocksRule:
   description: 'India rows carry NSE''s delivery figure (dl; null when NSE gives none)'
   properties: {payload: {properties: {rows: {items: {required: [dl]}}}}}
+
+# ---------- W13: the option chain (32), India only ----------
+ChainUnderlyingResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainUnderlying'}}}
+ChainExpiriesResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainExpiries'}}}
+ChainRowsResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainRows'}}}
+    - $ref: '#/components/schemas/MarketCurrency'
+ChainHistoryResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainHistory'}}}
+ContractHistoryResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ContractHistory'}}}
+ChainSourcesResponse:
+  allOf:
+    - $ref: '#/components/schemas/FnoBlockMeta'
+    - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ChainSources'}}}

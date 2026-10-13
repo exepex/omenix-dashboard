@@ -703,3 +703,173 @@
   section: Elements
   row: 'Source chips'
   static: 'dashboard text per source, beside each block''s envelope (as_of, freshness)'
+
+# ---------- W13: 32-option-chain (its one table; the notes have no ## sections) ----------
+- id: c32.header
+  notes: 32-option-chain
+  section: Chain
+  row: 'Header'
+  fields:
+    - {t: 'sym', k: ['sym']}
+    - {t: 'lot', k: ['lot']}
+  other:
+    - {t: 'NewBrdLotQty', why: 'the NSE column lot comes from'}
+- id: c32.nifty
+  block: in-one-look
+  notes: 32-option-chain
+  section: Chain
+  row: 'NIFTY card'
+  fields:
+    - {t: 'spot', k: ['spot']}
+    - {t: 'chg', k: ['chg']}
+    - {t: 'chg_pct', k: ['chg_pct']}
+    - {t: 'history.nifty', k: ['history.nifty']}
+  other:
+    - {t: 'UndrlygPric', why: 'the NSE column spot comes from'}
+- id: c32.range
+  block: in-one-look
+  notes: 32-option-chain
+  section: Chain
+  row: 'Range priced in'
+  fields:
+    - {t: 'stats.straddle', k: ['stats.straddle']}
+    - {t: 'stats.range', k: ['stats.range']}
+    - {t: 'days', k: ['days']}
+- id: c32.positions
+  block: in-one-look
+  notes: 32-option-chain
+  section: Chain
+  row: 'Where traders hold positions'
+  fields:
+    - {t: 'stats.call_wall', k: ['stats.call_wall']}
+    - {t: 'stats.put_wall', k: ['stats.put_wall']}
+    - {t: 'stats.call_add', k: ['stats.call_add']}
+    - {t: 'stats.put_add', k: ['stats.put_add']}
+    - {t: 'stats.max_pain', k: ['stats.max_pain']}
+- id: c32.mood
+  block: in-one-look
+  notes: 32-option-chain
+  section: Chain
+  row: 'Mood and fear'
+  fields:
+    - {t: 'stats.pcr', k: ['stats.pcr']}
+    - {t: 'history.pcr[expiry]', k: ['history.pcr']}
+    - {t: 'vix', k: ['vix']}
+    - {t: 'history.vix', k: ['history.vix']}
+- id: c32.sources
+  notes: 32-option-chain
+  section: Chain
+  row: 'Source chips'
+  fields:
+    - {t: 'source.eod', k: ['source.eod']}
+    - {t: 'source.index', k: ['source.index']}
+    - {t: 'source.as_of', k: ['source.as_of']}
+    - {t: 'quotes.status', k: ['quotes.status']}
+    - {t: 'quotes.text', k: ['quotes.text']}
+    - {t: 'computed.iv', k: ['computed.iv']}
+    - {t: 'computed.chance', k: ['computed.chance']}
+    - {t: 'books', k: ['books']}
+- id: c32.expiries
+  notes: 32-option-chain
+  section: Chain
+  row: 'Expiry chips'
+  fields:
+    - {t: 'expiry', k: ['expiry']}
+    - {t: 'monthly', k: ['monthly']}
+    - {t: 'days', k: ['days']}
+- id: c32.chain-simple
+  notes: 32-option-chain
+  section: Chain
+  row: 'Chain, Simple'
+  block: chain
+  fields:
+    - {t: 'oi', k: ['oi']}
+    - {t: 'close', k: ['close']}
+    - {t: 'lot', k: ['lot']}
+    - {t: 'close', k: ['close']}
+    - {t: 'chg_pct', k: ['chg_pct']}
+    - {t: 'stats.atm', k: ['stats.atm']}
+- id: c32.chain-detailed
+  notes: 32-option-chain
+  section: Chain
+  row: 'Chain, Detailed'
+  block: chain
+  fields:
+    - {t: 'oi_chg', k: ['oi_chg']}
+    - {t: 'volume', k: ['volume']}
+    - {t: 'iv', k: ['iv']}
+  other:
+    - {t: 'ChngInOpnIntrst', why: 'the NSE column oi_chg comes from'}
+    - {t: 'TtlTradgVol', why: 'the NSE column volume comes from'}
+- id: c32.chain-greeks
+  notes: 32-option-chain
+  section: Chain
+  row: 'Chain, Greeks'
+  block: chain
+  fields:
+    - {t: 'greeks.delta', k: ['greeks.delta']}
+    - {t: 'gamma', k: ['gamma']}
+    - {t: 'theta', k: ['theta']}
+    - {t: 'vega', k: ['vega']}
+    - {t: 'iv', k: ['iv']}
+- id: c32.strikes
+  notes: 32-option-chain
+  section: Chain
+  row: 'Strikes'
+  block: chain
+- id: c32.tray
+  notes: 32-option-chain
+  section: Chain
+  row: 'Combination tray'
+  fields:
+    - {t: 'code', k: ['code']}
+    - {t: 'close', k: ['close']}
+- id: c32.oi-chart
+  notes: 32-option-chain
+  section: Chain
+  row: 'Open interest chart'
+  fields:
+    - {t: 'oi', k: ['oi']}
+    - {t: 'oi_chg', k: ['oi_chg']}
+- id: c32.iv-chart
+  notes: 32-option-chain
+  section: Chain
+  row: 'IV chart'
+  fields:
+    - {t: 'iv', k: ['iv']}
+- id: c32.contract
+  notes: 32-option-chain
+  section: Chain
+  row: 'Contract view'
+  fields:
+    - {t: 'code', k: ['code']}
+    - {t: 'close', k: ['close']}
+    - {t: 'chg_pct', k: ['chg_pct']}
+    - {t: 'breakeven', k: ['breakeven']}
+    - {t: 'chance', k: ['chance']}
+    - {t: 'oi', k: ['oi']}
+    - {t: 'oi_chg', k: ['oi_chg']}
+    - {t: 'volume', k: ['volume']}
+    - {t: 'iv', k: ['iv']}
+    - {t: 'greeks', k: ['greeks']}
+  other:
+    - {t: 'NIFTY26OCT22400CE', why: 'an example monthly code'}
+    - {t: 'NIFTY26O1322400CE', why: 'an example weekly code'}
+- id: c32.history
+  notes: 32-option-chain
+  section: Chain
+  row: 'Contract history'
+  fields:
+    - {t: 'history.contracts[code]', k: ['history.contracts']}
+    - {t: 'from', k: ['from']}
+    - {t: 'history.dates', k: ['history.dates']}
+    - {t: 'close', k: ['close']}
+    - {t: 'oi', k: ['oi']}
+- id: c32.buysell
+  notes: 32-option-chain
+  section: Chain
+  row: 'Buy / Sell'
+  fields:
+    - {t: 'quotes.status', k: ['quotes.status']}
+  other:
+    - {t: 'market_status', why: 'the frame''s /session block (the lock while closed)'}
