@@ -4,7 +4,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { fixtureHomeData as home } from "../fixture-source.ts";
-import { groupCard } from "../groups.ts";
+import { groupCard, groupCards } from "../groups.ts";
+import { resolveSource } from "../sources.ts";
 import { groupFigures, rowsOf, tradeRows } from "../trades.ts";
 
 const MARKETS = ["india", "us"] as const;
@@ -26,27 +27,46 @@ test("every block of both markets reads, in the market's own currency; F&O books
 });
 
 test("a group card's headline is the block's own total; its F&O line is its book's own figure, not added in", async () => {
-  const { groups } = await home.groups("india");
+  const block = await home.groups("india");
+  const { groups } = block;
   const { books } = await home.fnoBooks();
-  for (const g of groups) {
-    const c = groupCard(g, books);
+  groupCards(block, books).forEach((c, at) => {
+    const g = groups[at];
     assert.equal(c.total, g.total, g.family);
     assert.equal(c.book, books.find((b) => b.family === g.family), g.family);
-    for (const s of c.ran) assert.ok(g.strategies.includes(s), "each strategy's own result, as published");
-  }
-  const rule = groupCard(groups.find((g) => g.family === "rule")!, books);
+    for (const { result } of c.ran) assert.ok(g.strategies.includes(result), "each strategy's own result, as published");
+  });
+  const card = (family: string) => groupCard(block, groups.findIndex((g) => g.family === family), books);
+  const rule = card("rule");
   assert.equal(rule.total?.net, -9309.36);
   assert.equal(rule.book?.pnl, 0);
   assert.equal(rule.totalLabel, "Stocks: total profit / loss");
-  assert.equal(groupCard(groups.find((g) => g.family === "hybrid")!, books).total, null, "Hybrid: no strategy yet");
+  assert.equal(card("hybrid").total, null, "Hybrid: no strategy yet");
 });
 
 test("in the US a card has no F&O line and reads 'Total profit / loss'", async () => {
-  const { groups } = await home.groups("us");
-  for (const g of groups) {
-    const c = groupCard(g, null);
+  for (const c of groupCards(await home.groups("us"), null)) {
     assert.equal(c.book, null);
+    assert.equal(c.bookSrc, null);
     assert.equal(c.totalLabel, "Total profit / loss");
+  }
+});
+
+// Judge 29, minor 3: a card's sources are named from its own group index, so each resolves to exactly its figure.
+test("each group card's sources resolve to exactly the figures it shows; a neighbour's source would not", async () => {
+  for (const m of MARKETS) {
+    const groups = await home.groups(m);
+    const fnoBooks = m === "india" ? await home.fnoBooks() : undefined;
+    const blocks = { groups, fnoBooks };
+    const cards = groupCards(groups, fnoBooks?.books ?? null);
+    for (const c of cards) {
+      if (c.total) assert.equal(resolveSource(c.totalSrc, blocks), c.total.net, c.totalSrc);
+      if (c.book) assert.equal(resolveSource(c.bookSrc!, blocks), c.book.pnl, String(c.bookSrc));
+      for (const { result, src } of c.ran) assert.equal(resolveSource(src, blocks), result.net, src);
+    }
+    // the mislabel the UI check must catch: the Rule-based figure under the AI team's source
+    const [rule, ai] = [cards.find((c) => c.family === "rule")!, cards.find((c) => c.family === "ai")!];
+    assert.notEqual(resolveSource(ai.totalSrc, blocks), rule.total?.net, `${m}: a mislabelled source resolves to another value`);
   }
 });
 

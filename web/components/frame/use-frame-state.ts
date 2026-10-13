@@ -3,7 +3,7 @@
 // the frame data. The URL hash opens a state directly, as the signed-off mockup's links do (#drawer=order:RELIANCE:buy,
 // #pal=NIFTY26OCT22800CE, #keys=1, #picks=1, #ap=rule, and #clock=open for the labelled example clock of example data).
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FrameData } from "../../lib/shell/contract.ts";
 import { frameClock, marketState, tradeLock } from "../../lib/shell/market.ts";
 import { SOON, screenById, screenHref, type NavScreen } from "../../lib/shell/nav.ts";
@@ -102,9 +102,11 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
     if (picksOpen) setPicksOpen(false);
   }, [menu, hover, palette, keysOpen, drawer, picksOpen, closePalette, closeDrawer]);
 
-  // Bookmarkable states in the hash (read on load and on every hash change).
+  // Bookmarkable states in the hash (read on load and on every hash change). Applied as a transition: the server
+  // rendered without the hash, and Home's sections stream in; an urgent update could reach a section before it has
+  // hydrated and make it hydrate against the new state (a text mismatch). A transition lets React hydrate first.
   useEffect(() => {
-    const read = () => {
+    const read = () => startTransition(() => {
       const h = new URLSearchParams(window.location.hash.slice(1));
       setExampleClock(h.get("clock") === "open");
       setDrawer(parseDrawer(h.get("drawer")));
@@ -113,7 +115,7 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
       setPicksOpen(h.get("picks") === "1");
       const ap = h.get("ap");
       setApproach(ap === "rule" || ap === "hybrid" || ap === "ai" ? ap : "all");
-    };
+    });
     read();
     window.addEventListener("hashchange", read);
     return () => window.removeEventListener("hashchange", read);
