@@ -9,7 +9,8 @@ import { Icon } from "../ui/icon.tsx";
 import { useFrame } from "../frame/frame-context.tsx";
 import { Delta, Tk } from "../frame/parts.tsx";
 import { TradeButton } from "../frame/trade.tsx";
-import { MoneyDelta, SectionHead } from "./section-head.tsx";
+import { src } from "../../lib/home/sources.ts";
+import { Money, MoneyDelta, SectionHead } from "./section-head.tsx";
 
 const REGIME: Record<string, string> = { EVENT_HEAVY: "Event-heavy session", TRENDING: "Trending market", CALM: "Calm market" };
 
@@ -53,8 +54,8 @@ export function Glance({ accounts, needs }: { accounts: Accounts; needs: number 
         <span className="mb-avatar paper"><Icon name="account_circle" /></span>
         <span className="l">Your paper account · open profit</span>
         <span className="v">
-          <MoneyDelta value={mine.open_profit} />
-          <span className="muted glance-note">{`value ${fmt.money(mine.value)}`}</span>
+          <MoneyDelta value={mine.open_profit} src={src("accounts", "accounts.manual.open_profit")} />
+          <span className="muted glance-note">value <Money value={mine.value} src={src("accounts", "accounts.manual.value")} /></span>
         </span>
       </div>
       <TopPick />

@@ -1,63 +1,94 @@
-// Home's checks on the running app (story W9), used by cases/home.mjs. Criterion 4: every money figure on Home is a
-// value of the fixture (the W10 block examples and the frame's 30-shell records) for that market, shown in that
-// market's currency: a figure the screen added up across groups, markets or currencies is not in the fixture and fails.
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+// Home's checks on the running app (story W9), used by cases/home.mjs. Criterion 4: every money figure on Home names
+// its source field (`data-src`, lib/home/sources.ts) and must equal exactly that field of the data the app renders
+// (the adapters' own output), with its sign and in that market's currency. A figure the screen added up has no field
+// that holds it, so it fails, whatever other value it happens to equal; a money figure without a source fails too.
+import { fixtureHomeData } from "../../../lib/home/fixture-source.ts";
+import { resolveSource } from "../../../lib/home/sources.ts";
+import { fixtureShellData } from "../../../lib/shell/fixture-source.ts";
+import { frameData } from "../../../lib/shell/view.ts";
 
-const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
-const read = (p) => JSON.parse(readFileSync(join(repo, p), "utf8"));
-const blocks = read("api/examples/blocks.json");
-const shell = read("design/mockups/30-shell/data.json");
 const SYMBOL = { india: "₹", us: "$" };
+/** Quoted text: a news headline ("Jio's ₹11 trn IPO") and the needs-you line quoting it are the publisher's words. */
+const QUOTED = ".news li > b, .att small";
+const MONEY = /([+\u2212-])?\s?([₹$])\s?([\d,]+(?:\.\d+)?)/g;
 
-function numbers(value, out = new Set()) {
-  // each value as shown with cents and as shown in whole units (whole rupees: −2,151.80 reads −₹2,152)
-  if (typeof value === "number") out.add(Math.round(Math.abs(value) * 100)).add(Math.round(Math.abs(value)) * 100);
-  else if (Array.isArray(value)) value.forEach((v) => numbers(v, out));
-  else if (value && typeof value === "object") Object.values(value).forEach((v) => numbers(v, out));
-  return out;
+/** The block payloads a source name can point into, exactly as the app's adapters give them for a market. */
+export async function sourceBlocks(market) {
+  const [accounts, positions, groups, strategyTrades, fnoBooks, shell] = await Promise.all([
+    fixtureHomeData.accounts(market),
+    fixtureHomeData.positions(market),
+    fixtureHomeData.groups(market),
+    fixtureHomeData.strategyTrades(market),
+    market === "india" ? fixtureHomeData.fnoBooks() : null,
+    fixtureShellData.read().then((p) => frameData(p, market).shell),
+  ]);
+  return { accounts, positions, groups, strategyTrades, fnoBooks: fnoBooks ?? undefined, shell };
 }
 
-/** Every number the fixture holds for a market, in cents (absolute: the sign is shown separately). */
-export function fixtureNumbers(market) {
-  const own = Object.entries(blocks).filter(([k]) => k.endsWith(`_${market}`) || (market === "india" && k.includes("Fno"))).map(([, v]) => v.value.payload);
-  return numbers([own, shell.markets[market]]);
-}
-
-/** The money figures shown inside Home (the frame's own overlays aside). Quoted text is left out: a news headline
- *  ("Jio's ₹11 trn IPO") and the needs-you line quoting it are the publisher's words, not the screen's figures. */
-export async function shownMoney(page) {
-  const text = await page.$eval(".home", (n) => {
-    const copy = n.cloneNode(true);
-    copy.querySelectorAll(".news li > b, .att small").forEach((q) => q.remove());
+/** Every money figure inside Home: the sourced ones with their source name, and those outside any source. */
+export async function shownMoney(page, plants = []) {
+  return page.$eval(".home", (home, { quoted, plants }) => {
+    const added = plants.map(({ src, text }) => {
+      const n = document.createElement("span");
+      if (src) n.dataset.src = src;
+      n.textContent = text;
+      return home.appendChild(n);
+    });
+    const sourced = [...home.querySelectorAll("[data-src]")].filter((n) => !n.closest(quoted)).map((n) => ({ src: n.dataset.src, text: n.textContent.trim() }));
+    const copy = home.cloneNode(true);
+    copy.querySelectorAll(`[data-src], ${quoted}`).forEach((q) => q.remove());
     document.body.append(copy);
-    const t = copy.innerText;
+    const rest = copy.innerText;
     copy.remove();
-    return t;
-  });
-  return [...text.matchAll(/([₹$])\s?([\d,]+(?:\.\d+)?)/g)].map((m) => ({ symbol: m[1], text: m[0], cents: Math.round(Number(m[2].replace(/,/g, "")) * 100) }));
+    added.forEach((n) => n.remove());
+    return { sourced, rest };
+  }, { quoted: QUOTED, plants });
 }
 
-export function moneyProblems(shown, market, allowed = fixtureNumbers(market)) {
+/** A shown money text as sign, symbol, amount and shown decimals; null when it is not one money figure. */
+function parse(text) {
+  const m = [...text.matchAll(MONEY)];
+  if (m.length !== 1 || m[0][0].trim() !== text.trim()) return null;
+  const [, sign, symbol, digits] = m[0];
+  return { negative: sign === "\u2212" || sign === "-", symbol, amount: Number(digits.replace(/,/g, "")), decimals: digits.split(".")[1]?.length ?? 0 };
+}
+
+/** What is wrong with the shown figures, given the market's source blocks. */
+export function moneyProblems({ sourced, rest }, market, blocks) {
   const problems = [];
-  if (!shown.length) problems.push("no money figure found on Home");
-  for (const m of shown) {
-    if (m.symbol !== SYMBOL[market]) problems.push(`a ${m.symbol} figure in the ${market} market: ${m.text}`);
-    else if (!allowed.has(m.cents)) problems.push(`a figure not in the fixture (added up on screen?): ${m.text}`);
+  if (!sourced.length) problems.push("no sourced money figure found on Home");
+  for (const { src, text } of sourced) {
+    const value = resolveSource(src, blocks);
+    const shown = parse(text);
+    if (typeof value !== "number") problems.push(`${text}: its source ${src} is not a number in the data`);
+    else if (!shown) problems.push(`${src}: "${text}" is not one money figure`);
+    else if (shown.symbol !== SYMBOL[market]) problems.push(`${src}: a ${shown.symbol} figure in the ${market} market: ${text}`);
+    else {
+      const scale = 10 ** shown.decimals;
+      if (Math.round(Math.abs(value) * scale) !== Math.round(shown.amount * scale) || (value < 0) !== shown.negative)
+        problems.push(`${src}: shows ${text}, the field holds ${value}`);
+    }
   }
+  for (const m of rest.matchAll(MONEY)) problems.push(`a money figure with no source field (computed on screen?): ${m[0].trim()}`);
   return problems;
 }
 
-/** Criterion 4 on the page, and a planted cross-currency sum proves the check bites. */
+/** The judge's plants, injected into the real page on every run; each must be caught. */
+const PLANTS = [
+  { why: "a sum of two groups (Rule-based + AI team) that equals another figure (the Baselines total)", src: "groups:groups[0].total.net", text: "\u2212₹8,293.55" },
+  { why: "a figure with no source", text: "₹4,44,907.60" },
+  { why: "a cross-currency sum carrying a real source", src: "accounts:accounts.manual.value", text: "₹4,44,907.60" },
+  { why: "a source that does not exist", src: "groups:groups[9].total.net", text: "₹1.00" },
+];
+
+/** Criterion 4 on the page, and the plants prove the check bites. */
 export async function homeMoneyChecks(page, { market }) {
-  const shown = await shownMoney(page);
-  const problems = moneyProblems(shown, market);
-  const india = fixtureNumbers("india");
-  const planted = moneyProblems([{ symbol: "₹", text: "₹4,40,900 + $4,007.60", cents: Math.round((440900 + 4007.6) * 100) }], "india", india);
-  if (!planted.length) problems.push("the check did not catch a planted cross-currency sum");
-  const groupsSum = moneyProblems([{ symbol: "₹", text: "Rule-based + You", cents: Math.round(Math.abs(-9309.36 + 1800) * 100) }], "india", india);
-  if (!groupsSum.length) problems.push("the check did not catch a planted sum of two groups");
+  const blocks = await sourceBlocks(market);
+  const problems = moneyProblems(await shownMoney(page), market, blocks);
+  for (const plant of PLANTS) {
+    const caught = moneyProblems(await shownMoney(page, [plant]), market, blocks).length > problems.length;
+    if (!caught) problems.push(`the check did not catch ${plant.why}`);
+  }
   return problems;
 }
 

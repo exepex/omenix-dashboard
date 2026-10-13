@@ -19,9 +19,16 @@ export function SectionHead({ title, sub, go }: { title: string; sub?: string; g
   );
 }
 
-/** A profit or loss with its sign and colour (never colour alone). */
-export function MoneyDelta({ value, decimals = 2 }: { value: number | null | undefined; decimals?: number }) {
+/** A profit or loss with its sign and colour (never colour alone). `src` names the block field it shows
+ *  (lib/home/sources.ts), so the UI check can compare the figure with exactly that field. */
+export function MoneyDelta({ value, src, decimals = 2 }: { value: number | null | undefined; src: string; decimals?: number }) {
   const { fmt } = useFrame();
   if (value === null || value === undefined) return <span className="muted">—</span>;
-  return <span className={`mb-delta ${value > 0 ? "up" : value < 0 ? "down" : "flat"}`}>{fmt.money(value, decimals, true)}</span>;
+  return <span className={`mb-delta ${value > 0 ? "up" : value < 0 ? "down" : "flat"}`} data-src={src}>{fmt.money(value, decimals, true)}</span>;
+}
+
+/** An amount (no sign colour), with its source field. */
+export function Money({ value, src, decimals }: { value: number; src: string; decimals?: number }) {
+  const { fmt } = useFrame();
+  return <span data-src={src}>{fmt.money(value, decimals)}</span>;
 }

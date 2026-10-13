@@ -5,7 +5,8 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
-import { AI_TEAM, MODEL_NAME, applyDisplayNames, citedId, displayNames } from "../strategy-names.ts";
+import { modelNameIn, namesModel, withoutModelNames } from "../model-names.ts";
+import { AI_TEAM, applyDisplayNames, citedId, displayNames } from "../strategy-names.ts";
 
 const web = join(import.meta.dirname, "..", "..", "..");
 const repo = join(web, "..");
@@ -25,12 +26,12 @@ function texts(value: unknown, out: string[] = []): string[] {
 
 test("the fixtures really carry model names (the rule has work to do)", () => {
   assert.ok(FIXTURES.length > 15);
-  assert.ok(FIXTURES.some((f) => texts(json(f)).some((s) => MODEL_NAME.test(s))));
+  assert.ok(FIXTURES.some((f) => texts(json(f)).some(namesModel)));
 });
 
 test("after the rule, no fixture text names an AI model", () => {
   for (const f of FIXTURES) {
-    const left = texts(applyDisplayNames(json(f))).filter((s) => MODEL_NAME.test(s));
+    const left = texts(applyDisplayNames(json(f))).filter(namesModel);
     assert.deepEqual(left.slice(0, 3), [], f);
   }
 });
@@ -81,7 +82,54 @@ test("a cited id shown as text reads each strategy id as its display name, still
   const strategies = { "ai.combined.opus.v1": { name: `${AI_TEAM} · combined A` }, "rule.model_news.v1": { name: "Model + news" } };
   assert.equal(citedId("tra:acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d:biggest_win", strategies), `tra:acc:[${AI_TEAM} · combined A]:2026-09-29-RELIANCE-3d:biggest_win`);
   assert.equal(citedId("rule.model_news.v1", strategies), "[Model + news]");
-  assert.doesNotMatch(citedId("acc:ai.unknown.sonnet.v1:x", strategies), MODEL_NAME);
+  assert.equal(namesModel(citedId("acc:ai.unknown.sonnet.v1:x", strategies)), false);
   assert.equal(citedId("news:abc123", strategies), "news:abc123");
 });
 
+
+// Judge 24 (W9): a fixed list of names was the wrong design. Names come from the allowlist; detection is generic.
+test("names come from the allowlist: a role it knows reads as approach and role, an unknown one as the approach only", () => {
+  const shown = displayNames(new Map([
+    ["ai.combined.fable5.v1", "AI combined (Fable 5)"],
+    ["ai.reasoning.o3.v1", "AI reasoning (o3)"],
+    ["ai.pattern_mood.sonnet.v1", "AI price pattern & mood (Sonnet)"],
+    ["hybrid.momentum.gpt5.v1", "Hybrid momentum (GPT-5)"],
+    ["hybrid.calm.v1", "Rules + a careful reader"],
+    ["rule.model_news.v1", "Model + news (claude-sonnet-5)"],
+  ]));
+  assert.deepEqual(Object.fromEntries(shown), {
+    "ai.combined.fable5.v1": `${AI_TEAM} · combined`,
+    "ai.reasoning.o3.v1": AI_TEAM,
+    "ai.pattern_mood.sonnet.v1": `${AI_TEAM} · price pattern & mood`,
+    "hybrid.momentum.gpt5.v1": "Hybrid B", // letters by id: hybrid.calm sorts first
+    "hybrid.calm.v1": "Hybrid A",
+    "rule.model_news.v1": "Rule-based",
+  });
+});
+
+test("the detector knows families and id shapes, not a list: each of these is one whole model token", () => {
+  for (const [text, token] of [
+    ["AI combined (Fable 5)", "Fable 5"],
+    ["AI reasoning (o3)", "o3"],
+    ["picked by claude-sonnet-5 today", "claude-sonnet-5"],
+    ["claude-3-5-haiku", "claude-3-5-haiku"],
+    ["GPT-4o-mini scored it", "GPT-4o-mini"],
+    ["gpt-4.1", "gpt-4.1"],
+    ["Gemini 2.5 Pro", "Gemini 2.5 Pro"],
+    ["Llama-3.1 and Qwen", "Llama-3.1"],
+    ["o4-mini", "o4-mini"],
+    ["DeepSeek-R1", "DeepSeek-R1"],
+  ]) assert.equal(modelNameIn(text), token, text);
+  for (const clean of ["Model + news", "a fable about markets", "the Claude app", "Hybrid", "O2 margin", "Model + news, 60% bar"]) assert.equal(modelNameIn(clean), null, clean);
+});
+
+test("model ids are replaced as whole tokens: no 'claude--5', no 'claude-AI team-4'", () => {
+  assert.equal(withoutModelNames("picked by claude-sonnet-5 today", AI_TEAM), `picked by ${AI_TEAM} today`);
+  assert.equal(applyDisplayNames({ note: "Reviewed by claude-haiku-4 overnight" }).note, `Reviewed by ${AI_TEAM} overnight`);
+  assert.equal(applyDisplayNames({ id: "claude-sonnet-5" }).id, AI_TEAM);
+  assert.equal(applyDisplayNames({ note: "AI reasoning (o3) and AI combined (Fable 5)" }).note, "AI reasoning and AI combined");
+  const payload = { strategies: [{ id: "ai.combined.fable5.v1", name: "AI combined (Fable 5)" }, { id: "ai.reasoning.o3.v1", name: "AI reasoning (o3)" }], line: "Best: AI reasoning (o3)" };
+  const out = applyDisplayNames(payload);
+  assert.deepEqual(out.strategies.map((x) => x.name), [`${AI_TEAM} · combined`, AI_TEAM]);
+  assert.equal(out.line, `Best: ${AI_TEAM}`);
+});

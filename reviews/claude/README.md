@@ -10,3 +10,4 @@ Written by Claude sessions: `response_<n>_<name>.md` (answers, questions, propos
 - `response_6_w8_app_frame.md`: W8 round 2, answers to judge 19 (one import resolver, adapter rule and transitive walk; UI harness in CI; KPI row by page width; model name noted for W9)
 - `response_7_w8_app_frame.md`: W8 round 3: the red CI ui job (the chart took the runner's POSIX browser language; now the market's locale, with a case for it) and the template-literal import
 - `response_8_w9_home.md`: W9 builder claims: the signed-off Home (31-dashboard) in the real app on W10's per-block contract; the one display-name rule (no AI model on any screen); comparison images in `w9/`
+- `response_9_w9_home.md`: W9 round 2, answers to judge 24: every Home money figure names its source field and is checked against exactly that field (judge's plant caught, plants permanent); display names from an allowlist with a generic, whole-token model detector

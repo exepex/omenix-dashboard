@@ -4,6 +4,7 @@
 // the picking strategy's own record on that stock, and Buy / Sell.
 import { asOf } from "../../lib/shell/clock.ts";
 import type { Signal } from "../../lib/shell/contract.ts";
+import { src } from "../../lib/home/sources.ts";
 import { signed } from "../../lib/ui/format.ts";
 import { Icon } from "../ui/icon.tsx";
 import { useFrame } from "./frame-context.tsx";
@@ -43,7 +44,8 @@ function AfterCosts({ x }: { x: Signal }) {
   );
 }
 
-function Record({ x, sym }: { x: Signal; sym: string }) {
+/** `at` is the pick's index in the shell's signals, the source of its record figure. */
+function Record({ x, at, sym }: { x: Signal; at: number; sym: string }) {
   const { fmt } = useFrame();
   const r = x.record;
   if (!r) {
@@ -59,13 +61,13 @@ function Record({ x, sym }: { x: Signal; sym: string }) {
     <div className="proof" data-tip={`${x.strategy} on ${sym} so far: ${r.trades} settled paper trades, ${won} won, net ${fmt.money(r.net_pnl, 2)}. Fewer than 20 is too few to rank.`}>
       <Icon name="history" />
       {`Record here: ${won} of ${r.trades} won, `}
-      <span className={`mb-delta ${r.net_pnl > 0 ? "up" : r.net_pnl < 0 ? "down" : "flat"}`}>{fmt.money(r.net_pnl, undefined, true)}</span>
+      <span className={`mb-delta ${r.net_pnl > 0 ? "up" : r.net_pnl < 0 ? "down" : "flat"}`} data-src={src("shell", `signals[${at}].record.net_pnl`)}>{fmt.money(r.net_pnl, undefined, true)}</span>
       {r.badge === "too_few_to_rank" ? " · too few to rank" : null}
     </div>
   );
 }
 
-export function PickRow({ x }: { x: Signal }) {
+export function PickRow({ x, at }: { x: Signal; at: number }) {
   const { data, item, fmt } = useFrame();
   const it = item(x.id);
   if (!it) return null;
@@ -88,7 +90,7 @@ export function PickRow({ x }: { x: Signal }) {
         {` at N+${x.horizon} · ${x.strategy} · model ${pct1(x.prob_up)} up`}
       </div>
       <AfterCosts x={x} />
-      <Record x={x} sym={it.sym} />
+      <Record x={x} at={at} sym={it.sym} />
       <TradePair id={x.id} className="act" />
     </li>
   );

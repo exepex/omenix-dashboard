@@ -12,7 +12,8 @@ import { Icon } from "../ui/icon.tsx";
 import { useFrame } from "../frame/frame-context.tsx";
 import { ApBadge, Tk } from "../frame/parts.tsx";
 import { TradePair } from "../frame/trade.tsx";
-import { MoneyDelta, SectionHead } from "./section-head.tsx";
+import { src } from "../../lib/home/sources.ts";
+import { Money, MoneyDelta, SectionHead } from "./section-head.tsx";
 
 function Side({ qty }: { qty: number }) {
   return qty >= 0 ? (
@@ -37,23 +38,24 @@ function Row({ r, sessionDate }: { r: TradeRow; sessionDate: string }) {
           <span>{`${Math.abs(p.qty).toLocaleString(LOCALE[shell.currency] ?? "en-US", { maximumFractionDigits: 0 })} × ${fmt.price(p.avg)}`}</span>
           <small>{`last ${fmt.price(p.last)}${it ? " · " + asOf(it, data).short : ""}`}</small>
         </div>
-        <div className="p"><MoneyDelta value={p.unrealised} /><small>{signed(ownPct(p))}</small></div>
+        <div className="p"><MoneyDelta value={p.unrealised} src={src("positions", `own[${r.at}].unrealised`)} /><small>{signed(ownPct(p))}</small></div>
         <div className="a"><TradePair id={p.id} variant="letter" /></div>
       </li>
     );
   }
-  const g = groupFigures(r.trades);
-  const n = r.trades.length;
+  const g = groupFigures(r.entries);
+  const n = r.entries.length;
+  const at = (e: { at: number }, field: string) => src("strategyTrades", `strategy_trades[${e.at}].${field}`);
   const exits = g.exits.map((d) => dateShort(`${d}T06:00:00Z`, shell) + (d === sessionDate ? " (today)" : "")).join(", ");
   return (
     <li>
       <div className="w">
-        <div className="nm"><Side qty={r.trades[0].qty} /><Tk id={r.id} /><ApBadge family={r.family} /></div>
+        <div className="nm"><Side qty={r.entries[0].trade.qty} /><Tk id={r.id} /><ApBadge family={r.family} /></div>
         <small>{`${n} trade${n > 1 ? "s" : ""}: ${g.strategies.join(", ")} · N+${g.horizons.join(", N+")}`}</small>
       </div>
-      <div className="q"><span>{`${fmt.money(g.amount)} each`}</span><small>{`exits ${exits}`}</small></div>
+      <div className="q"><span><Money value={g.amount.trade.amount} src={at(g.amount, "amount")} /> each</span><small>{`exits ${exits}`}</small></div>
       <div className="p">
-        {g.pnl !== null ? <MoneyDelta value={g.pnl} /> : <span><MoneyDelta value={g.low} /> to <MoneyDelta value={g.high} /></span>}
+        {g.same ? <MoneyDelta value={g.same.trade.unrealised} src={at(g.same, "unrealised")} /> : <span><MoneyDelta value={g.low.trade.unrealised} src={at(g.low, "unrealised")} /> to <MoneyDelta value={g.high.trade.unrealised} src={at(g.high, "unrealised")} /></span>}
         <small>{g.pct !== null ? signed(g.pct) : "each trade"}</small>
       </div>
       <div className="a"><TradePair id={r.id} variant="letter" /></div>

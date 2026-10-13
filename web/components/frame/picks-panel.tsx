@@ -66,7 +66,7 @@ export function PicksBody({ where }: { where: "panel" | "home" }) {
       </div>
       <ul className="mb-wl-list" aria-label="Today’s buy picks">
         {shown.map((x) => (
-          <PickRow key={`${x.family}:${x.id}`} x={x} />
+          <PickRow key={`${x.family}:${x.id}`} x={x} at={shell.signals.indexOf(x)} />
         ))}
         {shown.length ? null : <Empty hybrid={approach === "hybrid"} />}
       </ul>

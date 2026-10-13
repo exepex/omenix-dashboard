@@ -57,15 +57,17 @@ test("open trades: yours first, then one row per stock and family; a row shows o
   assert.deepEqual(["all", "manual", "rule", "hybrid", "ai", "baseline"].map((t) => rowsOf(rows, t as never).length), [6, 1, 1, 0, 2, 2]);
   for (const r of rows) {
     if (r.kind !== "group") continue;
-    const f = groupFigures(r.trades);
-    const own = r.trades.map((t) => t.unrealised);
-    if (f.pnl !== null) assert.ok(own.includes(f.pnl));
-    assert.ok(own.includes(f.low) && own.includes(f.high), "the range ends are trades' own values");
+    const f = groupFigures(r.entries);
+    // every figure is one trade's own field, named by its index in the block (the source the screen shows)
+    for (const e of [f.amount, f.low, f.high, ...(f.same ? [f.same] : [])]) assert.equal(strategy_trades[e.at], e.trade);
+    assert.ok(r.entries.some((e) => e.trade === f.low.trade) && r.entries.some((e) => e.trade === f.high.trade), "the range ends are trades' own values");
   }
 });
 
 test("a group of trades with different results shows their range, still each trade's own value", () => {
   const t = (unrealised: number) => ({ id: "X", family: "rule" as const, strategy_id: "rule.a.v1", strategy: "A", horizon: 1, qty: 1, avg: 1, unrealised, exit: "2026-10-08", amount: 100, as_of: "" });
-  const f = groupFigures([t(5), t(-3), t(5)]);
-  assert.deepEqual([f.pnl, f.low, f.high], [null, -3, 5]);
+  const f = groupFigures([t(5), t(-3), t(5)].map((trade, at) => ({ trade, at })));
+  assert.deepEqual([f.same, f.low.at, f.high.at], [null, 1, 0]);
+  const same = groupFigures([t(4), t(4)].map((trade, at) => ({ trade, at })));
+  assert.equal(same.same?.trade.unrealised, 4);
 });

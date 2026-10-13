@@ -26,7 +26,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { contrastProblems } from "./contrast.mjs";
 import { apiFixture } from "./fixtures.mjs";
-import { MODEL_NAME } from "../../lib/ui/strategy-names.ts";
+import { modelNameIn } from "../../lib/ui/model-names.ts";
 
 const web = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const repo = join(web, "..");
@@ -214,8 +214,11 @@ async function runCase(browser, c) {
     for (const sel of c.expectSelector ?? []) if (!(await page.$(sel))) errors.push(`${tag} missing element: ${sel}`);
     // Owner rule (W9 criterion 5): no screen names an AI model, in its text or in a tooltip, label or title.
     const shown = await page.evaluate(() => [document.body.innerText, ...[...document.querySelectorAll("[data-tip], [aria-label], [title]")].flatMap((n) => [n.getAttribute("data-tip"), n.getAttribute("aria-label"), n.getAttribute("title")])].filter(Boolean).join("\n"));
-    const model = MODEL_NAME.exec(shown);
-    if (model) errors.push(`${tag} names an AI model: "${shown.slice(Math.max(0, model.index - 40), model.index + 40).replace(/\s+/g, " ")}"`);
+    const model = modelNameIn(shown);
+    if (model) {
+      const at = shown.indexOf(model);
+      errors.push(`${tag} names an AI model: "${shown.slice(Math.max(0, at - 40), at + 40).replace(/\s+/g, " ")}"`);
+    }
     const dir = join(out, c.name.replace(/[^a-z0-9-]+/gi, "_"));
     mkdirSync(dir, { recursive: true });
     const appPng = join(dir, `app-${width}-full.png`);
