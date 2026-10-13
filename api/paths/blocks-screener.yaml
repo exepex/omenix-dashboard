@@ -1,0 +1,227 @@
+# Block endpoints of the screener (33-screener, story W11). India's stock and F&O rows come from NSE's files (publisher
+# fno: exepex/trading publishes them, owner 13 Oct 2026; India-only paths); the US rows and the tools' view from the stock tool.
+/api/v1/markets/india/screener/summary:
+  get:
+    tags: [blocks]
+    operationId: getScreenerSummaryIndia
+    summary: 'Counts over each universe of NSE stocks: tabs, up and down, the tiles, the screens'' chips, the Markets breadth'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: 'fno', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'TR-NSE-proposed', status: 'planned'}
+    x-read-model: 'fno.pages_history page screener_summary (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
+    x-empty: 'never empty on a trading day; on a holiday the last session''s counts with their as_of'
+    x-feeds: [h33.header, h33.screens, h33.tabs, h33.tiles, h33.updown, h34.breadth]
+    x-shared: 'one set of counts over the same rows: the screener''s day, tabs, up and down, tiles and chips, and the Markets breadth (34''s breadth equals these counts: checked on the 12 Oct data)'
+    responses:
+      '200':
+        description: 'The ScreenerSummaryIndia block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ScreenerSummaryIndiaResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getScreenerSummaryIndia_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/us/screener/summary:
+  get:
+    tags: [blocks]
+    operationId: getScreenerSummaryUs
+    summary: 'Counts over the stock tool''s 20 US companies (the screener''s tiles and chips, the Markets breadth)'
+    x-status: planned
+    x-publisher: stock
+    x-catalog: {publisher: 'stock', source: 'the stock tool''s daily prices of its 20 US companies (ohlc); returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'post-close run', story: 'K5-proposed', status: 'planned'}
+    x-read-model: 'rm.blocks page_key screener_summary (K5-proposed)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:screener_summary, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'never empty: 20 companies'
+    x-feeds: [h33.header, h33.screens, h33.tiles, h33.updown, h34.breadth]
+    x-shared: 'one set of counts over the stock tool''s 20 companies: the screener''s tiles and chips and the Markets breadth'
+    responses:
+      '200':
+        description: 'The ScreenerSummaryUs block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ScreenerSummaryUsResponse'}
+            examples:
+              us: {$ref: '#/components/examples/getScreenerSummaryUs_us'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/screener/stocks:
+  get:
+    tags: [blocks]
+    operationId: getScreenerStocksIndia
+    summary: 'A page of NSE stock rows, filtered and sorted (the screener table; the Markets movers)'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: 'fno', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'TR-NSE-proposed', status: 'planned'}
+    x-read-model: 'fno.pages_history page screener_stocks (proposed; the route filters, sorts and pages)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
+    x-empty: 'rows empty: "No stock matches"'
+    x-feeds: [h33.filters, h33.period, h33.screens, h33.sort, h33.table, h33.which, h34.movers]
+    x-shared: 'one table of the day''s rows: the screener''s table and chips filter it, the Markets movers are its top rows by d1 or value (all 8 movers equal on the 12 Oct data)'
+    parameters:
+      - {name: u, in: query, description: 'Which stocks (default all in India, ours in the US)', schema: {type: string, enum: [all, n500, fno, ours]}}
+      - {name: screen, in: query, description: 'A ready-made screen (33-screener/notes.md row 4); the tools-based screens (picks, results) take symbols from the tools block', schema: {type: string, enum: [high, low, movers, volume, trend, fall, delivery, oversold]}}
+      - {name: period, in: query, description: 'The period that cmin and sort chg use (default m1)', schema: {type: string, enum: [d1, w1, m1, m3, y1]}}
+      - {name: pmin, in: query, schema: {type: number, minimum: 0}}
+      - {name: pmax, in: query, schema: {type: number, minimum: 0}}
+      - {name: cmin, in: query, description: Change in the period at least (percent points), schema: {type: number}}
+      - {name: vrmin, in: query, description: 'Volume × usual at least (v ÷ va)', schema: {type: number, minimum: 0}}
+      - {name: dlmin, in: query, description: Delivery at least (percent), schema: {type: number, minimum: 0, maximum: 100}}
+      - {name: rmax, in: query, description: RSI at most, schema: {type: number, minimum: 0, maximum: 100}}
+      - {name: vamin, in: query, description: 'Usual volume at least (the movers'' "All NSE" list uses 100000 with pmin 20)', schema: {type: number, minimum: 0}}
+      - {name: symbols, in: query, description: 'Comma-separated symbols, at most 50 (the tools-based screens, the movers of one list)', schema: {type: string, maxLength: 600}}
+      - {name: sort, in: query, description: 'A column, descending; a leading minus sorts ascending (default value = p × v)', schema: {type: string, enum: [value, -value, p, -p, chg, -chg, d1, -d1, m1, -m1, pos, -pos, abs, vr, dl, -dl, r, -r]}}
+      - {name: page, in: query, schema: {type: integer, minimum: 1, default: 1}}
+      - {name: page_size, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 25}}
+    responses:
+      '200':
+        description: 'The ScreenerStocksIndia block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ScreenerStocksIndiaResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getScreenerStocksIndia_india'}
+              india_high: {$ref: '#/components/examples/getScreenerStocksIndia_india_high'}
+              india_gainers: {$ref: '#/components/examples/getScreenerStocksIndia_india_gainers'}
+      '422': {$ref: '#/components/responses/Invalid'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/us/screener/stocks:
+  get:
+    tags: [blocks]
+    operationId: getScreenerStocksUs
+    summary: 'A page of the stock tool''s US company rows, filtered and sorted'
+    x-status: planned
+    x-publisher: stock
+    x-catalog: {publisher: 'stock', source: 'the stock tool''s daily prices of its 20 US companies (ohlc); returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'post-close run', story: 'K5-proposed', status: 'published'}
+    x-read-model: 'rm.blocks page_key screener_stocks (K5-proposed; the route filters, sorts and pages)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:screener_stocks, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'rows empty: "No stock matches"'
+    x-feeds: [h33.filters, h33.period, h33.screens, h33.sort, h33.table, h33.which, h34.movers]
+    x-shared: 'one table of the 20 companies'' rows: the screener''s table and chips filter it, the Markets movers are its top rows'
+    parameters:
+      - {name: u, in: query, description: 'Which stocks (default all in India, ours in the US)', schema: {type: string, enum: [ours]}}
+      - {name: screen, in: query, description: 'A ready-made screen (33-screener/notes.md row 4); the tools-based screens (picks, results) take symbols from the tools block', schema: {type: string, enum: [high, low, movers, volume, trend, fall, oversold]}}
+      - {name: period, in: query, description: 'The period that cmin and sort chg use (default m1)', schema: {type: string, enum: [d1, w1, m1, m3, y1]}}
+      - {name: pmin, in: query, schema: {type: number, minimum: 0}}
+      - {name: pmax, in: query, schema: {type: number, minimum: 0}}
+      - {name: cmin, in: query, description: Change in the period at least (percent points), schema: {type: number}}
+      - {name: vrmin, in: query, description: 'Volume × usual at least (v ÷ va)', schema: {type: number, minimum: 0}}
+      - {name: rmax, in: query, description: RSI at most, schema: {type: number, minimum: 0, maximum: 100}}
+      - {name: vamin, in: query, description: 'Usual volume at least (the movers'' "All NSE" list uses 100000 with pmin 20)', schema: {type: number, minimum: 0}}
+      - {name: symbols, in: query, description: 'Comma-separated symbols, at most 50 (the tools-based screens, the movers of one list)', schema: {type: string, maxLength: 600}}
+      - {name: sort, in: query, description: 'A column, descending; a leading minus sorts ascending (default value = p × v)', schema: {type: string, enum: [value, -value, p, -p, chg, -chg, d1, -d1, m1, -m1, pos, -pos, abs, vr, dl, -dl, r, -r]}}
+      - {name: page, in: query, schema: {type: integer, minimum: 1, default: 1}}
+      - {name: page_size, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 25}}
+    responses:
+      '200':
+        description: 'The ScreenerStocksUs block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ScreenerStocksUsResponse'}
+            examples:
+              us: {$ref: '#/components/examples/getScreenerStocksUs_us'}
+              us_gainers: {$ref: '#/components/examples/getScreenerStocksUs_us_gainers'}
+      '422': {$ref: '#/components/responses/Invalid'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/screener/tools:
+  get:
+    tags: [blocks]
+    operationId: getScreenerTools
+    summary: 'The stock tool''s view of the companies it follows: strategies buying, the model''s chance, days to results'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key screener_tools (K5-proposed; interim: rm.home agreement and model scores)'
+    x-freshness: 'stock_age; pre-open run'
+    x-cache: 'tag rm:blocks:<market>:screener_tools, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'a company with strategies.of 0 shows "No view today"'
+    x-feeds: [h33.screens, h33.tools]
+    x-shared: 'one view per followed company: the table''s tools column and the two tools-based chips'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The ScreenerTools block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ScreenerToolsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getScreenerTools_india'}
+              us: {$ref: '#/components/examples/getScreenerTools_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/screener/summary:
+  get:
+    tags: [blocks]
+    operationId: getFnoScreenerSummary
+    summary: 'Counts over the F&O underlyings: the four build-ups and the F&O screens'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page fno_screener_summary (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
+    x-empty: 'never empty on a trading day'
+    x-feeds: [h33.buildup, h33.fno-screens, h33.tabs]
+    x-shared: 'one set of counts over the same underlyings: the F&O tab''s count, the build-up tiles and the F&O chips'
+    responses:
+      '200':
+        description: 'The FnoScreenerSummary block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoScreenerSummaryResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFnoScreenerSummary_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/screener/rows:
+  get:
+    tags: [blocks]
+    operationId: getFnoScreenerRows
+    summary: 'A page of F&O underlyings with the future, open interest, build-up, ATM IV, put-call ratio and move priced in'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page fno_screener_rows (proposed; the route filters, sorts and pages)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
+    x-empty: 'rows empty'
+    x-feeds: [h33.fno-screens, h33.fno-table, h34.index-options]
+    x-shared: 'one table of underlyings: the F&O table and chips filter it; the Markets index options are its four index rows (equal on the 12 Oct data)'
+    parameters:
+      - {name: screen, in: query, schema: {type: string, enum: [long_buildup, short_buildup, short_covering, long_unwinding, ivhigh, ivlow, oiup, index]}}
+      - {name: symbols, in: query, description: 'Comma-separated underlyings, at most 50 (the Markets overview asks for NIFTY,BANKNIFTY,FINNIFTY,MIDCPNIFTY)', schema: {type: string, maxLength: 600}}
+      - {name: sort, in: query, description: 'Default oi (open interest × future price); a leading minus sorts ascending', schema: {type: string, enum: [oi, fc, -fc, oc, -oc, ivr, -ivr, pcr, -pcr, mv, -mv]}}
+      - {name: page, in: query, schema: {type: integer, minimum: 1, default: 1}}
+      - {name: page_size, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 25}}
+    responses:
+      '200':
+        description: 'The FnoScreenerRows block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoScreenerRowsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFnoScreenerRows_india'}
+              india_index_options: {$ref: '#/components/examples/getFnoScreenerRows_india_index_options'}
+      '422': {$ref: '#/components/responses/Invalid'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}

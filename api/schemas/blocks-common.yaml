@@ -28,7 +28,7 @@ BlockMetaFields:
   x-element: [s30.freshness]
   x-catalog: {publisher: dashboard, source: 'the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks)', freshness: each request, status: planned}
   properties:
-    publisher: {type: string, enum: [stock, fno, dashboard], x-unit: enum, description: 'stock = contactexepex/agentic-stock-prediction; fno = exepex/trading; dashboard = this repository'}
+    publisher: {type: string, enum: [stock, fno, dashboard], x-unit: enum, description: 'stock = contactexepex/agentic-stock-prediction; fno = exepex/trading (its F&O read models and, owner 13 Oct 2026, the blocks built from NSE''s daily files); dashboard = this repository'}
     freshness: {$ref: '#/components/schemas/BlockFreshness'}
     paper: {type: string, const: Paper, x-unit: text, description: 'Every block is research and paper trading only; the screen shows Paper on every signal and money figure'}
 StockBlockMeta:
@@ -41,8 +41,9 @@ StockBlockMeta:
         publisher: {const: stock}
 FnoBlockMeta:
   description: >-
-    Envelope of an F&O-tool block: the stock envelope plus `product` and `publication_id` (exepex/trading P1
-    criterion 4); the dashboard reads only rows of `fno.current_publication` (P3). India only
+    Envelope of an exepex/trading block (its F&O read models and the blocks it builds from NSE's daily files): the
+    stock envelope plus `product` and `publication_id` (exepex/trading P1 criterion 4); the dashboard reads only rows of
+    `fno.current_publication` (P3). India only
   allOf:
     - $ref: '#/components/schemas/ReadModelMeta'
     - $ref: '#/components/schemas/BlockMetaFields'

@@ -46,7 +46,9 @@ def session(x: Mock, market):
     return {"": ("closed: before the 7 Oct open in the US, after the close in India", {
         "exchange": mk["exchange"], "zone": mk["zone"], "session_date": st["session_date"], "open_utc": st["open_utc"],
         "close_utc": st["close_utc"], "next_open_utc": st["next_open_utc"], "regime": st["regime"],
-        "post_close_at": st["runs"]["post_close"]["next_at"]})}
+        "post_close_at": st["runs"]["post_close"]["next_at"],
+        # the session's major events: 31's calendar rows marked major on the session date (India: the RBI decision)
+        "major_event_names": [e["title"] for e in x.h(market)["events"] if e["major"] and e["date"] == st["session_date"]]})}
 
 
 def _level(it, role):

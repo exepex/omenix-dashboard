@@ -86,3 +86,10 @@ warning, so a naive revoke would have aborted `apply.sh` on a server where `PUBL
 |---|---|---|---|
 | A | Exception 2 understates the harm; large-object revokes and detection only in `omenix` | **Accepted** (function rights are per database; reproduced: `dashboard_app` created a large object in `postgres`). README rows 1 and 2 now say "disk fill, as for exception 1". New `sql/12_large_objects.sql`, run by `apply.sh` in every database the admin can reach (an unreachable one is reported and skipped). New `tests/large_objects.sh` counts large objects in every database that accepts connections (fails on any; fails if PUBLIC may connect where the admin cannot check), used by CI and by `owner/run_real_matrix.sh` (RESULT "no large objects anywhere"). CI step 6a: `omenix` closed, `postgres` open, a large object made there is detected and `postgres` is reported OPEN. | CI steps 4, 6a, 6b |
 | B | `role_matrix.txt:26` names `05_server_wide.sql` | **Accepted**, now names `12_large_objects.sql` and `15_server_wide.sql`. | `tests/role_matrix.txt` |
+
+## Owner's real-server runs (13 Oct 2026)
+
+Results per criterion and what is still open: `platform/evidence/README.md`. One builder bug surfaced there: the
+restore script's marker-drop trap does not run on bash 3.2 (macOS), so `fno.x1_restore_marker` stayed on
+`omenix-pg`; the owner dropped it by hand. The root cause is fixed in every owner script (`a0bb4bb`) and tested on
+bash 3.2 in CI. Step 6 (delete lock, failed-connection and storage alerts) is in place.

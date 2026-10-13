@@ -400,3 +400,306 @@
     - {t: status, k: [status]}
     - {t: at, k: [at]}
     - {t: tickers, k: [tickers]}
+
+# ---------- W11: 33-screener and 34-markets (only the rows of each notes.md "Elements" table) ----------
+- id: h33.header
+  notes: 33-screener
+  section: Elements
+  row: 'Header'
+- id: h33.tabs
+  notes: 33-screener
+  section: Elements
+  row: 'Tabs'
+- id: h33.updown
+  notes: 33-screener
+  section: Elements
+  row: 'Today: up and down'
+  block: screener-look
+  other:
+    - {t: 'd1', why: 'the basis of the counts up, down and flat (the summary publishes the counts; each row carries d1)'}
+- id: h33.tiles
+  notes: 33-screener
+  section: Elements
+  row: 'Near 52-week high / low, Volume 3× usual'
+  block: screener-look
+- id: h33.screens
+  notes: 33-screener
+  section: Elements
+  row: 'Ready-made screens (chips with counts)'
+  block: screener-look
+  fields:
+    - {t: 'p', k: ['p']}
+    - {t: 'h', k: ['h']}
+    - {t: 'p', k: ['p']}
+    - {t: 'l', k: ['l']}
+    - {t: 'd1', k: ['d1']}
+    - {t: 'v', k: ['v']}
+    - {t: 'va', k: ['va']}
+    - {t: 'va', k: ['va']}
+    - {t: 'm1', k: ['m1']}
+    - {t: 'dl', k: ['dl']}
+    - {t: 'va', k: ['va']}
+    - {t: 'r', k: ['r']}
+    - {t: 'strategies.buy', k: ['strategies.buy']}
+    - {t: 'days_to_results', k: ['days_to_results']}
+- id: h33.which
+  notes: 33-screener
+  section: Elements
+  row: 'Which stocks'
+  block: screener-table
+  fields:
+    - {t: 'u', k: ['u']}
+  other:
+    - {t: 'n500', why: 'a value of u (and of the u query)'}
+    - {t: 'fno', why: 'a value of u (and of the u query)'}
+    - {t: 'ours', why: 'a value of u (and of the u query)'}
+- id: h33.period
+  notes: 33-screener
+  section: Elements
+  row: 'Change over'
+  block: screener-table
+  fields:
+    - {t: 'd1', k: ['d1']}
+    - {t: 'w1', k: ['w1']}
+    - {t: 'm1', k: ['m1']}
+    - {t: 'm3', k: ['m3']}
+    - {t: 'y1', k: ['y1']}
+- id: h33.filters
+  notes: 33-screener
+  section: Elements
+  row: 'Your filters'
+  block: screener-table
+  fields:
+    - {t: 'p', k: ['p']}
+    - {t: 'v', k: ['v']}
+    - {t: 'va', k: ['va']}
+    - {t: 'dl', k: ['dl']}
+    - {t: 'r', k: ['r']}
+- id: h33.table
+  notes: 33-screener
+  section: Elements
+  row: 'Results table'
+  block: screener-table
+  fields:
+    - {t: 's', k: ['s']}
+    - {t: 'n', k: ['n']}
+    - {t: 'g', k: ['g']}
+    - {t: 'p', k: ['p']}
+    - {t: 'p', k: ['p']}
+    - {t: 'l', k: ['l']}
+    - {t: 'h', k: ['h']}
+    - {t: 'l', k: ['l']}
+    - {t: 'h', k: ['h']}
+    - {t: 'l', k: ['l']}
+    - {t: 'v', k: ['v']}
+    - {t: 'va', k: ['va']}
+    - {t: 'dl', k: ['dl']}
+    - {t: 'r', k: ['r']}
+- id: h33.tools
+  notes: 33-screener
+  section: Elements
+  row: 'Our tools (followed companies)'
+  block: screener-table
+  fields:
+    - {t: 'strategies.buy', k: ['strategies.buy']}
+    - {t: 'strategies.of', k: ['strategies.of']}
+    - {t: 'prob_up', k: ['prob_up']}
+    - {t: 'days_to_results', k: ['days_to_results']}
+- id: h33.buysell
+  notes: 33-screener
+  section: Elements
+  row: 'Buy / Sell'
+  block: screener-table
+  static: 'dashboard rule: a company in the tools block opens the shell''s order window (its next price check); any other is grey with the reason'
+- id: h33.sort
+  notes: 33-screener
+  section: Elements
+  row: 'Sort'
+  block: screener-table
+  fields:
+    - {t: 'p', k: ['p']}
+    - {t: 'v', k: ['v']}
+- id: h33.buildup
+  notes: 33-screener
+  section: Elements
+  row: 'F&O: build-up tiles'
+  block: fno-look
+  fields:
+    - {t: 'b', k: ['b']}
+- id: h33.fno-screens
+  notes: 33-screener
+  section: Elements
+  row: 'F&O screens'
+  block: fno-look
+  fields:
+    - {t: 'ivr', k: ['ivr']}
+    - {t: 'ivr', k: ['ivr']}
+    - {t: 'oc', k: ['oc']}
+    - {t: 'kind', k: ['kind']}
+- id: h33.fno-table
+  notes: 33-screener
+  section: Elements
+  row: 'F&O table'
+  block: fno-table
+  fields:
+    - {t: 's', k: ['s']}
+    - {t: 'n', k: ['n']}
+    - {t: 'kind', k: ['kind']}
+    - {t: 'fut', k: ['fut']}
+    - {t: 'fc', k: ['fc']}
+    - {t: 'oc', k: ['oc']}
+    - {t: 'oi', k: ['oi']}
+    - {t: 'b', k: ['b']}
+    - {t: 'iv', k: ['iv']}
+    - {t: 'ivl', k: ['ivl']}
+    - {t: 'ivh', k: ['ivh']}
+    - {t: 'ivr', k: ['ivr']}
+    - {t: 'pcr', k: ['pcr']}
+    - {t: 'mv', k: ['mv']}
+    - {t: 'x', k: ['x']}
+    - {t: 'lot', k: ['lot']}
+- id: h33.chain
+  notes: 33-screener
+  section: Elements
+  row: 'Chain'
+  block: fno-table
+  static: 'a link: NIFTY''s option chain is the 32 page; other underlyings later'
+- id: h33.sources
+  notes: 33-screener
+  section: Elements
+  row: 'Source chips'
+  static: 'dashboard text per source, beside each block''s envelope (as_of, freshness)'
+- id: h34.header
+  notes: 34-markets
+  section: Elements
+  row: 'Header'
+  fields:
+    - {t: 'regime', k: ['regime']}
+    - {t: 'major_event_names', k: ['major_event_names']}
+- id: h34.period
+  notes: 34-markets
+  section: Elements
+  row: 'Change over'
+  fields:
+    - {t: 'd1', k: ['d1']}
+    - {t: 'w1', k: ['w1']}
+    - {t: 'm1', k: ['m1']}
+    - {t: 'm3', k: ['m3']}
+    - {t: 'y1', k: ['y1']}
+- id: h34.main-card
+  notes: 34-markets
+  section: Elements
+  row: 'The main index card'
+  fields:
+    - {t: 'name', k: ['name']}
+    - {t: 'close', k: ['close']}
+    - {t: 'hi52', k: ['hi52']}
+    - {t: 'lo52', k: ['lo52']}
+    - {t: 'pe', k: ['pe']}
+    - {t: 'pb', k: ['pb']}
+    - {t: 'dy', k: ['dy']}
+- id: h34.broad
+  notes: 34-markets
+  section: Elements
+  row: 'Broad indices (US: benchmarks)'
+  fields:
+    - {t: 'name', k: ['name']}
+    - {t: 'close', k: ['close']}
+    - {t: 'pe', k: ['pe']}
+- id: h34.breadth
+  notes: 34-markets
+  section: Elements
+  row: 'Is the move broad?'
+  fields:
+    - {t: 'n', k: ['n']}
+    - {t: 'up', k: ['up']}
+    - {t: 'down', k: ['down']}
+    - {t: 'flat', k: ['flat']}
+    - {t: 'high', k: ['high']}
+    - {t: 'near_high', k: ['near_high']}
+    - {t: 'low', k: ['low']}
+    - {t: 'near_low', k: ['near_low']}
+    - {t: 'up_1m', k: ['up_1m']}
+- id: h34.sectors
+  notes: 34-markets
+  section: Elements
+  row: 'Which sectors led?'
+  fields:
+    - {t: 'name', k: ['name']}
+    - {t: 'pe', k: ['pe']}
+    - {t: 'hi52', k: ['hi52']}
+    - {t: 'lo52', k: ['lo52']}
+    - {t: 'g', k: ['g']}
+    - {t: 'n', k: ['n']}
+    - {t: 'up', k: ['up']}
+    - {t: 'down', k: ['down']}
+    - {t: 'best', k: ['best']}
+    - {t: 'worst', k: ['worst']}
+    - {t: 'sectors', k: ['sectors']}
+- id: h34.movers
+  notes: 34-markets
+  section: Elements
+  row: 'Who moved most?'
+  fields:
+    - {t: 's', k: ['s']}
+    - {t: 'n', k: ['n']}
+    - {t: 'p', k: ['p']}
+    - {t: 'd1', k: ['d1']}
+    - {t: 'v', k: ['v']}
+    - {t: 'va', k: ['va']}
+- id: h34.flows
+  notes: 34-markets
+  section: Elements
+  row: 'What did big investors do? (India)'
+  fields:
+    - {t: 'net', k: ['net']}
+- id: h34.vix
+  notes: 34-markets
+  section: Elements
+  row: 'How nervous is the market? (India)'
+  fields:
+    - {t: 'close', k: ['close']}
+    - {t: 'd1', k: ['d1']}
+    - {t: 'lo52', k: ['lo52']}
+    - {t: 'hi52', k: ['hi52']}
+- id: h34.index-options
+  notes: 34-markets
+  section: Elements
+  row: 'What do index options say? (India)'
+  fields:
+    - {t: 'iv', k: ['iv']}
+    - {t: 'ivr', k: ['ivr']}
+    - {t: 'pcr', k: ['pcr']}
+    - {t: 'mv', k: ['mv']}
+    - {t: 'b', k: ['b']}
+    - {t: 'x', k: ['x']}
+- id: h34.rates
+  notes: 34-markets
+  section: Elements
+  row: 'What do interest rates say? (US)'
+  fields:
+    - {t: 'name', k: ['name']}
+    - {t: 'value', k: ['value']}
+    - {t: 'date', k: ['date']}
+- id: h34.world
+  notes: 34-markets
+  section: Elements
+  row: 'World, currencies, commodities'
+  fields:
+    - {t: 'name', k: ['name']}
+    - {t: 'close', k: ['close']}
+    - {t: 'as_of', k: ['as_of']}
+- id: h34.coming-up
+  notes: 34-markets
+  section: Elements
+  row: 'What is coming?'
+  fields:
+    - {t: 'date', k: ['date']}
+    - {t: 'type', k: ['type']}
+    - {t: 'name', k: ['name']}
+    - {t: 'ticker', k: ['ticker']}
+- id: h34.sources
+  notes: 34-markets
+  section: Elements
+  row: 'Source chips'
+  static: 'dashboard text per source, beside each block''s envelope (as_of, freshness)'

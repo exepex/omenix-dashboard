@@ -43,3 +43,8 @@ jobs:
           psql -X -U postgres -d postgres -Atc "SELECT version()"
       - name: Setup, idempotence, role matrix and drift tests
         run: platform/tests/ci.sh
+      - name: Owner scripts on bash 3.2 (the macOS default bash the owner runs them with)
+        # The official bash image from Google's Docker Hub mirror (Docker Hub rate-limits anonymous pulls).
+        run: |
+          docker run --rm -v "$PWD:/r:ro" -w /r mirror.gcr.io/library/bash:3.2 bash platform/tests/bash32_trap_test.sh
+          docker run --rm -v "$PWD:/r:ro" -w /r mirror.gcr.io/library/bash:3.2 bash platform/tests/owner_scripts_test.sh

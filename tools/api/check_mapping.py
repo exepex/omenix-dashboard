@@ -23,7 +23,11 @@ import bundle  # noqa: E402
 from walk import block_fields, block_operations  # noqa: E402
 
 NOTES = {"30-shell": bundle.REPO / "design/mockups/30-shell/notes.md",
-         "31-dashboard": bundle.REPO / "design/mockups/31-dashboard/notes.md"}
+         "31-dashboard": bundle.REPO / "design/mockups/31-dashboard/notes.md",
+         "33-screener": bundle.REPO / "design/mockups/33-screener/notes.md",
+         "34-markets": bundle.REPO / "design/mockups/34-markets/notes.md"}
+# 33 and 34 hold their contract in one "## Elements" table; their other sections (data, findings, decisions) are prose
+ELEMENTS_TABLE_ONLY = {"33-screener", "34-markets"}
 ELEMENTS = bundle.API / "catalog/elements.yaml"
 TOKEN = re.compile(r"`([^`]+)`")
 SEPARATOR = re.compile(r"^\|[\s|:-]+\|$")
@@ -59,6 +63,8 @@ def parse_notes(name: str, path: Path) -> list[dict]:
     close_section()
     if name == "31-dashboard":
         found = [e for e in found if e["row"] != "<prose in a table section>"]  # the "Not on Home any more" list
+    if name in ELEMENTS_TABLE_ONLY:
+        found = [e for e in found if e["section"] == "Elements" and e["row"] not in (None, "<prose in a table section>")]
     return found
 
 
@@ -90,7 +96,7 @@ def independence(fields, ops, block_of: dict, problems: list[str]) -> int:
     for path, _, op in ops:
         parts: dict[str, set] = defaultdict(set)
         for f in fields:
-            if f.op == op["operationId"] and f.path.startswith("payload.") and f.path.split(".")[1] not in ("currency", "q"):
+            if f.op == op["operationId"] and f.path.startswith("payload.") and f.path.split(".")[1] not in ("currency", "q", "as_of"):
                 parts[f.path.split(".")[1].rstrip("[]")].update(block_of[e] for e in f.elements)
         names = sorted(parts)
         for i, a in enumerate(names):

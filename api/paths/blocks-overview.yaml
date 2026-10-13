@@ -1,0 +1,181 @@
+# Block endpoints of the Markets overview (34-markets, story W11). Breadth and movers are the screener's endpoints, the
+# header is /session and "What is coming?" is /events.
+/api/v1/markets/india/overview/indices:
+  get:
+    tags: [blocks]
+    operationId: getOverviewIndicesIndia
+    summary: 'NSE''s broad indices and India VIX with a year of closes and NSE''s own P/E, P/B and dividend yield'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: 'fno', source: 'NSE''s daily index file (ind_close_all), a year: close, change, P/E, P/B, dividend yield as NSE publishes them', freshness: 'daily, after the NSE index file', story: 'TR-NSE-proposed', status: 'planned'}
+    x-read-model: 'fno.pages_history page overview_indices (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
+    x-empty: 'never empty on a trading day'
+    x-feeds: [h34.broad, h34.main-card, h34.period, h34.vix]
+    x-shared: 'one set of index rows: the main card is the chosen row, the broad list all of them, the VIX card the vol row; the period switch picks the change shown'
+    responses:
+      '200':
+        description: 'The OverviewIndicesIndia block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OverviewIndicesIndiaResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getOverviewIndicesIndia_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/us/overview/indices:
+  get:
+    tags: [blocks]
+    operationId: getOverviewIndicesUs
+    summary: 'The S&P 500 fund and the VIX with a year of closes (the US benchmarks)'
+    x-status: planned
+    x-publisher: stock
+    x-catalog: {publisher: 'stock', source: 'the stock tool''s daily closes of SPY and the VIX (prices, Yahoo Finance)', freshness: 'post-close run', story: 'K5-proposed', status: 'published'}
+    x-read-model: 'rm.blocks page_key overview_indices (K5-proposed; interim: rm.status levels and rm.bars)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:overview_indices, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'never empty'
+    x-feeds: [h34.broad, h34.main-card, h34.period]
+    x-shared: 'one pair of benchmark rows: the main card is the chosen row, the list both; the period switch picks the change shown'
+    responses:
+      '200':
+        description: 'The OverviewIndicesUs block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OverviewIndicesUsResponse'}
+            examples:
+              us: {$ref: '#/components/examples/getOverviewIndicesUs_us'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/overview/sectors:
+  get:
+    tags: [blocks]
+    operationId: getIndiaSectors
+    summary: 'NSE''s sector indices and the Nifty 500 industries (ours)'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page overview_sectors (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
+    x-empty: 'never empty on a trading day'
+    x-feeds: [h34.period, h34.sectors]
+    x-shared: 'one set of sector rows; the period switch picks the change shown'
+    responses:
+      '200':
+        description: 'The IndiaSectors block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/IndiaSectorsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getIndiaSectors_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/us/overview/sectors:
+  get:
+    tags: [blocks]
+    operationId: getUsSectors
+    summary: 'The stock tool''s US sector funds with the sectors they stand for'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key overview_sectors (K5-proposed)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:overview_sectors, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'never empty'
+    x-feeds: [h34.period, h34.sectors]
+    x-shared: 'one set of sector funds; the period switch picks the change shown'
+    responses:
+      '200':
+        description: 'The UsSectors block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/UsSectorsResponse'}
+            examples:
+              us: {$ref: '#/components/examples/getUsSectors_us'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/overview/flows:
+  get:
+    tags: [blocks]
+    operationId: getFlows
+    summary: 'FII/FPI and DII net buying per day (NSE, provisional) and NSDL''s FPI equity net'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key flows (K5-proposed)'
+    x-freshness: 'stock_age; next morning'
+    x-cache: 'tag rm:blocks:<market>:flows, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'days empty: the card says no figures yet'
+    x-feeds: [h34.flows]
+    responses:
+      '200':
+        description: 'The Flows block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FlowsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFlows_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/us/overview/rates:
+  get:
+    tags: [blocks]
+    operationId: getRates
+    summary: 'US Treasury par yields by maturity'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key rates (K5-proposed)'
+    x-freshness: 'stock_age; daily'
+    x-cache: 'tag rm:blocks:<market>:rates, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'yields empty: the card says no figures yet'
+    x-feeds: [h34.rates]
+    responses:
+      '200':
+        description: 'The Rates block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/RatesResponse'}
+            examples:
+              us: {$ref: '#/components/examples/getRates_us'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/overview/world:
+  get:
+    tags: [blocks]
+    operationId: getWorld
+    summary: 'World markets, currencies and commodities, each at its own last close'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key world (K5-proposed)'
+    x-freshness: 'stock_age; each instrument''s own close'
+    x-cache: 'tag rm:blocks:<market>:world, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'quotes empty'
+    x-feeds: [h34.period, h34.world]
+    x-shared: 'one set of quotes; the period switch picks the change shown'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The World block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/WorldResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getWorld_india'}
+              us: {$ref: '#/components/examples/getWorld_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}

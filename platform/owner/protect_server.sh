@@ -21,35 +21,34 @@ threshold="${X1_FAILED_THRESHOLD:-10}"
 server_id="$(az postgres flexible-server show -g "$X1_RG" -n "$server" --query id -o tsv)" || die "server not found"
 printf 'Email address for alerts (stored only in Azure, not shown or saved here): ' > /dev/tty; read -r alert_email < /dev/tty
 [ -n "$alert_email" ] || die "no email address typed"
-{
-  echo "X1 protection of $server, $(date -u '+%Y-%m-%d %H:%M UTC')"
-  echo; echo "== 1. delete lock"
-  az lock create -g "$X1_RG" --name omenix-pg-no-delete --lock-type CanNotDelete \
-    --resource "$server" --resource-type Microsoft.DBforPostgreSQL/flexibleServers \
-    --notes "Deleting the server deletes its backups (X1). Remove this lock by hand only on purpose." -o none \
-    || die "lock not created"
-  az lock list -g "$X1_RG" --resource "$server" --resource-type Microsoft.DBforPostgreSQL/flexibleServers \
-    --query "[].[name, level]" -o tsv
-  echo; echo "== 2. action group (email)"
-  az monitor action-group create -g "$X1_RG" -n omenix-db-alerts --short-name omenixdb \
-    --action email owner "$alert_email" -o none || die "action group not created"
-  echo "action group omenix-db-alerts: email receivers = $(az monitor action-group show -g "$X1_RG" -n omenix-db-alerts --query 'length(emailReceivers)' -o tsv)"
-  echo; echo "== 3. failed-connection alert"
-  az monitor metrics alert create -g "$X1_RG" -n omenix-pg-failed-connections --scopes "$server_id" \
-    --condition "total connections_failed > $threshold" --window-size 15m --evaluation-frequency 5m \
-    --severity 2 --action omenix-db-alerts \
-    --description "More than $threshold failed connections to $server in 15 minutes (X1)" -o none \
-    || die "alert not created"
-  az monitor metrics alert show -g "$X1_RG" -n omenix-pg-failed-connections \
-    --query "{name:name, enabled:enabled, severity:severity, window:windowSize, every:evaluationFrequency, metric:criteria.allOf[0].metricName, aggregation:criteria.allOf[0].timeAggregation, operator:criteria.allOf[0].operator, threshold:criteria.allOf[0].threshold}" -o yaml
-  echo; echo "== 4. storage alert (mitigation for the large-object exception and any runaway writer)"
-  az monitor metrics alert create -g "$X1_RG" -n omenix-pg-storage --scopes "$server_id" \
-    --condition "avg storage_percent > ${X1_STORAGE_THRESHOLD:-80}" --window-size 15m --evaluation-frequency 5m \
-    --severity 2 --action omenix-db-alerts \
-    --description "Storage of $server above ${X1_STORAGE_THRESHOLD:-80} percent (X1)" -o none \
-    || die "storage alert not created"
-  az monitor metrics alert show -g "$X1_RG" -n omenix-pg-storage \
-    --query "{name:name, enabled:enabled, window:windowSize, every:evaluationFrequency, metric:criteria.allOf[0].metricName, aggregation:criteria.allOf[0].timeAggregation, operator:criteria.allOf[0].operator, threshold:criteria.allOf[0].threshold}" -o yaml
-  echo; echo "RESULT: lock, action group and both alerts in place"
-} 2>&1 | tee "$out"
+record_evidence "$out"
+echo "X1 protection of $server, $(date -u '+%Y-%m-%d %H:%M UTC')"
+echo; echo "== 1. delete lock"
+az lock create -g "$X1_RG" --name omenix-pg-no-delete --lock-type CanNotDelete \
+  --resource "$server" --resource-type Microsoft.DBforPostgreSQL/flexibleServers \
+  --notes "Deleting the server deletes its backups (X1). Remove this lock by hand only on purpose." -o none \
+  || die "lock not created"
+az lock list -g "$X1_RG" --resource "$server" --resource-type Microsoft.DBforPostgreSQL/flexibleServers \
+  --query "[].[name, level]" -o tsv
+echo; echo "== 2. action group (email)"
+az monitor action-group create -g "$X1_RG" -n omenix-db-alerts --short-name omenixdb \
+  --action email owner "$alert_email" -o none || die "action group not created"
+echo "action group omenix-db-alerts: email receivers = $(az monitor action-group show -g "$X1_RG" -n omenix-db-alerts --query 'length(emailReceivers)' -o tsv)"
+echo; echo "== 3. failed-connection alert"
+az monitor metrics alert create -g "$X1_RG" -n omenix-pg-failed-connections --scopes "$server_id" \
+  --condition "total connections_failed > $threshold" --window-size 15m --evaluation-frequency 5m \
+  --severity 2 --action omenix-db-alerts \
+  --description "More than $threshold failed connections to $server in 15 minutes (X1)" -o none \
+  || die "alert not created"
+az monitor metrics alert show -g "$X1_RG" -n omenix-pg-failed-connections \
+  --query "{name:name, enabled:enabled, severity:severity, window:windowSize, every:evaluationFrequency, metric:criteria.allOf[0].metricName, aggregation:criteria.allOf[0].timeAggregation, operator:criteria.allOf[0].operator, threshold:criteria.allOf[0].threshold}" -o yaml
+echo; echo "== 4. storage alert (mitigation for the large-object exception and any runaway writer)"
+az monitor metrics alert create -g "$X1_RG" -n omenix-pg-storage --scopes "$server_id" \
+  --condition "avg storage_percent > ${X1_STORAGE_THRESHOLD:-80}" --window-size 15m --evaluation-frequency 5m \
+  --severity 2 --action omenix-db-alerts \
+  --description "Storage of $server above ${X1_STORAGE_THRESHOLD:-80} percent (X1)" -o none \
+  || die "storage alert not created"
+az monitor metrics alert show -g "$X1_RG" -n omenix-pg-storage \
+  --query "{name:name, enabled:enabled, window:windowSize, every:evaluationFrequency, metric:criteria.allOf[0].metricName, aggregation:criteria.allOf[0].timeAggregation, operator:criteria.allOf[0].operator, threshold:criteria.allOf[0].threshold}" -o yaml
+echo; echo "RESULT: lock, action group and both alerts in place"
 echo "Saved: $out"

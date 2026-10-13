@@ -92,7 +92,7 @@
     x-freshness: 'stock_age; each stock run'
     x-cache: 'tag rm:blocks:<market>:session, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'non-trading day: open_utc and close_utc null, next_open_utc set'
-    x-feeds: [h31.band, s30.lock, s30.status-chip]
+    x-feeds: [h31.band, h34.header, s30.lock, s30.status-chip]
     x-shared: 'one session record: the top bar''s chip and lock and Home''s band show the same times (serving it twice would duplicate one fact)'
     parameters:
       - $ref: '#/components/parameters/Market'

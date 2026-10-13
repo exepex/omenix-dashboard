@@ -153,9 +153,13 @@
     x-freshness: 'stock_age; pre-open run'
     x-cache: 'tag rm:blocks:<market>:events, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'events empty'
-    x-feeds: [h31.coming-up]
+    x-feeds: [h31.coming-up, h34.coming-up]
+    x-shared: 'one calendar, one query per screen: Home asks kinds=rbi_policy,earnings,holiday,fno_expiry,fomc,cpi,jobs_report&limit=6 (31 row 6), the Markets overview kinds=earnings,ex_dividend,fno_expiry,weekly_expiry,filing,rbi_policy,fomc,cpi,jobs_report,budget&limit=12 (34 row 12); both from the session being predicted. check_contract recomputes each screen''s example from the calendar example'
     parameters:
       - $ref: '#/components/parameters/Market'
+      - {name: kinds, in: query, description: 'Comma-separated event kinds (default every kind); each screen''s list is a query, so Home never receives ex-dividend or filing rows', schema: {type: string, maxLength: 300}}
+      - {name: from, in: query, description: 'The first date (default the session being predicted)', schema: {type: string, format: date}}
+      - {name: limit, in: query, description: The nearest N rows (default all), schema: {type: integer, minimum: 1, maximum: 100}}
     responses:
       '200':
         description: 'The Events block'
@@ -167,6 +171,10 @@
             examples:
               india: {$ref: '#/components/examples/getEvents_india'}
               us: {$ref: '#/components/examples/getEvents_us'}
+              india_markets: {$ref: '#/components/examples/getEvents_india_markets'}
+              us_markets: {$ref: '#/components/examples/getEvents_us_markets'}
+              india_calendar: {$ref: '#/components/examples/getEvents_india_calendar'}
+              us_calendar: {$ref: '#/components/examples/getEvents_us_calendar'}
       '404': {$ref: '#/components/responses/NotFound'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}

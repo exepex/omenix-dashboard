@@ -1,8 +1,11 @@
-"""Write (or check) api/examples/blocks.json: one OpenAPI Example per block operation and market, every payload taken
-from the signed-off mockups' data (examples_payloads.py, examples_home.py) and wrapped in the publisher's envelope.
+"""Write (or check) the block examples: one OpenAPI Example per block operation and market, every payload taken from
+the mockups' data and wrapped in the publisher's envelope.
+  api/examples/blocks.json        the frame and Home (30-shell, 31-dashboard; examples_payloads.py, examples_home.py);
+                                  web/ copies it as Home's fixture, so W11 never changes it
+  api/examples/blocks-33-34.json  the screener and the Markets overview (33-screener, 34-markets; examples_screens.py)
 
-  python3 tools/api/examples.py          rewrite api/examples/blocks.json (deterministic: same input, same bytes)
-  python3 tools/api/examples.py --check  exit 1 if the file differs from what the mockups' data gives"""
+  python3 tools/api/examples.py          rewrite both (deterministic: same input, same bytes)
+  python3 tools/api/examples.py --check  exit 1 if a file differs from what the mockups' data gives"""
 
 from __future__ import annotations
 
@@ -15,12 +18,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 import examples_home as home  # noqa: E402
 import examples_payloads as frame  # noqa: E402
+import examples_screens as screens  # noqa: E402
 
 SHELL = bundle.REPO / "design/mockups/30-shell/data.json"
 HOME = bundle.REPO / "design/mockups/31-dashboard/data.json"
+SCREENER = bundle.REPO / "design/mockups/33-screener/data.json"
+MARKETS = bundle.REPO / "design/mockups/34-markets/data.json"
 OUT = bundle.API / "examples/blocks.json"
-SIGNED_OFF = {"shell": "cadf1d2", "home": "e8cd360"}  # "signed off ... as of commit" in each notes.md
-SCHEMA_VERSION = "2.1.0"
+OUT_SCREENS = bundle.API / "examples/blocks-33-34.json"
+# the data each example comes from: its mockup folder, the source_commit its envelope names (the "signed off ... as of
+# commit" of its notes.md) and the description
+DATA = {"shell": ("30-shell", "cadf1d2", "signed off as of cadf1d2"), "home": ("31-dashboard", "e8cd360", "signed off as of e8cd360"),
+        "screener": ("33-screener", "e28b43d", "signed off as of e28b43d; real NSE files and stock-tool records of 12 Oct 2026"),
+        "markets": ("34-markets", "59b606d", "signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026")}
+SCHEMA_VERSION = {"blocks": "2.1.0", "screens": "2.2.0"}
 RULE = {"stock": "stock_age", "fno": "fno_calendar", "dashboard": "static"}
 BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getFrameMarkets": (frame.frame_markets, "markets", "shell", ["_all"]),
@@ -39,7 +50,7 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getGroups": (home.groups, "groups", "home", ["india", "us"]),
     "getStrategyTrades": (home.strategy_trades, "strategy_trades", "home", ["india", "us"]),
     "getAttention": (home.attention, "attention", "home", ["india", "us"]),
-    "getEvents": (home.events, "events", "home", ["india", "us"]),
+    "getEvents": (lambda x, m: screens.home_events(x.screens, m, x.H), "events", "home", ["india", "us"]),  # one calendar
     "getTopNews": (home.top_news, "top_news", "home", ["india", "us"]),
     "searchFnoContracts": (frame.fno_search, "contracts", "shell", ["india"]),
     "getFnoPicks": (home.fno_picks, "today", "shell", ["india"]),
@@ -47,15 +58,33 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getFnoOrderRules": (frame.fno_order_rules, "order_rules", "shell", ["india"]),
     "getFnoBooks": (home.fno_books, "risk", "home", ["india"]),
 }
+SCREEN_BUILDERS = {  # the same, for api/examples/blocks-33-34.json
+    "getScreenerSummaryIndia": (screens.screener_summary, "screener_summary", "screener", ["india"]),
+    "getScreenerSummaryUs": (screens.screener_summary, "screener_summary", "screener", ["us"]),
+    "getScreenerStocksIndia": (screens.screener_stocks, "screener_stocks", "screener", ["india"]),
+    "getScreenerStocksUs": (screens.screener_stocks, "screener_stocks", "screener", ["us"]),
+    "getScreenerTools": (screens.screener_tools, "screener_tools", "screener", ["india", "us"]),
+    "getFnoScreenerSummary": (screens.fno_screener_summary, "fno_screener_summary", "screener", ["india"]),
+    "getFnoScreenerRows": (screens.fno_screener_rows, "fno_screener_rows", "screener", ["india"]),
+    "getOverviewIndicesIndia": (screens.overview_indices, "overview_indices", "markets", ["india"]),
+    "getOverviewIndicesUs": (screens.overview_indices, "overview_indices", "markets", ["us"]),
+    "getIndiaSectors": (screens.india_sectors, "overview_sectors", "markets", ["india"]),
+    "getUsSectors": (screens.us_sectors, "overview_sectors", "markets", ["us"]),
+    "getFlows": (screens.flows, "flows", "markets", ["india"]),
+    "getRates": (screens.rates, "rates", "markets", ["us"]),
+    "getWorld": (screens.world, "world", "markets", ["india", "us"]),
+    "getEvents": (lambda x, m: screens.events(x, m, x.home), "events", "markets", ["india", "us"]),
+}
 
 
 def canonical(payload) -> bytes:
     return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
 
-def envelope(publisher: str, market: str, page_key: str, data: str, cutoff: str, payload: dict) -> dict:
-    meta = {"market": market, "page_key": page_key, "as_of": "2026-10-06", "cutoff": cutoff, "built_at": cutoff,
-            "schema_version": SCHEMA_VERSION, "source_commit": SIGNED_OFF[data],
+def envelope(publisher: str, market: str, page_key: str, data: str, clock: tuple, version: str, payload: dict) -> dict:
+    as_of, cutoff = clock
+    meta = {"market": market, "page_key": page_key, "as_of": as_of, "cutoff": cutoff, "built_at": cutoff,
+            "schema_version": version, "source_commit": DATA[data][1],
             "payload_sha256": hashlib.sha256(canonical(payload)).hexdigest(), "publisher": publisher,
             "freshness": {"state": "fresh", "rule": RULE[publisher], "built_at": cutoff, "age_minutes": 0, "reason": None},
             "paper": "Paper"}
@@ -64,39 +93,49 @@ def envelope(publisher: str, market: str, page_key: str, data: str, cutoff: str,
     return {**meta, "payload": payload}
 
 
-def build() -> dict:
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def build(builders: dict, mock, clock: tuple, version: str) -> dict:
     doc = bundle.bundle()
     ops = {op["operationId"]: op for item in doc["paths"].values() for op in item.values() if isinstance(op, dict) and "operationId" in op}
-    mock = frame.Mock(json.loads(SHELL.read_text(encoding="utf-8")), json.loads(HOME.read_text(encoding="utf-8")))
-    cutoff = mock.S["now"]
     out = {}
-    for op_id, (builder, page_key, data, markets) in BUILDERS.items():
+    for op_id, (builder, page_key, data, markets) in builders.items():
         publisher = ops[op_id]["x-publisher"]
         for market in markets:
-            for suffix, (summary, payload) in builder(mock, None if market == "_all" else market).items():
+            for suffix, (summary, payload, *query) in builder(mock, None if market == "_all" else market).items():
                 name = f"{op_id}_{market.strip('_')}{suffix}"
                 key = page_key if op_id != "getInstrument" else f"instrument:{payload['id']}"
                 out[name] = {"summary": f"Mock ({market.strip('_')}): {summary}",
-                             "description": f"Taken from design/mockups/{'30-shell' if data == 'shell' else '31-dashboard'}/data.json (signed off as of {SIGNED_OFF[data]})",
-                             "value": envelope(publisher, market, key, data, cutoff, payload)}
+                             "description": f"Taken from design/mockups/{DATA[data][0]}/data.json ({DATA[data][2]})",
+                             "value": envelope(publisher, market, key, data, clock, version, payload)}
+                if query:  # a view of a shared record: the query that gives it (check_contract recomputes it)
+                    out[name]["x-query"] = query[0]
     return out
 
 
-def rendered() -> str:
-    return json.dumps(build(), indent=1, ensure_ascii=False) + "\n"
+def rendered() -> dict[Path, str]:
+    shell = frame.Mock(load(SHELL), load(HOME))
+    screen = screens.Screens(load(SCREENER), load(MARKETS))
+    shell.screens, screen.home = screen, shell.H  # the events calendar joins 31's and 34's records
+    files = {OUT: build(BUILDERS, shell, ("2026-10-06", shell.S["now"]), SCHEMA_VERSION["blocks"]),
+             OUT_SCREENS: build(SCREEN_BUILDERS, screen, (screen.C["day"], screen.C["clock"]["now"]), SCHEMA_VERSION["screens"])}
+    return {path: json.dumps(value, indent=1, ensure_ascii=False) + "\n" for path, value in files.items()}
 
 
 def is_current() -> bool:
-    return OUT.exists() and OUT.read_text(encoding="utf-8") == rendered()
+    return all(path.exists() and path.read_text(encoding="utf-8") == text for path, text in rendered().items())
 
 
 def main() -> int:
     if "--check" in sys.argv:
         same = is_current()
-        print("examples: api/examples/blocks.json matches the mockups' data" if same else "examples: api/examples/blocks.json is out of date (run tools/api/examples.py)")
+        print("examples: api/examples/*.json match the mockups' data" if same else "examples: api/examples/*.json are out of date (run tools/api/examples.py)")
         return 0 if same else 1
-    OUT.write_text(rendered(), encoding="utf-8")
-    print(f"examples: wrote {OUT.relative_to(bundle.REPO)}")
+    for path, text in rendered().items():
+        path.write_text(text, encoding="utf-8")
+        print(f"examples: wrote {path.relative_to(bundle.REPO)}")
     return 0
 
 

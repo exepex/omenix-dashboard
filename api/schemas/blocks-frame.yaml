@@ -110,9 +110,15 @@ Session:
       description: "The newest regime code stored by the cut-off (the stock tool's `regime` kind: TRENDING, EVENT_HEAVY, UNSTABLE, ...)"
       x-unit: code
       x-element: [h31.band]
-      x-notes: ['h31.band:session.regime']
+      x-notes: ['h31.band:session.regime', 'h34.header:regime']
       x-catalog: {source: rm.status payload.regime}
     post_close_at: {type: ['string', 'null'], format: date-time, x-unit: UTC time, x-element: [h31.band], x-notes: ['h31.band:session.post_close_at'], description: "When today's post-close run is due (its result brings today's close); null once it ran", x-catalog: {source: rm.status payload.runs.post_close.next_at}}
+    major_event_names:
+      type: array
+      description: "The stock tool's major events for the session (e.g. US CPI); empty when none. Optional (added in 2.2 for the Markets header)"
+      x-notes: ['h34.header:major_event_names']
+      x-catalog: {source: "the stock tool's regime record (major_event_names)", story: K5-proposed}
+      items: {type: string, x-unit: text}
 
 Indices:
   type: object
