@@ -80,7 +80,7 @@ export function HoverCard() {
           <div className="top">
             <div>
               <b>{it.sym}</b>
-              <small>{it.name}</small>
+              <small data-security="">{it.name}</small>
             </div>
             <div className="px">
               {fmt.price(it.last)}

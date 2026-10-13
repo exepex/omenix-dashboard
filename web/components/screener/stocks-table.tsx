@@ -79,7 +79,7 @@ export function StocksTable({ state, stocks, tools, india, locale }: Props) {
           <tbody>
             {shown.map(({ r, i }) => (
               <tr key={r.s} data-inst={followed.has(r.s) ? r.s : undefined}>
-                <td><Name r={r} followed={followed.has(r.s)} /><small>{r.n}{r.g ? ` · ${r.g}` : ""}</small></td>
+                <td><Name r={r} followed={followed.has(r.s)} /><small><span data-security="">{r.n}</span>{r.g ? ` · ${r.g}` : ""}</small></td>
                 <td className="num">{n(i, "p", 2)}</td>
                 <td className="num"><Chg value={r[state.per]} src={rowSrc(i, state.per)} /></td>
                 <td><Pos52 r={r} i={i} locale={locale} /></td>
@@ -97,7 +97,7 @@ export function StocksTable({ state, stocks, tools, india, locale }: Props) {
           {shown.map(({ r, i }) => (
             <li key={r.s}>
               <div className="top"><Name r={r} followed={followed.has(r.s)} /><span className="px">{n(i, "p", 2)} <Chg value={r[state.per]} src={rowSrc(i, state.per)} /></span></div>
-              <small>{r.n}</small>
+              <small data-security="">{r.n}</small>
               <div className="row">
                 <Pos52 r={r} i={i} locale={locale} />
                 <span>Vol <Volume r={r} i={i} locale={locale} brief /></span>

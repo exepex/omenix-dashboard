@@ -214,17 +214,28 @@ async function runCase(browser, c) {
     for (const sel of c.expectSelector ?? []) if (!(await page.$(sel))) errors.push(`${tag} missing element: ${sel}`);
     // Owner rule (W9 criterion 5): no screen names an AI model, in its text or in a tooltip, label or title. A case may
     // plant one (`modelPlant`: a selector and a text put there first) to prove the gate flags it rather than miss it.
-    const pageText = () => page.evaluate(() => [document.body.innerText, ...[...document.querySelectorAll("[data-tip], [aria-label], [title]")].flatMap((n) => [n.getAttribute("data-tip"), n.getAttribute("aria-label"), n.getAttribute("title")])].filter(Boolean).join("\n"));
+    // Security names (`data-security`) are read as names, where a company may be called "GPT …"; the rest as prose.
+    const pageText = () => page.evaluate(() => {
+      const copy = document.body.cloneNode(true);
+      copy.querySelectorAll("[data-security]").forEach((n) => n.remove());
+      document.body.append(copy);
+      const prose = [copy.innerText, ...[...document.querySelectorAll("[data-tip], [aria-label], [title]")].flatMap((n) => [n.getAttribute("data-tip"), n.getAttribute("aria-label"), n.getAttribute("title")])].filter(Boolean).join("\n");
+      copy.remove();
+      return { prose, names: [...document.querySelectorAll("[data-security]")].filter((n) => n.offsetParent !== null).map((n) => n.textContent).join("\n") };
+    });
+    const modelOn = ({ prose, names }) => {
+      const m = modelNameIn(prose) ?? modelNameIn(names, { security: true });
+      return m ? { m, text: modelNameIn(prose) ? prose : names } : null;
+    };
     if (c.modelPlant) {
       const planted = await page.evaluate(([sel, text]) => { const n = [...document.querySelectorAll(sel)].find((x) => x.offsetParent !== null); if (!n) return false; const was = n.textContent; n.textContent = text; window.__unplant = () => (n.textContent = was); return true; }, c.modelPlant);
-      if (!planted || !modelNameIn(await pageText())) errors.push(`${tag} the model-name gate did not catch the plant "${c.modelPlant[1]}"`);
+      if (!planted || !modelOn(await pageText())) errors.push(`${tag} the model-name gate did not catch the plant "${c.modelPlant[1]}"`);
       await page.evaluate(() => window.__unplant?.());
     }
-    const shown = await pageText();
-    const model = modelNameIn(shown);
-    if (model) {
-      const at = shown.indexOf(model);
-      errors.push(`${tag} names an AI model: "${shown.slice(Math.max(0, at - 40), at + 40).replace(/\s+/g, " ")}"`);
+    const found = modelOn(await pageText());
+    if (found) {
+      const at = found.text.indexOf(found.m);
+      errors.push(`${tag} names an AI model: "${found.text.slice(Math.max(0, at - 40), at + 40).replace(/\s+/g, " ")}"`);
     }
     const dir = join(out, c.name.replace(/[^a-z0-9-]+/gi, "_"));
     mkdirSync(dir, { recursive: true });

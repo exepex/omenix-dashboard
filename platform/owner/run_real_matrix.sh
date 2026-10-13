@@ -42,4 +42,4 @@ open_count="$(grep -c '^OPEN  ' "$evidence_dir/.snapshot.$$.matrix")"
 rm -f "$evidence_dir/.snapshot.$$.matrix"
 echo
 echo "RESULT: matrix passed: $matrix_ok; snapshot identical: $snapshot_ok; no large objects anywhere: $lo_ok; open named exceptions: $open_count (see platform/README.md)"
-echo "Saved: $out  (read it, then commit it: git add platform/evidence && git commit -m 'X1 evidence: real-server role matrix')"
+echo "Saved: platform/evidence/$(basename "$out")  (read it, then commit it: git add platform/evidence && git commit -m 'X1 evidence: real-server role matrix')"

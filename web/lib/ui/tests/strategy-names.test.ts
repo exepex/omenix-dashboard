@@ -16,23 +16,25 @@ const stored = ["b16", "ux3"].flatMap((d) => readdirSync(join(web, "tests", "ui"
 const examples = readdirSync(join(web, "lib", "fixtures")).filter((f) => f.endsWith(".json")).map((f) => join(web, "lib", "fixtures", f));
 const FIXTURES = [...mockups, ...stored, ...examples];
 
-/** Every text value a screen could show as prose: string values that are not identifiers (strategy, trade and record
- *  ids are keys; a page that shows one as text passes it through citedId, tested below). */
-function texts(value: unknown, out: string[] = []): string[] {
-  if (typeof value === "string") out.push(value);
-  else if (Array.isArray(value)) value.forEach((v) => texts(v, out));
-  else if (value && typeof value === "object") Object.values(value).forEach((v) => texts(v, out));
-  return out.filter((s) => /\s/.test(s) || !/[.:]/.test(s));
+/** Every text value a screen could show: string values that are not identifiers (strategy, trade and record ids are
+ *  keys; a page that shows one as text passes it through citedId, tested below), each marked when it is a security's
+ *  name (the rows' `n`), which the detector reads as such: a company may be called "GPT …". */
+function texts(value: unknown, out: { text: string; security: boolean }[] = [], key = ""): { text: string; security: boolean }[] {
+  if (typeof value === "string") out.push({ text: value, security: key === "n" });
+  else if (Array.isArray(value)) value.forEach((v) => texts(v, out, key));
+  else if (value && typeof value === "object") Object.entries(value).forEach(([k, v]) => texts(v, out, k));
+  return out.filter(({ text }) => /\s/.test(text) || !/[.:]/.test(text));
 }
+const named = ({ text, security }: { text: string; security: boolean }) => namesModel(text, { security });
 
 test("the fixtures really carry model names (the rule has work to do)", () => {
   assert.ok(FIXTURES.length > 15);
-  assert.ok(FIXTURES.some((f) => texts(json(f)).some(namesModel)));
+  assert.ok(FIXTURES.some((f) => texts(json(f)).some(named)));
 });
 
 test("after the rule, no fixture text names an AI model", () => {
   for (const f of FIXTURES) {
-    const left = texts(applyDisplayNames(json(f))).filter(namesModel);
+    const left = texts(applyDisplayNames(json(f))).filter(named).map(({ text }) => text);
     assert.deepEqual(left.slice(0, 3), [], f);
   }
 });
@@ -79,9 +81,9 @@ test("text outside any strategy name stays exactly as published, and a model nam
 test("security names are never touched: GPT Healthcare and GPT Infraprojects stay; a planted model in a name is caught", () => {
   const rows = [{ s: "GPTHEALTH", n: "GPT Healthcare Limited" }, { s: "GPTINFRA", n: "GPT Infraprojects Limited" }, { s: "MONEYVIEW", n: "Moneyview GPT-4o Limited" }];
   assert.deepEqual(applyDisplayNames({ rows }).rows, rows, "the rule leaves security text alone");
-  assert.equal(modelNameIn("GPT Healthcare Limited"), null);
-  assert.equal(modelNameIn("GPT Infraprojects Limited"), null);
-  assert.equal(modelNameIn("Moneyview GPT-4o Limited"), "GPT-4o", "the page gate flags it");
+  assert.equal(modelNameIn("GPT Healthcare Limited", { security: true }), null);
+  assert.equal(modelNameIn("GPT Infraprojects Limited", { security: true }), null);
+  assert.equal(modelNameIn("Moneyview GPT-4o Limited", { security: true }), "GPT-4o", "the page gate flags it");
 });
 
 test("a quoted id of a strategy the payload does not name reads as its approach and role, never raw", () => {
@@ -184,4 +186,15 @@ test("judge 29, minor 2: a baseline named after a model never reaches the screen
   assert.deepEqual(out.strategies.map((x) => x.name), ["Baseline", "Always buy"]);
   assert.equal(out.line, "Beaten by Baseline today");
   assert.equal(namesModel(JSON.stringify(out)), false);
+});
+
+// Follow-up to judge round 3: a bare "GPT" in prose and open-weight names ("gpt-oss-120b") are models; a security's
+// name keeps "GPT Healthcare" unflagged, while a versioned model in a name is still caught.
+test("prose flags a bare GPT and gpt-oss names; a security's name flags only a versioned model", () => {
+  for (const [text, token] of [["Scored by GPT today", "GPT"], ["the gpt-oss-120b run", "gpt-oss-120b"], ["GPT-OSS-20B", "GPT-OSS-20B"], ["GPT Healthcare Limited", "GPT"]]) assert.equal(modelNameIn(text), token, text);
+  assert.equal(modelNameIn("GPT Healthcare Limited", { security: true }), null);
+  assert.equal(modelNameIn("GPT Infraprojects Limited", { security: true }), null);
+  assert.equal(modelNameIn("Moneyview GPT-4o Limited", { security: true }), "GPT-4o");
+  assert.equal(modelNameIn("Acme gpt-oss-120b Limited", { security: true }), "gpt-oss-120b");
+  assert.equal(modelNameIn("GPTHEALTH"), null, "a symbol is not the word");
 });

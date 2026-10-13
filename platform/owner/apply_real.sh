@@ -27,4 +27,4 @@ echo "-- diff after apply against expected_catalog.txt (empty = identical)"
 diff -u "$platform/tests/expected_catalog.txt" "$evidence_dir/.after.$$" && ok=yes || ok=no
 rm -f "$evidence_dir/.before.$$" "$evidence_dir/.after.$$"
 echo "RESULT: catalog identical to expected_catalog.txt after apply: $ok"
-echo "Saved: $out"
+echo "Saved: platform/evidence/$(basename "$out")"

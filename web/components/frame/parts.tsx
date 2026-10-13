@@ -67,13 +67,14 @@ export function ExampleTag() {
 }
 
 /** The drawer's title row with its close button (Esc also closes). */
-export function DrawerHead({ title, sub, children }: { title: string; sub?: string; children?: ReactNode }) {
+/** `subIsName`: the line is a security's name (marked for the model-name gate, which reads names as names). */
+export function DrawerHead({ title, sub, subIsName = false, children }: { title: string; sub?: string; subIsName?: boolean; children?: ReactNode }) {
   const { closeDrawer } = useFrame();
   return (
     <div className="mb-drawer-head">
       <div style={{ minWidth: 0 }}>
         <h2 id="drawer-title">{title}</h2>
-        {sub ? <div className="sub">{sub}</div> : null}
+        {sub ? <div className="sub" data-security={subIsName ? "" : undefined}>{sub}</div> : null}
         {children}
       </div>
       <button className="md-icon-btn" type="button" aria-label="Close (Esc)" onClick={closeDrawer}>
