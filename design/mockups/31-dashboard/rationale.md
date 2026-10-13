@@ -48,8 +48,24 @@ changes; Buy (green) and Sell (red) are locked while closed. Strategy names neve
   rules), AI team (fully autonomous, agents with roles). The earlier model-versus-model AI strategies are shown as
   "AI team"; no AI model is named anywhere. Hybrid applies to stocks too (empty state until it exists).
 - The US paper account starts at $5,000 (owner).
-- Every function of Home has its own picture: `gallery.html` (46 states, desktop and phone), made by
+- Every function of Home has its own picture: `gallery.html` (48 states, desktop and phone), made by
   `design/system/shoot_states.js` from `states.json` and `design/mockups/_platform/gallery.py`.
+
+## Sixth round (13 Oct 2026, owner): aggregates on Home, detail one click away
+- "Who trades" is four summary cards (You, Rule-based, Hybrid, AI team), aggregates only. Each approach's headline
+  figures are its own single accounts: the head-to-head portfolio for stocks (its best pick each day, which is how the
+  approaches are compared) and its F&O book. Strategies stay collapsed under one button and the full detail is on the
+  approach's strategy page. Baselines are one comparison line. (Earlier tries in this round, a comparison table and an
+  always-open grouped table, were too bulky; the owner rejected them.)
+- **Owner's decision (same evening):** each group's headline is its **total profit or loss**, the sum of its own
+  strategies' paper results, green for a profit and red for a loss (with the + or − sign, never colour alone). The
+  rule in CLAUDE.md and AGENTS.md now allows this one total per group; groups are never added together, markets and
+  currencies stay apart, and the F&O book is its own line (a separate backend). The AI team is one team, so its total
+  is the team's own record. The head-to-head comparison moves to the group pages (Strategies, Scoreboards). Each card
+  ends with "Open <group>", the link to that group's page with every strategy's own result.
+- Open paper trades say on every row whether the trade was bought (long) or sold (short); tab counts are in brackets.
+- Locked buttons are plain grey; active Buy is green and Sell red. Bottom: Needs you, Coming up and Top news side by
+  side.
 
 ## Supersedes
 `01-home`'s layout (01-home/rationale.md says so).

@@ -12,11 +12,11 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "_platform"))
 from platform_build import SHELL_DATA, run  # noqa: E402
-from real_data import home_payload  # noqa: E402
+from home_data import home_payload  # noqa: E402
 
 
 def summary(shell, data):
-    return "; ".join(f"{m}: {len(p['groups'])} groups, {len(p['own'])} own and {len(p['strategy_trades'])} strategy trades open, "
+    return "; ".join(f"{m}: {len(p['approaches'])} approaches, {len(p['own'])} own and {len(p['strategy_trades'])} strategy trades open, "
                      f"{len(p['attention'])} items need you" for m, p in data["markets"].items())
 
 

@@ -1,6 +1,6 @@
 """Build a mockup's gallery page: every state of the screen, captioned, desktop and phone side by side.
 
-    python design/mockups/_platform/gallery.py design/mockups/<nn-name>
+    python design/mockups/_platform/gallery.py design/mockups/<nn-name>     (gallery.html and screens/NN-*.png)
 
 Run after `node design/system/shoot_states.js design/mockups/<nn-name>`, which writes gallery/<id>-<width>.png from
 the folder's states.json. This script compresses those screenshots (256-colour PNG: screen captures lose nothing
@@ -80,5 +80,36 @@ def build(folder: str) -> str:
     return out
 
 
+def screens(folder: str) -> int:
+    """screens/NN-<state>-<device>.png: the owner's plain pictures in reading order. The first full-page state on desktop,
+    its phone page cut into phone-sized screens, then every state on desktop, and on the phone where `phone_screen` is
+    set or the state is phone-only."""
+    spec = json.load(open(os.path.join(folder, "states.json"), encoding="utf-8"))
+    out = os.path.join(folder, "screens")
+    os.makedirs(out, exist_ok=True)
+    for name in os.listdir(out):
+        os.remove(os.path.join(out, name))
+    n = 0
+
+    def put(src, label, box=None):
+        nonlocal n
+        n += 1
+        image = Image.open(os.path.join(folder, "gallery", src)).convert("RGB")
+        (image.crop(box) if box else image).quantize(colors=256).save(os.path.join(out, f"{n:02d}-{label}.png"), optimize=True)
+
+    first = spec["states"][0]
+    put(f"{first['id']}-1280.png", f"{first['id']}-desktop-whole-page")
+    phone = Image.open(os.path.join(folder, "gallery", f"{first['id']}-390.png"))
+    for i, top in enumerate(range(0, phone.size[1], 1688), 1):
+        put(f"{first['id']}-390.png", f"{first['id']}-phone-screen-{i}", (0, top, phone.size[0], min(phone.size[1], top + 1688)))
+    for state in spec["states"][1:]:
+        widths = state.get("widths", [1280, 390])
+        if 1280 in widths:
+            put(f"{state['id']}-1280.png", f"{state['id']}-desktop")
+        if 390 in widths and (state.get("phone_screen") or 1280 not in widths) and not state.get("full"):
+            put(f"{state['id']}-390.png", f"{state['id']}-phone")
+    return n
+
+
 if __name__ == "__main__":
-    print(build(sys.argv[1]))
+    print(build(sys.argv[1]), screens(sys.argv[1]), "screens")

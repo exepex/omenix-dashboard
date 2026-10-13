@@ -16,7 +16,6 @@
 .sec-head .go{margin-left:auto;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;white-space:nowrap}
 .sec-head .go .ms{width:16px;height:16px}
 .top{padding-top:16px}
-.aps{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .home-sig{display:none;padding:0;overflow:hidden}
 .pos{list-style:none;margin:0;padding:0}
 .pos li{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,1fr) auto;gap:4px 14px;align-items:center;padding:10px 2px;border-top:1px solid var(--md-sys-color-surface-container-high)}
@@ -32,7 +31,7 @@
 .att li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;font-size:13.5px}
 .att li b{display:block;font-weight:600} .att li small{display:block;color:var(--md-sys-color-on-surface-variant);font-size:12.5px;overflow-wrap:anywhere}
 .ev{list-style:none;margin:0;padding:0}
-.ev li{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}
+.ev li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}
 .ev li:first-child{border-top:0}
 .ev .d{text-align:center;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);padding:4px 0;line-height:1.15}
 .ev .d b{display:block;font-size:17px} .ev .d small{font-size:11px;color:var(--md-sys-color-on-surface-variant);text-transform:uppercase;letter-spacing:.05em}
@@ -42,9 +41,16 @@
 .news li:first-child{border-top:0}
 .news .m{display:flex;gap:6px 8px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
 .mv{display:flex;flex-wrap:wrap;gap:4px 12px}
+.aps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}
+@media (max-width:1100px){.aps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:599px){.aps{grid-template-columns:1fr}}
+.sec > .note a{white-space:nowrap}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.pos li{grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,1fr) auto}
+@media (max-width:1100px){.trio{grid-template-columns:1fr}}
 @media (max-width:1199px){.home-sig{display:block}}
 @media (max-width:760px){.pos li{grid-template-columns:minmax(0,1fr) auto}.pos .q{display:none}.pos .a{grid-column:1/-1;justify-content:flex-start}}
-@media (max-width:599px){.top{padding-top:12px}.ev li{grid-template-columns:44px minmax(0,1fr)}.ev li .mb-label{grid-column:2;justify-self:start}}
+@media (max-width:599px){.top{padding-top:12px}}
 </style>
 </head>
 <body>
@@ -64,7 +70,7 @@ PF.mount({screen: 'dashboard', group: 'dashboard', strip: false,
   main.append(el('h1', {class: 'vh'}, 'Home'));
 
   /* 1. today at a glance: how am I doing, what is the best pick, what needs me (each one click from acting) */
-  const mine = M.groups.find(g => g.family === 'manual').lines[0];
+  const mine = M.approaches.find(r => r.family === 'manual').account; mine.pnl = mine.open_profit;
   const best = P.signals[0], bi = best && item(best.id);
   main.append(el('div', {class: 'mb-glance top', role: 'region', 'aria-label': 'Today at a glance'},
     el('div', {}, el('span', {class: 'mb-avatar paper'}, icon('account_circle')), el('span', {class: 'l'}, 'Your paper account · open profit'),
@@ -91,12 +97,42 @@ PF.mount({screen: 'dashboard', group: 'dashboard', strip: false,
   /* 3. today's buy picks: in the left panel on wide screens; here on tablets and phones (never both at once) */
   main.append(el('section', {class: 'sec card home-sig', 'aria-label': 'Today’s buy picks'}, ...c.signalsBody('home')));
 
-  /* 4. who trades and how it is going: your account, each strategy family, the F&O books; never summed */
-  main.append(el('section', {class: 'sec', 'aria-label': 'Who trades'}, head('Who trades, and how it is going', 'You, and the three approaches: rule-based, hybrid (the AI team within the rules) and the autonomous AI team, with the baselines as the comparison line. Each line is its own paper account or scoreboard; nothing is added together.', ['Accounts and funds', 'funds']),
-    el('div', {class: 'aps'}, ...M.groups.map(g => el('article', {class: 'mb-apcard'},
-      el('div', {class: 'h'}, el('span', {class: 'mb-avatar ' + ({manual: 'paper', ai: 'info', rule: '', baseline: 'neutral', hybrid: 'warn'}[g.family])}, icon(FAM[g.family].icon)), el('b', {}, FAM[g.family].long), el('small', {}, TXT[g.family])),
-      ...g.lines.map(l => el('div', {class: 'line'}, el('span', {class: 'k'}, l.label), l.value == null && l.pnl == null ? null : el('div', {class: 'fig'}, l.value != null ? el('span', {class: 'val'}, money(l.value)) : null, el('span', {class: 'd'}, moneyDelta(l.pnl, 2), ' ' + l.pnl_label)), el('span', {class: 's'}, l.sub))),
-      g.note ? el('div', {class: 'today'}, icon('info'), g.note) : null)))));
+  /* 4. who trades, and how it is going (owner, 13 Oct 2026): one summary card per group. Its headline is the group's
+     total profit or loss on stocks (its own strategies' paper results added up: green a profit, red a loss); the F&O
+     book is its own line (a separate backend, never added in). The strategies are collapsed under one button; each
+     group's own page holds every strategy's detail. Groups are never added together. */
+  const fno = P.fno;
+  const SHORT = {manual: 'Your own trades', rule: 'Rules only, no AI', hybrid: 'AI team within the rules', ai: 'Fully autonomous AI agents'};
+  const fig = (label, value, sub) => el('div', {class: 'line'}, el('span', {class: 'k'}, label), el('div', {class: 'fig'}, value), sub ? el('span', {class: 's'}, sub) : null);
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  const groupLink = r => el('a', {class: 'mb-apcard-go', href: '#', onclick: e => { e.preventDefault(); c.go('scoreboards'); }}, `Open ${FAM[r.family].label}`, icon('chevron_right'));
+  const card = r => {
+    const tone = {manual: 'paper', ai: 'info', rule: '', hybrid: 'warn'}[r.family];
+    const kids = [el('div', {class: 'h'}, el('span', {class: 'mb-avatar ' + tone}, icon(FAM[r.family].icon)), el('b', {}, FAM[r.family].label, c.help(TXT[r.family])), el('small', {}, SHORT[r.family]))];
+    if (r.family === 'manual') {
+      kids.push(fig('Open profit / loss', [el('span', {class: 'val'}, moneyDelta(r.account.open_profit, 2))], `account ${money(r.account.value)} · ${plural(r.open_now, 'trade', 'trades')} open`));
+      kids.push(el('a', {class: 'mb-apcard-go', href: '#', onclick: e => { e.preventDefault(); c.go('positions'); }}, 'See your trades', icon('chevron_right')));
+      return el('article', {class: 'mb-apcard'}, ...kids);
+    }
+    const T = r.total;
+    kids.push(fig(fno ? 'Stocks: total profit / loss' : 'Total profit / loss', T ? [el('span', {class: 'val'}, moneyDelta(T.net, 2))] : [el('span', {class: 'none'}, 'No strategy yet')],
+      !T ? 'planned' : r.family === 'ai' ? `the team’s own trades · ${plural(T.trades, 'trade', 'trades')} settled, ${T.wins} won`
+        : `${plural(T.with_trades, 'strategy', 'strategies')} with trades added up · ${plural(T.trades, 'trade', 'trades')} settled, ${T.wins} won`));
+    if (fno && r.book) kids.push(fig('F&O: total profit / loss', [el('span', {class: 'val'}, moneyDelta(r.book.pnl, 2))], `${r.book.name} · ${r.book.approved.length ? plural(r.book.approved.length, 'approved strategy', 'approved strategies') : 'no approved strategy yet'}`));
+    const list = r.strategies, ran = list.filter(x => x.trades);
+    const count = r.family === 'ai' ? 'One team: its strategies show once it publishes them' : list.length ? `${plural(list.length, 'strategy', 'strategies')} · ${ran.length} with trades` : 'No strategy yet';
+    kids.push(list.length ? el('details', {class: 'mb-apcard-more'}, el('summary', {}, el('span', {}, count), icon('expand_more')),
+        el('ul', {}, ...ran.map(x => el('li', {}, el('span', {}, x.name), moneyDelta(x.net, 2))),
+          list.length > ran.length ? el('li', {class: 'idle'}, el('span', {}, `${list.length - ran.length} more: no trade yet`)) : null),
+        el('p', {}, 'Each strategy’s own result; the total above adds them up.'))
+      : r.total ? el('div', {class: 'mb-apcard-count'}, count) : null);
+    kids.push(groupLink(r));
+    return el('article', {class: 'mb-apcard'}, ...kids);
+  };
+  const base = M.approaches.find(r => r.family === 'baseline');
+  main.append(el('section', {class: 'sec', 'aria-label': 'Who trades'}, head('Who trades, and how it is going', 'Each group’s total paper profit or loss. Open a group for each of its strategies.', ['Strategies', 'scoreboards']),
+    el('div', {class: 'aps'}, ...M.approaches.filter(r => r.family !== 'baseline').map(card)),
+    base && base.total ? el('p', {class: 'note'}, icon('trending_flat'), ' Baselines (yardsticks to beat), their own total: ', moneyDelta(base.total.net, 2), ` from ${plural(base.total.with_trades, 'baseline', 'baselines')} with trades · `, el('a', {href: '#', onclick: e => { e.preventDefault(); c.go('scoreboards'); }}, 'Open Baselines')) : null));
 
   /* 5. open paper trades by who opened them, paged; and what needs you */
   /* strategies' open trades grouped per stock and family (each strategy is its own experiment: P&L shown per trade, never summed) */
@@ -104,36 +140,38 @@ PF.mount({screen: 'dashboard', group: 'dashboard', strip: false,
   for (const t of M.strategy_trades) (grouped[t.id + '|' + t.family] ||= {id: t.id, family: t.family, trades: []}).trades.push(t);
   const all = M.own.map(p => ({...p, own: true})).concat(Object.values(grouped));
   const count = k => all.filter(p => k === 'all' || p.family === k).length;
-  const tabs = el('div', {class: 'md-segmented dense tabs', role: 'group', 'aria-label': 'Who opened the trade'}, ...[['all', 'All'], ['manual', 'Yours'], ['rule', 'Rule-based'], ['hybrid', 'Hybrid'], ['ai', 'AI team'], ['baseline', 'Baselines']].map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(OWNER === k), onclick: () => { OWNER = k; PPG = 0; c.rerender(); }}, `${v} ${count(k)}`)));
+  const tabs = el('div', {class: 'md-segmented dense tabs', role: 'group', 'aria-label': 'Who opened the trade'}, ...[['all', 'All'], ['manual', 'Yours'], ['rule', 'Rule-based'], ['hybrid', 'Hybrid'], ['ai', 'AI team'], ['baseline', 'Baselines']].map(([k, v]) => el('button', {type: 'button', 'aria-pressed': String(OWNER === k), onclick: () => { OWNER = k; PPG = 0; c.rerender(); }}, `${v} (${count(k)})`)));
   const rows = all.filter(p => OWNER === 'all' || p.family === OWNER), pages = Math.max(1, Math.ceil(rows.length / PPG_SIZE)); PPG = Math.min(PPG, pages - 1);
   const uniq = xs => [...new Set(xs)];
+const sideLab = q => q >= 0 ? el('span', {class: 'mb-label success', 'data-tip': 'A buy (long): it gains when the price rises.'}, icon('arrow_upward'), 'Bought') : el('span', {class: 'mb-label danger', 'data-tip': 'A sell (short): it gains when the price falls.'}, icon('arrow_downward'), 'Sold');
   const posRow = p => { const it = item(p.id);
-    if (p.own) return el('li', {}, el('div', {class: 'w'}, el('div', {class: 'nm'}, inst(p.id), c.apBadge('manual')), el('small', {}, `${p.strategy} · ${p.source}`)),
+    if (p.own) return el('li', {}, el('div', {class: 'w'}, el('div', {class: 'nm'}, sideLab(p.qty), inst(p.id), c.apBadge('manual')), el('small', {}, `${p.strategy} · ${p.source}`)),
       el('div', {class: 'q'}, el('span', {}, `${num(p.qty, 0)} × ${num(p.avg)}`), el('small', {}, 'last ' + num(it.last) + ' · ' + c.asOf(it).short)),
       el('div', {class: 'p'}, moneyDelta(p.unrealised, 2), el('small', {}, c.sgn(p.unrealised / (p.avg * p.qty) * 100))),
       el('div', {class: 'a'}, c.bsPair(p.id)));
     const T = p.trades, pnl = uniq(T.map(t => t.unrealised)), exits = uniq(T.map(t => t.exit)).sort();
-    return el('li', {}, el('div', {class: 'w'}, el('div', {class: 'nm'}, inst(p.id), c.apBadge(p.family)),
+    return el('li', {}, el('div', {class: 'w'}, el('div', {class: 'nm'}, sideLab(T[0].qty), inst(p.id), c.apBadge(p.family)),
         el('small', {}, `${T.length} trade${T.length > 1 ? 's' : ''}: ${uniq(T.map(t => t.strategy)).join(', ')} · N+${uniq(T.map(t => t.horizon)).join(', N+')}`)),
       el('div', {class: 'q'}, el('span', {}, `${money(T[0].amount)} each`), el('small', {}, 'exits ' + exits.map(d => c.dateShort(d + 'T06:00:00Z') + (d === session ? ' (today)' : '')).join(', '))),
       el('div', {class: 'p'}, pnl.length === 1 ? moneyDelta(pnl[0], 2) : el('span', {}, moneyDelta(Math.min(...pnl), 2), ' to ', moneyDelta(Math.max(...pnl), 2)), el('small', {}, T.length > 1 ? 'each trade' : c.sgn(T[0].unrealised / T[0].amount * 100))),
       el('div', {class: 'a'}, c.bsPair(p.id))); };
-  main.append(el('div', {class: 'grid sec'},
-    el('section', {class: 'card', 'aria-label': 'Open paper trades'}, head('Open paper trades', 'Yours first, then each strategy family’s trades by stock. B and S trade your own account.', ['Portfolio', 'positions']), tabs,
+  main.append(el('div', {class: 'sec'},
+    el('section', {class: 'card', 'aria-label': 'Open paper trades'}, head('Open paper trades', 'Each row says whether it was bought (long) or sold (short). Yours first, then each approach’s trades by stock. B and S trade your own account.', ['Portfolio', 'positions']), tabs,
       el('ul', {class: 'pos'}, ...rows.slice(PPG * PPG_SIZE, PPG * PPG_SIZE + PPG_SIZE).map(posRow), rows.length ? null : el('li', {class: 'quiet'}, 'Nothing open here.')),
       el('div', {class: 'pager'}, el('span', {}, rows.length ? `${PPG * PPG_SIZE + 1}–${Math.min(rows.length, PPG * PPG_SIZE + PPG_SIZE)} of ${rows.length}` : ''),
         el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Previous page', disabled: PPG === 0, onclick: () => { PPG--; c.rerender(); }}, icon('chevron_left')),
-        el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Next page', disabled: PPG >= pages - 1, onclick: () => { PPG++; c.rerender(); }}, icon('chevron_right')))),
+        el('button', {class: 'md-icon-btn small', type: 'button', 'aria-label': 'Next page', disabled: PPG >= pages - 1, onclick: () => { PPG++; c.rerender(); }}, icon('chevron_right'))))));
+  const needs = (
     el('section', {class: 'card', id: 'needs', 'aria-label': 'Needs you'}, head('Needs you', 'Things to look at today.'),
-      el('ul', {class: 'att'}, ...M.attention.map(a => el('li', {}, el('span', {class: 'mb-avatar sm ' + a.tone}, icon(a.icon)), el('span', {}, el('b', {}, a.title), el('small', {}, a.sub))))))));
+      el('ul', {class: 'att'}, ...M.attention.map(a => el('li', {}, el('span', {class: 'mb-avatar sm ' + a.tone}, icon(a.icon)), el('span', {}, el('b', {}, a.title), el('small', {}, a.sub)))))));
 
   /* 6. what is coming and what is said */
   const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const KIND = {rbi_policy: 'Policy', earnings: 'Results', holiday: 'Holiday', fno_expiry: 'F&O expiry', fomc: 'Fed', jobs_report: 'Jobs data', cpi: 'Inflation'};
   const STATUS = {confirmed_primary: 'confirmed', corroborated: 'corroborated', single_source: 'single source', unverified: 'unverified', rumour: 'rumour', promotional: 'promotional', contradicted: 'contradicted', not_checked: 'not checked yet'};
-  main.append(el('div', {class: 'grid even sec'},
+  main.append(el('div', {class: 'trio sec'}, needs,
     el('section', {class: 'card'}, head('Coming up', 'Results, policy, holidays and expiry from the stock tool’s event calendar.', ['Calendar', 'events']),
-      el('ul', {class: 'ev'}, ...M.events.map(e => { const d = new Date(e.date + 'T00:00:00Z'); return el('li', {}, el('span', {class: 'd'}, el('b', {}, d.getUTCDate()), el('small', {}, MON[d.getUTCMonth()])), el('span', {}, el('b', {}, e.inst ? inst(e.inst, e.title) : e.title), el('small', {}, c.dateShort(e.date + 'T06:00:00Z') + (e.date === session ? ' · today' : '') + (e.major ? ' · major' : ''))), el('span', {class: 'mb-label neutral'}, KIND[e.kind] || e.kind)); }))),
+      el('ul', {class: 'ev'}, ...M.events.map(e => { const d = new Date(e.date + 'T00:00:00Z'); return el('li', {}, el('span', {class: 'd'}, el('b', {}, d.getUTCDate()), el('small', {}, MON[d.getUTCMonth()])), el('span', {}, el('b', {}, e.inst ? inst(e.inst, e.title) : e.title), el('small', {}, c.dateShort(e.date + 'T06:00:00Z') + (e.date === session ? ' · today' : '') + ' · ', KIND[e.kind] || e.kind, e.major ? ' · major' : ''))); }))),
     el('section', {class: 'card'}, head('Top news', 'From the news run, with how far each story is confirmed.', ['News', 'news']),
       el('ul', {class: 'news'}, ...M.news.map(n => el('li', {}, el('b', {}, n.title), el('span', {class: 'm'}, ...n.tickers.map(t => P.items[t] ? inst(t) : el('span', {}, t)), el('span', {class: 'md-badge ' + n.status}, STATUS[n.status] || n.status), `${n.src} · ${c.when(n.at)}`)))))));
 }});

@@ -59,7 +59,9 @@ Work on `main`; `git pull --no-rebase origin main` before every push (several se
   overflow).
 - Mixed screens never merge numbers that belong to separate experiments: each paper account, book and scoreboard is
   shown on its own; currencies are never summed (INR and USD apart); scoreboards of the two backends are never
-  combined into one figure.
+  combined into one figure. One exception (owner, 13 Oct 2026): Home shows each group's (Rule-based, Hybrid, AI team,
+  Baselines) total stock profit or loss, the sum of that group's own strategies' paper results, labelled as a total;
+  groups are never added together, and the F&O book stays its own line.
 - F&O appears only in the India market; in the US market every F&O element is absent (not empty, absent).
 
 ## Code

@@ -9,103 +9,221 @@
     "date": "2026-10-07",
     "in_session": false,
     "regime": "EVENT_HEAVY",
-    "post_close_at": "2026-10-07T12:15:00Z"
+    "post_close_at": "2026-10-07T12:15:00Z",
+    "eod_date": "2026-10-06"
    },
-   "groups": [
+   "approaches": [
     {
      "family": "manual",
-     "lines": [
-      {
-       "label": "Your paper account",
-       "value": 501800.0,
-       "pnl": 1800.0,
-       "pnl_label": "open profit",
-       "sub": "1 stock open · Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
-      }
-     ]
+     "account": {
+      "value": 501800.0,
+      "open_profit": 1800.0,
+      "cash": 440900.0,
+      "note": "Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
+     },
+     "open_now": 1
     },
     {
      "family": "rule",
-     "lines": [
+     "h2h": {
+      "net": 1015.81,
+      "trades": 1,
+      "wins": 1,
+      "badge": "too_few_to_rank",
+      "per_trade": "₹1,00,000"
+     },
+     "yesterday": {
+      "trades": 2,
+      "wins": 1,
+      "net_pnl": -975.83
+     },
+     "strategies": [
       {
-       "label": "Stocks · head-to-head portfolio",
-       "value": null,
-       "pnl": 1015.81,
-       "pnl_label": "net so far",
-       "sub": "1 settled trade · too few to rank · ₹1,00,000 a trade"
+       "id": "rule.model_news.v1",
+       "name": "Model + news",
+       "trades": 6,
+       "wins": 1,
+       "net": -9309.36,
+       "badge": "too_few_to_rank",
+       "open_now": 3
       },
       {
-       "label": "Stocks · yesterday (6 Oct)",
-       "value": null,
-       "pnl": -975.83,
-       "pnl_label": "settled",
-       "sub": "2 trades settled, 1 won · 3 open now"
+       "id": "rule.model_news_half.v1",
+       "name": "Model + half news",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
       },
       {
-       "label": "F&O Book 1",
-       "value": 500000.0,
-       "pnl": 0.0,
-       "pnl_label": "no trade yet",
-       "sub": "No approved strategy yet · loss limit used ₹0 of ₹30,000"
+       "id": "rule.model_news_double.v1",
+       "name": "Model + double news",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_confirmed.v1",
+       "name": "Model + confirmed news only",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_high.v1",
+       "name": "Model + major news only",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_global.v1",
+       "name": "Model + news + global cues",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_calm.v1",
+       "name": "Model + news, calm markets only",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_strict.v1",
+       "name": "Model + news, 60% bar",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
       }
-     ]
+     ],
+     "total": {
+      "net": -9309.36,
+      "trades": 6,
+      "wins": 1,
+      "count": 8,
+      "with_trades": 1
+     },
+     "book": {
+      "name": "F&O Book 1",
+      "value": 500000.0,
+      "pnl": 0.0,
+      "approved": [],
+      "limit_used": 0.0,
+      "limit_max": 30000.0
+     },
+     "open_now": 3
     },
     {
      "family": "hybrid",
-     "lines": [
-      {
-       "label": "Stocks",
-       "value": null,
-       "pnl": null,
-       "pnl_label": "",
-       "sub": "No hybrid stock strategy yet: planned (owner, 13 Oct 2026)"
-      },
-      {
-       "label": "F&O Book 2",
-       "value": 500000.0,
-       "pnl": 0.0,
-       "pnl_label": "no trade yet",
-       "sub": "No approved strategy yet · loss limit used ₹0 of ₹30,000"
-      }
-     ]
+     "h2h": null,
+     "yesterday": null,
+     "strategies": [],
+     "total": null,
+     "book": {
+      "name": "F&O Book 2",
+      "value": 500000.0,
+      "pnl": 0.0,
+      "approved": [],
+      "limit_used": 0.0,
+      "limit_max": 30000.0
+     },
+     "open_now": 0,
+     "empty": "No hybrid stock strategy yet (planned)."
     },
     {
      "family": "ai",
-     "lines": [
-      {
-       "label": "Stocks · head-to-head portfolio",
-       "value": null,
-       "pnl": 1015.81,
-       "pnl_label": "net so far",
-       "sub": "1 settled trade · too few to rank · ₹1,00,000 a trade"
-      },
-      {
-       "label": "Stocks · yesterday (6 Oct)",
-       "value": null,
-       "pnl": -1951.66,
-       "pnl_label": "settled",
-       "sub": "4 trades settled, 2 won · 5 open now"
-      },
-      {
-       "label": "F&O Book 3",
-       "value": 500000.0,
-       "pnl": 0.0,
-       "pnl_label": "no trade yet",
-       "sub": "No approved strategy yet · loss limit used ₹0 of ₹30,000"
-      }
-     ]
+     "h2h": {
+      "net": 1015.81,
+      "trades": 1,
+      "wins": 1,
+      "badge": "too_few_to_rank",
+      "per_trade": "₹1,00,000"
+     },
+     "yesterday": {
+      "trades": 4,
+      "wins": 2,
+      "net_pnl": -1951.66
+     },
+     "strategies": [],
+     "total": {
+      "net": 1015.81,
+      "trades": 1,
+      "wins": 1,
+      "count": 1,
+      "with_trades": 1
+     },
+     "book": {
+      "name": "F&O Book 3",
+      "value": 500000.0,
+      "pnl": 0.0,
+      "approved": [],
+      "limit_used": 0.0,
+      "limit_max": 30000.0
+     },
+     "open_now": 5
     },
     {
      "family": "baseline",
-     "lines": [
+     "h2h": null,
+     "yesterday": {
+      "trades": 3,
+      "wins": 2,
+      "net_pnl": 39.98
+     },
+     "strategies": [
       {
-       "label": "Stocks · yesterday (6 Oct)",
-       "value": null,
-       "pnl": 39.98,
-       "pnl_label": "settled",
-       "sub": "3 trades settled, 2 won · 6 open now · the comparison line"
+       "id": "base.always_up.v1",
+       "name": "Always buy",
+       "trades": 6,
+       "wins": 1,
+       "net": -9309.36,
+       "badge": "too_few_to_rank",
+       "open_now": 4
+      },
+      {
+       "id": "base.momentum.v1",
+       "name": "Follow yesterday",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "base.model_only.v1",
+       "name": "Model without news",
+       "trades": 1,
+       "wins": 1,
+       "net": 1015.81,
+       "badge": "too_few_to_rank",
+       "open_now": 2
       }
-     ]
+     ],
+     "total": {
+      "net": -8293.55,
+      "trades": 7,
+      "wins": 2,
+      "count": 3,
+      "with_trades": 2
+     },
+     "book": null,
+     "open_now": 6,
+     "comparison": true
     }
    ],
    "own": [
@@ -309,8 +427,8 @@
      "icon": "schedule",
      "tone": "info",
      "title": "4 paper trades exit today",
-     "sub": "HDFCBANK, RELIANCE at N+4: Always buy, Model + news, Model without news",
-     "inst": "RELIANCE"
+     "inst": "RELIANCE",
+     "sub": "HDFCBANK, RELIANCE at N+4: Always buy, Model + news, Model without news"
     },
     {
      "icon": "pending",
@@ -328,8 +446,8 @@
      "icon": "newspaper",
      "tone": "danger",
      "title": "Promotional news on RELIANCE",
-     "sub": "“Jio Platforms plans IPO. Reliance Industries stock sits 24.42 percent below its ” (AD HOC NEWS): it never supports a call",
-     "inst": "RELIANCE"
+     "inst": "RELIANCE",
+     "sub": "“Jio Platforms plans IPO. Reliance Industries stock sits 24.42 percent below its ” (AD HOC NEWS): it never supports a call"
     }
    ],
    "events": [
@@ -421,82 +539,200 @@
     "date": "2026-10-07",
     "in_session": false,
     "regime": "TRENDING",
-    "post_close_at": "2026-10-07T22:15:00Z"
+    "post_close_at": "2026-10-07T22:15:00Z",
+    "eod_date": "2026-10-06"
    },
-   "groups": [
+   "approaches": [
     {
      "family": "manual",
-     "lines": [
-      {
-       "label": "Your paper account",
-       "value": 5008.49,
-       "pnl": 8.49,
-       "pnl_label": "open profit",
-       "sub": "1 stock open · Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
-      }
-     ]
+     "account": {
+      "value": 5008.49,
+      "open_profit": 8.49,
+      "cash": 4007.6,
+      "note": "Proposed starting cash (owner-changeable); the trades in it are your real paper trades."
+     },
+     "open_now": 1
     },
     {
      "family": "rule",
-     "lines": [
+     "h2h": {
+      "net": 41.15,
+      "trades": 1,
+      "wins": 1,
+      "badge": "too_few_to_rank",
+      "per_trade": "$1,000"
+     },
+     "yesterday": {
+      "trades": 2,
+      "wins": 2,
+      "net_pnl": 47.37
+     },
+     "strategies": [
       {
-       "label": "Stocks · head-to-head portfolio",
-       "value": null,
-       "pnl": 41.15,
-       "pnl_label": "net so far",
-       "sub": "2 settled trades · too few to rank · $1,000 a trade"
+       "id": "rule.model_news.v1",
+       "name": "Model + news",
+       "trades": 10,
+       "wins": 7,
+       "net": 99.0,
+       "badge": "too_few_to_rank",
+       "open_now": 2
       },
       {
-       "label": "Stocks · yesterday (6 Oct)",
-       "value": null,
-       "pnl": 47.37,
-       "pnl_label": "settled",
-       "sub": "2 trades settled, 2 won · 2 open now"
+       "id": "rule.model_news_half.v1",
+       "name": "Model + half news",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_double.v1",
+       "name": "Model + double news",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_confirmed.v1",
+       "name": "Model + confirmed news only",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_high.v1",
+       "name": "Model + major news only",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_global.v1",
+       "name": "Model + news + global cues",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_calm.v1",
+       "name": "Model + news, calm markets only",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "rule.model_news_strict.v1",
+       "name": "Model + news, 60% bar",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
       }
-     ]
+     ],
+     "total": {
+      "net": 99.0,
+      "trades": 10,
+      "wins": 7,
+      "count": 8,
+      "with_trades": 1
+     },
+     "book": null,
+     "open_now": 2
     },
     {
      "family": "hybrid",
-     "lines": [
-      {
-       "label": "Stocks",
-       "value": null,
-       "pnl": null,
-       "pnl_label": "",
-       "sub": "No hybrid stock strategy yet: planned (owner, 13 Oct 2026)"
-      }
-     ]
+     "h2h": null,
+     "yesterday": null,
+     "strategies": [],
+     "total": null,
+     "book": null,
+     "open_now": 0,
+     "empty": "No hybrid stock strategy yet (planned)."
     },
     {
      "family": "ai",
-     "lines": [
-      {
-       "label": "Stocks · head-to-head portfolio",
-       "value": null,
-       "pnl": 39.66,
-       "pnl_label": "net so far",
-       "sub": "1 settled trade · too few to rank · $1,000 a trade"
-      },
-      {
-       "label": "Stocks · yesterday (6 Oct)",
-       "value": null,
-       "pnl": 0,
-       "pnl_label": "settled",
-       "sub": "0 trades settled, 0 won · 7 open now"
-      }
-     ]
+     "h2h": {
+      "net": 39.66,
+      "trades": 1,
+      "wins": 1,
+      "badge": "too_few_to_rank",
+      "per_trade": "$1,000"
+     },
+     "yesterday": {
+      "trades": 0,
+      "wins": 0,
+      "net_pnl": 0
+     },
+     "strategies": [],
+     "total": {
+      "net": 39.66,
+      "trades": 1,
+      "wins": 1,
+      "count": 1,
+      "with_trades": 1
+     },
+     "book": null,
+     "open_now": 7
     },
     {
      "family": "baseline",
-     "lines": [
+     "h2h": null,
+     "yesterday": {
+      "trades": 4,
+      "wins": 3,
+      "net_pnl": 75.4
+     },
+     "strategies": [
       {
-       "label": "Stocks · yesterday (6 Oct)",
-       "value": null,
-       "pnl": 75.4,
-       "pnl_label": "settled",
-       "sub": "4 trades settled, 3 won · 4 open now · the comparison line"
+       "id": "base.always_up.v1",
+       "name": "Always buy",
+       "trades": 12,
+       "wins": 7,
+       "net": 76.04,
+       "badge": "too_few_to_rank",
+       "open_now": 3
+      },
+      {
+       "id": "base.momentum.v1",
+       "name": "Follow yesterday",
+       "trades": 0,
+       "wins": 0,
+       "net": null,
+       "badge": null,
+       "open_now": 0
+      },
+      {
+       "id": "base.model_only.v1",
+       "name": "Model without news",
+       "trades": 5,
+       "wins": 5,
+       "net": 109.88,
+       "badge": "too_few_to_rank",
+       "open_now": 1
       }
-     ]
+     ],
+     "total": {
+      "net": 185.92,
+      "trades": 17,
+      "wins": 12,
+      "count": 3,
+      "with_trades": 2
+     },
+     "book": null,
+     "open_now": 4,
+     "comparison": true
     }
    ],
    "own": [
@@ -687,8 +923,8 @@
      "icon": "schedule",
      "tone": "info",
      "title": "13 paper trades exit today",
-     "sub": "AAPL, JPM, NVDA at N+5: AI team, Always buy, Model + news, Model without news",
-     "inst": "NVDA"
+     "inst": "NVDA",
+     "sub": "AAPL, JPM, NVDA at N+5: AI team, Always buy, Model + news, Model without news"
     },
     {
      "icon": "pending",
@@ -700,8 +936,8 @@
      "icon": "newspaper",
      "tone": "danger",
      "title": "Rumour news on NVDA",
-     "sub": "“Nvidia share price jumps nearly 30 per cent in 2026 as world's most valuable com” (The Economic Times): it never supports a call",
-     "inst": "NVDA"
+     "inst": "NVDA",
+     "sub": "“Nvidia share price jumps nearly 30 per cent in 2026 as world's most valuable com” (The Economic Times): it never supports a call"
     }
    ],
    "events": [

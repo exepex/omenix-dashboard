@@ -36,7 +36,7 @@ follows the same rules (see `CLAUDE.md`). The F&O backend `exepex/trading` has t
   sample size) beside it; untested strategies are labelled "not proven"; an empty state ("no approved idea") is a
   valid, designed state.
 - Every price shows its as-of time and source; nothing is presented as live when it is not.
-- Separate paper accounts, books and scoreboards are never merged into one figure; INR and USD are never summed.
+- Separate paper accounts, books and scoreboards are never merged into one figure; INR and USD are never summed. One exception (owner, 13 Oct 2026): Home shows each group's (Rule-based, Hybrid, AI team, Baselines) total stock profit or loss, the sum of that group's own strategies' paper results, labelled as a total; groups are never added together, and the F&O book stays its own line.
 - Every idea, position and decision says where it comes from: rule-based, AI-based, hybrid, or the owner's own trades.
 
 ## Roles

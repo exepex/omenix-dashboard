@@ -104,7 +104,8 @@
    "widths": [
     1280,
     390
-   ]
+   ],
+   "phone_screen": true
   },
   {
    "id": "search-code",
@@ -174,7 +175,8 @@
    "widths": [
     1280,
     390
-   ]
+   ],
+   "phone_screen": true
   },
   {
    "id": "sell-holding",
@@ -229,7 +231,8 @@
     {
      "click": ".mb-drawer-foot .md-btn.buy"
     }
-   ]
+   ],
+   "phone_screen": true
   },
   {
    "id": "buy-option",
@@ -279,7 +282,8 @@
    "widths": [
     1280,
     390
-   ]
+   ],
+   "phone_screen": true
   },
   {
    "id": "us-buy",
@@ -348,7 +352,8 @@
    "hash": "wlopen=1",
    "widths": [
     390
-   ]
+   ],
+   "phone_screen": true
   },
   {
    "id": "hover-card",
@@ -367,7 +372,8 @@
    "widths": [
     1280,
     390
-   ]
+   ],
+   "phone_screen": true
   },
   {
    "id": "trades-yours",
@@ -382,7 +388,8 @@
     {
      "scroll": "[aria-label='Open paper trades']"
     }
-   ]
+   ],
+   "phone_screen": true
   },
   {
    "id": "trades-rule",
@@ -447,7 +454,7 @@
   {
    "id": "who-trades",
    "section": "8. Who trades, needs you, coming up, news",
-   "title": "Who trades: you and each approach, never added together.",
+   "title": "Who trades: each group's total paper profit or loss (green a profit, red a loss), the F&O book on its own line, strategies collapsed, a link to the group's page.",
    "hash": "",
    "widths": [
     1280,
@@ -457,7 +464,46 @@
     {
      "scroll": "[aria-label='Who trades']"
     }
-   ]
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "who-trades-open",
+   "section": "8. Who trades, needs you, coming up, news",
+   "title": "Who trades, Rule-based opened: each strategy's own result under the group total.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": ".mb-apcard-more summary"
+    },
+    {
+     "scroll": "[aria-label='Who trades']"
+    }
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "who-trades-us",
+   "section": "8. Who trades, needs you, coming up, news",
+   "title": "Who trades, US: totals in dollars; no F&O line (no US F&O).",
+   "hash": "m=us",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "click": ".mb-apcard-more summary"
+    },
+    {
+     "scroll": "[aria-label='Who trades']"
+    }
+   ],
+   "phone_screen": true
   },
   {
    "id": "needs-you",
@@ -485,7 +531,7 @@
    ],
    "actions": [
     {
-     "scroll": ".grid.even.sec"
+     "scroll": ".trio"
     }
    ]
   },
@@ -539,7 +585,8 @@
    "hash": "drawer=nav",
    "widths": [
     390
-   ]
+   ],
+   "phone_screen": true
   }
  ]
 }

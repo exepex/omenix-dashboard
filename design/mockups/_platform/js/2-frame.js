@@ -59,7 +59,7 @@ function renderAll() {
   F.pf.replaceChildren(appbar(), navrail(), signalsPanel(), F.main, tabbar());
   inner.replaceChildren();
   page.render(inner, ctx());
-  inner.append(el('footer', {}, 'Omenix · research and paper trading only: nothing here places a real order · ', el('b', {}, 'Mock data'), ` as of ${nowLabel()}`));
+  inner.append(el('footer', {}, 'Omenix · research and paper trading only: nothing here places a real order · ', el('b', {}, 'Example data'), ` as of ${nowLabel()}`));
   writeHash();
 }
 
