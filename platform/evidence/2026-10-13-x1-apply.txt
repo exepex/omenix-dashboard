@@ -1,0 +1,26 @@
+X1 apply of platform/sql to omenix-pg.postgres.database.azure.com, 2026-10-13 01:28 UTC, repository commit unknown
+-- changes this apply will make (expected: exactly tests/catalog_difference.txt, or nothing on a second run)
+(none)
+psql:<repository>/platform/sql/00_roles.sql:89: NOTICE:  role "<admin>" has already been granted membership in role "stock_owner" by role "<admin>"
+psql:<repository>/platform/sql/00_roles.sql:89: NOTICE:  role "<admin>" has already been granted membership in role "fno_owner" by role "<admin>"
+psql:<repository>/platform/sql/00_roles.sql:89: NOTICE:  role "<admin>" has already been granted membership in role "app_owner" by role "<admin>"
+database azure_maintenance: large-object functions still open for PUBLIC: lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea)
+database azure_sys: large-object functions still open for PUBLIC: lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea)
+database omenix: large-object functions still open for PUBLIC: lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea)
+database postgres: large-object functions still open for PUBLIC: lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea)
+database template1: large-object functions still open for PUBLIC: lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea)
+still open for PUBLIC (each row is a named exception in platform/README.md; 0 rows = all closed):
+              still_open               
+---------------------------------------
+ database azure_maintenance: CONNECT
+ database azure_maintenance: TEMPORARY
+ database azure_sys: CONNECT
+ database azure_sys: TEMPORARY
+(4 rows)
+
+psql:<repository>/platform/sql/20_schemas.sql:7: NOTICE:  schema "stock" already exists, skipping
+psql:<repository>/platform/sql/20_schemas.sql:8: NOTICE:  schema "fno" already exists, skipping
+psql:<repository>/platform/sql/20_schemas.sql:9: NOTICE:  schema "app" already exists, skipping
+applied platform/sql 00-40 to database omenix on omenix-pg.postgres.database.azure.com
+-- diff after apply against expected_catalog.txt (empty = identical)
+RESULT: catalog identical to expected_catalog.txt after apply: yes
