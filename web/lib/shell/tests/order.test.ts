@@ -30,7 +30,7 @@ test("an option buy prices at the snapshot's ask, a sell at its bid; the lot mul
   const ce = india.items.NIFTY26OCT23300CE;
   const buy = preview(india, ce, input(), null, inr);
   assert.equal(buy.price, ce.ask);
-  assert.equal(buy.units, 75);
+  assert.equal(buy.units, ce.lot);
   assert.equal(buy.ok, true, JSON.stringify(buy.checks));
   assert.equal(preview(india, ce, input({ side: "sell" }), null, inr).price, ce.bid);
 });
