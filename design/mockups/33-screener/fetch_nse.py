@@ -11,7 +11,7 @@ Writes into source/:
 - fno.csv.gz: per F&O underlying and day, three months back (UDiFF `BhavCopy_NSE_FO_*`): the underlying's close,
   the nearest monthly future (close, previous close, OI, OI change), all futures' OI, all calls' and puts' OI of that
   expiry, the at-the-money call and put (strike nearest the underlying: close, volume), the lot and the expiry.
-A day without a file (a holiday) is skipped and printed.
+Days are NSE's sessions (_platform/nse_calendar.py); a session without a file is skipped and printed.
 """
 import csv
 import datetime as dt
@@ -24,6 +24,8 @@ import urllib.error
 import urllib.request
 import zipfile
 from collections import defaultdict
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "_platform"))
+from nse_calendar import sessions  # noqa: E402  (NSE's sessions, never weekdays: the 1 Feb 2026 Sunday Budget session)
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "source")
 BASE = "https://nsearchives.nseindia.com"
@@ -48,11 +50,7 @@ def unzip_csv(raw: bytes) -> list:
 
 
 def days(last: dt.date, n: int):
-    d = last - dt.timedelta(days=n)
-    while d <= last:
-        if d.weekday() < 5:
-            yield d
-        d += dt.timedelta(days=1)
+    return sessions(last - dt.timedelta(days=n), last)
 
 
 def rsi14(closes: list) -> float | None:
