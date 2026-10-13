@@ -69,7 +69,11 @@ def render() -> str:
     lines += ["", "## Stories", "", "| Story | Exists | Fields not yet published | What it covers |", "|---|---|---|---|"]
     for sid, s in stories.items():
         lines.append(f"| `{sid}` | {'yes' if s['exists'] else '**no: to be written**'} | {planned.get(sid, 0)} | {cell(s.get('scope') or s['title'])} |")
-    lines += ["", "## Fields", ""]
+    lines += ["", "## Open questions (owner)", "",
+              "- Who publishes NSE's daily files (publisher `nse_ingest`, story `NSE1-proposed`): exepex/trading or `platform/`?",
+              "- Should the stock tool publish a year of daily FII/DII flows (5 days today: 1D and 1W totals only)?",
+              "- Events: 34's data has no `major` flag; it is derived from the regime record's `major_event_names` until published.",
+              "", "## Fields", ""]
     for path, _, op in ops:
         lines += [f"### `GET {path}` ({op['operationId']})", "", "| Field | Elements | Publisher | Source | Unit | Freshness | Story | Status |",
                   "|---|---|---|---|---|---|---|---|"]
