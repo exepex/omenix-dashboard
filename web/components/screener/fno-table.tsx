@@ -69,7 +69,7 @@ export function FnoTable({ state, rows, sortKey }: { state: ScreenerState; rows:
           <tbody>
             {rows.rows.map((r, i) => (
               <tr key={r.s}>
-                <td>{name(r)}<small>{r.n}</small></td>
+                <td>{name(r)}<small data-security="">{r.n}</small></td>
                 <td className="num"><Num value={r.fut} src={at(i, "fut")} locale={L} /><small><Chg value={r.fc} src={at(i, "fc")} /></small></td>
                 <td className="num"><Chg value={r.oc} src={at(i, "oc")} /><small><Num value={r.oi} src={at(i, "oi")} decimals={0} locale={L} /></small></td>
                 <td><Build r={r} /></td>

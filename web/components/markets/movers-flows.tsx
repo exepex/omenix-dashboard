@@ -34,7 +34,7 @@ export function Movers({ movers, state, india, locale }: { movers: ScreenerStock
         <ul className="list">
           {movers.rows.map((r, i) => (
             <li key={r.s}>
-              <span>{item(r.s) ? <Tk id={r.s} /> : <b>{r.s}</b>}<small>{r.n}</small></span>
+              <span>{item(r.s) ? <Tk id={r.s} /> : <b>{r.s}</b>}<small data-security="">{r.n}</small></span>
               <span className="r"><Num value={r.p} src={at(i, "p")} locale={locale} /><small><Chg value={r.d1} src={at(i, "d1")} /></small></span>
               <span className="r small muted" data-derived={`${at(i, "p")} ${at(i, "v")} ${at(i, "va")}`}>
                 {india ? `₹${f((r.p * r.v) / 1e7, 1)} cr` : `$${f((r.p * r.v) / 1e6, 0)}M`}
