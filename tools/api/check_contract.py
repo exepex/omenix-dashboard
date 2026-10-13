@@ -27,12 +27,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 import examples  # noqa: E402
 from check_stored import check_stored, planted as planted_stored  # noqa: E402
+from check_calendar import check_calendar, planted as planted_calendar  # noqa: E402
 from check_chain import check_chain, planted as planted_chain  # noqa: E402
 from check_semantics import check_flows, check_home_events, check_views  # noqa: E402
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 55  # planted breaks in planted()
+PLANTED = 58  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -280,6 +281,8 @@ def main() -> int:
     stored = check_stored(doc, validate, found, problems)
     planted_stored(doc, validate, found, stored, problems)
     planted_chain(doc, validate, found, problems)
+    series = check_calendar(found, problems)
+    planted_calendar(found, problems)
     schemas = check_coverage(doc, found, stored, problems)
     leaves = check_catalog(doc, problems)
     check_rules(doc, found, problems)
@@ -289,7 +292,7 @@ def main() -> int:
     check_home_events(doc, problems)
     ops = list(block_operations(doc))
     print(f"contract: {len(doc['paths'])} paths ({len(ops)} block endpoints), {sum(len(v) for v in found.values())} block examples, "
-          f"{schemas} block schemas, {leaves} catalogued leaf fields, {PLANTED} planted breaks")
+          f"{schemas} block schemas, {leaves} catalogued leaf fields, {PLANTED} planted breaks, {series} daily series on NSE's sessions")
     print("\n".join(problems) if problems else "contract: OpenAPI 3.1 valid; examples valid and current; catalog complete; screen rules hold; every planted break caught")
     return 1 if problems else 0
 
