@@ -1,0 +1,45 @@
+name: db-check
+
+# Issue #2: hourly read-only check of omenix-pg for the owner's accepted exceptions (large objects in any database,
+# drift such as a persistent statement_timeout). Logs in as db_monitor, which can read catalogs and large-object sizes
+# only. Its password is the repository secret OMENIX_DB_MONITOR_PASSWORD (Settings > Secrets and variables > Actions);
+# nothing else is secret. Never runs on pull requests, so no fork can reach the secret.
+# On a finding: the run fails (GitHub e-mails the owner) and an issue "Database check: alert" is opened or commented.
+# The report holds no secret and no IP address. Details: platform/README.md, "Scheduled check".
+on:
+  schedule:
+    - cron: "17 * * * *"   # every hour at :17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write            # only to open or comment on the alert issue
+
+concurrency:
+  group: db-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PGHOST: omenix-pg.postgres.database.azure.com
+      PGPORT: "5432"
+      PGUSER: db_monitor
+      PGSSLMODE: verify-full
+      PGSSLROOTCERT: system      # the runner's trusted roots (libpq 16 or later)
+      PGPASSWORD: ${{ secrets.OMENIX_DB_MONITOR_PASSWORD }}
+      PGCONNECT_TIMEOUT: "20"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check
+        run: |
+          if [ -z "$PGPASSWORD" ]; then
+            echo "::notice::db-check is not configured yet: the secret OMENIX_DB_MONITOR_PASSWORD is not set (platform/README.md, Scheduled check)."
+            exit 0
+          fi
+          command -v psql > /dev/null || { sudo apt-get update -q && sudo apt-get install -y -q postgresql-client; }
+          psql --version
+          platform/monitor/run.sh "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

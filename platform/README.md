@@ -68,6 +68,7 @@ who failed), and an email alert when storage is above 80 percent (metric `storag
 | `fno_writer` | read and write rows in `fno` tables | `FNO_DB_URL`, `exepex/trading`'s cloud environment |
 | `dashboard_app` | read `stock` and `fno`; read, insert and update `app` (no delete) | `OMENIX_DB_URL`, the dashboard's Vercel projects |
 | `stock_inbox_reader` | read `app` | `STOCK_INBOX_DB_URL`, stock backend's cloud environment |
+| `db_monitor` | connect and read catalogs and large-object sizes only (no schema, table or function access); limit 2 connections, 30 s timeout | `OMENIX_DB_MONITOR_PASSWORD`, this repository's GitHub Actions secret (the scheduled check below) |
 | `stock_owner`, `fno_owner`, `app_owner` | create and change tables in their own schema | nowhere: the owner's password manager only, used by hand for migrations |
 | server admin | create roles and databases | nowhere: the owner's password manager only |
 
@@ -119,6 +120,48 @@ admin, like Azure's) they stay open; CI step 6a shows that a large object made i
 
 The story owner decides whether these exceptions are acceptable; X1 does not claim them away.
 
+## Scheduled check (issue #2)
+
+What it watches, hourly, read-only (`platform/monitor/`, workflow `.github/workflows/db-check.yml`):
+1. **Large objects** (named exceptions 1 and 2): their bytes in every database that accepts connections, against a
+   limit of 50 MiB each (`X1_LO_MAX_BYTES`). This is far earlier than the 80 percent storage alert.
+2. **Drift** (named exception 3 and anything else): the catalog snapshot against `tests/expected_catalog.txt`. It
+   catches a role's persistent `statement_timeout` or other setting, attributes, memberships, grants and default
+   privileges.
+3. **Password changes: not detectable.** A read-only role cannot see them (strong evidence: `pg_authid` is
+   superuser-only, so even Azure's admin cannot read it, and PostgreSQL keeps no change time). The report says so on
+   every run. A deployment locked out by a changed password shows as failed connections, which the Azure alert
+   `omenix-pg-failed-connections` covers.
+
+**Where it runs and why:** a scheduled GitHub Actions workflow in this repository, chosen over a scheduled Claude
+routine. It is deterministic, costs nothing on a public repository and needs no model run.
+- **Credential:** only `db_monitor`'s password, as the repository secret `OMENIX_DB_MONITOR_PASSWORD`. Host and role
+  name are in the workflow, since they are not secret. No admin credential is stored anywhere.
+- **Fork safety:** the workflow never runs on pull requests, so a fork cannot reach the secret.
+- **What is public:** the run logs are public, so the report holds only role names, database names, counts, sizes and
+  catalog lines (no secret, IP addresses redacted).
+
+**Alert:** on a finding the run fails, and GitHub e-mails the owner about failed scheduled runs. `monitor/alert.sh`
+also opens the issue "Database check: alert", or comments on it if it is already open, using the workflow's own
+token; repository watchers get it by e-mail. Each condition is planted in a disposable database by
+`tests/monitor_test.sh` (CI step 7), which checks that the alert fires.
+
+**Owner setup, once:**
+1. `git pull`, then run `platform/owner/apply_real.sh`. It creates `db_monitor` and its CONNECT grants, and should
+   end with `catalog identical ... yes`.
+2. As admin in psql, run `\password db_monitor` and type a long random password of letters and digits.
+3. Add it on GitHub: Settings > Secrets and variables > Actions > New repository secret, named
+   `OMENIX_DB_MONITOR_PASSWORD`.
+4. Under Actions > db-check, click Run workflow. Expected result: `RESULT: OK`. Until the secret exists, each run
+   only prints a notice.
+
+**Limits (reasoning only unless marked):**
+- GitHub disables scheduled workflows in a public repository after 60 days without repository activity.
+- A finding is reported once an hour while it lasts, each time as a comment on the same issue.
+- The check sees a persistent setting, not one switched off for a single session (exception 3).
+- A leaked `db_monitor` password has the same named exceptions as any role (it could create large objects), and no
+  more.
+
 ## Scope: infrastructure only; dashboard tables come later (follow-up for W7)
 
 Owner scope note (12 Oct 2026): the dashboard's screens are being redesigned (`design/PLATFORM_DESIGN.md`: manual
@@ -139,8 +182,8 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 
 | Path | What |
 |---|---|
-| `sql/00_roles.sql` | the seven roles, attributes, connection limits, timeouts; removes stray memberships; the admin's SET-only membership in the owner roles |
-| `sql/10_database.sql` | database `omenix`; only the seven roles may connect |
+| `sql/00_roles.sql` | the eight roles (seven from X1, `db_monitor` from issue #2), attributes, connection limits, timeouts; removes stray memberships; the admin's SET-only membership in the owner roles |
+| `sql/10_database.sql` | database `omenix`; only the eight roles may connect |
 | `sql/12_large_objects.sql` | run in every database the admin can reach: tries to close large-object creation (named exception 1) and prints what stays open there |
 | `sql/15_server_wide.sql` | tries to close CONNECT and TEMPORARY for PUBLIC on the other databases (named exception 2) and prints what stays open |
 | `sql/20_schemas.sql` | schemas `stock`, `fno`, `app` and their owners; no `CREATE` on `public` |
@@ -156,14 +199,16 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `tests/large_objects.sh` | counts large objects in every database that accepts connections (as the admin); fails on any |
 | `tests/owner_scripts_test.sh` | tests the owner scripts' Azure handling with a fake `az`: both firewall-rule flag forms (current `--server-name`, older `--name`), an az failure shown as "ERROR, could not read", and IP addresses redacted from evidence |
 | `owner/az.sh` | az helpers shared by the owner scripts: firewall-rule calls for both az flag forms, and reads that report a failure as an error, never as a value |
+| `monitor/db_check.sh`, `monitor/alert.sh`, `monitor/run.sh` | the scheduled check (issue #2): report, GitHub alert, entry point |
+| `tests/monitor_test.sh` | plants each watched condition and checks that the alert fires (CI step 7) |
 | `tests/ci.sh` | the whole test on a disposable PostgreSQL 16 (CI: `.github/workflows/platform-tests.yml`) |
 | `owner/` | the owner's scripts for the real server; checklist in `owner/CHECKLIST_X1.md` |
 | `evidence/` | outputs of the owner's scripts, committed by the owner |
 
-## Equivalence with what the owner ran, and the one deliberate difference
+## Equivalence with what the owner ran, and the two deliberate differences
 
 `tests/ci.sh` proves on every push that `sql/reference/azure_setup.sql` gives `tests/reference_catalog.txt` (71
-lines), that `sql/00..40` gives `tests/expected_catalog.txt` (74 lines) both on an empty server and on top of the
+lines), that `sql/00..40` gives `tests/expected_catalog.txt` (79 lines) both on an empty server and on top of the
 owner's setup, that a second run changes nothing, and that the two listings differ only by
 `tests/catalog_difference.txt`:
 
@@ -174,6 +219,10 @@ role creates in `stock`, `fno` or `app`, and each writer those in its own schema
 original setup: 9 checks fail). Only a global default (without `IN SCHEMA`) can remove a built-in default, so the
 revoke is global per owner role; it adds the three `acl default functions` lines. The real server gets it from
 `owner/apply_real.sh`.
+
+**Second deliberate difference (issue #2, 13 Oct 2026):** the monitor role `db_monitor` for the scheduled check. It
+adds four lines: the role (with its 2-connection limit), its 30 s `statement_timeout`, its CONNECT on `omenix`, and the
+admin's implicit membership from creating it.
 
 Everything else acts only on **drift** and does nothing on the owner's server as set up:
 - grants on the database, schemas and default privileges (tables, sequences, functions) are revoked from the other

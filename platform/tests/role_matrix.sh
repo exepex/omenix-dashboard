@@ -14,7 +14,7 @@
 set -u
 here="$(cd "$(dirname "$0")" && pwd)"
 database="${X1_DATABASE:-omenix}"
-all_roles="stock_owner fno_owner app_owner stock_writer fno_writer dashboard_app stock_inbox_reader"
+all_roles="stock_owner fno_owner app_owner stock_writer fno_writer dashboard_app stock_inbox_reader db_monitor"
 if [ "$#" -gt 0 ]; then roles="$*"; else roles="$all_roles"; fi
 for role in $roles; do
   case " $all_roles " in *" $role "*) ;; *) echo "unknown role: $role" >&2; exit 2 ;; esac

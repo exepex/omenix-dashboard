@@ -1,17 +1,21 @@
--- X1: a normalised, sorted listing of everything the setup controls: the seven roles' attributes, settings and
+-- X1: a normalised, sorted listing of everything the setup controls: the eight roles' attributes, settings and
 -- memberships, the database's owner and privileges, the four schemas' owners and privileges, and the default
--- privileges. Run as the server admin connected to "omenix" (psql -X -A -t -f). The admin's own name prints as
--- <admin>, any superuser (the bootstrap one on Azure is not ours) as <superuser> and the platform's default owner of
--- schema public (pg_database_owner, or azure_pg_admin on Azure) as <platform default>, so the output of a local copy and
--- of the real server can be compared line by line with expected_catalog.txt. Reads catalogs only; no secrets.
+-- privileges. Run connected to "omenix" (psql -X -A -t -f) as the admin or as db_monitor: it reads only catalogs that
+-- every role may read, and no secret. The admin (the owner of database omenix, unless that is an Omenix role or a
+-- superuser) prints as <admin>, any superuser (the bootstrap one on Azure is not ours) as <superuser> and the
+-- platform's default owner of schema public (pg_database_owner, or azure_pg_admin on Azure) as <platform default>, so
+-- the output of a local copy and of the real server can be compared line by line with expected_catalog.txt.
 WITH ours(name) AS (
   VALUES ('stock_owner'), ('fno_owner'), ('app_owner'),
-         ('stock_writer'), ('fno_writer'), ('dashboard_app'), ('stock_inbox_reader')
+         ('stock_writer'), ('fno_writer'), ('dashboard_app'), ('stock_inbox_reader'), ('db_monitor')
 ),
 who AS (  -- display name of a role oid
   SELECT oid,
-         CASE WHEN rolname = current_user THEN '<admin>'
-              WHEN rolsuper THEN '<superuser>'
+         CASE WHEN rolsuper THEN '<superuser>'
+              -- Not current_user, so the same listing comes out whoever runs it (admin or db_monitor). If someone else
+              -- became the owner, the admin's own grants would print under its real name: still a difference.
+              WHEN oid = (SELECT datdba FROM pg_database WHERE datname = 'omenix')
+                   AND rolname NOT IN (SELECT name FROM ours) THEN '<admin>'
               -- The platform's default owner of schema public: PostgreSQL 16 uses pg_database_owner, Azure its own
               -- azure_pg_admin (seen on omenix-pg, 13 Oct 2026). Only these two names; any other owner shows as drift.
               WHEN rolname IN ('pg_database_owner', 'azure_pg_admin') THEN '<platform default>'

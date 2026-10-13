@@ -6,19 +6,19 @@ BEGIN;
 
 SET ROLE stock_owner;
 REVOKE ALL ON SCHEMA stock
-  FROM PUBLIC, fno_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader;
+  FROM PUBLIC, fno_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader, db_monitor;
 GRANT USAGE ON SCHEMA stock TO stock_writer, dashboard_app;
 RESET ROLE;
 
 SET ROLE fno_owner;
 REVOKE ALL ON SCHEMA fno
-  FROM PUBLIC, stock_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader;
+  FROM PUBLIC, stock_owner, app_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader, db_monitor;
 GRANT USAGE ON SCHEMA fno TO fno_writer, dashboard_app;
 RESET ROLE;
 
 SET ROLE app_owner;
 REVOKE ALL ON SCHEMA app
-  FROM PUBLIC, stock_owner, fno_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader;
+  FROM PUBLIC, stock_owner, fno_owner, stock_writer, fno_writer, dashboard_app, stock_inbox_reader, db_monitor;
 GRANT USAGE ON SCHEMA app TO dashboard_app, stock_inbox_reader;
 RESET ROLE;
 
