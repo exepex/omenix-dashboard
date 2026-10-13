@@ -44,7 +44,9 @@ K5-proposed:
     tools' view of its followed companies (strategy_predictions at N+5, model_scores, features days_to_results), the
     US screener rows and counts of its 20 companies (daily prices; returns, 52-week range, volume ratio and RSI computed
     the screener's way), the US benchmarks and sector funds, world quotes (prices), India's FII/DII and NSDL flows,
-    US Treasury par yields (macro), and the regime record's major_event_names on the session block
+    US Treasury par yields (macro), and the regime record's major_event_names on the session block; also the list of
+    India companies it follows (FollowedCompaniesIndia), which exepex/trading reads. Acceptance: its stored parts pass
+    tools/api/check_stored.py
 TR-NSE-proposed:
   exists: false
   repo: trading
@@ -55,7 +57,9 @@ TR-NSE-proposed:
     publishes one page per block in its P3 publication: the stock rows and their counts per universe, the F&O
     underlyings (nearest monthly future, ATM IV computed its way, build-up, put-call ratio, move priced in) and their
     counts, the broad and sector index rows (with NSE's P/E, P/B, dividend yield) and the Nifty 500 industries.
-    exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story"
+    exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story".
+    The "ours" tag and counts come from the stock tool's FollowedCompaniesIndia list over its own NSE rows. Acceptance:
+    its stored tables and summary pass tools/api/check_stored.py (the tables are built there, not kept as files)
 TR-CHAIN-proposed:
   exists: false
   repo: trading
