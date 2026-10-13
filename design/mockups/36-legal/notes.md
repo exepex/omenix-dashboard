@@ -25,6 +25,9 @@ the logo, linked from every page. Not yet signed off by the owner.
 
 ## Promises the owner must confirm (written as commitments, not yet facts)
 
-- Google sign-in: the app has none today. The Google section covers basic sign-in only; if the consent screen asks
-  for more scopes (Drive, Gmail...), the section must name them.
+- The Google section is for the **Drive uploader** (owner's answer, 13 Oct 2026). Its scope and use are read from
+  exepex/trading: `fno/constants.py` DRIVE_FULL_SCOPE, `tools/gdrive_oauth_setup.py` (owner signs in once; refresh
+  token kept in the cloud environment's settings), `fno/storage/google_drive.py` and `google_drive_upload.py`. The
+  code only lists, creates folders and uploads inside the research folder, and reads a file back only to compare it;
+  it never deletes or shares. If that code changes, this section must change with it.
 - Deletion within 30 days of access ending; telling invited users of material changes.

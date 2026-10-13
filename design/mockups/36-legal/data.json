@@ -7,36 +7,101 @@
       "title": "Privacy policy",
       "lead": "Omenix is a private research dashboard for stock and F&O research and paper trading. It is run by one person, its owner, for their own use and for the few people they invite. This page says what data Omenix uses, why, and who else sees it.",
       "sections": [
-        {"h": "What Omenix is", "p": ["A research and paper-trading tool. It never places, changes or cancels a real order, and no money moves through it. Nothing in it is investment advice."]},
-        {"h": "Who can use it", "p": ["Only the owner and people the owner invites. There is no public sign-up. Every page with research or personal data needs a sign-in; only these two pages and the private-link daily briefs open without one."]},
-        {"h": "Data Omenix collects about you", "li": [
-          "Sign-in identity: your name, e-mail address and profile picture from the sign-in you use (Google, GitHub or the hosting provider's sign-in). They are used only to let you in and to show who is signed in.",
-          "What you do in the app: your paper trades, watchlists, settings and the questions you ask the assistant. They are stored so the app can show them back to you.",
-          "Slack: when you use Omenix from Slack, the command you type and your Slack user and channel ids, to answer you in Slack.",
-          "Technical logs: the hosting provider's standard request logs (time, page, browser, IP address), kept for security and fault finding."
-        ]},
-        {"h": "Google user data", "p": [
-          "If you sign in with Google or connect a Google account, Omenix receives only the data shown on Google's consent screen and uses it only for the feature you asked for: to sign you in, and nothing else unless the consent screen says so.",
-          "Omenix's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements. Google user data is never sold, never used for advertising, never used to train AI models, and never read by people except with your consent, for security, or where the law requires it."
-        ]},
-        {"h": "What Omenix does not do", "li": [
-          "It does not sell or rent your data, and it shows no advertising.",
-          "It does not connect to a broker, hold your money or place real orders.",
-          "It does not use tracking cookies or analytics. It sets only the cookies sign-in needs, and keeps your theme choice in your browser."
-        ]},
-        {"h": "Services that process data for Omenix", "li": [
-          "Hosting: Vercel (runs the app and its sign-in).",
-          "Database: MotherDuck (stores the research data and your paper records).",
-          "Sign-in: Google and GitHub, when you choose them.",
-          "Slack, when you use Omenix from Slack.",
-          "An AI model provider, which receives the questions you ask the assistant and the research data needed to answer them, to produce the answer."
-        ], "p": ["Each of them handles the data under its own privacy terms. Market data (prices, filings, news) comes from public sources and is not personal data."]},
-        {"h": "How long data is kept", "p": ["Sign-in data and your records are kept while you have access. When access ends, your personal data is deleted within 30 days, except where the law requires otherwise. Hosting logs follow the hosting provider's retention."]},
-        {"h": "Your choices", "p": ["You can ask to see, correct or delete your data, or to stop using Omenix, at any time. You can also remove Omenix's access to your Google account at myaccount.google.com/permissions."]},
-        {"h": "Security", "p": ["All traffic is encrypted (HTTPS). Secrets live only in the hosting provider's protected settings, never in code. Access is limited to the owner."]},
-        {"h": "Children", "p": ["Omenix is not meant for anyone under 18."]},
-        {"h": "Changes", "p": ["When this policy changes, the date at the top changes, and invited users are told of any material change."]},
-        {"h": "Contact", "p": ["Questions or requests: write to @@CONTACT@@the developer contact address shown on Omenix's Google sign-in consent screen."]}
+        {
+          "h": "What Omenix is",
+          "p": [
+            "A research and paper-trading tool. It never places, changes or cancels a real order, and no money moves through it. Nothing in it is investment advice."
+          ]
+        },
+        {
+          "h": "Who can use it",
+          "p": [
+            "Only the owner and people the owner invites. There is no public sign-up. Every page with research or personal data needs a sign-in; only these two pages and the private-link daily briefs open without one."
+          ]
+        },
+        {
+          "h": "Data Omenix collects about you",
+          "li": [
+            "Sign-in identity: the name and e-mail address of the sign-in you use for the dashboard (GitHub or the hosting provider's sign-in), used only to let you in and to show who is signed in.",
+            "What you do in the app: your paper trades, watchlists, settings and the questions you ask the assistant. They are stored so the app can show them back to you.",
+            "Slack: when you use Omenix from Slack, the command you type and your Slack user and channel ids, to answer you in Slack.",
+            "Technical logs: the hosting provider's standard request logs (time, page, browser, IP address), kept for security and fault finding."
+          ]
+        },
+        {
+          "h": "Google user data (Google Drive)",
+          "intro": [
+            "Omenix's F&O research tool asks Google for access to Google Drive with the scope https://www.googleapis.com/auth/drive (Google shows it as \"See, edit, create and delete all of your Google Drive files\"). Only the owner signs in, once, with the Google account that owns the research folder. Google's narrower Drive scope covers only files an app created itself; the tool must add files inside a folder the owner created, so it needs this one.",
+            "With that access the tool does only this, and only inside the owner's research folder (fno-research) and the folders under it:"
+          ],
+          "li": [
+            "lists the folders and files there, to see what is already stored;",
+            "creates folders and uploads files there: copies of public NSE market data files (daily F&O reports) that the tool downloads;",
+            "reads a file back only when a file with the same name is already there, to check it is identical before skipping it."
+          ],
+          "p": [
+            "It never opens, reads, changes, shares or deletes anything outside that folder, never deletes or shares any file, and receives no Google profile, contacts or e-mail data. The access is kept as a refresh token in the protected settings of the cloud machine that runs the research jobs, never in code or files, and no person reads Drive content through it.",
+            "Omenix's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements. Google user data is never sold, never used for advertising, never used to train AI models, and never transferred to anyone else.",
+            "To stop the access at any time, remove it at myaccount.google.com/permissions."
+          ]
+        },
+        {
+          "h": "What Omenix does not do",
+          "li": [
+            "It does not sell or rent your data, and it shows no advertising.",
+            "It does not connect to a broker, hold your money or place real orders.",
+            "It does not use tracking cookies or analytics. It sets only the cookies sign-in needs, and keeps your theme choice in your browser."
+          ]
+        },
+        {
+          "h": "Services that process data for Omenix",
+          "li": [
+            "Hosting: Vercel (runs the app and its sign-in).",
+            "Database: MotherDuck (stores the research data and your paper records).",
+            "Sign-in: GitHub and the hosting provider. Google Drive stores the research files described above.",
+            "Slack, when you use Omenix from Slack.",
+            "An AI model provider, which receives the questions you ask the assistant and the research data needed to answer them, to produce the answer."
+          ],
+          "p": [
+            "Each of them handles the data under its own privacy terms. Market data (prices, filings, news) comes from public sources and is not personal data."
+          ]
+        },
+        {
+          "h": "How long data is kept",
+          "p": [
+            "Sign-in data and your records are kept while you have access. When access ends, your personal data is deleted within 30 days, except where the law requires otherwise. Hosting logs follow the hosting provider's retention."
+          ]
+        },
+        {
+          "h": "Your choices",
+          "p": [
+            "You can ask to see, correct or delete your data, or to stop using Omenix, at any time. The Google Drive access can be removed at myaccount.google.com/permissions."
+          ]
+        },
+        {
+          "h": "Security",
+          "p": [
+            "All traffic is encrypted (HTTPS). Secrets live only in the hosting provider's protected settings, never in code. Access is limited to the owner."
+          ]
+        },
+        {
+          "h": "Children",
+          "p": [
+            "Omenix is not meant for anyone under 18."
+          ]
+        },
+        {
+          "h": "Changes",
+          "p": [
+            "When this policy changes, the date at the top changes, and invited users are told of any material change."
+          ]
+        },
+        {
+          "h": "Contact",
+          "p": [
+            "Questions or requests: write to @@CONTACT@@the developer contact address shown on Omenix's Google sign-in consent screen."
+          ]
+        }
       ]
     },
     "terms": {
@@ -44,20 +109,68 @@
       "title": "Terms of service",
       "lead": "These terms apply to anyone who uses Omenix, a private research dashboard run by one person, its owner. By using Omenix you agree to them.",
       "sections": [
-        {"h": "Research and paper trading only", "p": ["Omenix shows research, model outputs and paper (simulated) trades. It never places, changes or cancels a real order, and no money moves through it. Every money figure in it is a paper figure."]},
-        {"h": "Not investment advice", "p": ["Nothing in Omenix is investment, financial, tax or legal advice, or a recommendation to buy or sell anything. Models and strategies in it are experiments: many have no settled track record, and past paper results do not predict future results. Any real decision you make is yours alone."]},
-        {"h": "Access", "p": ["Omenix is by invitation of the owner only. Keep your sign-in to yourself. The owner may limit, suspend or end anyone's access at any time."]},
-        {"h": "Acceptable use", "li": [
-          "Do not try to break, overload or get around the app's security or sign-in.",
-          "Do not copy the app's data in bulk or resell it.",
-          "Do not use Omenix for anything illegal, including market manipulation."
-        ]},
-        {"h": "Data and accuracy", "p": ["Market data comes from public sources and can be late, incomplete or wrong. Omenix shows the time each figure is as of, but does not guarantee any figure. Check anything that matters at the original source."]},
-        {"h": "No warranty", "p": ["Omenix is provided as it is, without warranty of any kind. It may change, pause or stop at any time."]},
-        {"h": "Limitation of liability", "p": ["To the extent the law allows, the owner is not liable for any loss or damage from using Omenix or relying on anything in it, including trading losses."]},
-        {"h": "Privacy", "p": ["How Omenix handles your data, including Google user data, is set out in the privacy policy."]},
-        {"h": "Changes", "p": ["These terms may change; the date at the top shows the latest version. Using Omenix after a change means you accept the new terms."]},
-        {"h": "Contact", "p": ["Questions: write to @@CONTACT@@the developer contact address shown on Omenix's Google sign-in consent screen."]}
+        {
+          "h": "Research and paper trading only",
+          "p": [
+            "Omenix shows research, model outputs and paper (simulated) trades. It never places, changes or cancels a real order, and no money moves through it. Every money figure in it is a paper figure."
+          ]
+        },
+        {
+          "h": "Not investment advice",
+          "p": [
+            "Nothing in Omenix is investment, financial, tax or legal advice, or a recommendation to buy or sell anything. Models and strategies in it are experiments: many have no settled track record, and past paper results do not predict future results. Any real decision you make is yours alone."
+          ]
+        },
+        {
+          "h": "Access",
+          "p": [
+            "Omenix is by invitation of the owner only. Keep your sign-in to yourself. The owner may limit, suspend or end anyone's access at any time."
+          ]
+        },
+        {
+          "h": "Acceptable use",
+          "li": [
+            "Do not try to break, overload or get around the app's security or sign-in.",
+            "Do not copy the app's data in bulk or resell it.",
+            "Do not use Omenix for anything illegal, including market manipulation."
+          ]
+        },
+        {
+          "h": "Data and accuracy",
+          "p": [
+            "Market data comes from public sources and can be late, incomplete or wrong. Omenix shows the time each figure is as of, but does not guarantee any figure. Check anything that matters at the original source."
+          ]
+        },
+        {
+          "h": "No warranty",
+          "p": [
+            "Omenix is provided as it is, without warranty of any kind. It may change, pause or stop at any time."
+          ]
+        },
+        {
+          "h": "Limitation of liability",
+          "p": [
+            "To the extent the law allows, the owner is not liable for any loss or damage from using Omenix or relying on anything in it, including trading losses."
+          ]
+        },
+        {
+          "h": "Privacy",
+          "p": [
+            "How Omenix handles your data, including Google user data, is set out in the privacy policy."
+          ]
+        },
+        {
+          "h": "Changes",
+          "p": [
+            "These terms may change; the date at the top shows the latest version. Using Omenix after a change means you accept the new terms."
+          ]
+        },
+        {
+          "h": "Contact",
+          "p": [
+            "Questions: write to @@CONTACT@@the developer contact address shown on Omenix's Google sign-in consent screen."
+          ]
+        }
       ]
     }
   }
