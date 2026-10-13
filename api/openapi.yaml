@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: market-brief app API
-  version: 2.2.0
+  version: 2.3.0
   summary: Read API over the precomputed read models (docs/ARCHITECTURE.md section 4), plus planned governed writes.
   description: |
     Research only: nothing here places, routes or suggests a trade, and nothing is investment advice.
@@ -39,6 +39,10 @@ info:
     daily files are exepex/trading's (publisher `fno`, owner 13 Oct 2026), not published yet; those paths are India only.
     Where a block's publisher differs by market, India and the US have their own paths sharing one schema. Session gains
     the optional `major_event_names`; Events gains the kind `filing`.
+
+    Version 2.3 (story W13, 13 Oct 2026; additions only): the NIFTY option chain (32-option-chain) as six India-only
+    block endpoints under /api/v1/markets/india/fno/chain/ (api/paths/blocks-chain.yaml), publisher exepex/trading, not
+    published yet; every object closed; history-dependent figures carry their coverage.
 
     Serve-time fields (2.0 page payloads): the stored payload carries no time of its build, so a rebuild of the same data
     keeps its hash. The route adds `cutoff` and `built_at` (the row's envelope) at the top of a page payload and

@@ -26,11 +26,11 @@ from referencing.jsonschema import DRAFT202012
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 import examples  # noqa: E402
-from check_semantics import check_flows, check_home_events, check_views  # noqa: E402
+from check_semantics import check_chain, check_flows, check_home_events, check_views  # noqa: E402
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 32  # planted breaks in planted()
+PLANTED = 39  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -236,6 +236,19 @@ def planted(doc: dict, found: dict, problems: list[str]) -> None:
     must_fail("an F&O field on an F&O row's sibling: a stock row with IV", "getScreenerStocksIndia", "india", lambda v: v["payload"]["rows"][0].update(iv=12.0))
     must_fail("a currency on a world quote (J9)", "getWorld", "india", lambda v: v["payload"]["quotes"][0].update(currency="INR"))
     must_fail("an RBI decision in the US calendar (J7)", "getEvents", "us", lambda v: v["payload"]["events"][0].update(kind="rbi_policy"))
+    # W13: the option chain (India only, closed objects, coverage)
+    must_fail("the option chain served for the US", "getChainRows", "india", lambda v: v.update(market="us"))
+    must_fail("a bid on a chain row (quotes not published)", "getChainRows", "india", lambda v: v["payload"]["rows"][0]["CE"].update(bid=1.0))
+    must_fail("a chain row without the page's as_of", "getChainRows", "india", lambda v: v["payload"].pop("as_of"))
+    must_fail("a 3-month NIFTY change on 30 sessions", "getChainHistory", "india_short", lambda v: v["payload"]["coverage"]["nifty"]["m3"].update(value=-7.63))
+    for label, op_id, key, change in (("3M marked complete on a 52-session contract", "getContractHistory", "india", lambda p: p["periods"]["m3"].update(complete=True, days=63)),
+                                      ("a NIFTY 1M change not from its series", "getChainHistory", "india", lambda p: p["coverage"]["nifty"]["m1"].update(value=-1.0)),
+                                      ("a 3M VIX middle marked complete on 30 sessions", "getChainHistory", "india_short", lambda p: p["coverage"]["vix_middle_3m"].update(complete=True, days=63, value=12.0))):
+        fake, caught = copy.deepcopy(found[op_id][key]), []
+        change(fake["payload"])
+        check_chain({op_id: {"planted": fake}}, caught)
+        if not caught:
+            problems.append(f"planted break not caught: {label}")
     # finding 3: a 1M total computed from 5 days (schema: a total with complete false; the semantic check: days)
     must_fail("a 1M flows total marked incomplete but with a number", "getFlows", "india", lambda v: v["payload"]["totals"]["m1"].update(fii=-4699.14))
     fake = copy.deepcopy(found["getFlows"]["india"])
@@ -276,6 +289,7 @@ def main() -> int:
     leaves = check_catalog(doc, problems)
     check_rules(doc, found, problems)
     check_flows(found, problems)
+    check_chain(found, problems)
     check_views(doc, problems)
     check_home_events(doc, problems)
     ops = list(block_operations(doc))
