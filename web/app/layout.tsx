@@ -4,6 +4,7 @@
 // latin subset preloaded. Dark mode (UX4): styles/tokens-dark.css follows the device unless <html data-theme> says
 // light or dark; the boot script (lib/ui/theme.ts, a constant) sets that attribute from the saved choice before the
 // first paint, so the html element's attribute differs from the server's markup by design (suppressHydrationWarning).
+// Icons: the logo tile (design/brand/favicon/) as app/icon.svg, favicon.ico and apple-icon.png (Next.js file conventions).
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { ICON_SPRITE } from "../components/icons/sprite.generated.ts";
@@ -20,8 +21,6 @@ export const metadata: Metadata = {
   title: { default: "Omenix", template: "Omenix · %s" },
   description: "Personal research cockpit: paper strategies, AI traders and their track record per market. Research only, every signal Paper; nothing here is investment advice.",
   robots: { index: false, follow: false },
-  // Favicon: a small rising chart line, inlined as a data URI (no extra route through the gateway).
-  icons: { icon: { url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231e3a8a'/%3E%3Cpolyline points='6,22 12,16 17,19 26,9' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='9' r='3' fill='%2334d399'/%3E%3C/svg%3E", type: "image/svg+xml" } },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
