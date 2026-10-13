@@ -69,10 +69,10 @@
    "full": true
   },
   {
-   "id": "review-all-pro",
+   "id": "review-fno-pro",
    "section": "2. Examples (made-up trades on future dates)",
-   "title": "EXAMPLE: Stocks + F&O together (India, rupees), detailed view for a professional.",
-   "hash": "ex=review&asset=all&view=pro",
+   "title": "EXAMPLE, F&O, detailed view for a professional; the India \"Both books together\" block shows one total line per family (owner's choice (a)).",
+   "hash": "ex=review&asset=fno&view=pro",
    "widths": [
     1280
    ],

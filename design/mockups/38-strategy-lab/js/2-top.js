@@ -1,5 +1,5 @@
-/* The top: what the lab answers in one line and three steps, which state is shown, the asset tabs (stocks, F&O, and
-   both together in India only, in rupees), and where things stand. */
+/* The top: what the lab answers in one line and three steps, which state is shown, the asset tabs (stocks and F&O,
+   each its own book), where things stand, and in India the one total line of both books per family. */
 function topPart(main, c) {
   const {el} = c, S = state(), assets = mk(c).assets;
   if (!assets.includes(ASSET)) ASSET = 'stocks';
@@ -11,11 +11,23 @@ function topPart(main, c) {
       step3(c, 'verified_user', 'Proven before real money', 'A family must pass every check below, over months of trading, before it is trusted with real money.')),
     el('div', {class: 'acts', style: 'margin-top:14px'}, el('span', {class: 'small muted'}, 'Showing:'), seg(c, 'Showing', [[null, 'Today (real)'], ...Object.entries(EXAMPLES)], EX, k => { EX = k; FROM = TO = null; })),
     el('div', {class: 'md-segmented assets', role: 'tablist', 'aria-label': 'What was traded'}, ...assets.map(a => el('button', {type: 'button', role: 'tab', 'aria-selected': String(ASSET === a), 'aria-pressed': String(ASSET === a), onclick: () => { ASSET = a; c.rerender(); }},
-      c.icon(a === 'fno' ? 'layers' : a === 'all' ? 'grid_view' : 'show_chart'), ASSETS[a]))),
-    el('p', {class: 'small muted', style: 'margin:6px 0 0'}, ASSET === 'all' ? 'Stocks and F&O added together, India only, in rupees. Each part is shown on its own in its tab; their returns are never mixed.'
-      : ASSET === 'fno' ? 'NIFTY and BANKNIFTY futures and options. Each family has its own ₹5 lakh paper account and may lose at most ₹10,000 on one trade.'
+      c.icon(a === 'fno' ? 'layers' : 'show_chart'), ASSETS[a]))),
+    el('p', {class: 'small muted', style: 'margin:6px 0 0'}, ASSET === 'fno' ? 'NIFTY and BANKNIFTY futures and options. Each family has its own ₹5 lakh paper account and may lose at most ₹10,000 on one trade.'
       : `Stocks${c.m === 'india' ? ' on NSE' : ' in the US'}: each trade uses ${plain(c, mk(c).per_trade)}. Baselines are simple rules (such as “always buy”) that every family must beat.`));
   main.append(statusBand(c, S));
+  bothBooks(main, c);
+}
+
+/* both books together (owner, 13 Oct 2026, choice (a)): one labelled total line per family, India only, in rupees;
+   who wins, win rates and rankings stay separate for Stocks and for F&O */
+function bothBooks(main, c) {
+  if (c.m !== 'india') return;
+  const {el} = c, line = f => { const s = tradesOf(c, f, 'stocks'), o = tradesOf(c, f, 'fno'), sum = T => T.reduce((a, t) => a + t[3], 0);
+    if (!s.length && !o.length) return el('li', {}, badge(c, f), el('span', {class: 'muted'}, 'no closed trade in either book yet'));
+    return el('li', {}, badge(c, f), el('span', {}, `Stocks ${s.length ? money(c, sum(s)) : 'none'} + F&O ${o.length ? money(c, sum(o)) : 'none'} = `, el('b', {}, 'total '), upDown(c, sum(s) + sum(o), money(c, sum(s) + sum(o))))); };
+  main.append(el('section', {class: 'card sec both', 'aria-label': 'Both books together'}, head(c, 'Both books together: total only', 'profit after charges since the start, India, in rupees'),
+    el('ul', {class: 'totals'}, ...families().map(line)),
+    howto(c, 'A plain total of each family’s stock book and F&O book. It is not a ranking: the two books use different money (₹1 lakh a stock trade, a ₹5 lakh F&O account), so who wins is judged in each tab on its own.')));
 }
 function step3(c, icon, title, text) { return c.el('div', {class: 'step3'}, c.el('span', {class: 'mb-avatar sm info'}, c.icon(icon)), c.el('div', {}, c.el('b', {}, title), c.el('small', {}, text))); }
 
@@ -23,7 +35,7 @@ function step3(c, icon, title, text) { return c.el('div', {class: 'step3'}, c.el
 function statusBand(c, S) {
   const {el} = c, trading = families().filter(f => tradesOf(c, f).length), all = families().flatMap(f => tradesOf(c, f)), base = ASSET !== 'fno' ? tradesOf(c, 'baseline', 'stocks') : [];
   if (S.kind === 'real') {
-    const fno = ASSET === 'fno' || ASSET === 'all';
+    const fno = ASSET === 'fno';
     return el('section', {class: 'card sec', 'aria-label': 'Where things stand'}, head(c, 'Where things stand', `real records up to ${dlabel(S.as_of)}`),
       el('div', {class: 'firsts'}, el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'Stock trades settled'), el('b', {}, String(all.length + base.length)),
           el('small', {}, base.length ? `${base.length} from the baselines, the first on ${dlabel(S.as_of)}; no family trade has settled yet` : 'none yet in this market')),

@@ -22,7 +22,7 @@ from real_data import display_names
 HERE = os.path.dirname(os.path.abspath(__file__))
 SETTLED = os.path.join(os.path.dirname(HERE), "38-strategy-lab", "source", "settled.json")
 FAMILIES = [{"id": "rule", "name": "Rule-based"}, {"id": "hybrid", "name": "Hybrid"}, {"id": "ai", "name": "AI team"}]
-MARKETS = {"india": {"currency": "INR", "per_trade": 100000, "fno_capital": 500000, "assets": ["all", "stocks", "fno"]},
+MARKETS = {"india": {"currency": "INR", "per_trade": 100000, "fno_capital": 500000, "assets": ["stocks", "fno"]},
            "us": {"currency": "USD", "per_trade": 1000, "assets": ["stocks"]}}
 
 

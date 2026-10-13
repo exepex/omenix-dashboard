@@ -49,6 +49,5 @@ function hbar(v, max, c) { const w = Math.min(50, Math.abs(v) / max * 50).toFixe
 function refStats(c, a, b) {
   const ref = reference();
   if (ref === 'baseline') { const s = stats(within(tradesOf(c, 'baseline', 'stocks'), a, b)); return s.n ? ['Baselines', `${money(c, s.net)} on ${s.n} trades, ${Math.round(s.rate)}% won`] : null; }
-  if (ref === 'nifty') { const L = niftyLine(c, a, b); return L.length ? ['Holding NIFTY', `${money(c, L.at(-1)[1])} with the same ${plain(c, mk(c).fno_capital)}`] : null; }
-  return null;
+  const L = niftyLine(c, a, b); return L.length ? ['Holding NIFTY', `${money(c, L.at(-1)[1])} with the same ${plain(c, mk(c).fno_capital)}`] : null;
 }

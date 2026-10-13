@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Omenix · Strategy lab</title>
-<meta name="description" content="The Strategy lab: which family of strategies (Rule-based, Hybrid, AI team) makes money on paper after every charge, and whether it is ready to be trusted with real money. Stocks and F&O apart and together (India), since the start and over any period: readiness checks, a leaderboard in simple and detailed views, one chart of every family against its comparison line, month by month, what drove the results, and the strategies inside each family. Real settled trades of 13 Oct 2026 and labelled Examples on future dates. Paper only.">
+<meta name="description" content="The Strategy lab: which family of strategies (Rule-based, Hybrid, AI team) makes money on paper after every charge, and whether it is ready to be trusted with real money. Stocks and F&O each as its own book, with one total line of both (India), since the start and over any period: readiness checks, a leaderboard in simple and detailed views, one chart of every family against its comparison line, month by month, what drove the results, and the strategies inside each family. Real settled trades of 13 Oct 2026 and labelled Examples on future dates. Paper only.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
 <style>
@@ -64,6 +64,7 @@ svg.plot.race{width:100%;height:auto;display:block;margin-top:8px;touch-action:p
 .mistake{display:flex;gap:6px;align-items:flex-start;margin:0;font-size:12.5px}.mistake .mb-mark{flex:none;margin-top:1px}
 .linkcard{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;text-decoration:none;color:inherit}.linkcard b{display:block}.linkcard small{display:block;font-size:12.5px;color:var(--md-sys-color-on-surface-variant)}.linkcard>svg{width:22px;height:22px;fill:currentColor}
 .scroll{overflow-x:auto}.md-table td small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.totals{list-style:none;margin:0;padding:0;display:grid;gap:8px}.totals li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:14px}
 .src{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
 table.pro thead{display:none}table.pro,table.pro tbody,table.pro tr,table.pro td{display:block;width:auto}table.pro tr{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(auto-fill,minmax(140px,1fr));gap:4px 12px;padding:10px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.pro td{border:0;padding:2px 0;text-align:left}table.pro td[data-k]::before{content:attr(data-k);display:block;color:var(--md-sys-color-on-surface-variant);font-size:11.5px}
 @media (max-width:899px){table.stack thead{display:none}table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:auto}table.stack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.stack td{border:0;padding:2px 0;text-align:left}table.stack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}.steps3{grid-template-columns:1fr}.firsts.four{grid-template-columns:repeat(2,minmax(0,1fr))}}

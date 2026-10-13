@@ -8,7 +8,6 @@ const WHY = {months: 'A few good weeks can be luck; the bar asks for months of t
 
 function checks(c, f, asset) { return ((state().ready[c.m] || {})[asset] || {})[f] || []; }
 function readyState(c, f, asset = ASSET) {
-  if (asset === 'all') { const s = ['stocks', 'fno'].map(a => readyState(c, f, a)).filter(x => x !== 'none'); return !s.length ? 'none' : s.every(x => x === 'ready') ? 'ready' : 'notyet'; }
   const L = checks(c, f, asset); return !L.length ? 'none' : L.every(x => x.ok) ? 'ready' : 'notyet';
 }
 
@@ -20,7 +19,7 @@ function readyPart(main, c) {
 }
 
 function readyCard(c, f) {
-  const {el} = c, st = readyState(c, f), parts = ASSET === 'all' ? ['stocks', 'fno'] : [ASSET];
+  const {el} = c, st = readyState(c, f), parts = [ASSET];
   const chip = st === 'ready' ? ['success', 'verified_user', 'Ready for real money'] : st === 'notyet' ? ['warn', 'timer', 'Not yet'] : ['neutral', 'block', 'No trades yet'];
   return el('article', {class: 'leader' + (st === 'ready' ? ' first' : '')}, el('div', {class: 'lh'}, badge(c, f), el('span', {class: 'mb-label ' + chip[0]}, c.icon(chip[1]), chip[2])),
     ...parts.map(a => { const L = checks(c, f, a), met = L.filter(x => x.ok).length;

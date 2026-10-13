@@ -23,7 +23,6 @@
    "per_trade": 100000,
    "fno_capital": 500000,
    "assets": [
-    "all",
     "stocks",
     "fno"
    ]

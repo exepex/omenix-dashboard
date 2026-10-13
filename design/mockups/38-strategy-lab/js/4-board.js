@@ -3,7 +3,7 @@
    win rate, average win and loss, profit factor, worst fall, best and worst trade). */
 function returnOf(c, s) {
   if (!s.n) return null;
-  return ASSET === 'stocks' ? {v: s.ret, word: 'average return a trade'} : ASSET === 'fno' ? {v: 100 * s.net / (mk(c).fno_capital), word: `on its ${plain(c, mk(c).fno_capital)} account`} : null;
+  return ASSET === 'stocks' ? {v: s.ret, word: 'average return a trade'} : {v: 100 * s.net / (mk(c).fno_capital), word: `on its ${plain(c, mk(c).fno_capital)} account`};
 }
 
 function boardPart(main, c) {
@@ -55,6 +55,6 @@ function proTable(c, rows) {
 function refNote(c) {
   const ref = reference(), S = state();
   if (ref === 'baseline') { const s = stats(tradesOf(c, 'baseline', 'stocks')); return howto(c, s.n ? `For comparison, the baselines (simple rules such as “always buy”) made ${money(c, s.net)} on ${s.n} trades, ${Math.round(s.rate)}% won. A family is only worth using if it does better.` : 'The baselines (simple rules such as “always buy”) are the bar every family must beat; none of their trades has closed yet.'); }
-  if (ref === 'nifty' && S.index) { const L = niftyLine(c, 1, S.days); return howto(c, `For comparison, simply holding NIFTY with the same ${plain(c, mk(c).fno_capital)} would have made ${money(c, L.at(-1)[1])} over the same time.`); }
-  return howto(c, 'Stocks and F&O together, in rupees: each family’s stock and F&O results added up. Their returns are not mixed: see each tab for those.');
+  if (S.index) { const L = niftyLine(c, 1, S.days); return howto(c, `For comparison, simply holding NIFTY with the same ${plain(c, mk(c).fno_capital)} would have made ${money(c, L.at(-1)[1])} over the same time.`); }
+  return howto(c, `For comparison: holding NIFTY with the same ${plain(c, mk(c).fno_capital)}, shown once trades exist.`);
 }

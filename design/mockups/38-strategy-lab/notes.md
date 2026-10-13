@@ -29,7 +29,10 @@ should trust the system with real money ... the end goal is net profitable trade
 6. **Inside each family:** its strategies (stocks) or what it traded (F&O; the AI team is one team).
 7. A link to the Forecast lab (F&O predictions; a side view).
 
-Tabs: Stocks, F&O, and Stocks + F&O (India only, rupees). In the US market only Stocks exists (no US F&O).
+Tabs: Stocks and F&O, each its own book. In India a "Both books together: total only" block gives each family one
+labelled total line in rupees (owner's choice (a), 13 Oct 2026, relayed by the orchestrator: a total line only, never a
+combined leaderboard, win rate or winner; recorded as the second named exception in CLAUDE.md and
+design/system/README.md). In the US market only Stocks exists (no US F&O).
 
 ## Data used
 
@@ -53,6 +56,7 @@ state:
   index.<m>: [levels] | null                   # NIFTY (or the US index) closes on `dates`, for the comparison line
   stormy: [first, last]                        # day numbers of the volatile regime (stock tool `regime`; F&O A3 panel)
   ready.<m>.<asset>.<family>: [{key, label, ok: true | false | null, value, need}]
+                                               # asset: stocks | fno (no combined asset); the total line is summed on the screen
   fno_reason: str                              # the empty state's reason while no F&O trade exists
 ```
 
@@ -73,11 +77,9 @@ state:
 1. **Almost nothing real yet.** On 13 Oct 2026 the only settled paper trades are 39 baseline trades of one day. No
    family's stock trade has settled; F&O paper trading starts with slice 3. The first real verdict is at least 2 months
    away for stocks (300 trades each) and 6 months for F&O. Until then, the real screen is mostly empty, by design.
-2. **"Stocks + F&O" changes one of your rules.** CLAUDE.md (your rule of 13 Oct) says the two backends' scoreboards are
-   never combined into one figure. You asked for a combined view, so it is built, India only, rupees only, profits
-   added and returns never mixed. Please confirm the rule change; until then CLAUDE.md is unchanged. Risk: the two
-   use different money (₹1 lakh a stock trade, a ₹5 lakh F&O account), so a combined profit says who made more rupees,
-   not who uses money better.
+2. **Both books together is a total line only** (your choice (a)). The two books use different money (₹1 lakh a stock
+   trade, a ₹5 lakh F&O account), so a combined profit says who made more rupees, not who uses money better; rankings,
+   win rates and readiness stay per book.
 3. **Win rate alone misleads.** In the Example, F&O Rule-based wins 65% of its trades and still makes only ₹215,
    because one loss wipes out about two wins. The screen always puts win rate beside the size of wins and losses.
 4. **"Why" is told from outcomes, not methods:** what moved each trade (market, sector, news, the stock alone) and how
@@ -87,6 +89,6 @@ state:
 
 ## Checks
 
-- `node design/system/shoot_states.js design/mockups/38-strategy-lab` on all 9 states: no console errors, no overflow, no
+- `node design/system/shoot_states.js design/mockups/38-strategy-lab` on all 9 states (Stocks + F&O tab replaced by the total line): no console errors, no overflow, no
   external requests; `check_text.js` on 10 states: 0 findings.
 - `python3 design/mockups/38-strategy-lab/build.py` twice gives the same bytes.

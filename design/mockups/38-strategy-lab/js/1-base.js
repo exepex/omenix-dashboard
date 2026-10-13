@@ -1,13 +1,13 @@
 /* 38-strategy-lab page runtime (owner, 13 Oct 2026: which family makes money on paper, overall and over a period,
    stocks and F&O apart and together, for a first-time investor and a professional alike, so the owner can decide
-   whether to trust it with real money). Split by purpose: 1 state and statistics, 2 the top, 3 ready for real money,
+   whether to trust it with real money). Split by purpose: 1 state and statistics, 2 the top and both books' total line, 3 ready for real money,
    4 since the start, 5 a chosen period, 6 month by month, 7 what drove the results, 8 the strategies inside each
    family, 9 mount. Tokens only; every gain or loss has its sign and word, never colour alone. */
 let EX = null, ASSET = 'stocks', VIEW = 'simple', RANGE = '21', FROM = null, TO = null, RV = 'total', SF = 'rule';
-/* URL: ex (early | review), asset (all | stocks | fno), view (simple | pro), range (5 | 21 | 63 | 126 | 252 | all |
+/* URL: ex (early | review), asset (stocks | fno), view (simple | pro), range (5 | 21 | 63 | 126 | 252 | all |
    custom) with from and to, rv (total | week | month), sf (the family whose strategies are listed) */
 const EXAMPLES = {early: 'Example: first month', review: 'Example: seven months in'};
-const ASSETS = {all: 'Stocks + F&O', stocks: 'Stocks', fno: 'F&O'};
+const ASSETS = {stocks: 'Stocks', fno: 'F&O'};
 const AP = {rule: 'rule', hybrid: 'hybrid', ai: 'ai', baseline: 'baseline'};
 const LINE = {rule: 'l1', hybrid: 'l2', ai: 'l3', baseline: 'ly', nifty: 'ly'};
 
@@ -34,8 +34,7 @@ function upDown(c, x, text) { return c.el('b', {class: 'pl ' + (x > 0 ? 'pos' : 
 
 /* the trades of one family in the asset shown: [entry day, exit day, symbol, net, return %, reason, strategy, asset] */
 function tradesOf(c, fam, asset = ASSET) {
-  const T = state().trades[c.m] || {}, pick = a => (((T[a] || {})[fam]) || []).map(t => [...t, a]);
-  return asset === 'all' ? [...pick('stocks'), ...pick('fno')] : pick(asset);
+  return ((((state().trades[c.m] || {})[asset]) || {})[fam] || []).map(t => [...t, asset]);
 }
 function within(trades, a, b) { return trades.filter(t => t[1] >= a && t[1] <= b); }
 /* every number the leaderboard shows, from the trades alone (profit is after all charges) */
@@ -50,7 +49,7 @@ function stats(trades) {
 }
 /* the families shown for the asset, and the reference line each is compared with */
 function families() { return D.families.map(f => f.id); }
-function reference(asset = ASSET) { return asset === 'stocks' ? 'baseline' : asset === 'fno' ? 'nifty' : null; }
+function reference(asset = ASSET) { return asset === 'stocks' ? 'baseline' : 'nifty'; }
 /* holding NIFTY with the F&O book's money (₹5 lakh), as daily P&L points from day a, for comparison */
 function niftyLine(c, a, b) {
   const lv = (state().index || {})[c.m]; if (!lv) return [];

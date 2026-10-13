@@ -15,6 +15,6 @@
 - **Why, from outcomes.** Win rate against the size of wins and losses, what moved the trades (market, sector, news, the
   stock alone), calm against stormy, the best and worst trade as sentences. Never how a family decides.
 - **Every case visible:** ready, nearly ready, losing, break-even, not running, no trade yet (real), all labelled.
-- **Stocks, F&O, together** as tabs: the same layout three times, so the user compares like with like.
+- **Stocks and F&O as tabs**, the same layout twice, so the user compares like with like; in India one total line per family adds both books (owner's choice (a)), never a combined ranking.
 - Reused design-system parts only: `.mb-pagehead`, `.mb-ap`, `.mb-mark`, `.mb-label`, `.mb-fact`, `.md-segmented`,
   `.md-table`, `.quiet`, `svg.plot` with chart tokens.
