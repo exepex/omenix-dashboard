@@ -6,11 +6,11 @@
     operationId: getOverviewIndicesIndia
     summary: 'NSE''s broad indices and India VIX with a year of closes and NSE''s own P/E, P/B and dividend yield'
     x-status: planned
-    x-publisher: nse_ingest
-    x-catalog: {publisher: 'nse_ingest', source: 'NSE''s daily index file (ind_close_all), a year: close, change, P/E, P/B, dividend yield as NSE publishes them', freshness: 'daily, after the NSE index file', story: 'NSE1-proposed', status: 'planned'}
-    x-read-model: 'nse.blocks page_key overview_indices (proposed)'
-    x-freshness: 'nse_calendar; daily'
-    x-cache: 'keyed by the NSE ingest''s publication; responses private, max-age=300'
+    x-publisher: fno
+    x-catalog: {publisher: 'fno', source: 'NSE''s daily index file (ind_close_all), a year: close, change, P/E, P/B, dividend yield as NSE publishes them', freshness: 'daily, after the NSE index file', story: 'TR-NSE-proposed', status: 'planned'}
+    x-read-model: 'fno.pages_history page overview_indices (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'never empty on a trading day'
     x-feeds: [h34.broad, h34.main-card, h34.period, h34.vix]
     x-shared: 'one set of index rows: the main card is the chosen row, the broad list all of them, the VIX card the vol row; the period switch picks the change shown'
@@ -58,10 +58,10 @@
     operationId: getIndiaSectors
     summary: 'NSE''s sector indices and the Nifty 500 industries (ours)'
     x-status: planned
-    x-publisher: nse_ingest
-    x-read-model: 'nse.blocks page_key overview_sectors (proposed)'
-    x-freshness: 'nse_calendar; daily'
-    x-cache: 'keyed by the NSE ingest''s publication; responses private, max-age=300'
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page overview_sectors (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'never empty on a trading day'
     x-feeds: [h34.period, h34.sectors]
     x-shared: 'one set of sector rows; the period switch picks the change shown'

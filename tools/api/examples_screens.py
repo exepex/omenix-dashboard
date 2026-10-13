@@ -40,8 +40,8 @@ def _counts(rows, market):
             "screens": {"movers": sum(1 for r in rows if abs(r["d1"] or 0) >= 5),
                         "volume": sum(1 for r in rows if (r["va"] or 0) >= 5e4 and r["v"] >= 3 * r["va"]),
                         "trend": sum(1 for r in rows if (r["m1"] or 0) >= 10), "fall": sum(1 for r in rows if (r["m1"] or 0) <= -10),
-                        "delivery": sum(1 for r in rows if (r["dl"] or 0) >= 70 and (r["va"] or 0) >= 1e5) if market == "india" else None,
-                        "oversold": sum(1 for r in rows if r["r"] is not None and r["r"] < 30)}}
+                        "oversold": sum(1 for r in rows if r["r"] is not None and r["r"] < 30),
+                        **({"delivery": sum(1 for r in rows if (r["dl"] or 0) >= 70 and (r["va"] or 0) >= 1e5)} if market == "india" else {})}}
 
 
 def screener_summary(x: Screens, market):
@@ -54,7 +54,7 @@ def screener_summary(x: Screens, market):
 
 def _page(x, market, rows, total, size=PAGE):
     return {"as_of": x.as_of(market), "currency": "INR" if market == "india" else "USD", "total": total, "page": 1, "page_size": size,
-            "rows": [{k: r[k] for k in ROW_KEYS} for r in rows[:size]]}
+            "rows": [{k: r[k] for k in ROW_KEYS if k != "dl" or market == "india"} for r in rows[:size]]}  # dl: NSE only
 
 
 def screener_stocks(x: Screens, market):
@@ -133,9 +133,24 @@ def us_sectors(x: Screens, market):
     return {"": ("US sector funds", {"funds": [_quote(r, r["role"], r["as_of"]) for r in x.K["markets"]["us"]["sectors"]]})}
 
 
+FLOW_SPAN = {"d1": 1, "w1": 5, "m1": 21, "m3": 63, "y1": 250}  # sessions per period switch value (34's template)
+
+
+def flow_totals(days: list) -> dict:
+    """Each period's FII and DII totals: the sum of its last sessions, only when the days cover the whole period."""
+    out = {}
+    for period, span in FLOW_SPAN.items():
+        have, last = min(len(days), span), days[-span:]
+        complete = have == span
+        total = lambda side: round(sum(d[side]["net"] for d in last), 2) if complete else None  # noqa: E731
+        out[period] = {"days_in_period": span, "days": have, "complete": complete, "fii": total("fii"), "dii": total("dii")}
+    return out
+
+
 def flows(x: Screens, market):
     f = x.K["markets"]["india"]["flows"]
-    return {"": ("FII/DII per day and NSDL FPI", {"currency": "INR", "days": f["days"], "nsdl": f["nsdl"]})}
+    return {"": ("FII/DII per day, period totals (1D, 1W only: 5 days of data) and NSDL FPI",
+                 {"currency": "INR", "totals": flow_totals(f["days"]), "days": f["days"], "nsdl": f["nsdl"]})}
 
 
 def rates(x: Screens, market):
@@ -146,8 +161,45 @@ def world(x: Screens, market):
     return {"": ("world cues, currencies, commodities", {"quotes": [_quote(r, r["role"], r["as_of"]) for r in x.K["markets"][market]["world"]]})}
 
 
-def events(x: Screens, market):
+# One calendar, two screens (judge 27, finding 1): each screen's list is a documented query on the same calendar.
+ECONOMY = ["rbi_policy", "fomc", "cpi", "jobs_report", "budget"]
+HOME_VIEW = {"kinds": ["rbi_policy", "earnings", "holiday", "fno_expiry", "fomc", "cpi", "jobs_report"], "limit": 6}  # 31 row 6
+MARKETS_VIEW = {"kinds": ["earnings", "ex_dividend", "fno_expiry", "weekly_expiry", "filing", *ECONOMY], "limit": 12}  # 34 row 12
+
+
+def calendar(x: Screens, home: dict, market) -> list:
+    """The market's calendar as recorded on 12 Oct: the company events and NSE expiries of 34's real records (named
+    "<company> results" as the stock tool's catalogue names them; a weekly expiry is the kind weekly_expiry) with the
+    market-wide events of 31's calendar (config/events.yaml rules: policy, Fed, CPI, jobs, holidays, the monthly expiry),
+    one row per date, kind and company (the market-wide row wins a tie: it carries the major flag)."""
     mk = x.K["markets"][market]
     major = set(mk["regime"]["major_event_names"])
-    return {"_markets": ("the Markets overview's calendar (major: named by the stock tool's regime record)", {"events": [
-        {"date": e["date"], "title": e["name"], "kind": e["type"], "major": e["name"] in major, "inst": e["ticker"]} for e in mk["events"]]})}
+    rows = {}
+    for e in home["markets"][market]["events"]:
+        if e["inst"] is None:
+            rows[(e["date"], e["kind"], None)] = {k: e[k] for k in ("date", "title", "kind", "major", "inst")}
+    for e in mk["events"]:
+        kind = "weekly_expiry" if e["type"] == "fno_expiry" and "weekly" in e["name"] else e["type"]
+        title = e["name"].replace(" earnings", " results")
+        rows.setdefault((e["date"], kind, e["ticker"]), {"date": e["date"], "title": title, "kind": kind, "major": e["name"] in major, "inst": e["ticker"]})
+    return sorted(rows.values(), key=lambda e: (e["date"], e["inst"] is not None, e["title"]))
+
+
+def view(events: list, query: dict) -> list:
+    """GET /events?kinds=…&from=…&limit=…: the calendar's rows of those kinds from that date, nearest first."""
+    rows = [e for e in events if e["date"] >= query["from"] and (query.get("kinds") is None or e["kind"] in query["kinds"])]
+    return rows[: query["limit"]] if query.get("limit") else rows
+
+
+def events(x: Screens, market, home: dict):
+    """The full calendar and the Markets overview's view (from its session, 13 Oct)."""
+    full = calendar(x, home, market)
+    query = {**MARKETS_VIEW, "from": x.K["markets"][market]["regime"]["session_date"]}
+    return {"_calendar": ("the full calendar of 12 Oct (every kind; both screens query it)", {"events": full}, {"from": full[0]["date"]}),
+            "_markets": ("the Markets overview's view: kinds=results, ex-dividend, expiries, filing, economy; limit=12", {"events": view(full, query)}, query)}
+
+
+def home_events(x: Screens, market, home: dict):
+    """Home's view of the same calendar, from Home's session (7 Oct)."""
+    query = {**HOME_VIEW, "from": home["markets"][market]["session"]["date"]}
+    return {"": ("Home's view: kinds of 31 row 6; limit=6", {"events": view(calendar(x, home, market), query)}, query)}

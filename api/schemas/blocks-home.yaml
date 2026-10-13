@@ -170,6 +170,9 @@ Events:
             enum: [rbi_policy, fomc, cpi, jobs_report, fno_expiry, weekly_expiry, opex, triple_witching, index_rebalance, budget, earnings, ex_dividend, filing, holiday]
             x-unit: enum
             x-notes: ['h31.coming-up:kind', 'h34.coming-up:type']
+            description: 'The display words are x-kind-labels; 34''s type "economy" is the group x-kind-groups.economy'
+            x-kind-labels: {rbi_policy: Policy, fomc: Fed, cpi: Inflation, jobs_report: Jobs data, fno_expiry: F&O expiry, weekly_expiry: Weekly expiry, opex: Options expiry, triple_witching: Triple witching, index_rebalance: Index change, budget: Budget, earnings: Results, ex_dividend: Ex-dividend, filing: Filing, holiday: Holiday}
+            x-kind-groups: {economy: [rbi_policy, fomc, cpi, jobs_report, budget], expiry: [fno_expiry, weekly_expiry, opex, triple_witching]}
           major: {type: boolean, x-unit: yes/no, x-notes: ['h31.coming-up:major'], description: 'Open gap (W11): 34-markets'' events carry no major flag; until the stock tool publishes one it is derived from the regime record (an event named in major_event_names)'}
           inst: {type: ['string', 'null'], x-unit: id, x-notes: ['h31.coming-up:inst', 'h34.coming-up:ticker']}
 

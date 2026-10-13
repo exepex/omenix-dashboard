@@ -120,9 +120,9 @@ UsAccountsRule:
   if: {properties: {market: {const: us}}, required: [market]}
   then: {properties: {payload: {properties: {accounts: {properties: {manual: {properties: {open_structures: false, at_risk: false}}}}}}}}
 UsEventsRule:
-  description: 'In the US no F&O expiry is listed (NSE monthly and weekly expiries are India-only events)'
+  description: 'In the US no India-only event is listed: no NSE F&O expiry (monthly or weekly), no RBI policy decision'
   if: {properties: {market: {const: us}}, required: [market]}
-  then: {properties: {payload: {properties: {events: {items: {properties: {kind: {not: {enum: [fno_expiry, weekly_expiry]}}}}}}}}}
+  then: {properties: {payload: {properties: {events: {items: {properties: {kind: {not: {enum: [fno_expiry, weekly_expiry, rbi_policy]}}}}}}}}}
 IndiaAccountsRule:
   description: 'In India the Manual account carries its F&O figures'
   if: {properties: {market: {const: india}}, required: [market]}
@@ -131,7 +131,7 @@ IndiaAccountsRule:
 # ---------- W11: the screener (33) and the Markets overview (34) ----------
 ScreenerSummaryIndiaResponse:
   allOf:
-    - $ref: '#/components/schemas/NseBlockMeta'
+    - $ref: '#/components/schemas/FnoBlockMeta'
     - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ScreenerSummary'}}}
     - $ref: '#/components/schemas/IndiaScreenerSummaryRule'
 ScreenerSummaryUsResponse:
@@ -142,9 +142,10 @@ ScreenerSummaryUsResponse:
     - $ref: '#/components/schemas/UsScreenerSummaryRule'
 ScreenerStocksIndiaResponse:
   allOf:
-    - $ref: '#/components/schemas/NseBlockMeta'
+    - $ref: '#/components/schemas/FnoBlockMeta'
     - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ScreenerStocks'}}}
     - $ref: '#/components/schemas/MarketCurrency'
+    - $ref: '#/components/schemas/IndiaScreenerStocksRule'
 ScreenerStocksUsResponse:
   allOf:
     - $ref: '#/components/schemas/StockBlockMeta'
@@ -158,16 +159,16 @@ ScreenerToolsResponse:
     - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/ScreenerTools'}}}
 FnoScreenerSummaryResponse:
   allOf:
-    - $ref: '#/components/schemas/NseBlockMeta'
+    - $ref: '#/components/schemas/FnoBlockMeta'
     - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/FnoScreenerSummary'}}}
 FnoScreenerRowsResponse:
   allOf:
-    - $ref: '#/components/schemas/NseBlockMeta'
+    - $ref: '#/components/schemas/FnoBlockMeta'
     - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/FnoScreenerRows'}}}
     - $ref: '#/components/schemas/MarketCurrency'
 OverviewIndicesIndiaResponse:
   allOf:
-    - $ref: '#/components/schemas/NseBlockMeta'
+    - $ref: '#/components/schemas/FnoBlockMeta'
     - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/OverviewIndices'}}}
 OverviewIndicesUsResponse:
   allOf:
@@ -176,7 +177,7 @@ OverviewIndicesUsResponse:
     - $ref: '#/components/schemas/UsMarket'
 IndiaSectorsResponse:
   allOf:
-    - $ref: '#/components/schemas/NseBlockMeta'
+    - $ref: '#/components/schemas/FnoBlockMeta'
     - {type: object, required: [payload], properties: {payload: {$ref: '#/components/schemas/IndiaSectors'}}}
 UsSectorsResponse:
   allOf:
@@ -207,10 +208,13 @@ IndiaMarket:
   properties: {market: {const: india}}
 IndiaScreenerSummaryRule:
   description: 'India counts every NSE stock, the Nifty 500, the F&O stocks and the stock tool''s companies'
-  properties: {payload: {properties: {universes: {required: [all, n500, fno, ours]}}}}
+  properties: {payload: {properties: {universes: {required: [all, n500, fno, ours], additionalProperties: {properties: {screens: {required: [delivery]}}}}}}}
 UsScreenerSummaryRule:
   description: 'The US has only the stock tool''s 20 companies: no NSE universe and no F&O universe (absent, not empty)'
-  properties: {payload: {properties: {universes: {required: [ours], properties: {all: false, n500: false, fno: false}}}}}
+  properties: {payload: {properties: {universes: {required: [ours], properties: {all: false, n500: false, fno: false, ours: {properties: {screens: {properties: {delivery: false}}}}}}}}}
 UsScreenerStocksRule:
-  description: 'US rows belong only to the stock tool''s companies: no F&O or Nifty 500 tag'
-  properties: {payload: {properties: {rows: {items: {properties: {u: {items: {const: ours}}}}}}}}
+  description: 'US rows belong only to the stock tool''s companies: no F&O or Nifty 500 tag, and no NSE delivery figure (dl absent, not null)'
+  properties: {payload: {properties: {rows: {items: {properties: {u: {items: {const: ours}}, dl: false}}}}}}
+IndiaScreenerStocksRule:
+  description: 'India rows carry NSE''s delivery figure (dl; null when NSE gives none)'
+  properties: {payload: {properties: {rows: {items: {required: [dl]}}}}}

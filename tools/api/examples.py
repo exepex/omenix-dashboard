@@ -32,7 +32,7 @@ DATA = {"shell": ("30-shell", "cadf1d2", "signed off as of cadf1d2"), "home": ("
         "screener": ("33-screener", "e28b43d", "signed off as of e28b43d; real NSE files and stock-tool records of 12 Oct 2026"),
         "markets": ("34-markets", "59b606d", "signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026")}
 SCHEMA_VERSION = {"blocks": "2.1.0", "screens": "2.2.0"}
-RULE = {"stock": "stock_age", "fno": "fno_calendar", "nse_ingest": "nse_calendar", "dashboard": "static"}
+RULE = {"stock": "stock_age", "fno": "fno_calendar", "dashboard": "static"}
 BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getFrameMarkets": (frame.frame_markets, "markets", "shell", ["_all"]),
     "getApproaches": (frame.approaches, "approaches", "shell", ["india", "us"]),
@@ -50,7 +50,7 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getGroups": (home.groups, "groups", "home", ["india", "us"]),
     "getStrategyTrades": (home.strategy_trades, "strategy_trades", "home", ["india", "us"]),
     "getAttention": (home.attention, "attention", "home", ["india", "us"]),
-    "getEvents": (home.events, "events", "home", ["india", "us"]),
+    "getEvents": (lambda x, m: screens.home_events(x.screens, m, x.H), "events", "home", ["india", "us"]),  # one calendar
     "getTopNews": (home.top_news, "top_news", "home", ["india", "us"]),
     "searchFnoContracts": (frame.fno_search, "contracts", "shell", ["india"]),
     "getFnoPicks": (home.fno_picks, "today", "shell", ["india"]),
@@ -73,7 +73,7 @@ SCREEN_BUILDERS = {  # the same, for api/examples/blocks-33-34.json
     "getFlows": (screens.flows, "flows", "markets", ["india"]),
     "getRates": (screens.rates, "rates", "markets", ["us"]),
     "getWorld": (screens.world, "world", "markets", ["india", "us"]),
-    "getEvents": (screens.events, "events", "markets", ["india", "us"]),
+    "getEvents": (lambda x, m: screens.events(x, m, x.home), "events", "markets", ["india", "us"]),
 }
 
 
@@ -104,18 +104,21 @@ def build(builders: dict, mock, clock: tuple, version: str) -> dict:
     for op_id, (builder, page_key, data, markets) in builders.items():
         publisher = ops[op_id]["x-publisher"]
         for market in markets:
-            for suffix, (summary, payload) in builder(mock, None if market == "_all" else market).items():
+            for suffix, (summary, payload, *query) in builder(mock, None if market == "_all" else market).items():
                 name = f"{op_id}_{market.strip('_')}{suffix}"
                 key = page_key if op_id != "getInstrument" else f"instrument:{payload['id']}"
                 out[name] = {"summary": f"Mock ({market.strip('_')}): {summary}",
                              "description": f"Taken from design/mockups/{DATA[data][0]}/data.json ({DATA[data][2]})",
                              "value": envelope(publisher, market, key, data, clock, version, payload)}
+                if query:  # a view of a shared record: the query that gives it (check_contract recomputes it)
+                    out[name]["x-query"] = query[0]
     return out
 
 
 def rendered() -> dict[Path, str]:
     shell = frame.Mock(load(SHELL), load(HOME))
     screen = screens.Screens(load(SCREENER), load(MARKETS))
+    shell.screens, screen.home = screen, shell.H  # the events calendar joins 31's and 34's records
     files = {OUT: build(BUILDERS, shell, ("2026-10-06", shell.S["now"]), SCHEMA_VERSION["blocks"]),
              OUT_SCREENS: build(SCREEN_BUILDERS, screen, (screen.C["day"], screen.C["clock"]["now"]), SCHEMA_VERSION["screens"])}
     return {path: json.dumps(value, indent=1, ensure_ascii=False) + "\n" for path, value in files.items()}

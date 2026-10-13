@@ -29,7 +29,7 @@ import examples  # noqa: E402
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 20  # must_fail calls in planted()
+PLANTED = 31  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -162,10 +162,12 @@ def check_rules(doc: dict, found: dict, problems: list[str]) -> None:
     fields = block_fields(doc)
     for path, _, op in block_operations(doc):
         pub, fno_path = op["x-publisher"], path.startswith("/api/v1/markets/india/fno/")
-        if (pub == "fno" and not fno_path) or (fno_path and pub not in ("fno", "nse_ingest")):
-            problems.append(f"{path}: F&O endpoints live under /api/v1/markets/india/fno/ and nowhere else")
-        if pub == "nse_ingest" and not path.startswith("/api/v1/markets/india/"):
-            problems.append(f"{path}: an NSE-file block is India only (/api/v1/markets/india/)")
+        # exepex/trading publishes India only: its F&O blocks under /markets/india/fno/, its NSE stock and index blocks
+        # under /markets/india/ (owner, 13 Oct 2026); nothing else may live under /markets/india/fno/
+        if fno_path and pub != "fno":
+            problems.append(f"{path}: only exepex/trading's F&O blocks live under /api/v1/markets/india/fno/")
+        if pub == "fno" and not path.startswith("/api/v1/markets/india/"):
+            problems.append(f"{path}: an exepex/trading block is India only (/api/v1/markets/india/)")
     problems += [f"{f.op} {f.path}: F&O field in a market-scoped endpoint" for f in fields
                  if f.catalog.get("publisher") == "fno" and f.path.startswith("payload") and f.op not in
                  {op["operationId"] for _, _, op in block_operations(doc) if op["x-publisher"] == "fno"}]
@@ -193,6 +195,29 @@ def walk_nodes(node, trail):
     elif isinstance(node, list):
         for i, sub in enumerate(node):
             yield from walk_nodes(sub, f"{trail}/{i}")
+
+
+def check_views(doc: dict, problems: list[str]) -> None:
+    """A screen's view of a shared record (an example with x-query) must be exactly that query applied to the record's
+    full example (judge 27, finding 1: Home and the Markets overview read one calendar)."""
+    from examples_screens import view
+    examples = doc["components"]["examples"]
+    for name, ex in examples.items():
+        if "x-query" not in ex or name.endswith("_calendar"):
+            continue
+        op, market = name.split("_")[0], ex["value"]["market"]
+        full = examples.get(f"{op}_{market}_calendar")
+        if full is None or ex["value"]["payload"]["events"] != view(full["value"]["payload"]["events"], ex["x-query"]):
+            problems.append(f"example {name}: not its query {ex['x-query']} applied to {op}_{market}_calendar")
+
+
+def check_flows(found: dict, problems: list[str]) -> None:
+    """34 row 8: a period total exists only when the days cover the period, and equals the sum of those days."""
+    from examples_screens import flow_totals
+    for key, value in found.get("getFlows", {}).items():
+        payload = value["payload"]
+        if payload["totals"] != flow_totals(payload["days"]):
+            problems.append(f"flows example {key}: the period totals are not the covered sums of its days (null when not covered)")
 
 
 def planted(doc: dict, found: dict, problems: list[str]) -> None:
@@ -224,6 +249,31 @@ def planted(doc: dict, found: dict, problems: list[str]) -> None:
     must_fail("an NSE block served for the US", "getIndiaSectors", "india", lambda v: v.update(market="us"))
     must_fail("screener rows without the page's as_of", "getScreenerStocksIndia", "india", lambda v: v["payload"].pop("as_of"))
     must_fail("a quote without as_of", "getWorld", "us", lambda v: v["payload"]["quotes"][0].pop("as_of"))
+    # round 2 (judge 27, finding 2): every US payload is closed, so no F&O or India-only field can ride along
+    must_fail("F&O fields on a US screener row (J1)", "getScreenerStocksUs", "us", lambda v: v["payload"]["rows"][0].update(fut=1.0, oi=1, b="long_buildup", lot=1))
+    must_fail("NSE delivery on a US screener row (J2)", "getScreenerStocksUs", "us", lambda v: v["payload"]["rows"][0].update(dl=50.0))
+    must_fail("an F&O count block in the US summary (J5)", "getScreenerSummaryUs", "us", lambda v: v["payload"].update(fno={"n": 1}))
+    must_fail("a delivery count in the US summary", "getScreenerSummaryUs", "us", lambda v: v["payload"]["universes"]["ours"]["screens"].update(delivery=0))
+    must_fail("an India row without its delivery figure", "getScreenerStocksIndia", "india", lambda v: v["payload"]["rows"][0].pop("dl"))
+    must_fail("an F&O field on an F&O row's sibling: a stock row with IV", "getScreenerStocksIndia", "india", lambda v: v["payload"]["rows"][0].update(iv=12.0))
+    must_fail("a currency on a world quote (J9)", "getWorld", "india", lambda v: v["payload"]["quotes"][0].update(currency="INR"))
+    must_fail("an RBI decision in the US calendar (J7)", "getEvents", "us", lambda v: v["payload"]["events"][0].update(kind="rbi_policy"))
+    # finding 3: a 1M total computed from 5 days (schema: a total with complete false; the semantic check: days)
+    must_fail("a 1M flows total marked incomplete but with a number", "getFlows", "india", lambda v: v["payload"]["totals"]["m1"].update(fii=-4699.14))
+    fake = copy.deepcopy(found["getFlows"]["india"])
+    fake["payload"]["totals"]["m1"].update(complete=True, fii=sum(d["fii"]["net"] for d in fake["payload"]["days"]), dii=0.0)
+    caught: list[str] = []
+    check_flows({"getFlows": {"planted": fake}}, caught)
+    if not caught:
+        problems.append("planted break not caught: a 1M flows total computed from 5 days")
+    # finding 1: the Markets view loses the US CPI that Home's view shows on the same date
+    broken = copy.deepcopy(doc)
+    rows = broken["components"]["examples"]["getEvents_us_markets"]["value"]["payload"]["events"]
+    rows[:] = [e for e in rows if e["kind"] != "cpi"]
+    caught = []
+    check_views(broken, caught)
+    if not caught:
+        problems.append("planted break not caught: the two screens' calendars disagree")
 
 
 def main() -> int:
@@ -236,6 +286,8 @@ def main() -> int:
     schemas = check_coverage(doc, found, problems)
     leaves = check_catalog(doc, problems)
     check_rules(doc, found, problems)
+    check_flows(found, problems)
+    check_views(doc, problems)
     ops = list(block_operations(doc))
     print(f"contract: {len(doc['paths'])} paths ({len(ops)} block endpoints), {sum(len(v) for v in found.values())} block examples, "
           f"{schemas} block schemas, {leaves} catalogued leaf fields, {PLANTED} planted breaks")

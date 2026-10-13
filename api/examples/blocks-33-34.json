@@ -11,15 +11,17 @@
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
    "payload_sha256": "8803e8fbed513247e32bf62f72f0b67ef6e6cd73bbbd4b6ae16bdabf025aa26f",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "as_of": "2026-10-12T10:00:00Z",
     "universes": {
@@ -38,8 +40,8 @@
        "volume": 64,
        "trend": 246,
        "fall": 653,
-       "delivery": 145,
-       "oversold": 265
+       "oversold": 265,
+       "delivery": 145
       }
      },
      "n500": {
@@ -57,8 +59,8 @@
        "volume": 12,
        "trend": 14,
        "fall": 112,
-       "delivery": 10,
-       "oversold": 44
+       "oversold": 44,
+       "delivery": 10
       }
      },
      "fno": {
@@ -76,8 +78,8 @@
        "volume": 3,
        "trend": 1,
        "fall": 49,
-       "delivery": 7,
-       "oversold": 21
+       "oversold": 21,
+       "delivery": 7
       }
      },
      "ours": {
@@ -95,8 +97,8 @@
        "volume": 1,
        "trend": 0,
        "fall": 3,
-       "delivery": 3,
-       "oversold": 2
+       "oversold": 2,
+       "delivery": 3
       }
      }
     }
@@ -114,7 +116,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
-   "payload_sha256": "c539474c77908ca68e67fdc848bf335298ef5ccbe7827be23f3fc75402c68a59",
+   "payload_sha256": "f2b922b4858d2a60340ccfd04e29264788a6ab9192481336729cdae3012f15aa",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -142,7 +144,6 @@
        "volume": 0,
        "trend": 1,
        "fall": 1,
-       "delivery": null,
        "oversold": 0
       }
      }
@@ -162,15 +163,17 @@
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
    "payload_sha256": "7b2697ceec61f3abad62a0b2a9b5ff6db9d3404238ccc07d5438e91aa5f63463",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "as_of": "2026-10-12T10:00:00Z",
     "currency": "INR",
@@ -703,15 +706,17 @@
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
    "payload_sha256": "8505faebc2f3a9fe3ec2a26c173ef4f077f51acd897f05e1b5ec7ed50c571dba",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "as_of": "2026-10-12T10:00:00Z",
     "currency": "INR",
@@ -1190,15 +1195,17 @@
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
    "payload_sha256": "011ade4a364f71f96b950b3280e5c3b36113ab0609bf3d5bbd27b4a411d94cdd",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "as_of": "2026-10-12T10:00:00Z",
     "currency": "INR",
@@ -1381,7 +1388,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
-   "payload_sha256": "de4acea8f440390ccf6c48e94138576581f7dd6df0153f05f45bfbfb8c310a9e",
+   "payload_sha256": "af24024c1ee39521d37e55017b10c54400d4804683081aa69b1e24a0aa0564db",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -1412,7 +1419,6 @@
       "l": 520.26,
       "v": 24749285,
       "va": 21673522.0,
-      "dl": null,
       "r": 62.3,
       "u": [
        "ours"
@@ -1432,7 +1438,6 @@
       "l": 164.27,
       "v": 69908781,
       "va": 108699307.0,
-      "dl": null,
       "r": 49.4,
       "u": [
        "ours"
@@ -1452,7 +1457,6 @@
       "l": 243.42,
       "v": 25796997,
       "va": 37720858.0,
-      "dl": null,
       "r": 60.2,
       "u": [
        "ours"
@@ -1472,7 +1476,6 @@
       "l": 297.38,
       "v": 20131780,
       "va": 35810206.0,
-      "dl": null,
       "r": 56.4,
       "u": [
        "ours"
@@ -1492,7 +1495,6 @@
       "l": 240.51,
       "v": 18116718,
       "va": 26267150.0,
-      "dl": null,
       "r": 57.2,
       "u": [
        "ours"
@@ -1512,7 +1514,6 @@
       "l": 279.1,
       "v": 5636960,
       "va": 8651993.0,
-      "dl": null,
       "r": 40.6,
       "u": [
        "ours"
@@ -1532,7 +1533,6 @@
       "l": 146.49,
       "v": 7994548,
       "va": 9501406.0,
-      "dl": null,
       "r": 63.7,
       "u": [
        "ours"
@@ -1552,7 +1552,6 @@
       "l": 98.88,
       "v": 13691712,
       "va": 22328335.0,
-      "dl": null,
       "r": 64.7,
       "u": [
        "ours"
@@ -1572,7 +1571,6 @@
       "l": 110.39,
       "v": 8800320,
       "va": 13250355.0,
-      "dl": null,
       "r": 69.0,
       "u": [
        "ours"
@@ -1592,7 +1590,6 @@
       "l": 783.85,
       "v": 1245032,
       "va": 2274484.0,
-      "dl": null,
       "r": 55.1,
       "u": [
        "ours"
@@ -1612,7 +1609,6 @@
       "l": 844.06,
       "v": 1465138,
       "va": 2358820.0,
-      "dl": null,
       "r": 67.1,
       "u": [
        "ours"
@@ -1632,7 +1628,6 @@
       "l": 46.12,
       "v": 23804076,
       "va": 40469306.0,
-      "dl": null,
       "r": 34.3,
       "u": [
        "ours"
@@ -1652,7 +1647,6 @@
       "l": 499.01,
       "v": 1453228,
       "va": 2415447.0,
-      "dl": null,
       "r": 44.3,
       "u": [
        "ours"
@@ -1672,7 +1666,6 @@
       "l": 82.01,
       "v": 6624466,
       "va": 9821412.0,
-      "dl": null,
       "r": 51.3,
       "u": [
        "ours"
@@ -1692,7 +1685,6 @@
       "l": 433.0,
       "v": 1036445,
       "va": 1292786.0,
-      "dl": null,
       "r": 38.4,
       "u": [
        "ours"
@@ -1712,7 +1704,6 @@
       "l": 55.03,
       "v": 6156624,
       "va": 8334729.0,
-      "dl": null,
       "r": 41.7,
       "u": [
        "ours"
@@ -1732,7 +1723,6 @@
       "l": 54.33,
       "v": 5579241,
       "va": 7697595.0,
-      "dl": null,
       "r": 49.6,
       "u": [
        "ours"
@@ -1752,7 +1742,6 @@
       "l": 189.2,
       "v": 1863484,
       "va": 3048451.0,
-      "dl": null,
       "r": 60.1,
       "u": [
        "ours"
@@ -1772,7 +1761,6 @@
       "l": 84.64,
       "v": 3178864,
       "va": 4348560.0,
-      "dl": null,
       "r": 37.6,
       "u": [
        "ours"
@@ -1792,7 +1780,6 @@
       "l": 188.08,
       "v": 1393944,
       "va": 2454652.0,
-      "dl": null,
       "r": 44.9,
       "u": [
        "ours"
@@ -1813,7 +1800,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
-   "payload_sha256": "0f0aba7874a0443a6f4de74f7bd06099019f5a0c1a7738ace044b001f6bd76f6",
+   "payload_sha256": "74aa39b214459c6060d8063b683d3a189c3540b5697220ed83568d2e630ef0d2",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -1844,7 +1831,6 @@
       "l": 520.26,
       "v": 24749285,
       "va": 21673522.0,
-      "dl": null,
       "r": 62.3,
       "u": [
        "ours"
@@ -1864,7 +1850,6 @@
       "l": 110.39,
       "v": 8800320,
       "va": 13250355.0,
-      "dl": null,
       "r": 69.0,
       "u": [
        "ours"
@@ -1884,7 +1869,6 @@
       "l": 433.0,
       "v": 1036445,
       "va": 1292786.0,
-      "dl": null,
       "r": 38.4,
       "u": [
        "ours"
@@ -1904,7 +1888,6 @@
       "l": 98.88,
       "v": 13691712,
       "va": 22328335.0,
-      "dl": null,
       "r": 64.7,
       "u": [
        "ours"
@@ -1924,7 +1907,6 @@
       "l": 146.49,
       "v": 7994548,
       "va": 9501406.0,
-      "dl": null,
       "r": 63.7,
       "u": [
        "ours"
@@ -2911,15 +2893,17 @@
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
    "payload_sha256": "4c1121a66d8695cf86186ae6389d033dc1b3cd35d744a74e3ef114adb9743c53",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "as_of": "2026-10-12T10:00:00Z",
     "n": 219,
@@ -2951,15 +2935,17 @@
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
    "payload_sha256": "46f3d956cb78a8954684b39113d15016d46527a7f9d6ecd2b94f0ffe88efe61f",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "as_of": "2026-10-12T10:00:00Z",
     "currency": "INR",
@@ -3433,15 +3419,17 @@
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
    "payload_sha256": "00e853e97129b65263327f75d1c7ac63c4c66eb0f8548f486f0f621604ca6a24",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "as_of": "2026-10-12T10:00:00Z",
     "currency": "INR",
@@ -3537,15 +3525,17 @@
    "schema_version": "2.2.0",
    "source_commit": "59b606d",
    "payload_sha256": "e12b4154a2e1f48070be242ef1a81a16b45433683cfacb70f1c7662d93492e75",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "indices": [
      {
@@ -5731,15 +5721,17 @@
    "schema_version": "2.2.0",
    "source_commit": "59b606d",
    "payload_sha256": "c5745b1ef3fb9e82bbde669a0f9e396d1e07eb8cea56e262807318217d68f6f8",
-   "publisher": "nse_ingest",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "nse_calendar",
+    "rule": "fno_calendar",
     "built_at": "2026-10-12T12:30:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "indices": [
      {
@@ -10304,7 +10296,7 @@
   }
  },
  "getFlows_india": {
-  "summary": "Mock (india): FII/DII per day and NSDL FPI",
+  "summary": "Mock (india): FII/DII per day, period totals (1D, 1W only: 5 days of data) and NSDL FPI",
   "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
   "value": {
    "market": "india",
@@ -10314,7 +10306,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "59b606d",
-   "payload_sha256": "47a68eb05a374a48f6d5cdbf3d703ccf30875684a330a6a527ed111a4796a855",
+   "payload_sha256": "6fa9148f5330883f33045c50a74848dfd63617156823b86308d449e7186db5b8",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -10326,6 +10318,43 @@
    "paper": "Paper",
    "payload": {
     "currency": "INR",
+    "totals": {
+     "d1": {
+      "days_in_period": 1,
+      "days": 1,
+      "complete": true,
+      "fii": -3568.9,
+      "dii": 4743.26
+     },
+     "w1": {
+      "days_in_period": 5,
+      "days": 5,
+      "complete": true,
+      "fii": -30294.29,
+      "dii": 30313.48
+     },
+     "m1": {
+      "days_in_period": 21,
+      "days": 5,
+      "complete": false,
+      "fii": null,
+      "dii": null
+     },
+     "m3": {
+      "days_in_period": 63,
+      "days": 5,
+      "complete": false,
+      "fii": null,
+      "dii": null
+     },
+     "y1": {
+      "days_in_period": 250,
+      "days": 5,
+      "complete": false,
+      "fii": null,
+      "dii": null
+     }
+    },
     "days": [
      {
       "date": "2026-10-05",
@@ -15136,8 +15165,8 @@
    }
   }
  },
- "getEvents_india_markets": {
-  "summary": "Mock (india): the Markets overview's calendar (major: named by the stock tool's regime record)",
+ "getEvents_india_calendar": {
+  "summary": "Mock (india): the full calendar of 12 Oct (every kind; both screens query it)",
   "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
   "value": {
    "market": "india",
@@ -15147,7 +15176,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "59b606d",
-   "payload_sha256": "6e4da7e2e59f5b7bb1d38d5720e48128c1802eee72fda81bd635b2b48a7a4eac",
+   "payload_sha256": "555351ef1ce3499e9e586a74d998828c975de325bf7363fa70193824358648fd",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -15160,9 +15189,16 @@
    "payload": {
     "events": [
      {
+      "date": "2026-10-07",
+      "title": "RBI policy decision",
+      "kind": "rbi_policy",
+      "major": true,
+      "inst": null
+     },
+     {
       "date": "2026-10-13",
       "title": "NIFTY weekly expiry",
-      "kind": "fno_expiry",
+      "kind": "weekly_expiry",
       "major": false,
       "inst": null
      },
@@ -15175,28 +15211,28 @@
      },
      {
       "date": "2026-10-15",
-      "title": "HDFC Life earnings",
+      "title": "HDFC Life results",
       "kind": "earnings",
       "major": false,
       "inst": "HDFCLIFE"
      },
      {
       "date": "2026-10-16",
-      "title": "Reliance Industries earnings",
+      "title": "Reliance Industries results",
       "kind": "earnings",
       "major": false,
       "inst": "RELIANCE"
      },
      {
       "date": "2026-10-17",
-      "title": "HDFC Bank earnings",
+      "title": "HDFC Bank results",
       "kind": "earnings",
       "major": false,
       "inst": "HDFCBANK"
      },
      {
       "date": "2026-10-17",
-      "title": "ICICI Bank earnings",
+      "title": "ICICI Bank results",
       "kind": "earnings",
       "major": false,
       "inst": "ICICIBANK"
@@ -15204,145 +15240,162 @@
      {
       "date": "2026-10-19",
       "title": "NIFTY weekly expiry",
-      "kind": "fno_expiry",
+      "kind": "weekly_expiry",
       "major": false,
       "inst": null
      },
      {
       "date": "2026-10-19",
-      "title": "UltraTech Cement earnings",
+      "title": "UltraTech Cement results",
       "kind": "earnings",
       "major": false,
       "inst": "ULTRACEMCO"
      },
      {
+      "date": "2026-10-20",
+      "title": "NSE closed",
+      "kind": "holiday",
+      "major": false,
+      "inst": null
+     },
+     {
       "date": "2026-10-23",
-      "title": "Dr Reddy's earnings",
+      "title": "Dr Reddy's results",
       "kind": "earnings",
       "major": false,
       "inst": "DRREDDY"
      },
      {
       "date": "2026-10-23",
-      "title": "Infosys earnings",
+      "title": "Infosys results",
       "kind": "earnings",
       "major": false,
       "inst": "INFY"
      },
      {
       "date": "2026-10-23",
-      "title": "SBI Life Insurance earnings",
+      "title": "SBI Life Insurance results",
       "kind": "earnings",
       "major": false,
       "inst": "SBILIFE"
      },
      {
       "date": "2026-10-27",
-      "title": "NIFTY monthly expiry",
+      "title": "NSE monthly F&O expiry (last Tuesday)",
       "kind": "fno_expiry",
-      "major": false,
+      "major": true,
       "inst": null
      },
      {
       "date": "2026-10-28",
-      "title": "Adani Ports earnings",
+      "title": "Adani Ports results",
       "kind": "earnings",
       "major": false,
       "inst": "ADANIPORTS"
      },
      {
       "date": "2026-10-28",
-      "title": "Larsen & Toubro earnings",
+      "title": "Larsen & Toubro results",
       "kind": "earnings",
       "major": false,
       "inst": "LT"
      },
      {
       "date": "2026-10-29",
-      "title": "Hindustan Unilever earnings",
+      "title": "FOMC rate decision (previous US evening)",
+      "kind": "fomc",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-29",
+      "title": "Hindustan Unilever results",
       "kind": "earnings",
       "major": false,
       "inst": "HINDUNILVR"
      },
      {
       "date": "2026-10-29",
-      "title": "ITC earnings",
+      "title": "ITC results",
       "kind": "earnings",
       "major": false,
       "inst": "ITC"
      },
      {
       "date": "2026-10-29",
-      "title": "Maruti Suzuki earnings",
+      "title": "Maruti Suzuki results",
       "kind": "earnings",
       "major": false,
       "inst": "MARUTI"
      },
      {
       "date": "2026-11-03",
-      "title": "InterGlobe Aviation earnings",
+      "title": "NIFTY weekly expiry",
+      "kind": "weekly_expiry",
+      "major": false,
+      "inst": null
+     },
+     {
+      "date": "2026-11-03",
+      "title": "InterGlobe Aviation results",
       "kind": "earnings",
       "major": false,
       "inst": "INDIGO"
      },
      {
-      "date": "2026-11-03",
-      "title": "NIFTY weekly expiry",
-      "kind": "fno_expiry",
-      "major": false,
-      "inst": null
-     },
-     {
       "date": "2026-11-04",
-      "title": "Mahindra & Mahindra earnings",
+      "title": "Mahindra & Mahindra results",
       "kind": "earnings",
       "major": false,
       "inst": "M&M"
      },
      {
       "date": "2026-11-05",
-      "title": "Mahindra & Mahindra earnings",
+      "title": "Mahindra & Mahindra results",
       "kind": "earnings",
       "major": false,
       "inst": "M&M"
      },
      {
       "date": "2026-11-05",
-      "title": "Sun Pharma earnings",
+      "title": "Sun Pharma results",
       "kind": "earnings",
       "major": false,
       "inst": "SUNPHARMA"
      },
      {
       "date": "2026-11-06",
-      "title": "Hindalco earnings",
+      "title": "Hindalco results",
       "kind": "earnings",
       "major": false,
       "inst": "HINDALCO"
      },
      {
       "date": "2026-11-06",
-      "title": "ONGC earnings",
+      "title": "ONGC results",
       "kind": "earnings",
       "major": false,
       "inst": "ONGC"
      }
     ]
    }
+  },
+  "x-query": {
+   "from": "2026-10-07"
   }
  },
- "getEvents_us_markets": {
-  "summary": "Mock (us): the Markets overview's calendar (major: named by the stock tool's regime record)",
+ "getEvents_india_markets": {
+  "summary": "Mock (india): the Markets overview's view: kinds=results, ex-dividend, expiries, filing, economy; limit=12",
   "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
   "value": {
-   "market": "us",
+   "market": "india",
    "page_key": "events",
    "as_of": "2026-10-12",
    "cutoff": "2026-10-12T12:30:00Z",
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "59b606d",
-   "payload_sha256": "d94de16f16bab6d1c0b5e35f5f46fa557c2729bd1c9606419b8573d99ad8f9d1",
+   "payload_sha256": "64cf5a91d709d71425a813861571db442efc5bcf304c581bed7932923c47e62b",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -15356,21 +15409,155 @@
     "events": [
      {
       "date": "2026-10-13",
-      "title": "JPMorgan earnings",
+      "title": "NIFTY weekly expiry",
+      "kind": "weekly_expiry",
+      "major": false,
+      "inst": null
+     },
+     {
+      "date": "2026-10-14",
+      "title": "Tata Consultancy Services ex-dividend (est. 12, last dividend)",
+      "kind": "ex_dividend",
+      "major": false,
+      "inst": "TCS"
+     },
+     {
+      "date": "2026-10-15",
+      "title": "HDFC Life results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "HDFCLIFE"
+     },
+     {
+      "date": "2026-10-16",
+      "title": "Reliance Industries results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "RELIANCE"
+     },
+     {
+      "date": "2026-10-17",
+      "title": "HDFC Bank results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "HDFCBANK"
+     },
+     {
+      "date": "2026-10-17",
+      "title": "ICICI Bank results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "ICICIBANK"
+     },
+     {
+      "date": "2026-10-19",
+      "title": "NIFTY weekly expiry",
+      "kind": "weekly_expiry",
+      "major": false,
+      "inst": null
+     },
+     {
+      "date": "2026-10-19",
+      "title": "UltraTech Cement results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "ULTRACEMCO"
+     },
+     {
+      "date": "2026-10-23",
+      "title": "Dr Reddy's results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "DRREDDY"
+     },
+     {
+      "date": "2026-10-23",
+      "title": "Infosys results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "INFY"
+     },
+     {
+      "date": "2026-10-23",
+      "title": "SBI Life Insurance results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "SBILIFE"
+     },
+     {
+      "date": "2026-10-27",
+      "title": "NSE monthly F&O expiry (last Tuesday)",
+      "kind": "fno_expiry",
+      "major": true,
+      "inst": null
+     }
+    ]
+   }
+  },
+  "x-query": {
+   "kinds": [
+    "earnings",
+    "ex_dividend",
+    "fno_expiry",
+    "weekly_expiry",
+    "filing",
+    "rbi_policy",
+    "fomc",
+    "cpi",
+    "jobs_report",
+    "budget"
+   ],
+   "limit": 12,
+   "from": "2026-10-13"
+  }
+ },
+ "getEvents_us_calendar": {
+  "summary": "Mock (us): the full calendar of 12 Oct (every kind; both screens query it)",
+  "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
+  "value": {
+   "market": "us",
+   "page_key": "events",
+   "as_of": "2026-10-12",
+   "cutoff": "2026-10-12T12:30:00Z",
+   "built_at": "2026-10-12T12:30:00Z",
+   "schema_version": "2.2.0",
+   "source_commit": "59b606d",
+   "payload_sha256": "b822509a17754c013d39e7cb5df3e91df10aad7a203e46320f4c8b8d44393f16",
+   "publisher": "stock",
+   "freshness": {
+    "state": "fresh",
+    "rule": "stock_age",
+    "built_at": "2026-10-12T12:30:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "payload": {
+    "events": [
+     {
+      "date": "2026-10-13",
+      "title": "JPMorgan results",
       "kind": "earnings",
       "major": false,
       "inst": "JPM"
      },
      {
       "date": "2026-10-14",
-      "title": "Bank of America earnings",
+      "title": "US CPI (September)",
+      "kind": "cpi",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-14",
+      "title": "Bank of America results",
       "kind": "earnings",
       "major": false,
       "inst": "BAC"
      },
      {
       "date": "2026-10-14",
-      "title": "Progressive earnings",
+      "title": "Progressive results",
       "kind": "earnings",
       "major": false,
       "inst": "PGR"
@@ -15384,119 +15571,133 @@
      },
      {
       "date": "2026-10-20",
-      "title": "General Motors earnings",
+      "title": "General Motors results",
       "kind": "earnings",
       "major": false,
       "inst": "GM"
      },
      {
       "date": "2026-10-20",
-      "title": "United Airlines earnings",
+      "title": "United Airlines results",
       "kind": "earnings",
       "major": false,
       "inst": "UAL"
      },
      {
       "date": "2026-10-21",
-      "title": "Tesla earnings",
+      "title": "Tesla results",
       "kind": "earnings",
       "major": false,
       "inst": "TSLA"
      },
      {
       "date": "2026-10-28",
-      "title": "Alphabet earnings",
+      "title": "FOMC rate decision",
+      "kind": "fomc",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-28",
+      "title": "Alphabet results",
       "kind": "earnings",
       "major": false,
       "inst": "GOOGL"
      },
      {
       "date": "2026-10-28",
-      "title": "Meta Platforms earnings",
+      "title": "Meta Platforms results",
       "kind": "earnings",
       "major": false,
       "inst": "META"
      },
      {
       "date": "2026-10-29",
-      "title": "Apple earnings",
+      "title": "Apple results",
       "kind": "earnings",
       "major": false,
       "inst": "AAPL"
      },
      {
       "date": "2026-10-29",
-      "title": "Caterpillar earnings",
+      "title": "Caterpillar results",
       "kind": "earnings",
       "major": false,
       "inst": "CAT"
      },
      {
       "date": "2026-10-29",
-      "title": "Eli Lilly earnings",
+      "title": "Eli Lilly results",
       "kind": "earnings",
       "major": false,
       "inst": "LLY"
      },
      {
       "date": "2026-10-29",
-      "title": "Merck earnings",
+      "title": "Merck results",
       "kind": "earnings",
       "major": false,
       "inst": "MRK"
      },
      {
       "date": "2026-10-30",
-      "title": "Chevron earnings",
+      "title": "Chevron results",
       "kind": "earnings",
       "major": false,
       "inst": "CVX"
      },
      {
       "date": "2026-10-30",
-      "title": "ExxonMobil earnings",
+      "title": "ExxonMobil results",
       "kind": "earnings",
       "major": false,
       "inst": "XOM"
      },
      {
       "date": "2026-11-02",
-      "title": "Apple earnings",
+      "title": "Apple results",
       "kind": "earnings",
       "major": false,
       "inst": "AAPL"
      },
      {
       "date": "2026-11-04",
-      "title": "Allstate earnings",
+      "title": "Allstate results",
       "kind": "earnings",
       "major": false,
       "inst": "ALL"
      },
      {
+      "date": "2026-11-06",
+      "title": "US jobs report (usually first Friday; check for shifts)",
+      "kind": "jobs_report",
+      "major": true,
+      "inst": null
+     },
+     {
       "date": "2026-11-17",
-      "title": "Nvidia earnings",
+      "title": "Nvidia results",
       "kind": "earnings",
       "major": false,
       "inst": "NVDA"
      },
      {
       "date": "2026-11-19",
-      "title": "Walmart earnings",
+      "title": "Walmart results",
       "kind": "earnings",
       "major": false,
       "inst": "WMT"
      },
      {
       "date": "2026-11-25",
-      "title": "Deere earnings",
+      "title": "Deere results",
       "kind": "earnings",
       "major": false,
       "inst": "DE"
      },
      {
       "date": "2026-12-10",
-      "title": "Costco earnings",
+      "title": "Costco results",
       "kind": "earnings",
       "major": false,
       "inst": "COST"
@@ -15510,6 +15711,136 @@
      }
     ]
    }
+  },
+  "x-query": {
+   "from": "2026-10-13"
+  }
+ },
+ "getEvents_us_markets": {
+  "summary": "Mock (us): the Markets overview's view: kinds=results, ex-dividend, expiries, filing, economy; limit=12",
+  "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
+  "value": {
+   "market": "us",
+   "page_key": "events",
+   "as_of": "2026-10-12",
+   "cutoff": "2026-10-12T12:30:00Z",
+   "built_at": "2026-10-12T12:30:00Z",
+   "schema_version": "2.2.0",
+   "source_commit": "59b606d",
+   "payload_sha256": "043d92d22c0a87a5f1dfe932ccad210bd0cff7c99102bfe3a7181a9b5205ba30",
+   "publisher": "stock",
+   "freshness": {
+    "state": "fresh",
+    "rule": "stock_age",
+    "built_at": "2026-10-12T12:30:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "payload": {
+    "events": [
+     {
+      "date": "2026-10-13",
+      "title": "JPMorgan results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "JPM"
+     },
+     {
+      "date": "2026-10-14",
+      "title": "US CPI (September)",
+      "kind": "cpi",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-14",
+      "title": "Bank of America results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "BAC"
+     },
+     {
+      "date": "2026-10-14",
+      "title": "Progressive results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "PGR"
+     },
+     {
+      "date": "2026-10-15",
+      "title": "Delta Air Lines ex-dividend",
+      "kind": "ex_dividend",
+      "major": false,
+      "inst": "DAL"
+     },
+     {
+      "date": "2026-10-20",
+      "title": "General Motors results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "GM"
+     },
+     {
+      "date": "2026-10-20",
+      "title": "United Airlines results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "UAL"
+     },
+     {
+      "date": "2026-10-21",
+      "title": "Tesla results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "TSLA"
+     },
+     {
+      "date": "2026-10-28",
+      "title": "FOMC rate decision",
+      "kind": "fomc",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-28",
+      "title": "Alphabet results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "GOOGL"
+     },
+     {
+      "date": "2026-10-28",
+      "title": "Meta Platforms results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "META"
+     },
+     {
+      "date": "2026-10-29",
+      "title": "Apple results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "AAPL"
+     }
+    ]
+   }
+  },
+  "x-query": {
+   "kinds": [
+    "earnings",
+    "ex_dividend",
+    "fno_expiry",
+    "weekly_expiry",
+    "filing",
+    "rbi_policy",
+    "fomc",
+    "cpi",
+    "jobs_report",
+    "budget"
+   ],
+   "limit": 12,
+   "from": "2026-10-13"
   }
  }
 }

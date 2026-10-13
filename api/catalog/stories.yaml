@@ -45,14 +45,14 @@ K5-proposed:
     US screener rows and counts of its 20 companies (daily prices; returns, 52-week range, volume ratio and RSI computed
     the screener's way), the US benchmarks and sector funds, world quotes (prices), India's FII/DII and NSDL flows,
     US Treasury par yields (macro), and the regime record's major_event_names on the session block
-NSE1-proposed:
+TR-NSE-proposed:
   exists: false
-  repo: 'trading or platform (owner to decide)'
-  title: Daily NSE ingest publishes the screener and Markets overview rows (W11)
+  repo: trading
+  title: "NSE daily files published by exepex/trading (W11; to be added in exepex/trading)"
   scope: >-
-    After each NSE session, read NSE's own daily files (equity BhavCopy, security-wise delivery, EQUITY_L and the
-    Nifty 500 list, F&O BhavCopy, the index close file) and publish one row per block, atomically like P3: the stock
-    rows and their counts per universe, the F&O underlyings (nearest monthly future, ATM IV computed the F&O tool's
-    way, build-up, put-call ratio, move priced in) and their counts, the broad and sector index rows (with NSE's P/E,
-    P/B, dividend yield) and the Nifty 500 industries; plus the dashboard's publication-aware read path for it.
+    Owner, 13 Oct 2026: exepex/trading publishes NSE's daily files. After each NSE session it reads NSE's own files
+    (equity BhavCopy, security-wise delivery, EQUITY_L and the Nifty 500 list, F&O BhavCopy, the index close file) and
+    publishes one page per block in its P3 publication: the stock rows and their counts per universe, the F&O
+    underlyings (nearest monthly future, ATM IV computed its way, build-up, put-call ratio, move priced in) and their
+    counts, the broad and sector index rows (with NSE's P/E, P/B, dividend yield) and the Nifty 500 industries.
     exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story"

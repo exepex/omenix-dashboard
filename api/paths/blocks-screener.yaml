@@ -1,16 +1,16 @@
 # Block endpoints of the screener (33-screener, story W11). India's stock and F&O rows come from NSE's files (publisher
-# nse_ingest, India-only paths); the US rows and the tools' view from the stock tool.
+# fno: exepex/trading publishes them, owner 13 Oct 2026; India-only paths); the US rows and the tools' view from the stock tool.
 /api/v1/markets/india/screener/summary:
   get:
     tags: [blocks]
     operationId: getScreenerSummaryIndia
     summary: 'Counts over each universe of NSE stocks: tabs, up and down, the tiles, the screens'' chips, the Markets breadth'
     x-status: planned
-    x-publisher: nse_ingest
-    x-catalog: {publisher: 'nse_ingest', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'NSE1-proposed', status: 'planned'}
-    x-read-model: 'nse.blocks page_key screener_summary (proposed)'
-    x-freshness: 'nse_calendar; daily'
-    x-cache: 'keyed by the NSE ingest''s publication; responses private, max-age=300'
+    x-publisher: fno
+    x-catalog: {publisher: 'fno', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'TR-NSE-proposed', status: 'planned'}
+    x-read-model: 'fno.pages_history page screener_summary (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'never empty on a trading day; on a holiday the last session''s counts with their as_of'
     x-feeds: [h33.header, h33.screens, h33.tabs, h33.tiles, h33.updown, h34.breadth]
     x-shared: 'one set of counts over the same rows: the screener''s day, tabs, up and down, tiles and chips, and the Markets breadth (34''s breadth equals these counts: checked on the 12 Oct data)'
@@ -58,11 +58,11 @@
     operationId: getScreenerStocksIndia
     summary: 'A page of NSE stock rows, filtered and sorted (the screener table; the Markets movers)'
     x-status: planned
-    x-publisher: nse_ingest
-    x-catalog: {publisher: 'nse_ingest', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'NSE1-proposed', status: 'planned'}
-    x-read-model: 'nse.blocks page_key screener_stocks (proposed; the route filters, sorts and pages)'
-    x-freshness: 'nse_calendar; daily'
-    x-cache: 'keyed by the NSE ingest''s publication; responses private, max-age=300'
+    x-publisher: fno
+    x-catalog: {publisher: 'fno', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'TR-NSE-proposed', status: 'planned'}
+    x-read-model: 'fno.pages_history page screener_stocks (proposed; the route filters, sorts and pages)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'rows empty: "No stock matches"'
     x-feeds: [h33.filters, h33.period, h33.screens, h33.sort, h33.table, h33.which, h34.movers]
     x-shared: 'one table of the day''s rows: the screener''s table and chips filter it, the Markets movers are its top rows by d1 or value (all 8 movers equal on the 12 Oct data)'
@@ -173,10 +173,10 @@
     operationId: getFnoScreenerSummary
     summary: 'Counts over the F&O underlyings: the four build-ups and the F&O screens'
     x-status: planned
-    x-publisher: nse_ingest
-    x-read-model: 'nse.blocks page_key fno_screener_summary (proposed)'
-    x-freshness: 'nse_calendar; daily'
-    x-cache: 'keyed by the NSE ingest''s publication; responses private, max-age=300'
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page fno_screener_summary (proposed)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'never empty on a trading day'
     x-feeds: [h33.buildup, h33.fno-screens, h33.tabs]
     x-shared: 'one set of counts over the same underlyings: the F&O tab''s count, the build-up tiles and the F&O chips'
@@ -198,10 +198,10 @@
     operationId: getFnoScreenerRows
     summary: 'A page of F&O underlyings with the future, open interest, build-up, ATM IV, put-call ratio and move priced in'
     x-status: planned
-    x-publisher: nse_ingest
-    x-read-model: 'nse.blocks page_key fno_screener_rows (proposed; the route filters, sorts and pages)'
-    x-freshness: 'nse_calendar; daily'
-    x-cache: 'keyed by the NSE ingest''s publication; responses private, max-age=300'
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page fno_screener_rows (proposed; the route filters, sorts and pages)'
+    x-freshness: 'fno_calendar; daily'
+    x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'rows empty'
     x-feeds: [h33.fno-screens, h33.fno-table, h34.index-options]
     x-shared: 'one table of underlyings: the F&O table and chips filter it; the Markets index options are its four index rows (equal on the 12 Oct data)'
