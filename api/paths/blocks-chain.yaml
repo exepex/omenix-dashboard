@@ -80,6 +80,7 @@
             examples:
               india: {$ref: '#/components/examples/getChainRows_india'}
               india_weekly_band: {$ref: '#/components/examples/getChainRows_india_weekly_band'}
+              india_all: {$ref: '#/components/examples/getChainRows_india_all'}
       '404': {$ref: '#/components/responses/NotFound'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}
@@ -120,7 +121,7 @@
     x-read-model: 'fno.pages_history page chain_contract:<code> (proposed)'
     x-freshness: 'fno_calendar; daily'
     x-cache: 'keyed by publication_id (fno.current_publication); browser private, no-cache + ETag'
-    x-empty: 'an unknown code is 404'
+    x-empty: 'history is kept for every contract NSE lists (owner default, 13 Oct 2026; the mockup kept 21 strikes an expiry); 404 only for a code NSE does not list'
     x-feeds: [c32.history]
     parameters:
       - {name: code, in: path, required: true, description: 'An NSE NIFTY option code, e.g. NIFTY26OCT22350CE', schema: {$ref: '#/components/schemas/InstrumentRef'}}

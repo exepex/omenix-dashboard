@@ -2751,6 +2751,3321 @@
    }
   }
  },
+ "getChainRows_india_all": {
+  "summary": "Mock (india): the nearest monthly, every strike in the file (within 10%): its stats recompute from these rows",
+  "description": "Taken from design/mockups/32-option-chain/data.json (signed off as of 9d9c401; real NSE files of 12 Oct 2026)",
+  "value": {
+   "market": "india",
+   "page_key": "chain_rows",
+   "as_of": "2026-10-12",
+   "cutoff": "2026-10-12T12:30:00Z",
+   "built_at": "2026-10-12T12:30:00Z",
+   "schema_version": "2.3.0",
+   "source_commit": "9d9c401",
+   "payload_sha256": "f81da1d204beab7b33e8395125fbd47eeec4e14d7c2b821090e9bc52b06a58a1",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-10-12T12:30:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
+   "payload": {
+    "as_of": "2026-10-12T10:00:00Z",
+    "currency": "INR",
+    "lot": 65,
+    "expiry": "2026-10-27",
+    "strikes": "all",
+    "rows": [
+     {
+      "strike": 20150.0,
+      "CE": {
+       "code": "NIFTY26OCT20150CE",
+       "close": 4145.5,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24295.5,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20150PE",
+       "close": 7.75,
+       "chg": 0.95,
+       "chg_pct": 13.97,
+       "oi": 12610,
+       "oi_chg": 8840,
+       "volume": 272,
+       "iv": 25.5,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 4e-05,
+        "theta": -1.65,
+        "vega": 2.02
+       },
+       "breakeven": 20142.25,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20200.0,
+      "CE": {
+       "code": "NIFTY26OCT20200CE",
+       "close": 2420.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22620.0,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20200PE",
+       "close": 6.55,
+       "chg": -0.85,
+       "chg_pct": -11.49,
+       "oi": 59735,
+       "oi_chg": 32500,
+       "volume": 2421,
+       "iv": 24.4,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 4e-05,
+        "theta": -1.43,
+        "vega": 1.84
+       },
+       "breakeven": 20193.45,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20250.0,
+      "CE": {
+       "code": "NIFTY26OCT20250CE",
+       "close": 4048.4,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24298.4,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20250PE",
+       "close": 6.55,
+       "chg": -0.35,
+       "chg_pct": -5.07,
+       "oi": 1105,
+       "oi_chg": 260,
+       "volume": 18,
+       "iv": 23.9,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 4e-05,
+        "theta": -1.42,
+        "vega": 1.87
+       },
+       "breakeven": 20243.45,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20300.0,
+      "CE": {
+       "code": "NIFTY26OCT20300CE",
+       "close": 3999.95,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24299.95,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20300PE",
+       "close": 7.3,
+       "chg": -0.5,
+       "chg_pct": -6.41,
+       "oi": 48815,
+       "oi_chg": -2860,
+       "volume": 1928,
+       "iv": 23.8,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 4e-05,
+        "theta": -1.54,
+        "vega": 2.04
+       },
+       "breakeven": 20292.7,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20350.0,
+      "CE": {
+       "code": "NIFTY26OCT20350CE",
+       "close": 3951.55,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24301.55,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20350PE",
+       "close": 7.5,
+       "chg": -0.5,
+       "chg_pct": -6.25,
+       "oi": 3055,
+       "oi_chg": 1040,
+       "volume": 58,
+       "iv": 23.4,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 4e-05,
+        "theta": -1.57,
+        "vega": 2.11
+       },
+       "breakeven": 20342.5,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20400.0,
+      "CE": {
+       "code": "NIFTY26OCT20400CE",
+       "close": 3903.2,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24303.2,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20400PE",
+       "close": 8.1,
+       "chg": -0.5,
+       "chg_pct": -5.81,
+       "oi": 85605,
+       "oi_chg": 18265,
+       "volume": 1432,
+       "iv": 23.1,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 5e-05,
+        "theta": -1.65,
+        "vega": 2.25
+       },
+       "breakeven": 20391.9,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20450.0,
+      "CE": {
+       "code": "NIFTY26OCT20450CE",
+       "close": 3854.95,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24304.95,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20450PE",
+       "close": 8.2,
+       "chg": -1.25,
+       "chg_pct": -13.23,
+       "oi": 2470,
+       "oi_chg": -845,
+       "volume": 91,
+       "iv": 22.7,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 5e-05,
+        "theta": -1.66,
+        "vega": 2.31
+       },
+       "breakeven": 20441.8,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20500.0,
+      "CE": {
+       "code": "NIFTY26OCT20500CE",
+       "close": 1880.75,
+       "chg": -233.95,
+       "chg_pct": -11.06,
+       "oi": 70980,
+       "oi_chg": -4615,
+       "volume": 218,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22380.75,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20500PE",
+       "close": 8.65,
+       "chg": -0.3,
+       "chg_pct": -3.35,
+       "oi": 1287585,
+       "oi_chg": 91065,
+       "volume": 23411,
+       "iv": 22.3,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 5e-05,
+        "theta": -1.72,
+        "vega": 2.43
+       },
+       "breakeven": 20491.35,
+       "chance": 2
+      }
+     },
+     {
+      "strike": 20550.0,
+      "CE": {
+       "code": "NIFTY26OCT20550CE",
+       "close": 3758.6,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24308.6,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20550PE",
+       "close": 9.35,
+       "chg": -0.35,
+       "chg_pct": -3.61,
+       "oi": 35555,
+       "oi_chg": 9880,
+       "volume": 501,
+       "iv": 22.1,
+       "greeks": {
+        "delta": -0.02,
+        "gamma": 6e-05,
+        "theta": -1.81,
+        "vega": 2.6
+       },
+       "breakeven": 20540.65,
+       "chance": 3
+      }
+     },
+     {
+      "strike": 20600.0,
+      "CE": {
+       "code": "NIFTY26OCT20600CE",
+       "close": 3710.55,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24310.55,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20600PE",
+       "close": 9.9,
+       "chg": -0.5,
+       "chg_pct": -4.81,
+       "oi": 357955,
+       "oi_chg": 68315,
+       "volume": 6447,
+       "iv": 21.8,
+       "greeks": {
+        "delta": -0.03,
+        "gamma": 6e-05,
+        "theta": -1.88,
+        "vega": 2.74
+       },
+       "breakeven": 20590.1,
+       "chance": 3
+      }
+     },
+     {
+      "strike": 20650.0,
+      "CE": {
+       "code": "NIFTY26OCT20650CE",
+       "close": 3662.6,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24312.6,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20650PE",
+       "close": 10.6,
+       "chg": -0.15,
+       "chg_pct": -1.4,
+       "oi": 23205,
+       "oi_chg": 6370,
+       "volume": 602,
+       "iv": 21.5,
+       "greeks": {
+        "delta": -0.03,
+        "gamma": 7e-05,
+        "theta": -1.97,
+        "vega": 2.91
+       },
+       "breakeven": 20639.4,
+       "chance": 3
+      }
+     },
+     {
+      "strike": 20700.0,
+      "CE": {
+       "code": "NIFTY26OCT20700CE",
+       "close": 1997.6,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22697.6,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20700PE",
+       "close": 11.3,
+       "chg": -0.1,
+       "chg_pct": -0.88,
+       "oi": 141960,
+       "oi_chg": 5265,
+       "volume": 3618,
+       "iv": 21.2,
+       "greeks": {
+        "delta": -0.03,
+        "gamma": 7e-05,
+        "theta": -2.05,
+        "vega": 3.08
+       },
+       "breakeven": 20688.7,
+       "chance": 3
+      }
+     },
+     {
+      "strike": 20750.0,
+      "CE": {
+       "code": "NIFTY26OCT20750CE",
+       "close": 3566.95,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24316.95,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20750PE",
+       "close": 12.3,
+       "chg": 0.15,
+       "chg_pct": 1.23,
+       "oi": 25610,
+       "oi_chg": -9295,
+       "volume": 776,
+       "iv": 21.0,
+       "greeks": {
+        "delta": -0.03,
+        "gamma": 8e-05,
+        "theta": -2.17,
+        "vega": 3.3
+       },
+       "breakeven": 20737.7,
+       "chance": 3
+      }
+     },
+     {
+      "strike": 20800.0,
+      "CE": {
+       "code": "NIFTY26OCT20800CE",
+       "close": 1550.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22350.0,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20800PE",
+       "close": 12.8,
+       "chg": 0.1,
+       "chg_pct": 0.79,
+       "oi": 357175,
+       "oi_chg": 26910,
+       "volume": 4719,
+       "iv": 20.6,
+       "greeks": {
+        "delta": -0.03,
+        "gamma": 8e-05,
+        "theta": -2.22,
+        "vega": 3.44
+       },
+       "breakeven": 20787.2,
+       "chance": 4
+      }
+     },
+     {
+      "strike": 20850.0,
+      "CE": {
+       "code": "NIFTY26OCT20850CE",
+       "close": 3471.7,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24321.7,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20850PE",
+       "close": 13.45,
+       "chg": -0.45,
+       "chg_pct": -3.24,
+       "oi": 9815,
+       "oi_chg": -5655,
+       "volume": 427,
+       "iv": 20.2,
+       "greeks": {
+        "delta": -0.04,
+        "gamma": 9e-05,
+        "theta": -2.29,
+        "vega": 3.61
+       },
+       "breakeven": 20836.55,
+       "chance": 4
+      }
+     },
+     {
+      "strike": 20900.0,
+      "CE": {
+       "code": "NIFTY26OCT20900CE",
+       "close": 1676.8,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 325,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22576.8,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20900PE",
+       "close": 14.6,
+       "chg": 0.45,
+       "chg_pct": 3.18,
+       "oi": 145470,
+       "oi_chg": 48165,
+       "volume": 3494,
+       "iv": 20.0,
+       "greeks": {
+        "delta": -0.04,
+        "gamma": 9e-05,
+        "theta": -2.41,
+        "vega": 3.86
+       },
+       "breakeven": 20885.4,
+       "chance": 4
+      }
+     },
+     {
+      "strike": 20950.0,
+      "CE": {
+       "code": "NIFTY26OCT20950CE",
+       "close": 3376.9,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 0,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 24326.9,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT20950PE",
+       "close": 16.05,
+       "chg": 1.15,
+       "chg_pct": 7.72,
+       "oi": 18655,
+       "oi_chg": -455,
+       "volume": 1139,
+       "iv": 19.8,
+       "greeks": {
+        "delta": -0.04,
+        "gamma": 0.0001,
+        "theta": -2.57,
+        "vega": 4.16
+       },
+       "breakeven": 20933.95,
+       "chance": 5
+      }
+     },
+     {
+      "strike": 21000.0,
+      "CE": {
+       "code": "NIFTY26OCT21000CE",
+       "close": 1395.9,
+       "chg": -232.85,
+       "chg_pct": -14.3,
+       "oi": 374465,
+       "oi_chg": 47125,
+       "volume": 1565,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22395.9,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21000PE",
+       "close": 17.5,
+       "chg": 1.6,
+       "chg_pct": 10.06,
+       "oi": 2012660,
+       "oi_chg": 173095,
+       "volume": 30877,
+       "iv": 19.5,
+       "greeks": {
+        "delta": -0.05,
+        "gamma": 0.00011,
+        "theta": -2.71,
+        "vega": 4.45
+       },
+       "breakeven": 20982.5,
+       "chance": 5
+      }
+     },
+     {
+      "strike": 21050.0,
+      "CE": {
+       "code": "NIFTY26OCT21050CE",
+       "close": 1609.9,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22659.9,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21050PE",
+       "close": 18.65,
+       "chg": 1.55,
+       "chg_pct": 9.06,
+       "oi": 18005,
+       "oi_chg": -2015,
+       "volume": 589,
+       "iv": 19.2,
+       "greeks": {
+        "delta": -0.05,
+        "gamma": 0.00012,
+        "theta": -2.81,
+        "vega": 4.71
+       },
+       "breakeven": 21031.35,
+       "chance": 5
+      }
+     },
+     {
+      "strike": 21100.0,
+      "CE": {
+       "code": "NIFTY26OCT21100CE",
+       "close": 1340.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22440.0,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21100PE",
+       "close": 20.35,
+       "chg": 2.25,
+       "chg_pct": 12.43,
+       "oi": 122785,
+       "oi_chg": 15470,
+       "volume": 5269,
+       "iv": 19.0,
+       "greeks": {
+        "delta": -0.05,
+        "gamma": 0.00013,
+        "theta": -2.97,
+        "vega": 5.04
+       },
+       "breakeven": 21079.65,
+       "chance": 6
+      }
+     },
+     {
+      "strike": 21150.0,
+      "CE": {
+       "code": "NIFTY26OCT21150CE",
+       "close": 1433.7,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22583.7,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21150PE",
+       "close": 22.15,
+       "chg": 2.75,
+       "chg_pct": 14.18,
+       "oi": 24895,
+       "oi_chg": 845,
+       "volume": 601,
+       "iv": 18.7,
+       "greeks": {
+        "delta": -0.06,
+        "gamma": 0.00014,
+        "theta": -3.12,
+        "vega": 5.38
+       },
+       "breakeven": 21127.85,
+       "chance": 6
+      }
+     },
+     {
+      "strike": 21200.0,
+      "CE": {
+       "code": "NIFTY26OCT21200CE",
+       "close": 1505.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 130,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22705.0,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21200PE",
+       "close": 24.15,
+       "chg": 3.5,
+       "chg_pct": 16.95,
+       "oi": 562510,
+       "oi_chg": 71045,
+       "volume": 10723,
+       "iv": 18.5,
+       "greeks": {
+        "delta": -0.06,
+        "gamma": 0.00015,
+        "theta": -3.28,
+        "vega": 5.75
+       },
+       "breakeven": 21175.85,
+       "chance": 7
+      }
+     },
+     {
+      "strike": 21250.0,
+      "CE": {
+       "code": "NIFTY26OCT21250CE",
+       "close": 1356.25,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22606.25,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21250PE",
+       "close": 27.05,
+       "chg": 4.5,
+       "chg_pct": 19.96,
+       "oi": 259090,
+       "oi_chg": -65,
+       "volume": 1371,
+       "iv": 18.4,
+       "greeks": {
+        "delta": -0.07,
+        "gamma": 0.00016,
+        "theta": -3.52,
+        "vega": 6.22
+       },
+       "breakeven": 21222.95,
+       "chance": 7
+      }
+     },
+     {
+      "strike": 21300.0,
+      "CE": {
+       "code": "NIFTY26OCT21300CE",
+       "close": 1111.0,
+       "chg": -151.95,
+       "chg_pct": -12.03,
+       "oi": 1040,
+       "oi_chg": 65,
+       "volume": 7,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22411.0,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21300PE",
+       "close": 29.55,
+       "chg": 5.6,
+       "chg_pct": 23.38,
+       "oi": 444600,
+       "oi_chg": -21580,
+       "volume": 10083,
+       "iv": 18.1,
+       "greeks": {
+        "delta": -0.08,
+        "gamma": 0.00018,
+        "theta": -3.7,
+        "vega": 6.64
+       },
+       "breakeven": 21270.45,
+       "chance": 8
+      }
+     },
+     {
+      "strike": 21350.0,
+      "CE": {
+       "code": "NIFTY26OCT21350CE",
+       "close": 1174.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22524.0,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21350PE",
+       "close": 32.65,
+       "chg": 6.45,
+       "chg_pct": 24.62,
+       "oi": 278915,
+       "oi_chg": -845,
+       "volume": 2078,
+       "iv": 18.0,
+       "greeks": {
+        "delta": -0.09,
+        "gamma": 0.00019,
+        "theta": -3.91,
+        "vega": 7.12
+       },
+       "breakeven": 21317.35,
+       "chance": 9
+      }
+     },
+     {
+      "strike": 21400.0,
+      "CE": {
+       "code": "NIFTY26OCT21400CE",
+       "close": 1026.1,
+       "chg": -255.5,
+       "chg_pct": -19.94,
+       "oi": 2925,
+       "oi_chg": 130,
+       "volume": 5,
+       "iv": 12.0,
+       "greeks": {
+        "delta": 0.97,
+        "gamma": 0.00011,
+        "theta": -4.82,
+        "vega": 2.82
+       },
+       "breakeven": 22426.1,
+       "chance": 49
+      },
+      "PE": {
+       "code": "NIFTY26OCT21400PE",
+       "close": 36.15,
+       "chg": 7.8,
+       "chg_pct": 27.51,
+       "oi": 506545,
+       "oi_chg": -53885,
+       "volume": 12416,
+       "iv": 17.8,
+       "greeks": {
+        "delta": -0.09,
+        "gamma": 0.00021,
+        "theta": -4.14,
+        "vega": 7.63
+       },
+       "breakeven": 21363.85,
+       "chance": 9
+      }
+     },
+     {
+      "strike": 21450.0,
+      "CE": {
+       "code": "NIFTY26OCT21450CE",
+       "close": 1084.5,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22534.5,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21450PE",
+       "close": 39.75,
+       "chg": 9.3,
+       "chg_pct": 30.54,
+       "oi": 46020,
+       "oi_chg": -18850,
+       "volume": 1690,
+       "iv": 17.6,
+       "greeks": {
+        "delta": -0.1,
+        "gamma": 0.00023,
+        "theta": -4.35,
+        "vega": 8.14
+       },
+       "breakeven": 21410.25,
+       "chance": 10
+      }
+     },
+     {
+      "strike": 21500.0,
+      "CE": {
+       "code": "NIFTY26OCT21500CE",
+       "close": 924.75,
+       "chg": -222.05,
+       "chg_pct": -19.36,
+       "oi": 676780,
+       "oi_chg": 12155,
+       "volume": 1552,
+       "iv": 10.4,
+       "greeks": {
+        "delta": 0.98,
+        "gamma": 0.00011,
+        "theta": -4.58,
+        "vega": 2.45
+       },
+       "breakeven": 22424.75,
+       "chance": 49
+      },
+      "PE": {
+       "code": "NIFTY26OCT21500PE",
+       "close": 43.85,
+       "chg": 10.75,
+       "chg_pct": 32.48,
+       "oi": 3297320,
+       "oi_chg": -82940,
+       "volume": 57215,
+       "iv": 17.4,
+       "greeks": {
+        "delta": -0.11,
+        "gamma": 0.00024,
+        "theta": -4.57,
+        "vega": 8.69
+       },
+       "breakeven": 21456.15,
+       "chance": 11
+      }
+     },
+     {
+      "strike": 21550.0,
+      "CE": {
+       "code": "NIFTY26OCT21550CE",
+       "close": 997.3,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 65,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22547.3,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21550PE",
+       "close": 48.05,
+       "chg": 12.3,
+       "chg_pct": 34.41,
+       "oi": 264615,
+       "oi_chg": 14625,
+       "volume": 13211,
+       "iv": 17.1,
+       "greeks": {
+        "delta": -0.12,
+        "gamma": 0.00026,
+        "theta": -4.78,
+        "vega": 9.23
+       },
+       "breakeven": 21501.95,
+       "chance": 12
+      }
+     },
+     {
+      "strike": 21600.0,
+      "CE": {
+       "code": "NIFTY26OCT21600CE",
+       "close": 857.95,
+       "chg": -226.0,
+       "chg_pct": -20.85,
+       "oi": 3445,
+       "oi_chg": 1235,
+       "volume": 41,
+       "iv": 15.2,
+       "greeks": {
+        "delta": 0.89,
+        "gamma": 0.00027,
+        "theta": -7.71,
+        "vega": 8.51
+       },
+       "breakeven": 22457.95,
+       "chance": 47
+      },
+      "PE": {
+       "code": "NIFTY26OCT21600PE",
+       "close": 53.35,
+       "chg": 14.4,
+       "chg_pct": 36.97,
+       "oi": 694330,
+       "oi_chg": 143975,
+       "volume": 18556,
+       "iv": 17.0,
+       "greeks": {
+        "delta": -0.14,
+        "gamma": 0.00028,
+        "theta": -5.03,
+        "vega": 9.84
+       },
+       "breakeven": 21546.65,
+       "chance": 13
+      }
+     },
+     {
+      "strike": 21650.0,
+      "CE": {
+       "code": "NIFTY26OCT21650CE",
+       "close": 1000.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 130,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22650.0,
+       "chance": null
+      },
+      "PE": {
+       "code": "NIFTY26OCT21650PE",
+       "close": 59.5,
+       "chg": 16.95,
+       "chg_pct": 39.84,
+       "oi": 117325,
+       "oi_chg": 4940,
+       "volume": 2348,
+       "iv": 16.9,
+       "greeks": {
+        "delta": -0.15,
+        "gamma": 0.0003,
+        "theta": -5.3,
+        "vega": 10.49
+       },
+       "breakeven": 21590.5,
+       "chance": 14
+      }
+     },
+     {
+      "strike": 21700.0,
+      "CE": {
+       "code": "NIFTY26OCT21700CE",
+       "close": 750.15,
+       "chg": -203.3,
+       "chg_pct": -21.32,
+       "oi": 7410,
+       "oi_chg": 2340,
+       "volume": 96,
+       "iv": 12.9,
+       "greeks": {
+        "delta": 0.9,
+        "gamma": 0.00031,
+        "theta": -6.93,
+        "vega": 8.11
+       },
+       "breakeven": 22450.15,
+       "chance": 48
+      },
+      "PE": {
+       "code": "NIFTY26OCT21700PE",
+       "close": 66.0,
+       "chg": 19.45,
+       "chg_pct": 41.78,
+       "oi": 760045,
+       "oi_chg": 132990,
+       "volume": 22421,
+       "iv": 16.7,
+       "greeks": {
+        "delta": -0.16,
+        "gamma": 0.00032,
+        "theta": -5.55,
+        "vega": 11.14
+       },
+       "breakeven": 21634.0,
+       "chance": 15
+      }
+     },
+     {
+      "strike": 21750.0,
+      "CE": {
+       "code": "NIFTY26OCT21750CE",
+       "close": 733.5,
+       "chg": -128.55,
+       "chg_pct": -14.91,
+       "oi": 520,
+       "oi_chg": 65,
+       "volume": 2,
+       "iv": 15.6,
+       "greeks": {
+        "delta": 0.84,
+        "gamma": 0.00035,
+        "theta": -9.02,
+        "vega": 11.19
+       },
+       "breakeven": 22483.5,
+       "chance": 46
+      },
+      "PE": {
+       "code": "NIFTY26OCT21750PE",
+       "close": 73.6,
+       "chg": 22.45,
+       "chg_pct": 43.89,
+       "oi": 97500,
+       "oi_chg": -4940,
+       "volume": 2667,
+       "iv": 16.6,
+       "greeks": {
+        "delta": -0.18,
+        "gamma": 0.00035,
+        "theta": -5.81,
+        "vega": 11.81
+       },
+       "breakeven": 21676.4,
+       "chance": 16
+      }
+     },
+     {
+      "strike": 21800.0,
+      "CE": {
+       "code": "NIFTY26OCT21800CE",
+       "close": 664.45,
+       "chg": -207.7,
+       "chg_pct": -23.81,
+       "oi": 46150,
+       "oi_chg": 6500,
+       "volume": 355,
+       "iv": 13.1,
+       "greeks": {
+        "delta": 0.86,
+        "gamma": 0.00038,
+        "theta": -7.71,
+        "vega": 10.12
+       },
+       "breakeven": 22464.45,
+       "chance": 47
+      },
+      "PE": {
+       "code": "NIFTY26OCT21800PE",
+       "close": 81.35,
+       "chg": 25.7,
+       "chg_pct": 46.18,
+       "oi": 1319500,
+       "oi_chg": 42835,
+       "volume": 32786,
+       "iv": 16.4,
+       "greeks": {
+        "delta": -0.19,
+        "gamma": 0.00037,
+        "theta": -6.04,
+        "vega": 12.47
+       },
+       "breakeven": 21718.65,
+       "chance": 17
+      }
+     },
+     {
+      "strike": 21850.0,
+      "CE": {
+       "code": "NIFTY26OCT21850CE",
+       "close": 631.15,
+       "chg": -158.7,
+       "chg_pct": -20.09,
+       "oi": 3055,
+       "oi_chg": 65,
+       "volume": 13,
+       "iv": 13.8,
+       "greeks": {
+        "delta": 0.83,
+        "gamma": 0.00041,
+        "theta": -8.55,
+        "vega": 11.65
+       },
+       "breakeven": 22481.15,
+       "chance": 46
+      },
+      "PE": {
+       "code": "NIFTY26OCT21850PE",
+       "close": 90.35,
+       "chg": 28.75,
+       "chg_pct": 46.67,
+       "oi": 76895,
+       "oi_chg": 14560,
+       "volume": 3097,
+       "iv": 16.3,
+       "greeks": {
+        "delta": -0.21,
+        "gamma": 0.00039,
+        "theta": -6.28,
+        "vega": 13.14
+       },
+       "breakeven": 21759.65,
+       "chance": 19
+      }
+     },
+     {
+      "strike": 21900.0,
+      "CE": {
+       "code": "NIFTY26OCT21900CE",
+       "close": 587.3,
+       "chg": -200.15,
+       "chg_pct": -25.42,
+       "oi": 60710,
+       "oi_chg": -1365,
+       "volume": 172,
+       "iv": 13.5,
+       "greeks": {
+        "delta": 0.81,
+        "gamma": 0.00044,
+        "theta": -8.69,
+        "vega": 12.35
+       },
+       "breakeven": 22487.3,
+       "chance": 45
+      },
+      "PE": {
+       "code": "NIFTY26OCT21900PE",
+       "close": 100.2,
+       "chg": 32.8,
+       "chg_pct": 48.66,
+       "oi": 821665,
+       "oi_chg": 85670,
+       "volume": 22645,
+       "iv": 16.2,
+       "greeks": {
+        "delta": -0.23,
+        "gamma": 0.00041,
+        "theta": -6.5,
+        "vega": 13.8
+       },
+       "breakeven": 21799.8,
+       "chance": 20
+      }
+     },
+     {
+      "strike": 21950.0,
+      "CE": {
+       "code": "NIFTY26OCT21950CE",
+       "close": 544.05,
+       "chg": -202.5,
+       "chg_pct": -27.12,
+       "oi": 16510,
+       "oi_chg": -1495,
+       "volume": 84,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.79,
+        "gamma": 0.00048,
+        "theta": -8.81,
+        "vega": 13.05
+       },
+       "breakeven": 22494.05,
+       "chance": 45
+      },
+      "PE": {
+       "code": "NIFTY26OCT21950PE",
+       "close": 111.7,
+       "chg": 37.1,
+       "chg_pct": 49.73,
+       "oi": 102440,
+       "oi_chg": 3640,
+       "volume": 2109,
+       "iv": 16.1,
+       "greeks": {
+        "delta": -0.25,
+        "gamma": 0.00044,
+        "theta": -6.74,
+        "vega": 14.46
+       },
+       "breakeven": 21838.3,
+       "chance": 21
+      }
+     },
+     {
+      "strike": 22000.0,
+      "CE": {
+       "code": "NIFTY26OCT22000CE",
+       "close": 507.05,
+       "chg": -190.15,
+       "chg_pct": -27.27,
+       "oi": 1276730,
+       "oi_chg": 37440,
+       "volume": 10802,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.76,
+        "gamma": 0.00051,
+        "theta": -9.17,
+        "vega": 13.98
+       },
+       "breakeven": 22507.05,
+       "chance": 44
+      },
+      "PE": {
+       "code": "NIFTY26OCT22000PE",
+       "close": 123.45,
+       "chg": 41.95,
+       "chg_pct": 51.47,
+       "oi": 4700020,
+       "oi_chg": -3705,
+       "volume": 93575,
+       "iv": 16.0,
+       "greeks": {
+        "delta": -0.27,
+        "gamma": 0.00046,
+        "theta": -6.92,
+        "vega": 15.07
+       },
+       "breakeven": 21876.55,
+       "chance": 23
+      }
+     },
+     {
+      "strike": 22050.0,
+      "CE": {
+       "code": "NIFTY26OCT22050CE",
+       "close": 468.9,
+       "chg": -187.8,
+       "chg_pct": -28.6,
+       "oi": 19240,
+       "oi_chg": -975,
+       "volume": 95,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.74,
+        "gamma": 0.00054,
+        "theta": -9.38,
+        "vega": 14.76
+       },
+       "breakeven": 22518.9,
+       "chance": 43
+      },
+      "PE": {
+       "code": "NIFTY26OCT22050PE",
+       "close": 136.5,
+       "chg": 47.9,
+       "chg_pct": 54.06,
+       "oi": 161395,
+       "oi_chg": -49465,
+       "volume": 13426,
+       "iv": 15.9,
+       "greeks": {
+        "delta": -0.3,
+        "gamma": 0.00048,
+        "theta": -7.08,
+        "vega": 15.65
+       },
+       "breakeven": 21913.5,
+       "chance": 24
+      }
+     },
+     {
+      "strike": 22100.0,
+      "CE": {
+       "code": "NIFTY26OCT22100CE",
+       "close": 434.5,
+       "chg": -180.45,
+       "chg_pct": -29.34,
+       "oi": 102115,
+       "oi_chg": 3445,
+       "volume": 1236,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.71,
+        "gamma": 0.00057,
+        "theta": -9.66,
+        "vega": 15.55
+       },
+       "breakeven": 22534.5,
+       "chance": 42
+      },
+      "PE": {
+       "code": "NIFTY26OCT22100PE",
+       "close": 150.6,
+       "chg": 51.7,
+       "chg_pct": 52.28,
+       "oi": 733330,
+       "oi_chg": -17225,
+       "volume": 25143,
+       "iv": 15.8,
+       "greeks": {
+        "delta": -0.32,
+        "gamma": 0.0005,
+        "theta": -7.21,
+        "vega": 16.19
+       },
+       "breakeven": 21949.4,
+       "chance": 26
+      }
+     },
+     {
+      "strike": 22150.0,
+      "CE": {
+       "code": "NIFTY26OCT22150CE",
+       "close": 403.75,
+       "chg": -173.0,
+       "chg_pct": -30.0,
+       "oi": 28405,
+       "oi_chg": -1235,
+       "volume": 160,
+       "iv": 13.6,
+       "greeks": {
+        "delta": 0.68,
+        "gamma": 0.00058,
+        "theta": -9.98,
+        "vega": 16.27
+       },
+       "breakeven": 22553.75,
+       "chance": 41
+      },
+      "PE": {
+       "code": "NIFTY26OCT22150PE",
+       "close": 166.25,
+       "chg": 57.35,
+       "chg_pct": 52.66,
+       "oi": 163540,
+       "oi_chg": 16640,
+       "volume": 3765,
+       "iv": 15.7,
+       "greeks": {
+        "delta": -0.34,
+        "gamma": 0.00052,
+        "theta": -7.32,
+        "vega": 16.68
+       },
+       "breakeven": 21983.75,
+       "chance": 27
+      }
+     },
+     {
+      "strike": 22200.0,
+      "CE": {
+       "code": "NIFTY26OCT22200CE",
+       "close": 369.25,
+       "chg": -166.35,
+       "chg_pct": -31.06,
+       "oi": 815165,
+       "oi_chg": -66820,
+       "volume": 13253,
+       "iv": 13.4,
+       "greeks": {
+        "delta": 0.65,
+        "gamma": 0.00061,
+        "theta": -10.05,
+        "vega": 16.82
+       },
+       "breakeven": 22569.25,
+       "chance": 40
+      },
+      "PE": {
+       "code": "NIFTY26OCT22200PE",
+       "close": 183.5,
+       "chg": 63.15,
+       "chg_pct": 52.47,
+       "oi": 2026895,
+       "oi_chg": -239590,
+       "volume": 38246,
+       "iv": 15.6,
+       "greeks": {
+        "delta": -0.37,
+        "gamma": 0.00053,
+        "theta": -7.4,
+        "vega": 17.12
+       },
+       "breakeven": 22016.5,
+       "chance": 29
+      }
+     },
+     {
+      "strike": 22250.0,
+      "CE": {
+       "code": "NIFTY26OCT22250CE",
+       "close": 335.55,
+       "chg": -163.75,
+       "chg_pct": -32.8,
+       "oi": 218010,
+       "oi_chg": -17550,
+       "volume": 2700,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.62,
+        "gamma": 0.00063,
+        "theta": -10.06,
+        "vega": 17.28
+       },
+       "breakeven": 22585.55,
+       "chance": 39
+      },
+      "PE": {
+       "code": "NIFTY26OCT22250PE",
+       "close": 203.0,
+       "chg": 70.75,
+       "chg_pct": 53.5,
+       "oi": 621075,
+       "oi_chg": -20995,
+       "volume": 6885,
+       "iv": 15.6,
+       "greeks": {
+        "delta": -0.4,
+        "gamma": 0.00055,
+        "theta": -7.47,
+        "vega": 17.48
+       },
+       "breakeven": 22047.0,
+       "chance": 30
+      }
+     },
+     {
+      "strike": 22300.0,
+      "CE": {
+       "code": "NIFTY26OCT22300CE",
+       "close": 307.3,
+       "chg": -155.5,
+       "chg_pct": -33.6,
+       "oi": 1485315,
+       "oi_chg": 180895,
+       "volume": 25574,
+       "iv": 13.4,
+       "greeks": {
+        "delta": 0.59,
+        "gamma": 0.00064,
+        "theta": -10.14,
+        "vega": 17.67
+       },
+       "breakeven": 22607.3,
+       "chance": 38
+      },
+      "PE": {
+       "code": "NIFTY26OCT22300PE",
+       "close": 223.45,
+       "chg": 77.95,
+       "chg_pct": 53.57,
+       "oi": 3780790,
+       "oi_chg": 8840,
+       "volume": 47697,
+       "iv": 15.6,
+       "greeks": {
+        "delta": -0.42,
+        "gamma": 0.00056,
+        "theta": -7.48,
+        "vega": 17.76
+       },
+       "breakeven": 22076.55,
+       "chance": 32
+      }
+     },
+     {
+      "strike": 22350.0,
+      "CE": {
+       "code": "NIFTY26OCT22350CE",
+       "close": 280.3,
+       "chg": -147.75,
+       "chg_pct": -34.52,
+       "oi": 149370,
+       "oi_chg": 39780,
+       "volume": 7039,
+       "iv": 13.4,
+       "greeks": {
+        "delta": 0.55,
+        "gamma": 0.00065,
+        "theta": -10.16,
+        "vega": 17.92
+       },
+       "breakeven": 22630.3,
+       "chance": 36
+      },
+      "PE": {
+       "code": "NIFTY26OCT22350PE",
+       "close": 243.25,
+       "chg": 83.7,
+       "chg_pct": 52.46,
+       "oi": 317980,
+       "oi_chg": -8775,
+       "volume": 11140,
+       "iv": 15.4,
+       "greeks": {
+        "delta": -0.45,
+        "gamma": 0.00057,
+        "theta": -7.38,
+        "vega": 17.96
+       },
+       "breakeven": 22106.75,
+       "chance": 33
+      }
+     },
+     {
+      "strike": 22400.0,
+      "CE": {
+       "code": "NIFTY26OCT22400CE",
+       "close": 253.1,
+       "chg": -142.1,
+       "chg_pct": -35.96,
+       "oi": 2066220,
+       "oi_chg": 457860,
+       "volume": 57013,
+       "iv": 13.4,
+       "greeks": {
+        "delta": 0.52,
+        "gamma": 0.00066,
+        "theta": -10.07,
+        "vega": 18.06
+       },
+       "breakeven": 22653.1,
+       "chance": 35
+      },
+      "PE": {
+       "code": "NIFTY26OCT22400PE",
+       "close": 267.1,
+       "chg": 92.95,
+       "chg_pct": 53.37,
+       "oi": 2197650,
+       "oi_chg": 270660,
+       "volume": 69732,
+       "iv": 15.4,
+       "greeks": {
+        "delta": -0.48,
+        "gamma": 0.00057,
+        "theta": -7.32,
+        "vega": 18.06
+       },
+       "breakeven": 22132.9,
+       "chance": 34
+      }
+     },
+     {
+      "strike": 22450.0,
+      "CE": {
+       "code": "NIFTY26OCT22450CE",
+       "close": 227.15,
+       "chg": -133.7,
+       "chg_pct": -37.05,
+       "oi": 188955,
+       "oi_chg": 40820,
+       "volume": 8909,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.49,
+        "gamma": 0.00066,
+        "theta": -9.9,
+        "vega": 18.08
+       },
+       "breakeven": 22677.15,
+       "chance": 33
+      },
+      "PE": {
+       "code": "NIFTY26OCT22450PE",
+       "close": 290.1,
+       "chg": 99.65,
+       "chg_pct": 52.32,
+       "oi": 230360,
+       "oi_chg": 8710,
+       "volume": 11196,
+       "iv": 15.3,
+       "greeks": {
+        "delta": -0.51,
+        "gamma": 0.00058,
+        "theta": -7.13,
+        "vega": 18.08
+       },
+       "breakeven": 22159.9,
+       "chance": 36
+      }
+     },
+     {
+      "strike": 22500.0,
+      "CE": {
+       "code": "NIFTY26OCT22500CE",
+       "close": 203.65,
+       "chg": -126.15,
+       "chg_pct": -38.25,
+       "oi": 4220190,
+       "oi_chg": 511225,
+       "volume": 113826,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.45,
+        "gamma": 0.00066,
+        "theta": -9.71,
+        "vega": 17.97
+       },
+       "breakeven": 22703.65,
+       "chance": 32
+      },
+      "PE": {
+       "code": "NIFTY26OCT22500PE",
+       "close": 317.1,
+       "chg": 108.2,
+       "chg_pct": 51.8,
+       "oi": 4660305,
+       "oi_chg": 166595,
+       "volume": 119173,
+       "iv": 15.3,
+       "greeks": {
+        "delta": -0.54,
+        "gamma": 0.00057,
+        "theta": -6.98,
+        "vega": 18.01
+       },
+       "breakeven": 22182.9,
+       "chance": 37
+      }
+     },
+     {
+      "strike": 22550.0,
+      "CE": {
+       "code": "NIFTY26OCT22550CE",
+       "close": 183.1,
+       "chg": -115.9,
+       "chg_pct": -38.76,
+       "oi": 286585,
+       "oi_chg": 15600,
+       "volume": 8236,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.42,
+        "gamma": 0.00065,
+        "theta": -9.51,
+        "vega": 17.74
+       },
+       "breakeven": 22733.1,
+       "chance": 30
+      },
+      "PE": {
+       "code": "NIFTY26OCT22550PE",
+       "close": 344.6,
+       "chg": 116.7,
+       "chg_pct": 51.21,
+       "oi": 206245,
+       "oi_chg": -21905,
+       "volume": 7346,
+       "iv": 15.3,
+       "greeks": {
+        "delta": -0.57,
+        "gamma": 0.00057,
+        "theta": -6.76,
+        "vega": 17.84
+       },
+       "breakeven": 22205.4,
+       "chance": 38
+      }
+     },
+     {
+      "strike": 22600.0,
+      "CE": {
+       "code": "NIFTY26OCT22600CE",
+       "close": 162.6,
+       "chg": -106.7,
+       "chg_pct": -39.62,
+       "oi": 2790060,
+       "oi_chg": 672230,
+       "volume": 87188,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.39,
+        "gamma": 0.00064,
+        "theta": -9.21,
+        "vega": 17.4
+       },
+       "breakeven": 22762.6,
+       "chance": 28
+      },
+      "PE": {
+       "code": "NIFTY26OCT22600PE",
+       "close": 380.05,
+       "chg": 131.7,
+       "chg_pct": 53.03,
+       "oi": 1931540,
+       "oi_chg": 211250,
+       "volume": 70511,
+       "iv": 15.6,
+       "greeks": {
+        "delta": -0.59,
+        "gamma": 0.00055,
+        "theta": -6.73,
+        "vega": 17.6
+       },
+       "breakeven": 22219.95,
+       "chance": 39
+      }
+     },
+     {
+      "strike": 22650.0,
+      "CE": {
+       "code": "NIFTY26OCT22650CE",
+       "close": 145.35,
+       "chg": -97.85,
+       "chg_pct": -40.23,
+       "oi": 460135,
+       "oi_chg": 67405,
+       "volume": 10461,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.36,
+        "gamma": 0.00062,
+        "theta": -8.92,
+        "vega": 16.95
+       },
+       "breakeven": 22795.35,
+       "chance": 27
+      },
+      "PE": {
+       "code": "NIFTY26OCT22650PE",
+       "close": 409.8,
+       "chg": 141.35,
+       "chg_pct": 52.65,
+       "oi": 213135,
+       "oi_chg": -65390,
+       "volume": 5831,
+       "iv": 15.5,
+       "greeks": {
+        "delta": -0.62,
+        "gamma": 0.00054,
+        "theta": -6.4,
+        "vega": 17.27
+       },
+       "breakeven": 22240.2,
+       "chance": 40
+      }
+     },
+     {
+      "strike": 22700.0,
+      "CE": {
+       "code": "NIFTY26OCT22700CE",
+       "close": 128.45,
+       "chg": -89.2,
+       "chg_pct": -40.98,
+       "oi": 3322475,
+       "oi_chg": 278980,
+       "volume": 60251,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.33,
+        "gamma": 0.0006,
+        "theta": -8.56,
+        "vega": 16.4
+       },
+       "breakeven": 22828.45,
+       "chance": 25
+      },
+      "PE": {
+       "code": "NIFTY26OCT22700PE",
+       "close": 439.25,
+       "chg": 143.95,
+       "chg_pct": 48.75,
+       "oi": 1927510,
+       "oi_chg": 115180,
+       "volume": 27382,
+       "iv": 15.4,
+       "greeks": {
+        "delta": -0.65,
+        "gamma": 0.00053,
+        "theta": -5.97,
+        "vega": 16.84
+       },
+       "breakeven": 22260.75,
+       "chance": 41
+      }
+     },
+     {
+      "strike": 22750.0,
+      "CE": {
+       "code": "NIFTY26OCT22750CE",
+       "close": 111.4,
+       "chg": -82.45,
+       "chg_pct": -42.53,
+       "oi": 419770,
+       "oi_chg": 5590,
+       "volume": 11847,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.3,
+        "gamma": 0.00058,
+        "theta": -8.08,
+        "vega": 15.73
+       },
+       "breakeven": 22861.4,
+       "chance": 23
+      },
+      "PE": {
+       "code": "NIFTY26OCT22750PE",
+       "close": 473.7,
+       "chg": 150.7,
+       "chg_pct": 46.66,
+       "oi": 243425,
+       "oi_chg": -19175,
+       "volume": 1199,
+       "iv": 15.4,
+       "greeks": {
+        "delta": -0.67,
+        "gamma": 0.00052,
+        "theta": -5.66,
+        "vega": 16.37
+       },
+       "breakeven": 22276.3,
+       "chance": 42
+      }
+     },
+     {
+      "strike": 22800.0,
+      "CE": {
+       "code": "NIFTY26OCT22800CE",
+       "close": 98.3,
+       "chg": -73.15,
+       "chg_pct": -42.67,
+       "oi": 3286855,
+       "oi_chg": 66170,
+       "volume": 65493,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.27,
+        "gamma": 0.00055,
+        "theta": -7.68,
+        "vega": 15.03
+       },
+       "breakeven": 22898.3,
+       "chance": 21
+      },
+      "PE": {
+       "code": "NIFTY26OCT22800PE",
+       "close": 504.8,
+       "chg": 154.45,
+       "chg_pct": 44.08,
+       "oi": 1804530,
+       "oi_chg": 375635,
+       "volume": 20371,
+       "iv": 15.2,
+       "greeks": {
+        "delta": -0.7,
+        "gamma": 0.0005,
+        "theta": -5.11,
+        "vega": 15.76
+       },
+       "breakeven": 22295.2,
+       "chance": 43
+      }
+     },
+     {
+      "strike": 22850.0,
+      "CE": {
+       "code": "NIFTY26OCT22850CE",
+       "close": 85.45,
+       "chg": -66.0,
+       "chg_pct": -43.58,
+       "oi": 212745,
+       "oi_chg": -33345,
+       "volume": 6771,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.24,
+        "gamma": 0.00053,
+        "theta": -7.22,
+        "vega": 14.24
+       },
+       "breakeven": 22935.45,
+       "chance": 20
+      },
+      "PE": {
+       "code": "NIFTY26OCT22850PE",
+       "close": 547.8,
+       "chg": 167.2,
+       "chg_pct": 43.93,
+       "oi": 84240,
+       "oi_chg": -8060,
+       "volume": 481,
+       "iv": 15.7,
+       "greeks": {
+        "delta": -0.72,
+        "gamma": 0.00048,
+        "theta": -5.03,
+        "vega": 15.3
+       },
+       "breakeven": 22302.2,
+       "chance": 44
+      }
+     },
+     {
+      "strike": 22900.0,
+      "CE": {
+       "code": "NIFTY26OCT22900CE",
+       "close": 74.45,
+       "chg": -58.75,
+       "chg_pct": -44.11,
+       "oi": 1428115,
+       "oi_chg": 32110,
+       "volume": 31662,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.22,
+        "gamma": 0.00049,
+        "theta": -6.76,
+        "vega": 13.42
+       },
+       "breakeven": 22974.45,
+       "chance": 18
+      },
+      "PE": {
+       "code": "NIFTY26OCT22900PE",
+       "close": 583.15,
+       "chg": 173.3,
+       "chg_pct": 42.28,
+       "oi": 592735,
+       "oi_chg": -37505,
+       "volume": 3212,
+       "iv": 15.6,
+       "greeks": {
+        "delta": -0.74,
+        "gamma": 0.00046,
+        "theta": -4.52,
+        "vega": 14.63
+       },
+       "breakeven": 22316.85,
+       "chance": 45
+      }
+     },
+     {
+      "strike": 22950.0,
+      "CE": {
+       "code": "NIFTY26OCT22950CE",
+       "close": 64.25,
+       "chg": -52.45,
+       "chg_pct": -44.94,
+       "oi": 167570,
+       "oi_chg": 27040,
+       "volume": 6060,
+       "iv": 13.2,
+       "greeks": {
+        "delta": 0.2,
+        "gamma": 0.00046,
+        "theta": -6.28,
+        "vega": 12.54
+       },
+       "breakeven": 23014.25,
+       "chance": 16
+      },
+      "PE": {
+       "code": "NIFTY26OCT22950PE",
+       "close": 624.15,
+       "chg": 181.9,
+       "chg_pct": 41.13,
+       "oi": 45370,
+       "oi_chg": -4615,
+       "volume": 252,
+       "iv": 15.8,
+       "greeks": {
+        "delta": -0.76,
+        "gamma": 0.00043,
+        "theta": -4.24,
+        "vega": 14.05
+       },
+       "breakeven": 22325.85,
+       "chance": 45
+      }
+     },
+     {
+      "strike": 23000.0,
+      "CE": {
+       "code": "NIFTY26OCT23000CE",
+       "close": 56.6,
+       "chg": -45.65,
+       "chg_pct": -44.65,
+       "oi": 6727565,
+       "oi_chg": 565760,
+       "volume": 142513,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.18,
+        "gamma": 0.00043,
+        "theta": -5.89,
+        "vega": 11.74
+       },
+       "breakeven": 23056.6,
+       "chance": 15
+      },
+      "PE": {
+       "code": "NIFTY26OCT23000PE",
+       "close": 666.35,
+       "chg": 187.8,
+       "chg_pct": 39.24,
+       "oi": 3579355,
+       "oi_chg": -169195,
+       "volume": 17537,
+       "iv": 16.0,
+       "greeks": {
+        "delta": -0.78,
+        "gamma": 0.00041,
+        "theta": -3.98,
+        "vega": 13.48
+       },
+       "breakeven": 22333.65,
+       "chance": 46
+      }
+     },
+     {
+      "strike": 23050.0,
+      "CE": {
+       "code": "NIFTY26OCT23050CE",
+       "close": 48.5,
+       "chg": -39.15,
+       "chg_pct": -44.67,
+       "oi": 220675,
+       "oi_chg": 26455,
+       "volume": 6964,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.16,
+        "gamma": 0.0004,
+        "theta": -5.41,
+        "vega": 10.85
+       },
+       "breakeven": 23098.5,
+       "chance": 13
+      },
+      "PE": {
+       "code": "NIFTY26OCT23050PE",
+       "close": 708.9,
+       "chg": 196.3,
+       "chg_pct": 38.29,
+       "oi": 42770,
+       "oi_chg": -3250,
+       "volume": 110,
+       "iv": 16.2,
+       "greeks": {
+        "delta": -0.79,
+        "gamma": 0.00039,
+        "theta": -3.69,
+        "vega": 12.9
+       },
+       "breakeven": 22341.1,
+       "chance": 46
+      }
+     },
+     {
+      "strike": 23100.0,
+      "CE": {
+       "code": "NIFTY26OCT23100CE",
+       "close": 41.65,
+       "chg": -33.65,
+       "chg_pct": -44.69,
+       "oi": 1818570,
+       "oi_chg": 251095,
+       "volume": 37256,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.14,
+        "gamma": 0.00037,
+        "theta": -4.96,
+        "vega": 9.98
+       },
+       "breakeven": 23141.65,
+       "chance": 12
+      },
+      "PE": {
+       "code": "NIFTY26OCT23100PE",
+       "close": 748.95,
+       "chg": 198.35,
+       "chg_pct": 36.02,
+       "oi": 1489410,
+       "oi_chg": -8125,
+       "volume": 736,
+       "iv": 16.2,
+       "greeks": {
+        "delta": -0.81,
+        "gamma": 0.00037,
+        "theta": -3.19,
+        "vega": 12.17
+       },
+       "breakeven": 22351.05,
+       "chance": 47
+      }
+     },
+     {
+      "strike": 23150.0,
+      "CE": {
+       "code": "NIFTY26OCT23150CE",
+       "close": 35.85,
+       "chg": -28.85,
+       "chg_pct": -44.59,
+       "oi": 395395,
+       "oi_chg": 56940,
+       "volume": 7922,
+       "iv": 13.3,
+       "greeks": {
+        "delta": 0.12,
+        "gamma": 0.00033,
+        "theta": -4.55,
+        "vega": 9.15
+       },
+       "breakeven": 23185.85,
+       "chance": 11
+      },
+      "PE": {
+       "code": "NIFTY26OCT23150PE",
+       "close": 797.35,
+       "chg": 207.8,
+       "chg_pct": 35.25,
+       "oi": 26065,
+       "oi_chg": -5395,
+       "volume": 175,
+       "iv": 16.8,
+       "greeks": {
+        "delta": -0.82,
+        "gamma": 0.00034,
+        "theta": -3.21,
+        "vega": 11.84
+       },
+       "breakeven": 22352.65,
+       "chance": 47
+      }
+     },
+     {
+      "strike": 23200.0,
+      "CE": {
+       "code": "NIFTY26OCT23200CE",
+       "close": 31.5,
+       "chg": -23.25,
+       "chg_pct": -42.47,
+       "oi": 3609450,
+       "oi_chg": 776295,
+       "volume": 76624,
+       "iv": 13.5,
+       "greeks": {
+        "delta": 0.11,
+        "gamma": 0.00031,
+        "theta": -4.21,
+        "vega": 8.44
+       },
+       "breakeven": 23231.5,
+       "chance": 9
+      },
+      "PE": {
+       "code": "NIFTY26OCT23200PE",
+       "close": 840.35,
+       "chg": 212.3,
+       "chg_pct": 33.8,
+       "oi": 1819220,
+       "oi_chg": -38610,
+       "volume": 1544,
+       "iv": 16.9,
+       "greeks": {
+        "delta": -0.84,
+        "gamma": 0.00032,
+        "theta": -2.84,
+        "vega": 11.22
+       },
+       "breakeven": 22359.65,
+       "chance": 47
+      }
+     },
+     {
+      "strike": 23250.0,
+      "CE": {
+       "code": "NIFTY26OCT23250CE",
+       "close": 27.2,
+       "chg": -20.65,
+       "chg_pct": -43.16,
+       "oi": 287430,
+       "oi_chg": 27105,
+       "volume": 6476,
+       "iv": 13.5,
+       "greeks": {
+        "delta": 0.1,
+        "gamma": 0.00028,
+        "theta": -3.85,
+        "vega": 7.7
+       },
+       "breakeven": 23277.2,
+       "chance": 8
+      },
+      "PE": {
+       "code": "NIFTY26OCT23250PE",
+       "close": 886.0,
+       "chg": 213.15,
+       "chg_pct": 31.68,
+       "oi": 48100,
+       "oi_chg": -1625,
+       "volume": 40,
+       "iv": 17.2,
+       "greeks": {
+        "delta": -0.85,
+        "gamma": 0.0003,
+        "theta": -2.62,
+        "vega": 10.73
+       },
+       "breakeven": 22364.0,
+       "chance": 48
+      }
+     },
+     {
+      "strike": 23300.0,
+      "CE": {
+       "code": "NIFTY26OCT23300CE",
+       "close": 23.55,
+       "chg": -17.2,
+       "chg_pct": -42.21,
+       "oi": 3186040,
+       "oi_chg": 196625,
+       "volume": 47301,
+       "iv": 13.6,
+       "greeks": {
+        "delta": 0.08,
+        "gamma": 0.00025,
+        "theta": -3.51,
+        "vega": 7.01
+       },
+       "breakeven": 23323.55,
+       "chance": 7
+      },
+      "PE": {
+       "code": "NIFTY26OCT23300PE",
+       "close": 928.85,
+       "chg": 217.35,
+       "chg_pct": 30.55,
+       "oi": 2296840,
+       "oi_chg": -3705,
+       "volume": 1433,
+       "iv": 17.2,
+       "greeks": {
+        "delta": -0.86,
+        "gamma": 0.00028,
+        "theta": -2.16,
+        "vega": 10.05
+       },
+       "breakeven": 22371.15,
+       "chance": 48
+      }
+     },
+     {
+      "strike": 23350.0,
+      "CE": {
+       "code": "NIFTY26OCT23350CE",
+       "close": 20.3,
+       "chg": -14.75,
+       "chg_pct": -42.08,
+       "oi": 156260,
+       "oi_chg": 34125,
+       "volume": 3315,
+       "iv": 13.7,
+       "greeks": {
+        "delta": 0.07,
+        "gamma": 0.00023,
+        "theta": -3.19,
+        "vega": 6.35
+       },
+       "breakeven": 23370.3,
+       "chance": 7
+      },
+      "PE": {
+       "code": "NIFTY26OCT23350PE",
+       "close": 985.0,
+       "chg": 227.3,
+       "chg_pct": 30.0,
+       "oi": 31785,
+       "oi_chg": -910,
+       "volume": 64,
+       "iv": 18.5,
+       "greeks": {
+        "delta": -0.86,
+        "gamma": 0.00027,
+        "theta": -2.73,
+        "vega": 10.27
+       },
+       "breakeven": 22365.0,
+       "chance": 48
+      }
+     },
+     {
+      "strike": 23400.0,
+      "CE": {
+       "code": "NIFTY26OCT23400CE",
+       "close": 18.35,
+       "chg": -12.1,
+       "chg_pct": -39.74,
+       "oi": 2101320,
+       "oi_chg": 47710,
+       "volume": 31574,
+       "iv": 13.9,
+       "greeks": {
+        "delta": 0.07,
+        "gamma": 0.00021,
+        "theta": -2.99,
+        "vega": 5.89
+       },
+       "breakeven": 23418.35,
+       "chance": 6
+      },
+      "PE": {
+       "code": "NIFTY26OCT23400PE",
+       "close": 1022.0,
+       "chg": 220.5,
+       "chg_pct": 27.51,
+       "oi": 1199770,
+       "oi_chg": -12545,
+       "volume": 1469,
+       "iv": 17.8,
+       "greeks": {
+        "delta": -0.88,
+        "gamma": 0.00025,
+        "theta": -1.76,
+        "vega": 9.17
+       },
+       "breakeven": 22378.0,
+       "chance": 48
+      }
+     },
+     {
+      "strike": 23450.0,
+      "CE": {
+       "code": "NIFTY26OCT23450CE",
+       "close": 16.15,
+       "chg": -10.0,
+       "chg_pct": -38.24,
+       "oi": 347035,
+       "oi_chg": -6565,
+       "volume": 3679,
+       "iv": 14.0,
+       "greeks": {
+        "delta": 0.06,
+        "gamma": 0.00019,
+        "theta": -2.75,
+        "vega": 5.37
+       },
+       "breakeven": 23466.15,
+       "chance": 5
+      },
+      "PE": {
+       "code": "NIFTY26OCT23450PE",
+       "close": 1063.55,
+       "chg": 214.2,
+       "chg_pct": 25.22,
+       "oi": 32630,
+       "oi_chg": -5720,
+       "volume": 119,
+       "iv": 17.4,
+       "greeks": {
+        "delta": -0.89,
+        "gamma": 0.00023,
+        "theta": -1.07,
+        "vega": 8.29
+       },
+       "breakeven": 22386.45,
+       "chance": 49
+      }
+     },
+     {
+      "strike": 23500.0,
+      "CE": {
+       "code": "NIFTY26OCT23500CE",
+       "close": 14.4,
+       "chg": -8.55,
+       "chg_pct": -37.25,
+       "oi": 8839740,
+       "oi_chg": -161655,
+       "volume": 89880,
+       "iv": 14.2,
+       "greeks": {
+        "delta": 0.05,
+        "gamma": 0.00017,
+        "theta": -2.55,
+        "vega": 4.93
+       },
+       "breakeven": 23514.4,
+       "chance": 5
+      },
+      "PE": {
+       "code": "NIFTY26OCT23500PE",
+       "close": 1124.1,
+       "chg": 229.4,
+       "chg_pct": 25.64,
+       "oi": 5191420,
+       "oi_chg": -16640,
+       "volume": 4354,
+       "iv": 19.3,
+       "greeks": {
+        "delta": -0.88,
+        "gamma": 0.00023,
+        "theta": -2.08,
+        "vega": 9.01
+       },
+       "breakeven": 22375.9,
+       "chance": 49
+      }
+     },
+     {
+      "strike": 23550.0,
+      "CE": {
+       "code": "NIFTY26OCT23550CE",
+       "close": 12.55,
+       "chg": -7.25,
+       "chg_pct": -36.62,
+       "oi": 147810,
+       "oi_chg": -7735,
+       "volume": 3744,
+       "iv": 14.3,
+       "greeks": {
+        "delta": 0.05,
+        "gamma": 0.00015,
+        "theta": -2.32,
+        "vega": 4.46
+       },
+       "breakeven": 23562.55,
+       "chance": 4
+      },
+      "PE": {
+       "code": "NIFTY26OCT23550PE",
+       "close": 1115.35,
+       "chg": 176.8,
+       "chg_pct": 18.84,
+       "oi": 12610,
+       "oi_chg": -65,
+       "volume": 6,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22434.65,
+       "chance": null
+      }
+     },
+     {
+      "strike": 23600.0,
+      "CE": {
+       "code": "NIFTY26OCT23600CE",
+       "close": 11.2,
+       "chg": -5.6,
+       "chg_pct": -33.33,
+       "oi": 1183260,
+       "oi_chg": -93145,
+       "volume": 19621,
+       "iv": 14.5,
+       "greeks": {
+        "delta": 0.04,
+        "gamma": 0.00014,
+        "theta": -2.14,
+        "vega": 4.09
+       },
+       "breakeven": 23611.2,
+       "chance": 4
+      },
+      "PE": {
+       "code": "NIFTY26OCT23600PE",
+       "close": 1213.55,
+       "chg": 224.35,
+       "chg_pct": 22.68,
+       "oi": 696735,
+       "oi_chg": 13780,
+       "volume": 458,
+       "iv": 19.3,
+       "greeks": {
+        "delta": -0.9,
+        "gamma": 0.0002,
+        "theta": -1.24,
+        "vega": 7.86
+       },
+       "breakeven": 22386.45,
+       "chance": 49
+      }
+     },
+     {
+      "strike": 23650.0,
+      "CE": {
+       "code": "NIFTY26OCT23650CE",
+       "close": 9.95,
+       "chg": -4.9,
+       "chg_pct": -33.0,
+       "oi": 133835,
+       "oi_chg": 2600,
+       "volume": 2694,
+       "iv": 14.7,
+       "greeks": {
+        "delta": 0.04,
+        "gamma": 0.00012,
+        "theta": -1.97,
+        "vega": 3.73
+       },
+       "breakeven": 23659.95,
+       "chance": 3
+      },
+      "PE": {
+       "code": "NIFTY26OCT23650PE",
+       "close": 1111.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 21125,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22539.0,
+       "chance": null
+      }
+     },
+     {
+      "strike": 23700.0,
+      "CE": {
+       "code": "NIFTY26OCT23700CE",
+       "close": 9.05,
+       "chg": -4.05,
+       "chg_pct": -30.92,
+       "oi": 820495,
+       "oi_chg": -171470,
+       "volume": 17113,
+       "iv": 14.9,
+       "greeks": {
+        "delta": 0.03,
+        "gamma": 0.00011,
+        "theta": -1.85,
+        "vega": 3.45
+       },
+       "breakeven": 23709.05,
+       "chance": 3
+      },
+      "PE": {
+       "code": "NIFTY26OCT23700PE",
+       "close": 1308.0,
+       "chg": 225.0,
+       "chg_pct": 20.78,
+       "oi": 395395,
+       "oi_chg": -1365,
+       "volume": 95,
+       "iv": 19.7,
+       "greeks": {
+        "delta": -0.91,
+        "gamma": 0.00018,
+        "theta": -0.78,
+        "vega": 7.1
+       },
+       "breakeven": 22392.0,
+       "chance": 49
+      }
+     },
+     {
+      "strike": 23750.0,
+      "CE": {
+       "code": "NIFTY26OCT23750CE",
+       "close": 8.35,
+       "chg": -3.5,
+       "chg_pct": -29.54,
+       "oi": 145730,
+       "oi_chg": -8320,
+       "volume": 1635,
+       "iv": 15.1,
+       "greeks": {
+        "delta": 0.03,
+        "gamma": 0.0001,
+        "theta": -1.75,
+        "vega": 3.22
+       },
+       "breakeven": 23758.35,
+       "chance": 3
+      },
+      "PE": {
+       "code": "NIFTY26OCT23750PE",
+       "close": 1144.75,
+       "chg": -37.25,
+       "chg_pct": -3.15,
+       "oi": 13585,
+       "oi_chg": -65,
+       "volume": 2,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22605.25,
+       "chance": null
+      }
+     },
+     {
+      "strike": 23800.0,
+      "CE": {
+       "code": "NIFTY26OCT23800CE",
+       "close": 7.4,
+       "chg": -2.9,
+       "chg_pct": -28.16,
+       "oi": 1541280,
+       "oi_chg": -94185,
+       "volume": 14230,
+       "iv": 15.3,
+       "greeks": {
+        "delta": 0.03,
+        "gamma": 9e-05,
+        "theta": -1.6,
+        "vega": 2.92
+       },
+       "breakeven": 23807.4,
+       "chance": 3
+      },
+      "PE": {
+       "code": "NIFTY26OCT23800PE",
+       "close": 1411.6,
+       "chg": 229.15,
+       "chg_pct": 19.38,
+       "oi": 474565,
+       "oi_chg": -7800,
+       "volume": 311,
+       "iv": 21.3,
+       "greeks": {
+        "delta": -0.91,
+        "gamma": 0.00016,
+        "theta": -1.25,
+        "vega": 7.22
+       },
+       "breakeven": 22388.4,
+       "chance": 49
+      }
+     },
+     {
+      "strike": 23850.0,
+      "CE": {
+       "code": "NIFTY26OCT23850CE",
+       "close": 7.05,
+       "chg": -2.8,
+       "chg_pct": -28.43,
+       "oi": 96395,
+       "oi_chg": -26065,
+       "volume": 1236,
+       "iv": 15.6,
+       "greeks": {
+        "delta": 0.03,
+        "gamma": 9e-05,
+        "theta": -1.55,
+        "vega": 2.78
+       },
+       "breakeven": 23857.05,
+       "chance": 2
+      },
+      "PE": {
+       "code": "NIFTY26OCT23850PE",
+       "close": 1231.2,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 10010,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22618.8,
+       "chance": null
+      }
+     },
+     {
+      "strike": 23900.0,
+      "CE": {
+       "code": "NIFTY26OCT23900CE",
+       "close": 6.6,
+       "chg": -2.2,
+       "chg_pct": -25.0,
+       "oi": 486785,
+       "oi_chg": -60970,
+       "volume": 4713,
+       "iv": 15.9,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 8e-05,
+        "theta": -1.48,
+        "vega": 2.61
+       },
+       "breakeven": 23906.6,
+       "chance": 2
+      },
+      "PE": {
+       "code": "NIFTY26OCT23900PE",
+       "close": 1508.2,
+       "chg": 230.25,
+       "chg_pct": 18.02,
+       "oi": 212225,
+       "oi_chg": -1885,
+       "volume": 92,
+       "iv": 22.0,
+       "greeks": {
+        "delta": -0.92,
+        "gamma": 0.00015,
+        "theta": -0.99,
+        "vega": 6.71
+       },
+       "breakeven": 22391.8,
+       "chance": 50
+      }
+     },
+     {
+      "strike": 23950.0,
+      "CE": {
+       "code": "NIFTY26OCT23950CE",
+       "close": 6.3,
+       "chg": -1.95,
+       "chg_pct": -23.64,
+       "oi": 189930,
+       "oi_chg": -16835,
+       "volume": 1719,
+       "iv": 16.2,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 7e-05,
+        "theta": -1.43,
+        "vega": 2.49
+       },
+       "breakeven": 23956.3,
+       "chance": 2
+      },
+      "PE": {
+       "code": "NIFTY26OCT23950PE",
+       "close": 1330.0,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 4290,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22620.0,
+       "chance": null
+      }
+     },
+     {
+      "strike": 24000.0,
+      "CE": {
+       "code": "NIFTY26OCT24000CE",
+       "close": 6.05,
+       "chg": -1.75,
+       "chg_pct": -22.44,
+       "oi": 5950750,
+       "oi_chg": -46280,
+       "volume": 39007,
+       "iv": 16.5,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 7e-05,
+        "theta": -1.4,
+        "vega": 2.38
+       },
+       "breakeven": 24006.05,
+       "chance": 2
+      },
+      "PE": {
+       "code": "NIFTY26OCT24000PE",
+       "close": 1603.25,
+       "chg": 229.75,
+       "chg_pct": 16.73,
+       "oi": 2795195,
+       "oi_chg": 54470,
+       "volume": 2320,
+       "iv": 22.3,
+       "greeks": {
+        "delta": -0.93,
+        "gamma": 0.00013,
+        "theta": -0.52,
+        "vega": 6.06
+       },
+       "breakeven": 22396.75,
+       "chance": 50
+      }
+     },
+     {
+      "strike": 24050.0,
+      "CE": {
+       "code": "NIFTY26OCT24050CE",
+       "close": 5.65,
+       "chg": -1.5,
+       "chg_pct": -20.98,
+       "oi": 213395,
+       "oi_chg": -13260,
+       "volume": 1903,
+       "iv": 16.8,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 6e-05,
+        "theta": -1.33,
+        "vega": 2.24
+       },
+       "breakeven": 24055.65,
+       "chance": 2
+      },
+      "PE": {
+       "code": "NIFTY26OCT24050PE",
+       "close": 1418.05,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 3965,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22631.95,
+       "chance": null
+      }
+     },
+     {
+      "strike": 24100.0,
+      "CE": {
+       "code": "NIFTY26OCT24100CE",
+       "close": 5.3,
+       "chg": -1.35,
+       "chg_pct": -20.3,
+       "oi": 568490,
+       "oi_chg": -22165,
+       "volume": 3606,
+       "iv": 17.0,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 6e-05,
+        "theta": -1.27,
+        "vega": 2.11
+       },
+       "breakeven": 24105.3,
+       "chance": 2
+      },
+      "PE": {
+       "code": "NIFTY26OCT24100PE",
+       "close": 1726.65,
+       "chg": 248.3,
+       "chg_pct": 16.8,
+       "oi": 209625,
+       "oi_chg": -975,
+       "volume": 30,
+       "iv": 26.8,
+       "greeks": {
+        "delta": -0.9,
+        "gamma": 0.00014,
+        "theta": -3.05,
+        "vega": 7.78
+       },
+       "breakeven": 22373.35,
+       "chance": 49
+      }
+     },
+     {
+      "strike": 24150.0,
+      "CE": {
+       "code": "NIFTY26OCT24150CE",
+       "close": 4.8,
+       "chg": -1.2,
+       "chg_pct": -20.0,
+       "oi": 42250,
+       "oi_chg": -11310,
+       "volume": 768,
+       "iv": 17.2,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 5e-05,
+        "theta": -1.18,
+        "vega": 1.94
+       },
+       "breakeven": 24154.8,
+       "chance": 2
+      },
+      "PE": {
+       "code": "NIFTY26OCT24150PE",
+       "close": 1572.75,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 16575,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22577.25,
+       "chance": null
+      }
+     },
+     {
+      "strike": 24200.0,
+      "CE": {
+       "code": "NIFTY26OCT24200CE",
+       "close": 4.45,
+       "chg": -1.1,
+       "chg_pct": -19.82,
+       "oi": 787215,
+       "oi_chg": 2990,
+       "volume": 4946,
+       "iv": 17.4,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 5e-05,
+        "theta": -1.11,
+        "vega": 1.81
+       },
+       "breakeven": 24204.45,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24200PE",
+       "close": 1805.65,
+       "chg": 238.55,
+       "chg_pct": 15.22,
+       "oi": 364065,
+       "oi_chg": -1885,
+       "volume": 71,
+       "iv": 24.9,
+       "greeks": {
+        "delta": -0.93,
+        "gamma": 0.00012,
+        "theta": -0.95,
+        "vega": 6.0
+       },
+       "breakeven": 22394.35,
+       "chance": 50
+      }
+     },
+     {
+      "strike": 24250.0,
+      "CE": {
+       "code": "NIFTY26OCT24250CE",
+       "close": 4.4,
+       "chg": -0.95,
+       "chg_pct": -17.76,
+       "oi": 117000,
+       "oi_chg": 715,
+       "volume": 615,
+       "iv": 17.8,
+       "greeks": {
+        "delta": 0.02,
+        "gamma": 5e-05,
+        "theta": -1.11,
+        "vega": 1.77
+       },
+       "breakeven": 24254.4,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24250PE",
+       "close": 1610.05,
+       "chg": 0.0,
+       "chg_pct": 0.0,
+       "oi": 10530,
+       "oi_chg": 0,
+       "volume": 0,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22639.95,
+       "chance": null
+      }
+     },
+     {
+      "strike": 24300.0,
+      "CE": {
+       "code": "NIFTY26OCT24300CE",
+       "close": 4.1,
+       "chg": -0.75,
+       "chg_pct": -15.46,
+       "oi": 396630,
+       "oi_chg": -4420,
+       "volume": 2343,
+       "iv": 18.0,
+       "greeks": {
+        "delta": 0.01,
+        "gamma": 4e-05,
+        "theta": -1.05,
+        "vega": 1.66
+       },
+       "breakeven": 24304.1,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24300PE",
+       "close": 1911.85,
+       "chg": 237.45,
+       "chg_pct": 14.18,
+       "oi": 218530,
+       "oi_chg": -5135,
+       "volume": 151,
+       "iv": 27.0,
+       "greeks": {
+        "delta": -0.93,
+        "gamma": 0.00012,
+        "theta": -1.73,
+        "vega": 6.4
+       },
+       "breakeven": 22388.15,
+       "chance": 50
+      }
+     },
+     {
+      "strike": 24350.0,
+      "CE": {
+       "code": "NIFTY26OCT24350CE",
+       "close": 4.0,
+       "chg": -0.7,
+       "chg_pct": -14.89,
+       "oi": 39455,
+       "oi_chg": 2665,
+       "volume": 353,
+       "iv": 18.3,
+       "greeks": {
+        "delta": 0.01,
+        "gamma": 4e-05,
+        "theta": -1.03,
+        "vega": 1.6
+       },
+       "breakeven": 24354.0,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24350PE",
+       "close": 1748.5,
+       "chg": 105.45,
+       "chg_pct": 6.42,
+       "oi": 14885,
+       "oi_chg": 0,
+       "volume": 2,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22601.5,
+       "chance": null
+      }
+     },
+     {
+      "strike": 24400.0,
+      "CE": {
+       "code": "NIFTY26OCT24400CE",
+       "close": 3.85,
+       "chg": -0.5,
+       "chg_pct": -11.49,
+       "oi": 267995,
+       "oi_chg": -14300,
+       "volume": 1743,
+       "iv": 18.6,
+       "greeks": {
+        "delta": 0.01,
+        "gamma": 4e-05,
+        "theta": -1.01,
+        "vega": 1.54
+       },
+       "breakeven": 24403.85,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24400PE",
+       "close": 2011.3,
+       "chg": 242.65,
+       "chg_pct": 13.72,
+       "oi": 148200,
+       "oi_chg": 780,
+       "volume": 79,
+       "iv": 28.0,
+       "greeks": {
+        "delta": -0.93,
+        "gamma": 0.00011,
+        "theta": -1.75,
+        "vega": 6.22
+       },
+       "breakeven": 22388.7,
+       "chance": 50
+      }
+     },
+     {
+      "strike": 24450.0,
+      "CE": {
+       "code": "NIFTY26OCT24450CE",
+       "close": 3.6,
+       "chg": -0.5,
+       "chg_pct": -12.2,
+       "oi": 52000,
+       "oi_chg": -2145,
+       "volume": 193,
+       "iv": 18.8,
+       "greeks": {
+        "delta": 0.01,
+        "gamma": 4e-05,
+        "theta": -0.96,
+        "vega": 1.45
+       },
+       "breakeven": 24453.6,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24450PE",
+       "close": 2175.7,
+       "chg": 347.7,
+       "chg_pct": 19.02,
+       "oi": 8255,
+       "oi_chg": -260,
+       "volume": 10,
+       "iv": 41.4,
+       "greeks": {
+        "delta": -0.84,
+        "gamma": 0.00013,
+        "theta": -11.61,
+        "vega": 11.1
+       },
+       "breakeven": 22274.3,
+       "chance": 49
+      }
+     },
+     {
+      "strike": 24500.0,
+      "CE": {
+       "code": "NIFTY26OCT24500CE",
+       "close": 3.6,
+       "chg": -0.45,
+       "chg_pct": -11.11,
+       "oi": 2321150,
+       "oi_chg": 13975,
+       "volume": 9525,
+       "iv": 19.2,
+       "greeks": {
+        "delta": 0.01,
+        "gamma": 4e-05,
+        "theta": -0.96,
+        "vega": 1.43
+       },
+       "breakeven": 24503.6,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24500PE",
+       "close": 2102.3,
+       "chg": 224.85,
+       "chg_pct": 11.98,
+       "oi": 1568515,
+       "oi_chg": 16315,
+       "volume": 625,
+       "iv": 27.5,
+       "greeks": {
+        "delta": -0.94,
+        "gamma": 9e-05,
+        "theta": -0.77,
+        "vega": 5.34
+       },
+       "breakeven": 22397.7,
+       "chance": 50
+      }
+     },
+     {
+      "strike": 24550.0,
+      "CE": {
+       "code": "NIFTY26OCT24550CE",
+       "close": 3.3,
+       "chg": -0.3,
+       "chg_pct": -8.33,
+       "oi": 28145,
+       "oi_chg": 975,
+       "volume": 81,
+       "iv": 19.4,
+       "greeks": {
+        "delta": 0.01,
+        "gamma": 3e-05,
+        "theta": -0.9,
+        "vega": 1.32
+       },
+       "breakeven": 24553.3,
+       "chance": 1
+      },
+      "PE": {
+       "code": "NIFTY26OCT24550PE",
+       "close": 2020.0,
+       "chg": 126.7,
+       "chg_pct": 6.69,
+       "oi": 6435,
+       "oi_chg": -65,
+       "volume": 5,
+       "iv": null,
+       "greeks": null,
+       "breakeven": 22530.0,
+       "chance": null
+      }
+     }
+    ]
+   }
+  }
+ },
  "getChainHistory_india": {
   "summary": "Mock (india): NIFTY, VIX and put-call ratio since 2026-06-01, with coverage",
   "description": "Taken from design/mockups/32-option-chain/data.json (signed off as of 9d9c401; real NSE files of 12 Oct 2026)",

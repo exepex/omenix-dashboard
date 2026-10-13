@@ -70,7 +70,8 @@ def _rows(x: Chain, date, strikes):
 def rows(x: Chain, market):
     monthly, weekly = x.default_expiry(), x.C["expiries"][0]["expiry"]
     return {"": ("the nearest monthly (the page's default), 21 strikes nearest the money", _rows(x, monthly, "near")),
-            "_weekly_band": ("the nearest weekly, strikes within 5% (the 3 pm band)", _rows(x, weekly, "band"))}
+            "_weekly_band": ("the nearest weekly, strikes within 5% (the 3 pm band)", _rows(x, weekly, "band")),
+            "_all": ("the nearest monthly, every strike in the file (within 10%): its stats recompute from these rows", _rows(x, monthly, "all"))}
 
 
 SHORT = 30  # sessions of a later-starting extract: shows the nulls a short history gives
