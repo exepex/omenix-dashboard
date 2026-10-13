@@ -5,7 +5,7 @@
 const $ = (s, el=document) => el.querySelector(s);
 const el = (tag, attrs={}, ...kids) => { const n = document.createElement(tag); for (const [k,v] of Object.entries(attrs)) { if (v == null || v === false) continue; if (k==='class') n.className=v; else if (k==='html') n.innerHTML=v; else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v === true ? '' : v);} for (const k of kids) { if (k==null) continue; n.append(k.nodeType? k : document.createTextNode(String(k))); } return n; };
 const svgEl = (tag, attrs={}) => { const n = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const [k,v] of Object.entries(attrs)) n.setAttribute(k, v); return n; };
-const icon = (id, cls='ms') => { const s = svgEl('svg', {class: cls, 'aria-hidden': 'true'}); const u = svgEl('use'); u.setAttribute('href', '#' + (id.startsWith('ms-') ? id : 'ms-' + id)); s.append(u); return s; };
+const icon = (id, cls='ms') => { const s = svgEl('svg', {class: cls, 'aria-hidden': 'true'}); const u = svgEl('use'); u.setAttribute('href', '#' + (/^m[sb]-/.test(id) ? id : 'ms-' + id)); s.append(u); return s; };
 const help = tip => el('button', {class:'md-help', 'data-tip': tip, 'aria-label':'Explain', type:'button'}, '?');
 const LABEL = {india: 'India', us: 'US'};
 const ZONE = {india: 'IST', us: 'ET'};                      /* presentation only: the market's local clock label */
@@ -103,7 +103,7 @@ let onMarketChange = () => {};
 function shell(current, title, opts={}) {
   const navItem = ([ico, label, href]) => el('a', {class:'mb-nav-item', href: href === current ? '#' : href, 'aria-current': href === current ? 'page' : null}, el('span', {class:'mb-nav-ind'}, icon('ms-'+ico)), el('span', {class:'mb-nav-label'}, label));
   const sidebar = $('#sidebar');
-  sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, 'OM'), el('span', {}, 'Omenix', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
+  sidebar.append(el('div', {class:'mb-sidebar-brand'}, el('span', {class:'mb-brand-mark', 'aria-hidden':'true'}, icon('mb-logo', 'mb-logo')), el('span', {}, 'Omenix', el('small', {}, 'research cockpit'))), el('div', {class:'mb-sidebar-section'}, 'Pages'), ...NAV.map(navItem), el('div', {class:'mb-sidebar-foot', id:'side-foot'}));
   const menuBtn = $('#menu-btn'), scrim = $('#scrim');
   const toggleMenu = on => { sidebar.classList.toggle('open', on); menuBtn.setAttribute('aria-expanded', String(on)); };
   menuBtn.addEventListener('click', () => toggleMenu(!sidebar.classList.contains('open')));

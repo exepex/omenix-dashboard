@@ -106,7 +106,9 @@ export function AppBar() {
   return (
     <header className={`mb-appbar${scrolled ? " scrolled" : ""}`} id="appbar">
       <Link className="mb-appbar-brand" href={pagePath(market, "home")} aria-label="Omenix: Dashboard">
-        <span className="mb-brand-mark">OM</span>
+        <span className="mb-brand-mark">
+          <svg className="mb-logo" aria-hidden="true"><use href="#mb-logo" /></svg>
+        </span>
       </Link>
       <div className="mb-appbar-name">
         Omenix<small>Research · Paper only</small>

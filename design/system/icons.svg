@@ -92,4 +92,6 @@
   <symbol id="ms-verified_user" viewBox="0 -960 960 960"><path d="m438-338 226-226-57-57-169 169-84-84-57 57 141 141Zm42 258q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></symbol>
   <symbol id="ms-view_column" viewBox="0 -960 960 960"><path d="M121-280v-400q0-33 23.5-56.5T201-760h559q33 0 56.5 23.5T840-680v400q0 33-23.5 56.5T760-200H201q-33 0-56.5-23.5T121-280Zm79 0h133v-400H200v400Zm213 0h133v-400H413v400Zm213 0h133v-400H626v400Z"/></symbol>
   <symbol id="ms-warning" viewBox="0 -960 960 960"><path d="m40-120 440-760 440 760H40Zm138-80h604L480-720 178-200Zm302-40q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm-40-120h80v-200h-80v200Zm40-100Z"/></symbol>
+  <!-- Omenix's own logo mark (design/brand/mark/mark-white.svg; stroke follows currentColor). Use: <svg class="mb-logo"><use href="#mb-logo"/></svg>. -->
+  <symbol id="mb-logo" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"><path d="M52.3 29.15 A20.5 20.5 0 1 1 36.96 12.11"/><path d="M21 45 L33 31 L39 36 L57 11"/></g></symbol>
 </svg>

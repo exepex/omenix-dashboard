@@ -20,7 +20,7 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 .mb-app { min-height: 100vh; display: grid; grid-template-columns: var(--mb-sidebar-width) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
 .mb-sidebar, .mb-rail { grid-row: 1 / span 2; background: var(--mb-sidebar-bg); color: var(--mb-sidebar-ink); display: flex; flex-direction: column; gap: 2px; padding: var(--mb-space-4) var(--mb-space-3); position: sticky; top: 0; height: 100vh; overflow-y: auto; }
 .mb-sidebar-brand, .mb-rail-brand { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 var(--mb-space-2); margin-bottom: var(--mb-space-4); color: #fff; font: var(--md-sys-typescale-title-medium); letter-spacing: .2px; }
-.mb-sidebar-brand .mb-brand-mark, .mb-rail-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-sidebar-active); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; font: 700 13px/1 var(--md-ref-typeface-plain); color: #fff; flex: none; }
+.mb-sidebar-brand .mb-brand-mark, .mb-rail-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-brand-tile); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; color: #fff; flex: none; }
 .mb-sidebar-brand small { display: block; font: var(--md-sys-typescale-label-small); color: var(--mb-sidebar-muted); letter-spacing: .3px; }
 .mb-sidebar-section { font: var(--md-sys-typescale-label-small); letter-spacing: .08em; text-transform: uppercase; color: var(--mb-sidebar-muted); padding: var(--mb-space-4) var(--mb-space-3) var(--mb-space-1); }
 .mb-nav-item { display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 var(--mb-space-3); border: 0; border-radius: var(--md-sys-shape-corner-small); background: none; color: var(--mb-sidebar-ink); text-decoration: none; cursor: pointer; font: var(--md-sys-typescale-label-large); letter-spacing: var(--md-sys-typescale-label-large-tracking); white-space: nowrap; transition: background var(--md-sys-motion-duration-short); }
@@ -293,7 +293,8 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-appbar { grid-column: 1 / -1; grid-row: 1; position: sticky; top: 0; z-index: 25; height: var(--mb-appbar-height); display: flex; align-items: center; gap: var(--mb-space-3); padding: 0 var(--mb-space-4) 0 0; background: var(--md-sys-color-surface); box-shadow: 0 1px 0 var(--md-sys-color-surface-container-high); }
 .mb-appbar.scrolled { box-shadow: var(--md-sys-elevation-2); }
 .mb-appbar-brand { width: var(--mb-navrail-width); height: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--mb-sidebar-bg); color: #fff; text-decoration: none; flex: none; font: var(--md-sys-typescale-title-medium); }
-.mb-appbar-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-sidebar-active); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; font: 700 13px/1 var(--md-ref-typeface-plain); color: #fff; }
+.mb-appbar-brand .mb-brand-mark, .mb-legal-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-brand-tile); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; color: #fff; }
+.mb-brand-mark .mb-logo { width: 72%; height: 72%; display: block; }   /* the logo's own margin inside its tile (design/brand/desktop/tile.svg) */
 .mb-appbar-name { font: 700 18px/1 var(--md-ref-typeface-plain); letter-spacing: -.3px; color: var(--md-sys-color-on-surface); white-space: nowrap; }
 .mb-appbar-name small { display: block; font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); letter-spacing: .2px; margin-top: 3px; }
 .mb-appbar-end { margin-left: auto; display: flex; align-items: center; gap: var(--mb-space-1); flex: none; }
@@ -803,3 +804,19 @@ ul.mb-flows li { grid-template-columns: 76px minmax(0, 1fr) minmax(0, 1fr); gap:
 .mb-fanbar .b50 { top: 3px; bottom: 3px; background: var(--mb-chart-1); opacity: .55; }
 .mb-fanbar .now { width: 2px; margin-left: -1px; top: -3px; bottom: -3px; background: var(--md-sys-color-on-surface); border-radius: 1px; }
 .mb-fan td small { display: block; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+
+/* ---- legal pages (design/mockups/36-legal; served by the app at /privacy and /terms, no sign-in) ------------------ */
+body.mb-legal { margin: 0; background: var(--md-sys-color-surface-container-low); color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-large); }
+.mb-legal-head { display: flex; align-items: center; justify-content: space-between; gap: var(--mb-space-4); flex-wrap: wrap; padding: 12px var(--mb-gutter-desktop); background: var(--mb-sidebar-bg); }
+.mb-legal-brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font: 700 18px/1 var(--md-ref-typeface-plain); letter-spacing: -.3px; }
+.mb-legal-head nav, .mb-legal-foot { display: flex; gap: var(--mb-space-4); flex-wrap: wrap; justify-content: center; }
+.mb-legal-head nav a { color: #fff; font: var(--md-sys-typescale-label-large); text-decoration: none; opacity: .8; }
+.mb-legal-head nav a[aria-current="page"] { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+.mb-legal-doc { max-width: 760px; margin: var(--mb-space-6) auto; padding: var(--mb-space-6) var(--mb-gutter-desktop); background: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-medium); box-sizing: border-box; }
+.mb-legal-doc h1 { font: var(--md-sys-typescale-headline-medium); margin: 0 0 4px; }
+.mb-legal-doc h2 { font: var(--md-sys-typescale-title-large); margin: var(--mb-space-6) 0 var(--mb-space-2); }
+.mb-legal-doc p, .mb-legal-doc li { line-height: 1.6; margin: 0 0 var(--mb-space-2); }
+.mb-legal-doc .updated { color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-medium); margin-bottom: var(--mb-space-4); }
+.mb-legal-doc a, .mb-legal-foot a { color: var(--md-sys-color-primary); }
+.mb-legal-foot { color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-small); padding: 0 var(--mb-gutter-desktop) var(--mb-space-6); text-align: center; }
+@media (max-width: 599px) { .mb-legal-doc { margin: 0; border-radius: 0; padding: var(--mb-space-4) var(--mb-gutter); } }

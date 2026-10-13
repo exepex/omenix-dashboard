@@ -17,6 +17,8 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const el = (tag, attrs = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs || {})) { if (v == null || v === false) continue; if (k === 'class') n.className = v; else if (k === 'html') n.innerHTML = v; else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v === true ? '' : v); } for (const c of kids.flat()) { if (c == null || c === false) continue; n.append(c.nodeType ? c : document.createTextNode(String(c))); } return n; };
 const svgEl = (tag, attrs = {}) => { const n = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); return n; };
+/** The logo tile (design/brand/): the sprite's mb-logo mark on the brand gradient. */
+const brandMark = () => { const s = svgEl('svg', {class: 'mb-logo', 'aria-hidden': 'true'}); const u = svgEl('use'); u.setAttribute('href', '#mb-logo'); s.append(u); const t = document.createElement('span'); t.className = 'mb-brand-mark'; t.append(s); return t; };
 const icon = (id, cls = 'ms') => { const s = svgEl('svg', {class: cls, 'aria-hidden': 'true'}); const u = svgEl('use'); u.setAttribute('href', '#ms-' + id); s.append(u); return s; };
 const help = tip => el('button', {class: 'md-help', type: 'button', 'data-tip': tip, 'aria-label': 'Explain'}, '?');
 
