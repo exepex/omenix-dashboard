@@ -1,6 +1,6 @@
 "use client";
 // The F11 chat panel on every page (B8), rendered by the parallel route @chat into the shell's slot (B7,
-// components/shell/chat-panel.tsx). It registers itself so the top bar's Ask button toggles it; closed, it renders
+// components/shell/chat-panel.tsx). It registers itself so the app bar's Ask button (More on a phone) toggles it; closed, it renders
 // nothing (the slot stays empty and hidden). It shows the current conversation and sends the page in view (company
 // ticker, strategy id) as hints with the question. Same tool, rules and log as page 11.
 import Link from "next/link";
@@ -35,8 +35,12 @@ export function AssistantPanel({ market }: { market: Market }) {
   if (!panel.open) return null;
   const close = () => {
     panel.setOpen(false);
-    // focus goes back to the top bar's Ask button that opened the panel
-    requestAnimationFrame(() => document.querySelector<HTMLElement>('button[aria-controls="mb-chat-slot"]')?.focus());
+    // focus goes back to the visible Ask button (the app bar's; on a phone Ask sits in the More sheet, now closed, so the
+    // More tab that leads to it)
+    requestAnimationFrame(() => {
+      const ask = [...document.querySelectorAll<HTMLElement>('[aria-controls="mb-chat-slot"]')].find((b) => b.offsetParent !== null);
+      (ask ?? document.querySelector<HTMLElement>("#tabs [data-tab='more']"))?.focus();
+    });
   };
   return <OpenPanel market={market} close={close} />;
 }

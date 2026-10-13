@@ -129,14 +129,16 @@ export const cases = [
     widths: [1280, 390],
     routes: assistantApi({ posted }),
     waitFor: ".phead",
-    check: async (page) => {
+    check: async (page, { width }) => {
       const problems = [];
       if (await page.$(".mb-chat-slot *")) problems.push("the panel is on screen before Ask");
-      const askButton = 'button[aria-controls="mb-chat-slot"]';
+      // the app bar's Ask from 600 px; on a phone Ask sits in More (the frame's phone bar has no room, W8)
+      if (width < 600) await page.click("#tabs [data-tab='more']");
+      const askButton = 'button[aria-controls="mb-chat-slot"]:visible';
       if (!(await page.$(askButton))) return ["the Ask button does not control the panel (not registered)"];
       await page.click(askButton);
       await page.waitForSelector(".chat-panel textarea", { timeout: 5000 }).catch(() => problems.push("Ask did not open the panel"));
-      if ((await page.getAttribute(askButton, "aria-expanded")) !== "true") problems.push("Ask is not aria-expanded while open");
+      if (width >= 600 && (await page.getAttribute(askButton, "aria-expanded")) !== "true") problems.push("Ask is not aria-expanded while open");
       const focused = await page.evaluate(() => document.activeElement?.tagName);
       if (focused !== "TEXTAREA") problems.push(`focus went to ${focused}, not the question box`);
       if (!(await page.textContent(".chat-panel"))?.includes("Asked about the page of RELIANCE")) problems.push("the panel does not name the company in view");
@@ -146,7 +148,8 @@ export const cases = [
       await page.keyboard.press("Escape");
       if (await page.$(".chat-panel")) problems.push("Escape did not close the panel");
       await page.waitForTimeout(100);
-      if ((await page.evaluate(() => document.activeElement?.getAttribute("aria-controls"))) !== "mb-chat-slot") problems.push("focus did not return to Ask");
+      const back = await page.evaluate(() => document.activeElement?.getAttribute("aria-controls") ?? document.activeElement?.getAttribute("data-tab"));
+      if (back !== (width < 600 ? "more" : "mb-chat-slot")) problems.push(`focus did not return to Ask (or More on a phone): ${back}`);
       return problems;
     },
   },

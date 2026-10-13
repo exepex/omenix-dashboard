@@ -40,7 +40,7 @@ reset() {
   if [ "$(su_sql -At -c "SELECT count(*) FROM pg_roles WHERE rolname = 'x1_admin'")" = 1 ]; then
     su_sql -c "REVOKE ALL ON DATABASE postgres, template1 FROM x1_admin"
   fi
-  for r in stock_owner fno_owner app_owner stock_writer fno_writer dashboard_app stock_inbox_reader x1_admin; do
+  for r in stock_owner fno_owner app_owner stock_writer fno_writer dashboard_app stock_inbox_reader x1_admin azure_pg_admin; do
     su_sql -c "DROP ROLE IF EXISTS $r"
   done
   su_sql -c "CREATE ROLE x1_admin LOGIN CREATEDB CREATEROLE"
@@ -59,6 +59,9 @@ echo "== 0. owner scripts read their expected server settings from platform/READ
 "$platform/owner/server_evidence.sh" --list-expected > "$work/settings.txt" \
   || { cat "$work/settings.txt"; echo "FAILED: README server-settings table" >&2; exit 1; }
 echo "ok: $(wc -l < "$work/settings.txt" | tr -d ' ') expected settings parsed from README.md"
+"$here/owner_scripts_test.sh" > "$work/owner_tests.txt" \
+  || { cat "$work/owner_tests.txt"; echo "FAILED: owner script tests" >&2; exit 1; }
+echo "ok: owner scripts handle both az flag forms and az errors, and redact IP addresses ($(grep -c '^ok:' "$work/owner_tests.txt") checks)"
 
 echo "== 1. the owner's original script"
 reset
@@ -77,6 +80,20 @@ echo "== 2. platform/sql on top of the owner's server"
 apply_platform
 snapshot converged
 same_as_expected converged "platform/sql on a server set up by the original script gives expected_catalog.txt"
+
+echo "== 2b. the catalog accepts Azure's owner of schema public, and only it"
+# On Azure, schema public belongs to azure_pg_admin (PUBLIC USAGE; the owner CREATE and USAGE), not pg_database_owner.
+su_sql -c "CREATE ROLE azure_pg_admin NOLOGIN"
+su_sql -d omenix -c "ALTER SCHEMA public OWNER TO azure_pg_admin"
+snapshot azure
+same_as_expected azure "schema public owned by azure_pg_admin (as on Azure) gives expected_catalog.txt"
+su_sql -d omenix -c "ALTER SCHEMA public OWNER TO stock_owner"
+snapshot other_owner
+if diff -q "$here/expected_catalog.txt" "$work/other_owner.txt" > /dev/null; then
+  echo "FAILED: schema public owned by stock_owner was not shown as drift" >&2; exit 1
+fi
+echo "ok: schema public owned by any other role (stock_owner) is shown as drift"
+su_sql -d omenix -c "ALTER SCHEMA public OWNER TO pg_database_owner"
 
 echo "== 3. platform/sql on an empty server, twice"
 reset

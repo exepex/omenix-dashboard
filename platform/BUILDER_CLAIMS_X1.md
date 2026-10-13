@@ -32,7 +32,11 @@ Every other difference acts only on drift; listed in `platform/README.md`.
 1. **Azure-specific catalog lines** (some evidence): the expected catalog was produced on community PostgreSQL 16.
    On Azure the role-creation grants come from Azure's bootstrap superuser (printed as `<superuser>`, so they should
    match), but Azure may differ in details the builder cannot check without the server. The owner's snapshot diff
-   decides; a difference is reviewed, not patched.
+   decides; a difference is reviewed, not patched. **Resolved by the owner's step 1 (13 Oct 2026):** the only
+   difference was the owner of schema `public` (`azure_pg_admin` on Azure, `pg_database_owner` in PostgreSQL;
+   `PUBLIC` has no `CREATE` in either). The snapshot now prints exactly these two as `<platform default>`; any other
+   owner still shows by name. CI step 2b proves both: an Azure-like owner matches `expected_catalog.txt`, and
+   `stock_owner` as owner is drift.
 2. **Function `EXECUTE`**: fixed inside X1 (see above). The original's PUBLIC `EXECUTE` let `dashboard_app` run any
    function an owner role creates; a future function that a runtime role really needs gets a per-function grant.
    The new drift test for this found a real convergence gap (per-schema function grants were not revoked), now fixed.

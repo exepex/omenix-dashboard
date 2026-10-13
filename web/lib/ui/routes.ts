@@ -15,7 +15,7 @@ export interface PageRoute {
   owner: "B7" | "B8" | "B14" | "B15" | "B16";
   /** The read endpoint under /api/v1/markets/{market}/ ("" when the page has none). */
   endpoint: string;
-  /** Shown in the sidebar (the per-stock pages are reached from a company). */
+  /** A screen of the frame's navigation (the per-stock pages are reached from a company; lib/shell/nav.ts). */
   nav: boolean;
 }
 
@@ -36,9 +36,6 @@ export const PAGES: readonly PageRoute[] = [
      the UI harness. Not in the navigation. */
   { key: "gallery", label: "Component gallery", icon: "construction", segment: "gallery", mockup: "", owner: "B7", endpoint: "", nav: false },
 ];
-
-/** The phone bar's first four pages (the mockups' default; "More" opens the drawer). */
-export const PHONE_BAR = ["home", "watchlist", "lab", "compare"] as const;
 
 export const DEFAULT_MARKET: Market = "india";
 

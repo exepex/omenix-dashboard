@@ -198,7 +198,7 @@ async function runCase(browser, c) {
           .filter((el) => {
             const r = el.getBoundingClientRect();
             const style = getComputedStyle(el);
-            return r.right > vw + 1 && r.width > 0 && style.position !== "fixed" && style.visibility !== "hidden" && !el.closest(".md-table-wrap, .md-pre, pre, .mb-sidebar, .mb-chat-slot") && el.id !== "tip";
+            return r.right > vw + 1 && r.width > 0 && style.position !== "fixed" && style.visibility !== "hidden" && !el.closest(".md-table-wrap, .md-pre, pre, .mb-chat-slot") && el.id !== "tip";
           })
           .slice(0, 6)
           .map((el) => `${el.tagName}.${el.className?.baseVal ?? el.className} ${Math.round(el.getBoundingClientRect().right)}`),
@@ -223,7 +223,8 @@ async function runCase(browser, c) {
       for (const problem of (await c.check(page, { width, market })) ?? []) errors.push(`${tag} ${problem}`);
     }
     if (c.mockup) {
-      const mockupPng = MOCKUP_SHOT(c.mockup, width, market);
+      // A case may name the mockup's screenshot of a state itself (W8's frame states: dark, open, an overlay).
+      const mockupPng = c.mockupShot ? join(repo, "design", "mockups", c.mockup, c.mockupShot(width)) : MOCKUP_SHOT(c.mockup, width, market);
       if (existsSync(mockupPng)) {
         const comparePng = join(dir, `compare-${width}.png`);
         await compareImage(browser, mockupPng, appPng, comparePng, `${c.mockup} ${market} ${width}px`);

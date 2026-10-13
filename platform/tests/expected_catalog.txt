@@ -39,9 +39,9 @@ acl schema fno: dashboard_app USAGE granted by fno_owner
 acl schema fno: fno_owner CREATE granted by fno_owner
 acl schema fno: fno_owner USAGE granted by fno_owner
 acl schema fno: fno_writer USAGE granted by fno_owner
-acl schema public: PUBLIC USAGE granted by pg_database_owner
-acl schema public: pg_database_owner CREATE granted by pg_database_owner
-acl schema public: pg_database_owner USAGE granted by pg_database_owner
+acl schema public: <platform default> CREATE granted by <platform default>
+acl schema public: <platform default> USAGE granted by <platform default>
+acl schema public: PUBLIC USAGE granted by <platform default>
 acl schema stock: dashboard_app USAGE granted by stock_owner
 acl schema stock: stock_owner CREATE granted by stock_owner
 acl schema stock: stock_owner USAGE granted by stock_owner
@@ -59,7 +59,7 @@ member <admin> in stock_writer: admin=t inherit=f set=f grantor=<superuser>
 owner database omenix: <admin>
 owner schema app: app_owner
 owner schema fno: fno_owner
-owner schema public: pg_database_owner
+owner schema public: <platform default>
 owner schema stock: stock_owner
 role app_owner: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=-1 valid_until=never
 role dashboard_app: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=20 valid_until=never
