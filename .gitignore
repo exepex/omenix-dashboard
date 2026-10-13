@@ -35,3 +35,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 __pycache__/
+
+# local UI harness and audit output (web/tests/ui/harness.mjs --out ../work/...); evidence that matters is copied into reviews/
+/work/
