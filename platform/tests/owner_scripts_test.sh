@@ -77,4 +77,28 @@ check "IPv6 addresses redacted" "! printf '%s' \"\$redacted\" | grep -Eq '2001:d
 check "redacted text keeps its shape" "[ \"\$(printf '%s' \"\$redacted\" | grep -c '<IP address>')\" = 4 ]"
 check "times and host names kept" "printf '%s' \"\$redacted\" | grep -q '01:38 UTC, at 22:58:01' && printf '%s' \"\$redacted\" | grep -q 'omenix-pg.postgres.database.azure.com'"
 
+# check_tls.sh end to end with a fake psql: the evidence file is complete (RESULT line written) and holds no IP.
+cat > "$work/bin/psql" <<'EOF'
+#!/usr/bin/env bash
+case " $* " in *" --version "*) echo "psql (PostgreSQL) 16.4"; exit 0 ;; esac
+if [ "${PGSSLMODE:-}" = disable ]; then
+  echo 'psql: error: connection to server at "omenix-pg.postgres.database.azure.com" (198.51.100.20), port 5432 failed: FATAL:  no pg_hba.conf entry for host "203.0.113.45", user "x1_tls_probe", database "omenix", no encryption' >&2
+  exit 2
+fi
+echo "ssl=true version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384"
+EOF
+chmod +x "$work/bin/psql"
+FAKE_AZ=new "$owner/check_tls.sh" > /dev/null 2>&1
+sleep 1   # tee runs in its own process
+tls_file="$(ls "$work"/evidence/*-x1-tls.txt 2>/dev/null | head -1)"
+check "check_tls.sh writes a complete evidence file" \
+  "[ -n '$tls_file' ] && grep -q 'RESULT: require_secure_transport on: yes; non-TLS refused: yes; verified TLS connection works: yes' '$tls_file'"
+check "check_tls.sh evidence holds no IP address" \
+  "[ -n '$tls_file' ] && ! grep -Eq '[0-9]{1,3}(\\.[0-9]{1,3}){3}' '$tls_file' && grep -q 'host \"<IP address>\"' '$tls_file'"
+
+# Every trap must be set in the main shell: no owner script may wrap its body in a "{ ...; } | tee" block, where bash
+# 3.2 never runs an EXIT trap (13 Oct 2026: the restore marker stayed on omenix-pg). tests/bash32_trap_test.sh runs it.
+check "no owner script pipes a { } block into tee" "! grep -nE '^\\}.*\\|' '$owner'/*.sh"
+check "every trap in the owner scripts is set at the top level" "! grep -nE '^[[:space:]]+trap ' '$owner'/*.sh"
+
 [ "$failed" -eq 0 ] && echo "owner script tests: all passed"

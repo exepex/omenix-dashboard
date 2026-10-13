@@ -13,32 +13,33 @@ mkdir -p "$evidence_dir"
 out="$evidence_dir/$today-x1-real-matrix.txt"
 ask_admin
 
-cleanup() { admin_psql -d omenix -f "$platform/tests/fixtures_down.sql" && echo "probe tables dropped"; }
+cleanup() {  # EXIT trap in the main shell, so it runs on bash 3.2 as well (see record_evidence in lib.sh)
+  rm -f "$evidence_dir/.snapshot.$$" "$evidence_dir/.snapshot.$$.matrix"
+  admin_psql -d omenix -f "$platform/tests/fixtures_down.sql" && echo "probe tables dropped"
+}
 trap cleanup EXIT
 
-{
-  trap 'rm -f "$evidence_dir/.snapshot.$$" "$evidence_dir/.snapshot.$$.matrix"' EXIT
-  echo "X1 role matrix on $host, $(date -u '+%Y-%m-%d %H:%M UTC'), sslmode=$PGSSLMODE, repository commit $(git -C "$platform" rev-parse --short HEAD 2>/dev/null || echo unknown)"
-  echo
-  echo "== catalog snapshot compared with platform/tests/expected_catalog.txt (no output between the markers = identical)"
-  admin_psql -d omenix -A -t -f "$platform/tests/catalog_snapshot.sql" > "$evidence_dir/.snapshot.$$" || die "snapshot failed"
-  echo "-- diff start"
-  diff -u "$platform/tests/expected_catalog.txt" "$evidence_dir/.snapshot.$$" && snapshot_ok=yes || snapshot_ok=no
-  echo "-- diff end"
-  rm -f "$evidence_dir/.snapshot.$$"
-  echo "snapshot identical: $snapshot_ok"
-  echo
-  echo "== large objects in every database (named exceptions 1 and 2)"
-  PGUSER="$X1_ADMIN" PGPASSWORD="$admin_password" "$platform/tests/large_objects.sh" && lo_ok=yes || lo_ok=no
-  echo
-  admin_psql -d omenix -f "$platform/tests/fixtures_up.sql" || die "could not create the probe tables"
-  roles="stock_writer fno_writer dashboard_app stock_inbox_reader"
-  if [ "${X1_INCLUDE_OWNERS:-0}" = "1" ]; then roles="stock_owner fno_owner app_owner $roles"; fi
-  X1_REQUIRE_TLS=1 "$platform/tests/role_matrix.sh" $roles | tee "$evidence_dir/.snapshot.$$.matrix"
-  if [ "${PIPESTATUS[0]}" -eq 0 ]; then matrix_ok=yes; else matrix_ok=no; fi
-  open_count="$(grep -c '^OPEN  ' "$evidence_dir/.snapshot.$$.matrix")"
-  rm -f "$evidence_dir/.snapshot.$$.matrix"
-  echo
-  echo "RESULT: matrix passed: $matrix_ok; snapshot identical: $snapshot_ok; no large objects anywhere: $lo_ok; open named exceptions: $open_count (see platform/README.md)"
-} 2>&1 | tee "$out"
+record_evidence "$out"
+echo "X1 role matrix on $host, $(date -u '+%Y-%m-%d %H:%M UTC'), sslmode=$PGSSLMODE, repository commit $(git -C "$platform" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+echo
+echo "== catalog snapshot compared with platform/tests/expected_catalog.txt (no output between the markers = identical)"
+admin_psql -d omenix -A -t -f "$platform/tests/catalog_snapshot.sql" > "$evidence_dir/.snapshot.$$" || die "snapshot failed"
+echo "-- diff start"
+diff -u "$platform/tests/expected_catalog.txt" "$evidence_dir/.snapshot.$$" && snapshot_ok=yes || snapshot_ok=no
+echo "-- diff end"
+rm -f "$evidence_dir/.snapshot.$$"
+echo "snapshot identical: $snapshot_ok"
+echo
+echo "== large objects in every database (named exceptions 1 and 2)"
+PGUSER="$X1_ADMIN" PGPASSWORD="$admin_password" "$platform/tests/large_objects.sh" && lo_ok=yes || lo_ok=no
+echo
+admin_psql -d omenix -f "$platform/tests/fixtures_up.sql" || die "could not create the probe tables"
+roles="stock_writer fno_writer dashboard_app stock_inbox_reader"
+if [ "${X1_INCLUDE_OWNERS:-0}" = "1" ]; then roles="stock_owner fno_owner app_owner $roles"; fi
+X1_REQUIRE_TLS=1 "$platform/tests/role_matrix.sh" $roles | tee "$evidence_dir/.snapshot.$$.matrix"
+if [ "${PIPESTATUS[0]}" -eq 0 ]; then matrix_ok=yes; else matrix_ok=no; fi
+open_count="$(grep -c '^OPEN  ' "$evidence_dir/.snapshot.$$.matrix")"
+rm -f "$evidence_dir/.snapshot.$$.matrix"
+echo
+echo "RESULT: matrix passed: $matrix_ok; snapshot identical: $snapshot_ok; no large objects anywhere: $lo_ok; open named exceptions: $open_count (see platform/README.md)"
 echo "Saved: $out  (read it, then commit it: git add platform/evidence && git commit -m 'X1 evidence: real-server role matrix')"
