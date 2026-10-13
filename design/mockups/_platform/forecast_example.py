@@ -9,12 +9,16 @@ that drifts day by day. Days are numbered ("day 45"), never dated, so no example
 """
 from __future__ import annotations
 
+import datetime as dt
 import math
 
 import numpy as np
 
 from forecast_scoring import brier, calibration, compare, holm, log_score, pairs_for
 from forecast_views import overview
+from nse_calendar import exceptions, sessions
+
+FIRST = dt.date(2026, 11, 2)   # the start Example's first forecast; Example dates run on from it (future, never history)
 
 SEED = 20261013
 PLAN = {"early": {"days": 45, "start": {"book1_rules": 1, "book2_hybrid": 30}, "review": False},
@@ -24,6 +28,18 @@ SKILL = {"book1_rules": (0.55, 0.45), "book2_hybrid": (0.95, 0.12), "book3_ai": 
          "baseline_a": (0.5, 0.45), "baseline_c": (0.5, 0.4)}
 MISSED = {"book3_ai": {40, 77, 78, 121}}
 ROLL = 20
+
+
+def example_dates(n: int) -> list:
+    """n trading days from FIRST: NSE's 2026 sessions (muhurat left out), then weekdays (2027 holidays not published yet)."""
+    rows = exceptions()
+    out = [d for d in sessions(FIRST, dt.date(2026, 12, 31), rows) if rows.get(d) != "muhurat"]
+    day = dt.date(2027, 1, 1)
+    while len(out) < n:
+        if day.weekday() < 5:
+            out.append(day)
+        day += dt.timedelta(days=1)
+    return [d.isoformat() for d in out[:n]]
 
 
 def sig(x: float) -> float:
@@ -122,7 +138,7 @@ def example(kind: str, questions: list, families: list, yardsticks: list) -> dic
         r["verdict"] = verdict(r, plan["review"])
         blocks[r.pop("question")].setdefault("comparisons", []).append(r)
     started = {f: plan["start"].get(f, 1 if f.startswith("baseline") else None) for f in ids}
-    return {"kind": "example", "example": kind, "as_of": None, "day": plan["days"],
+    return {"kind": "example", "example": kind, "as_of": None, "day": plan["days"], "dates": example_dates(plan["days"] + 21),
             "protocol": {"version": "1", "status": "frozen", "frozen_commit": "example"},
             "review": {"reached": plan["review"], "date": None, "day": 126 if plan["review"] else None},
             "forecasters": {f: {"status": "running" if s else "not_running", "days": plan["days"] - s + 1 if s else 0,

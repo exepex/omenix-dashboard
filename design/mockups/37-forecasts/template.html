@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Omenix · Forecast contest</title>
-<meta name="description" content="Which family reads NIFTY best: every trading day Rule-based, Hybrid and AI team give the chance of five things happening, each checked against simple yardsticks and scored when the answer is known. A leaderboard, the race of all families on one chart by day, week and month, where each wins and loses, and why. Today no forecast exists yet; the labelled Example states show a family winning, one losing and too early to tell. India, F&O only. Research and paper only.">
+<title>Omenix · Forecast lab</title>
+<meta name="description" content="The Forecast lab: every trading day Rule-based, Hybrid and AI team predict five things about NIFTY over the coming weeks; each prediction is scored when its answer is known. Today's predictions first, then the track record overall and over any period, what made the difference, and which family is best at which prediction. Today no prediction exists yet; labelled Examples on future dates show every case. India, F&O only. Research and paper only.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
 <style>
@@ -67,6 +67,30 @@
 .qcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
 .qcards .mb-fact b{font-size:13.5px;line-height:1.35}
 .scroll{overflow-x:auto}
+.steps3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.step3{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:12px;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-lowest);box-shadow:var(--mb-card-shadow)}
+.step3 b{display:block;font-size:13.5px}.step3 small{display:block;font-size:12.5px;color:var(--md-sys-color-on-surface-variant);margin-top:2px}
+.firsts.four{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:0}
+.todays{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.card.today{padding:16px 18px}.card.today h3{font:600 15px/1.35 var(--md-ref-typeface-plain);margin:8px 0 0}
+.tq{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between}
+.chance .track i.l1{background:var(--mb-chart-1)}.chance .track i.l2{background:var(--mb-chart-2)}.chance .track i.l3{background:var(--mb-chart-3)}
+.card.today .chance{grid-template-columns:130px minmax(0,1fr) 44px;padding:4px 0}
+.period{grid-template-columns:minmax(0,1fr);align-items:start}
+.winner{display:flex;gap:8px;align-items:flex-start;margin:0 0 8px;font-size:14px}.winner svg{width:20px;height:20px;fill:var(--mb-color-up);flex:none}
+.ptable .rk{font-weight:700;width:24px}.ptable tr.ref td{color:var(--md-sys-color-on-surface-variant)}
+.pbar{display:flex;align-items:center;gap:8px}.pbar b{font-variant-numeric:tabular-nums}.pbar b.pos{color:var(--mb-color-up)}.pbar b.neg{color:var(--mb-color-down)}
+.hbar{position:relative;display:block;width:90px;height:10px;flex:none;border-radius:3px;background:var(--md-sys-color-surface-container)}.hbar i{position:absolute;top:0;bottom:0;border-radius:3px}.hbar .pos{background:var(--mb-color-up)}.hbar .neg{background:var(--mb-color-down)}
+.hbar::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--md-sys-color-outline)}
+.acts.dates{margin-top:8px;align-items:flex-end}.acts.dates .mb-field{display:grid;gap:4px;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.story .big2{font-size:14px;font-weight:600;color:var(--md-sys-color-on-surface)}
+.meter{display:grid;gap:4px;padding-top:8px;border-top:1px solid var(--md-sys-color-surface-container-high)}.meter .k{font-size:12px;font-weight:600;color:var(--md-sys-color-on-surface-variant)}
+.meter small{font-size:12px;color:var(--md-sys-color-on-surface-variant)}.meter .mb-label{justify-self:start}
+.mistake{display:flex;gap:6px;align-items:flex-start;margin:0;font-size:12.5px}.mistake .mb-mark{flex:none;margin-top:1px}
+.pairs{list-style:none;margin:0;padding:0;display:grid;gap:8px}.pairs li{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:13.5px}
+table.heat th[scope=row] .qp{display:block;font-weight:400;font-size:12.5px;margin-top:2px}table.heat th[scope=row] small{display:block;font-weight:400;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);margin-top:2px}
+table.heat th[scope=row]{min-width:220px;width:34%}
+
 .leaders{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
 .leader{display:grid;gap:6px;align-content:start;padding:14px 16px;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-surface-container-high);min-width:0}
 .leader.first{border:2px solid var(--mb-color-up);background:color-mix(in srgb,var(--mb-color-up-container) 35%,var(--md-sys-color-surface-container-lowest))}
@@ -102,12 +126,13 @@ table.heat td{min-width:100px}table.heat td,table.heat th{padding:8px 4px}
 .src{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
 .md-table td small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
 @media (max-width:899px){table.stack thead{display:none}table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:auto}table.stack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.stack td{border:0;padding:2px 0;text-align:left}table.stack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}table.stack td small{display:inline;margin-left:6px}}
-@media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+@media (max-width:1100px){.grid2,.period{grid-template-columns:1fr}.firsts.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:899px){.steps3{grid-template-columns:1fr}}
 @media (max-width:899px){.h2h-row,.h2h-ends{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.h2h-row>:first-child,.h2h-ends>:first-child{grid-column:1 / -1}.h2h-ends{display:none}}
 @media (max-width:899px){table.board thead{display:none}table.board,table.board tbody,table.board tr,table.board td,table.board th{display:block;width:auto}
   table.board tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.board td,table.board th{border:0;padding:4px 0}
   table.board td[data-k]::before{content:attr(data-k);display:block;font-size:11.5px;color:var(--md-sys-color-on-surface-variant)}}
-@media (max-width:599px){.srow,.settled li.miss3{grid-template-columns:1fr}.srow small{grid-column:1}.lfacts{grid-template-columns:1fr 1fr}.chance{grid-template-columns:minmax(0,1fr) 52px;gap:4px 10px}.chance>.who{grid-column:1 / -1}.chance .na{grid-column:1 / -1}.firsts{grid-template-columns:1fr}.settled li{grid-template-columns:52px minmax(0,1fr)}.settled li>:last-child{grid-column:2}
+@media (max-width:599px){.todays{grid-template-columns:1fr}.card.today .chance{grid-template-columns:100px minmax(0,1fr) 40px}.card.today .chance>.who{grid-column:auto}.firsts.four{grid-template-columns:1fr 1fr}.srow,.settled li.miss3{grid-template-columns:1fr}.srow small{grid-column:1}.lfacts{grid-template-columns:1fr 1fr}.chance{grid-template-columns:minmax(0,1fr) 52px;gap:4px 10px}.chance>.who{grid-column:1 / -1}.chance .na{grid-column:1 / -1}.firsts{grid-template-columns:1fr}.settled li{grid-template-columns:52px minmax(0,1fr)}.settled li>:last-child{grid-column:2}
   .steps li{grid-template-columns:110px 28px minmax(0,1fr)}.md-table th,.md-table td{padding:8px 6px;white-space:normal}}
 </style>
 </head>

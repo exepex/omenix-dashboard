@@ -18,6 +18,11 @@ def points(p: float, ref: float, o: int) -> float:
     return round((brier(ref, o) - brier(p, o)) * 100, 2)
 
 
+def right(p: float, o: int) -> float:
+    """1 when the forecast leaned the way it turned out (above 0.5 and yes, below 0.5 and no), 0.5 at exactly 0.5."""
+    return 1.0 if (p > 0.5) == bool(o) and p != 0.5 else 0.5 if p == 0.5 else 0.0
+
+
 def settled(said: dict, outcomes: dict) -> list:
     return [(d, said[d], o) for d, o in sorted(outcomes.items()) if said.get(d) is not None]
 
@@ -27,11 +32,11 @@ def traits(rows: list) -> dict:
     if not rows:
         return {"n": 0}
     pairs = [(p, o) for _, p, o in rows]
-    right = sum(1.0 if (p > 0.5) == bool(o) else 0.5 if p == 0.5 else 0.0 for p, o in pairs)
+    hits = sum(right(p, o) for p, o in pairs)
     bins = [b for b in calibration(pairs) if b["n"]]
     gap = sum(abs(b["mean_p"] - b["freq"]) * b["n"] for b in bins) / len(pairs)
     return {"n": len(pairs), "brier": round(sum(brier(p, o) for p, o in pairs) / len(pairs), 4),
-            "right_pct": round(100 * right / len(pairs), 1), "bold_pct": round(100 * sum(abs(p - 0.5) * 2 for p, _ in pairs) / len(pairs), 1),
+            "right_pct": round(100 * hits / len(pairs), 1), "bold_pct": round(100 * sum(abs(p - 0.5) * 2 for p, _ in pairs) / len(pairs), 1),
             "honesty_gap": round(100 * gap, 1)}
 
 
@@ -67,11 +72,13 @@ def overview(raw: dict, families: list, yardsticks: list, questions: list) -> di
             if fid in fams and rows:
                 pts = [points(p, said[REF][d], o) for d, p, o in rows if said[REF].get(d) is not None]
                 t["points_per_forecast"] = round(sum(pts) / len(pts), 2) if pts else None
-                race.setdefault(fid, {})[q["id"]] = [[d, points(p, said[REF][d], o)] for d, p, o in rows if said[REF].get(d) is not None]
+                race.setdefault(fid, {})[q["id"]] = [[d, points(p, said[REF][d], o), right(p, o), round(brier(p, o), 4)] for d, p, o in rows if said[REF].get(d) is not None]
+            elif fid == REF and rows:
+                race.setdefault(fid, {})[q["id"]] = [[d, 0.0, right(p, o), round(brier(p, o), 4)] for d, p, o in rows]
             per_q[q["id"]] = t
         table[fid] = {**traits([(d, p, o) for d, p, o, _ in rows_all]), "questions": per_q}
         if fid in fams and rows_all:
-            pts = [x[1] for xs in race.get(fid, {}).values() for x in xs]
+            pts = [x[1] for xs in race.get(fid, {}).values() for x in xs]   # [made day, points, right, Brier] rows
             table[fid].update(points=round(sum(pts), 1), gains=round(sum(x for x in pts if x > 0), 1), losses=round(sum(x for x in pts if x < 0), 1),
                               wins=sum(x > 0 for x in pts), defeats=sum(x < 0 for x in pts))
             worst = sorted(rows_all, key=lambda r: -brier(r[1], r[2]))[:3]

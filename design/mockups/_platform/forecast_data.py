@@ -1,4 +1,4 @@
-"""Payload of the Forecast contest mockup (design/mockups/37-forecasts; slice 2 of exepex/trading docs/BUILD_MAP.md).
+"""Payload of the Forecast lab mockup (design/mockups/37-forecasts; slice 2 of exepex/trading docs/BUILD_MAP.md).
 
 Every field is one that stories G1-G5 define or produce (exepex/trading research/forecasts/PROTOCOL.md, draft version 1;
 docs/stories/G-forecasts.md). Fields G4's report does not define yet are listed in 37-forecasts/notes.md as the
@@ -14,23 +14,42 @@ from forecast_example import example
 from nse_calendar import exceptions, sessions
 
 AS_OF = "2026-10-13"
-QUESTIONS = [
-    {"id": "q1_nifty_up_20d", "short": "NIFTY higher", "days": 20,
-     "plain": "Will NIFTY close higher in 20 trading days (about a month) than today?",
-     "yes_when": "NIFTY’s close 20 trading days later is above today’s close.", "yardsticks": ["baseline_a", "baseline_b"]},
-    {"id": "q2_nifty_move_3pct_20d", "short": "Big NIFTY move", "days": 20,
-     "plain": "Will NIFTY move 3% or more, up or down, in 20 trading days?",
-     "yes_when": "NIFTY’s close 20 trading days later is at least 3% away from today’s, either way.", "yardsticks": ["baseline_a", "baseline_b"]},
-    {"id": "q3_rv20_above_trailing", "short": "Bumpier month", "days": 20,
-     "plain": "Will NIFTY swing more in the next 20 trading days than in the last 20?",
-     "yes_when": "NIFTY’s day-to-day swings over the next 20 trading days are bigger than over the last 20.", "yardsticks": ["baseline_b", "baseline_c"]},
-    {"id": "q4_vix_up_10d", "short": "Fear gauge up", "days": 10,
-     "plain": "Will India VIX, the market’s fear gauge, be higher in 10 trading days than today?",
-     "yes_when": "India VIX’s close 10 trading days later is above today’s close.", "yardsticks": ["baseline_b", "baseline_c"]},
-    {"id": "q5_rv20_below_atm_iv30", "short": "Calmer than priced", "days": 20,
-     "plain": "Will NIFTY swing less in the next 20 trading days than option prices expect today?",
-     "yes_when": "NIFTY’s swings over the next 20 trading days are smaller than the swing today’s 30-day option prices imply.",
+QUESTIONS = [   # plain names and words for a retail user (owner, 13 Oct 2026); "ask" takes the answer date
+    {"id": "q1_nifty_up_20d", "short": "Up or down", "days": 20,
+     "ask": "Will NIFTY be higher on {date} than today?",
+     "plain": "Will NIFTY be higher in about a month (20 trading days) than today?",
+     "why": "The basic call every investor wants: will the market be up or down a month from now.",
+     "yes_when": "NIFTY’s close 20 trading days later is above today’s close.",
+     "said_yes": "NIFTY would be higher", "said_no": "NIFTY would be lower", "was_yes": "it ended higher", "was_no": "it ended lower",
+     "yardsticks": ["baseline_a", "baseline_b"]},
+    {"id": "q2_nifty_move_3pct_20d", "short": "Big move", "days": 20,
+     "ask": "Will NIFTY move 3% or more, up or down, by {date}?",
+     "plain": "Will NIFTY move 3% or more, up or down, in about a month?",
+     "why": "Big moves decide whether options pay off: buyers need them, sellers fear them.",
+     "yes_when": "NIFTY’s close 20 trading days later is at least 3% away from today’s, either way.",
+     "said_yes": "NIFTY would move 3% or more", "said_no": "NIFTY would stay within 3%", "was_yes": "it moved 3% or more", "was_no": "it stayed within 3%",
+     "yardsticks": ["baseline_a", "baseline_b"]},
+    {"id": "q3_rv20_above_trailing", "short": "Choppier", "days": 20,
+     "ask": "Will NIFTY’s daily ups and downs be bigger up to {date} than over the last month?",
+     "plain": "Will NIFTY’s daily ups and downs be bigger over the next month than over the last month?",
+     "why": "A choppier market means bigger daily swings: more risk, and stop-losses hit more often.",
+     "yes_when": "NIFTY’s day-to-day swings over the next 20 trading days are bigger than over the last 20.",
+     "said_yes": "the market would get choppier", "said_no": "the market would get calmer", "was_yes": "it got choppier", "was_no": "it got calmer",
      "yardsticks": ["baseline_b", "baseline_c"]},
+    {"id": "q4_vix_up_10d", "short": "Fear rising", "days": 10,
+     "ask": "Will India VIX, the market’s fear gauge, be higher on {date} than today?",
+     "plain": "Will India VIX, the market’s fear gauge, be higher in two weeks (10 trading days) than today?",
+     "why": "India VIX measures how nervous traders are. Rising fear often comes with falling prices and dearer options.",
+     "yes_when": "India VIX’s close 10 trading days later is above today’s close.",
+     "said_yes": "fear would rise", "said_no": "fear would fall", "was_yes": "fear rose", "was_no": "fear fell",
+     "yardsticks": ["baseline_b", "baseline_c"]},
+    {"id": "q5_rv20_below_atm_iv30", "short": "Calmer than expected", "days": 20,
+     "ask": "Will NIFTY move less up to {date} than today’s option prices expect?",
+     "plain": "Will NIFTY move less over the next month than today’s option prices expect?",
+     "why": "Option prices carry the market’s own guess of how much NIFTY will move. This asks whether that guess is too high.",
+     "yes_when": "NIFTY’s swings over the next 20 trading days are smaller than the swing today’s 30-day option prices imply.",
+     "said_yes": "the market would be calmer than option prices expected", "said_no": "the market would move more than option prices expected",
+     "was_yes": "it was calmer", "was_no": "it moved more", "yardsticks": ["baseline_b", "baseline_c"]},
 ]
 FAMILIES = [
     {"id": "book1_rules", "name": "Rule-based", "ap": "rule"},
@@ -38,23 +57,23 @@ FAMILIES = [
     {"id": "book3_ai", "name": "AI team", "ap": "ai"},
 ]
 YARDSTICKS = [
-    {"id": "baseline_a", "name": "What option prices say", "only": "Questions 1 and 2",
+    {"id": "baseline_a", "name": "Option prices", "only": "Questions 1 and 2",
      "plain": "The chance hidden in today’s NIFTY option prices. Option prices include a premium for risk, so this is "
               "the market’s price, not a true real-world chance.", "label": "risk-neutral"},
-    {"id": "baseline_b", "name": "How often it happened", "only": "All five questions",
-     "plain": "The share of the last 750 trading days (about 3 years) on which the answer was yes."},
-    {"id": "baseline_c", "name": "A simple formula", "only": "Questions 3, 4 and 5",
+    {"id": "baseline_b", "name": "Past average", "only": "All five questions",
+     "plain": "How often the answer was yes over the last 3 years (750 trading days). A family must beat this to show it knows something more."},
+    {"id": "baseline_c", "name": "Simple formula", "only": "Questions 3, 4 and 5",
      "plain": "A small textbook formula on recent swings (or on the fear gauge), refitted once a month."},
 ]
 STEPS = [   # what the first real score waits for, in order (exepex/trading docs/BUILD_MAP.md slice 2, 13 Oct 2026)
-    {"story": "G1", "what": "The contest’s rules are written and frozen", "status": "review",
+    {"story": "G1", "what": "The lab’s rules are written and frozen", "status": "review",
      "detail": "Draft written; waiting for the outside review, then frozen so no rule can change after a score exists."},
     {"story": "G2", "what": "The three yardsticks are built", "status": "not_started", "detail": "Starts when G1 is frozen."},
-    {"story": "G3", "what": "Rule-based makes its five forecasts every trading day", "status": "not_started",
-     "detail": "Starts with G2. Each forecast is saved before 15:00 IST and can never be changed."},
-    {"story": "G4", "what": "Each forecast is scored when its answer is known", "status": "not_started",
-     "detail": "10 trading days later for the fear-gauge question, 20 for the other four."},
-    {"story": "G5", "what": "Hybrid and AI team join the contest", "status": "not_started",
+    {"story": "G3", "what": "Rule-based makes its five predictions every trading day", "status": "not_started",
+     "detail": "Starts with G2. Each prediction is saved before 15:00 IST and can never be changed."},
+    {"story": "G4", "what": "Each prediction is scored when its answer is known", "status": "not_started",
+     "detail": "10 trading days later for “Fear rising”, 20 for the other four."},
+    {"story": "G5", "what": "Hybrid and AI team join the lab", "status": "not_started",
      "detail": "Comes with their own daily sessions (story F1); until then they show as not running, never as zero."},
 ]
 
@@ -73,8 +92,8 @@ def first_scores(first: str) -> dict:
 
 def real_state() -> dict:
     return {"kind": "real", "as_of": AS_OF, "day": None, "protocol": {"version": "1", "status": "draft_awaiting_review", "frozen_commit": None},
-            "reason": "No forecast exists yet, so none can be scored. The contest’s rules wait for an outside review before "
-                      "they are frozen; the yardsticks and Rule-based’s daily forecasts are built after that.",
+            "reason": "No prediction exists yet, so none can be scored. The lab’s rules wait for an outside review before "
+                      "they are frozen; the yardsticks and Rule-based’s daily predictions are built after that.",
             "steps": STEPS, "first_forecast": None, "first_score_rule": {"q4_vix_up_10d": 10, "others": 20},
             "review": {"reached": False, "date": None},
             "forecasters": {f["id"]: {"status": "not_started", "days": 0, "with_forecast": 0} for f in FAMILIES + YARDSTICKS},
@@ -85,8 +104,8 @@ def forecast_payload() -> dict:
     return {"questions": QUESTIONS, "families": FAMILIES, "yardsticks": YARDSTICKS,
             "rules": {"min_dates": 40, "block_days": 20, "comparisons": 45, "family_wise_error": 0.05,
                       "review": "the first scheduled review, after 6 months of the three families paper trading together"},
-            "standing": "Profit decides which family trades. Forecast scores only show who reads the market best; a "
-                        "family never gets to trade because it forecasts well.",
+            "standing": "Profit decides which family trades. Prediction scores only show who reads the market best; a "
+                        "family never gets to trade because it predicts well.",
             "states": {"real": real_state(),
                        "start": {**real_state(), "kind": "example", "example": "start", "first_forecast": first_scores("2026-11-02")},
                        "early": example("early", QUESTIONS, FAMILIES, YARDSTICKS),

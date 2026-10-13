@@ -1,13 +1,32 @@
-# 37 Forecast contest: data used, where it comes from, the proposed contract
+# 37 Forecast lab: data used, where it comes from, the proposed contract
 
-**Status:** second draft for the owner's sign-off (13 Oct 2026), after the owner's feedback on the first: more pictures and data, one race chart of all families by day, week and month, who wins and loses and why, each family against each other and as a whole. Slice 2 of exepex/trading `docs/BUILD_MAP.md`
+**Status:** third draft for the owner's sign-off (13 Oct 2026). Slice 2 of exepex/trading `docs/BUILD_MAP.md`
 ("Forecast contest, Book 1"; the producer is G4 plus P1/P2). India only, F&O only: in the US market the screen is absent
 (the page sends the US market to Home, as the option chain does; the navigation item is India only).
+
+Owner's feedback rounds (13 Oct 2026):
+1. First draft: "more visualization and more data", one line graph of all families together by day up to month, who
+   wins and loses and why. Second draft added the leaderboard, the race, the traits and the costliest misses.
+2. Second draft: keep those; say how long it runs; call it a lab, not a contest; let the user pick a period (overall
+   and last 30 or 60 days or chosen dates); plain language everywhere (the question names, "why they win or lose",
+   "biggest misses", "who beats whom", "habits" were not understood); today's predictions on top and the past below,
+   and say which is which. Third draft (this one) does all of these:
+   - renamed **Forecast lab** (menu: Strategies > Forecast lab); "Strategy lab" stays the separate screen where
+     strategies are built and tested (merging is the owner's call);
+   - order: what it is in three steps and how long it runs; **today's predictions** (about the coming weeks, each with
+     its answer date); **overall since the start** (ranked cards); **a period you choose** (last week, 2 weeks, month,
+     2 or 3 months, since the start, or picked dates: a table and a race chart by running total, day, week or month,
+     for all five predictions or one); **what made the difference** (one story card per family); **which family is best
+     at which prediction** (one row per prediction in plain words with why it matters); the official statistics folded
+     away under "For the curious";
+   - plain names: "Up or down", "Big move", "Choppier", "Fear rising", "Calmer than expected"; the main yardstick is
+     "Past average"; costliest mistakes are written as sentences ("On 2 Nov 2026 it said 99% sure NIFTY would be higher
+     by 2 Dec 2026; it ended lower.").
 
 ## What the screen answers
 
 Which family (Rule-based, Hybrid, AI team) reads NIFTY best: every trading day each one gives its chance of five things
-happening, each forecast gets a miss score when its answer is known, and each family is tested against simple
+happening over the coming weeks, each prediction gets a miss score when its answer is known, and each family is tested against simple
 yardsticks. Profit decides which family trades; the screen says so at the top (protocol "Standing", design 12.7).
 
 ## Data used
@@ -16,19 +35,20 @@ yardsticks. Profit decides which family trades; the screen says so at the top (p
 |---|---|---|
 | Real (no `ex`) | No forecast exists: the reason, the steps G1-G5 with their status, the first-score rule (10 / 20 trading days after the first forecast) | exepex/trading `docs/stories/G-forecasts.md` (status lines), `research/forecasts/PROTOCOL.md` draft 1, `docs/BUILD_MAP.md`, read on 13 Oct 2026 at `68c6bb8` |
 | Example `ex=start` | If the first forecast were made on Mon 2 Nov 2026: first scores Tue 17 Nov (question 4) and Wed 2 Dec (questions 1-3, 5) | NSE's session calendar (`_platform/nse_sessions.csv`, the vendored copy of exepex/trading's), muhurat sessions left out (protocol section 2) |
-| Example `ex=early` | Day 45: too early to tell; AI team not running | made-up numbers (`_platform/forecast_example.py`) |
-| Example `ex=review` | Day 150, after the first review: Hybrid winning, AI team losing, Rule-based mostly no clear difference | made-up numbers, scored by `_platform/forecast_scoring.py` |
+| Example `ex=early` | 6 Jan 2027 (day 45): too early to tell, nobody ranked yet; AI team not running | made-up numbers (`_platform/forecast_example.py`) |
+| Example `ex=review` | 2 Jun 2027 (day 150), after the first review: Hybrid winning, AI team losing, Rule-based mostly no clear difference | made-up numbers, scored by `_platform/forecast_scoring.py` |
 
 **The Example numbers are made up, never real NIFTY or India VIX results.** The protocol's access attestation (section 11)
-forbids computing any question's outcome on real data before the freeze, so the mockup does not either. Days are
-numbered ("day 45"), never dated, so an Example cannot be mistaken for history. Each Example is scored by the
+forbids computing any question's outcome on real data before the freeze, so the mockup does not either. Example dates
+are **future** trading days from 2 Nov 2026 (NSE's 2026 calendar, then weekdays: NSE has not published its 2027
+holidays), so an Example can never be mistaken for history while still letting the period picker work on dates. Each Example is scored by the
 protocol's own rules (Brier, clipped log score, 10 calibration bins, 20-day moving-block bootstrap with B = 10,000 and
 the seed `SeedSequence([20261013, k])`, Holm at 5% over all 45 comparisons, at least 40 paired days), so every verdict
 on the screen follows from its own numbers. That copy exists for the mockup only; the app never scores.
 
 ## Proposed contract (G4's report fields are not defined yet)
 
-One read-model page per publication, `product = fno`, `page_key = forecast_contest`, inside the atomic publication of
+One read-model page per publication, `product = fno`, `page_key = forecast_lab`, inside the atomic publication of
 design 13.2 (`publication_id`, `as_of`, `schema_version`, `source_commit`, `payload_sha256`). Fields marked **G1**
 exist in the protocol or the record schema today; **proposed** are new and need G4/P2's agreement.
 
@@ -62,7 +82,8 @@ state:
     table: {<forecaster id>: {n, brier, right_pct, bold_pct, honesty_gap,
             points?, gains?, losses?, wins?, defeats?,                                               # families only
             questions: {<question id>: {n, brier, right_pct, bold_pct, honesty_gap, points_per_forecast?}}}},
-    race: {<family id>: {<question id>: [[date, points]]}},     # one row per settled forecast; the screen sums days, weeks, months
+    race: {<family id or ref>: {<question id>: [[made, points, right, miss]]}},   # one row per answered prediction (the G4 record);
+                                                                    # the screen sums them by answer day, week, month or a picked period
     h2h: {<family id>: {<family id>: {n, win_pct, points_per_forecast}}},
     misses: {<family id>: [{date, question, said, outcome, miss}] (the 3 costliest)}}
 ```
@@ -81,7 +102,10 @@ Overview definitions (proposed, for G4/P2 to compute and publish; the mockup's c
 - A family is **ranked** only when it has 40 settled days (the protocol's minimum) on every question it answers;
   before that its card says "Not ranked yet" with the days still needed.
 
-- In the real app `day` and `made`/`resolves` are dates; the mockup's Examples use day numbers on purpose.
+- `dates`: the trading dates of the lab, so `made` (a day number) and its answer day (`made` + the question's days)
+  become dates; in the app these fields can be dates directly.
+- Each question also carries its plain words for the screen: `short`, `ask` (with the answer date), `plain`, `why`,
+  `said_yes`/`said_no`, `was_yes`/`was_no` (dashboard text, not from the backend).
 - **`verdict` is the backend's word, not the screen's.** The backend applies the frozen rule (tested, Holm, review
   reached) and the screen only draws it. If ChatGPT's review changes the rule (response 57 point 8 asks whether Holm over
   45 is too strict and offers "one primary comparison per question"), only the backend changes; the screen does not.
@@ -121,8 +145,14 @@ Overview definitions (proposed, for G4/P2 to compute and publish; the mockup's c
 8. **"All five together" is shown, not tested.** The protocol tests each question separately; the overall points,
    ranking and race are descriptive and say so.
 
+9. **The period picker counts answers, not predictions.** "Last month" means predictions whose answer came in during
+   the last month (they were made 2 to 4 weeks before). That is what a user means by "who won the last month";
+   counting by the day a prediction was made would leave the last 4 weeks always empty.
+10. **The yardstick for points is the past average only.** "Option prices" and "Simple formula" answer only some
+   questions, so they stay in the official statistics; one zero line for everyone keeps the race readable.
+
 ## Checks
 
-- `node design/system/shoot_states.js` on all 10 states (1280 and 390 px): no console errors, no overflow, no external requests.
-- `node design/system/check_text.js design/mockups/37-forecasts/page.html "" ex=start ex=early ex=review ex=review&rv=week "ex=review&rv=month&rq=4" "ex=early&rv=month" "ex=review&q=5" "ex=review&who=book3_ai"`: 0 findings.
+- `node design/system/shoot_states.js` on all 8 states (1280 and 390 px): no console errors, no overflow, no external requests.
+- `node design/system/check_text.js design/mockups/37-forecasts/page.html "" ex=start ex=early ex=review "ex=review&range=all&rv=month" "ex=review&range=5&rv=day" "ex=review&range=custom&from=2027-03-01&to=2027-03-31&rv=week&rq=4" "ex=review&det=1&q=5"`: 0 findings.
 - `python3 design/mockups/37-forecasts/build.py` twice gives the same bytes.

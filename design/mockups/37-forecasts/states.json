@@ -4,7 +4,7 @@
   {
    "id": "real",
    "section": "1. Real today (13 Oct 2026)",
-   "title": "REAL: no forecast exists, so every block is in its empty state: the reason, the steps G1-G5 with their status, when the first scores come (10 and 20 trading days after the first forecast), and what each block will show.",
+   "title": "REAL: no prediction exists yet. What the Forecast lab is in three steps, how long it runs, why it is empty (steps G1-G5), when the first answers come, and every block in its empty state.",
    "hash": "",
    "widths": [
     1280,
@@ -16,8 +16,8 @@
   },
   {
    "id": "start",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE: the first forecast made on Mon 2 Nov 2026; first scores on 17 Nov (fear gauge) and 2 Dec (the other four), counted on NSE's calendar.",
+   "section": "2. Examples (made-up numbers on future dates)",
+   "title": "EXAMPLE: first predictions made on 2 Nov 2026; first answers on 17 Nov (Fear rising) and 2 Dec 2026 (the other four).",
    "hash": "ex=start",
    "widths": [
     1280,
@@ -27,8 +27,8 @@
   },
   {
    "id": "early",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE, too early to tell (day 45): Rule-based ranked with 25 of 40 days, Hybrid joined on day 30, AI team not running yet (a card saying so, never zero); the race already drawn, every verdict 'Not proven yet' with the days still needed.",
+   "section": "2. Examples (made-up numbers on future dates)",
+   "title": "EXAMPLE, too early to tell (6 Jan 2027): Rule-based and Hybrid shown but not ranked yet (days still needed), AI team not running yet; the period block already works.",
    "hash": "ex=early",
    "widths": [
     1280,
@@ -37,29 +37,9 @@
    "full": true
   },
   {
-   "id": "early-month",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE, too early: the race by month, two families running.",
-   "hash": "ex=early&rv=month",
-   "widths": [
-    1280
-   ],
-   "full": false
-  },
-  {
-   "id": "early-q4",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE, too early, the fear-gauge question: 35 settled days, the miss-score line has begun, Hybrid's 6 days, AI team not running.",
-   "hash": "ex=early&q=4",
-   "widths": [
-    1280
-   ],
-   "full": true
-  },
-  {
    "id": "review",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE after the first review (day 150): the leaderboard (Hybrid 1st, Rule-based 2nd, AI team 3rd and behind the yardstick), the race of all three on one chart, question by question with the official verdicts, why they win or lose (AI team leans right more often than Rule-based yet loses: its misses were nearly certain), who beats whom, today's calls.",
+   "section": "2. Examples (made-up numbers on future dates)",
+   "title": "EXAMPLE six months in (2 Jun 2027): today's predictions first; overall since the start (Hybrid 1st, Rule-based 2nd, AI team 3rd and behind the past average); the last month as a table and a race chart; what made the difference (AI team is right about the direction more often than Rule-based yet loses: it was nearly certain when wrong); which family is best at which prediction.",
    "hash": "ex=review",
    "widths": [
     1280,
@@ -68,10 +48,20 @@
    "full": true
   },
   {
-   "id": "review-week",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE after the review: the race as weekly bars (each week's points won or lost against the yardstick).",
-   "hash": "ex=review&rv=week",
+   "id": "review-all-month",
+   "section": "2. Examples (made-up numbers on future dates)",
+   "title": "EXAMPLE: the period block since the start, as monthly bars.",
+   "hash": "ex=review&range=all&rv=month",
+   "widths": [
+    1280
+   ],
+   "full": false
+  },
+  {
+   "id": "review-week-day",
+   "section": "2. Examples (made-up numbers on future dates)",
+   "title": "EXAMPLE: the last week, day by day.",
+   "hash": "ex=review&range=5&rv=day",
    "widths": [
     1280,
     390
@@ -79,30 +69,20 @@
    "full": false
   },
   {
-   "id": "review-month-q4",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE after the review: the race by month on question 4 only (fear gauge up).",
-   "hash": "ex=review&rv=month&rq=4",
+   "id": "review-custom",
+   "section": "2. Examples (made-up numbers on future dates)",
+   "title": "EXAMPLE: dates the user picked (1 to 31 Mar 2027), by week, on one prediction (Fear rising).",
+   "hash": "ex=review&range=custom&from=2027-03-01&to=2027-03-31&rv=week&rq=4",
    "widths": [
     1280
    ],
    "full": false
   },
   {
-   "id": "review-q5",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE after the review, question 5 (calmer than priced), with all the numbers open: exact and estimated option-price days scored apart, one day without an answer (never scored).",
-   "hash": "ex=review&q=5",
-   "widths": [
-    1280
-   ],
-   "full": true
-  },
-  {
-   "id": "review-ai",
-   "section": "2. Examples (made-up numbers)",
-   "title": "EXAMPLE: AI team's calibration on question 1: its dots are flatter than the line, so it is too sure of itself.",
-   "hash": "ex=review&who=book3_ai",
+   "id": "review-official",
+   "section": "2. Examples (made-up numbers on future dates)",
+   "title": "EXAMPLE: For the curious, opened: the official statistics of prediction 5 (miss score over time, calibration, the official tests, the latest answered days, every number).",
+   "hash": "ex=review&det=1&q=5",
    "widths": [
     1280
    ],

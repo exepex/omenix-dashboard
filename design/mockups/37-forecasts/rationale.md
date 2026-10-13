@@ -1,11 +1,11 @@
-# 37 Forecast contest: why it looks like this
+# 37 Forecast lab: why it looks like this
 
-- **One question a beginner can hold: who reads NIFTY best?** (Owner's feedback, 13 Oct 2026: more pictures and data,
-  who is winning and losing and why.) The page reads top to bottom as: who is winning (ranked cards with points, a
-  small running line and a one-line why), the race (all families on one chart, running total by day or bars by week or
-  month, all five questions or one), question by question (coloured tiles with the official verdict), why they win or
-  lose (points won against points lost, habits side by side with the yardstick, costliest misses, who beats whom),
-  today's calls, then one question in full detail.
+- **Today first, the past below** (owner, 13 Oct 2026). A visitor first wants to know what the families expect now;
+  each prediction says the date its answer comes, so it is clear it is about the future. The track record follows:
+  overall since the start, then any period the user picks, then why, then each prediction.
+- **A lab, not a contest.** It never ends; the top says so in one line, with when the official verdict comes.
+- **Plain words first, statistics last.** Names a retail user knows ("Up or down", "Fear rising", "Past average"),
+  a "why it matters" line on every prediction, mistakes as sentences; the official tests stay one tap away.
 - **Points instead of Brier at the top.** "Points ahead of the yardstick" reads like a sports table; the miss score
   stays one tap away in each card and in the detail.
 - **No rank before 40 settled days.** An early lead on six forecasts is noise; the card says so instead of crowning it.
