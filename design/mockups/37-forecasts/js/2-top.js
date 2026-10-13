@@ -39,9 +39,8 @@ function startNow(c, S) {
 
 /* Example: the contest has run for some days; who is ahead in one line, and how many tests are proven */
 function dayNow(c, S) {
-  const {el} = c, rows = Object.values(S.questions).flatMap(b => b.comparisons.filter(r => r.b.startsWith('baseline')));
-  const count = (fam, v) => rows.filter(r => r.a === fam && r.verdict === v).length;
-  const line = S.review.reached ? D.families.map(f => S.forecasters[f.id].status !== 'running' ? `${f.name}: not running` : `${f.name}: better on ${count(f.id, 'better')}, worse on ${count(f.id, 'worse')} of 10 yardstick tests`).join(' · ')
+  const {el} = c;
+  const line = S.review.reached ? 'The official verdicts are in each family’s card and in the question-by-question table below.'
     : 'No question has enough settled days for a test yet, and no verdict is given before the first review.';
   return el('section', {class: 'card sec', 'aria-label': 'Where the contest stands'}, head(c, `Day ${S.day} of the contest`, EXAMPLES[S.example]),
     el('p', {class: 'small', style: 'margin:0'}, S.review.reached ? `The first review came on day ${S.review.day}. ` : '', line),

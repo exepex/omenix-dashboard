@@ -1,4 +1,4 @@
-X1 server settings of omenix-pg, 2026-10-13 01:45 UTC (az CLI), compared with platform/README.md
+X1 server settings of omenix-pg, 2026-10-13 17:23 UTC (az CLI), compared with platform/README.md
 
 PASS  location = Central India
 PASS  sku = Standard_B1ms
@@ -11,15 +11,8 @@ PASS  public network access = Enabled
 PASS  data encryption = SystemManaged
 PASS  require_secure_transport = on
 firewall rules (name, start, end):
-ERROR: unrecognized arguments: -n omenix-pg
-
-https://aka.ms/cli_ref
-Read more about the command in reference docs
-ERROR: unrecognized arguments: -n omenix-pg
-
-https://aka.ms/cli_ref
-Read more about the command in reference docs
-FAIL  firewall rules =  (README says 0.0.0.0-255.255.255.255)
+vercel-and-routines	0.0.0.0	255.255.255.255
+PASS  firewall rules = 0.0.0.0-255.255.255.255
 
 info  geo-redundant backup = Disabled
 info  high availability = Disabled
@@ -29,4 +22,5 @@ info  earliest restore point (UTC) = 2026-10-12T21:17:57.188671+00:00
 info  ssl_min_protocol_version = TLSv1.2
 info  state = Ready
 
-RESULT: 1 difference(s) from platform/README.md
+RESULT: 0 difference(s) from platform/README.md; 0 setting(s) could not be read
+Saved: platform/evidence/2026-10-13-x1-server.txt

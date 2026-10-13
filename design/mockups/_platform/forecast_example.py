@@ -14,6 +14,7 @@ import math
 import numpy as np
 
 from forecast_scoring import brier, calibration, compare, holm, log_score, pairs_for
+from forecast_views import overview
 
 SEED = 20261013
 PLAN = {"early": {"days": 45, "start": {"book1_rules": 1, "book2_hybrid": 30}, "review": False},
@@ -106,15 +107,15 @@ def question_block(rng, q: dict, qi: int, plan: dict, ids: list, k0: int) -> tup
             "today": {f: said[f].get(days) for f in said},
             "scores": {f: scores(said[f], outcomes, flagged) for f in said if said[f]},
             "rolling": {f: rolling(said[f], outcomes) for f in said if said[f]},
-            "recent": recent}, rows
+            "recent": recent}, rows, (said, outcomes)
 
 
 def example(kind: str, questions: list, families: list, yardsticks: list) -> dict:
     plan, rng = PLAN[kind], np.random.default_rng(np.random.SeedSequence([SEED, len(kind)]))
     ids = [f["id"] for f in families] + [y["id"] for y in yardsticks]
-    blocks, rows = {}, []
+    blocks, rows, raw = {}, [], {}
     for qi, q in enumerate(questions):
-        blocks[q["id"]], qrows = question_block(rng, q, qi, plan, ids, len(rows) + 1)
+        blocks[q["id"]], qrows, raw[q["id"]] = question_block(rng, q, qi, plan, ids, len(rows) + 1)
         rows += [{**r, "question": q["id"]} for r in qrows]
     holm(rows)
     for r in rows:
@@ -126,4 +127,4 @@ def example(kind: str, questions: list, families: list, yardsticks: list) -> dic
             "review": {"reached": plan["review"], "date": None, "day": 126 if plan["review"] else None},
             "forecasters": {f: {"status": "running" if s else "not_running", "days": plan["days"] - s + 1 if s else 0,
                                 "with_forecast": (plan["days"] - s + 1 - len(MISSED.get(f, ()))) if s else 0} for f, s in started.items()},
-            "questions": blocks}
+            "questions": blocks, "overview": overview(raw, families, yardsticks, questions)}

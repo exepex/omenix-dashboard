@@ -8,7 +8,7 @@
 #      plain password never reaches the server;
 #   4. runs the check once as db_monitor (the first real run, printed below);
 #   5. saves the password as the repository secret OMENIX_DB_MONITOR_PASSWORD, and (asked once, hidden) the Slack
-#      incoming webhook for #fno-desk as OMENIX_DB_ALERT_WEBHOOK for the private details (CHECKLIST_MONITOR.md says
+#      incoming webhook for #db-alerts as OMENIX_DB_ALERT_WEBHOOK for the private details (CHECKLIST_MONITOR.md says
 #      how to create it); sets the variable DB_CHECK_ENABLED=true (from then on a lost secret is UNKNOWN, never a
 #      silent pass); starts the workflow once.
 # Asks for the admin user name and password and the webhook URL (all hidden; Enter keeps the webhook already saved). Needs psql 16+, python3 and gh (logged in: gh auth login).
@@ -24,7 +24,7 @@ gh auth status > /dev/null 2>&1 || die "not logged in to GitHub (run: gh auth lo
 mkdir -p "$evidence_dir"
 out="$evidence_dir/$today-monitor-setup.txt"
 ask_admin
-printf 'Slack webhook URL for #fno-desk (hidden; Enter to keep the one already saved): ' > /dev/tty
+printf 'Slack webhook URL for #db-alerts (hidden; Enter to keep the one already saved): ' > /dev/tty
 read -rs webhook < /dev/tty; echo > /dev/tty
 case "$webhook" in
   ""|https://hooks.slack.com/services/*) ;;

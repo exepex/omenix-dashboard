@@ -105,4 +105,4 @@ echo; echo "== 5. the marker on $server is dropped when the script ends (also af
 
 echo; echo "RESULT: marker restored: $marker_ok; catalog identical: $catalog_ok; scratch server deleted: $gone"
 echo "COST: fill in from Azure Cost Management a day later (resource $scratch): ____"
-echo "Saved: $out (the marker drop follows)"
+echo "Saved: platform/evidence/$(basename "$out") (the marker drop follows)"

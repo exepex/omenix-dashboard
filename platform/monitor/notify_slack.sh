@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Send the scheduled check's private message (details of a finding, or the weekly heartbeat) to the owner's Slack
-# channel #fno-desk. This is the only place the details go: the repository is public, so its run logs and issues are
-# too. Uses the secret OMENIX_DB_ALERT_WEBHOOK, a Slack incoming webhook the owner created for #fno-desk only (owner
-# decision, issue #2): Slack binds the channel to the webhook, so a leaked URL can post to #fno-desk and nothing else.
+# channel #db-alerts. This is the only place the details go: the repository is public, so its run logs and issues are
+# too. Uses the secret OMENIX_DB_ALERT_WEBHOOK, a Slack incoming webhook the owner created for #db-alerts only (owner
+# decision, issue #2): Slack binds the channel to the webhook, so a leaked URL can post to #db-alerts and nothing else.
 # Usage: notify_slack.sh MESSAGE_FILE    Exit 0 when Slack accepted the message, 1 otherwise.
 # The URL is the secret: it reaches curl through a config file on stdin (never its command line) and is never printed;
 # curl's own error text is not shown either, because it can quote the URL.

@@ -1,6 +1,6 @@
 # 37 Forecast contest: data used, where it comes from, the proposed contract
 
-**Status:** first draft for the owner's sign-off (13 Oct 2026). Slice 2 of exepex/trading `docs/BUILD_MAP.md`
+**Status:** second draft for the owner's sign-off (13 Oct 2026), after the owner's feedback on the first: more pictures and data, one race chart of all families by day, week and month, who wins and loses and why, each family against each other and as a whole. Slice 2 of exepex/trading `docs/BUILD_MAP.md`
 ("Forecast contest, Book 1"; the producer is G4 plus P1/P2). India only, F&O only: in the US market the screen is absent
 (the page sends the US market to Home, as the option chain does; the navigation item is India only).
 
@@ -57,7 +57,29 @@ state:
                      significant: bool, verdict: "better" | "worse" | "no_difference" |               proposed (verdict)
                               "before_review" | "too_few_dates" | "not_running"},
     recent[≤6]: {date, said: {<family id>: probability | null}, outcome: 0 | 1}}}                    proposed
+  overview: {                                                                                        proposed (descriptive, all from settled forecasts)
+    ref: "baseline_b",                     # the yardstick answering all five questions ("How often it happened")
+    table: {<forecaster id>: {n, brier, right_pct, bold_pct, honesty_gap,
+            points?, gains?, losses?, wins?, defeats?,                                               # families only
+            questions: {<question id>: {n, brier, right_pct, bold_pct, honesty_gap, points_per_forecast?}}}},
+    race: {<family id>: {<question id>: [[date, points]]}},     # one row per settled forecast; the screen sums days, weeks, months
+    h2h: {<family id>: {<family id>: {n, win_pct, points_per_forecast}}},
+    misses: {<family id>: [{date, question, said, outcome, miss}] (the 3 costliest)}}
 ```
+
+Overview definitions (proposed, for G4/P2 to compute and publish; the mockup's copy is `_platform/forecast_views.py`):
+- **points** of one settled forecast = 100 × (the yardstick's Brier − the forecaster's Brier) against "How often it
+  happened" on the same question and day. Above 0: it missed less than the yardstick.
+- **right_pct**: share of settled forecasts that leaned the right way (above 0.5 and it happened, below 0.5 and it did
+  not; exactly 0.5 counts half). **bold_pct**: mean of |p − 0.5| × 2. **honesty_gap**: the calibration bins' |mean
+  forecast − observed frequency|, weighted by count, in points.
+- **gains / losses**: the sum of positive and of negative points; **wins / defeats** their counts.
+- **h2h**: over every question and day both forecast, the share on which A's Brier was lower (ties half) and the mean
+  Brier gap × 100.
+- The screen aggregates `race` into running totals and 5- or 21-trading-day buckets; nothing else is computed on the
+  screen except the plain-words line under each card (a fixed template on these numbers).
+- A family is **ranked** only when it has 40 settled days (the protocol's minimum) on every question it answers;
+  before that its card says "Not ranked yet" with the days still needed.
 
 - In the real app `day` and `made`/`resolves` are dates; the mockup's Examples use day numbers on purpose.
 - **`verdict` is the backend's word, not the screen's.** The backend applies the frozen rule (tested, Holm, review
@@ -88,8 +110,19 @@ state:
    live forecasts. My recommendation (reasoning only): keep this screen live-only; if wanted, a separate, labelled
    "History (close proxy)" tab later.
 
+6. **"Why" is told from behaviour, not method.** You asked to see what a winning family did differently. The screen
+   shows what its forecasts reveal: how often it leaned the right way, how sure it is, how honest its chances are,
+   where its points come from and its costliest misses. It never shows how it forecasts (your rule that strategy
+   internals stay private). In the review Example this is enough to explain the result: AI team leans the right way
+   more often than Rule-based (62% against 57%) and still loses, because it was nearly certain when wrong.
+7. **Forecasts are per family, not per strategy.** The protocol records one set of five chances per family (one book
+   each) per day. A contest between individual strategies inside a family would need the F&O tool to record forecasts
+   per strategy, a change to stories G1-G5. Your decision; I have not designed it.
+8. **"All five together" is shown, not tested.** The protocol tests each question separately; the overall points,
+   ranking and race are descriptive and say so.
+
 ## Checks
 
-- `node design/system/check_page.js` at 1280 and 390 px on all 7 states: no console errors, no overflow, no external requests.
-- `node design/system/check_text.js design/mockups/37-forecasts/page.html "" ex=start ex=early ex=review "ex=review&q=5" "ex=early&q=4" "ex=review&who=book3_ai"`: 0 findings.
+- `node design/system/shoot_states.js` on all 10 states (1280 and 390 px): no console errors, no overflow, no external requests.
+- `node design/system/check_text.js design/mockups/37-forecasts/page.html "" ex=start ex=early ex=review ex=review&rv=week "ex=review&rv=month&rq=4" "ex=early&rv=month" "ex=review&q=5" "ex=review&who=book3_ai"`: 0 findings.
 - `python3 design/mockups/37-forecasts/build.py` twice gives the same bytes.

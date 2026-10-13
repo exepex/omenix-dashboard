@@ -75,4 +75,4 @@ echo "info  ssl_min_protocol_version = $(param ssl_min_protocol_version)"
 echo "info  state = $(show state)"
 echo
 echo "RESULT: $fails difference(s) from platform/README.md; $errors setting(s) could not be read"
-echo "Saved: $out"
+echo "Saved: platform/evidence/$(basename "$out")"

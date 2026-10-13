@@ -2,7 +2,7 @@
    and the head-to-head tests with their uncertainty. Each block has its empty state. */
 function questionPart(main, c) {
   const {el} = c, S = state(), q = question(), B = S.questions[q.id];
-  main.append(el('section', {class: 'sec', 'aria-label': 'Pick a question'}, head(c, 'The five questions', 'pick one to see its forecasts and scores'),
+  main.append(el('section', {class: 'sec', 'aria-label': 'Pick a question'}, head(c, 'One question in detail', 'pick a question: its chances, scores, official tests and calibration'),
     seg(c, 'Question', D.questions.map((x, i) => [i, `${i + 1}. ${x.short}`]), Q, k => { Q = k; })));
   main.append(el('section', {class: 'card', 'aria-label': 'The question'}, el('p', {class: 'qtitle'}, `${Q + 1}. ${q.plain}`),
     el('p', {class: 'small muted', style: 'margin:4px 0 0'}, el('b', {}, 'Counts as yes when: '), q.yes_when, ` Answer known after ${q.days} trading days.`)));
