@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 CATALOG_KEYS = ("publisher", "source", "freshness", "story", "status")
 BLOCK_TAG = "blocks"
 # Who serves the envelope's block fields (publisher, freshness, paper): the read path of each product
-ENVELOPE_STORY = {"stock": "W6", "fno": "W2", "dashboard": "W8"}
+ENVELOPE_STORY = {"stock": "W6", "fno": "W2", "dashboard": "W8", "nse_ingest": "NSE1-proposed"}
 METHODS = ("get", "put", "post", "delete", "patch")
 
 
@@ -57,7 +57,7 @@ def payload_schema_name(doc: dict, op: dict) -> str:
 
 
 def _inherit(base: dict, node: dict) -> dict:
-    out = {"catalog": dict(base["catalog"]), "elements": list(base["elements"])}
+    out = {"catalog": dict(base["catalog"]), "elements": list(base["elements"]), "scope": base.get("scope")}
     out["catalog"].update(node.get("x-catalog", {}))
     if "x-element" in node:
         out["elements"] = list(node["x-element"])
@@ -94,7 +94,10 @@ def walk(doc: dict, op_id: str, node: dict, pointer: str, path: str, base: dict,
             children.append((branch, f"{tpointer}/oneOf/{i}", path))
     identity = pointer if (notes or "$ref" not in node) else tpointer
     leaf = not children
-    elements = ctx["elements"] + [n.split(":", 1)[0] for n in notes if n.split(":", 1)[0] not in ctx["elements"]]
+    # a field serves only the blocks its operation feeds (x-feeds): a shared schema (one quote row read by three blocks)
+    # names every block that reads it; a field left with no element fails check_mapping
+    noted = [n.split(":", 1)[0] for n in notes]
+    elements = [e for e in dict.fromkeys(ctx["elements"] + noted) if ctx["scope"] is None or e in ctx["scope"]]
     out.append(Field(op_id, path, identity, leaf, ctx["catalog"], elements, unit, notes, price, agg, market))
     if tpointer in seen and "$ref" in node:
         return  # a shared schema is walked once per operation path only through its first use
@@ -106,11 +109,12 @@ def walk(doc: dict, op_id: str, node: dict, pointer: str, path: str, base: dict,
 def block_fields(doc: dict) -> list[Field]:
     """Every field of every block operation (payload and the envelope's block fields)."""
     out: list[Field] = []
-    empty = {"catalog": {}, "elements": []}
     for _, _, op in block_operations(doc):
         name = payload_schema_name(doc, op)
         seen: set = set()
-        walk(doc, op["operationId"], {"$ref": f"#/components/schemas/{name}"}, f"#/components/schemas/{name}", "payload", empty, out, seen)
+        # a schema shared by two markets' operations takes its publisher and source from the operation
+        base = {"catalog": dict(op.get("x-catalog", {})), "elements": [], "scope": set(op["x-feeds"]) if "x-feeds" in op else None}
+        walk(doc, op["operationId"], {"$ref": f"#/components/schemas/{name}"}, f"#/components/schemas/{name}", "payload", base, out, seen)
         envelope = {"catalog": {"story": ENVELOPE_STORY[op["x-publisher"]]}, "elements": []}
         walk(doc, op["operationId"], {"$ref": "#/components/schemas/BlockMetaFields"}, "#/components/schemas/BlockMetaFields", "envelope", envelope, out, seen)
         if op.get("x-publisher") == "fno":

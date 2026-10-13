@@ -163,15 +163,15 @@ Events:
         type: object
         required: [date, title, kind, major, inst]
         properties:
-          date: {type: string, format: date, x-unit: date, x-notes: ['h31.coming-up:date']}
-          title: {type: string, x-unit: text, x-notes: ['h31.coming-up:title']}
+          date: {type: string, format: date, x-unit: date, x-notes: ['h31.coming-up:date', 'h34.coming-up:date']}
+          title: {type: string, x-unit: text, x-notes: ['h31.coming-up:title', 'h34.coming-up:name']}
           kind:
             type: string
-            enum: [rbi_policy, fomc, cpi, jobs_report, fno_expiry, weekly_expiry, opex, triple_witching, index_rebalance, budget, earnings, ex_dividend, holiday]
+            enum: [rbi_policy, fomc, cpi, jobs_report, fno_expiry, weekly_expiry, opex, triple_witching, index_rebalance, budget, earnings, ex_dividend, filing, holiday]
             x-unit: enum
-            x-notes: ['h31.coming-up:kind']
+            x-notes: ['h31.coming-up:kind', 'h34.coming-up:type']
           major: {type: boolean, x-unit: yes/no, x-notes: ['h31.coming-up:major']}
-          inst: {type: ['string', 'null'], x-unit: id, x-notes: ['h31.coming-up:inst']}
+          inst: {type: ['string', 'null'], x-unit: id, x-notes: ['h31.coming-up:inst', 'h34.coming-up:ticker']}
 
 TopNews:
   type: object

@@ -153,7 +153,8 @@
     x-freshness: 'stock_age; pre-open run'
     x-cache: 'tag rm:blocks:<market>:events, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'events empty'
-    x-feeds: [h31.coming-up]
+    x-feeds: [h31.coming-up, h34.coming-up]
+    x-shared: 'one calendar: Home''s Coming up and the Markets overview''s What is coming? list the same events'
     parameters:
       - $ref: '#/components/parameters/Market'
     responses:
@@ -167,6 +168,8 @@
             examples:
               india: {$ref: '#/components/examples/getEvents_india'}
               us: {$ref: '#/components/examples/getEvents_us'}
+              india_markets: {$ref: '#/components/examples/getEvents_india_markets'}
+              us_markets: {$ref: '#/components/examples/getEvents_us_markets'}
       '404': {$ref: '#/components/responses/NotFound'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}

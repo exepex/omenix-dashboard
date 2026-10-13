@@ -1,26 +1,31 @@
-# api/catalog/: the data catalog of the frame and Home block endpoints (story W10)
+# api/catalog/: the data catalog of the block endpoints (stories W10 and W11)
 
 The owner (13 Oct 2026): "multiple small APIs which could populate the screen in parallel instead of a big bulky API
-call". The signed-off frame (`design/mockups/30-shell/notes.md`) and Home (`31-dashboard/notes.md`) are served by 23
-small read endpoints, one per independent screen block, each with its own schema, envelope, freshness, cache rule,
-empty state and examples.
+call". The signed-off frame (`design/mockups/30-shell/notes.md`), Home (`31-dashboard`), screener (`33-screener`) and
+Markets overview (`34-markets`) are served by 37 small read endpoints, one per independent screen block, each with its
+own schema, envelope, freshness, cache rule, empty state and examples. The catalog's "Published today?" column says
+plainly which blocks no backend publishes yet (the NSE-file blocks: publisher `nse_ingest`, story `NSE1-proposed`).
 
 | File | What it is |
 |---|---|
 | `catalog.md` | **The catalog** (generated): every endpoint, which screen blocks it feeds, and every field with its publisher, source read model or table, unit, freshness, story and status |
-| `elements.yaml` | Every element of the two notes.md files and every backticked field token, mapped to contract keys (hand-written; checked against notes.md) |
+| `elements.yaml` | Every element of the four notes.md files (30 and 31 whole; 33 and 34 their "Elements" table) and every backticked field token, mapped to contract keys (hand-written; checked against notes.md) |
 | `stories.yaml` | The stories that build or publish the data; `exists: false` marks a story still to be written |
 
 ## How the contract carries the catalog
 
 The catalog lives in the schemas, so it cannot drift from them (`api/schemas/blocks-*.yaml`):
 - `x-catalog: {publisher, source, freshness, story, status}` on a schema or property, inherited downward; a property
-  overrides single keys. `publisher` is `stock` (contactexepex/agentic-stock-prediction), `fno` (exepex/trading) or
-  `dashboard` (this repository). `status: published` means the publisher stores the value today in the named source
+  overrides single keys; an operation's own `x-catalog` is the base, so one schema can serve India's and the US's
+  paths with different publishers. `publisher` is `stock` (contactexepex/agentic-stock-prediction), `fno`
+  (exepex/trading), `nse_ingest` (NSE's daily files; no backend publishes them yet and the owner has not chosen the
+  repository) or `dashboard` (this repository). `status: published` means the publisher stores the value today in the named source
   and only the block row is new; `planned` means no backend publishes it yet and `story` will.
 - `x-element`: the notes.md elements a field feeds (inherited); `x-notes: ["<element>:<key>"]`: the notes.md field
-  token it implements; `x-unit` on every leaf.
-- `x-price: true` on a price or a value marked to a price: its object must require `as_of` (and carries `source`).
+  token it implements; `x-unit` on every leaf. A field serves only the elements its operation lists in `x-feeds`
+  (a shared quote row names every block that reads it); a field left with none fails the check.
+- `x-price: true` on a price or a value marked to a price: its object must require `as_of`, or name with
+  `x-as-of-from` the page schema whose required `as_of` covers every row (one day's table of closes).
 - `x-aggregate`: `group_total` (the owner's one allowed sum, per group, AGENTS.md 13 Oct 2026; only in `GroupTotal`)
   or `single_account` (one account's own figure). No other field adds numbers up.
 - `x-market: india` on an India-only field; the response schemas reject it in the US (`Us*Rule`).

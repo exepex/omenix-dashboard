@@ -29,6 +29,7 @@ import examples  # noqa: E402
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
+PLANTED = 20  # must_fail calls in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -104,7 +105,8 @@ def check_examples(doc: dict, problems: list[str]) -> dict:
             found.setdefault(op["operationId"], {})[key] = value
             problems += [f"example {name}: {e}" for e in errors(doc, content["schema"]["$ref"], value)]
         markets = {v["market"] for v in found.get(op["operationId"], {}).values()}
-        want = {"india"} if "/markets/india/" in path else ({"_all"} if "{market}" not in path else {"india", "us"})
+        want = ({"india"} if "/markets/india/" in path else {"us"} if "/markets/us/" in path
+                else {"india", "us"} if "{market}" in path else {"_all"})
         if markets != want:
             problems.append(f"{path}: examples cover {sorted(markets)}, want {sorted(want)}")
     unused = {n for n in doc["components"].get("examples", {}) if n.split("_")[0] in {op["operationId"] for _, _, op in block_operations(doc)}} - used
@@ -119,7 +121,8 @@ def check_coverage(doc: dict, found: dict, problems: list[str]) -> int:
         for value in found.get(op["operationId"], {}).values():
             reached(doc, schema, value, hits)
     names = [n for n, f in bundle.schema_files().items() if f.startswith(BLOCK_FILE)]
-    missing = [n for n in names if n not in hits and not n.startswith(("Us", "India", "MarketCurrency"))]
+    rules = {"MarketCurrency", "UsMarket", "IndiaMarket"}  # constraint schemas, no payload of their own
+    missing = [n for n in names if n not in hits and n not in rules and not n.endswith("Rule")]
     problems += [f"block schema {n} has no example value" for n in missing]
     return len(names)
 
@@ -143,19 +146,26 @@ def check_catalog(doc: dict, problems: list[str]) -> int:
 
 
 def check_rules(doc: dict, found: dict, problems: list[str]) -> None:
-    # as-of on every price: an object with an x-price property requires as_of
+    # as-of on every price: an object with an x-price property requires as_of, or names (x-as-of-from) the page
+    # schema whose required as_of covers all its rows (a table of one day's closes)
+    schemas = doc["components"]["schemas"]
     for name, f in bundle.schema_files().items():
         if not f.startswith(BLOCK_FILE):
             continue
-        for trail, node in walk_nodes(doc["components"]["schemas"][name], name):
+        for trail, node in walk_nodes(schemas[name], name):
             props = node.get("properties") or {}
-            if any(isinstance(p, dict) and p.get("x-price") for p in props.values()) and "as_of" not in node.get("required", []):
-                problems.append(f"{trail}: has a price but does not require as_of")
+            if not any(isinstance(p, dict) and p.get("x-price") for p in props.values()) or "as_of" in node.get("required", []):
+                continue
+            page = schemas.get(node.get("x-as-of-from", ""), {})
+            if "as_of" not in page.get("required", []):
+                problems.append(f"{trail}: has a price but does not require as_of (nor names a page that does)")
     fields = block_fields(doc)
     for path, _, op in block_operations(doc):
-        is_fno = op["x-publisher"] == "fno"
-        if is_fno != path.startswith("/api/v1/markets/india/fno/"):
+        pub, fno_path = op["x-publisher"], path.startswith("/api/v1/markets/india/fno/")
+        if (pub == "fno" and not fno_path) or (fno_path and pub not in ("fno", "nse_ingest")):
             problems.append(f"{path}: F&O endpoints live under /api/v1/markets/india/fno/ and nowhere else")
+        if pub == "nse_ingest" and not path.startswith("/api/v1/markets/india/"):
+            problems.append(f"{path}: an NSE-file block is India only (/api/v1/markets/india/)")
     problems += [f"{f.op} {f.path}: F&O field in a market-scoped endpoint" for f in fields
                  if f.catalog.get("publisher") == "fno" and f.path.startswith("payload") and f.op not in
                  {op["operationId"] for _, _, op in block_operations(doc) if op["x-publisher"] == "fno"}]
@@ -206,6 +216,14 @@ def planted(doc: dict, found: dict, problems: list[str]) -> None:
     must_fail("a stock pick from the hybrid family", "getPicks", "india", lambda v: v["payload"]["signals"][0].update(family="hybrid"))
     must_fail("a future in stock search", "searchInstruments", "india", lambda v: v["payload"]["instruments"][0].update(kind="future"))
     must_fail("a block without the Paper label", "getSession", "us", lambda v: v.pop("paper"))
+    # W11: the screener and the Markets overview
+    must_fail("an F&O universe in the US screener", "getScreenerSummaryUs", "us", lambda v: v["payload"]["universes"].update(fno=v["payload"]["universes"]["ours"]))
+    must_fail("an F&O tag on a US screener row", "getScreenerStocksUs", "us", lambda v: v["payload"]["rows"][0].update(u=["fno"]))
+    must_fail("India's screener without its F&O universe", "getScreenerSummaryIndia", "india", lambda v: v["payload"]["universes"].pop("fno"))
+    must_fail("India's flows served for the US", "getFlows", "india", lambda v: v.update(market="us"))
+    must_fail("an NSE block served for the US", "getIndiaSectors", "india", lambda v: v.update(market="us"))
+    must_fail("screener rows without the page's as_of", "getScreenerStocksIndia", "india", lambda v: v["payload"].pop("as_of"))
+    must_fail("a quote without as_of", "getWorld", "us", lambda v: v["payload"]["quotes"][0].pop("as_of"))
 
 
 def main() -> int:
@@ -220,7 +238,7 @@ def main() -> int:
     check_rules(doc, found, problems)
     ops = list(block_operations(doc))
     print(f"contract: {len(doc['paths'])} paths ({len(ops)} block endpoints), {sum(len(v) for v in found.values())} block examples, "
-          f"{schemas} block schemas, {leaves} catalogued leaf fields, 13 planted breaks")
+          f"{schemas} block schemas, {leaves} catalogued leaf fields, {PLANTED} planted breaks")
     print("\n".join(problems) if problems else "contract: OpenAPI 3.1 valid; examples valid and current; catalog complete; screen rules hold; every planted break caught")
     return 1 if problems else 0
 

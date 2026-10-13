@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: market-brief app API
-  version: 2.1.0
+  version: 2.2.0
   summary: Read API over the precomputed read models (docs/ARCHITECTURE.md section 4), plus planned governed writes.
   description: |
     Research only: nothing here places, routes or suggests a trade, and nothing is investment advice.
@@ -33,6 +33,12 @@ info:
     not empty). Block payloads follow the frame's units (30-shell/notes.md): changes are percent points (1.25 = +1.25 %),
     not the fractions of the 1.0/2.0 pages; probabilities stay 0-1. The data catalog of every block field is
     api/catalog/catalog.md; /api/v1/markets/{market}/home is superseded by the blocks.
+
+    Version 2.2 (story W11, 13 Oct 2026; additions only): the screener (33-screener) and the Markets overview
+    (34-markets) as block endpoints (api/paths/blocks-screener.yaml, blocks-overview.yaml). A fourth publisher,
+    `nse_ingest`, names blocks built from NSE's daily files, which no backend publishes yet; those paths are India only.
+    Where a block's publisher differs by market, India and the US have their own paths sharing one schema. Session gains
+    the optional `major_event_names`; Events gains the kind `filing`.
 
     Serve-time fields (2.0 page payloads): the stored payload carries no time of its build, so a rebuild of the same data
     keeps its hash. The route adds `cutoff` and `built_at` (the row's envelope) at the top of a page payload and

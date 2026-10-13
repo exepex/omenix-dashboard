@@ -35,3 +35,24 @@ MA1-proposed:
     The owner's own paper account per market (capital Rs 5 lakh / US $5,000, owner-changeable; cash; positions from
     the owner's recorded trades; India: open structures and at-risk against the F&O limits), stored in the app schema
     (W7 pattern) and read by the accounts block; named as "a later story" in W8's out-of-scope list
+K5-proposed:
+  exists: false
+  repo: agentic-stock-prediction
+  title: Stock backend publishes the screener and Markets overview blocks (W11)
+  scope: >-
+    One rm.blocks row per block and market, in the stock envelope, from records the stock tool already stores: the
+    tools' view of its followed companies (strategy_predictions at N+5, model_scores, features days_to_results), the
+    US screener rows and counts of its 20 companies (daily prices; returns, 52-week range, volume ratio and RSI computed
+    the screener's way), the US benchmarks and sector funds, world quotes (prices), India's FII/DII and NSDL flows,
+    US Treasury par yields (macro), and the regime record's major_event_names on the session block
+NSE1-proposed:
+  exists: false
+  repo: 'trading or platform (owner to decide)'
+  title: Daily NSE ingest publishes the screener and Markets overview rows (W11)
+  scope: >-
+    After each NSE session, read NSE's own daily files (equity BhavCopy, security-wise delivery, EQUITY_L and the
+    Nifty 500 list, F&O BhavCopy, the index close file) and publish one row per block, atomically like P3: the stock
+    rows and their counts per universe, the F&O underlyings (nearest monthly future, ATM IV computed the F&O tool's
+    way, build-up, put-call ratio, move priced in) and their counts, the broad and sector index rows (with NSE's P/E,
+    P/B, dividend yield) and the Nifty 500 industries; plus the dashboard's publication-aware read path for it.
+    exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story"
