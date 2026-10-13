@@ -9,7 +9,7 @@ shell's `30-shell/data.json` (watchlists, index strip, accounts, search, notific
 to the page's `template.html`: the design system (design/system/, light tokens plus tokens-dark.css for the theme
 switch), the page layout helpers (design/mockups/_shared/shell.css) and the platform runtime (js/*.js of this
 folder, concatenated in file order) are inlined. Markers: `<!--@@SYSTEM_CSS@@-->`, `<!--@@ICONS@@-->`, `<!--@@SHARED_CSS@@-->`,
-`<!--@@PLATFORM_JS@@-->`, `/*__SHELL__*/null` and `/*__DATA__*/null`. Deterministic: nothing reads the wall clock
+`<!--@@PLATFORM_JS@@-->`, `<!--@@PAGE_JS@@-->` (the page's own js/*.js), `/*__SHELL__*/null` and `/*__DATA__*/null`. Deterministic: nothing reads the wall clock
 (the payloads carry their own `now`), so two builds give the same bytes. No request leaves the page.
 """
 from __future__ import annotations
@@ -26,6 +26,7 @@ sys.path.insert(0, os.path.join(REPO, "design", "system"))
 from system import inline_system  # noqa: E402
 
 SHELL_DATA = os.path.join(MOCKUPS, "30-shell", "data.json")
+PAGE_JS = "<!--@@PAGE_JS@@-->"
 MARKS = ("<!--@@SHARED_CSS@@-->", "<!--@@PLATFORM_JS@@-->", "/*__SHELL__*/null", "/*__DATA__*/null")
 
 
@@ -55,6 +56,14 @@ def render(template: str, shell: dict, data: dict | None) -> str:
     return inline_system(html, dark=True)
 
 
+def page_js(here: str) -> str:
+    """The page's own runtime, `<page>/js/*.js` concatenated in file order (a page too big for one template), or ''."""
+    folder = os.path.join(here, "js")
+    if not os.path.isdir(folder):
+        return ""
+    return "".join(read(os.path.join(folder, name)) for name in sorted(os.listdir(folder)) if name.endswith(".js"))
+
+
 def run(here: str, summary=None, compose=None) -> None:
     """`compose()`, when given, returns the page's payload and is written to data.json first (deterministic)."""
     parser = argparse.ArgumentParser(description="Build this platform mockup into page.html")
@@ -68,7 +77,8 @@ def run(here: str, summary=None, compose=None) -> None:
     shell = json.loads(read(SHELL_DATA))
     data = shell if os.path.abspath(own) == os.path.abspath(SHELL_DATA) else json.loads(read(own))
     assert data.get("_mock") is True, "every platform payload is labelled Mock"
-    html = render(read(os.path.join(here, "template.html")), shell, None if data is shell else data)
+    template = read(os.path.join(here, "template.html")).replace(PAGE_JS, f"<script>\n{page_js(here)}\n</script>")
+    html = render(template, shell, None if data is shell else data)
     os.makedirs(args.out, exist_ok=True)
     out = os.path.join(args.out, "page.html")
     with open(out, "w", encoding="utf-8") as handle:
