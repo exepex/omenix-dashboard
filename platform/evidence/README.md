@@ -1,18 +1,19 @@
 # X1 evidence from the real server (`omenix-pg`, 13 Oct 2026)
 
-The owner ran `platform/owner/` steps 1 to 5 on the Mac against `omenix-pg` and saved the outputs to Drive
+The owner ran `platform/owner/` steps 1 to 6 on the Mac against `omenix-pg` and saved the outputs to Drive
 (`fno-research/evidence/x1/`). They are committed here unchanged except for scrubbing:
 - every IPv4/IPv6 address is replaced by `<IP address>` (`owner/lib.sh` `redact_ips`; it hit 2 addresses in the TLS
   file: the client's public IP and the server's);
 - the local path of the owner's clone is shown as `<repository>`;
-- the admin login is shown as `<admin>`, as the catalog snapshot prints it.
+- the admin login is shown as `<admin>`, as the catalog snapshot prints it;
+- the Azure CLI's install path in one of its own Python warnings (step 6) is shown as `<az install>`.
 
 No password, token, connection string, subscription ID, e-mail or human user name is in these files. The only host
 name is the server's.
 
 Owner decisions (13 Oct 2026, recorded in `exepex/trading` `docs/DESK_DECISIONS.md`): first "let's skip these
-checks. we don't need them"; later the owner ran step 5 (restore test) after all and is running step 6 (delete
-lock, alerts). Steps 3 and 4 are not rerun with the fixed scripts.
+checks. we don't need them"; later the owner ran step 5 (restore test) and step 6 (delete lock, alerts) after all.
+Steps 3 and 4 are not rerun with the fixed scripts.
 
 | File | Step | Script version |
 |---|---|---|
@@ -21,7 +22,7 @@ lock, alerts). Steps 3 and 4 are not rerun with the fixed scripts.
 | `2026-10-13-x1-tls.txt` | 3, TLS | before the IP-redaction fix (redacted here by hand with the same function) |
 | `2026-10-13-x1-server.txt` | 4, server settings | before the az firewall-rule fix (`742443d`) |
 | `2026-10-13-x1-restore.txt` | 5, restore test | before the bash 3.2 trap fix (see "Left on the server" below); nothing needed scrubbing |
-| step 6 (`x1-protect`) | 6, delete lock and alerts | **not yet**: the owner is running it |
+| `2026-10-13-x1-protect.txt` | 6, delete lock and alerts | current at the time |
 
 ## Per criterion
 
@@ -33,26 +34,37 @@ lock, alerts). Steps 3 and 4 are not rerun with the fixed scripts.
 | 4 | Backups with stated retention; one restore tested | **PASS.** Retention: 14 days, as the README states (earliest restore point 12 Oct 21:17 UTC). Restore: a marker row with a random token was written at 08:58:07 UTC. `omenix-pg` was restored to 09:03:07 UTC as the scratch server `omenix-pg-x1restore`; Azure took 7 minutes (09:13 to 09:20 UTC). On the scratch server the marker row was there with the same token, and the catalog was identical to `expected_catalog.txt`. Firewall rules were not copied, as Microsoft documents; the script opened the scratch server to the owner's Mac only. The scratch server was deleted and confirmed gone after about 1 billed hour. **Cost: pending** (the owner reads it from Azure Cost Management a day later; estimate USD 0.03 to 0.06). | `x1-server.txt`; `x1-restore.txt` |
 | 5 | Firewall and public-access policy written and matching the server | **Mostly read; firewall rule UNREAD.** These match the README: location, SKU, tier, version, storage, performance tier, backup retention, public network access, encryption, and `require_secure_transport`. The firewall rule could not be read because of the old script's bug (`unrecognized arguments: -n omenix-pg`; fixed in `742443d`, not rerun by owner decision). The owner set the one rule (0.0.0.0-255.255.255.255) when creating the server. | `x1-server.txt` |
 
-## Left on the server by step 5 (builder's bug, owner action pending)
+## Left on the server by step 5 (builder's bug; removed by the owner)
 
 The restore script was meant to drop its marker table `fno.x1_restore_marker` on `omenix-pg` when it ended. That
 drop ran in an EXIT trap set inside a `{ ...; } | tee` block, and bash 3.2 (the macOS default) never runs such a trap.
 The evidence file shows it: no "marker table dropped" line after step 5. Reproduced in `mirror.gcr.io/library/bash:3.2`
-(strong evidence). So the table, with one row holding the random token and no secret, is almost certainly still on
-`omenix-pg`. Owner action, once, as admin on database `omenix`:
-`SET ROLE fno_owner; DROP TABLE IF EXISTS fno.x1_restore_marker;`
+(strong evidence). So the table, with one row holding the random token and no secret, stayed on `omenix-pg`. **The
+owner dropped it by hand** (13 Oct 2026, reported via the orchestrator) with
+`SET ROLE fno_owner; DROP TABLE IF EXISTS fno.x1_restore_marker;`.
 
 Root cause fixed for every owner script: the body stays in the main shell, with output recorded through
 `record_evidence` (`owner/lib.sh`), so traps run on every bash. Tests: `tests/bash32_trap_test.sh` runs the pattern,
-and `tests/owner_scripts_test.sh` forbids traps inside pipeline blocks; CI runs both on bash 3.2 as well.
+and `tests/owner_scripts_test.sh` forbids traps inside pipeline blocks; CI runs both on bash 3.2 as well. Fixed in
+commit `a0bb4bb`.
 
-## Not met by owner decision, or not yet, and the risk accepted with it
+## Step 6: delete lock and alerts (PASS)
 
-- **Firewall rule read-back (criterion 5):** the server's firewall rule is not recorded by `az` output. The policy
-  rests on the owner's setup and on the README.
-- **Delete lock (step 6, not yet):** until it is in place, deleting `omenix-pg` by mistake also deletes all its
-  backups. Nothing but the portal's own confirmation prevents it.
-- **Failed-login alert (step 6, not yet):** password guessing against the open firewall goes unnoticed. The defences
-  are TLS, least privilege and long passwords.
-- **Storage alert (step 6, not yet):** a leaked credential filling the 32 GiB disk with large objects (named exception
-  1) goes unnoticed until writes fail. `tests/large_objects.sh` finds such objects only when someone runs it.
+From `x1-protect.txt`:
+- **Delete lock:** `omenix-pg-no-delete`, CanNotDelete, on `omenix-pg`. Deleting the server, and with it its backups,
+  first needs the lock removed by hand.
+- **Action group:** `omenix-db-alerts`, with 1 e-mail receiver (the address stays in Azure).
+- **Failed-connection alert:** `omenix-pg-failed-connections`. It fires when the total of `connections_failed` is
+  above 10 in 15 minutes, checked every 5 minutes, severity 2. It counts every failed connection, not only wrong
+  passwords, and names no user or address.
+- **Storage alert:** `omenix-pg-storage`. It fires when the average of `storage_percent` is above 80 over 15 minutes,
+  checked every 5 minutes. It is server-wide, so it covers large objects in every database.
+
+Azure registered the `microsoft.insights` provider during the run (a one-time warning). The az CLI's own Python
+`SyntaxWarning` is noise from az 2.91.0, not an error.
+
+## Not met by owner decision, and the risk accepted with it
+
+- **Firewall rule read-back (criterion 5):** the server's firewall rule is not recorded by `az` output: the old script
+  failed to read it, and step 4 was not rerun with the fixed script. The policy rests on the owner's setup and on the README.
+- **Restore cost (criterion 4):** pending; the owner reads it from Azure Cost Management a day later.

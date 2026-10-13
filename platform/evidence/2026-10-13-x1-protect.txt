@@ -1,0 +1,34 @@
+X1 protection of omenix-pg, 2026-10-13 09:39 UTC
+
+== 1. delete lock
+<az install>/site-packages/azure/mgmt/resource/deploymentstacks/models/_models.py:119: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  following actions are automatically appended to 'excludedActions': '*\/read' and
+omenix-pg-no-delete	CanNotDelete
+
+== 2. action group (email)
+WARNING: Resource provider 'microsoft.insights' used by this operation is not registered. We are registering for you.
+WARNING: Registration succeeded.
+action group omenix-db-alerts: email receivers = 1
+
+== 3. failed-connection alert
+aggregation: Total
+enabled: true
+every: PT5M
+metric: connections_failed
+name: omenix-pg-failed-connections
+operator: GreaterThan
+severity: 2
+threshold: 10.0
+window: PT15M
+
+== 4. storage alert (mitigation for the large-object exception and any runaway writer)
+aggregation: Average
+enabled: true
+every: PT5M
+metric: storage_percent
+name: omenix-pg-storage
+operator: GreaterThan
+threshold: 80.0
+window: PT15M
+
+RESULT: lock, action group and both alerts in place

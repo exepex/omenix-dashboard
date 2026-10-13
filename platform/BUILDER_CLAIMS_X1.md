@@ -90,6 +90,6 @@ warning, so a naive revoke would have aborted `apply.sh` on a server where `PUBL
 ## Owner's real-server runs (13 Oct 2026)
 
 Results per criterion and what is still open: `platform/evidence/README.md`. One builder bug surfaced there: the
-restore script's marker-drop trap does not run on bash 3.2 (macOS), so `fno.x1_restore_marker` was most likely left
-on `omenix-pg` (owner drops it with one statement). The root cause is fixed in every owner script and tested on
-bash 3.2 in CI.
+restore script's marker-drop trap does not run on bash 3.2 (macOS), so `fno.x1_restore_marker` stayed on
+`omenix-pg`; the owner dropped it by hand. The root cause is fixed in every owner script (`a0bb4bb`) and tested on
+bash 3.2 in CI. Step 6 (delete lock, failed-connection and storage alerts) is in place.
