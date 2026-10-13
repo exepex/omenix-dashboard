@@ -60,9 +60,9 @@ no database setting the same calls do load the examples, so the "never loaded" a
   flows, the world, events, and the whole US screener and markets show "No backend publishes this part yet". The stock
   tool's columns and its two screens (picks, results) are empty too; the stock table itself still shows. This follows
   review 28 (Example is not a runtime state) but it is a visible step back from today's example-filled pages.
-- **Where to set the variables:** the dashboard project still deploys from the stock repository's frozen copy; the
-  gateway project deploys from here but is public. Setting the variables on the gateway would publish F&O data on its
-  public pages. Recommendation (reasoning only): wait for the cutover. Written in the owner's steps.
+- **Where to set the variables:** superseded by the owner's decision in the addendum below. (My first version said
+  the gateway's public pages would show F&O data if the variables were set there. That was wrong: the gateway answers
+  404 to the Screener and Markets, `web/lib/tools/gateway.ts`.)
 - **Not read from the real Azure server.** The container cannot reach port 5432. The real certificate chain, the host
   name and Vercel's reach through Azure's firewall are unverified; the owner's steps say what to check.
 - **Two parts of one page can come from two publications** if the pointer moves between their reads (a few
@@ -84,3 +84,32 @@ no database setting the same calls do load the examples, so the "never loaded" a
 `node tools/check_code_size.mjs`, `npm ci --ignore-scripts`, `npm run typecheck`, `npm test` (all web tests, including
 the new 24 in `lib/fno/tests` and `lib/screener/tests/query-engine.test.ts`), `npm run build`, and the full UI harness
 in fixture mode; results in the commit message.
+
+## Addendum: omenix-dashboard deploys from this repository (owner decision, 13 Oct 2026)
+
+The orchestrator relayed the owner's decision: no separate preview project; the existing Vercel project
+**omenix-dashboard** switches its Git source to this repository (root `web/`). Done as part of W2:
+
+- `docs/W2_OWNER_STEPS.md` is now the exact checklist: Git connection and root directory, build settings, every
+  environment variable name the dashboard needs (existing and new; never values), automatic deployments off with a
+  manual deploy, the firewall step, and the smoke test (India: 12 Oct's data with "as of" and the freshness line; US:
+  no F&O element; the stock pages as before).
+- `CLAUDE.md`'s Vercel section now says both projects deploy from this repository's `main`.
+
+**Do the stock screens still work with the variables omenix-dashboard already has?** Checked, with evidence:
+
+- **Names: yes.** I listed every environment variable name read by the code of both trees (`process.env.X`,
+  `value(env, "X")`, `env.X`). The stock repository's frozen `web/` (commit 29955dd) reads 14 names (13 settings and `UPDATE_INBOX_FIXTURE`, a switch of a test helper). All 14 are read
+  the same way here; this repository adds only `MB_CONTACT_EMAIL` and `MB_GOOGLE_SITE_VERIFICATION` (optional, the
+  gateway's public pages) and the five optional `OMENIX_FNO_PG_*`. `lib/data`, `app/api`, `app/brief` and
+  `app/slack` are byte-identical between the two trees. The constants (MotherDuck host and databases, the dispatch
+  repository `contactexepex/agentic-stock-prediction`, the Slack channel, `APP_URL`) are the same. The assistant
+  accepts same-origin requests as well as `APP_URL`, so the project's own domain works.
+- **Behaviour: one visible difference, not hidden.** In the stock tree, Home reads live data (`usePage("home")`). Here,
+  Home (W9) and the frame (W8) read the signed-off examples, labelled "Example data", until their backend stories
+  land. After the switch, the owner's Home shows examples where it showed live data. Every other stock page (companies,
+  stock pages, strategies, paper portfolios, rule vs AI, track record, watchlist, news, strategy lab, help) reads the
+  same `/api/v1` routes with `MOTHERDUCK_READ_TOKEN` as before.
+- **Not verified:** the actual variables set on the omenix-dashboard project. I cannot see Vercel; the list comes from
+  the stock repository's `docs/ws/b5.md` (the app project's table). The checklist asks the owner to keep what is
+  there and confirm `MB_GATEWAY` is unset, because `MB_GATEWAY=1` would turn every dashboard page into a 404.
