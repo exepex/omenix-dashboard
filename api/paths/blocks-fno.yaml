@@ -114,7 +114,7 @@
     summary: 'The three F&O paper books: value, profit or loss, approved strategies, risk used'
     x-status: planned
     x-publisher: fno
-    x-read-model: 'fno.pages_history pages risk and scoreboard_b (P1)'
+    x-read-model: 'fno.pages_history page risk (P1''s page, published by P10)'
     x-freshness: 'fno_calendar; 3 pm run and post-close marks'
     x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
     x-empty: 'never empty: three books always exist (Rs 5 lakh each); approved empty means no approved strategy yet'

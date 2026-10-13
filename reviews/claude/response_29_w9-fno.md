@@ -191,3 +191,14 @@ rejects one (`IndiaStockEventsRule`).
   rule). The orchestrator set both rules; I kept each as given. Say if they should match.
 - `api/catalog/README.md` still says "37 small read endpoints"; there are 46. That count was already stale before this
   change.
+
+### Contract follow-up (orchestrator, 13 Oct 2026, after P10's fix 8cf2584)
+
+- The books block now names one page, `risk`, in both places: the path's `x-read-model` and the schema's catalog
+  source. The catalog story is P10. `scoreboard_b` belongs to S2 (not built) and will get its own field or block
+  through a normal contract change.
+- Checked in exepex/trading 8cf2584: P10 publishes `today` for FnoPicks and `risk` for FnoBooks. These equal the
+  contract and `web/lib/fno/pages.ts` (held by `lib/fno/tests/pages.test.ts`).
+- W13's chain page keys: unchanged, as decided.
+- The India publisher split and its page keys (`session`, `indices`, `fno_events`, `flows`) are in 13661c0
+  (contract 2.5). That is the exact list the P6 session publishes.
