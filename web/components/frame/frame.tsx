@@ -72,10 +72,11 @@ function Snack({ text, dismiss }: { text: string | null; dismiss: () => void }) 
 
 /** <Frame data={frameData(payload, market)} chat={chatSlot}>{page}</Frame>, rendered by app/(cockpit)/[market]/layout.tsx. */
 export function Frame({ data, children, chat }: { data: FrameData; children: ReactNode; chat?: ReactNode }) {
-  const { snackText, dismissSnack, ...ui } = useFrameState(data);
+  const { snackText, dismissSnack, asServer, ...ui } = useFrameState(data);
+  const views = { live: ui, server: { ...ui, ...asServer } };
   return (
     <ChatPanelProvider>
-      <FrameContext.Provider value={ui}>
+      <FrameContext.Provider value={views}>
         <TooltipLayer />
         <Layout chat={chat}>{children}</Layout>
         <Veil />

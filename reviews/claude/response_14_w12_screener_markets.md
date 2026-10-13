@@ -119,7 +119,36 @@ which are compared. The `not-followed` state's hover is not driven; its reason t
 Proposal for W11's owner (reasoning only): add those examples (`u=ours`, `screen=volume`, …, `sort=-d1`), and each
 becomes a harness case with no app change.
 
+## Correction to `response_10` (the `home-open` failure): the earlier fix was wrong
+
+In `response_10` I said `home-open`'s one-off React #418 came from the `#clock=open` hash being applied too early, and
+that applying it in `startTransition` fixed it. The cause I named was right; the fix was not. The full harness
+failed `home-open` again during W12 (at 390 px, with 12 controls still locked).
+
+- **Reproduced on purpose.** I delayed one Home block by 2.5 s on a production build, so its section streams in after
+  the frame has read the hash.
+  - Without the transition: the section hydrated against the open clock while its HTML said closed. React does not
+    patch attribute mismatches in production, so 12 Buy / Sell controls stayed `disabled` during the session.
+  - With the transition, this one run passed, but the full harness had already shown it does not always hold.
+- **Root fix** (`components/frame/frame-context.tsx`, `frame.tsx`, `use-frame-state.ts`):
+  - The frame keeps two views: the live state, and the state the server rendered (no hash clock, the "all" picks
+    filter, no instruments a page lent).
+  - `useFrame()` reads the server view while a component hydrates (`useSyncExternalStore` with a server snapshot,
+    React's documented pattern). React then re-renders that component with the live state.
+  - So a streamed section always hydrates against what its HTML was made from. The transition is removed.
+  - This also covers W12's new `addItems`, which had the same flaw: lent instruments would have changed Buy / Sell in
+    a section that hydrates late.
+- **Evidence.** Same forced delay, no transition, with the fix: 0 page errors and 0 locked controls in 3 loads
+  (before: 12 locked). The full harness is in the orchestrator report. **Strong evidence** for the cause and the fix.
+
 ## Doubts and limits
+
+- **A separate, older issue found on the way (not fixed here, reasoning only on its impact).** The shared tooltip
+  layer (`components/shell/tooltip-layer.tsx`) adds `tabindex="0"` to every `[data-tip]` element through a
+  MutationObserver, including nodes React has not hydrated yet. In development React warns that the attributes do
+  not match, on every page that streams. In production it does not throw, but React does not patch it either, so it
+  is harmless today. Proposed fix: give the elements `tabIndex` in their components (or one `Tip` component) instead
+  of mutating React's DOM. It is outside W12; I am raising it rather than widening this story.
 
 - **A harness hang I hit while building.** The rail linked to `/markets` before that page existed. Next's prefetch
   of the missing page never finished on the harness server, so every case timed out waiting for the network to go
