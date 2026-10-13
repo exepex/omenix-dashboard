@@ -96,6 +96,15 @@
               india: {$ref: '#/components/examples/getScreenerStocksIndia_india'}
               india_high: {$ref: '#/components/examples/getScreenerStocksIndia_india_high'}
               india_gainers: {$ref: '#/components/examples/getScreenerStocksIndia_india_gainers'}
+              india_ours: {$ref: '#/components/examples/getScreenerStocksIndia_india_ours'}
+              india_year: {$ref: '#/components/examples/getScreenerStocksIndia_india_year'}
+              india_volume: {$ref: '#/components/examples/getScreenerStocksIndia_india_volume'}
+              india_oversold: {$ref: '#/components/examples/getScreenerStocksIndia_india_oversold'}
+              india_picks: {$ref: '#/components/examples/getScreenerStocksIndia_india_picks'}
+              india_results: {$ref: '#/components/examples/getScreenerStocksIndia_india_results'}
+              india_filters: {$ref: '#/components/examples/getScreenerStocksIndia_india_filters'}
+              india_losers: {$ref: '#/components/examples/getScreenerStocksIndia_india_losers'}
+              india_active: {$ref: '#/components/examples/getScreenerStocksIndia_india_active'}
       '422': {$ref: '#/components/responses/Invalid'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}
@@ -227,6 +236,9 @@
             examples:
               india: {$ref: '#/components/examples/getFnoScreenerRows_india'}
               india_index_options: {$ref: '#/components/examples/getFnoScreenerRows_india_index_options'}
+              india_short: {$ref: '#/components/examples/getFnoScreenerRows_india_short'}
+              india_ivhigh: {$ref: '#/components/examples/getFnoScreenerRows_india_ivhigh'}
+              india_index: {$ref: '#/components/examples/getFnoScreenerRows_india_index'}
       '422': {$ref: '#/components/responses/Invalid'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}

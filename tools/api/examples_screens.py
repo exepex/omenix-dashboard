@@ -10,8 +10,6 @@ CLOSE_UTC = {"india": "T10:00:00Z", "us": "T20:00:00Z"}  # NSE closes 15:30 IST,
 ROW_KEYS = ("s", "n", "g", "p", "d1", "w1", "m1", "m3", "y1", "h", "l", "v", "va", "dl", "r", "u")
 FNO_KEYS = ("s", "n", "kind", "fut", "fc", "oi", "oc", "b", "iv", "ivl", "ivh", "ivr", "pcr", "mv", "x", "lot")
 QUOTE_KEYS = ("d1", "w1", "m1", "m3", "y1", "hi52", "lo52")
-INDEX_OPTIONS = ("BANKNIFTY", "FINNIFTY", "MIDCPNIFTY", "NIFTY")
-PAGE = 25
 
 
 class Screens:
@@ -56,11 +54,6 @@ def _row(r, market):
     return {k: r[k] for k in ROW_KEYS if k != "dl" or market == "india"}  # dl: NSE only
 
 
-def _page(x, market, rows, total, size=PAGE):
-    return {"as_of": x.as_of(market), "currency": "INR" if market == "india" else "USD", "total": total, "page": 1, "page_size": size,
-            "rows": [_row(r, market) for r in rows[:size]]}
-
-
 def followed_india(x: Screens) -> dict:
     """The stock tool's own input to India's screener: the companies it follows (its published signals)."""
     return {"as_of": x.C["day"], "companies": sorted(x.C["markets"]["india"]["signals"])}
@@ -72,24 +65,6 @@ def stored_tables(x: Screens) -> dict:
     return {"ScreenerStocksTableIndia": table("india", [_row(r, "india") for r in x.rows("india")]),
             "ScreenerStocksTableUs": table("us", [_row(r, "us") for r in x.rows("us")]),
             "FnoScreenerTable": table("india", [{k: r[k] for k in FNO_KEYS} for r in x.C["markets"]["india"]["fno"]])}
-
-
-def screener_stocks(x: Screens, market):
-    value = lambda r: r["p"] * r["v"]  # noqa: E731
-    if market == "us":
-        rows = sorted(x.rows("us"), key=value, reverse=True)
-        movers = sorted(x.rows("us"), key=lambda r: -r["d1"])[:5]
-        _same("US gainers", [r["s"] for r in movers], [m["s"] for m in x.K["markets"]["us"]["movers"]["ours"]["gainers"]])
-        return {"": ("first page, sorted by value traded (the default)", _page(x, "us", rows, len(rows))),
-                "_gainers": ("the Markets gainers: sort=d1&page_size=5", _page(x, "us", movers, len(rows), 5))}
-    rows = sorted(x.rows("india"), key=value, reverse=True)
-    n500 = x.rows("india", "n500")
-    gainers = sorted(n500, key=lambda r: -r["d1"])
-    _same("Nifty 500 gainers", [r["s"] for r in gainers[:8]], [m["s"] for m in x.K["markets"]["india"]["movers"]["n500"]["gainers"]])
-    high = sorted((r for r in rows if r["h"] and r["p"] >= r["h"] * .98), key=lambda r: -(r["p"] - r["l"]) / (r["h"] - r["l"]))
-    return {"": ("first page of every NSE stock, sorted by value traded (the default)", _page(x, "india", rows, len(rows))),
-            "_high": ("screen=high: near the 52-week high, closest first", _page(x, "india", high, len(high))),
-            "_gainers": ("the Markets gainers: u=n500&sort=d1&page_size=8", _page(x, "india", gainers, len(n500), 8))}
 
 
 def screener_tools(x: Screens, market):
@@ -105,16 +80,6 @@ def fno_screener_summary(x: Screens, market):
             "buildups": {k: sum(1 for r in rows if r["b"] == k) for k in kinds},
             "screens": {"ivhigh": sum(1 for r in rows if (r["ivr"] or 0) >= 80), "ivlow": sum(1 for r in rows if r["ivr"] is not None and r["ivr"] <= 20),
                         "oiup": sum(1 for r in rows if (r["oc"] or 0) >= 5), "index": sum(1 for r in rows if r["kind"] == "index")}})}
-
-
-def fno_screener_rows(x: Screens, market):
-    rows = sorted(x.C["markets"]["india"]["fno"], key=lambda r: -(r["oi"] * r["fut"]))
-    page = lambda rs, total: {"as_of": x.as_of("india"), "currency": "INR", "total": total, "page": 1, "page_size": PAGE,  # noqa: E731
-                              "rows": [{k: r[k] for k in FNO_KEYS} for r in rs[:PAGE]]}
-    idx = sorted((r for r in rows if r["s"] in INDEX_OPTIONS), key=lambda r: r["s"])
-    _same("index options", [{k: r[k] for k in FNO_KEYS} for r in idx], [{k: r[k] for k in FNO_KEYS} for r in x.K["markets"]["india"]["fno"]])
-    return {"": ("first page, by futures open interest (the default)", page(rows, len(rows))),
-            "_index_options": ("the Markets index options: symbols=NIFTY,BANKNIFTY,FINNIFTY,MIDCPNIFTY", page(idx, len(idx)))}
 
 
 def _quote(row, kind, as_of):

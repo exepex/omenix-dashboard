@@ -26,7 +26,8 @@ GH
 cat > "$work/bin/curl" <<'CURL'
 #!/usr/bin/env bash
 { echo "curl $*"; echo "stdin: $(cat)"; } >> "$FAKE_SLACK_LOG"
-if [ -f "$FAKE_SLACK_LOG.refuse" ]; then echo 'no_service'; else echo 'ok'; fi
+if [ -f "$FAKE_SLACK_LOG.odd" ]; then echo '<html>https://hooks.slack.com/services/T0TEST/B0TEST/webhooksecret</html>'
+elif [ -f "$FAKE_SLACK_LOG.refuse" ]; then echo 'no_service'; else echo 'ok'; fi
 CURL
 chmod +x "$work/bin/gh" "$work/bin/curl"
 export FAKE_GH_LOG="$work/gh.log" FAKE_SLACK_LOG="$work/slack.log" PATH="$work/bin:$PATH"
@@ -101,6 +102,11 @@ notify "https://hooks.slack.com/services/T0TEST/B0TEST/webhooksecret"; code=$?
 [ "$code" -eq 1 ] && grep -q "refused the message: no_service" "$work/notify.txt" && ! grep -q webhooksecret "$work/notify.txt" \
   && echo "ok: a refusal names Slack's error code, never the URL" || fail "refusal output"
 rm -f "$FAKE_SLACK_LOG.refuse"
+touch "$FAKE_SLACK_LOG.odd"
+notify "https://hooks.slack.com/services/T0TEST/B0TEST/webhooksecret"; code=$?
+[ "$code" -eq 1 ] && grep -q "unrecognised answer (not shown)" "$work/notify.txt" && ! grep -q webhooksecret "$work/notify.txt" \
+  && echo "ok: an answer that is not a plain Slack error code is never echoed" || fail "odd answer echoed"
+rm -f "$FAKE_SLACK_LOG.odd"
 
 # Keep-alive: commits only when the repository has been idle for 45 days.
 repo="$work/repo"; mkdir -p "$repo/platform/monitor"; cp "$platform/monitor/keepalive.sh" "$repo/platform/monitor/"

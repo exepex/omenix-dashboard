@@ -20,4 +20,8 @@ answer="$(printf 'url = "%s"\n' "$webhook" \
 code=$?
 [ "$code" -eq 0 ] || { echo "Slack could not be reached (curl exit $code)"; exit 1; }
 # Slack answers "ok" on success, else a short error code such as invalid_payload or no_service (never the URL).
-[ "$answer" = ok ] || { echo "Slack refused the message: $(printf '%s' "$answer" | tr -cd 'a-z_' | head -c 40)"; exit 1; }
+[ "$answer" = ok ] && exit 0
+# Echo the answer only when it is exactly such a code; anything else (HTML, a proxy page) gets a fixed text.
+if printf '%s' "$answer" | grep -Eqx '[a-z_]{1,40}'; then echo "Slack refused the message: $answer"
+else echo "Slack refused the message: unrecognised answer (not shown)"; fi
+exit 1

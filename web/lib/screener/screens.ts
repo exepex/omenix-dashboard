@@ -74,3 +74,14 @@ export const fnoSortOf = (screen: string) => FNO_SCREENS.find((s) => s[0] === sc
 
 /** The Markets overview's index options: the four index underlyings that trade (34 notes, decision 5). */
 export const INDEX_OPTIONS = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
+
+/** The tools-based screens' own order (33: picks by strategies buying, most first; results soonest first), which the
+ *  route cannot sort by (it is the tools block's data): applied on the page to the screen's at most 20 rows, keeping
+ *  each row's index in the block (its figures' source). Stable, so ties keep the route's order (value traded). */
+export function toolsOrder<R extends { s: string }>(rows: readonly R[], tools: ScreenerTools, key: "picks" | "results"): { r: R; i: number }[] {
+  const by = new Map(tools.companies.map((c) => [c.s, c]));
+  const value = (s: string) => (key === "picks" ? -(by.get(s)?.strategies.buy ?? 0) : (by.get(s)?.days_to_results ?? Infinity));
+  return rows.map((r, i) => ({ r, i })).sort((a, b) => value(a.r.s) - value(b.r.s));
+}
+
+export const TOOLS_ORDER_WORDS: Record<"picks" | "results", string> = { picks: "strategies buying", results: "soonest results" };

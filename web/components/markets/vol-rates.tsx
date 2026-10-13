@@ -46,11 +46,13 @@ export function IndexOptions({ rows }: { rows: FnoScreenerRows }) {
   const at = (i: number, f: string) => sourceName("fnoRows", `rows[${i}].${f}`);
   const raw = (i: number, f: "iv" | "ivr" | "pcr" | "mv", v: number | null) => <span data-src={at(i, f)}>{v ?? "—"}</span>;
   const expiry = rows.rows[0]?.x;
+  // the four by name, as signed off (34); each keeps its index in the block, the source of its figures
+  const byName = rows.rows.map((r, i) => ({ r, i })).sort((a, b) => a.r.s.localeCompare(b.r.s));
   return (
     <section className="card" aria-label="Index options">
       <Head title="What do index options say?" sub={expiry ? `nearest monthly expiry, ${dateShort(`${expiry}T10:00:00Z`, shell)}` : undefined} go={<a className="go" href="#" onClick={(e) => { e.preventDefault(); snack(`NIFTY option chain: ${SOON}`); }}>NIFTY chain<Icon name="chevron_right" /></a>} />
       <ul className="list">
-        {rows.rows.map((r, i) => {
+        {byName.map(({ r, i }) => {
           const [, label, toneName, icon] = buildupOf(r.b);
           return (
             <li key={r.s} style={{ gridTemplateColumns: "minmax(0,1fr) auto" }}>
