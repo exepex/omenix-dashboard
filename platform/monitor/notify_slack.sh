@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 # Send the scheduled check's private message (details of a finding, or the weekly heartbeat) to the owner's Slack
 # channel #fno-desk. This is the only place the details go: the repository is public, so its run logs and issues are
-# too. Uses the secret FNO_SLACK_BOT_TOKEN (the F&O bot, which already posts there). Only this channel, never another.
-# Usage: notify_slack.sh MESSAGE_FILE    Exit 0 when Slack accepted the message, 1 otherwise (never prints the token).
+# too. Uses the secret OMENIX_DB_ALERT_WEBHOOK, a Slack incoming webhook the owner created for #fno-desk only (owner
+# decision, issue #2): Slack binds the channel to the webhook, so a leaked URL can post to #fno-desk and nothing else.
+# Usage: notify_slack.sh MESSAGE_FILE    Exit 0 when Slack accepted the message, 1 otherwise.
+# The URL is the secret: it reaches curl through a config file on stdin (never its command line) and is never printed;
+# curl's own error text is not shown either, because it can quote the URL.
 set -u
-channel="C0C89E8QCCD"   # #fno-desk; fixed here on purpose (exepex/trading fno/constants.py FNO_DESK_CHANNEL_ID)
-url="${X1_SLACK_URL:-https://slack.com/api/chat.postMessage}"   # X1_SLACK_URL: only for tests
-[ -n "${FNO_SLACK_BOT_TOKEN:-}" ] || { echo "no private channel: the secret FNO_SLACK_BOT_TOKEN is not set"; exit 1; }
-payload="$(jq -n --arg channel "$channel" --rawfile text "$1" '{channel: $channel, text: $text}')" || exit 1
-# The token goes in a header read from stdin, not on the command line.
-answer="$(printf 'Authorization: Bearer %s\n' "$FNO_SLACK_BOT_TOKEN" \
-  | curl -sS --max-time 20 -H @- -H 'Content-Type: application/json; charset=utf-8' --data "$payload" "$url")" || exit 1
-[ "$(printf '%s' "$answer" | jq -r '.ok')" = true ] || { echo "Slack refused the message: $(printf '%s' "$answer" | jq -r '.error')"; exit 1; }
+webhook="${OMENIX_DB_ALERT_WEBHOOK:-}"
+[ -n "$webhook" ] || { echo "no private channel: the secret OMENIX_DB_ALERT_WEBHOOK is not set"; exit 1; }
+case "$webhook" in
+  https://hooks.slack.com/services/*) ;;
+  *) echo "the secret OMENIX_DB_ALERT_WEBHOOK is not a Slack incoming webhook (https://hooks.slack.com/services/...)"; exit 1 ;;
+esac
+case "$webhook" in *'"'*|*'\'*|*[[:space:]]*) echo "the secret OMENIX_DB_ALERT_WEBHOOK has characters a URL cannot hold"; exit 1 ;; esac
+payload="$(jq -n --rawfile text "$1" '{text: $text}')" || exit 1
+answer="$(printf 'url = "%s"\n' "$webhook" \
+  | curl -sS --max-time 20 --config - -H 'Content-Type: application/json; charset=utf-8' --data "$payload" 2> /dev/null)"
+code=$?
+[ "$code" -eq 0 ] || { echo "Slack could not be reached (curl exit $code)"; exit 1; }
+# Slack answers "ok" on success, else a short error code such as invalid_payload or no_service (never the URL).
+[ "$answer" = ok ] || { echo "Slack refused the message: $(printf '%s' "$answer" | tr -cd 'a-z_' | head -c 40)"; exit 1; }

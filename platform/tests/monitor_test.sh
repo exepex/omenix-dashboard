@@ -26,11 +26,11 @@ GH
 cat > "$work/bin/curl" <<'CURL'
 #!/usr/bin/env bash
 { echo "curl $*"; echo "stdin: $(cat)"; } >> "$FAKE_SLACK_LOG"
-if [ -f "$FAKE_SLACK_LOG.refuse" ]; then echo '{"ok":false,"error":"channel_not_found"}'; else echo '{"ok":true}'; fi
+if [ -f "$FAKE_SLACK_LOG.refuse" ]; then echo 'no_service'; else echo 'ok'; fi
 CURL
 chmod +x "$work/bin/gh" "$work/bin/curl"
 export FAKE_GH_LOG="$work/gh.log" FAKE_SLACK_LOG="$work/slack.log" PATH="$work/bin:$PATH"
-export FNO_SLACK_BOT_TOKEN="xoxb-test-token" X1_HEARTBEAT=0
+export OMENIX_DB_ALERT_WEBHOOK="https://hooks.slack.com/services/T0TEST/B0TEST/webhooksecret" X1_HEARTBEAT=0
 
 monitor() {
   : > "$FAKE_GH_LOG"; : > "$FAKE_SLACK_LOG"
@@ -40,7 +40,7 @@ monitor() {
 apply() { PGUSER=x1_admin PGOPTIONS="-c client_min_messages=warning" "$platform/sql/apply.sh" > /dev/null 2>&1; }
 # Details that must never reach the public log or issue (names, settings, sizes, catalog lines).
 public_clean() {
-  ! grep -qE 'dashboard_app|stock_writer|statement_timeout|database postgres|large object|bytes|acl |role setting|xoxb' \
+  ! grep -qE 'dashboard_app|stock_writer|statement_timeout|database postgres|large object|bytes|acl |role setting|webhooksecret|hooks.slack' \
     "$work/out.txt" "$FAKE_GH_LOG"
 }
 expect_alert() {  # name, exit code, pattern the private Slack message must contain
@@ -48,7 +48,7 @@ expect_alert() {  # name, exit code, pattern the private Slack message must cont
   [ "$code" -eq "$2" ] || { fail "$1: exit $code, expected $2"; cat "$work/out.txt"; return; }
   grep -q "gh issue" "$FAKE_GH_LOG" || { fail "$1: no GitHub alert"; return; }
   grep -q -- "$3" "$FAKE_SLACK_LOG" || { fail "$1: the private Slack message lacks the detail ($3)"; return; }
-  public_clean || { fail "$1: details leaked into the public log or issue"; grep -hE 'dashboard_app|statement_timeout|database postgres|large object|bytes|acl |role setting|xoxb' "$work/out.txt" "$FAKE_GH_LOG"; return; }
+  public_clean || { fail "$1: details leaked into the public log or issue"; grep -hE 'dashboard_app|statement_timeout|database postgres|large object|bytes|acl |role setting|webhooksecret|hooks.slack' "$work/out.txt" "$FAKE_GH_LOG"; return; }
   echo "ok: $1: alert raised in public with counts only; details went to the Slack sender"
 }
 
@@ -69,7 +69,7 @@ apply
 psql -X -q -U x1_admin -d omenix -c "SET ROLE stock_owner" -c "GRANT CREATE ON SCHEMA stock TO stock_writer"
 touch "$FAKE_SLACK_LOG.refuse"
 expect_alert "a CREATE grant on schema stock (Slack refusing)" 1 "acl schema stock: stock_writer CREATE granted by stock_owner"
-grep -q "Slack channel: no (Slack refused the message: channel_not_found)" "$FAKE_GH_LOG" \
+grep -q "Slack channel: no (Slack refused the message: no_service)" "$FAKE_GH_LOG" \
   && echo "ok: when Slack refuses, the public alert says the details were not delivered" || fail "Slack refusal not stated"
 rm -f "$FAKE_SLACK_LOG.refuse"
 apply
@@ -86,8 +86,21 @@ X1_HEARTBEAT=1 monitor
   && echo "ok: the weekly heartbeat names the last successful check" || fail "heartbeat"
 grep -q "password changes" "$platform/monitor/db_check.sh" && echo "ok: the report states that password changes are not detectable" \
   || fail "password limitation not stated"
-grep -q 'Authorization: Bearer xoxb-test-token' "$FAKE_SLACK_LOG" && ! grep -q 'curl .*xoxb' "$FAKE_SLACK_LOG" \
-  && echo "ok: the Slack token travels on stdin, never on curl's command line" || fail "token on the command line"
+grep -q 'stdin: url = "https://hooks.slack.com/services/T0TEST/B0TEST/webhooksecret"' "$FAKE_SLACK_LOG" \
+  && ! grep -q 'curl .*webhooksecret' "$FAKE_SLACK_LOG" \
+  && echo "ok: the webhook URL travels on stdin, never on curl's command line" || fail "webhook URL on the command line"
+echo "detail" > "$work/msg.txt"
+notify() { OMENIX_DB_ALERT_WEBHOOK="$1" "$platform/monitor/notify_slack.sh" "$work/msg.txt" > "$work/notify.txt" 2>&1; }
+notify "https://example.com/services/webhooksecret"; code=$?
+[ "$code" -eq 1 ] && grep -q "not a Slack incoming webhook" "$work/notify.txt" && ! grep -q webhooksecret "$work/notify.txt" \
+  && echo "ok: a URL that is not a Slack webhook is refused, and not printed" || fail "non-Slack URL"
+notify ""; [ $? -eq 1 ] && grep -q "OMENIX_DB_ALERT_WEBHOOK is not set" "$work/notify.txt" \
+  && echo "ok: a missing webhook is reported" || fail "missing webhook"
+touch "$FAKE_SLACK_LOG.refuse"
+notify "https://hooks.slack.com/services/T0TEST/B0TEST/webhooksecret"; code=$?
+[ "$code" -eq 1 ] && grep -q "refused the message: no_service" "$work/notify.txt" && ! grep -q webhooksecret "$work/notify.txt" \
+  && echo "ok: a refusal names Slack's error code, never the URL" || fail "refusal output"
+rm -f "$FAKE_SLACK_LOG.refuse"
 
 # Keep-alive: commits only when the repository has been idle for 45 days.
 repo="$work/repo"; mkdir -p "$repo/platform/monitor"; cp "$platform/monitor/keepalive.sh" "$repo/platform/monitor/"

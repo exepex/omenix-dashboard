@@ -68,7 +68,7 @@ who failed), and an email alert when storage is above 80 percent (metric `storag
 | `fno_writer` | read and write rows in `fno` tables | `FNO_DB_URL`, `exepex/trading`'s cloud environment |
 | `dashboard_app` | read `stock` and `fno`; read, insert and update `app` (no delete) | `OMENIX_DB_URL`, the dashboard's Vercel projects |
 | `stock_inbox_reader` | read `app` | `STOCK_INBOX_DB_URL`, stock backend's cloud environment |
-| `db_monitor` | connect and read catalogs and large-object sizes only: no row data, no schema, table or function access (catalog metadata such as table names and row counts is visible, as to every role); limit 2 connections, 30 s timeout | `OMENIX_DB_MONITOR_PASSWORD`, this repository's GitHub Actions secret (the scheduled check below; it also holds `FNO_SLACK_BOT_TOKEN` for the private details) |
+| `db_monitor` | connect and read catalogs and large-object sizes only: no row data, no schema, table or function access (catalog metadata such as table names and row counts is visible, as to every role); limit 2 connections, 30 s timeout | `OMENIX_DB_MONITOR_PASSWORD`, this repository's GitHub Actions secret (the scheduled check below; it also holds `OMENIX_DB_ALERT_WEBHOOK` for the private details) |
 | `stock_owner`, `fno_owner`, `app_owner` | create and change tables in their own schema | nowhere: the owner's password manager only, used by hand for migrations |
 | server admin | create roles and databases | nowhere: the owner's password manager only |
 
@@ -166,7 +166,8 @@ What it watches, hourly, read-only (`platform/monitor/`, workflow `.github/workf
 routine. It is deterministic, costs nothing on a public repository and needs no model run.
 - **Credentials:** two repository secrets, set by the owner's script.
   - `OMENIX_DB_MONITOR_PASSWORD`: `db_monitor`'s password.
-  - `FNO_SLACK_BOT_TOKEN`: the bot that already posts to the owner's #fno-desk, used for the private details.
+  - `OMENIX_DB_ALERT_WEBHOOK`: a Slack incoming webhook bound to #fno-desk (owner's choice of 13 Oct 2026), used for
+    the private details.
 
   Also one repository variable, `DB_CHECK_ENABLED=true`. Host and role name are in the workflow, since they are not
   secret. No admin credential is stored anywhere.
@@ -177,15 +178,16 @@ routine. It is deterministic, costs nothing on a public repository and needs no 
   `Database check ALERT: 1 finding(s), unknown parts: 0, checked 2026-10-13 11:22 UTC`. They also say whether the
   details reached Slack. They name nothing that would tell an attacker what is misconfigured.
 - **Private:** the details (which database, which role, which setting or grant, how many bytes) go only to Slack
-  #fno-desk (`C0C89E8QCCD`, fixed in `monitor/notify_slack.sh`; no other channel). The token is sent to Slack in a
-  header read from stdin, never on a command line.
-- **If Slack refuses** or the token is missing, the public alert says the details were not delivered. The run still
-  fails, so it is never a silent pass.
-- **Residual risk (reasoning only):** the Slack token now lives in this public repository's Actions secrets as well
-  as in `exepex/trading`. Anyone who can change this repository's workflows (only its writers) could read it, and a
-  leaked token can post to channels the bot is in. This is the price of a private channel without new
-  infrastructure. The alternatives are e-mail through the Azure action group, which Actions cannot reach, or making
-  the repository private.
+  #fno-desk, through an incoming webhook the owner created for that channel (Slack fixes the channel when the webhook
+  is made; `monitor/notify_slack.sh` accepts only `https://hooks.slack.com/services/...` URLs). The URL is the secret:
+  it reaches curl through a config on stdin, never on a command line, and neither it nor curl's error text is printed.
+- **If Slack refuses** or the webhook is missing, the public alert says the details were not delivered (with Slack's
+  short error code, e.g. `no_service`). The run still fails, so it is never a silent pass.
+- **Residual risk (reasoning only):** the webhook URL lives in this public repository's Actions secrets. Anyone who
+  can change this repository's workflows (only its writers) could read it. A leaked webhook can only post messages to
+  #fno-desk: it cannot read the channel, post anywhere else or act as a user (Slack's incoming webhooks are post-only
+  and bound to one channel). That is narrower than the bot token used before, which could post to every channel the
+  bot is in. If it leaks: delete the webhook in Slack, create a new one and run `owner/setup_monitor.sh` again.
 
 **Alerts, and never a silent pass:**
 - **Results:** `RESULT: OK` (exit 0), `RESULT: ALERT` (exit 1, a finding) or `RESULT: UNKNOWN` (exit 2: no
@@ -210,7 +212,7 @@ table and column names, row counts from the statistics views, role names and set
 `fno` or `app`.
 
 **Owner setup, once: one script** (`owner/CHECKLIST_MONITOR.md`). `owner/setup_monitor.sh` asks for the admin name and
-password and the #fno-desk bot token, all at hidden prompts; Enter keeps an already saved token. It then:
+password and the #fno-desk webhook URL, all at hidden prompts; Enter keeps an already saved webhook. It then:
 - applies `platform/sql`, which creates `db_monitor`;
 - generates the monitor's 40-character password, which nobody types or sees;
 - stores it in the database as a SCRAM-SHA-256 verifier computed on the Mac (`owner/scram_verifier.py`), so the plain
