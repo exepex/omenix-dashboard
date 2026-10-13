@@ -1,11 +1,14 @@
 "use client";
 // Today's buy picks panel (story W8; 30-shell): left on desktop (>= 1200 px), an overlay below that, the Picks tab on a
 // phone. Each approach's pick for today with its evidence; filter chips and pages (6 a page) instead of a second
-// search box; the no-pick note; in India the F&O state ("no approved strategy yet"). The F&O note is absent in the US.
+// search box; the no-pick note; in India the F&O state ("no approved strategy yet") and, once a book's strategy is
+// approved, its ideas (W9-F&O, from the F&O tool). Every F&O element is absent in the US.
 import { useEffect, useState } from "react";
 import type { Signal } from "../../lib/shell/contract.ts";
 import { HelpTip, Icon } from "../ui/icon.tsx";
 import { useFrame, type Approach } from "./frame-context.tsx";
+import { FnoPicksNote } from "./fno-picks.tsx";
+import { StockExampleTag } from "./parts.tsx";
 import { PickRow } from "./pick-row.tsx";
 
 const PAGE = 6;
@@ -46,7 +49,6 @@ export function PicksBody({ where }: { where: "panel" | "home" }) {
   const at = Math.min(page, pages - 1);
   const shown = rows.slice(at * PAGE, at * PAGE + PAGE);
   const G = shell.go_live;
-  const fs = shell.fno_state;
   return (
     <>
       <div className="mb-wl-head">
@@ -62,6 +64,7 @@ export function PicksBody({ where }: { where: "panel" | "home" }) {
         <Chips />
         <div className="mb-wl-meta">
           <span>{`Not proven yet · ${G.trades_needed} trades to go`}</span>
+          <StockExampleTag />
         </div>
       </div>
       <ul className="mb-wl-list" aria-label="Today’s buy picks">
@@ -78,15 +81,7 @@ export function PicksBody({ where }: { where: "panel" | "home" }) {
           </span>
         </div>
       ) : null}
-      {shell.fno && fs && !fs.approved ? (
-        <div className="mb-wl-note">
-          <Icon name="science" />
-          <span>
-            <b>F&amp;O: no approved strategy yet. </b>
-            {fs.note.replace(/^No F&O strategy has passed testing yet: /, "")}
-          </span>
-        </div>
-      ) : null}
+      <FnoPicksNote />
       <div className="mb-wl-foot mb-pager">
         <span>{rows.length ? `${at * PAGE + 1}–${at * PAGE + shown.length} of ${rows.length}` : "0 of 0"}</span>
         <button className="md-icon-btn small" type="button" aria-label="Previous page" disabled={at === 0} onClick={() => setPage(at - 1)}>

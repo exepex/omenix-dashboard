@@ -8,7 +8,7 @@ export function HomeFooter() {
   return (
     <footer>
       {"Omenix · research and paper trading only: nothing here places a real order · "}
-      {data.example ? <b>Example data</b> : "data"}
+      {shell.fno_live && data.example ? <><b>stock figures: Example data</b>{"; F&O figures: the F&O tool’s publication"}</> : data.example ? <b>Example data</b> : "data"}
       {` as of ${when(data.now, data.now, shell)}`}
     </footer>
   );

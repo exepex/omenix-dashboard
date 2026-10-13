@@ -44,6 +44,8 @@ export interface Instrument {
   /** Why the value is an example (labelled). */
   example?: string;
   note?: string;
+  /** Read from a backend's publication (W9-F&O), not the example records: never labelled "Example data". */
+  live?: boolean;
 }
 
 export interface SourceRule {
@@ -168,6 +170,50 @@ export interface FnoState {
   note: string;
 }
 
+/** One F&O book's idea for today (W10 FnoPickRow; India only): a basket of legs with its risk. */
+export interface FnoPickRow {
+  basket: string;
+  family: "rule" | "hybrid" | "ai";
+  strategy: string;
+  name: string;
+  /** Risk-neutral probability of profit, percent. */
+  pop: number;
+  max_loss: number;
+  credit?: number;
+  debit?: number;
+}
+
+/** W10 FnoPicks (page "today"): the F&O tool's 3 pm state for the picks panel. */
+export interface FnoPicks {
+  currency: "INR";
+  fno_state: FnoState;
+  rows: FnoPickRow[];
+  baskets: Record<string, unknown>;
+}
+
+/** W10 IndexLevel and Indices (page "indices"): the benchmark and volatility index at their last close. */
+export interface IndexLevel {
+  id: string;
+  sym: string;
+  name: string;
+  role: "benchmark" | "vol_index";
+  last: number;
+  chg_pct: number;
+  chg_5d_pct: number;
+  as_of: string;
+  source: PriceSource;
+}
+
+export interface Indices {
+  indices: IndexLevel[];
+}
+
+/** Which of a market's frame parts come from the F&O tool's publication (W9-F&O), and why one is missing. */
+export interface FnoLive {
+  /** A part with no data: its reason (empty, or the read failed), shown where the part would be. */
+  missing: Partial<Record<"session" | "indices" | "picks", string>>;
+}
+
 export interface MarketShell {
   label: string;
   exchange: string;
@@ -193,6 +239,10 @@ export interface MarketShell {
   short_option_margin_per_lot?: number;
   next_quotes: { stock: string; option?: string };
   fno_state?: FnoState;
+  /** Today's F&O ideas (W9-F&O; empty until a book's strategy is approved). */
+  fno_rows?: FnoPickRow[];
+  /** Present when the F&O parts (indices, session, F&O picks) are read from the F&O tool: the rest stays example. */
+  fno_live?: FnoLive;
 }
 
 /** The whole frame payload, both markets. */

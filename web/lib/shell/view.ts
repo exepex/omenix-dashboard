@@ -11,7 +11,7 @@ export function withoutFno(shell: MarketShell): MarketShell {
   const items: Record<string, Instrument> = {};
   for (const [id, item] of Object.entries(shell.items)) if (!isFno(item.kind)) items[id] = { ...item, fno: false };
   const kept = (id: string) => id in items;
-  const { fno_state: _fnoState, short_option_margin_per_lot: _margin, ...rest } = shell;
+  const { fno_state: _fnoState, fno_rows: _fnoRows, fno_live: _fnoLive, short_option_margin_per_lot: _margin, ...rest } = shell;
   return {
     ...rest,
     items,

@@ -1,4 +1,4 @@
-# Response 29 · W14 builder claims: the owner's UI feedback (loading, buttons and links, side menu, chart zoom)
+# Response 30 · W14 builder claims: the owner's UI feedback (loading, buttons and links, side menu, chart zoom)
 
 Story W14, the owner's feedback of 13 Oct 2026 on the deployed app. Built design system first (`design/system/`),
 then the app (`web/`, copies kept in sync by `web/tools/sync-design.mjs`). Not deployed. Evidence: the audit tables

@@ -9,6 +9,7 @@ import { groupCards, plural, type GroupCard } from "../../lib/home/groups.ts";
 import { src } from "../../lib/home/sources.ts";
 import { HelpTip, Icon } from "../ui/icon.tsx";
 import { useFrame } from "../frame/frame-context.tsx";
+import { StockExampleTag } from "../frame/parts.tsx";
 import { Money, MoneyDelta, SectionHead } from "./section-head.tsx";
 
 const SHORT: Record<string, string> = { manual: "Your own trades", rule: "Rules only, no AI", hybrid: "AI team within the rules", ai: "Fully autonomous AI agents" };
@@ -59,17 +60,21 @@ function YouCard({ accounts, positions }: { accounts: Accounts; positions: Posit
   );
 }
 
-function GroupCardView({ c }: { c: GroupCard }) {
+function GroupCardView({ c, booksMissing }: { c: GroupCard; booksMissing: string | null }) {
   const { data } = useFrame();
   return (
     <article className="mb-apcard">
       <CardHead family={c.family} />
       <Figure label={c.totalLabel} sub={c.totalSub}>
-        {c.total ? <span className="val"><MoneyDelta value={c.total.net} src={c.totalSrc} /></span> : <span className="none">No strategy yet</span>}
+        {c.total ? <span className="val"><MoneyDelta value={c.total.net} src={c.totalSrc} /> <StockExampleTag /></span> : <span className="none">No strategy yet</span>}
       </Figure>
       {c.book && c.bookSrc ? (
         <Figure label="F&O: total profit / loss" sub={c.bookSub}>
           <span className="val"><MoneyDelta value={c.book.pnl} src={c.bookSrc} /></span>
+        </Figure>
+      ) : booksMissing ? (
+        <Figure label="F&O: total profit / loss" sub={booksMissing}>
+          <span className="none">No data</span>
         </Figure>
       ) : null}
       {c.hasList ? (
@@ -89,7 +94,8 @@ function GroupCardView({ c }: { c: GroupCard }) {
   );
 }
 
-export function WhoTrades({ groups, books, accounts, positions }: { groups: Groups; books: FnoBook[] | null; accounts: Accounts; positions: Positions }) {
+/** `books`: null in the US (no F&O line at all); in India an empty list with `booksMissing` when the block has no data. */
+export function WhoTrades({ groups, books, booksMissing, accounts, positions }: { groups: Groups; books: FnoBook[] | null; booksMissing: string | null; accounts: Accounts; positions: Positions }) {
   const { go } = useFrame();
   const base = groups.baselines.total;
   return (
@@ -97,7 +103,7 @@ export function WhoTrades({ groups, books, accounts, positions }: { groups: Grou
       <SectionHead title="Who trades, and how it is going" sub="Each group’s total paper profit or loss. Open a group for each of its strategies." go={["Strategies", "scoreboards"]} />
       <div className="aps">
         <YouCard accounts={accounts} positions={positions} />
-        {groupCards(groups, books).map((c) => <GroupCardView key={c.family} c={c} />)}
+        {groupCards(groups, books).map((c) => <GroupCardView key={c.family} c={c} booksMissing={booksMissing} />)}
       </div>
       <p className="note">
         <Icon name="trending_flat" />

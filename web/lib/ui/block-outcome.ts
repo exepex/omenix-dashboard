@@ -23,3 +23,17 @@ export function outcomeOf(what: string, error: unknown): BlockOutcome {
   const failure = (error as { failure?: unknown } | null)?.failure;
   return { kind: "error", title: `${what}: data not available`, detail: "This part could not be read; the rest of the page works.", log: `${what}: ${name}${typeof failure === "string" ? ` (${failure})` : ""}` };
 }
+
+/** A block read, or the reason it has no data (the part shows the reason in its place). */
+export type Part<T> = { value: T } | { missing: string };
+
+/** Settles a read into a Part: its value, or its state's words (a failure logged by class only, never its message). */
+export async function settle<T>(what: string, read: Promise<T>): Promise<Part<T>> {
+  try {
+    return { value: await read };
+  } catch (error) {
+    const o = outcomeOf(what, error);
+    if (o.log) console.error(`block failed: ${o.log}`);
+    return { missing: o.detail };
+  }
+}

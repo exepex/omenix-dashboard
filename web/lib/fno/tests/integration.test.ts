@@ -11,7 +11,11 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { after, before, test } from "node:test";
+import { fnoHomeData } from "../../home/azure-source.ts";
+import { fixtureHomeData } from "../../home/fixture-source.ts";
 import { azureOverviewData } from "../../overview/azure-source.ts";
+import { fnoShellData } from "../../shell/azure-source.ts";
+import { fixtureShellData } from "../../shell/fixture-source.ts";
 import { azureScreenerData } from "../../screener/azure-source.ts";
 import type { ScreenerStock } from "../../screener/contract.ts";
 import { outcomeOf } from "../../ui/block-outcome.ts";
@@ -28,6 +32,8 @@ const bin = pgBin();
 const skip = bin || process.env.CI ? false : "no PostgreSQL binaries installed";
 const repo = join(import.meta.dirname, "..", "..", "..", "..");
 const examples = JSON.parse(readFileSync(join(repo, "api/examples/blocks-33-34.json"), "utf8"));
+const homeExamples = JSON.parse(readFileSync(join(repo, "api/examples/blocks.json"), "utf8"));
+const home = (op: string) => homeExamples[op].value.payload;
 const day = JSON.parse(readFileSync(join(repo, "design/mockups/33-screener/data.json"), "utf8")).markets.india;
 const ex = (op: string) => examples[op].value.payload;
 const table = (rows: object[]) => ({ as_of: "2026-10-12", currency: "INR", total: rows.length, rows });
@@ -38,6 +44,12 @@ const PAGES: Record<FnoPageKey, unknown> = {
   fno_screener_rows: table(day.fno),
   overview_indices: ex("getOverviewIndicesIndia_india"),
   overview_sectors: ex("getIndiaSectors_india"),
+  // P10's pages for Home and the frame, shaped as W10's examples (W9-F&O): the expiry rows only in the F&O events.
+  session: home("getSession_india"),
+  indices: home("getIndices_india"),
+  today: home("getFnoPicks_india"),
+  risk: home("getFnoBooks_india"),
+  events: { events: home("getEvents_india").events.filter((e: { kind: string }) => e.kind === "fno_expiry") },
 };
 const KEYS = Object.keys(PAGES) as FnoPageKey[];
 const IST = (date: string, time: string) => new Date(`${date}T${time}:00+05:30`);
@@ -99,6 +111,30 @@ test("the database adapters serve the published pages and say what no backend pu
   for (const read of [screener.tools("india"), screener.summary("us"), azureOverviewData(r).flows()]) {
     await assert.rejects(read, (e) => e instanceof BlockEmpty && e.reason === "no_producer");
   }
+});
+
+test("W9-F&O: Home and the frame read P10's pages from the current publication", { skip }, async () => {
+  await reset();
+  await publish("nse-2026-10-12-eeee", "2026-10-12", KEYS);
+  const r = reader(IST("2026-10-13", "10:00"));
+  const home = fnoHomeData(r, fixtureHomeData);
+  assert.deepEqual(await home.session("india"), PAGES.session);
+  assert.deepEqual(await home.fnoBooks(), PAGES.risk);
+  assert.deepEqual(await home.fnoEvents(), PAGES.events);
+  const frame = await fnoShellData(r, fixtureShellData, nseCalendar, () => IST("2026-10-13", "10:00")).read();
+  assert.equal(frame.markets.india.items.NIFTY50.live, true);
+  assert.deepEqual(frame.markets.india.fno_state, (PAGES.today as { fno_state: unknown }).fno_state);
+  assert.deepEqual(frame.markets.india.fno_live?.missing, { session: undefined, indices: undefined, picks: undefined });
+});
+
+test("W9-F&O: a publication without P10's pages (today's P6) leaves each F&O part's reason, never an example", { skip }, async () => {
+  await reset();
+  await publish("nse-2026-10-12-ffff", "2026-10-12", KEYS.slice(0, 6));
+  const frame = await fnoShellData(reader(IST("2026-10-13", "10:00")), fixtureShellData, nseCalendar, () => IST("2026-10-13", "10:00")).read();
+  const missing = frame.markets.india.fno_live?.missing ?? {};
+  for (const part of ["session", "indices", "picks"] as const) assert.match(missing[part] ?? "", /The current publication has no page for this part/, part);
+  assert.deepEqual(frame.markets.india.indices, []);
+  await assert.rejects(fnoHomeData(reader(IST("2026-10-13", "10:00")), fixtureHomeData).fnoBooks(), (e) => e instanceof BlockEmpty && e.reason === "page_missing");
 });
 
 test("empty with its reason: nothing published, or no such page in the current publication", { skip }, async () => {

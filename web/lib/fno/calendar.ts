@@ -75,3 +75,13 @@ export function sessionBefore(day: string, calendar: SessionCalendar): string {
   while (!calendar.isSession(d)) d = dayBefore(d);
   return d;
 }
+
+/** The day after, as YYYY-MM-DD. */
+export const dayAfter = (day: string) => new Date(Date.parse(`${day}T00:00:00Z`) + 86400000).toISOString().slice(0, 10);
+
+/** The first session strictly after `day`. */
+export function sessionAfter(day: string, calendar: SessionCalendar): string {
+  let d = dayAfter(day);
+  while (!calendar.isSession(d)) d = dayAfter(d);
+  return d;
+}
