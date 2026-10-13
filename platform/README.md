@@ -166,7 +166,7 @@ What it watches, hourly, read-only (`platform/monitor/`, workflow `.github/workf
 routine. It is deterministic, costs nothing on a public repository and needs no model run.
 - **Credentials:** two repository secrets, set by the owner's script.
   - `OMENIX_DB_MONITOR_PASSWORD`: `db_monitor`'s password.
-  - `OMENIX_DB_ALERT_WEBHOOK`: a Slack incoming webhook bound to #fno-desk (owner's choice of 13 Oct 2026), used for
+  - `OMENIX_DB_ALERT_WEBHOOK`: a Slack incoming webhook bound to #db-alerts (owner's choice of 13 Oct 2026; channel changed from #fno-desk to #db-alerts the same day), used for
     the private details.
 
   Also one repository variable, `DB_CHECK_ENABLED=true`. Host and role name are in the workflow, since they are not
@@ -178,14 +178,14 @@ routine. It is deterministic, costs nothing on a public repository and needs no 
   `Database check ALERT: 1 finding(s), unknown parts: 0, checked 2026-10-13 11:22 UTC`. They also say whether the
   details reached Slack. They name nothing that would tell an attacker what is misconfigured.
 - **Private:** the details (which database, which role, which setting or grant, how many bytes) go only to Slack
-  #fno-desk, through an incoming webhook the owner created for that channel (Slack fixes the channel when the webhook
+  #db-alerts, through an incoming webhook the owner created for that channel (Slack fixes the channel when the webhook
   is made; `monitor/notify_slack.sh` accepts only `https://hooks.slack.com/services/...` URLs). The URL is the secret:
   it reaches curl through a config on stdin, never on a command line, and neither it nor curl's error text is printed.
 - **If Slack refuses** or the webhook is missing, the public alert says the details were not delivered (with Slack's
   short error code, e.g. `no_service`). The run still fails, so it is never a silent pass.
 - **Residual risk (reasoning only):** the webhook URL lives in this public repository's Actions secrets. Anyone who
   can change this repository's workflows (only its writers) could read it. A leaked webhook can only post messages to
-  #fno-desk: it cannot read the channel, post anywhere else or act as a user (Slack's incoming webhooks are post-only
+  #db-alerts: it cannot read the channel, post anywhere else or act as a user (Slack's incoming webhooks are post-only
   and bound to one channel). That is narrower than the bot token used before, which could post to every channel the
   bot is in. If it leaks: delete the webhook in Slack, create a new one and run `owner/setup_monitor.sh` again.
 
@@ -200,7 +200,7 @@ routine. It is deterministic, costs nothing on a public repository and needs no 
   sender.
 
 **Is it still running?** A stopped check is a silent pass of another kind:
-- **Heartbeat:** every Monday the 03:xx UTC run, when OK, posts a heartbeat to #fno-desk with the time of the last
+- **Heartbeat:** every Monday the 03:xx UTC run, when OK, posts a heartbeat to #db-alerts with the time of the last
   successful check. If the Monday message stops coming, the check has stopped.
 - **Keep-alive:** GitHub pauses scheduled workflows in a public repository after 60 days without repository
   activity. The monthly workflow `keepalive` (`monitor/keepalive.sh`) commits `platform/monitor/keepalive.txt` only
@@ -212,7 +212,7 @@ table and column names, row counts from the statistics views, role names and set
 `fno` or `app`.
 
 **Owner setup, once: one script** (`owner/CHECKLIST_MONITOR.md`). `owner/setup_monitor.sh` asks for the admin name and
-password and the #fno-desk webhook URL, all at hidden prompts; Enter keeps an already saved webhook. It then:
+password and the #db-alerts webhook URL, all at hidden prompts; Enter keeps an already saved webhook. It then:
 - applies `platform/sql`, which creates `db_monitor`;
 - generates the monitor's 40-character password, which nobody types or sees;
 - stores it in the database as a SCRAM-SHA-256 verifier computed on the Mac (`owner/scram_verifier.py`), so the plain
@@ -265,7 +265,7 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `tests/large_objects.sh` | counts large objects in every database that accepts connections (as the admin); fails on any |
 | `tests/owner_scripts_test.sh` | tests the owner scripts' Azure handling with a fake `az`: both firewall-rule flag forms (current `--server-name`, older `--name`), an az failure shown as "ERROR, could not read", and IP addresses redacted from evidence |
 | `owner/az.sh` | az helpers shared by the owner scripts: firewall-rule calls for both az flag forms, and reads that report a failure as an error, never as a value |
-| `monitor/db_check.sh`, `monitor/run.sh`, `monitor/alert.sh`, `monitor/notify_slack.sh` | the scheduled check (issue #2): detailed report (OK, ALERT or UNKNOWN); entry point that prints only a summary; public GitHub alert (summary only); private details and weekly heartbeat to #fno-desk |
+| `monitor/db_check.sh`, `monitor/run.sh`, `monitor/alert.sh`, `monitor/notify_slack.sh` | the scheduled check (issue #2): detailed report (OK, ALERT or UNKNOWN); entry point that prints only a summary; public GitHub alert (summary only); private details and weekly heartbeat to #db-alerts |
 | `monitor/keepalive.sh` | monthly keep-alive commit when the repository has been idle 45 days (workflow `keepalive`) |
 | `owner/setup_monitor.sh`, `owner/scram_verifier.py`, `owner/CHECKLIST_MONITOR.md` | the owner's one-script setup of the check |
 | `tests/monitor_test.sh` | plants each watched condition and checks that the alert fires (CI step 7) |

@@ -7,7 +7,7 @@
 set -eu
 summary="$1"; run_url="${2:-}"
 title="Database check: alert"
-body="$(printf '%s\n\n%s\n\nDetails are never posted here (the repository is public); see the Slack message in #fno-desk. Issue #2, platform/README.md "Scheduled check".\n' \
+body="$(printf '%s\n\n%s\n\nDetails are never posted here (the repository is public); see the Slack message in #db-alerts. Issue #2, platform/README.md "Scheduled check".\n' \
   "$summary" "${run_url:+Run: $run_url}")"
 number="$(gh issue list --state open --search "\"$title\" in:title" --json number,title \
   --jq "map(select(.title == \"$title\")) | .[0].number // empty")"
