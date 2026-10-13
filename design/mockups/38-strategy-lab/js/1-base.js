@@ -56,3 +56,29 @@ function niftyLine(c, a, b) {
   const cap = mk(c).fno_capital || 500000, base = lv[a - 1];
   return Array.from({length: b - a + 1}, (_, i) => [a + i, cap * (lv[a + i - 1] / base - 1)]);
 }
+/* costs beyond the market charges in each trade (judge 55; DESK_DESIGN 12.8: the verdict is net after execution and
+   operating costs): the owner's own charges and the family's AI and data costs (allocated, not a bill), by day.
+   null when the backend does not publish them (the real stock records today): figures then say "market charges only"
+   and no readiness check is ticked on money. */
+function costRows(c, fam, asset = ASSET) { const C = state().costs; return C ? ((((C[c.m] || {})[asset]) || {})[fam] || []) : null; }
+function priced() { return state().costs != null; }
+function basisWord() { return priced() ? 'after every cost' : 'after market charges only'; }
+function costsIn(c, fam, a, b, asset = ASSET) { let own = 0, ai = 0; for (const [d, o, x] of costRows(c, fam, asset) || []) if (d >= a && d <= b) { own += o; ai += x; } return {own, ai}; }
+/* profit by day after every cost: the trades closed that day, less that day's own charges and AI and data costs */
+function dailyNet(c, fam, a, b, asset = ASSET) {
+  const by = {};
+  for (const t of within(tradesOf(c, fam, asset), a, b)) by[t[1]] = (by[t[1]] || 0) + t[3];
+  for (const [d, o, x] of costRows(c, fam, asset) || []) if (d >= a && d <= b) by[d] = (by[d] || 0) - o - x;
+  return by;
+}
+function netIn(c, fam, a, b, asset = ASSET) { return Object.values(dailyNet(c, fam, a, b, asset)).reduce((s, v) => s + v, 0); }
+function allDays() { return [1, state().days]; }
+/* a family's record between days a and b: the trade statistics (after market charges) plus the costs beyond them; `net`,
+   `per` and `dd` are after every cost, `trades` is the trades' own result */
+function record(c, fam, a, b, asset = ASSET) {
+  const s = stats(within(tradesOf(c, fam, asset), a, b)), k = costsIn(c, fam, a, b, asset), by = dailyNet(c, fam, a, b, asset);
+  let run = 0, peak = 0, dd = 0;
+  for (const d of Object.keys(by).map(Number).sort((x, y) => x - y)) { run += by[d]; peak = Math.max(peak, run); dd = Math.min(dd, run - peak); }
+  const net = s.net - k.own - k.ai;
+  return {...s, trades: s.net, own: k.own, ai: k.ai, net, per: s.n ? net / s.n : null, dd};
+}

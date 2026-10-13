@@ -2,9 +2,9 @@
    against its backend's own written bar: the stock tool's go-live bar (SPEC F7.2) for stocks, the F&O desk's
    evaluation rules (DESK_DESIGN 12.1, 12.8) for F&O. A family is ready only when every check passes. */
 const WHY = {months: 'A few good weeks can be luck; the bar asks for months of trading.', trades: 'About 300 trades, so one lucky trade cannot decide.',
-  beats: 'It must make more than the best simple rule (the baselines); otherwise there is no reason to use it.', luck: 'A statistical test: could this profit come from chance? It must pass.',
+  beats: 'After every cost, it must make more than the best simple rule (the baselines); otherwise there is no reason to use it.', luck: 'A statistical test: could this profit come from chance? It must pass.',
   drawdown: 'Its worst fall from a high must stay within the limit (10 times the money per trade).', regimes: 'It must make money both in calm markets and in stormy ones.',
-  profit: 'After every charge, the account must be up.', risk: 'No trade may lose more than ₹10,000, charges included.'};
+  profit: 'After every cost (market charges, and the book’s AI and data costs), the account must be up.', risk: 'No trade may lose more than ₹10,000, charges included.'};
 
 function checks(c, f, asset) { return ((state().ready[c.m] || {})[asset] || {})[f] || []; }
 function readyState(c, f, asset = ASSET) {
@@ -38,10 +38,10 @@ function checkRow(c, x) {
 function checkValue(c, x) {
   switch (x.key) {
     case 'months': case 'trades': return `${x.value} (needs ${x.need})`;
-    case 'beats': return x.need == null ? 'no baseline trades to compare yet' : `${money(c, x.value)} against ${money(c, x.need)} for the best baseline`;
+    case 'beats': if (x.ok == null && x.need != null) return 'waits for the own charges and AI costs to be published'; return x.need == null ? 'no baseline trades to compare yet' : `${money(c, x.value)} against ${money(c, x.need)} for the best baseline`;
     case 'luck': return x.value === 'passes' ? 'the profit is very unlikely to be chance' : x.value === 'fails' ? 'the profit could still be chance' : 'needs at least 20 trades';
     case 'drawdown': return `worst fall ${plain(c, x.value)} (limit ${plain(c, x.need)})`;
-    case 'profit': return `${money(c, x.value)} after charges`;
+    case 'profit': return `${money(c, x.value)} after every cost`;
     case 'risk': return `worst trade ${money(c, x.value)} (limit ${money(c, x.need)})`;
     case 'regimes': if (x.ok == null) return 'no stormy market yet to test it in'; return `calm markets ${money(c, x.value[0])}, stormy ${money(c, x.value[1])}`;
   }

@@ -18,24 +18,26 @@ function whyCard(c, f) {
   const {el} = c, T = tradesOf(c, f), s = stats(T), by = {};
   for (const t of T) by[t[5]] = (by[t[5]] || 0) + t[3];
   const drivers = Object.entries(by).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 5), max = Math.max(1, ...drivers.map(d => Math.abs(d[1])));
-  const st = state().stormy, storm = T.filter(t => t[1] >= st[0] && t[1] <= st[1]), calm = T.filter(t => !(t[1] >= st[0] && t[1] <= st[1]));
-  return el('article', {class: 'leader story'}, el('div', {class: 'lh'}, badge(c, f)), el('p', {class: 'why big2'}, storyLine(c, s, storm, calm)),
+  const st = state().stormy, storm = T.filter(t => t[1] >= st[0] && t[1] <= st[1]), calm = T.filter(t => !(t[1] >= st[0] && t[1] <= st[1])), r = record(c, f, ...allDays());
+  const inStorm = Object.entries(dailyNet(c, f, ...allDays())).reduce((o, [d, v]) => { o[+d >= st[0] && +d <= st[1] ? 1 : 0] += v; return o; }, [0, 0]);
+  return el('article', {class: 'leader story'}, el('div', {class: 'lh'}, badge(c, f)), el('p', {class: 'why big2'}, storyLine(c, s, r, inStorm)),
     el('div', {class: 'meter'}, el('span', {class: 'k'}, 'What moved its trades'), ...drivers.map(([r, v]) => el('div', {class: 'drv'}, el('span', {}, REASON[r] || r),
       el('span', {class: 'hbar wide', 'aria-hidden': 'true'}, el('i', {class: v < 0 ? 'neg' : 'pos', style: v < 0 ? `right:50%;width:${(Math.abs(v) / max * 50).toFixed(1)}%` : `left:50%;width:${(v / max * 50).toFixed(1)}%`})), el('b', {class: v >= 0 ? 'pos' : 'neg'}, short(c, v))))),
-    storm.length ? el('div', {class: 'meter'}, el('span', {class: 'k'}, 'Calm and stormy markets'), el('small', {}, `In calm markets ${money(c, stats(calm).net)} on ${calm.length} trades; in the stormy month ${money(c, stats(storm).net)} on ${storm.length}.`)) : null,
+    storm.length ? el('div', {class: 'meter'}, el('span', {class: 'k'}, 'Calm and stormy markets'), el('small', {}, `In calm markets ${money(c, inStorm[0])} on ${calm.length} trades; in the stormy month ${money(c, inStorm[1])} on ${storm.length} (${basisWord()}).`)) : null,
     el('div', {class: 'meter'}, el('span', {class: 'k'}, 'Best and worst trade'), tradeLine(c, s.best, true), tradeLine(c, s.worst, false)));
 }
 
 /* one sentence on how the family makes its money: win rate against the size of wins and losses */
-function storyLine(c, s, storm, calm) {
-  const ratio = s.avgLoss ? Math.abs(s.avgLoss) / (s.avgWin || 1) : 0, sc = stats(storm).net, cc = stats(calm).net;
-  let line = s.net >= 0 ? `Made ${money(c, s.net)} after charges. ` : `Lost ${plain(c, s.net)} after charges. `;
+function storyLine(c, s, r, [cc, sc]) {
+  const ratio = s.avgLoss ? Math.abs(s.avgLoss) / (s.avgWin || 1) : 0;
+  let line = r.net >= 0 ? `Made ${money(c, r.net)} ${basisWord()}. ` : `Lost ${plain(c, r.net)} ${basisWord()}. `;
   if (s.rate >= 60 && ratio > 1.5) line += `It wins ${Math.round(s.rate)}% of its trades, but one loss wipes out about ${Math.round(ratio)} wins.`;
   else if (s.rate < 50 && s.net > 0) line += `It wins fewer than half its trades, but its wins are bigger than its losses.`;
   else if (s.net < 0 && s.rate >= 50) line += `It wins ${Math.round(s.rate)}% of its trades, but its losses are bigger than its wins.`;
   else if (s.net < 0) line += `It loses more trades than it wins (${s.lost} against ${s.won}).`;
   else line += `It wins ${Math.round(s.rate)}% of its trades, and its average win (${money(c, s.avgWin)}) covers its average loss (${money(c, s.avgLoss)}).`;
-  if (storm.length && sc < 0 && cc > 0) line += ` The stormy month cost it ${plain(c, sc)}.`;
+  if (sc < 0 && cc > 0) line += ` The stormy month cost it ${plain(c, sc)}.`;
+  if (priced() && r.ai > Math.abs(r.trades) / 2 && r.ai > 0) line += ` Its AI and data costs (${plain(c, r.ai)}) took ${r.trades > 0 ? 'much of its trading profit' : 'it further into loss'}.`;
   return line;
 }
 

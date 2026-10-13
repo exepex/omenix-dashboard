@@ -22,10 +22,12 @@ function topPart(main, c) {
    who wins, win rates and rankings stay separate for Stocks and for F&O */
 function bothBooks(main, c) {
   if (c.m !== 'india') return;
-  const {el} = c, line = f => { const s = tradesOf(c, f, 'stocks'), o = tradesOf(c, f, 'fno'), sum = T => T.reduce((a, t) => a + t[3], 0);
-    if (!s.length && !o.length) return el('li', {}, badge(c, f), el('span', {class: 'muted'}, 'no closed trade in either book yet'));
-    return el('li', {}, badge(c, f), el('span', {}, `Stocks ${s.length ? money(c, sum(s)) : 'none'} + F&O ${o.length ? money(c, sum(o)) : 'none'} = `, el('b', {}, 'total '), upDown(c, sum(s) + sum(o), money(c, sum(s) + sum(o))))); };
-  main.append(el('section', {class: 'card sec both', 'aria-label': 'Both books together'}, head(c, 'Both books together: total only', 'profit after charges since the start, India, in rupees'),
+  /* each part rounded to the rupee first, and the total summed from the parts shown, so the line always adds up (judge 55) */
+  const {el} = c, part = (f, a) => tradesOf(c, f, a).length ? Math.round(netIn(c, f, ...allDays(), a)) : null, line = f => { const s = part(f, 'stocks'), o = part(f, 'fno');
+    if (s == null && o == null) return el('li', {}, badge(c, f), el('span', {class: 'muted'}, 'no closed trade in either book yet'));
+    const tot = (s || 0) + (o || 0);
+    return el('li', {'data-parts': [s || 0, o || 0].join(','), 'data-total': tot}, badge(c, f), el('span', {}, `Stocks ${s == null ? 'none' : money(c, s)} + F&O ${o == null ? 'none' : money(c, o)} = `, el('b', {}, 'total '), upDown(c, tot, money(c, tot)))); };
+  main.append(el('section', {class: 'card sec both', 'aria-label': 'Both books together'}, head(c, 'Both books together: total only', `profit ${basisWord()} since the start, India, in rupees`),
     el('ul', {class: 'totals'}, ...families().map(line)),
     howto(c, 'A plain total of each family’s stock book and F&O book. It is not a ranking: the two books use different money (₹1 lakh a stock trade, a ₹5 lakh F&O account), so who wins is judged in each tab on its own.')));
 }
@@ -47,6 +49,6 @@ function statusBand(c, S) {
   return el('section', {class: 'card sec status', 'aria-label': 'Where things stand'}, el('div', {class: 'firsts four'},
     el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'Trading since'), el('b', {}, dayText(1)), el('small', {}, `${S.days} trading days, to ${dayText(S.days)}`)),
     el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'Trades closed'), el('b', {}, all.length.toLocaleString('en-IN')), el('small', {}, `by the three families${base.length ? `, plus ${base.length} by the baselines` : ''}`)),
-    el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'Made money'), el('b', {}, `${trading.filter(f => stats(tradesOf(c, f)).net > 0).length} of ${trading.length} families`), el('small', {}, `after every charge, since the start${trading.length < 3 ? ' (of those trading)' : ''}`)),
+    el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'Made money'), el('b', {}, `${trading.filter(f => netIn(c, f, ...allDays()) > 0).length} of ${trading.length} families`), el('small', {}, `${basisWord()}, since the start${trading.length < 3 ? ' (of those trading)' : ''}`)),
     el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'Ready for real money'), el('b', {}, `${trading.filter(f => readyState(c, f) === 'ready').length} of ${trading.length} families`), el('small', {}, 'passed every check below'))));
 }

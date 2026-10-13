@@ -1,7 +1,6 @@
 /* The period's chart: every family's running profit on one chart with the comparison line (lines), or the profit of
    each week or month as grouped bars. Hover or touch shows every value on a day. */
-function cumulative(trades, a, b) {
-  const by = {}; for (const t of trades) by[t[1]] = (by[t[1]] || 0) + t[3];
+function cumulative(by, a, b) {
   let run = 0; const out = [[a, 0]];
   for (let d = a; d <= b; d++) if (by[d] != null) out.push([d, run += by[d]]);
   if (out.at(-1)[0] !== b) out.push([b, run]);
@@ -22,9 +21,9 @@ function nice(x) { const p = 10 ** Math.floor(Math.log10(x || 1)), m = x / p; re
 function short(c, v) { const a = Math.abs(v), s = v < 0 ? '−' : v > 0 ? '+' : '', cur = inr(c) ? '₹' : '$';
   return a >= 1e5 && inr(c) ? `${s}${cur}${+(a / 1e5).toFixed(1)}L` : a >= 1e3 ? `${s}${cur}${+(a / 1e3).toFixed(1)}k` : `${s}${cur}${Math.round(a)}`; }
 
-function lines(c, fams, rows, a, b) {
-  const S = fams.map(f => [f, nameOf(f), cumulative(rows[f], a, b)]), ref = reference();
-  if (ref === 'baseline') S.push(['baseline', 'Baselines', cumulative(within(tradesOf(c, 'baseline', 'stocks'), a, b), a, b)]);
+function lines(c, fams, a, b) {
+  const S = fams.map(f => [f, nameOf(f), cumulative(dailyNet(c, f, a, b), a, b)]), ref = reference();
+  if (ref === 'baseline') S.push(['baseline', 'Baselines', cumulative(dailyNet(c, 'baseline', a, b, 'stocks'), a, b)]);
   if (ref === 'nifty' && state().index) S.push(['nifty', 'Holding NIFTY', niftyLine(c, a, b)]);
   const vals = S.flatMap(x => x[2].map(p => p[1])), F = frame(c, Math.min(0, ...vals), Math.max(0, ...vals), S.map(([, n, s]) => `${n}: ${money(c, s.at(-1)[1])}`).join('; '));
   const X = d => F.L + (d - a) / (b - a || 1) * (F.W - F.L - F.R);
@@ -44,8 +43,8 @@ function lines(c, fams, rows, a, b) {
   return c.el('div', {class: 'pchart'}, F.svg, tip);
 }
 
-function bars(c, fams, rows, a, size) {
-  const B = fams.map(f => { const out = {}; for (const t of rows[f]) { const k = Math.floor((t[1] - a) / size); out[k] = (out[k] || 0) + t[3]; } return [f, out]; });
+function bars(c, fams, a, b, size) {
+  const B = fams.map(f => { const out = {}; for (const [d, v] of Object.entries(dailyNet(c, f, a, b))) { const k = Math.floor((d - a) / size); out[k] = (out[k] || 0) + v; } return [f, out]; });
   const keysIn = [...new Set(B.flatMap(([, o]) => Object.keys(o).map(Number)))].sort((x, y) => x - y), vals = B.flatMap(([, o]) => Object.values(o));
   const F = frame(c, Math.min(0, ...vals), Math.max(0, ...vals), 'Profit of each period, by family');
   const slot = (F.W - F.L - F.R) / Math.max(1, keysIn.length), bw = Math.max(2, Math.min(18, slot / (fams.length + 1))), every = Math.ceil(keysIn.length / 8);

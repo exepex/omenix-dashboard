@@ -23,8 +23,15 @@ STOCK = {   # family: (strategies, trades a day, edge % per trade, spread %, cal
     "baseline": (["Always buy", "Follow yesterday", "Model without news"], 3.0, 0.0, 1.6, 0.0)}
 FNO = {      # family: (start day, trades a day, win rate calm, win, loss, win rate stormy)
     "rule": (1, 0.45, 0.76, 2600, -5600, 0.22),
-    "hybrid": (1, 0.55, 0.75, 2900, -3500, 0.70),
+    "hybrid": (1, 0.55, 0.76, 3300, -3300, 0.72),
     "ai": (40, 0.30, 0.47, 5600, -5400, 0.40)}
+# Costs beyond the market charges in each trade's net (judge 55; DESK_DESIGN 12.5, 12.8, 13.6; stock tool SPEC decision 50):
+# "own" = the owner's own charges per trade (India: Groww's DP charge ₹23.60 on the sell; US: the FX markup of 0.75% each
+# way on $1,000 plus the portfolio fee, about $15.10); "ai_data" = AI and data costs a trading day, allocated, not a bill
+# (made up; Rule-based carries data only, the baselines nothing).
+COSTS = {("india", "stocks"): (23.6, {"rule": 40.0, "ai": 350.0, "baseline": 0.0}),
+         ("us", "stocks"): (15.1, {"rule": 0.5, "ai": 4.0, "baseline": 0.0}),
+         ("india", "fno"): (0.0, {"rule": 50.0, "hybrid": 350.0, "ai": 600.0})}
 FNO_TRADES = ["Sold NIFTY options", "Bought NIFTY options", "NIFTY futures", "Sold BANKNIFTY options"]
 
 
@@ -83,6 +90,18 @@ def fno_trades(rng, fam: str, days: int, mkt: np.ndarray) -> list:
     return out
 
 
+def cost_rows(trades: list, m: str, asset: str, fam: str, days: int) -> list:
+    """[[day, own charges, AI and data cost]] for each trading day from the family's first trade on (zero days left out)."""
+    own, per_day = COSTS[(m, asset)]
+    if not trades:
+        return []
+    closes = {}
+    for t in trades:
+        closes[t[1]] = closes.get(t[1], 0) + 1
+    rows = [[d, round(own * closes.get(d, 0), 2), per_day[fam]] for d in range(min(t[0] for t in trades), days + 1)]
+    return [r for r in rows if r[1] or r[2]]
+
+
 def nifty_levels(mkt: np.ndarray, start: float = 25000.0) -> list:
     lv, out = start, []
     for r in mkt:
@@ -99,5 +118,7 @@ def example(days: int) -> dict:
     keep = lambda rows: [t for t in rows if t[1] <= days]
     stocks = {m: {f: keep(stock_trades(rng, m, f, full, mk[m])) for f in STOCK} for m in ("india", "us")}
     fno = {f: keep(fno_trades(rng, f, full, mk["india"])) for f in FNO}
+    trades = {"india": {"stocks": stocks["india"], "fno": fno}, "us": {"stocks": stocks["us"]}}
+    costs = {m: {a: {f: cost_rows(T, m, a, f, days) for f, T in fams.items()} for a, fams in assets.items()} for m, assets in trades.items()}
     return {"days": days, "dates": example_dates(full)[:days], "stormy": [STORMY.start, STORMY.stop - 1],
-            "index": {m: nifty_levels(mk[m])[:days] for m in mk}, "trades": {"india": {"stocks": stocks["india"], "fno": fno}, "us": {"stocks": stocks["us"]}}}
+            "index": {m: nifty_levels(mk[m])[:days] for m in mk}, "trades": trades, "costs": costs}

@@ -9,10 +9,10 @@ function strategiesPart(main, c) {
   for (const t of tradesOf(c, SF)) { const k = t[7] === 'fno' ? `F&O: ${t[2]}` : t[6]; (groups[k] ||= []).push(t); }
   const rows = Object.entries(groups).map(([k, T]) => [k, stats(T)]).sort((a, b) => b[1].net - a[1].net), max = Math.max(1, ...rows.map(r => Math.abs(r[1].net)));
   sec.append(seg(c, 'Family', fams.map(f => [f, nameOf(f)]), SF, k => { SF = k; }),
-    el('div', {class: 'scroll'}, el('table', {class: 'md-table ptable stack'}, el('thead', {}, el('tr', {}, el('th', {}, SF === 'ai' ? 'What it traded' : 'Strategy'), el('th', {}, 'Profit after charges'), el('th', {class: 'num'}, 'Trades'), el('th', {class: 'num'}, 'Win rate'), el('th', {class: 'num'}, 'Per trade'))),
-      el('tbody', {}, ...rows.map(([k, s]) => el('tr', {}, el('td', {}, k), el('td', {'data-k': 'Profit after charges'}, el('span', {class: 'pbar'}, hbar(s.net, max, c), upDown(c, s.net, money(c, s.net)))),
+    el('div', {class: 'scroll'}, el('table', {class: 'md-table ptable stack'}, el('thead', {}, el('tr', {}, el('th', {}, SF === 'ai' ? 'What it traded' : 'Strategy'), el('th', {}, 'Trades’ profit after market charges'), el('th', {class: 'num'}, 'Trades'), el('th', {class: 'num'}, 'Win rate'), el('th', {class: 'num'}, 'Per trade'))),
+      el('tbody', {}, ...rows.map(([k, s]) => el('tr', {}, el('td', {}, k), el('td', {'data-k': 'Trades’ profit after market charges'}, el('span', {class: 'pbar'}, hbar(s.net, max, c), upDown(c, s.net, money(c, s.net)))),
         el('td', {class: 'num', 'data-k': 'Trades'}, String(s.n)), el('td', {class: 'num', 'data-k': 'Win rate'}, `${Math.round(s.rate)}%`), el('td', {class: 'num', 'data-k': 'Per trade'}, money(c, s.per))))))),
-    howto(c, SF === 'ai' ? 'The AI team decides as one team, so it is shown by what it traded rather than by strategy.' : 'A family is only as good as its strategies together; a single strong strategy can carry the others, and a weak one can be dropped in a new version.'));
+    howto(c, SF === 'ai' ? 'The AI team decides as one team, so it is shown by what it traded rather than by strategy. Results here are after market charges; its AI and data costs are in its total above.' : 'A family is only as good as its strategies together. These are the trades’ results after market charges: the owner’s own charges and the AI and data costs are paid by the family as a whole and are in its total above, not split by strategy.'));
   main.append(sec);
 }
 

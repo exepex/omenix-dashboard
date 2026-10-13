@@ -2,10 +2,10 @@
    closed trades, the total at the end, and how many months made money. */
 function monthsPart(main, c) {
   const {el} = c, fams = families().filter(f => tradesOf(c, f).length);
-  const sec = el('section', {class: 'card sec', 'aria-label': 'Month by month'}, head(c, 'Month by month', 'profit after charges of the trades closed each month'));
+  const sec = el('section', {class: 'card sec', 'aria-label': 'Month by month'}, head(c, 'Month by month', `profit ${basisWord()}, by the month trades closed`));
   if (!fams.length) { sec.append(quiet(c, 'Empty: no family trade has closed yet. Each month will get a green cell when the family made money and a red one when it lost.')); main.append(sec); return; }
   const month = d => dateOf(d).slice(0, 7), months = [...new Set(state().dates.map(d => d.slice(0, 7)))];
-  const per = f => { const o = {}; for (const t of tradesOf(c, f)) o[month(t[1])] = (o[month(t[1])] || 0) + t[3]; return o; };
+  const per = f => { const o = {}; for (const [d, v] of Object.entries(dailyNet(c, f, ...allDays()))) o[month(d)] = (o[month(d)] || 0) + v; return o; };
   const data = fams.map(f => [f, per(f)]), max = Math.max(1, ...data.flatMap(([, o]) => Object.values(o).map(Math.abs)));
   const label = ym => new Date(ym + '-01T00:00:00Z').toLocaleDateString('en-GB', {month: 'short', year: '2-digit', timeZone: 'UTC'});
   const cellOf = (v, m) => { if (v == null) return el('td', {class: 'mcell none', 'data-k': label(m)}, '—'); const s = Math.abs(v) / max > 0.6 ? ' s3' : Math.abs(v) / max > 0.25 ? ' s2' : ' s1';

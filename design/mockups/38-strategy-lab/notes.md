@@ -55,6 +55,9 @@ state:
   kind, as_of, dates[]                         # the trading dates; trades refer to them by day number
   trades.<m>.<asset>.<family>: [[entry, exit, symbol or what was traded, net_pnl, return_pct, reason_code, strategy]]
   index.<m>: [levels] | null                   # NIFTY (or the US index) closes on `dates`, for the comparison line
+  costs.<m>.<asset>.<family>: [[day, own, ai_data]] | null   # beyond the market charges in net_pnl (judge 55): the owner's
+                                               # own charges of trades closed that day, and the family's AI and data
+                                               # costs that day (allocated, not a bill); null when not published
   stormy: [first, last]                        # day numbers of the volatile regime (stock tool `regime`; F&O A3 panel)
   ready.<m>.<asset>.<family>: [{key, label, ok: true | false | null, value, need}]
                                                # asset: stocks | fno (no combined asset); the total line is summed on the screen
@@ -65,13 +68,22 @@ state:
   `strategy_id` shown by display name, `net_pnl` after market charges, `return_pct`, `reason_code`, `regime`). The
   go-live checks are the stock tool's `go_live` block on its strategy scoreboard rows (SPEC F7.2), today computed from
   example records only; per family they need a family-level row (proposed).
-- F&O: stories S1/S2 (scoreboard B) and E2-E6 (the paper desk) must publish closed trades with net P&L after charges
-  and a reason code (proposed codes: `calm_market`, `big_move`, `trend_right`, `trend_wrong`), plus the readiness
-  checks against DESK_DESIGN 12.8 and the evaluation protocol (B5).
+- F&O: stories S1/S2 (scoreboard B) and E2-E6 (the paper desk) must publish closed trades with net P&L after execution
+  charges and a reason code (proposed codes: `calm_market`, `big_move`, `trend_right`, `trend_wrong`), and S2's per-book
+  **gross, execution costs, AI and data costs (13.6 labels: allocated, not a bill), net** (DESK_DESIGN 12.5) as the
+  `costs` rows, plus the readiness checks against DESK_DESIGN 12.8 and the evaluation protocol (B5).
 - The screen sums trades into totals, periods, months, drivers and strategies (presentation only). At real volume the
   backends should publish daily aggregates instead of every trade (proposed; the mockup carries about 2,500 trades).
-- Profit is after **market** charges (the stock tool ranks on these); the go-live bar uses **your cost** (market cost
-  plus the owner's own charges). The real app should show the go-live checks on your cost, as F7.2 says.
+- **Every headline profit and every money check of the readiness bar is after every cost** (judge 55; DESK_DESIGN 12.8:
+  "net account result after execution and operating costs"; stock tool SPEC F7.2 and decision 50: the go-live bar on
+  your cost): the trades after market charges, less the owner's own charges, less the family's AI and data costs.
+  Trade-level figures (win rate, average win and loss, profit factor, the strategies inside a family) stay after market
+  charges and are labelled so. A figure on market charges only is labelled "market charges only" and never ticks a
+  readiness check: without published costs the money checks stay "waits" (null).
+- **Data gap (stock tool):** its settled paper trades carry `net_pnl` after market charges only (no `your_costs`), and it
+  publishes no AI or data costs per family. Both are needed before a stock family can be called ready; until then the
+  real stock figures say "after market charges only". Proposed: `your_costs` on each settled trade (the catalogue already
+  defines it for B2's cost view) and a daily AI-and-data cost per family.
 
 ## Things the owner should know (brutally honest)
 
@@ -81,14 +93,19 @@ state:
 2. **Both books together is a total line only** (your choice (a)). The two books use different money (₹1 lakh a stock
    trade, a ₹5 lakh F&O account), so a combined profit says who made more rupees, not who uses money better; rankings,
    win rates and readiness stay per book.
-3. **Win rate alone misleads.** In the Example, F&O Rule-based wins 65% of its trades and still makes only ₹215,
-   because one loss wipes out about two wins. The screen always puts win rate beside the size of wins and losses.
+3. **Win rate alone misleads, and costs decide.** In the Example, F&O Rule-based wins 65% of its trades but makes only
+   ₹215 on them, because one loss wipes out about two wins; after its data costs it is at −₹7,785. In the US Example,
+   Rule-based's trades make money but the currency fee on every trade turns it into a loss. The screen always shows the
+   way from the trades' result to the profit after every cost.
 4. **"Why" is told from outcomes, not methods:** what moved each trade (market, sector, news, the stock alone) and how
    the family did in calm and stormy markets. That explains results without showing how a family decides.
 5. **Hybrid has no stock strategy today**, so it shows "No stock strategy yet" in Stocks, never zero.
 6. The predictions (37) are now a side view, as the trading design says (forecasts never promote a book).
 
 ## Checks
+
+- `node design/mockups/38-strategy-lab/check_totals.js`: every "Both books together" line adds up as shown (9 lines);
+  it fails on the build before the judge 55 fix (−₹1,24,474 + −₹59,925 shown as −₹1,84,400).
 
 - `node design/system/shoot_states.js design/mockups/38-strategy-lab` on all 9 states (Stocks + F&O tab replaced by the total line): no console errors, no overflow, no
   external requests; `check_text.js` on 10 states: 0 findings.
