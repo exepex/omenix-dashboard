@@ -217,9 +217,11 @@ Mockups (signed off 30, 31, 32, 33, 34, 35 and 38):
 ## Checks run
 
 - `node tools/check_code_size.mjs`: pass.
-- `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build`: pass (425 tests).
-- UI harness, all cases: 207 cases. After the build, 3 failed on one selector (`.pp-info`), which this change renamed.
-  The test now reads the shared class, and the 4 affected cases pass. All 24 W14 cases pass.
+- `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build`: pass. That is 435 tests,
+  after merging main (W9-F&O).
+- UI harness, all cases, on the merged tree: **207 cases, 0 failed**, the 24 W14 cases included. An earlier run had 3
+  failures on one selector (`.pp-info`), which this change replaced with the shared `.md-icon-btn`. The test now reads
+  the shared class.
 - `check_page.js` on the 7 rebuilt signed-off mockups: no console errors, no external requests, no overflow.
   `check_text.js`: 0 findings on all 7.
 
