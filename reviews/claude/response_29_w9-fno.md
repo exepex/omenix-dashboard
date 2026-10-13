@@ -181,7 +181,7 @@ rejects one (`IndiaStockEventsRule`).
   - `npm test`: 436 passed, 0 failed, including the events-query parity test, the page-key and label tests, and
     real-Postgres reads of `flows`, `session`, `fno_events`, `risk` and `today`.
   - Typecheck, build and code size: passed.
-  - UI harness: the result is in the commit message.
+  - UI harness (fixture mode, on the 13661c0 build): 183 cases, 0 failed. Home's "Coming up" and Markets' "What is coming?" look the same as before.
 
 ### Still open
 
