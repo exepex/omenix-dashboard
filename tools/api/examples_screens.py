@@ -52,9 +52,28 @@ def screener_summary(x: Screens, market):
     return {"": ("counts per universe (the Markets breadth equals them)", {"as_of": x.as_of(market), "universes": out})}
 
 
+def _row(r, market):
+    return {k: r[k] for k in ROW_KEYS if k != "dl" or market == "india"}  # dl: NSE only
+
+
 def _page(x, market, rows, total, size=PAGE):
     return {"as_of": x.as_of(market), "currency": "INR" if market == "india" else "USD", "total": total, "page": 1, "page_size": size,
-            "rows": [{k: r[k] for k in ROW_KEYS if k != "dl" or market == "india"} for r in rows[:size]]}  # dl: NSE only
+            "rows": [_row(r, market) for r in rows[:size]]}
+
+
+def summary_parts(x: Screens) -> tuple[dict, dict]:
+    """India's summary as its two publishers store it: exepex/trading's NSE universes, the stock tool's own companies."""
+    as_of = x.as_of("india")
+    nse = {"as_of": as_of, "universes": {u: _counts(x.rows("india", u), "india") for u in ("all", "n500", "fno")}}
+    return nse, {"as_of": as_of, "ours": _counts(x.rows("india", "ours"), "india")}
+
+
+def stored_tables(x: Screens) -> dict:
+    """The paged blocks as their publishers store them: every row of the day, no page."""
+    table = lambda m, rows: {"as_of": x.as_of(m), "currency": "INR" if m == "india" else "USD", "total": len(rows), "rows": rows}  # noqa: E731
+    return {"ScreenerStocksTableIndia": table("india", [_row(r, "india") for r in x.rows("india")]),
+            "ScreenerStocksTableUs": table("us", [_row(r, "us") for r in x.rows("us")]),
+            "FnoScreenerTable": table("india", [{k: r[k] for k in FNO_KEYS} for r in x.C["markets"]["india"]["fno"]])}
 
 
 def screener_stocks(x: Screens, market):

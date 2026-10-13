@@ -127,7 +127,8 @@ The story owner decides whether these exceptions are acceptable; X1 does not cla
     `lo_create`, `lo_creat` and `lo_from_bytea`, which belong to the bootstrap superuser.
   - PostgreSQL 18's new `ALTER DEFAULT PRIVILEGES … ON LARGE OBJECTS` and `has_largeobject_privilege()` govern
     reading and writing large objects only, not creating them (release notes, "Privileges").
-  - `lo_compat_privileges` only relaxes checks, and is superuser-only.
+  - `lo_compat_privileges` only relaxes checks; it can never restrict creation. Since PostgreSQL 15 a superuser can let
+    another role set it (`GRANT SET ON PARAMETER`), which changes nothing here (judge 39).
   - On Azure the admin is not a superuser (`azure_pg_admin`, "doesn't have full superuser permissions"). Azure's
     access-control and server pages document no parameter or support route for this (some evidence: the docs are
     silent, not explicit).
@@ -143,6 +144,9 @@ The story owner decides whether these exceptions are acceptable; X1 does not cla
     first run, `tests/large_objects.sh` reports a database the server refuses to it at connection as
     `CLOSED … plain roles cannot reach it`, instead of a failure. The scheduled check and `setup_monitor.sh`'s first
     check will therefore show, per Azure database, whether exception 2 is open in fact or only on paper.
+  - `pg_hba` rules can name users, so the monitor's answer does not prove it for every role (judge 39). The owner's
+    30-second `owner/probe_azure_dbs.sh` (checklist step 4b) tries a real connection as `dashboard_app` and records
+    each Azure database as OPEN, CLOSED or UNCLEAR.
   - The role matrix still counts it OPEN, because its check reads the access list, which is what PostgreSQL grants.
 
 ## Scheduled check (issue #2)
