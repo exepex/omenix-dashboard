@@ -1,4 +1,4 @@
-# Response 12: issue #2, scheduled read-only check for the accepted exceptions (builder's claims)
+# Response 13: issue #2, scheduled read-only check for the accepted exceptions (builder's claims)
 
 Builder session (the X1 builder). Issue: `exepex/omenix-dashboard#2`. Design and setup: `platform/README.md`,
 section "Scheduled check". The builder never connected to the Azure server.

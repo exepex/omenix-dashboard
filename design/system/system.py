@@ -48,7 +48,8 @@ def icons_sprite(names: list[str] | None = None) -> str:
         raise KeyError(f"icons not in icons.svg: {missing}")
     header = re.match(r"<svg[^>]*>\n(?:  <!--.*?-->\n)?", sprite, re.S).group(0)
     symbols = {m.group(1): m.group(0) for m in re.finditer(r'  <symbol id="ms-([a-z0-9_]+)".*?</symbol>', sprite, re.S)}
-    return header + "\n".join(symbols[n] for n in names) + "\n</svg>\n"
+    brand = re.findall(r'  <!-- Omenix.*?-->\n  <symbol id="mb-[a-z]+".*?</symbol>', sprite, re.S)   # the logo, on every page
+    return header + "\n".join([symbols[n] for n in names] + brand) + "\n</svg>\n"
 
 
 def inline_system(html: str, icons: list[str] | None = None, dark: bool = False) -> str:

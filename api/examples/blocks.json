@@ -2434,7 +2434,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "e8cd360",
-   "payload_sha256": "b4932f39369e3d7b7983bea58170c1f0ad953854a18bee20950e4b7986d8fc8e",
+   "payload_sha256": "4b68b18484a55a8564f1479905ffb6e366864c4ed0c2cebf60dfabcfa38b5d3b",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -2454,13 +2454,6 @@
       "inst": null
      },
      {
-      "date": "2026-10-15",
-      "title": "HDFC Life results",
-      "kind": "earnings",
-      "major": false,
-      "inst": "HDFCLIFE"
-     },
-     {
       "date": "2026-10-16",
       "title": "Reliance Industries results",
       "kind": "earnings",
@@ -2475,18 +2468,25 @@
       "inst": "HDFCBANK"
      },
      {
-      "date": "2026-10-17",
-      "title": "ICICI Bank results",
-      "kind": "earnings",
+      "date": "2026-10-20",
+      "title": "NSE closed",
+      "kind": "holiday",
       "major": false,
-      "inst": "ICICIBANK"
+      "inst": null
      },
      {
-      "date": "2026-10-19",
-      "title": "UltraTech Cement results",
-      "kind": "earnings",
-      "major": false,
-      "inst": "ULTRACEMCO"
+      "date": "2026-10-27",
+      "title": "NSE monthly F&O expiry (last Tuesday)",
+      "kind": "fno_expiry",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-29",
+      "title": "FOMC rate decision (previous US evening)",
+      "kind": "fomc",
+      "major": true,
+      "inst": null
      }
     ]
    }
@@ -2502,7 +2502,13 @@
     "jobs_report"
    ],
    "limit": 6,
-   "from": "2026-10-07"
+   "market_first": true,
+   "from": "2026-10-07",
+   "tickers": [
+    "HDFCBANK",
+    "MARUTI",
+    "RELIANCE"
+   ]
   }
  },
  "getEvents_us": {
@@ -2516,7 +2522,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "e8cd360",
-   "payload_sha256": "c841ce1d5fa71c7a6b263e65c32ec9f81e6b6d91d7d2f3218f407aff24a53e7d",
+   "payload_sha256": "49ab109ef071d0144635dac722328171cda183c0f5420c69360a22e6faeebc2f",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -2543,32 +2549,32 @@
       "inst": null
      },
      {
-      "date": "2026-10-14",
-      "title": "Bank of America results",
-      "kind": "earnings",
-      "major": false,
-      "inst": "BAC"
+      "date": "2026-10-28",
+      "title": "FOMC rate decision",
+      "kind": "fomc",
+      "major": true,
+      "inst": null
      },
      {
-      "date": "2026-10-14",
-      "title": "Progressive results",
+      "date": "2026-10-29",
+      "title": "Apple results",
       "kind": "earnings",
       "major": false,
-      "inst": "PGR"
+      "inst": "AAPL"
      },
      {
-      "date": "2026-10-20",
-      "title": "General Motors results",
-      "kind": "earnings",
-      "major": false,
-      "inst": "GM"
+      "date": "2026-11-06",
+      "title": "US jobs report (usually first Friday; check for shifts)",
+      "kind": "jobs_report",
+      "major": true,
+      "inst": null
      },
      {
-      "date": "2026-10-20",
-      "title": "United Airlines results",
+      "date": "2026-11-17",
+      "title": "Nvidia results",
       "kind": "earnings",
       "major": false,
-      "inst": "UAL"
+      "inst": "NVDA"
      }
     ]
    }
@@ -2584,7 +2590,13 @@
     "jobs_report"
    ],
    "limit": 6,
-   "from": "2026-10-07"
+   "market_first": true,
+   "from": "2026-10-07",
+   "tickers": [
+    "AAPL",
+    "JPM",
+    "NVDA"
+   ]
   }
  },
  "getTopNews_india": {

@@ -99,6 +99,17 @@ test("gateway mode serves the public brief by GET with a well-formed token only"
   assert.deepEqual(gatewayDecision(`/brief/us/2026-10-12-${token}`, "GET", false), { action: "next" }, "dashboard: as usual");
 });
 
+test("gateway mode serves the legal pages by GET or HEAD, exact paths only", () => {
+  for (const path of ["/privacy", "/terms"]) {
+    for (const method of ["GET", "HEAD"]) assert.deepEqual(gatewayDecision(path, method, true), { action: "next" }, `${method} ${path}`);
+    for (const method of ["POST", "PUT", "DELETE"]) assert.deepEqual(gatewayDecision(path, method, true), { action: "not_found" }, `${method} ${path}`);
+    assert.deepEqual(gatewayDecision(path, "GET", false), { action: "next" }, `dashboard: ${path} as usual`);
+  }
+  for (const path of ["/privacy/", "/privacy/x", "/terms.html", "/Privacy", "/x/terms"]) {
+    assert.deepEqual(gatewayDecision(path, "GET", true), { action: "not_found" }, path);
+  }
+});
+
 test("the dashboard deployment never serves the gateway routes", () => {
   for (const path of ["/slack/commands", "/mcp", "/mcp/oauth/authorize", "/oauth/token", "/oauth/github/callback", "/.well-known/oauth-authorization-server"]) {
     assert.deepEqual(gatewayDecision(path, "POST", false), { action: "not_found" }, path);
