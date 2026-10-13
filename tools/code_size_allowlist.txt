@@ -1,9 +1,8 @@
 # Inherited files over 350 lines (copied from the stock dashboard on 12 Oct 2026): <lines at listing> <path>.
 # They may only shrink; each is broken down when its screen is rebuilt. Never add a new file here.
-586 web/app/(cockpit)/[market]/_home/home-page.tsx
 475 web/app/(cockpit)/[market]/help/_parts/help-page.tsx
 383 web/app/(cockpit)/[market]/paper-portfolios/_parts/paper-portfolios-page.tsx
-459 web/app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai-page.tsx
+458 web/app/(cockpit)/[market]/rule-vs-ai/_parts/rule-vs-ai-page.tsx
 355 web/app/(cockpit)/[market]/stocks/[ticker]/strategies/_parts/strategies-page.tsx
 607 web/app/(cockpit)/[market]/strategy-lab/_parts/strategy-lab-page.tsx
 404 web/app/(cockpit)/[market]/track-record/_parts/track-record-page.tsx

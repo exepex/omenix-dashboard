@@ -1,0 +1,1391 @@
+[
+  {
+    "name": "assistant-india",
+    "file": "assistant.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/assistant-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/assistant-india/compare-1280.png",
+      "/tmp/claude-0/w9c/assistant-india/app-390-full.png",
+      "/tmp/claude-0/w9c/assistant-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "assistant-us-declined",
+    "file": "assistant.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/assistant-us-declined/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "assistant-ask-continues",
+    "file": "assistant.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/assistant-ask-continues/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "assistant-log-down",
+    "file": "assistant.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/assistant-log-down/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "assistant-switched-off",
+    "file": "assistant.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/assistant-switched-off/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "chat-panel",
+    "file": "assistant.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/chat-panel/app-1280-full.png",
+      "/tmp/claude-0/w9c/chat-panel/app-390-full.png"
+    ]
+  },
+  {
+    "name": "companies-india",
+    "file": "companies.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/companies-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/companies-india/compare-1280.png",
+      "/tmp/claude-0/w9c/companies-india/app-390-full.png",
+      "/tmp/claude-0/w9c/companies-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "companies-us",
+    "file": "companies.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/companies-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "companies-deactivate",
+    "file": "companies.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/companies-deactivate/app-1280-full.png",
+      "/tmp/claude-0/w9c/companies-deactivate/compare-1280.png"
+    ]
+  },
+  {
+    "name": "companies-delete",
+    "file": "companies.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/companies-delete/app-1280-full.png",
+      "/tmp/claude-0/w9c/companies-delete/compare-1280.png"
+    ]
+  },
+  {
+    "name": "companies-add",
+    "file": "companies.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/companies-add/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "companies-empty-lists",
+    "file": "companies.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/companies-empty-lists/app-1280-full.png",
+      "/tmp/claude-0/w9c/companies-empty-lists/compare-1280.png"
+    ]
+  },
+  {
+    "name": "company-reliance",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-reliance/compare-1280.png",
+      "/tmp/claude-0/w9c/company-reliance/app-1024-full.png",
+      "/tmp/claude-0/w9c/company-reliance/compare-1024.png",
+      "/tmp/claude-0/w9c/company-reliance/app-390-full.png",
+      "/tmp/claude-0/w9c/company-reliance/compare-390.png"
+    ]
+  },
+  {
+    "name": "company-nvda",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-nvda/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-nvda/compare-1280.png"
+    ]
+  },
+  {
+    "name": "company-hdfcbank",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-hdfcbank/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-hdfcbank/compare-1280.png",
+      "/tmp/claude-0/w9c/company-hdfcbank/app-390-full.png",
+      "/tmp/claude-0/w9c/company-hdfcbank/compare-390.png"
+    ]
+  },
+  {
+    "name": "company-maruti",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-maruti/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-maruti/compare-1280.png"
+    ]
+  },
+  {
+    "name": "company-aapl",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-aapl/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-aapl/compare-1280.png",
+      "/tmp/claude-0/w9c/company-aapl/app-390-full.png"
+    ]
+  },
+  {
+    "name": "company-jpm",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-jpm/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-jpm/compare-1280.png"
+    ]
+  },
+  {
+    "name": "company-empty",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-empty/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-empty/app-390-full.png"
+    ]
+  },
+  {
+    "name": "company-no-bars",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-no-bars/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "company-unknown-ticker",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-unknown-ticker/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "company-503",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-503/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "company-keyboard",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-keyboard/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "strategies-reliance",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategies-reliance/app-1680-full.png",
+      "/tmp/claude-0/w9c/strategies-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/strategies-reliance/compare-1280.png",
+      "/tmp/claude-0/w9c/strategies-reliance/app-1024-full.png",
+      "/tmp/claude-0/w9c/strategies-reliance/compare-1024.png",
+      "/tmp/claude-0/w9c/strategies-reliance/app-390-full.png",
+      "/tmp/claude-0/w9c/strategies-reliance/compare-390.png"
+    ]
+  },
+  {
+    "name": "strategies-nvda",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategies-nvda/app-1280-full.png",
+      "/tmp/claude-0/w9c/strategies-nvda/compare-1280.png"
+    ]
+  },
+  {
+    "name": "strategies-keyboard",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategies-keyboard/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "strategies-empty",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategies-empty/app-1280-full.png",
+      "/tmp/claude-0/w9c/strategies-empty/app-390-full.png"
+    ]
+  },
+  {
+    "name": "lifecycle-reliance",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/lifecycle-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/lifecycle-reliance/app-390-full.png"
+    ]
+  },
+  {
+    "name": "lifecycle-old-day",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/lifecycle-old-day/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "lifecycle-empty",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/lifecycle-empty/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "company-deactivate",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-deactivate/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-deactivate/app-390-full.png"
+    ]
+  },
+  {
+    "name": "company-amount-refused",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-amount-refused/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "company-ex-dividend",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-ex-dividend/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "company-published-ranges-only",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-published-ranges-only/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-published-ranges-only/app-390-full.png"
+    ]
+  },
+  {
+    "name": "company-forecast-history",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-forecast-history/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-forecast-history/app-390-full.png"
+    ]
+  },
+  {
+    "name": "company-forecast-history-dense",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-forecast-history-dense/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-forecast-history-dense/app-1024-full.png",
+      "/tmp/claude-0/w9c/company-forecast-history-dense/app-390-full.png"
+    ]
+  },
+  {
+    "name": "company-forecast-history-none-at-horizon",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-forecast-history-none-at-horizon/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "company-evening-preview",
+    "file": "company.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/company-evening-preview/app-1280-full.png",
+      "/tmp/claude-0/w9c/company-evening-preview/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-home-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-home-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-home-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-home-us",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-home-us/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-home-us/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-watchlist-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-watchlist-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-watchlist-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-news-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-news-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-news-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-companies-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-companies-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-companies-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-company-reliance",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-company-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-company-reliance/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-company-aapl",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-company-aapl/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-company-aapl/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-lifecycle-reliance",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-lifecycle-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-lifecycle-reliance/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-strategies-reliance",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-strategies-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-strategies-reliance/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-strategy-lab-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-strategy-lab-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-strategy-lab-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-rule-vs-ai-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-rule-vs-ai-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-rule-vs-ai-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-paper-portfolio-v3-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-paper-portfolio-v3-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-paper-portfolio-v3-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-paper-portfolio-v3-finished",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-paper-portfolio-v3-finished/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-paper-portfolio-v3-finished/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-paper-portfolio-v3-story",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-paper-portfolio-v3-story/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-paper-portfolio-v3-story/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-track-record-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-track-record-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-track-record-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-help-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-help-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-help-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-assistant-india",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-assistant-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-assistant-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "dark-gallery",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/dark-gallery/app-1280-full.png",
+      "/tmp/claude-0/w9c/dark-gallery/app-390-full.png"
+    ]
+  },
+  {
+    "name": "theme-toggle",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/theme-toggle/app-1280-full.png",
+      "/tmp/claude-0/w9c/theme-toggle/app-390-full.png"
+    ]
+  },
+  {
+    "name": "theme-override-on-dark-device",
+    "file": "dark.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/theme-override-on-dark-device/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-home-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-home-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-home-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-home-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-home-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-home-us",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-home-us/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-home-us/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-home-us/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-home-us/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-watchlist-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-watchlist-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-watchlist-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-watchlist-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-watchlist-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-news-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-news-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-news-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-news-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-news-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-companies-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-companies-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-companies-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-companies-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-companies-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-company-reliance",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-company-reliance/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-company-reliance/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-company-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-company-reliance/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-company-aapl",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-company-aapl/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-company-aapl/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-company-aapl/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-company-aapl/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-lifecycle-reliance",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-lifecycle-reliance/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-lifecycle-reliance/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-lifecycle-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-lifecycle-reliance/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-strategies-reliance",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-strategies-reliance/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-strategies-reliance/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-strategies-reliance/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-strategies-reliance/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-strategy-lab-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-strategy-lab-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-strategy-lab-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-strategy-lab-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-strategy-lab-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-rule-vs-ai-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-rule-vs-ai-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-rule-vs-ai-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-rule-vs-ai-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-rule-vs-ai-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-paper-portfolio-v3-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-paper-portfolio-v3-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-paper-portfolio-v3-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-paper-portfolio-v3-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-paper-portfolio-v3-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-track-record-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-track-record-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-track-record-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-track-record-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-track-record-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-help-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-help-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-help-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-help-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-help-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-assistant-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-assistant-india/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-assistant-india/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-assistant-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-assistant-india/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-page-gallery",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-page-gallery/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-page-gallery/app-768-full.png",
+      "/tmp/claude-0/w9c/frame-page-gallery/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-page-gallery/app-1680-full.png"
+    ]
+  },
+  {
+    "name": "frame-search-india",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-search-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-search-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "frame-us",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-us/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-us/app-390-full.png"
+    ]
+  },
+  {
+    "name": "frame-lock",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-lock/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-lock/app-390-full.png"
+    ]
+  },
+  {
+    "name": "frame-open",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-open/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-open/app-390-full.png"
+    ]
+  },
+  {
+    "name": "frame-order",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-order/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "frame-compare-default",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-compare-default/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-compare-default/compare-1280.png",
+      "/tmp/claude-0/w9c/frame-compare-default/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-compare-default/compare-390.png"
+    ]
+  },
+  {
+    "name": "frame-compare-dark",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-compare-dark/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-compare-dark/compare-1280.png",
+      "/tmp/claude-0/w9c/frame-compare-dark/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-compare-dark/compare-390.png"
+    ]
+  },
+  {
+    "name": "frame-compare-us",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-compare-us/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-compare-us/compare-1280.png",
+      "/tmp/claude-0/w9c/frame-compare-us/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-compare-us/compare-390.png"
+    ]
+  },
+  {
+    "name": "frame-compare-open",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-compare-open/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-compare-open/compare-1280.png",
+      "/tmp/claude-0/w9c/frame-compare-open/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-compare-open/compare-390.png"
+    ]
+  },
+  {
+    "name": "frame-compare-closed-order",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-compare-closed-order/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-compare-closed-order/compare-1280.png",
+      "/tmp/claude-0/w9c/frame-compare-closed-order/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-compare-closed-order/compare-390.png"
+    ]
+  },
+  {
+    "name": "frame-compare-order",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-compare-order/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-compare-order/compare-1280.png",
+      "/tmp/claude-0/w9c/frame-compare-order/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-compare-order/compare-390.png"
+    ]
+  },
+  {
+    "name": "frame-compare-palette-code",
+    "file": "frame.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/frame-compare-palette-code/app-1280-full.png",
+      "/tmp/claude-0/w9c/frame-compare-palette-code/compare-1280.png",
+      "/tmp/claude-0/w9c/frame-compare-palette-code/app-390-full.png",
+      "/tmp/claude-0/w9c/frame-compare-palette-code/compare-390.png"
+    ]
+  },
+  {
+    "name": "help-india",
+    "file": "help.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/help-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/help-india/compare-1280.png",
+      "/tmp/claude-0/w9c/help-india/app-390-full.png",
+      "/tmp/claude-0/w9c/help-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "help-us",
+    "file": "help.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/help-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "help-data-down",
+    "file": "help.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/help-data-down/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "home-india",
+    "file": "home.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/home-india/app-1680-full.png",
+      "/tmp/claude-0/w9c/home-india/compare-1680.png",
+      "/tmp/claude-0/w9c/home-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/home-india/compare-1280.png",
+      "/tmp/claude-0/w9c/home-india/app-1024-full.png",
+      "/tmp/claude-0/w9c/home-india/compare-1024.png",
+      "/tmp/claude-0/w9c/home-india/app-768-full.png",
+      "/tmp/claude-0/w9c/home-india/compare-768.png",
+      "/tmp/claude-0/w9c/home-india/app-390-full.png",
+      "/tmp/claude-0/w9c/home-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "home-us",
+    "file": "home.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/home-us/app-1280-full.png",
+      "/tmp/claude-0/w9c/home-us/compare-1280.png",
+      "/tmp/claude-0/w9c/home-us/app-390-full.png",
+      "/tmp/claude-0/w9c/home-us/compare-390.png"
+    ]
+  },
+  {
+    "name": "home-open",
+    "file": "home.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/home-open/app-1280-full.png",
+      "/tmp/claude-0/w9c/home-open/compare-1280.png",
+      "/tmp/claude-0/w9c/home-open/app-390-full.png",
+      "/tmp/claude-0/w9c/home-open/compare-390.png"
+    ]
+  },
+  {
+    "name": "home-dark",
+    "file": "home.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/home-dark/app-1280-full.png",
+      "/tmp/claude-0/w9c/home-dark/compare-1280.png",
+      "/tmp/claude-0/w9c/home-dark/app-390-full.png",
+      "/tmp/claude-0/w9c/home-dark/compare-390.png"
+    ]
+  },
+  {
+    "name": "home-trades-ai",
+    "file": "home.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/home-trades-ai/app-1280-full.png",
+      "/tmp/claude-0/w9c/home-trades-ai/compare-1280.png",
+      "/tmp/claude-0/w9c/home-trades-ai/app-390-full.png",
+      "/tmp/claude-0/w9c/home-trades-ai/compare-390.png"
+    ]
+  },
+  {
+    "name": "home-trades-hybrid",
+    "file": "home.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/home-trades-hybrid/app-1280-full.png",
+      "/tmp/claude-0/w9c/home-trades-hybrid/compare-1280.png",
+      "/tmp/claude-0/w9c/home-trades-hybrid/app-390-full.png",
+      "/tmp/claude-0/w9c/home-trades-hybrid/compare-390.png"
+    ]
+  },
+  {
+    "name": "home-trades-baselines",
+    "file": "home.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/home-trades-baselines/app-1280-full.png",
+      "/tmp/claude-0/w9c/home-trades-baselines/compare-1280.png",
+      "/tmp/claude-0/w9c/home-trades-baselines/app-390-full.png",
+      "/tmp/claude-0/w9c/home-trades-baselines/compare-390.png"
+    ]
+  },
+  {
+    "name": "news-india",
+    "file": "news.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/news-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/news-india/compare-1280.png",
+      "/tmp/claude-0/w9c/news-india/app-390-full.png",
+      "/tmp/claude-0/w9c/news-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "news-india-filters",
+    "file": "news.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/news-india-filters/app-1280-full.png",
+      "/tmp/claude-0/w9c/news-india-filters/compare-1280.png"
+    ]
+  },
+  {
+    "name": "news-us",
+    "file": "news.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/news-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "news-empty",
+    "file": "news.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/news-empty/app-1280-full.png",
+      "/tmp/claude-0/w9c/news-empty/compare-1280.png",
+      "/tmp/claude-0/w9c/news-empty/app-390-full.png",
+      "/tmp/claude-0/w9c/news-empty/compare-390.png"
+    ]
+  },
+  {
+    "name": "paper-portfolio-v3-india",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolio-v3-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/paper-portfolio-v3-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "paper-portfolio-v3-finished",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolio-v3-finished/app-1280-full.png",
+      "/tmp/claude-0/w9c/paper-portfolio-v3-finished/app-390-full.png"
+    ]
+  },
+  {
+    "name": "paper-portfolio-v3-us-empty",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolio-v3-us-empty/app-1280-full.png",
+      "/tmp/claude-0/w9c/paper-portfolio-v3-us-empty/app-390-full.png"
+    ]
+  },
+  {
+    "name": "paper-portfolio-v3-story",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolio-v3-story/app-1280-full.png",
+      "/tmp/claude-0/w9c/paper-portfolio-v3-story/app-390-full.png"
+    ]
+  },
+  {
+    "name": "paper-portfolio-old-read-model",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolio-old-read-model/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "paper-portfolio-us-euro",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolio-us-euro/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "paper-portfolios-add-trade",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolios-add-trade/app-1280-full.png",
+      "/tmp/claude-0/w9c/paper-portfolios-add-trade/app-390-full.png"
+    ]
+  },
+  {
+    "name": "paper-portfolios-error",
+    "file": "paper-portfolios.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/paper-portfolios-error/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-india",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/rule-vs-ai-india/compare-1280.png",
+      "/tmp/claude-0/w9c/rule-vs-ai-india/app-390-full.png",
+      "/tmp/claude-0/w9c/rule-vs-ai-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-us",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-your-cost",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-your-cost/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-no-entry",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-no-entry/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-stored-india",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-stored-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/rule-vs-ai-stored-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-review-due-friday",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-review-due-friday/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-review-down",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-review-down/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "rule-vs-ai-error",
+    "file": "rule-vs-ai.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/rule-vs-ai-error/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "shell-home-india",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/shell-home-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/shell-home-india/app-1024-full.png",
+      "/tmp/claude-0/w9c/shell-home-india/app-768-full.png",
+      "/tmp/claude-0/w9c/shell-home-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "shell-home-us",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/shell-home-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "shell-watchlist",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/shell-watchlist/app-1280-full.png",
+      "/tmp/claude-0/w9c/shell-watchlist/compare-1280.png",
+      "/tmp/claude-0/w9c/shell-watchlist/app-390-full.png",
+      "/tmp/claude-0/w9c/shell-watchlist/compare-390.png"
+    ]
+  },
+  {
+    "name": "shell-company",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/shell-company/app-1280-full.png",
+      "/tmp/claude-0/w9c/shell-company/compare-1280.png",
+      "/tmp/claude-0/w9c/shell-company/app-390-full.png",
+      "/tmp/claude-0/w9c/shell-company/compare-390.png"
+    ]
+  },
+  {
+    "name": "state-error-503",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/state-error-503/app-1280-full.png",
+      "/tmp/claude-0/w9c/state-error-503/app-390-full.png"
+    ]
+  },
+  {
+    "name": "state-loading",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/state-loading/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "state-bad-ticker",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/state-bad-ticker/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "unknown-market-404",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/unknown-market-404/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "gallery",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/gallery/app-1280-full.png",
+      "/tmp/claude-0/w9c/gallery/app-390-full.png"
+    ]
+  },
+  {
+    "name": "gallery-posix-locale",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/gallery-posix-locale/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "phone-tab-order",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/phone-tab-order/app-390-full.png"
+    ]
+  },
+  {
+    "name": "market-switch",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/market-switch/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "phone-drawer",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/phone-drawer/app-390-full.png"
+    ]
+  },
+  {
+    "name": "tooltip-keyboard",
+    "file": "shell.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/tooltip-keyboard/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "strategy-lab-india",
+    "file": "strategy-lab.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategy-lab-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/strategy-lab-india/compare-1280.png",
+      "/tmp/claude-0/w9c/strategy-lab-india/app-390-full.png",
+      "/tmp/claude-0/w9c/strategy-lab-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "strategy-lab-us",
+    "file": "strategy-lab.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategy-lab-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "strategy-lab-switches",
+    "file": "strategy-lab.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategy-lab-switches/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "strategy-lab-hash",
+    "file": "strategy-lab.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategy-lab-hash/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "strategy-lab-stored-india",
+    "file": "strategy-lab.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategy-lab-stored-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/strategy-lab-stored-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "strategy-lab-stored-us",
+    "file": "strategy-lab.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategy-lab-stored-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "strategy-lab-error",
+    "file": "strategy-lab.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/strategy-lab-error/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "track-record-india",
+    "file": "track-record.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/track-record-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/track-record-india/compare-1280.png",
+      "/tmp/claude-0/w9c/track-record-india/app-390-full.png",
+      "/tmp/claude-0/w9c/track-record-india/compare-390.png"
+    ]
+  },
+  {
+    "name": "track-record-us",
+    "file": "track-record.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/track-record-us/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "track-record-stored-india",
+    "file": "track-record.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/track-record-stored-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/track-record-stored-india/app-390-full.png"
+    ]
+  },
+  {
+    "name": "track-record-basis-switch",
+    "file": "track-record.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/track-record-basis-switch/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "track-record-error",
+    "file": "track-record.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/track-record-error/app-1280-full.png"
+    ]
+  },
+  {
+    "name": "watchlist-india",
+    "file": "watchlist.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/watchlist-india/app-1280-full.png",
+      "/tmp/claude-0/w9c/watchlist-india/compare-1280.png"
+    ]
+  },
+  {
+    "name": "watchlist-india-narrow",
+    "file": "watchlist.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/watchlist-india-narrow/app-1024-full.png",
+      "/tmp/claude-0/w9c/watchlist-india-narrow/compare-1024.png",
+      "/tmp/claude-0/w9c/watchlist-india-narrow/app-768-full.png",
+      "/tmp/claude-0/w9c/watchlist-india-narrow/compare-768.png",
+      "/tmp/claude-0/w9c/watchlist-india-narrow/app-390-full.png",
+      "/tmp/claude-0/w9c/watchlist-india-narrow/compare-390.png"
+    ]
+  },
+  {
+    "name": "watchlist-india-table",
+    "file": "watchlist.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/watchlist-india-table/app-1440-full.png"
+    ]
+  },
+  {
+    "name": "watchlist-us",
+    "file": "watchlist.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/watchlist-us/app-1280-full.png",
+      "/tmp/claude-0/w9c/watchlist-us/compare-1280.png"
+    ]
+  },
+  {
+    "name": "watchlist-flagged",
+    "file": "watchlist.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/watchlist-flagged/app-1280-full.png",
+      "/tmp/claude-0/w9c/watchlist-flagged/compare-1280.png"
+    ]
+  },
+  {
+    "name": "watchlist-published-only",
+    "file": "watchlist.mjs",
+    "errors": [],
+    "shots": [
+      "/tmp/claude-0/w9c/watchlist-published-only/app-1280-full.png",
+      "/tmp/claude-0/w9c/watchlist-published-only/compare-1280.png"
+    ]
+  }
+]

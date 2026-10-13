@@ -5,7 +5,6 @@
 // Page sessions add their own file here (cases/<page>.mjs) with their page's cases at the mockup's widths.
 
 const PAPER = "Not proven yet: these are tests, not tips.";
-const HOME_VERDICT = "Can I rely on this yet?";
 const HTTP_ERROR_LINE = /^Failed to load resource: the server responded with a status of (404|503)/;
 
 /** The frame's own checks on any page (W8): one current rail group, the market switch pressed on the market, Paper visible. */
@@ -20,9 +19,18 @@ async function shellChecks(page, { market }) {
   return problems;
 }
 
+/** Home (W9) says Paper in its words, as the signed-off 31-dashboard does ("Your paper account", "Open paper trades",
+ *  "total paper profit or loss"), rather than with a tag; the frame's checks otherwise apply. */
+async function homeShellChecks(page, ctx) {
+  const problems = (await shellChecks(page, ctx)).filter((p) => p !== "no Paper tag on the page");
+  const text = await page.$eval(".home", (n) => n.innerText);
+  for (const w of ["Your paper account", "Open paper trades", "total paper profit or loss"]) if (!text.includes(w)) problems.push(`Home does not say "${w}"`);
+  return problems;
+}
+
 export const cases = [
-  { name: "shell-home-india", path: "/india", mockup: "01-home", widths: [1280, 1024, 768, 390], waitFor: ".phead", expectText: [HOME_VERDICT, "Market mood:"], check: shellChecks },
-  { name: "shell-home-us", path: "/us", market: "us", mockup: "01-home", widths: [1280], waitFor: ".phead", expectText: [HOME_VERDICT], check: shellChecks },
+  { name: "shell-home-india", path: "/india", widths: [1280, 1024, 768, 390], waitFor: ".home .mb-apcard", expectText: ["Who trades, and how it is going"], check: homeShellChecks },
+  { name: "shell-home-us", path: "/us", market: "us", widths: [1280], waitFor: ".home .mb-apcard", expectText: ["Who trades, and how it is going"], check: homeShellChecks },
   { name: "shell-watchlist", path: "/india/watchlist", mockup: "02-watchlist", waitFor: ".phead", expectText: [PAPER, "Watchlist"], check: shellChecks },
   { name: "shell-company", path: "/india/stocks/RELIANCE", mockup: "03-company", waitFor: ".phead", expectText: ["RELIANCE"], check: shellChecks },
   { name: "state-error-503", path: "/india/watchlist", apiStatus: 503, allowConsole: [HTTP_ERROR_LINE], widths: [1280, 390], waitFor: '[role="alert"]', expectText: ["Data service unavailable", "Try again", "omenix.vercel.app/india"] },
@@ -67,7 +75,7 @@ export const cases = [
     name: "phone-tab-order",
     path: "/india",
     widths: [390],
-    waitFor: ".phead",
+    waitFor: ".home .mb-apcard",
     keyboard: false,
     check: async (page) => {
       const problems = [];
@@ -97,7 +105,7 @@ export const cases = [
     name: "phone-drawer",
     path: "/india",
     widths: [390],
-    waitFor: ".phead",
+    waitFor: ".home .mb-apcard",
     check: async (page) => {
       const problems = [];
       await page.click('.mb-navbar a:has-text("More")');
@@ -111,11 +119,11 @@ export const cases = [
     name: "tooltip-keyboard",
     path: "/india",
     widths: [1280],
-    waitFor: ".phead",
+    waitFor: ".home .mb-apcard",
     check: async (page) => {
-      await page.focus(".phead .md-chip");
+      await page.focus(".home .mb-mband a");
       const shown = await page.$eval("#tip", (t) => t.classList.contains("on") && t.textContent.length > 0);
-      return shown ? [] : ["focusing a chip with data-tip did not show the tooltip"];
+      return shown ? [] : ["focusing an index with data-tip did not show the tooltip"];
     },
   },
 ];

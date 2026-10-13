@@ -3,7 +3,6 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { filterRows, mostAgreed, sectorsOf, sortRows, watchlistRows, horizonWords, distinctFlags } from "../watchlist.ts";
-import { cumulativeProfit, eodLeaders, expectedGainMoney, groupBy, pickSummary, runsOk, viableLineOf, type HeadToHeadPick } from "../home.ts";
 import { cleanReason, commandArguments, companiesCounts, deactivation, deleteConfirmed, onboardingWords, parseAmount } from "../companies.ts";
 
 const mockup = (page: string) => JSON.parse(readFileSync(new URL(`../../../../design/mockups/${page}/data.json`, import.meta.url), "utf8").replace(/\bNaN\b/g, "null"));
@@ -34,30 +33,6 @@ test("watchlist rows: active only, agreement and range at the horizon, open trad
   assert.equal(horizonWords(3), "the close of the 3rd session after the open");
 });
 
-test("home: pick summary, money gain, grouping, profit series, leaders and runs", () => {
-  const pick = (id: string, ticker: string, gain: number | null, viable: boolean | null, status = "picked"): HeadToHeadPick => ({ id, ticker, family: "rule", pick_rule: "best_expected_gain", status, strategy_id: "s", horizon_days: 2, expected_gain_pct: gain, amount: 1000, candidates: [{ horizon_days: 2, prob_up: 0.6, move_pct: 1, loss_pct: 1, costs_pct: 0.1, expected_gain_pct: gain, cost_viable: viable }] });
-  const picks = [pick("1", "A", 0.5, false), pick("2", "A", -0.1, null), pick("3", "B", 0.2, true), pick("4", "C", null, null, "no_candidate")];
-  const s = pickSummary(picks);
-  assert.deepEqual(s, { picked: 3, clearMarket: 2, viableYours: 1 });
-  assert.equal(viableLineOf(picks), "2 expected to beat market fees · 1 worth it after your fees");
-  assert.equal(viableLineOf([pick("5", "D", 0.3, null)]), "1 expected to beat market fees · your fees not stored");
-  assert.equal(expectedGainMoney(picks[0]), 5);
-  assert.deepEqual(groupBy(picks, (k) => k.ticker).map(([t, ks]) => [t, ks.length]), [["A", 2], ["B", 1], ["C", 1]]);
-  const series = cumulativeProfit([
-    { view: "accuracy", family: "rule", exit_date_actual: "2026-10-02", net_pnl: 10 },
-    { view: "accuracy", family: "rule", exit_date_actual: "2026-10-01", net_pnl: -4 },
-    { view: "accuracy", family: "ai", exit_date_actual: "2026-10-02", net_pnl: 3 },
-    { view: "head_to_head", family: "ai", exit_date_actual: "2026-10-02", net_pnl: 100 },
-    { view: "accuracy", family: "ai", exit_date_actual: null, net_pnl: null },
-  ]);
-  assert.deepEqual(series.days, ["2026-10-01", "2026-10-02"]);
-  assert.deepEqual(series.series.map((x) => [x.family, x.points]), [["rule", [-4, 6]], ["ai", [0, 3]], ["baseline", [0, 0]]]);
-  assert.equal(series.trades, 3);
-  assert.deepEqual([...eodLeaders({ rule: { trades: 2, wins: 1, net_pnl: 5 }, ai: { trades: 1, wins: 1, net_pnl: 9 }, baseline: { trades: 0, wins: 0, net_pnl: 50 } })], ["ai"]);
-  const run = (ok: boolean | null) => ({ at: ok == null ? null : "t", ok });
-  assert.deepEqual(runsOk({ pre_open: run(true), intraday: [run(true)], post_close: run(null), news: run(false) }), { ok: 2, total: 5 });
-});
-
 test("companies: counts, deactivation, arguments, onboarding words, confirmations", () => {
   const cos = [{ ticker: "A", name: "A", state: "active", amount_overridden: true }, { ticker: "B", name: "B", state: "active" }, { ticker: "C", name: "C", state: "inactive" }];
   const cmd = (result: string, args: Record<string, unknown> | null) => ({ id: "c", tool: "add_company", result, arguments: args, record_ids: [], refusal_code: null });
@@ -76,15 +51,11 @@ test("companies: counts, deactivation, arguments, onboarding words, confirmation
 });
 
 test("the mockups' payloads: every page's computations run on both markets", () => {
-  const wl = mockup("02-watchlist"), home = mockup("01-home"), cos = mockup("10-companies");
+  const wl = mockup("02-watchlist"), cos = mockup("10-companies");
   for (const m of ["india", "us"]) {
     const p = wl.markets[m];
     const rows = watchlistRows(p, p.default_horizon);
     assert.equal(rows.length, p.companies.filter((c: { state: string }) => c.state === "active").length);
-    const h = home.markets[m];
-    assert.ok(pickSummary(h.head_to_head).picked <= h.head_to_head.length);
-    assert.ok(runsOk(h.status.runs).ok <= 5);
-    assert.ok(cumulativeProfit(h.settled_trades).days.length > 0);
     const c = cos.markets[m];
     assert.equal(companiesCounts(c.companies, c.commands).active + companiesCounts(c.companies, c.commands).inactive, c.companies.length);
   }

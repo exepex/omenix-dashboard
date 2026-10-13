@@ -36,7 +36,8 @@ function Empty({ hybrid }: { hybrid: boolean }) {
   );
 }
 
-export function PicksPanel() {
+/** The picks: head, rows, notes and pager; the frame's left panel and Home (below 1200 px) both show it. */
+export function PicksBody({ where }: { where: "panel" | "home" }) {
   const { shell, approach, picksOpen, setPicksOpen } = useFrame();
   const [page, setPage] = useState(0);
   useEffect(() => setPage(0), [approach, shell]);
@@ -47,12 +48,12 @@ export function PicksPanel() {
   const G = shell.go_live;
   const fs = shell.fno_state;
   return (
-    <aside className="mb-wl mb-sig" id="wl" aria-label="Today’s buy picks">
+    <>
       <div className="mb-wl-head">
         <div className="mb-wl-title">
           <h2>Today’s buy picks</h2>
           <HelpTip tip={`The head-to-head picks of each strategy family for today's session, from the stock tool. Not proven yet: ${G.months_forward} of 2 months of forward paper trading and about ${G.trades_needed} more settled trades are needed before any signal can be called strong.`} />
-          {picksOpen ? (
+          {where === "panel" && picksOpen ? (
             <button className="md-icon-btn small" type="button" aria-label="Close the picks" onClick={() => setPicksOpen(false)}>
               <Icon name="close" />
             </button>
@@ -95,6 +96,14 @@ export function PicksPanel() {
           <Icon name="chevron_right" />
         </button>
       </div>
+    </>
+  );
+}
+
+export function PicksPanel() {
+  return (
+    <aside className="mb-wl mb-sig" id="wl" aria-label="Today’s buy picks">
+      <PicksBody where="panel" />
     </aside>
   );
 }

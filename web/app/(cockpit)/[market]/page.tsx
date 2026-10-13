@@ -1,5 +1,5 @@
-// Page 01, Home (design/mockups/01-home/; B14): the server part keeps the metadata, the client part (in `_home/`, a
-// private folder beside the other pages' route folders) reads the endpoint.
+// Home (story W9, design/mockups/31-dashboard): the market's home page. `_home/` holds its server sections, each
+// reading its own blocks through the HomeData interface.
 import type { Metadata } from "next";
 import type { Market } from "../../../lib/data/constants.ts";
 import { HomePage } from "./_home/home-page.tsx";

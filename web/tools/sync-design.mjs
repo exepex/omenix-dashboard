@@ -3,6 +3,8 @@
 //                                                                        _shared/shell.css
 //   web/components/icons/sprite.generated.ts        <- icons.svg as a string constant (inlined once in the root layout)
 //   web/lib/shell/fixture/shell.generated.json      <- mockups/30-shell/data.json (the app frame's fixture adapter, W8)
+//   web/lib/home/fixture/blocks.generated.json      <- api/examples/blocks.json (Home's block examples, W9: the W10
+//                                                     contract's examples, taken from 30-shell and 31-dashboard)
 // Run from web/: `node tools/sync-design.mjs`; `--check` exits 1 when a copy is out of date (lib/ui/tests/design-sync.test.ts).
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -24,6 +26,7 @@ export function expectedCopies() {
       "// design/system/LICENSE-material-symbols.txt). Do not edit; run `node tools/sync-design.mjs`.\n" +
       `export const ICON_SPRITE = ${JSON.stringify(sprite)};\n`,
     "lib/shell/fixture/shell.generated.json": read("mockups/30-shell/data.json"),
+    "lib/home/fixture/blocks.generated.json": readFileSync(join(design, "..", "api", "examples", "blocks.json"), "utf8"),
   };
 }
 

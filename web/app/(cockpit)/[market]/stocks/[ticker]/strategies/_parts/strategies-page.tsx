@@ -159,7 +159,7 @@ function FamilyBox({ family, picks, p, strategies }: { family: "rule" | "ai"; pi
         <Avatar icon={FAMILY[family][1]} tone={family === "ai" ? "info" : ""} size="sm" />
         <b>{FAMILY_SHORT[family]}</b>
         {st && any ? (
-          <small tabIndex={0} data-tip={`${st.name} (${any.strategy_id}) is the family’s strongest strategy with a buyable horizon today, ranked on ${any.strongest_basis === "per_company" ? `this company (${MIN_TRADES_TO_RANK}+ settled trades on it)` : `all companies (fewer than ${MIN_TRADES_TO_RANK} settled trades on this one)`}. Ranking: ${(any.ranking ?? []).map((x) => `${x.rank}. ${strategyOf(strategies, x.strategy_id).name} ${money(cur, x.net_pnl, dec, true)} on ${x.settled_trades}`).join(" · ")}.`}>
+          <small tabIndex={0} data-tip={`${st.name} is the family’s strongest strategy with a buyable horizon today, ranked on ${any.strongest_basis === "per_company" ? `this company (${MIN_TRADES_TO_RANK}+ settled trades on it)` : `all companies (fewer than ${MIN_TRADES_TO_RANK} settled trades on this one)`}. Ranking: ${(any.ranking ?? []).map((x) => `${x.rank}. ${strategyOf(strategies, x.strategy_id).name} ${money(cur, x.net_pnl, dec, true)} on ${x.settled_trades}`).join(" · ")}.`}>
             · {st.name} · ranked on {basis}
           </small>
         ) : <small>· no candidate</small>}

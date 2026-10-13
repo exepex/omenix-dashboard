@@ -157,7 +157,7 @@ function Horizons({ lab, companies }: { lab: LabForHelp | null; companies: Compa
 const FAMILY_NOTE: Record<Family, string> = {
   rule: "Fixed rules on the signal model and verified news. Each differs from the reference in exactly one setting, so a difference in results points to that setting.",
   baseline: "Yardsticks, not contenders: a strategy must beat the best of them after your cost to go live.",
-  ai: `Claude traders that read the day’s evidence and write a probability and a reason of at most ${REASON_MAX_WORDS} words; two see the signal model, two are blind to it.`,
+  ai: `AI traders that read the day’s evidence and write a probability and a reason of at most ${REASON_MAX_WORDS} words; two see the signal model, two are blind to it.`,
 };
 
 function Strategies({ market, lab, problem }: { market: Market; lab: LabForHelp | null; problem: ReactNode }) {
@@ -410,8 +410,8 @@ function Glossary() {
             ["Settled (finished)", "A paper trade whose exit close is stored; its profit after costs is final unless a later split correction re-settles it as a new record."],
             ["Unrealised", "The profit of an open paper trade at the latest stored close, before costs."],
             ["Reason split", "A settled trade’s move split into what the market explains, the sector, verified news, and the company itself."],
-            ["EOD analyst", `The Claude agent that writes a reason of at most ${REASON_MAX_WORDS} words per head-to-head trade and the day’s biggest wins and misses, after the close.`],
-            ["Research director", "The Claude agent that writes the weekly research review (apart from the weekly review of the ranges) and proposes changes; nothing changes until the owner approves."],
+            ["EOD analyst", `The AI agent that writes a reason of at most ${REASON_MAX_WORDS} words per head-to-head trade and the day’s biggest wins and misses, after the close.`],
+            ["Research director", "The AI agent that writes the weekly research review (apart from the weekly review of the ranges) and proposes changes; nothing changes until the owner approves."],
             ["Inactive company", "Still collected, never predicted or traded; its open paper trades still settle."],
           ]}
         />

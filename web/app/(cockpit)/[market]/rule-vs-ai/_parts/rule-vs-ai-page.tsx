@@ -21,8 +21,8 @@ import type { GoLive, PageBase } from "../../../../../lib/ui/types.ts";
 import { usePage } from "../../../../../lib/ui/use-api.ts";
 import { figure, REGIME_WORDS, tooFewToRank, type CostView, type ScoreboardRow } from "../../../../../lib/strategy-pages/scoreboard.ts";
 import {
-  familyLines, familyRow, matches, NOT_ENTERED, notEnteredFor, matchTally, matchWinner, perCompany, pickCandidate, pickFor, tradeNet, tradeReturn,
-  reviewDueWords, viableLine, whoLeads, type Match, type Pick, type ReviewPayload, type RuleVsAiPayload, type SettledTrade,
+  cited, familyLines, familyRow, matches, NOT_ENTERED, notEnteredFor, matchTally, matchWinner, perCompany, pickCandidate, pickFor, tradeNet, tradeReturn,
+  reviewDueWords, strategyName, viableLine, whoLeads, type Match, type Pick, type ReviewPayload, type RuleVsAiPayload, type SettledTrade,
 } from "../../../../../lib/strategy-pages/rule-vs-ai.ts";
 import { CostSwitch, LuckBar } from "../../_b16/parts.tsx";
 import "./rule-vs-ai.css";
@@ -75,7 +75,6 @@ function RuleVsAi({ p, market }: { p: Payload; market: Market }) {
   );
 }
 
-const strategyName = (p: Payload, id: string | null) => (id ? p.strategies[id]?.name ?? id : DASH);
 const companyName = (p: Payload, t: string) => p.companies.find((c) => c.ticker === t)?.name ?? t;
 
 function NotStored() {
@@ -362,7 +361,7 @@ function Why({ p }: { p: Payload }) {
               <li key={r.id}>
                 <div className="rh">{s ? <FamilyLabel family={s.family}>{FAMILY_SHORT[s.family]}</FamilyLabel> : null}<b>{strategyName(p, r.strategy_id)}</b><Link className="tk" href={companyPath(p.market, r.ticker)}>{r.ticker}</Link><span>{`· settled ${fmtDate(r.session_date)}`}</span></div>
                 <div>{r.text}</div>
-                <div className="ids">{r.cited_ids.map((id) => <code key={id}>{id}</code>)}</div>
+                <div className="ids">{r.cited_ids.map((id) => <code key={id}>{cited(p, id)}</code>)}</div>
               </li>
             );
           })}
@@ -401,7 +400,7 @@ function ReviewCard({ p, market }: { p: Payload; market: Market }) {
           </div>
           <h3>Findings</h3>
           <ul className="rl">
-            {r.findings.map((f, i) => <li key={i}><div>{f.text}</div><div className="ids">{f.cited_ids.map((id) => <code key={id}>{id}</code>)}</div></li>)}
+            {r.findings.map((f, i) => <li key={i}><div>{f.text}</div><div className="ids">{f.cited_ids.map((id) => <code key={id}>{cited(p, id)}</code>)}</div></li>)}
           </ul>
           <h3>Proposals (nothing applied until the owner approves)</h3>
           {!r.proposals.length ? <Quiet>No proposals this week.</Quiet> : r.proposals.map((q) => (
@@ -409,7 +408,7 @@ function ReviewCard({ p, market }: { p: Payload; market: Market }) {
               <div className="ph"><b>{`${q.kind} · ${q.file}`}</b><Label tone={q.status === "proposed" ? "warn" : "neutral"}>{q.status}</Label><code>{q.proposal_id}</code></div>
               <div style={{ marginTop: 4 }}>{q.rationale}</div>
               <pre>{q.diff}</pre>
-              <div className="ids" style={{ marginTop: 6 }}>{q.cited_ids.map((id) => <code key={id}>{id}</code>)}</div>
+              <div className="ids" style={{ marginTop: 6 }}>{q.cited_ids.map((id) => <code key={id}>{cited(p, id)}</code>)}</div>
             </div>
           ))}
           <p className="note">{`Full report: ${r.report_path}`}</p>

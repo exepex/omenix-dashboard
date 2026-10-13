@@ -1,7 +1,8 @@
 // The Rule vs AI page's own presentation logic (B16; design/mockups/06-rule-vs-ai, notes.md "Shown but computed by
 // the page"): who leads, the matches on identical company-days, the per-company sums, the cumulative lines per
 // family and the picks' cost counts. Pure: no React, no DOM.
-import { DOW_LONG, fmtDateYear } from "../ui/format.ts";
+import { DASH, DOW_LONG, fmtDateYear } from "../ui/format.ts";
+import { citedId } from "../ui/strategy-names.ts";
 import { figure, type CostView, type Family, type ScoreboardRow, type Strategy } from "./scoreboard.ts";
 
 export interface SettledTrade {
@@ -293,3 +294,10 @@ export function reviewDueWords(due: { date: string; iso_week: string } | null): 
   const weekday = DOW_LONG[new Date(due.date.slice(0, 10) + "T00:00:00Z").getUTCDay()];
   return `No weekly review written by the cut-off. The next one (${due.iso_week}) is due on ${weekday} ${fmtDateYear(due.date)}, after the cut-off.`;
 }
+
+type Named = { strategies: Record<string, Strategy> };
+/** A strategy's name as the page shows it (already through the display-name rule), or a dash. */
+export const strategyName = (p: Named, id: string | null): string => (id ? p.strategies[id]?.name ?? id : DASH);
+/** A cited record id as evidence text: its strategy ids read as their display names (lib/ui/strategy-names.ts). */
+export const cited = (p: Named, id: string): string => citedId(id, p.strategies);
+

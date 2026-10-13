@@ -8,6 +8,7 @@ import { strategyOf } from "../../../../../../components/blocks/records.tsx";
 import { Card, CardHead, Delta, GoLink, Label, Quiet, SentimentSquare, StatusBadge } from "../../../../../../components/ui/primitives.tsx";
 import { CURRENCY_SYMBOL, LOCALE } from "../../../../../../lib/ui/constants.ts";
 import { firstExit } from "../../../../../../lib/ui/empty.ts";
+import { citedId } from "../../../../../../lib/ui/strategy-names.ts";
 import { DOW, fmtDate, fmtDateYear, holdLabel, money, signed } from "../../../../../../lib/ui/format.ts";
 import { lifecyclePath, pagePath } from "../../../../../../lib/ui/routes.ts";
 import { companyEventEffect, horizonOfId, nextCompanyEvent } from "../../../../../../lib/company-pages/company-logic.ts";
@@ -41,7 +42,7 @@ export function ReasonsCard({ reasons, news, ctx, openHeadToHead = [] }: { reaso
                 <div>{r.text}</div>
                 <div className="ids" aria-label="Cited ids">
                   {r.cited_ids.map((id) => (
-                    <code key={id} tabIndex={0} data-tip={titles.has(id) ? `News item ${id}: ${titles.get(id)}` : `Cited id ${id} (a trade or news record).`}>{id}</code>
+                    <code key={id} tabIndex={0} data-tip={titles.has(id) ? `News item ${citedId(id, ctx.strategies)}: ${titles.get(id)}` : `Cited id ${citedId(id, ctx.strategies)} (a trade or news record).`}>{citedId(id, ctx.strategies)}</code>
                   ))}
                 </div>
               </li>
