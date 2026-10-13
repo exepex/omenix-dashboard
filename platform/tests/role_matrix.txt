@@ -6,42 +6,42 @@
 
 
 # Every role: no privileged attribute, no membership in any role, nothing outside its own grants
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | value=false | SELECT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls)::text AS v FROM pg_roles WHERE rolname = current_user | no SUPERUSER, CREATEDB, CREATEROLE, REPLICATION or BYPASSRLS
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | value=0 | SELECT count(*)::text AS v FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.member WHERE r.rolname = current_user | member of no role (no owner, admin or Azure role)
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE ROLE x1_matrix_role | cannot create roles
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE SCHEMA x1_matrix_schema | cannot create schemas (no CREATE on the database)
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TEMP TABLE x1_matrix_temp (i int) | cannot create temporary tables (no TEMP on the database)
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT count(*) FROM pg_authid | cannot read password hashes
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT pg_read_file('PG_VERSION') | cannot read server files
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | value=false | SELECT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls)::text AS v FROM pg_roles WHERE rolname = current_user | no SUPERUSER, CREATEDB, CREATEROLE, REPLICATION or BYPASSRLS
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | value=0 | SELECT count(*)::text AS v FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.member WHERE r.rolname = current_user | member of no role (no owner, admin or Azure role)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE ROLE x1_matrix_role | cannot create roles
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE SCHEMA x1_matrix_schema | cannot create schemas (no CREATE on the database)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TEMP TABLE x1_matrix_temp (i int) | cannot create temporary tables (no TEMP on the database)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | SELECT count(*) FROM pg_authid | cannot read password hashes
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | SELECT pg_read_file('PG_VERSION') | cannot read server files
 
 # Schema entry: USAGE exactly where granted (catches a schema grant even when no table grant exists yet)
 stock_owner,stock_writer,dashboard_app | value=true | SELECT has_schema_privilege('stock', 'USAGE')::text AS v | may enter schema stock
-fno_owner,app_owner,fno_writer,stock_inbox_reader | value=false | SELECT has_schema_privilege('stock', 'USAGE')::text AS v | may not enter schema stock
+fno_owner,app_owner,fno_writer,stock_inbox_reader,db_monitor | value=false | SELECT has_schema_privilege('stock', 'USAGE')::text AS v | may not enter schema stock
 fno_owner,fno_writer,dashboard_app | value=true | SELECT has_schema_privilege('fno', 'USAGE')::text AS v | may enter schema fno
-stock_owner,app_owner,stock_writer,stock_inbox_reader | value=false | SELECT has_schema_privilege('fno', 'USAGE')::text AS v | may not enter schema fno
+stock_owner,app_owner,stock_writer,stock_inbox_reader,db_monitor | value=false | SELECT has_schema_privilege('fno', 'USAGE')::text AS v | may not enter schema fno
 app_owner,dashboard_app,stock_inbox_reader | value=true | SELECT has_schema_privilege('app', 'USAGE')::text AS v | may enter schema app
-stock_owner,fno_owner,stock_writer,fno_writer | value=false | SELECT has_schema_privilege('app', 'USAGE')::text AS v | may not enter schema app
+stock_owner,fno_owner,stock_writer,fno_writer,db_monitor | value=false | SELECT has_schema_privilege('app', 'USAGE')::text AS v | may not enter schema app
 
 # Named exceptions (platform/README.md): PostgreSQL lets every role do these unless a superuser closes them.
 # known:<x> = OPEN while the server allows it, PASS once closed (sql/12_large_objects.sql (every database) and sql/15_server_wide.sql try; on Azure the admin may not be able to).
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SELECT lo_from_bytea(0, 'x1'::bytea) | create a large object (stored on disk, outlives the session)
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SELECT lo_create(0) | create a large object
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SELECT lo_creat(-1) | create a large object
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | known:deny | SELECT lo_from_bytea(0, 'x1'::bytea) | create a large object (stored on disk, outlives the session)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | known:deny | SELECT lo_create(0) | create a large object
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | known:deny | SELECT lo_creat(-1) | create a large object
 stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:value= | SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT') | connect to a database other than omenix (and create large objects and temporary tables there)
 stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:value= | SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'TEMP') | create temporary tables in a database other than omenix
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | SET statement_timeout = 0 | switch off its own statement timeout for its session
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | ALTER ROLE CURRENT_USER SET statement_timeout = 0 | switch off its own statement timeout persistently (caught by the catalog snapshot)
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | known:deny | ALTER ROLE CURRENT_USER PASSWORD NULL | change or remove its own password (rolled back here)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | known:deny | SET statement_timeout = 0 | switch off its own statement timeout for its session
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | known:deny | ALTER ROLE CURRENT_USER SET statement_timeout = 0 | switch off its own statement timeout persistently (caught by the catalog snapshot)
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | known:deny | ALTER ROLE CURRENT_USER PASSWORD NULL | change or remove its own password (rolled back here)
 
 # Detection: the large-object exception has not been used
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | value=0 | SELECT count(*)::text AS v FROM pg_largeobject_metadata | no large object exists in omenix
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | value=0 | SELECT count(*)::text AS v FROM pg_largeobject_metadata | no large object exists in omenix
 
 # Every role: nothing can be created in public
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TABLE public.x1_matrix (i int) | no table in public
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE VIEW public.x1_matrix_v AS SELECT 1 AS i | no view in public
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE SEQUENCE public.x1_matrix_s | no sequence in public
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE FUNCTION public.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no function in public
-stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TYPE public.x1_matrix_t AS (i int) | no type in public
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TABLE public.x1_matrix (i int) | no table in public
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE VIEW public.x1_matrix_v AS SELECT 1 AS i | no view in public
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE SEQUENCE public.x1_matrix_s | no sequence in public
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE FUNCTION public.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no function in public
+stock_owner,fno_owner,app_owner,stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TYPE public.x1_matrix_t AS (i int) | no type in public
 
 # Schema stock: only stock_owner creates objects
 stock_owner | allow | CREATE TABLE stock.x1_matrix (i int) | the owner role creates tables in stock
@@ -51,15 +51,15 @@ stock_owner | allow | DROP TABLE stock.x1_probe | the owner role drops its table
 stock_owner | allow | SELECT count(*) FROM stock.x1_probe | the owner role reads its tables in stock
 fno_owner,app_owner | deny | CREATE TABLE stock.x1_matrix (i int) | another owner role cannot create in stock
 fno_owner,app_owner | deny | SELECT count(*) FROM stock.x1_probe | another owner role cannot read stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TABLE stock.x1_matrix (i int) | no runtime role creates a table in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE VIEW stock.x1_matrix_v AS SELECT 1 AS i | no runtime role creates a view in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE SEQUENCE stock.x1_matrix_s | no runtime role creates a sequence in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE FUNCTION stock.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no runtime role creates a function in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TYPE stock.x1_matrix_t AS (i int) | no runtime role creates a type in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE INDEX x1_matrix_idx ON stock.x1_probe (note) | no runtime role indexes a table in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | ALTER TABLE stock.x1_probe ADD COLUMN x1_extra int | no runtime role alters a table in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | DROP TABLE stock.x1_probe | no runtime role drops a table in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | TRUNCATE stock.x1_probe | no runtime role truncates a table in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TABLE stock.x1_matrix (i int) | no runtime role creates a table in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE VIEW stock.x1_matrix_v AS SELECT 1 AS i | no runtime role creates a view in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE SEQUENCE stock.x1_matrix_s | no runtime role creates a sequence in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE FUNCTION stock.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no runtime role creates a function in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TYPE stock.x1_matrix_t AS (i int) | no runtime role creates a type in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE INDEX x1_matrix_idx ON stock.x1_probe (note) | no runtime role indexes a table in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | ALTER TABLE stock.x1_probe ADD COLUMN x1_extra int | no runtime role alters a table in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | DROP TABLE stock.x1_probe | no runtime role drops a table in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | TRUNCATE stock.x1_probe | no runtime role truncates a table in stock
 
 # Schema fno: only fno_owner creates objects
 fno_owner | allow | CREATE TABLE fno.x1_matrix (i int) | the owner role creates tables in fno
@@ -69,15 +69,15 @@ fno_owner | allow | DROP TABLE fno.x1_probe | the owner role drops its tables in
 fno_owner | allow | SELECT count(*) FROM fno.x1_probe | the owner role reads its tables in fno
 stock_owner,app_owner | deny | CREATE TABLE fno.x1_matrix (i int) | another owner role cannot create in fno
 stock_owner,app_owner | deny | SELECT count(*) FROM fno.x1_probe | another owner role cannot read fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TABLE fno.x1_matrix (i int) | no runtime role creates a table in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE VIEW fno.x1_matrix_v AS SELECT 1 AS i | no runtime role creates a view in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE SEQUENCE fno.x1_matrix_s | no runtime role creates a sequence in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE FUNCTION fno.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no runtime role creates a function in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TYPE fno.x1_matrix_t AS (i int) | no runtime role creates a type in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE INDEX x1_matrix_idx ON fno.x1_probe (note) | no runtime role indexes a table in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | ALTER TABLE fno.x1_probe ADD COLUMN x1_extra int | no runtime role alters a table in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | DROP TABLE fno.x1_probe | no runtime role drops a table in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | TRUNCATE fno.x1_probe | no runtime role truncates a table in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TABLE fno.x1_matrix (i int) | no runtime role creates a table in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE VIEW fno.x1_matrix_v AS SELECT 1 AS i | no runtime role creates a view in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE SEQUENCE fno.x1_matrix_s | no runtime role creates a sequence in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE FUNCTION fno.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no runtime role creates a function in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TYPE fno.x1_matrix_t AS (i int) | no runtime role creates a type in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE INDEX x1_matrix_idx ON fno.x1_probe (note) | no runtime role indexes a table in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | ALTER TABLE fno.x1_probe ADD COLUMN x1_extra int | no runtime role alters a table in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | DROP TABLE fno.x1_probe | no runtime role drops a table in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | TRUNCATE fno.x1_probe | no runtime role truncates a table in fno
 
 # Schema app: only app_owner creates objects
 app_owner | allow | CREATE TABLE app.x1_matrix (i int) | the owner role creates tables in app
@@ -87,90 +87,90 @@ app_owner | allow | DROP TABLE app.x1_probe | the owner role drops its tables in
 app_owner | allow | SELECT count(*) FROM app.x1_probe | the owner role reads its tables in app
 stock_owner,fno_owner | deny | CREATE TABLE app.x1_matrix (i int) | another owner role cannot create in app
 stock_owner,fno_owner | deny | SELECT count(*) FROM app.x1_probe | another owner role cannot read app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TABLE app.x1_matrix (i int) | no runtime role creates a table in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE VIEW app.x1_matrix_v AS SELECT 1 AS i | no runtime role creates a view in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE SEQUENCE app.x1_matrix_s | no runtime role creates a sequence in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE FUNCTION app.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no runtime role creates a function in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE TYPE app.x1_matrix_t AS (i int) | no runtime role creates a type in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | CREATE INDEX x1_matrix_idx ON app.x1_probe (note) | no runtime role indexes a table in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | ALTER TABLE app.x1_probe ADD COLUMN x1_extra int | no runtime role alters a table in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | DROP TABLE app.x1_probe | no runtime role drops a table in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | TRUNCATE app.x1_probe | no runtime role truncates a table in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TABLE app.x1_matrix (i int) | no runtime role creates a table in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE VIEW app.x1_matrix_v AS SELECT 1 AS i | no runtime role creates a view in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE SEQUENCE app.x1_matrix_s | no runtime role creates a sequence in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE FUNCTION app.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1' | no runtime role creates a function in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE TYPE app.x1_matrix_t AS (i int) | no runtime role creates a type in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | CREATE INDEX x1_matrix_idx ON app.x1_probe (note) | no runtime role indexes a table in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | ALTER TABLE app.x1_probe ADD COLUMN x1_extra int | no runtime role alters a table in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | DROP TABLE app.x1_probe | no runtime role drops a table in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | TRUNCATE app.x1_probe | no runtime role truncates a table in app
 
 # Schema stock: row operations of the runtime roles (default privileges on a table its owner created)
 stock_writer,dashboard_app | allow | SELECT count(*) FROM stock.x1_probe | SELECT on stock
-fno_writer,stock_inbox_reader | deny | SELECT count(*) FROM stock.x1_probe | no SELECT on stock
+fno_writer,stock_inbox_reader,db_monitor | deny | SELECT count(*) FROM stock.x1_probe | no SELECT on stock
 stock_writer | allow | INSERT INTO stock.x1_probe (note) VALUES ('x1 matrix') | INSERT on stock
-fno_writer,dashboard_app,stock_inbox_reader | deny | INSERT INTO stock.x1_probe (note) VALUES ('x1 matrix') | no INSERT on stock
+fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | INSERT INTO stock.x1_probe (note) VALUES ('x1 matrix') | no INSERT on stock
 stock_writer | allow | UPDATE stock.x1_probe SET note = 'x1 matrix' WHERE id = -1 | UPDATE on stock
-fno_writer,dashboard_app,stock_inbox_reader | deny | UPDATE stock.x1_probe SET note = 'x1 matrix' WHERE id = -1 | no UPDATE on stock
+fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | UPDATE stock.x1_probe SET note = 'x1 matrix' WHERE id = -1 | no UPDATE on stock
 stock_writer | allow | DELETE FROM stock.x1_probe WHERE id = -1 | DELETE on stock
-fno_writer,dashboard_app,stock_inbox_reader | deny | DELETE FROM stock.x1_probe WHERE id = -1 | no DELETE on stock
+fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | DELETE FROM stock.x1_probe WHERE id = -1 | no DELETE on stock
 stock_writer | allow | SELECT nextval('stock.x1_probe_id_seq') | NEXTVAL on stock
-fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT nextval('stock.x1_probe_id_seq') | no NEXTVAL on stock
+fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | SELECT nextval('stock.x1_probe_id_seq') | no NEXTVAL on stock
 
 # Schema fno: row operations of the runtime roles (default privileges on a table its owner created)
 fno_writer,dashboard_app | allow | SELECT count(*) FROM fno.x1_probe | SELECT on fno
-stock_writer,stock_inbox_reader | deny | SELECT count(*) FROM fno.x1_probe | no SELECT on fno
+stock_writer,stock_inbox_reader,db_monitor | deny | SELECT count(*) FROM fno.x1_probe | no SELECT on fno
 fno_writer | allow | INSERT INTO fno.x1_probe (note) VALUES ('x1 matrix') | INSERT on fno
-stock_writer,dashboard_app,stock_inbox_reader | deny | INSERT INTO fno.x1_probe (note) VALUES ('x1 matrix') | no INSERT on fno
+stock_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | INSERT INTO fno.x1_probe (note) VALUES ('x1 matrix') | no INSERT on fno
 fno_writer | allow | UPDATE fno.x1_probe SET note = 'x1 matrix' WHERE id = -1 | UPDATE on fno
-stock_writer,dashboard_app,stock_inbox_reader | deny | UPDATE fno.x1_probe SET note = 'x1 matrix' WHERE id = -1 | no UPDATE on fno
+stock_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | UPDATE fno.x1_probe SET note = 'x1 matrix' WHERE id = -1 | no UPDATE on fno
 fno_writer | allow | DELETE FROM fno.x1_probe WHERE id = -1 | DELETE on fno
-stock_writer,dashboard_app,stock_inbox_reader | deny | DELETE FROM fno.x1_probe WHERE id = -1 | no DELETE on fno
+stock_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | DELETE FROM fno.x1_probe WHERE id = -1 | no DELETE on fno
 fno_writer | allow | SELECT nextval('fno.x1_probe_id_seq') | NEXTVAL on fno
-stock_writer,dashboard_app,stock_inbox_reader | deny | SELECT nextval('fno.x1_probe_id_seq') | no NEXTVAL on fno
+stock_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | SELECT nextval('fno.x1_probe_id_seq') | no NEXTVAL on fno
 
 # Schema app: row operations of the runtime roles (default privileges on a table its owner created)
 dashboard_app,stock_inbox_reader | allow | SELECT count(*) FROM app.x1_probe | SELECT on app
-stock_writer,fno_writer | deny | SELECT count(*) FROM app.x1_probe | no SELECT on app
+stock_writer,fno_writer,db_monitor | deny | SELECT count(*) FROM app.x1_probe | no SELECT on app
 dashboard_app | allow | INSERT INTO app.x1_probe (note) VALUES ('x1 matrix') | INSERT on app
-stock_writer,fno_writer,stock_inbox_reader | deny | INSERT INTO app.x1_probe (note) VALUES ('x1 matrix') | no INSERT on app
+stock_writer,fno_writer,stock_inbox_reader,db_monitor | deny | INSERT INTO app.x1_probe (note) VALUES ('x1 matrix') | no INSERT on app
 dashboard_app | allow | UPDATE app.x1_probe SET note = 'x1 matrix' WHERE id = -1 | UPDATE on app
-stock_writer,fno_writer,stock_inbox_reader | deny | UPDATE app.x1_probe SET note = 'x1 matrix' WHERE id = -1 | no UPDATE on app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | DELETE FROM app.x1_probe WHERE id = -1 | no DELETE on app
+stock_writer,fno_writer,stock_inbox_reader,db_monitor | deny | UPDATE app.x1_probe SET note = 'x1 matrix' WHERE id = -1 | no UPDATE on app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | DELETE FROM app.x1_probe WHERE id = -1 | no DELETE on app
 dashboard_app | allow | SELECT nextval('app.x1_probe_id_seq') | NEXTVAL on app
-stock_writer,fno_writer,stock_inbox_reader | deny | SELECT nextval('app.x1_probe_id_seq') | no NEXTVAL on app
+stock_writer,fno_writer,stock_inbox_reader,db_monitor | deny | SELECT nextval('app.x1_probe_id_seq') | no NEXTVAL on app
 
 # Functions: an owner role's functions are executable by that owner only (default privileges revoke PUBLIC EXECUTE)
 stock_owner | allow | SELECT stock.x1_probe_f() | the owner role runs its own function in stock
 fno_owner,app_owner | deny | SELECT stock.x1_probe_f() | another owner role cannot run a function in stock
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT stock.x1_probe_f() | no runtime role runs a function stock_owner created in stock
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | SELECT stock.x1_probe_f() | no runtime role runs a function stock_owner created in stock
 stock_owner | value=false | SELECT has_function_privilege('public', 'stock.x1_probe_f()', 'EXECUTE')::text AS v | PUBLIC cannot execute functions (checked as the owner) in stock
 fno_owner | allow | SELECT fno.x1_probe_f() | the owner role runs its own function in fno
 stock_owner,app_owner | deny | SELECT fno.x1_probe_f() | another owner role cannot run a function in fno
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT fno.x1_probe_f() | no runtime role runs a function fno_owner created in fno
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | SELECT fno.x1_probe_f() | no runtime role runs a function fno_owner created in fno
 fno_owner | value=false | SELECT has_function_privilege('public', 'fno.x1_probe_f()', 'EXECUTE')::text AS v | PUBLIC cannot execute functions (checked as the owner) in fno
 app_owner | allow | SELECT app.x1_probe_f() | the owner role runs its own function in app
 stock_owner,fno_owner | deny | SELECT app.x1_probe_f() | another owner role cannot run a function in app
-stock_writer,fno_writer,dashboard_app,stock_inbox_reader | deny | SELECT app.x1_probe_f() | no runtime role runs a function app_owner created in app
+stock_writer,fno_writer,dashboard_app,stock_inbox_reader,db_monitor | deny | SELECT app.x1_probe_f() | no runtime role runs a function app_owner created in app
 app_owner | value=false | SELECT has_function_privilege('public', 'app.x1_probe_f()', 'EXECUTE')::text AS v | PUBLIC cannot execute functions (checked as the owner) in app
 
 # Runtime roles: cannot switch to an owner or another runtime role
-stock_writer | deny | SET ROLE stock_owner | stock_writer cannot act as stock_owner
-stock_writer | deny | SET ROLE fno_owner | stock_writer cannot act as fno_owner
-stock_writer | deny | SET ROLE app_owner | stock_writer cannot act as app_owner
-stock_writer | deny | SET ROLE fno_writer | stock_writer cannot act as fno_writer
-stock_writer | deny | SET ROLE dashboard_app | stock_writer cannot act as dashboard_app
-stock_writer | deny | SET ROLE stock_inbox_reader | stock_writer cannot act as stock_inbox_reader
-fno_writer | deny | SET ROLE stock_owner | fno_writer cannot act as stock_owner
-fno_writer | deny | SET ROLE fno_owner | fno_writer cannot act as fno_owner
-fno_writer | deny | SET ROLE app_owner | fno_writer cannot act as app_owner
-fno_writer | deny | SET ROLE stock_writer | fno_writer cannot act as stock_writer
-fno_writer | deny | SET ROLE dashboard_app | fno_writer cannot act as dashboard_app
-fno_writer | deny | SET ROLE stock_inbox_reader | fno_writer cannot act as stock_inbox_reader
-dashboard_app | deny | SET ROLE stock_owner | dashboard_app cannot act as stock_owner
-dashboard_app | deny | SET ROLE fno_owner | dashboard_app cannot act as fno_owner
-dashboard_app | deny | SET ROLE app_owner | dashboard_app cannot act as app_owner
-dashboard_app | deny | SET ROLE stock_writer | dashboard_app cannot act as stock_writer
-dashboard_app | deny | SET ROLE fno_writer | dashboard_app cannot act as fno_writer
-dashboard_app | deny | SET ROLE stock_inbox_reader | dashboard_app cannot act as stock_inbox_reader
-stock_inbox_reader | deny | SET ROLE stock_owner | stock_inbox_reader cannot act as stock_owner
-stock_inbox_reader | deny | SET ROLE fno_owner | stock_inbox_reader cannot act as fno_owner
-stock_inbox_reader | deny | SET ROLE app_owner | stock_inbox_reader cannot act as app_owner
-stock_inbox_reader | deny | SET ROLE stock_writer | stock_inbox_reader cannot act as stock_writer
-stock_inbox_reader | deny | SET ROLE fno_writer | stock_inbox_reader cannot act as fno_writer
-stock_inbox_reader | deny | SET ROLE dashboard_app | stock_inbox_reader cannot act as dashboard_app
+stock_writer,db_monitor | deny | SET ROLE stock_owner | stock_writer cannot act as stock_owner
+stock_writer,db_monitor | deny | SET ROLE fno_owner | stock_writer cannot act as fno_owner
+stock_writer,db_monitor | deny | SET ROLE app_owner | stock_writer cannot act as app_owner
+stock_writer,db_monitor | deny | SET ROLE fno_writer | stock_writer cannot act as fno_writer
+stock_writer,db_monitor | deny | SET ROLE dashboard_app | stock_writer cannot act as dashboard_app
+stock_writer,db_monitor | deny | SET ROLE stock_inbox_reader | stock_writer cannot act as stock_inbox_reader
+fno_writer,db_monitor | deny | SET ROLE stock_owner | fno_writer cannot act as stock_owner
+fno_writer,db_monitor | deny | SET ROLE fno_owner | fno_writer cannot act as fno_owner
+fno_writer,db_monitor | deny | SET ROLE app_owner | fno_writer cannot act as app_owner
+fno_writer,db_monitor | deny | SET ROLE stock_writer | fno_writer cannot act as stock_writer
+fno_writer,db_monitor | deny | SET ROLE dashboard_app | fno_writer cannot act as dashboard_app
+fno_writer,db_monitor | deny | SET ROLE stock_inbox_reader | fno_writer cannot act as stock_inbox_reader
+dashboard_app,db_monitor | deny | SET ROLE stock_owner | dashboard_app cannot act as stock_owner
+dashboard_app,db_monitor | deny | SET ROLE fno_owner | dashboard_app cannot act as fno_owner
+dashboard_app,db_monitor | deny | SET ROLE app_owner | dashboard_app cannot act as app_owner
+dashboard_app,db_monitor | deny | SET ROLE stock_writer | dashboard_app cannot act as stock_writer
+dashboard_app,db_monitor | deny | SET ROLE fno_writer | dashboard_app cannot act as fno_writer
+dashboard_app,db_monitor | deny | SET ROLE stock_inbox_reader | dashboard_app cannot act as stock_inbox_reader
+stock_inbox_reader,db_monitor | deny | SET ROLE stock_owner | stock_inbox_reader cannot act as stock_owner
+stock_inbox_reader,db_monitor | deny | SET ROLE fno_owner | stock_inbox_reader cannot act as fno_owner
+stock_inbox_reader,db_monitor | deny | SET ROLE app_owner | stock_inbox_reader cannot act as app_owner
+stock_inbox_reader,db_monitor | deny | SET ROLE stock_writer | stock_inbox_reader cannot act as stock_writer
+stock_inbox_reader,db_monitor | deny | SET ROLE fno_writer | stock_inbox_reader cannot act as fno_writer
+stock_inbox_reader,db_monitor | deny | SET ROLE dashboard_app | stock_inbox_reader cannot act as dashboard_app
 
 # Runtime roles: limits from 00_roles.sql
 stock_writer,fno_writer | value=1min | SELECT current_setting('statement_timeout') AS v | statement timeout 60s
@@ -189,3 +189,8 @@ fno_owner | deny | SET ROLE stock_writer | fno_owner cannot act as stock_writer
 app_owner | deny | SET ROLE stock_owner | app_owner cannot act as stock_owner
 app_owner | deny | SET ROLE fno_owner | app_owner cannot act as fno_owner
 app_owner | deny | SET ROLE stock_writer | app_owner cannot act as stock_writer
+
+# db_monitor (issue #2): the scheduled check's role. Reads catalogs only; no schema, table or function access.
+db_monitor | value=30s | SELECT current_setting('statement_timeout') AS v | statement timeout 30s
+db_monitor | value=2 | SELECT rolconnlimit::text AS v FROM pg_roles WHERE rolname = current_user | at most 2 connections
+db_monitor | value=0 | SELECT count(*)::text AS v FROM pg_namespace WHERE nspname IN ('stock', 'fno', 'app') AND has_schema_privilege(oid, 'USAGE') | may enter none of stock, fno, app

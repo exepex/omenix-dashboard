@@ -1,3 +1,7 @@
+> acl database omenix: db_monitor CONNECT granted by <admin>
 > acl default functions by app_owner in (all schemas): app_owner EXECUTE granted by app_owner
 > acl default functions by fno_owner in (all schemas): fno_owner EXECUTE granted by fno_owner
 > acl default functions by stock_owner in (all schemas): stock_owner EXECUTE granted by stock_owner
+> member <admin> in db_monitor: admin=t inherit=f set=f grantor=<superuser>
+> role db_monitor: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=2 valid_until=never
+> role setting db_monitor in (all databases): statement_timeout=30s

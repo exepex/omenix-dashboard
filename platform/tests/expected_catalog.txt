@@ -3,6 +3,7 @@ acl database omenix: <admin> CREATE granted by <admin>
 acl database omenix: <admin> TEMPORARY granted by <admin>
 acl database omenix: app_owner CONNECT granted by <admin>
 acl database omenix: dashboard_app CONNECT granted by <admin>
+acl database omenix: db_monitor CONNECT granted by <admin>
 acl database omenix: fno_owner CONNECT granted by <admin>
 acl database omenix: fno_writer CONNECT granted by <admin>
 acl database omenix: stock_inbox_reader CONNECT granted by <admin>
@@ -49,6 +50,7 @@ acl schema stock: stock_writer USAGE granted by stock_owner
 member <admin> in app_owner: admin=f inherit=f set=t grantor=<admin>
 member <admin> in app_owner: admin=t inherit=f set=f grantor=<superuser>
 member <admin> in dashboard_app: admin=t inherit=f set=f grantor=<superuser>
+member <admin> in db_monitor: admin=t inherit=f set=f grantor=<superuser>
 member <admin> in fno_owner: admin=f inherit=f set=t grantor=<admin>
 member <admin> in fno_owner: admin=t inherit=f set=f grantor=<superuser>
 member <admin> in fno_writer: admin=t inherit=f set=f grantor=<superuser>
@@ -63,9 +65,11 @@ owner schema public: <platform default>
 owner schema stock: stock_owner
 role app_owner: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=-1 valid_until=never
 role dashboard_app: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=20 valid_until=never
+role db_monitor: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=2 valid_until=never
 role fno_owner: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=-1 valid_until=never
 role fno_writer: login=t inherit=t superuser=f createdb=f createrole=f replication=f bypassrls=f connlimit=5 valid_until=never
 role setting dashboard_app in (all databases): statement_timeout=15s
+role setting db_monitor in (all databases): statement_timeout=30s
 role setting fno_writer in (all databases): statement_timeout=60s
 role setting stock_inbox_reader in (all databases): statement_timeout=30s
 role setting stock_writer in (all databases): statement_timeout=60s
