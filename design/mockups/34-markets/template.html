@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omenix · Markets</title>
+<meta name="description" content="Market overview with real data of 12 Oct 2026: how the indices did over 1 day to 1 year with their valuation, how broad the move was, which sectors led, who moved most, what foreign and domestic institutions did, what the options and volatility say (India only), world markets and currencies, and what is coming. Nothing is live. Research and paper trading only.">
+<!--@@SYSTEM_CSS@@-->
+<!--@@SHARED_CSS@@-->
+<style>
+/* 34-markets page layout only; every component is from design/system/components.css. Tokens only. */
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:12px 0}
+.bar .grow{flex:1 1 auto}
+.bar .md-segmented,.card .md-segmented{flex-wrap:wrap;max-width:100%}
+.sec{margin-top:22px}
+.sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
+.sec-head h2{font:600 17px/1.3 var(--md-ref-typeface-plain);margin:0}
+.sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 240px}
+.sec-head .go{margin-left:auto;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;white-space:nowrap}
+.sec-head .go .ms{width:16px;height:16px}
+.hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.big{font:700 28px/1.15 var(--md-ref-typeface-plain);font-variant-numeric:tabular-nums;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.big .mb-delta{font-size:15px}
+.muted{color:var(--md-sys-color-on-surface-variant)}
+.small{font-size:12.5px}
+.axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);margin-top:4px;gap:8px}
+.val{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:4px 14px;align-items:center;padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high);font-variant-numeric:tabular-nums}
+.list li:first-child{border-top:0}
+.list li small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.list li .r{text-align:right}
+.list .pick{color:inherit;text-decoration:none;min-width:0}
+.list .pick[aria-current="true"] b{color:var(--md-sys-color-primary)}
+.ev li{grid-template-columns:52px minmax(0,1fr)}
+.ev .d{text-align:center;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);padding:4px 0;line-height:1.15}
+.ev .d b{display:block;font-size:16px} .ev .d small{font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.src{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:16px 0 0}
+@media (max-width:1100px){.hero,.two{grid-template-columns:1fr}}
+@media (max-width:599px){.val{grid-template-columns:1fr}.big{font-size:24px}}
+</style>
+</head>
+<body>
+<!--@@ICONS@@-->
+<script>const SHELL = /*__SHELL__*/null; const D = /*__DATA__*/null;</script>
+<script>
+/* this page reads the real records of Mon 12 Oct 2026: the shell's clock moves to after both closes (22:30 UTC) */
+(() => { SHELL.now = '2026-10-12T22:30:00Z';
+  Object.assign(SHELL.markets.india.status, {open_utc: '2026-10-13T03:45:00Z', close_utc: '2026-10-13T10:00:00Z', next_open_utc: '2026-10-13T03:45:00Z', example_open_now: '2026-10-13T05:00:00Z'});
+  Object.assign(SHELL.markets.us.status, {open_utc: '2026-10-12T13:30:00Z', close_utc: '2026-10-12T20:00:00Z', next_open_utc: '2026-10-13T13:30:00Z', example_open_now: '2026-10-12T15:00:00Z'}); })();
+</script>
+<!--@@PLATFORM_JS@@-->
+<script>
+let PER = 'm1', IDX = '', BR = 'all', SEC = 'index', MOV = 'gainers', MU = 'n500', LOC = 'en-IN';   /* URL: per, idx, br, sec, mov, mu */
+const PERIODS = {d1: '1D', w1: '1W', m1: '1M', m3: '3M', y1: '1Y'}, LONG = {d1: 'today', w1: 'this week', m1: 'this month', m3: 'in 3 months', y1: 'in a year'}, SPAN = {d1: 5, w1: 5, m1: 21, m3: 63, y1: 250};
+const REGIME = {CALM: 'Calm market', TRENDING: 'Trending market', EVENT_HEAVY: 'Event-heavy session', UNSTABLE: 'Unstable market'};
+PF.mount({screen: 'markets', group: 'markets', strip: false, dataLabel: 'Real data of 12 Oct 2026',
+  readHash(h) {
+    PER = PERIODS[h.get('per')] ? h.get('per') : 'm1'; IDX = h.get('idx') || ''; BR = h.get('br') === 'n500' ? 'n500' : 'all'; SEC = h.get('sec') === 'industry' ? 'industry' : 'index';
+    MOV = ['losers', 'active'].includes(h.get('mov')) ? h.get('mov') : 'gainers'; MU = h.get('mu') === 'all' ? 'all' : 'n500'; PF.st.wlOff = h.get('wloff') !== '0';
+  },
+  writeHash(h) {
+    if (PER !== 'm1') h.set('per', PER); if (IDX) h.set('idx', IDX); if (BR !== 'all') h.set('br', BR); if (SEC !== 'index') h.set('sec', SEC);
+    if (MOV !== 'gainers') h.set('mov', MOV); if (MU !== 'n500') h.set('mu', MU); if (!PF.st.wlOff) h.set('wloff', '0');
+  },
+  render(main, c) {
+    const M = D.markets[c.m], india = c.m === 'india', {el} = c;
+    LOC = india ? 'en-IN' : 'en-US';
+    const day = c.dateShort(D.day + 'T10:00:00Z');
+    main.append(c.pagehead({crumbs: [['Markets'], ['Overview']], title: 'Markets',
+      meta: [el('span', {class: 'mb-tag', 'data-tip': M.source.indices}, `${india ? 'NSE' : 'Stock tool'} data · ${day}`),
+        M.regime ? el('span', {class: 'md-chip', 'data-tip': `The stock tool’s reading for the session of ${c.dateShort(M.regime.session_date + 'T10:00:00Z')}${M.regime.major_event ? ': ' + M.regime.major_event_names.join(', ') : ''}.`}, c.icon('sensors'), REGIME[M.regime.regime] || M.regime.regime) : null]}));
+    main.append(el('div', {class: 'bar'}, el('span', {class: 'muted small'}, 'Change over'), seg(c, 'Change over', Object.entries(PERIODS), PER, k => { PER = k; })));
+    hero(main, c, M, india);
+    breadthAndSectors(main, c, M, india);
+    moversAndFlows(main, c, M, india);
+    if (india) options(main, c, M); else yields(main, c, M);
+    worldAndEvents(main, c, M, india);
+    main.append(el('div', {class: 'src', role: 'note', 'aria-label': 'Where the figures come from'},
+      ...Object.entries(M.source).map(([k, v]) => el('span', {class: 'mb-asof', 'data-tip': v}, c.icon('schedule'), {indices: 'Indices', stocks: 'Stocks', world: 'World', flows: 'Flows', events: 'Events', yields: 'Yields'}[k])),
+      el('span', {class: 'mb-tag derived', 'data-tip': 'Returns, 52-week figures, breadth and the industry averages: computed by us from the daily closes'}, 'Computed: ours'),
+      el('span', {class: 'mb-tag', 'data-tip': 'No streaming prices: the page changes with each day’s files.'}, 'Not live')));
+  }});
+
+/* ---- helpers ---------------------------------------------------------------------------------------------------- */
+function seg(c, label, opts, cur, set) { return c.el('div', {class: 'md-segmented dense', role: 'group', 'aria-label': label}, ...opts.map(([k, v, t]) => c.el('button', {type: 'button', 'aria-pressed': String(cur === k), 'data-tip': t, onclick: () => { set(k); c.rerender(); }}, v))); }
+function fmt(x, d = 2) { return x == null ? '—' : x.toLocaleString(LOC, {minimumFractionDigits: d, maximumFractionDigits: d}); }
+function head(c, title, sub, go) { return c.el('div', {class: 'sec-head'}, c.el('h2', {}, title), sub ? c.el('span', {class: 'sub'}, sub) : null, go ? c.el('a', {class: 'go', href: go[1]}, go[0], c.icon('chevron_right')) : null); }
+function line(c, vals, label, h = 160, neutral = false) {   /* neutral: a series where up is not good (volatility) */
+  const pts = vals.map((v, i) => [i, v]).filter(p => p[1] != null), lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1])), W = 600;
+  const s = c.svgEl('svg', {viewBox: `0 0 ${W} ${h}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': label, class: 'plot', style: `height:${h}px`});
+  const up = vals[vals.length - 1] >= vals[0], xy = ([i, v]) => `${(i / Math.max(1, vals.length - 1) * W).toFixed(1)},${(h - 6 - (v - lo) / (hi - lo || 1) * (h - 12)).toFixed(1)}`;
+  s.append(c.svgEl('polyline', {points: pts.map(xy).join(' '), fill: 'none', stroke: neutral ? 'var(--mb-chart-1)' : up ? 'var(--mb-color-up)' : 'var(--mb-color-down)', 'stroke-width': '2', 'vector-effect': 'non-scaling-stroke'}));
+  return s;
+}
+function spark(c, vals, neutral) { const s = line(c, vals, 'trend', 28, neutral); s.setAttribute('class', 'spark'); s.style.cssText = 'height:28px;width:90px'; return s; }
+function chg(c, x) { return c.delta(x); }
+
+/* 1. the market today: the main index with its chart and valuation, and the other broad indices */
+function hero(main, c, M, india) {
+  const {el} = c, rows = M.indices.rows, main0 = rows.find(r => r.name === IDX && r.group !== 'sector') || rows[0], n = SPAN[PER];
+  const vals = main0.closes.slice(-1 - n), dates = india ? M.indices.dates.slice(-vals.length) : null;
+  const words = r => r.pe == null ? null : [['P/E', fmt(r.pe), `price is ${fmt(r.pe, 1)} times a year’s earnings`], ['P/B', fmt(r.pb), `price is ${fmt(r.pb, 1)} times book value`], ['Dividend yield', fmt(r.dy) + '%', 'paid out a year on the price']];
+  const pos = main0.hi52 > main0.lo52 ? Math.round((main0.close - main0.lo52) / (main0.hi52 - main0.lo52) * 100) : null;
+  const card = el('section', {class: 'card', 'aria-label': main0.name},
+    el('div', {class: 'sec-head'}, el('h2', {}, main0.name), el('span', {class: 'sub'}, `${india ? 'close of ' + c.dateShort(D.day + 'T10:00:00Z') : 'close of ' + c.dateShort(main0.as_of + 'T20:00:00Z')} · not live`)),
+    el('div', {class: 'big'}, fmt(main0.close), chg(c, main0[PER]), el('span', {class: 'muted small'}, LONG[PER])),
+    line(c, vals, `${main0.name}, the last ${PERIODS[PER]}`, 160, main0.group === 'vol' || /VIX/.test(main0.name)),
+    el('div', {class: 'axis'}, el('span', {}, dates ? c.dateShort(dates[0] + 'T10:00:00Z') : `${vals.length - 1} sessions ago`), el('span', {}, `low ${fmt(Math.min(...vals))} · high ${fmt(Math.max(...vals))}`), el('span', {}, 'today')),
+    el('div', {class: 'mb-pos52', style: 'margin-top:10px', role: 'img', 'aria-label': `${pos}% of the way from the 52-week low to the high`}, el('small', {}, `52-week low ${fmt(main0.lo52)}`), el('span', {class: 'track'}, el('i', {style: `left:${pos}%`})), el('small', {}, `high ${fmt(main0.hi52)}`)),
+    words(main0) ? el('div', {class: 'val'}, ...words(main0).map(([k, v, t]) => el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, k), el('b', {}, v), el('small', {}, t)))) : null);
+  const list = el('section', {class: 'card', 'aria-label': 'Indices'}, el('div', {class: 'sec-head'}, el('h2', {}, india ? 'Broad indices' : 'Benchmarks'), el('span', {class: 'sub'}, 'Tap one to chart it')),
+    el('ul', {class: 'list'}, ...rows.filter(r => r.group !== 'sector').map(r => el('li', {}, el('a', {class: 'pick', href: '#', onclick: e => { e.preventDefault(); IDX = r.name; c.rerender(); }, 'aria-current': r === main0 ? 'true' : null}, el('b', {}, r.name), el('small', {}, r.group === 'vol' ? 'volatility: higher means more fear' : r.pe != null ? `P/E ${fmt(r.pe, 1)}` : '')),
+      spark(c, r.closes.slice(-1 - n), r.group === 'vol' || /VIX/.test(r.name)), el('span', {class: 'r'}, fmt(r.close), el('small', {}, chg(c, r[PER])))))));
+  main.append(el('div', {class: 'hero'}, card, list));
+}
+
+/* 2. how broad the move was, and which sectors led */
+function breadthAndSectors(main, c, M, india) {
+  const {el} = c, B = india ? M.breadth[BR] : M.breadth.ours;
+  const share = Math.round(B.up_1m / B.n * 100);
+  const breadth = el('section', {class: 'card', 'aria-label': 'Breadth'}, head(c, 'Is the move broad?', india ? 'how many stocks rose or fell today' : 'our 20 companies only (no whole-market US file)'),
+    india ? seg(c, 'Which stocks', [['all', `All NSE (${M.breadth.all.n.toLocaleString(LOC)})`], ['n500', 'Nifty 500']], BR, k => { BR = k; }) : null,
+    el('div', {class: 'big', style: 'margin-top:12px'}, `${B.up.toLocaleString(LOC)} up · ${B.down.toLocaleString(LOC)} down`),
+    el('span', {class: 'mb-breadth', role: 'img', 'aria-label': `${B.up} up, ${B.flat} unchanged, ${B.down} down`, style: 'margin:8px 0'}, el('i', {class: 'up', style: `flex:${B.up}`}), el('i', {class: 'flat', style: `flex:${B.flat}`}), el('i', {class: 'down', style: `flex:${B.down}`})),
+    el('div', {class: 'val'}, el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'New 52-week highs'), el('b', {}, String(B.high)), el('small', {}, `${B.near_high} within 2%`)),
+      el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'New 52-week lows'), el('b', {}, String(B.low)), el('small', {}, `${B.near_low} within 2%`)),
+      el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, 'Up over a month'), el('b', {}, `${share}%`), el('small', {}, `${B.up_1m.toLocaleString(LOC)} of ${B.n.toLocaleString(LOC)} stocks`))),
+    B.n < 100 ? null : el('p', {class: 'muted small', style: 'margin:10px 0 0'}, B.near_low > B.near_high * 2 ? 'Far more stocks sit near their year’s low than near its high: a weak market underneath.' : B.near_high > B.near_low * 2 ? 'Far more stocks sit near their year’s high than near its low: a strong market underneath.' : 'Highs and lows are roughly balanced.'));
+  const tiles = india && SEC === 'industry'
+    ? M.sectors.map(s => ({name: s.g, v: s[PER], sub: `${s.n} stocks · ${s.up} up, ${s.down} down`, tip: `Best ${s.best[0]} ${c.sgn(s.best[1])}, worst ${s.worst[0]} ${c.sgn(s.worst[1])} today`}))
+    : (india ? M.indices.rows.filter(r => r.group === 'sector') : M.sectors).map(r => ({name: r.name, v: r[PER], sub: r.pe != null ? `P/E ${fmt(r.pe, 1)}` : r.sectors ? `our ${r.sectors.join(', ')}` : '', tip: `${fmt(r.close)} · 52-week ${fmt(r.lo52)}–${fmt(r.hi52)}`}));
+  tiles.sort((a, b) => (b.v ?? -1e9) - (a.v ?? -1e9));
+  const tone = v => v == null ? '' : (v >= 0 ? 'up' : 'down') + (Math.abs(v) >= (PER === 'd1' ? 2 : PER === 'w1' ? 4 : 8) ? ' s3' : Math.abs(v) >= (PER === 'd1' ? 1 : PER === 'w1' ? 2 : 4) ? ' s2' : ' s1');
+  const sectors = el('section', {class: 'card', 'aria-label': 'Sectors'}, head(c, 'Which sectors led?', `change ${LONG[PER]}, best first`),
+    india ? seg(c, 'Sectors', [['index', 'Sector indices', 'NSE’s sector indices'], ['industry', 'Nifty 500 industries', 'The Nifty 500 grouped by industry: equal-weighted average of its stocks (ours)']], SEC, k => { SEC = k; }) : el('span', {class: 'muted small'}, 'US sector funds (SPDR and others), as the stock tool records them'),
+    el('div', {class: 'mb-heat', style: 'margin-top:12px'}, ...tiles.map(t => el('div', {class: 'mb-heat-tile ' + tone(t.v), 'data-tip': t.tip}, el('span', {class: 'n'}, t.name), el('b', {}, t.v == null ? '—' : c.sgn(t.v)), el('small', {}, t.sub)))));
+  main.append(el('div', {class: 'two sec'}, breadth, sectors));
+}
+
+/* 3. who moved most, and what the big investors did */
+function moversAndFlows(main, c, M, india) {
+  const {el} = c, L = (india ? M.movers[MU] : M.movers.ours)[MOV];
+  const movers = el('section', {class: 'card', 'aria-label': 'Movers'}, head(c, 'Who moved most today?', india ? (MU === 'all' ? 'all NSE stocks that usually trade 1,00,000+ shares, priced ₹20+' : 'within the Nifty 500') : 'our 20 companies', ['Screener', '../33-screener/page.html']),
+    el('div', {class: 'bar', style: 'margin-top:0'}, seg(c, 'List', [['gainers', 'Gainers'], ['losers', 'Losers'], ['active', 'Most traded']], MOV, k => { MOV = k; }), india ? seg(c, 'From', [['n500', 'Nifty 500'], ['all', 'All NSE']], MU, k => { MU = k; }) : null),
+    el('ul', {class: 'list'}, ...L.map(r => el('li', {}, el('span', {}, c.item(r.s) ? c.inst(r.s) : el('b', {}, r.s), el('small', {}, r.n)), el('span', {class: 'r'}, fmt(r.p), el('small', {}, chg(c, r.d1))),
+      el('span', {class: 'r small muted'}, india ? `₹${fmt(r.p * r.v / 1e7, 1)} cr` : `$${fmt(r.p * r.v / 1e6, 0)}M`, el('small', {}, r.va ? `${fmt(r.v / r.va, 1)}× usual` : ''))))));
+  if (!india) { main.append(el('div', {class: 'sec'}, movers)); return; }
+  const F = M.flows, max = Math.max(...F.days.flatMap(d => [Math.abs(d.fii.net), Math.abs(d.dii.net)]));
+  const bar = (v, who) => el('span', {class: 'mb-flowbar ' + (v >= 0 ? 'in' : 'out'), role: 'img', 'aria-label': `${who} ${v >= 0 ? 'bought' : 'sold'} ₹${fmt(Math.abs(v), 0)} crore net`}, el('i', {style: `width:${Math.round(Math.abs(v) / max * 100)}%`}), el('span', {}, `${v >= 0 ? '+' : '−'}₹${fmt(Math.abs(v), 0)} cr`));
+  const tot = k => F.days.reduce((a, d) => a + d[k].net, 0);
+  const flows = el('section', {class: 'card', 'aria-label': 'Institutional flows'}, head(c, 'What did big investors do?', 'net buying (+) or selling (−) in the cash market, ₹ crore'),
+    el('ul', {class: 'list mb-flows'}, ...F.days.slice().reverse().map(d => el('li', {}, el('b', {}, c.dateShort(d.date + 'T10:00:00Z')), el('span', {}, el('small', {}, 'Foreign (FII/FPI)'), bar(d.fii.net, 'Foreign investors')), el('span', {}, el('small', {}, 'Domestic (DII)'), bar(d.dii.net, 'Domestic institutions'))))),
+    el('p', {class: 'small', style: 'margin:10px 0 0'}, `Over these ${F.days.length} days foreign investors ${tot('fii') < 0 ? 'sold' : 'bought'} ₹${fmt(Math.abs(tot('fii')), 0)} crore net and domestic institutions ${tot('dii') < 0 ? 'sold' : 'bought'} ₹${fmt(Math.abs(tot('dii')), 0)} crore.`),
+    el('p', {class: 'muted small', style: 'margin:4px 0 0'}, `Provisional NSE figures up to ${c.dateShort(F.days[F.days.length - 1].date + 'T10:00:00Z')}; 12 Oct’s arrive the next morning. NSDL’s FPI equity flow (all routes) for ${c.dateShort(F.nsdl[F.nsdl.length - 1].date + 'T10:00:00Z')}: ${F.nsdl[F.nsdl.length - 1].net < 0 ? '−' : '+'}₹${fmt(Math.abs(F.nsdl[F.nsdl.length - 1].net), 0)} cr.`));
+  main.append(el('div', {class: 'two sec'}, movers, flows));
+}
+
+/* 4a. India: options and volatility */
+function options(main, c, M) {
+  const {el} = c, vix = M.indices.rows.find(r => r.group === 'vol'), n = Math.max(SPAN[PER], 63), vals = vix.closes.slice(-1 - n);
+  const sorted = vix.closes.slice(-63).slice().sort((a, b) => a - b), mid = sorted[Math.floor(sorted.length / 2)];
+  const B = {long_buildup: ['Long build-up', 'success', 'trending_up'], short_buildup: ['Short build-up', 'danger', 'trending_down'], short_covering: ['Short covering', 'info', 'trending_up'], long_unwinding: ['Long unwinding', 'warn', 'trending_down']};
+  main.append(el('div', {class: 'two sec'},
+    el('section', {class: 'card', 'aria-label': 'India VIX'}, head(c, 'How nervous is the market?', 'India VIX: the volatility NIFTY options price in for the next 30 days'),
+      el('div', {class: 'big'}, fmt(vix.close), chg(c, vix.d1), el('span', {class: 'muted small'}, 'today')),
+      el('p', {class: 'small', style: 'margin:4px 0 0'}, `${vix.close > mid ? 'Above' : 'Below'} its 3-month middle (${fmt(mid)}): options ${vix.close > mid ? 'cost more' : 'cost less'} than usual. Its year: ${fmt(vix.lo52)} to ${fmt(vix.hi52)}.`),
+      line(c, vals, `India VIX, the last ${vals.length - 1} sessions`, 120, true), el('div', {class: 'axis'}, el('span', {}, `${vals.length - 1} sessions ago`), el('span', {}, 'today'))),
+    el('section', {class: 'card', 'aria-label': 'Index options'}, head(c, 'What do index options say?', `nearest monthly expiry, ${c.dateShort(M.fno[0].x + 'T10:00:00Z')}`, ['NIFTY chain', '../32-option-chain/page.html']),
+      el('ul', {class: 'list'}, ...M.fno.map(r => el('li', {style: 'grid-template-columns:minmax(0,1fr) auto'}, el('span', {}, el('b', {}, r.s), el('small', {}, `IV ${r.iv ?? '—'}% (${r.ivr ?? '—'}% of its 3-month range) · put-call ratio ${r.pcr ?? '—'} · move priced in ±${r.mv ?? '—'}%`)),
+        el('span', {class: 'mb-label ' + B[r.b][1]}, c.icon(B[r.b][2]), B[r.b][0])))),
+      el('p', {class: 'muted small', style: 'margin:10px 0 0'}, 'IV computed by us from the at-the-money closes; build-up from the futures’ price and open interest (NSE file).'))));
+}
+
+/* 4b. US: Treasury yields */
+function yields(main, c, M) {
+  const {el} = c, Y = M.yields, lo = Math.min(...Y.map(y => y.value)) - .1, hi = Math.max(...Y.map(y => y.value)) + .1, W = 600, h = 150;
+  const s = c.svgEl('svg', {viewBox: `0 0 ${W} ${h}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': 'US Treasury yield curve', class: 'plot', style: `height:${h}px`});
+  s.append(c.svgEl('polyline', {points: Y.map((y, i) => `${(i / (Y.length - 1) * W).toFixed(1)},${(h - 8 - (y.value - lo) / (hi - lo) * (h - 16)).toFixed(1)}`).join(' '), fill: 'none', stroke: 'var(--mb-chart-1)', 'stroke-width': '2', 'vector-effect': 'non-scaling-stroke'}));
+  const y10 = Y.find(y => y.name === '10 Yr'), y2 = Y.find(y => y.name === '2 Yr');
+  main.append(el('div', {class: 'sec'}, el('section', {class: 'card', 'aria-label': 'Treasury yields'}, head(c, 'What do interest rates say?', `US Treasury par yields, ${c.dateShort(Y[0].date + 'T20:00:00Z')}`),
+    el('p', {class: 'small', style: 'margin:0 0 6px'}, `10-year ${y10.value}% against 2-year ${y2.value}%: ${y10.value > y2.value ? 'longer loans pay more (a normal curve)' : 'shorter loans pay more (an inverted curve, often read as a slowdown warning)'}.`),
+    s, el('div', {class: 'axis'}, ...[Y[0], Y[Math.floor(Y.length / 2)], Y[Y.length - 1]].map(y => el('span', {}, `${y.name} ${y.value}%`))))));
+}
+
+/* 5. world markets, currencies and commodities; what is coming */
+function worldAndEvents(main, c, M, india) {
+  const {el} = c;
+  const world = el('section', {class: 'card', 'aria-label': 'World'}, head(c, india ? 'World cues, currency and commodities' : 'World, currencies and commodities', 'each at its own last close'),
+    el('div', {class: 'mb-heat'}, ...M.world.map(w => el('div', {class: 'mb-heat-tile plain', 'data-tip': `${w.name}: close ${fmt(w.close)} on ${c.dateShort(w.as_of + 'T12:00:00Z')}`}, el('span', {class: 'n'}, w.name.replace(' (previous US close)', '')), el('b', {}, fmt(w.close)), el('small', {}, chg(c, w[PER]), ` · ${c.dateShort(w.as_of + 'T12:00:00Z').replace(/^\w+ /, '')}`)))));
+  const KIND = {earnings: ['Results', 'event'], ex_dividend: ['Ex-dividend', 'payments'], fno_expiry: ['F&O expiry', 'layers'], periodic_report: ['Filing', 'description'], macro: ['Economy', 'public']};
+  const evs = (M.regime && M.regime.major_event ? M.regime.major_event_names.map(n => ({date: M.regime.session_date, type: 'macro', name: n})) : []).concat(M.events).sort((a, b) => a.date < b.date ? -1 : 1).slice(0, 12);
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const events = el('section', {class: 'card', 'aria-label': 'Coming up'}, head(c, 'What is coming?', india ? 'results, dividends and NIFTY expiries' : 'results, dividends, filings and the economy'),
+    el('ul', {class: 'list ev'}, ...evs.map(e => { const d = new Date(e.date + 'T00:00:00Z'), k = KIND[e.type] || [e.type, 'event'];
+      return el('li', {}, el('span', {class: 'd'}, el('b', {}, d.getUTCDate()), el('small', {}, MON[d.getUTCMonth()])), el('span', {}, el('b', {}, e.ticker && c.item(e.ticker) ? c.inst(e.ticker, e.name) : e.name), el('small', {}, c.icon(k[1]), ' ', k[0], ` · ${c.dateShort(e.date + 'T10:00:00Z')}`))); })));
+  main.append(el('div', {class: 'two sec'}, world, events));
+}
+</script>
+</body>
+</html>

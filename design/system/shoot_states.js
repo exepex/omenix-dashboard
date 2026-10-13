@@ -17,7 +17,7 @@ async function act(page, a) {
   if (a.click) await page.click(a.click);
   else if (a.hover) await page.hover(a.hover, { force: true });
   else if (a.press) await page.keyboard.press(a.press);
-  else if (a.scroll) await page.$eval(a.scroll, e => { e.scrollIntoView({ block: 'start' }); window.scrollBy(0, -12); });
+  else if (a.scroll) await page.$eval(a.scroll, e => { e.scrollIntoView({ block: 'start' }); const bar = document.querySelector('.mb-appbar'); window.scrollBy(0, -12 - (bar && getComputedStyle(bar).position !== 'static' ? bar.offsetHeight : 0)); });
   if (a.wait || a.click || a.hover || a.press || a.scroll) await page.waitForTimeout(a.wait || 350);
 }
 
