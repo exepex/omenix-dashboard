@@ -105,6 +105,7 @@
             schema: {$ref: '#/components/schemas/SessionIndiaResponse'}
             examples:
               india: {$ref: '#/components/examples/getSessionIndia_india'}
+              india_hours_not_issued: {$ref: '#/components/examples/getSessionIndia_india_hours_not_issued'}
       '404': {$ref: '#/components/responses/NotFound'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}

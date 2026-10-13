@@ -63,9 +63,13 @@ export interface FamilyInfo {
 
 export interface Session {
   session_date: string;
-  open_utc: string;
-  close_utc: string;
-  next_open_utc: string;
+  /** Null on a non-trading day, and while the hours are not issued (hours_status). */
+  open_utc: string | null;
+  close_utc: string | null;
+  /** Null only while the hours are not issued. */
+  next_open_utc: string | null;
+  /** Contract 2.6: "not_issued" means a session exists on session_date but NSE has not announced its hours. */
+  hours_status?: "known" | "not_issued";
   /** Mockup only: a time during the session, for the labelled "example clock" state. */
   example_open_now?: string;
 }

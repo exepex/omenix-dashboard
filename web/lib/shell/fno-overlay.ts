@@ -38,7 +38,7 @@ function liveIndia(shell: MarketShell, parts: FnoParts, fallback: Session): Mark
     ...shell,
     items,
     indices,
-    status: { session_date: session.session_date, open_utc: session.open_utc, close_utc: session.close_utc, next_open_utc: session.next_open_utc },
+    status: { session_date: session.session_date, open_utc: session.open_utc, close_utc: session.close_utc, next_open_utc: session.next_open_utc, ...(session.hours_status ? { hours_status: session.hours_status } : {}) },
     fno_state: picks?.fno_state,
     fno_rows: picks?.rows ?? [],
     fno_live: { missing: { session: missingOf(parts.session), indices: missingOf(parts.indices), picks: missingOf(parts.picks) } },

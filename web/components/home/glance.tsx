@@ -76,7 +76,7 @@ export function MarketBand({ session, missing, moves }: { session: Session | nul
   const { data, shell, status, fmt, openDrawer } = useFrame();
   const regime = session ? `${REGIME[session.regime] ?? session.regime} · ` : "";
   const after = session ? `; today’s close arrives with the ${clockTime(session.post_close_at, shell)} run` : "";
-  const state = status.open ? `open, ${status.text}; prices are the last close until the next price check` : `closed, ${status.text}${after}`;
+  const state = status.open ? `open, ${status.text}; prices are the last close until the next price check` : status.pending ? `special session ${status.text}` : `closed, ${status.text}${after}`;
   const rose = moves.companies.filter((c) => c.chg_pct > 0).length;
   return (
     <section className="sec" aria-label="Market">

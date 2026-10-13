@@ -253,7 +253,7 @@
   }
  },
  "getSessionIndia_india": {
-  "summary": "Mock (india): closed: before the 7 Oct open in the US, after the close in India",
+  "summary": "Mock (india): closed: after the close in India",
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
    "market": "india",
@@ -263,7 +263,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "16a255ab1eb466741869389d6a4ef48e971673729e92e20758faa231a96010cb",
+   "payload_sha256": "b041483a04a1a3c9614155ebf0d3d845afa1222f6899da7bf87fe0adfc6d334a",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -286,12 +286,50 @@
     "post_close_at": "2026-10-07T12:15:00Z",
     "major_event_names": [
      "RBI policy decision"
-    ]
+    ],
+    "hours_status": "known"
+   }
+  }
+ },
+ "getSessionIndia_india_hours_not_issued": {
+  "summary": "Mock (india): Example state: the 8 Nov muhurat session announced, its hours not issued yet",
+  "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
+  "value": {
+   "market": "india",
+   "page_key": "session",
+   "as_of": "2026-10-06",
+   "cutoff": "2026-10-07T12:00:00Z",
+   "built_at": "2026-10-07T12:00:00Z",
+   "schema_version": "2.1.0",
+   "source_commit": "cadf1d2",
+   "payload_sha256": "779d2749ca713128057eeb823c5897a0cfed489301618c6dd665c47d40f50730",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-10-07T12:00:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
+   "payload": {
+    "exchange": "India (NSE)",
+    "zone": "IST",
+    "session_date": "2026-11-08",
+    "open_utc": null,
+    "close_utc": null,
+    "next_open_utc": null,
+    "regime": null,
+    "post_close_at": null,
+    "major_event_names": [],
+    "hours_status": "not_issued"
    }
   }
  },
  "getSessionUs_us": {
-  "summary": "Mock (us): closed: before the 7 Oct open in the US, after the close in India",
+  "summary": "Mock (us): closed: before the 7 Oct open in the US",
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
    "market": "us",

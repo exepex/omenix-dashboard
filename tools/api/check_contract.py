@@ -33,7 +33,7 @@ from check_semantics import check_flows, check_home_events, check_views  # noqa:
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 64  # planted breaks in planted()
+PLANTED = 66  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -229,6 +229,9 @@ def planted(doc: dict, found: dict, problems: list[str]) -> None:
     must_fail("the US indices served for India", "getIndicesUs", "us", lambda v: v.update(market="india"))
     must_fail("an NSE F&O expiry in India's stock calendar", "getEvents", "india", lambda v: v["payload"]["events"][0].update(kind="fno_expiry"))
     must_fail("a company row in the F&O expiry calendar", "getFnoEvents", "india", lambda v: v["payload"]["events"][0].update(inst="RELIANCE"))
+    # 2.6: a session whose hours are not issued has no times; India always says whether they are
+    must_fail("hours not issued but an open time given", "getSessionIndia", "india_hours_not_issued", lambda v: v["payload"].update(open_utc="2026-11-08T12:45:00Z"))
+    must_fail("India's session without hours_status", "getSessionIndia", "india", lambda v: v["payload"].pop("hours_status"))
     # W11: the screener and the Markets overview
     must_fail("an F&O universe in the US screener", "getScreenerSummaryUs", "us", lambda v: v["payload"]["universes"].update(fno=v["payload"]["universes"]["ours"]))
     must_fail("an F&O tag on a US screener row", "getScreenerStocksUs", "us", lambda v: v["payload"]["rows"][0].update(u=["fno"]))

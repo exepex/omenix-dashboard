@@ -1,7 +1,9 @@
 // Story W8 AC4 (the rule): the market status chip and the one trade lock, from the session times of the contract.
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { frameClock, marketState, tradeLock } from "../market.ts";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { frameClock, marketState, marketTip, tradeLock } from "../market.ts";
 import { frame, payload } from "./helpers.ts";
 
 const india = frame("india").shell;
@@ -25,12 +27,39 @@ test("during the session the market is open, says its close, and nothing is lock
 });
 
 test("the open instant is open, the close instant is closed", () => {
-  assert.equal(marketState(india, at(india.status.open_utc)).open, true);
-  assert.equal(marketState(india, at(india.status.close_utc)).open, false);
+  assert.equal(marketState(india, at(india.status.open_utc!)).open, true);
+  assert.equal(marketState(india, at(india.status.close_utc!)).open, false);
 });
 
 test("the example clock applies to example data only", () => {
   assert.equal(frameClock(india, payload.now, true, true), at(india.status.example_open_now ?? ""));
   assert.equal(frameClock(india, payload.now, false, true), at(payload.now), "live data never takes the example clock");
   assert.equal(frameClock(india, payload.now, true, false), at(payload.now));
+});
+
+// Contract 2.6: a session announced without its hours (the 8 Nov 2026 muhurat before NSE's timings circular) is said as
+// such in plain words, never "market closed"; Buy and Sell wait for the hours and the open.
+test("a session whose hours are not issued: \"Special session on Sun 8 Nov; hours not announced yet\", never closed", () => {
+  const pending = { ...india, status: { session_date: "2026-11-08", open_utc: null, close_utc: null, next_open_utc: null, hours_status: "not_issued" as const } };
+  const state = marketState(pending, Date.parse("2026-11-07T15:00:00Z"));
+  assert.equal(`${state.word} ${state.text}`, "Special session on Sun 8 Nov; hours not announced yet");
+  assert.equal(state.open, false);
+  assert.equal(state.pending, true);
+  const lock = tradeLock(state) ?? "";
+  const tip = marketTip(pending, state, false);
+  for (const words of [`${state.word} ${state.text}`, lock, tip]) assert.doesNotMatch(words, /closed/i, words);
+  assert.match(lock, /^Special session on Sun 8 Nov; hours not announced yet: you can buy and sell once NSE announces the hours/);
+  assert.match(tip, /special session on Sun 8 Nov; hours not announced yet/);
+});
+
+test("the example state of the contract renders the same through the frame's F&O overlay", async () => {
+  const { withFnoParts } = await import("../fno-overlay.ts");
+  const { fixtureShellData } = await import("../fixture-source.ts");
+  const examples = JSON.parse(readFileSync(join(import.meta.dirname, "..", "..", "..", "..", "api/examples/blocks.json"), "utf8"));
+  const pendingSession = examples.getSessionIndia_india_hours_not_issued.value.payload;
+  const base = await fixtureShellData.read();
+  const shell = withFnoParts(base, { session: { value: pendingSession }, indices: { missing: "-" }, picks: { missing: "-" } }, "2026-11-07T15:00:00Z", base.markets.india.status).markets.india;
+  assert.equal(shell.status.hours_status, "not_issued");
+  const state = marketState(shell, Date.parse("2026-11-07T15:00:00Z"));
+  assert.equal(`${state.word} ${state.text}`, "Special session on Sun 8 Nov; hours not announced yet");
 });

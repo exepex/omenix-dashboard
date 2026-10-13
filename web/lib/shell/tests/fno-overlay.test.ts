@@ -43,7 +43,7 @@ test("India's index levels, session and F&O picks are the publication's; the sto
   assert.equal(india.items.NIFTY50.last, 25123.45);
   assert.equal(india.items.NIFTY50.live, true);
   assert.equal(india.items.INDIAVIX.live, true);
-  assert.deepEqual(india.status, { session_date: "2026-10-13", open_utc: "2026-10-13T03:45:00Z", close_utc: "2026-10-13T10:00:00Z", next_open_utc: "2026-10-14T03:45:00Z" });
+  assert.deepEqual(india.status, { session_date: "2026-10-13", open_utc: "2026-10-13T03:45:00Z", close_utc: "2026-10-13T10:00:00Z", next_open_utc: "2026-10-14T03:45:00Z", hours_status: "known" });
   assert.deepEqual(india.fno_state, live.today.fno_state);
   assert.deepEqual(india.fno_rows, []);
   assert.deepEqual(india.fno_live, { missing: { session: undefined, indices: undefined, picks: undefined } });

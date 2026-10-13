@@ -202,3 +202,33 @@ rejects one (`IndiaStockEventsRule`).
 - W13's chain page keys: unchanged, as decided.
 - The India publisher split and its page keys (`session`, `indices`, `fno_events`, `flows`) are in 13661c0
   (contract 2.5). That is the exact list the P6 session publishes.
+
+### Contract 2.6: a session whose hours are not issued (orchestrator, 13 Oct 2026)
+
+Gap: 8 Nov 2026 is a muhurat session, but NSE has not issued its timings circular. The only empty session form
+(open_utc and close_utc null) meant "non-trading day", which would be false, and publishing no page shows "page
+missing", an error.
+
+- **Field:** `Session.hours_status` is optional, `known` or `not_issued`.
+  - With `not_issued`, `open_utc`, `close_utc` and `next_open_utc` must be null; a schema if/then enforces it.
+    Otherwise `next_open_utc` stays a required time.
+  - `SessionIndiaResponse` requires `hours_status`. The US may omit it (it then means known).
+  - This is additive: version 2.6.0, and no signed-off field changed meaning.
+- **Example:** `getSessionIndia_india_hours_not_issued` is a labelled Example state: session_date `2026-11-08`, the
+  three times null, `regime` and `post_close_at` null. India's main example now says `hours_status: known`.
+- **Planted breaks:** "hours not issued but an open time given" and "India's session without hours_status". Both are
+  caught; that makes 66.
+- **App:**
+  - The market status shows "**Special session** on Sun 8 Nov; hours not announced yet" in the chip and on Home's market
+    line. It never says "closed".
+  - Buy and Sell wait, and the lock reason says why: "Special session on Sun 8 Nov; hours not announced yet: you can
+    buy and sell once NSE announces the hours and the session opens."
+  - Tests (`lib/shell/tests/market.test.ts`) check the words, the lock and the tooltip, assert that none of them says
+    "closed", and render the contract's own example through the frame's F&O overlay.
+- **For the P6 session:** publish page `session` with `hours_status` always set. For a session announced without its
+  timings, set `session_date` to that day, the three times null, and `hours_status: "not_issued"`.
+- **Checks:**
+  - `check_mapping`, `check_contract` (66 planted breaks) and `render_catalog --check`: green.
+  - Code size: passed.
+  - `npm test`: 450 passed, 0 failed.
+  - Build: passed.

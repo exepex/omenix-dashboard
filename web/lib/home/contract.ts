@@ -177,7 +177,10 @@ export interface Session {
   session_date: string;
   open_utc: string;
   close_utc: string;
-  next_open_utc: string;
+  /** Null only while the hours are not issued (contract 2.6). */
+  next_open_utc: string | null;
   regime: string;
   post_close_at: string;
+  /** Contract 2.6: "not_issued" means a session exists on session_date but NSE has not announced its hours. */
+  hours_status?: "known" | "not_issued";
 }

@@ -6,31 +6,40 @@ import { clockTime, dateShort } from "./clock.ts";
 
 export interface MarketState {
   open: boolean;
-  word: "Open" | "Closed";
-  /** "closes 15:30 IST" or "opens Thu 8 Oct 09:15 IST" / "opens today 09:30 ET". */
+  word: "Open" | "Closed" | "Special session";
+  /** "closes 15:30 IST" or "opens Thu 8 Oct 09:15 IST" / "opens today 09:30 ET"; for a session whose hours are not
+   *  issued, "on Sun 8 Nov; hours not announced yet". */
   text: string;
+  /** Contract 2.6: a session exists but the exchange has not announced its hours, so neither open nor closed is known. */
+  pending?: true;
 }
 
-/** Open between today's open and close; otherwise closed, with the next open (today's when before it). */
+/** Open between today's open and close; otherwise closed, with the next open (today's when before it). A session whose
+ *  hours are not issued is said as such, never "closed" (contract 2.6). */
 export function marketState(shell: MarketShell, nowMs: number): MarketState {
-  const { open_utc, close_utc, next_open_utc } = shell.status;
-  const open = Date.parse(open_utc);
-  const close = Date.parse(close_utc);
-  if (nowMs >= open && nowMs < close) return { open: true, word: "Open", text: `closes ${clockTime(close_utc, shell)}` };
-  const next = nowMs < open ? open_utc : next_open_utc;
-  return { open: false, word: "Closed", text: `opens ${nowMs < open ? "today" : dateShort(next, shell)} ${clockTime(next, shell)}` };
+  const { open_utc, close_utc, next_open_utc, hours_status, session_date } = shell.status;
+  if (hours_status === "not_issued" || !next_open_utc) {
+    return { open: false, word: "Special session", text: `on ${dateShort(`${session_date}T06:00:00Z`, shell)}; hours not announced yet`, pending: true };
+  }
+  const open = open_utc ? Date.parse(open_utc) : NaN;
+  const close = close_utc ? Date.parse(close_utc) : NaN;
+  if (close_utc && nowMs >= open && nowMs < close) return { open: true, word: "Open", text: `closes ${clockTime(close_utc, shell)}` };
+  const next = open_utc && nowMs < open ? open_utc : next_open_utc;
+  return { open: false, word: "Closed", text: `opens ${next === open_utc ? "today" : dateShort(next, shell)} ${clockTime(next, shell)}` };
 }
 
 /** The one lock rule: the reason every manual Buy and Sell is disabled, or null while the market is open. */
 export function tradeLock(state: MarketState): string | null {
-  return state.open ? null : `Market closed: you can buy and sell again when it ${state.text}. The strategies keep paper trading on their own.`;
+  if (state.open) return null;
+  if (state.pending) return `Special session ${state.text}: you can buy and sell once NSE announces the hours and the session opens. The strategies keep paper trading on their own.`;
+  return `Market closed: you can buy and sell again when it ${state.text}. The strategies keep paper trading on their own.`;
 }
 
 /** The chip's tooltip. */
 export function marketTip(shell: MarketShell, state: MarketState, exampleClock: boolean): string {
   return (
-    `${shell.exchange}: ${state.word.toLowerCase()}, ${state.text}.` +
-    (state.open ? " You can buy and sell." : " Your buy and sell are paused until then; the strategies keep paper trading.") +
+    (state.pending ? `${shell.exchange}: special session ${state.text}.` : `${shell.exchange}: ${state.word.toLowerCase()}, ${state.text}.`) +
+    (state.open ? " You can buy and sell." : state.pending ? " Your buy and sell wait for the hours and the open; the strategies keep paper trading." : " Your buy and sell are paused until then; the strategies keep paper trading.") +
     (exampleClock ? " (Example clock: during the session.)" : "") +
     (shell.fno_live?.missing.session ? " Times are NSE’s calendar at regular hours: the session block is not published yet." : "")
   );
