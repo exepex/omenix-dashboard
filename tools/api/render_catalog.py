@@ -36,6 +36,24 @@ def element_label(e: dict) -> str:
     return f"{e['notes'][:2]} · {where}"
 
 
+def publishers(doc: dict, op: dict) -> str:
+    """The endpoint's publisher; a merge of parts names every part's publisher."""
+    names = dict.fromkeys(PUBLISHER[doc["components"]["schemas"][n]["x-stored-by"]["publisher"]] for n in op.get("x-stored", []))
+    return " + ".join(names) + " (merged by the route)" if len(names) > 1 else PUBLISHER[op["x-publisher"]]
+
+
+def stored_parts(doc: dict, ops) -> list[str]:
+    """The blocks a publisher stores in another shape than the route serves (api/schemas/blocks-stored.yaml)."""
+    lines = ["", "## Stored parts", "", "What each publisher writes where the route serves another shape: a merge of two publishers' parts,",
+             "or a page of a whole stored table (checked by `tools/api/check_stored.py`).", "",
+             "| Endpoint | Stored part | Publisher | Read model | Story | Status |", "|---|---|---|---|---|---|"]
+    for path, _, op in ops:
+        for name in op.get("x-stored", []):
+            by = doc["components"]["schemas"][name]["x-stored-by"]
+            lines.append(f"| `GET {path}` | `{name}` | {PUBLISHER[by['publisher']]} | {cell(by['read_model'])} | `{by['story']}` | {STATUS[by['status']]} |")
+    return lines
+
+
 def render() -> str:
     doc = bundle.bundle()
     elements = {e["id"]: e for e in yaml.safe_load((bundle.API / "catalog/elements.yaml").read_text(encoding="utf-8"))}
@@ -53,8 +71,9 @@ def render() -> str:
     for path, _, op in ops:
         feeds = ", ".join(f"`{e}`" for e in op["x-feeds"])
         mine = [f for f in fields if f.op == op["operationId"] and f.path.startswith("payload")]
-        lines.append(f"| `GET {path}` | {PUBLISHER[op['x-publisher']]} | {published_today(mine)} | {feeds} | {cell(op['x-read-model'])} | {cell(op['x-freshness'])} | "
+        lines.append(f"| `GET {path}` | {publishers(doc, op)} | {published_today(mine)} | {feeds} | {cell(op['x-read-model'])} | {cell(op['x-freshness'])} | "
                      f"{cell(op['x-cache'])} | {cell(op['x-empty'])} | {cell(op.get('x-shared', ''))} |")
+    lines += stored_parts(doc, ops)
     lines += ["", "## Elements (the notes.md contracts) and the endpoints that feed them", "", "| Element | Notes row | Endpoints |", "|---|---|---|"]
     served = defaultdict(set)
     for f in fields:

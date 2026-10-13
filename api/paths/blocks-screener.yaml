@@ -8,7 +8,8 @@
     x-status: planned
     x-publisher: fno
     x-catalog: {publisher: 'fno', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'TR-NSE-proposed', status: 'planned'}
-    x-read-model: 'fno.pages_history page screener_summary (proposed)'
+    x-read-model: 'two stored parts merged by the route (x-stored): fno.pages_history page screener_summary (all, n500, fno) and rm.blocks page_key screener_summary_ours (ours)'
+    x-stored: [ScreenerSummaryNsePart, ScreenerSummaryOursPart]
     x-freshness: 'fno_calendar; daily'
     x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'never empty on a trading day; on a holiday the last session''s counts with their as_of'
@@ -61,6 +62,7 @@
     x-publisher: fno
     x-catalog: {publisher: 'fno', source: 'NSE daily equity file (BhavCopy CM), security-wise delivery file, EQUITY_L and the Nifty 500 list; returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'daily, after the NSE files (about 19:00 IST)', story: 'TR-NSE-proposed', status: 'planned'}
     x-read-model: 'fno.pages_history page screener_stocks (proposed; the route filters, sorts and pages)'
+    x-stored: [ScreenerStocksTableIndia]
     x-freshness: 'fno_calendar; daily'
     x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'rows empty: "No stock matches"'
@@ -105,6 +107,7 @@
     x-publisher: stock
     x-catalog: {publisher: 'stock', source: 'the stock tool''s daily prices of its 20 US companies (ohlc); returns, 52-week range, volume ratio and RSI computed: ours', freshness: 'post-close run', story: 'K5-proposed', status: 'published'}
     x-read-model: 'rm.blocks page_key screener_stocks (K5-proposed; the route filters, sorts and pages)'
+    x-stored: [ScreenerStocksTableUs]
     x-freshness: 'stock_age; post-close run'
     x-cache: 'tag rm:blocks:<market>:screener_stocks, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'rows empty: "No stock matches"'
@@ -200,6 +203,7 @@
     x-status: planned
     x-publisher: fno
     x-read-model: 'fno.pages_history page fno_screener_rows (proposed; the route filters, sorts and pages)'
+    x-stored: [FnoScreenerTable]
     x-freshness: 'fno_calendar; daily'
     x-cache: 'keyed by publication_id (fno.current_publication); responses private, max-age=300'
     x-empty: 'rows empty'

@@ -26,11 +26,12 @@ from referencing.jsonschema import DRAFT202012
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 import examples  # noqa: E402
+from check_stored import check_stored, planted as planted_stored  # noqa: E402
 from check_semantics import check_chain, check_flows, check_home_events, check_views  # noqa: E402
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 39  # planted breaks in planted()
+PLANTED = 45  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -115,8 +116,10 @@ def check_examples(doc: dict, problems: list[str]) -> dict:
     return found
 
 
-def check_coverage(doc: dict, found: dict, problems: list[str]) -> int:
+def check_coverage(doc: dict, found: dict, stored: dict, problems: list[str]) -> int:
     hits: set = set()
+    for name, value in stored.items():  # the stored parts (check_stored) are examples of their schemas
+        reached(doc, {"$ref": f"#/components/schemas/{name}"}, value, hits)
     for path, _, op in block_operations(doc):
         schema = op["responses"]["200"]["content"]["application/json"]["schema"]
         for value in found.get(op["operationId"], {}).values():
@@ -285,7 +288,10 @@ def main() -> int:
     if not examples.is_current():
         problems.append("api/examples/blocks.json is not what the mockups' data gives (run python3 tools/api/examples.py)")
     found = check_examples(doc, problems)
-    schemas = check_coverage(doc, found, problems)
+    validate = lambda ref, value: errors(doc, ref, value)  # noqa: E731
+    stored = check_stored(doc, validate, found, problems)
+    planted_stored(doc, validate, found, stored, problems)
+    schemas = check_coverage(doc, found, stored, problems)
     leaves = check_catalog(doc, problems)
     check_rules(doc, found, problems)
     check_flows(found, problems)
