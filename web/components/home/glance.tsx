@@ -7,7 +7,7 @@ import type { Accounts, Session, TrackedMoves } from "../../lib/home/contract.ts
 import { signed } from "../../lib/ui/format.ts";
 import { Icon } from "../ui/icon.tsx";
 import { useFrame } from "../frame/frame-context.tsx";
-import { Delta, Tk } from "../frame/parts.tsx";
+import { Delta, StockExampleTag, Tk } from "../frame/parts.tsx";
 import { TradeButton } from "../frame/trade.tsx";
 import { src } from "../../lib/home/sources.ts";
 import { Money, MoneyDelta, SectionHead } from "./section-head.tsx";
@@ -71,15 +71,19 @@ export function Glance({ accounts, needs }: { accounts: Accounts; needs: number 
   );
 }
 
-export function MarketBand({ session, moves }: { session: Session; moves: TrackedMoves }) {
+/** `session` null: India's session block is not there; `missing` says why, and the line keeps what the frame knows. */
+export function MarketBand({ session, missing, moves }: { session: Session | null; missing: string | null; moves: TrackedMoves }) {
   const { data, shell, status, fmt, openDrawer } = useFrame();
-  const regime = REGIME[session.regime] ?? session.regime;
-  const state = status.open ? `open, ${status.text}; prices are the last close until the next price check` : `closed, ${status.text}; today’s close arrives with the ${clockTime(session.post_close_at, shell)} run`;
+  const regime = session ? `${REGIME[session.regime] ?? session.regime} · ` : "";
+  const after = session ? `; today’s close arrives with the ${clockTime(session.post_close_at, shell)} run` : "";
+  const state = status.open ? `open, ${status.text}; prices are the last close until the next price check` : `closed, ${status.text}${after}`;
   const rose = moves.companies.filter((c) => c.chg_pct > 0).length;
   return (
     <section className="sec" aria-label="Market">
-      <SectionHead title="Market" sub={`${shell.exchange} · ${regime} · ${state}`} go={["Markets", "markets"]} />
+      <SectionHead title="Market" sub={`${shell.exchange} · ${regime}${state}`} go={["Markets", "markets"]} />
+      {missing ? <p className="quiet" role="note">{`Session: ${missing}`}</p> : null}
       <div className="mb-mband">
+        {shell.fno_live?.missing.indices ? <div className="quiet" role="note">{`Index levels: ${shell.fno_live.missing.indices}`}</div> : null}
         {shell.indices.map((id) => {
           const it = shell.items[id];
           const a = asOf(it, data);
@@ -93,7 +97,7 @@ export function MarketBand({ session, moves }: { session: Session; moves: Tracke
         })}
         {moves.companies.length ? (
           <div className="brd">
-            <div className="n">The stock tool’s companies</div>
+            <div className="n">The stock tool’s companies <StockExampleTag /></div>
             <span className="mv">
               {moves.companies.map((c) => (
                 <span key={c.id}>

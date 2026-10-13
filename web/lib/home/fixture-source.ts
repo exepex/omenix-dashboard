@@ -5,6 +5,8 @@
 import raw from "../fixtures/blocks.generated.json" with { type: "json" };
 import type { Market } from "../data/constants.ts";
 import { exampleReader } from "../fixtures/examples.ts";
+import type { Events } from "./contract.ts";
+import { fnoExpiries } from "./events.ts";
 import type { HomeData } from "./source.ts";
 
 /** The payload of one example (`getGroups_india`), strategy names through the display-name rule; a missing example is
@@ -24,4 +26,5 @@ export const fixtureHomeData: HomeData = {
   events: block("getEvents"),
   topNews: block("getTopNews"),
   fnoBooks: async () => example("getFnoBooks_india"),
+  fnoEvents: async () => fnoExpiries(example<Events>("getEvents_india")),
 };

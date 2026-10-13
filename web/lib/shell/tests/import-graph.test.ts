@@ -10,7 +10,7 @@ import { canonical, computedImports, importsOf, reachable, sources, web, type So
 
 /** The whole app's code (tests aside): every place an import of the adapter could hide. */
 const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].flatMap(sources).filter((f) => !/(^|\/)tests\//.test(f.path));
-const ADAPTER = /^lib\/shell\/(fixture-source$|fixture\/)/;
+const ADAPTER = /^lib\/shell\/(fixture-source$|azure-source$|fixture\/)/;
 const WIRING = "lib/shell/wiring";
 /** May import the adapter: the wiring (the one place that picks it) and the adapter itself (its fixture). */
 const MAY_IMPORT_ADAPTER = (path: string) => [WIRING, "lib/shell/fixture-source"].includes(canonical(path));
@@ -29,7 +29,7 @@ export function wiringReaders(files: Source[]): string[] {
 
 /** Rule 3: nothing the frame's components reach, directly or through any chain of modules, is an adapter, the
  *  wiring, a backend's data client or a server SDK. */
-const FORBIDDEN = [ADAPTER, /^lib\/shell\/wiring$/, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
+const FORBIDDEN = [ADAPTER, /^lib\/shell\/wiring$/, /^lib\/fno\//, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
 export function forbiddenReach(start: Source[], all: Source[]): string[] {
   return [...reachable(start, all)].filter((m) => FORBIDDEN.some((re) => re.test(m))).sort();
 }
@@ -102,7 +102,7 @@ test("no computed dynamic import in the app: every import target is a literal th
 
 test("the adapter is one line of the wiring", () => {
   const wiring = readFileSync(join(web, "lib/shell/wiring.ts"), "utf8");
-  assert.equal([...wiring.matchAll(/^export const shellData: ShellData = (\w+);$/gm)].length, 1);
+  assert.equal([...wiring.matchAll(/^export const shellData: ShellData = fnoReader \? fnoShellData\(fnoReader, fixtureShellData, nseCalendar\) : fixtureShellData;$/gm)].length, 1);
 });
 
 /** A network call or a form: what any submit path needs. */

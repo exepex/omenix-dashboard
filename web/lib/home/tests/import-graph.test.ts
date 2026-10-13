@@ -8,10 +8,10 @@ import { test } from "node:test";
 import { canonical, importsOf, reachable, sources, web, type Source } from "../../shell/tests/imports.ts";
 
 const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].flatMap(sources).filter((f) => !/(^|\/)tests\//.test(f.path));
-const ADAPTER = /^lib\/home\/(fixture-source$|fixture\/)|^lib\/fixtures\//;
+const ADAPTER = /^lib\/home\/(fixture-source$|azure-source$|fixture\/)|^lib\/fixtures\//;
 const WIRING = "lib/home/wiring";
 const LOADERS = "app/(cockpit)/[market]/_home/blocks.tsx";
-const FORBIDDEN = [ADAPTER, /^lib\/home\/wiring$/, /^lib\/shell\/(fixture-source$|fixture\/|wiring$)/, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
+const FORBIDDEN = [ADAPTER, /^lib\/home\/wiring$/, /^lib\/shell\/(fixture-source$|azure-source$|fixture\/|wiring$)/, /^lib\/fno\//, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
 
 export const adapterImports = (files: Source[]) =>
   files.filter((f) => ![WIRING, "lib/home/fixture-source", "lib/overview/fixture-source", "lib/screener/fixture-source", "lib/fixtures/examples"].includes(canonical(f.path))).flatMap((f) => importsOf(f).filter((m) => ADAPTER.test(m)).map((m) => `${f.path} imports ${m}`));
@@ -29,7 +29,7 @@ test("Home's components reach no adapter, wiring or data client, directly or tra
 test("no module but the wiring imports Home's adapter; only Home's block loaders read the wiring; one line picks it", () => {
   assert.deepEqual(adapterImports(appCode()), []);
   assert.deepEqual(wiringReaders(appCode()), [LOADERS]);
-  assert.equal([...readFileSync(join(web, "lib/home/wiring.ts"), "utf8").matchAll(/^export const homeData: HomeData = (\w+);$/gm)].length, 1);
+  assert.equal([...readFileSync(join(web, "lib/home/wiring.ts"), "utf8").matchAll(/^export const homeData: HomeData = fnoReader \? fnoHomeData\(fnoReader, fixtureHomeData\) : fixtureHomeData;$/gm)].length, 1);
 });
 
 test("the checks catch planted breaches: alias, extensionless, re-export through a helper, a data client", () => {

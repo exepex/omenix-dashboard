@@ -63,7 +63,10 @@ function Row({ r, sessionDate }: { r: TradeRow; sessionDate: string }) {
   );
 }
 
-export function OpenTrades({ positions, trades, sessionDate }: { positions: Positions; trades: StrategyTrades; sessionDate: string }) {
+/** `sessionDate` null: the session block is not there, so "today" is the frame's session day. */
+export function OpenTrades({ positions, trades, sessionDate }: { positions: Positions; trades: StrategyTrades; sessionDate: string | null }) {
+  const { shell } = useFrame();
+  const today = sessionDate ?? shell.status.session_date;
   const [tab, setTab] = useState<Tab>("all");
   const [page, setPage] = useState(0);
   // The mockup's state link: #own=ai opens a tab directly (bookmarks and screenshots).
@@ -87,7 +90,7 @@ export function OpenTrades({ positions, trades, sessionDate }: { positions: Posi
           ))}
         </div>
         <ul className="pos">
-          {shown.map((r) => <Row key={`${r.kind}:${r.id}:${r.family}`} r={r} sessionDate={sessionDate} />)}
+          {shown.map((r) => <Row key={`${r.kind}:${r.id}:${r.family}`} r={r} sessionDate={today} />)}
           {rows.length ? null : <li className="quiet">Nothing open here.</li>}
         </ul>
         <div className="pager">

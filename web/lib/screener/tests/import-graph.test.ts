@@ -35,7 +35,7 @@ test("no module but a wiring imports an adapter; only each page's loaders read i
   assert.deepEqual(adapterImports(appCode()), []);
   assert.deepEqual(readersOf(appCode(), WIRINGS.screener), [LOADERS.markets, LOADERS.screener].sort());
   assert.deepEqual(readersOf(appCode(), WIRINGS.overview), [LOADERS.markets]);
-  assert.deepEqual(readersOf(appCode(), WIRINGS.fno), [FRESHNESS, WIRINGS.screener + ".ts", WIRINGS.overview + ".ts"].sort());
+  assert.deepEqual(readersOf(appCode(), WIRINGS.fno), [FRESHNESS, "lib/home/wiring.ts", "lib/shell/wiring.ts", WIRINGS.screener + ".ts", WIRINGS.overview + ".ts"].sort());
   assert.equal([...readFileSync(join(web, "lib/screener/wiring.ts"), "utf8").matchAll(PICK("screenerData", "ScreenerData"))].length, 1);
   assert.equal([...readFileSync(join(web, "lib/overview/wiring.ts"), "utf8").matchAll(PICK("overviewData", "OverviewData"))].length, 1);
 });

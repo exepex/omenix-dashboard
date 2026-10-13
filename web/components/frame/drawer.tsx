@@ -44,7 +44,7 @@ function QuickView({ it }: { it: Instrument }) {
       <DrawerHead title={it.sym} sub={it.name} subIsName>
         <div className="mb-frame-row" style={{ marginTop: 6 }}>
           <AsOfStamp item={it} />
-          <ExampleTag />
+          <ExampleTag item={it} />
         </div>
       </DrawerHead>
       <div className="mb-drawer-body">

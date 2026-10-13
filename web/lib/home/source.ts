@@ -16,4 +16,6 @@ export interface HomeData {
   topNews(market: Market): Promise<TopNews>;
   /** India only: F&O exists in no other market, so there is no market parameter. */
   fnoBooks(): Promise<FnoBooks>;
+  /** India only: the F&O tool's expiry dates (W9-F&O), shown in "Coming up" beside the stock tool's events. */
+  fnoEvents(): Promise<Events>;
 }

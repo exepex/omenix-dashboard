@@ -6,6 +6,7 @@ import { HomeFooter } from "../../../../components/home/home-footer.tsx";
 import { HomePicks } from "../../../../components/home/home-picks.tsx";
 import { LoadingState } from "../../../../components/ui/states.tsx";
 import type { Market } from "../../../../lib/data/constants.ts";
+import { FreshnessBlock } from "../_fno/freshness-block.tsx";
 import { GlanceBlock, ListsBlock, MarketBlock, TradesBlock, WhoTradesBlock } from "./blocks.tsx";
 import "./home.css";
 
@@ -18,6 +19,7 @@ export function HomePage({ market }: { market: Market }) {
       <h1 className="vh">Home</h1>
       <Part label="today at a glance"><GlanceBlock market={market} /></Part>
       <Part label="the market"><MarketBlock market={market} /></Part>
+      {fno ? <Part label="how current the F&O data is"><FreshnessBlock /></Part> : null}
       <HomePicks />
       <Part label="who trades"><WhoTradesBlock market={market} fno={fno} /></Part>
       <Part label="open paper trades"><TradesBlock market={market} /></Part>

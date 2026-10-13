@@ -56,12 +56,25 @@ export function Tk({ id, children }: { id: string; children?: string }) {
   );
 }
 
-export function ExampleTag() {
+/** "Example data" on a view of example records; never on a value read from a backend's publication (`item.live`). */
+export function ExampleTag({ item }: { item?: Instrument }) {
   const { shell, data } = useFrame();
-  if (!data.example) return null;
+  if (!data.example || item?.live) return null;
   return (
     <span className="mb-tag mock" data-tip={shell.example_note}>
       Example data
+    </span>
+  );
+}
+
+/** "Example" beside a stock figure on a screen that also shows the F&O tool's real figures (W9-F&O), so the two kinds
+ *  can never be read as one. Absent when everything on the screen is example (the page's own label says so). */
+export function StockExampleTag() {
+  const { shell, data } = useFrame();
+  if (!data.example || !shell.fno_live) return null;
+  return (
+    <span className="mb-tag mock" data-tip="Stock figures are example records until the stock tool publishes them; the F&O figures here are the F&O tool’s.">
+      Example
     </span>
   );
 }

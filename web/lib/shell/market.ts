@@ -31,7 +31,8 @@ export function marketTip(shell: MarketShell, state: MarketState, exampleClock: 
   return (
     `${shell.exchange}: ${state.word.toLowerCase()}, ${state.text}.` +
     (state.open ? " You can buy and sell." : " Your buy and sell are paused until then; the strategies keep paper trading.") +
-    (exampleClock ? " (Example clock: during the session.)" : "")
+    (exampleClock ? " (Example clock: during the session.)" : "") +
+    (shell.fno_live?.missing.session ? " Times are NSE’s calendar at regular hours: the session block is not published yet." : "")
   );
 }
 
