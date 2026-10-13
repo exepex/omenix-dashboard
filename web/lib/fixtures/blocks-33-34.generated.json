@@ -10,7 +10,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
-   "payload_sha256": "8bda860bb4722d1b8aae9072eccef569356afad5cc199638194bbf54aa0814f9",
+   "payload_sha256": "e4d8d13b5e878af1541a4132a6fd7f59b9f8617df30eed2995a565c776dd2ad0",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -33,14 +33,14 @@
       "high": 12,
       "near_high": 56,
       "low": 10,
-      "near_low": 247,
-      "up_1m": 695,
+      "near_low": 240,
+      "up_1m": 697,
       "screens": {
        "movers": 165,
        "volume": 63,
-       "trend": 250,
-       "fall": 646,
-       "oversold": 246,
+       "trend": 251,
+       "fall": 647,
+       "oversold": 247,
        "delivery": 145
       }
      },
@@ -52,13 +52,13 @@
       "high": 1,
       "near_high": 7,
       "low": 1,
-      "near_low": 54,
+      "near_low": 53,
       "up_1m": 100,
       "screens": {
        "movers": 18,
        "volume": 12,
        "trend": 14,
-       "fall": 112,
+       "fall": 113,
        "oversold": 44,
        "delivery": 10
       }
@@ -3849,7 +3849,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "e28b43d",
-   "payload_sha256": "71eae2330014e4c9d58e378b88aa5ad88c9a75fb361353631ac6a70e2da68325",
+   "payload_sha256": "d8ac003ed21cb602d2249c52ab2631db5f68dab68f89579d47af1ccaa688bba7",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -4207,7 +4207,7 @@
       "w1": 0.9,
       "m1": 6.27,
       "m3": -2.1,
-      "y1": null,
+      "y1": 35.18,
       "h": 1774.0,
       "l": 1091.1,
       "v": 572,
@@ -10229,7 +10229,7 @@
    "built_at": "2026-10-12T12:30:00Z",
    "schema_version": "2.2.0",
    "source_commit": "59b606d",
-   "payload_sha256": "bad8b2a2283d6197cf115fb5e3e583d81e93f2f7f59df02c62d1bfddbfaaccaf",
+   "payload_sha256": "2bf88cacb2b01f53f1d7fa3f79a29bdfb2c0d354352fdb78b78c7a25999988fc",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -11727,9 +11727,9 @@
       "n": 69,
       "d1": 1.16,
       "w1": -0.59,
-      "m1": -3.82,
-      "m3": -0.4,
-      "y1": 25.24,
+      "m1": -3.94,
+      "m3": -0.21,
+      "y1": 25.26,
       "up": 49,
       "down": 20,
       "best": [
@@ -11767,7 +11767,7 @@
       "w1": -0.63,
       "m1": -6.66,
       "m3": -4.69,
-      "y1": 10.71,
+      "y1": 9.6,
       "up": 32,
       "down": 8,
       "best": [
@@ -11824,7 +11824,7 @@
       "w1": 1.37,
       "m1": -2.1,
       "m3": -3.12,
-      "y1": -12.34,
+      "y1": -12.81,
       "up": 13,
       "down": 12,
       "best": [
