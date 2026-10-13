@@ -48,21 +48,32 @@ function holdersCard(c, S) {
     el('p', {class: 'muted small', style: 'margin:8px 0 0'}, `Each trade is ${cur(c, G[0] ? G[0].amount : null, 0)} of paper money per exit; results at the last price check, before charges.`));
 }
 
-/* which family is winning on this stock: none has settled yet, so the labelled winning and losing examples show the design */
+/* which family is winning on this stock, per exit: none has settled yet, so the labelled examples show a winning and a
+   losing case (made-up numbers) and the real view says when the first results arrive */
+let WH = 'all';   /* the exit shown in the winning card: all, or 1 / 3 / 5 */
 function winningCard(c, S) {
   const {el} = c, X = S.examples, rows = EX ? X[EX] : null;
-  const toggle = el('div', {class: 'acts', style: 'margin-bottom:8px'}, seg(c, 'Show', [[null, 'Today'], ['win', 'Example: winning'], ['lose', 'Example: losing']], EX, k => { EX = k; }));
-  if (!rows) return el('section', {class: 'card', 'aria-label': 'Which family is winning'}, head(c, 'Which family is winning here'), toggle,
-    el('p', {}, el('span', {class: 'mb-label neutral'}, c.icon('schedule'), 'No settled trades yet')),
-    el('p', {class: 'small'}, `No strategy trade on ${S.ticker} has closed yet, so there is no score. Once trades settle, each family’s wins and paper result here appear in this card.`), scoreLink(c));
-  const max = Math.max(...rows.map(r => Math.abs(r.pnl || 0)), 1), lead = rows.filter(r => r.pnl != null).sort((a, b) => b.pnl - a.pnl)[0], base = rows.find(r => r.family === 'baseline');
-  const verdict = lead.family === 'baseline' ? `No family beats the baselines here: a strategy that cannot beat them has no edge on ${S.ticker}.` : `${S.tools.families[lead.family].label} leads here: ${cur(c, lead.pnl, 0)} over ${lead.settled} trades (${lead.wins} won), ahead of the baselines’ ${cur(c, base.pnl, 0)}.`;
-  return el('section', {class: 'card', 'aria-label': 'Which family is winning'}, head(c, 'Which family is winning here', 'EXAMPLE, not today'), toggle,
-    el('p', {class: 'small', style: 'margin:0 0 8px'}, el('span', {class: 'mb-tag', 'data-tip': X.note}, 'Example data'), ' ', verdict),
-    el('ul', {class: 'list'}, ...rows.map(r => el('li', {class: 'score'}, el('span', {}, c.apBadge(r.family)),
-      r.settled ? [el('span', {class: 'small'}, `${r.wins} of ${r.settled} won (${fmt(r.wins / r.settled * 100, 0)}%)`), el('span', {class: 'pnl'}, hbar(c, r.pnl, max, `Paper result ${cur(c, r.pnl, 0)}`), el('b', {}, c.moneyDelta(r.pnl, 0)))]
-        : el('span', {class: 'small muted'}, 'no settled trade')))),
-    el('p', {class: 'muted small', style: 'margin:8px 0 0'}, 'One stock gives too few trades to crown a winner; the scoreboard compares families across all stocks.'), scoreLink(c));
+  const toggle = el('div', {class: 'acts wseg', style: 'margin-bottom:8px'}, seg(c, 'Show', [[null, 'Real today'], ['win', 'Example: a family is winning'], ['lose', 'Example: no family is winning']], EX, k => { EX = k; }));
+  if (!rows) {
+    const first = [1, 3, 5].map(h => [h, S.trades.filter(t => t.h === h).map(t => t.exit_date).sort()[0]]).filter(x => x[1]);
+    return el('section', {class: 'card', 'aria-label': 'Which family is winning'}, head(c, 'Which family is winning here'), toggle,
+      el('p', {}, el('span', {class: 'mb-label neutral'}, c.icon('schedule'), 'No settled trades yet')),
+      el('p', {class: 'small'}, `This card will show, for ${S.ticker}, how many trades each family closed, how many made money, and its paper result, for each exit. No trade here has closed yet.`),
+      first.length ? el('ul', {class: 'list'}, ...first.map(([h, d]) => el('li', {class: 'score'}, el('b', {class: 'small'}, `N+${h}`), el('span', {class: 'small'}, `first result on ${day(c, d)}`)))) : null, scoreLink(c));
+  }
+  const pick = r => WH === 'all' ? r : {family: r.family, ...(r.by_h[WH] || {settled: 0, wins: 0, pnl: null})};
+  const R = rows.map(pick), max = Math.max(...R.map(r => Math.abs(r.pnl || 0)), 1), base = R.find(r => r.family === 'baseline');
+  const lead = R.filter(r => r.pnl != null && r.settled).sort((a, b) => b.pnl - a.pnl)[0], wins = lead && lead.family !== 'baseline';
+  const verdict = wins ? `▲ ${S.tools.families[lead.family].label} is winning here: ${cur(c, lead.pnl, 0)} over ${lead.settled} closed trades (${lead.wins} made money), more than the baselines’ ${cur(c, base.pnl, 0)}.`
+    : `▼ No family beats the baselines here. A strategy that cannot beat “always buy” has no edge on ${S.ticker}.`;
+  return el('section', {class: 'card', 'aria-label': 'Which family is winning'}, head(c, 'Which family is winning here', 'EXAMPLE, made-up numbers'), toggle,
+    el('p', {class: 'small muted', style: 'margin:0 0 8px'}, el('span', {class: 'mb-tag'}, 'Example data'), ' Made-up numbers that show how this card will look once trades close. Not real results.'),
+    el('div', {class: 'acts', style: 'margin-bottom:8px'}, seg(c, 'Exit', [['all', 'All exits'], ['1', 'N+1'], ['3', 'N+3'], ['5', 'N+5']], WH, k => { WH = k; })),
+    el('p', {class: 'verdict ' + (wins ? 'good' : 'bad')}, verdict),
+    el('ul', {class: 'list'}, ...R.map(r => el('li', {class: 'score'}, el('span', {}, c.apBadge(r.family)),
+      r.settled ? [el('span', {class: 'small'}, `${r.wins} of ${r.settled} made money`), el('span', {class: 'pnl'}, hbar(c, r.pnl, max, `Paper result ${cur(c, r.pnl, 0)}`), el('b', {}, c.moneyDelta(r.pnl, 0)))]
+        : el('span', {class: 'small muted'}, r.family === 'hybrid' ? 'none built yet' : 'no closed trade')))),
+    el('p', {class: 'muted small', style: 'margin:8px 0 0'}, 'One stock gives few trades; the scoreboard compares the families across all stocks.'), scoreLink(c));
 }
 function scoreLink(c) { return c.el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => c.go('scoreboards')}, c.icon('leaderboard'), 'Open the strategies scoreboard'); }
 
@@ -72,7 +83,7 @@ function aiCard(c, S) {
   if (!A) return el('section', {class: 'card'}, head(c, 'What the AI team thinks'), el('p', {class: 'muted'}, 'The AI team recorded no view on this company today.'));
   return el('section', {class: 'card ai', 'aria-label': 'What the AI team thinks'}, head(c, 'What the AI team thinks', `today, ${c.when(A.made_at)}`),
     el('p', {class: 'muted small', style: 'margin:0 0 8px'}, 'The AI team is one of the four families above, and the only one that writes down why. Rule-based and hybrid strategies follow their own rules and give no reasons.'),
-    el('p', {class: 'aisum'}, el('span', {class: 'mb-label neutral'}, c.icon('smart_toy'), A.decision_1d === 'abstain' && A.decision_5d === 'abstain' ? 'Stays out' : `Next day: ${A.decision_1d} · Next week: ${A.decision_5d}`), ' ', P.summary),
+    el('p', {class: 'aisum'}, el('span', {class: 'mb-label neutral'}, c.icon('smart_toy'), A.decision_1d === 'abstain' && A.decision_5d === 'abstain' ? 'No buy or sell today' : `Next day: ${A.decision_1d} · Next week: ${A.decision_5d}`), ' ', P.summary),
     el('div', {class: 'grid2 even'}, el('div', {}, el('b', {class: 'small'}, '▲ What could push it up'), el('ul', {class: 'pts'}, ...P.up.map(x => el('li', {}, x)))),
       el('div', {}, el('b', {class: 'small'}, '▼ What could pull it down'), el('ul', {class: 'pts'}, ...P.down.map(x => el('li', {}, x))))),
     el('p', {class: 'small', style: 'margin:8px 0 0'}, el('span', {class: 'mb-tag', 'data-tip': P.note}, 'Example wording'), ' The plain words are written for this mockup from the AI team’s record; it does not record a beginner’s summary yet.'),

@@ -19,7 +19,7 @@ function header(main, c, S, it) {
    (today the model gives every company about the same chance, so a coloured signal would mislead). */
 function quickLine(c, S) {
   const h1 = S.tools.horizons[0], buy = S.families.reduce((n, f) => n + f.votes[0].buy, 0), of = S.families.reduce((n, f) => n + f.n, 0);
-  const A = S.tools.ai_team, ai = A ? (A.decision_1d === 'abstain' ? 'stays out' : A.decision_1d || '—') : 'no reading';
-  return c.el('p', {class: 'quick', 'data-tip': `For the next session (N+1, exit ${day(c, h1.target_date)}). Grey on purpose: nothing here is proven yet, so no green or red verdict is shown.`},
+  const A = S.tools.ai_team, ai = A ? (A.decision_1d === 'abstain' ? 'no buy or sell today' : A.decision_1d || '—') : 'no view recorded';
+  return c.el('p', {class: 'quick', 'data-tip': `For the next session (N+1, exit ${day(c, h1.target_date)}). Grey on purpose: nothing here is proven yet, so no green or red verdict is shown. “No buy or sell today”: the AI team looked at the stock and chose not to trade.`},
     c.icon('query_stats'), `Our tools today: ${buy} of ${of} strategies buy · model ${h1.prob == null ? '—' : fmt(h1.prob * 100, 0) + '%'} (not proven) · AI team: ${ai}`);
 }

@@ -116,10 +116,34 @@ def gaps(m: str) -> list:
 
 
 def example_records(m: str) -> dict:
-    """EXAMPLE (not today): each family's settled record on this stock, a winning and a losing case (owner, 13 Oct
-    2026: mockups show both). Paper results in the market's currency; wins of settled trades."""
+    """EXAMPLE (not today): each family's settled record on this stock per exit (N+1, N+3, N+5) and in total, a winning
+    and a losing case (owner, 13 Oct 2026: mockups show both). Paper results in the market's currency."""
     k = 1 if m == "india" else 0.012   # rupee figures, or about the same in dollars for a $1,000 trade size
-    case = lambda rows: [{"family": f, "settled": s, "wins": w, "pnl": None if p is None else round(p * k)} for f, s, w, p in rows]
-    return {"note": "EXAMPLE state, not today: how each family's record on this stock looks once its trades settle.",
-            "win": case([("rule", 18, 11, 12400), ("hybrid", 0, 0, None), ("ai", 9, 4, -2100), ("baseline", 15, 7, 1800)]),
-            "lose": case([("rule", 18, 6, -9300), ("hybrid", 0, 0, None), ("ai", 9, 3, -4400), ("baseline", 15, 8, 2600)])}
+    def case(rows):
+        out = []
+        for fam, by in rows:
+            by_h = {h: {"settled": s, "wins": w, "pnl": round(p * k)} for h, (s, w, p) in by.items()}
+            total = {"settled": sum(x["settled"] for x in by_h.values()), "wins": sum(x["wins"] for x in by_h.values()),
+                     "pnl": sum(x["pnl"] for x in by_h.values()) if by_h else None}
+            out.append({"family": fam, **total, "by_h": by_h})
+        return out
+    win = [("rule", {1: (8, 5, 5100), 3: (6, 4, 4300), 5: (4, 2, 3000)}), ("hybrid", {}),
+           ("ai", {1: (4, 2, -600), 3: (3, 1, -1100), 5: (2, 1, -400)}), ("baseline", {1: (6, 3, 500), 3: (5, 2, 400), 5: (4, 2, 900)})]
+    lose = [("rule", {1: (8, 3, -4200), 3: (6, 2, -3100), 5: (4, 1, -2000)}), ("hybrid", {}),
+            ("ai", {1: (4, 1, -1800), 3: (3, 1, -1500), 5: (2, 1, -1100)}), ("baseline", {1: (6, 3, 700), 3: (5, 3, 900), 5: (4, 2, 1000)})]
+    return {"note": "EXAMPLE, made-up numbers: how this card looks once trades on this stock close. Not real results.",
+            "win": case(win), "lose": case(lose)}
+
+
+def example_marks(dates: list, closes: list) -> dict:
+    """EXAMPLE (not today): the buy and sell marks a proven family would put on the price chart. The dates are fixed
+    sessions of the real series (not chosen with hindsight) and each result is the real price change between them."""
+    marks = []
+    for back in (240, 180, 120, 60):   # fixed sessions back, each trade held 20 sessions
+        if back + 20 < len(closes):
+            i, j = len(closes) - 1 - back, len(closes) - 1 - back + 20
+            marks.append({"buy": dates[i], "buy_at": closes[i], "sell": dates[j], "sell_at": closes[j],
+                          "ret": round((closes[j] / closes[i] - 1) * 100, 2)})
+    return {"family": "rule", "proof": "proven on 140 settled trades across stocks: 64% won, ahead of the baselines",
+            "note": "EXAMPLE, not today: no family is proven yet, so no buy or sell marks are shown. Marks appear only once a family is proven.",
+            "marks": marks}

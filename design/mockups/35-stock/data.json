@@ -2839,31 +2839,83 @@
     "The sector index before 6 Oct 2025 (the markets page records one year)"
    ],
    "examples": {
-    "note": "EXAMPLE state, not today: how each family's record on this stock looks once its trades settle.",
+    "note": "EXAMPLE, made-up numbers: how this card looks once trades on this stock close. Not real results.",
     "win": [
      {
       "family": "rule",
       "settled": 18,
       "wins": 11,
-      "pnl": 12400
+      "pnl": 12400,
+      "by_h": {
+       "1": {
+        "settled": 8,
+        "wins": 5,
+        "pnl": 5100
+       },
+       "3": {
+        "settled": 6,
+        "wins": 4,
+        "pnl": 4300
+       },
+       "5": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": 3000
+       }
+      }
      },
      {
       "family": "hybrid",
       "settled": 0,
       "wins": 0,
-      "pnl": null
+      "pnl": null,
+      "by_h": {}
      },
      {
       "family": "ai",
       "settled": 9,
       "wins": 4,
-      "pnl": -2100
+      "pnl": -2100,
+      "by_h": {
+       "1": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": -600
+       },
+       "3": {
+        "settled": 3,
+        "wins": 1,
+        "pnl": -1100
+       },
+       "5": {
+        "settled": 2,
+        "wins": 1,
+        "pnl": -400
+       }
+      }
      },
      {
       "family": "baseline",
       "settled": 15,
       "wins": 7,
-      "pnl": 1800
+      "pnl": 1800,
+      "by_h": {
+       "1": {
+        "settled": 6,
+        "wins": 3,
+        "pnl": 500
+       },
+       "3": {
+        "settled": 5,
+        "wins": 2,
+        "pnl": 400
+       },
+       "5": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": 900
+       }
+      }
      }
     ],
     "lose": [
@@ -2871,25 +2923,112 @@
       "family": "rule",
       "settled": 18,
       "wins": 6,
-      "pnl": -9300
+      "pnl": -9300,
+      "by_h": {
+       "1": {
+        "settled": 8,
+        "wins": 3,
+        "pnl": -4200
+       },
+       "3": {
+        "settled": 6,
+        "wins": 2,
+        "pnl": -3100
+       },
+       "5": {
+        "settled": 4,
+        "wins": 1,
+        "pnl": -2000
+       }
+      }
      },
      {
       "family": "hybrid",
       "settled": 0,
       "wins": 0,
-      "pnl": null
+      "pnl": null,
+      "by_h": {}
      },
      {
       "family": "ai",
       "settled": 9,
       "wins": 3,
-      "pnl": -4400
+      "pnl": -4400,
+      "by_h": {
+       "1": {
+        "settled": 4,
+        "wins": 1,
+        "pnl": -1800
+       },
+       "3": {
+        "settled": 3,
+        "wins": 1,
+        "pnl": -1500
+       },
+       "5": {
+        "settled": 2,
+        "wins": 1,
+        "pnl": -1100
+       }
+      }
      },
      {
       "family": "baseline",
       "settled": 15,
       "wins": 8,
-      "pnl": 2600
+      "pnl": 2600,
+      "by_h": {
+       "1": {
+        "settled": 6,
+        "wins": 3,
+        "pnl": 700
+       },
+       "3": {
+        "settled": 5,
+        "wins": 3,
+        "pnl": 900
+       },
+       "5": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": 1000
+       }
+      }
+     }
+    ]
+   },
+   "example_marks": {
+    "family": "rule",
+    "proof": "proven on 140 settled trades across stocks: 64% won, ahead of the baselines",
+    "note": "EXAMPLE, not today: no family is proven yet, so no buy or sell marks are shown. Marks appear only once a family is proven.",
+    "marks": [
+     {
+      "buy": "2025-10-29",
+      "buy_at": 1504.2,
+      "sell": "2025-11-27",
+      "sell_at": 1563.4,
+      "ret": 3.94
+     },
+     {
+      "buy": "2026-01-23",
+      "buy_at": 1386.1,
+      "sell": "2026-02-23",
+      "sell_at": 1428.0,
+      "ret": 3.02
+     },
+     {
+      "buy": "2026-04-27",
+      "buy_at": 1365.8,
+      "sell": "2026-05-25",
+      "sell_at": 1367.0,
+      "ret": 0.09
+     },
+     {
+      "buy": "2026-07-20",
+      "buy_at": 1323.1,
+      "sell": "2026-08-17",
+      "sell_at": 1316.0,
+      "ret": -0.54
      }
     ]
    },
@@ -2939,6 +3078,7 @@
       "lo50": 1143.2517,
       "hi50": 1171.3276,
       "hi80": 1186.2661,
+      "mid": 1158.79,
       "buy": 1,
       "of": 12,
       "family": {
@@ -2974,6 +3114,7 @@
       "lo50": 1139.3384,
       "hi50": 1173.8529,
       "hi80": 1192.0252,
+      "mid": 1158.9,
       "buy": 1,
       "of": 11,
       "family": {
@@ -3005,6 +3146,7 @@
       "lo50": 1128.6251,
       "hi50": 1181.7077,
       "hi80": 1209.848,
+      "mid": 1158.9,
       "buy": 1,
       "of": 11,
       "family": {
@@ -3036,6 +3178,7 @@
       "lo50": 1125.6047,
       "hi50": 1182.8399,
       "hi80": 1212.5626,
+      "mid": 1158.9,
       "buy": 1,
       "of": 11,
       "family": {
@@ -3067,6 +3210,7 @@
       "lo50": 1123.5546,
       "hi50": 1184.8627,
       "hi80": 1217.0557,
+      "mid": 1158.9,
       "buy": 1,
       "of": 11,
       "family": {
@@ -7731,31 +7875,83 @@
     "Profit before tax and profit to owners (not in the copied SEC concepts)"
    ],
    "examples": {
-    "note": "EXAMPLE state, not today: how each family's record on this stock looks once its trades settle.",
+    "note": "EXAMPLE, made-up numbers: how this card looks once trades on this stock close. Not real results.",
     "win": [
      {
       "family": "rule",
       "settled": 18,
       "wins": 11,
-      "pnl": 149
+      "pnl": 149,
+      "by_h": {
+       "1": {
+        "settled": 8,
+        "wins": 5,
+        "pnl": 61
+       },
+       "3": {
+        "settled": 6,
+        "wins": 4,
+        "pnl": 52
+       },
+       "5": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": 36
+       }
+      }
      },
      {
       "family": "hybrid",
       "settled": 0,
       "wins": 0,
-      "pnl": null
+      "pnl": null,
+      "by_h": {}
      },
      {
       "family": "ai",
       "settled": 9,
       "wins": 4,
-      "pnl": -25
+      "pnl": -25,
+      "by_h": {
+       "1": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": -7
+       },
+       "3": {
+        "settled": 3,
+        "wins": 1,
+        "pnl": -13
+       },
+       "5": {
+        "settled": 2,
+        "wins": 1,
+        "pnl": -5
+       }
+      }
      },
      {
       "family": "baseline",
       "settled": 15,
       "wins": 7,
-      "pnl": 22
+      "pnl": 22,
+      "by_h": {
+       "1": {
+        "settled": 6,
+        "wins": 3,
+        "pnl": 6
+       },
+       "3": {
+        "settled": 5,
+        "wins": 2,
+        "pnl": 5
+       },
+       "5": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": 11
+       }
+      }
      }
     ],
     "lose": [
@@ -7763,25 +7959,112 @@
       "family": "rule",
       "settled": 18,
       "wins": 6,
-      "pnl": -112
+      "pnl": -111,
+      "by_h": {
+       "1": {
+        "settled": 8,
+        "wins": 3,
+        "pnl": -50
+       },
+       "3": {
+        "settled": 6,
+        "wins": 2,
+        "pnl": -37
+       },
+       "5": {
+        "settled": 4,
+        "wins": 1,
+        "pnl": -24
+       }
+      }
      },
      {
       "family": "hybrid",
       "settled": 0,
       "wins": 0,
-      "pnl": null
+      "pnl": null,
+      "by_h": {}
      },
      {
       "family": "ai",
       "settled": 9,
       "wins": 3,
-      "pnl": -53
+      "pnl": -53,
+      "by_h": {
+       "1": {
+        "settled": 4,
+        "wins": 1,
+        "pnl": -22
+       },
+       "3": {
+        "settled": 3,
+        "wins": 1,
+        "pnl": -18
+       },
+       "5": {
+        "settled": 2,
+        "wins": 1,
+        "pnl": -13
+       }
+      }
      },
      {
       "family": "baseline",
       "settled": 15,
       "wins": 8,
-      "pnl": 31
+      "pnl": 31,
+      "by_h": {
+       "1": {
+        "settled": 6,
+        "wins": 3,
+        "pnl": 8
+       },
+       "3": {
+        "settled": 5,
+        "wins": 3,
+        "pnl": 11
+       },
+       "5": {
+        "settled": 4,
+        "wins": 2,
+        "pnl": 12
+       }
+      }
+     }
+    ]
+   },
+   "example_marks": {
+    "family": "rule",
+    "proof": "proven on 140 settled trades across stocks: 64% won, ahead of the baselines",
+    "note": "EXAMPLE, not today: no family is proven yet, so no buy or sell marks are shown. Marks appear only once a family is proven.",
+    "marks": [
+     {
+      "buy": "2025-10-27",
+      "buy_at": 191.49,
+      "sell": "2025-11-24",
+      "sell_at": 182.55,
+      "ret": -4.67
+     },
+     {
+      "buy": "2026-01-23",
+      "buy_at": 187.67,
+      "sell": "2026-02-23",
+      "sell_at": 191.55,
+      "ret": 2.07
+     },
+     {
+      "buy": "2026-04-21",
+      "buy_at": 199.88,
+      "sell": "2026-05-19",
+      "sell_at": 220.61,
+      "ret": 10.37
+     },
+     {
+      "buy": "2026-07-17",
+      "buy_at": 202.81,
+      "sell": "2026-08-14",
+      "sell_at": 225.16,
+      "ret": 11.02
      }
     ]
    },
@@ -7829,6 +8112,7 @@
       "lo50": 225.3595,
       "hi50": 233.7025,
       "hi80": 237.6459,
+      "mid": 229.09,
       "buy": 1,
       "of": 12,
       "family": {
@@ -7864,6 +8148,7 @@
       "lo50": 223.9414,
       "hi50": 235.704,
       "hi80": 241.7809,
+      "mid": 229.09,
       "buy": 1,
       "of": 11,
       "family": {
@@ -7895,6 +8180,7 @@
       "lo50": 223.3646,
       "hi50": 236.9761,
       "hi80": 243.8058,
+      "mid": 229.09,
       "buy": 1,
       "of": 12,
       "family": {
@@ -7930,6 +8216,7 @@
       "lo50": 222.6454,
       "hi50": 237.7524,
       "hi80": 245.6103,
+      "mid": 229.09,
       "buy": 1,
       "of": 11,
       "family": {
@@ -7961,6 +8248,7 @@
       "lo50": 222.1377,
       "hi50": 238.5224,
       "hi80": 247.6221,
+      "mid": 229.09,
       "buy": 1,
       "of": 12,
       "family": {

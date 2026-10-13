@@ -17,11 +17,13 @@ function keyNumbers(c, S) {
     el('p', {class: 'muted small', style: 'margin:-4px 0 12px'}, 'Where the stock stands today. Not a forecast.'),
     el('div', {class: 'kn'}, el('span', {class: 'k'}, '52-week range ', lvl(posLvl)),
       el('div', {class: 'mb-pos52 wide zones', role: 'img', 'aria-label': `${pos}% of the way from the 52-week low to the high`}, el('small', {}, fmt(St.lo52)), el('span', {class: 'track'}, el('i', {style: `left:${pos}%`})), el('small', {}, fmt(St.hi52))),
-      el('small', {}, `Today ${fmt(S.quote.close)} is ${pos}% of the way from the year’s low to its high.`)),
-    el('div', {class: 'kn two'}, el('div', {}, el('span', {class: 'k'}, 'RSI 14 ', lvl(rsiLvl)), rsiDial(c, St.rsi), el('small', {}, el('b', {}, St.rsi == null ? '—' : fmt(St.rsi, 0)), ` of 100: ${rsiWords}. Below 30 or above 70 means a fast move.`)),
+      el('small', {}, `Today ${fmt(S.quote.close)} is ${pos}% of the way from the year’s low to its high.`),
+      el('small', {class: 'legend'}, 'Red part: near the year’s low. Green part: near its high. It shows where the price sits, not risk.')),
+    el('div', {class: 'kn two'}, el('div', {}, el('span', {class: 'k'}, 'RSI 14 ', lvl(rsiLvl)), rsiDial(c, St.rsi), el('small', {}, el('b', {}, St.rsi == null ? '—' : fmt(St.rsi, 0)), ` of 100: ${rsiWords}.`), el('small', {class: 'legend'}, 'Green (30 to 70): a normal pace. Red: the price moved fast, down below 30 or up above 70; a fast move often slows or turns. Not a risk score.')),
       el('div', {}, el('span', {class: 'k'}, `Against ${S.chart.bench_name} `, lvl(volLvl)),
         el('div', {class: 'cmp'}, el('span', {}, 'Volatility, 1 year'), vbar(c, R.vol, maxVol, S.ticker, volLvl ? volLvl[0] : ''), vbar(c, R.bench_vol, maxVol, S.chart.bench_name, 'idx')),
-        el('small', {}, R.beta == null ? '' : `Beta ${fmt(R.beta)}: when the index moves 1%, this stock has moved about ${fmt(R.beta, 1)}%.`))),
+        el('small', {}, R.beta == null ? '' : `Beta ${fmt(R.beta)}: when the index moves 1%, this stock has moved about ${fmt(R.beta, 1)}%.`),
+        el('small', {class: 'legend'}, 'Volatility is how much the price swings in a year. Red: it swings more than the market, so bigger ups and downs (more risk). Green: it swings less (calmer).'))),
     el('div', {class: 'facts', style: 'margin-top:12px'},
       fact(c, 'P/E (ours)', V.pe == null ? '—' : fmt(V.pe, 1), V.pe == null ? 'not enough filed quarters' : `price is ${fmt(V.pe, 1)} times the last four quarters’ earnings (${cur(c, V.eps_ttm)} a share)`),
       fact(c, 'Daily swing', St.atr_pct == null ? '—' : `${fmt(St.atr_pct * 100, 1)}%`, 'its usual day’s range (ATR 14)'),
@@ -49,32 +51,23 @@ function resultsCard(c, S) {
   const label = r => RES === 'y' ? `FY to ${quarterOf(r.end)}` : quarterOf(r.end);
   return el('section', {class: 'card', 'aria-label': 'Results'}, head(c, 'Results', india ? 'consolidated, as filed with NSE' : 'as filed with the SEC (a fourth quarter is the year minus nine months)'),
     el('div', {class: 'acts', style: 'margin-bottom:8px'}, seg(c, 'Periods', [['q', 'Quarters'], ['y', 'Years']], RES, k => { RES = k; }),
-      el('span', {class: 'small muted'}, el('i', {class: 'key rev'}), 'Revenue', el('i', {class: 'key prof'}), 'Net profit', el('i', {class: 'key mline'}), 'Net margin')),
+      el('span', {class: 'small muted'}, el('i', {class: 'key rev'}), `Revenue (${LOC === 'en-IN' ? '₹ thousand crore' : '$ billion'})`, el('i', {class: 'key prof'}), 'Net profit', el('span', {class: 'rm key-m'}, '7.4%'), 'Net margin (profit per 100 of revenue)')),
     resultsChart(c, rows, label),
-    el('div', {class: 'scroll'}, el('table', {class: 'md-table stack'}, el('thead', {}, el('tr', {}, el('th', {}, RES === 'y' ? 'Year' : 'Quarter'), el('th', {class: 'num'}, 'Revenue'), el('th', {class: 'num'}, 'Growth y/y'),
+    el('details', {class: 'nums'}, el('summary', {class: 'small'}, 'All the numbers'), el('div', {class: 'scroll'}, el('table', {class: 'md-table stack'}, el('thead', {}, el('tr', {}, el('th', {}, RES === 'y' ? 'Year' : 'Quarter'), el('th', {class: 'num'}, 'Revenue'), el('th', {class: 'num'}, 'Growth y/y'),
       el('th', {class: 'num'}, 'Net profit'), el('th', {class: 'num'}, 'Growth y/y'), el('th', {class: 'num'}, 'Margin'), el('th', {class: 'num'}, 'Before tax'), el('th', {class: 'num'}, 'To owners'))),
       el('tbody', {}, ...rows.slice().reverse().map(r => el('tr', {}, el('td', {}, el('b', {}, label(r))), el('td', {class: 'num', 'data-k': 'Revenue'}, big(r.revenue)), el('td', {class: 'num', 'data-k': 'Revenue growth y/y'}, r.rev_yoy == null ? '—' : c.delta(r.rev_yoy)),
         el('td', {class: 'num', 'data-k': 'Net profit'}, big(r.profit)), el('td', {class: 'num', 'data-k': 'Profit growth y/y'}, r.profit_yoy == null ? '—' : c.delta(r.profit_yoy)), el('td', {class: 'num', 'data-k': 'Net margin'}, r.margin == null ? '—' : `${fmt(r.margin, 1)}%`),
-        el('td', {class: 'num', 'data-k': 'Profit before tax'}, india ? big(r.pbt) : gap(c, 'Profit before tax')), el('td', {class: 'num', 'data-k': 'Profit to owners'}, india ? big(r.owners) : gap(c, 'Profit to owners'))))))),
+        el('td', {class: 'num', 'data-k': 'Profit before tax'}, india ? big(r.pbt) : gap(c, 'Profit before tax')), el('td', {class: 'num', 'data-k': 'Profit to owners'}, india ? big(r.owners) : gap(c, 'Profit to owners')))))))),
     el('p', {class: 'small', style: 'margin:10px 0 0'}, 'Debt and cash flow: ', gap(c, 'Debt and cash flow'), ' · history: ', gap(c, 'A three-year history of results')),
     el('button', {class: 'md-btn outlined small', type: 'button', style: 'margin-top:10px', onclick: () => { TAB = 'results'; c.rerender(); }}, c.icon('bar_chart'), 'See the financials in detail'),
     el('p', {class: 'muted small', style: 'margin:4px 0 0'}, `The records hold ${S.results.quarters.length} quarters and ${S.results.years.length} years. Growth y/y compares with the same period a year earlier; “—” where that period is not recorded.`));
 }
 
-function resultsChart(c, rows, label) {
-  const W = 960, H = 200, n = rows.length, max = Math.max(...rows.map(r => r.revenue || 0)), margins = rows.map(r => r.margin).filter(v => v != null);
-  const mlo = Math.min(0, ...margins), mhi = Math.max(...margins, 1), slot = W / n, bw = slot * 0.3;
-  const s = c.svgEl('svg', {viewBox: `0 0 ${W} ${H + 18}`, class: 'plot bars', role: 'img',
-    'aria-label': rows.map(r => `${label(r)}: revenue ${big(r.revenue)}, net profit ${big(r.profit)}, margin ${r.margin == null ? '—' : fmt(r.margin, 1) + '%'}`).join('; ')});
-  const y = v => H - (v || 0) / (max || 1) * (H - 10), my = v => H - 6 - (v - mlo) / (mhi - mlo || 1) * (H - 30);
-  rows.forEach((r, i) => {
-    const x = i * slot + slot / 2;
-    s.append(c.svgEl('rect', {class: 'rev', x: x - bw - 1, y: y(r.revenue), width: bw, height: H - y(r.revenue)}));
-    if (r.profit != null) s.append(c.svgEl('rect', {class: r.profit < 0 ? 'loss' : 'prof', x: x + 1, y: y(Math.abs(r.profit)), width: bw, height: H - y(Math.abs(r.profit))}));
-    const t = c.svgEl('text', {x, y: H + 14, 'text-anchor': 'middle', class: 'lbl'}); t.textContent = label(r).replace('FY to ', 'FY '); s.append(t);
-  });
-  const pts = rows.map((r, i) => r.margin == null ? null : `${i * slot + slot / 2},${my(r.margin)}`).filter(Boolean);
-  if (pts.length > 1) s.append(c.svgEl('polyline', {class: 'mline', points: pts.join(' '), 'vector-effect': 'non-scaling-stroke'}));
-  rows.forEach((r, i) => { if (r.margin == null) return; const t = c.svgEl('text', {x: i * slot + slot / 2, y: my(r.margin) - 8, 'text-anchor': 'middle', class: 'mval'}); t.textContent = `${fmt(r.margin, 1)}%`; s.append(t); });
-  return s;
+function resultsChart(c, rows, label) {   /* HTML bars so every number stays readable on a phone; values above the bars */
+  const {el} = c, max = Math.max(...rows.map(r => Math.max(r.revenue || 0, Math.abs(r.profit || 0))), 1), h = v => `${(Math.abs(v || 0) / max * 100).toFixed(1)}%`;
+  const short = v => v == null ? '—' : fmt(v / (LOC === 'en-IN' ? 1e10 : 1e9), 1);   /* ₹ thousand crore, or $ billion */
+  return el('div', {class: 'rchart', role: 'img', 'aria-label': rows.map(r => `${label(r)}: revenue ${big(r.revenue)}, net profit ${big(r.profit)}, margin ${r.margin == null ? '—' : fmt(r.margin, 1) + '%'}`).join('; ')},
+    ...rows.map(r => el('div', {class: 'rcol'}, el('div', {class: 'rv'}, el('b', {}, short(r.revenue)), el('small', {}, short(r.profit))),
+      el('div', {class: 'rbars'}, el('span', {class: 'rb rev', style: `height:${h(r.revenue)}`}), el('span', {class: 'rb ' + ((r.profit || 0) < 0 ? 'loss' : 'prof'), style: `height:${h(r.profit)}`})),
+      el('small', {class: 'rl'}, label(r).replace('FY to ', 'FY ').replace(' 20', " '")), el('span', {class: 'rm'}, r.margin == null ? '—' : `${fmt(r.margin, 1)}%`))));
 }

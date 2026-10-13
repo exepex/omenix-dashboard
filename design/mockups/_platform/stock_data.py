@@ -11,6 +11,7 @@ strategies' agreement by family, the futures build-up and ATM IV. Strategies are
 from __future__ import annotations
 
 import csv
+import math
 import gzip
 import json
 import os
@@ -118,6 +119,7 @@ def tools(m: str, M: dict) -> dict:
             f["buy"] += int(v["qualifies"] and v["direction"] == "up")
         prob = next((s["prob_up"] for s in M["model"] if s["horizon_days"] == h), None)
         horizons.append({"h": h, "target_date": r["target_date"], "prob": prob, "peers": peers(M, h, prob), "lo80": r["lo80"], "lo50": r["lo50"], "hi50": r["hi50"], "hi80": r["hi80"],
+                         "mid": round(r["base_close"] * math.exp(r["center"] or 0), 2),
                          "buy": sum(f["buy"] for f in fam.values()), "of": sum(f["of"] for f in fam.values()), "family": fam})
     R = M["reasoning"] or {}
     cost = M["costs"][0] if M["costs"] else None
@@ -212,7 +214,7 @@ def stock_payload() -> dict:
             "quote": q, "chart": {**C, "sector": V.sector(industries.get(t), C["dates"]) if m == "india" else None},
             "quarters": quarters[-6:], "valuation": valuation(q["close"], quarters), "results": results(m, M, quarters),
             "risk": V.risk(C["close"], C["bench"], f.get("beta_1y")), "families": V.families(M["views"], T["horizons"]),
-            "holders": V.holders(M["views"], M["open_trades"]), "gaps": V.gaps(m), "examples": V.example_records(m),
+            "holders": V.holders(M["views"], M["open_trades"]), "gaps": V.gaps(m), "examples": V.example_records(m), "example_marks": V.example_marks(C["dates"], C["close"]),
             "ai_plain": {**plain[m], "note": plain["_note"]},
             "stats": {"hi52": max(b[2] for b in bars[-250:]), "lo52": min(b[3] for b in bars[-250:]), "vol_avg20": round(sum(b[5] for b in bars[-21:-1]) / 20),
                       "beta": f.get("beta_1y"), "rsi": f.get("rsi_14"), "atr_pct": f.get("atr_pct"), "vol_10d": f.get("realized_vol_10d"),

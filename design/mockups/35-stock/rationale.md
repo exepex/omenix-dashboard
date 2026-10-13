@@ -185,3 +185,26 @@ Proposed:
 2. A glossary chip next to each term (IV, OI, build-up, strike), opening a one-line meaning.
 3. A "simple / detailed" switch for the whole page: beginners see the pictures and the plain lines; detail shows the
    tables.
+
+## Third round, the owner's feedback on the first screen (13 Oct 2026)
+- **The forecast's numbers are on the chart:**
+  - the N+5 high, middle and low written on the fan, with a dashed middle line;
+  - every day's forecast on hover or tap;
+  - the forecast in one plain line under the chart (also on a phone, where the fan is small).
+- **Buy and sell marks from a proven family, never before:**
+  - Today the chart says that none is proven, so no marks are shown.
+  - A labelled example shows how they would look: fixed sessions of the real series, each held 20 sessions, with the
+    real price change. 3 of 4 made money. The dates are not picked with hindsight.
+  - On a phone the marks show as ▲ and ▼ only, with the trades listed under the chart.
+- **"AI team: stays out" is now "no buy or sell today"**; the tooltip says it looked at the stock and chose not to trade.
+- **What each colour means** is written under each indicator. On RSI, red means a fast move, not risk; on
+  volatility, red means bigger swings than the market (more risk).
+- **Results bars:** lighter revenue bars with the values on a line above each column, so no number hides behind a bar
+  (also on a phone); short labels (Jun '26). The overview's table sits behind "All the numbers"; the full detail is in
+  the Results tab.
+- **Which family is winning:**
+  - The toggles now say what they mean: "Real today", "Example: a family is winning", "Example: no family is winning".
+  - The card says the examples are made-up numbers, not real results.
+  - Each case can be seen for all exits or per exit (N+1, N+3, N+5), with a green ▲ or red ▼ verdict against the
+    baselines.
+  - The real view lists when each exit's first result arrives.
