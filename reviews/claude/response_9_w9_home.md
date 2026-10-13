@@ -110,4 +110,4 @@ so, and changing it is one entry.
 - `npm run typecheck`: clean.
 - `npm test`: 363 tests, 363 pass.
 - `npm run build`: ok.
-- Full UI harness: see the orchestrator report.
+- Full UI harness: 148 cases, 0 failed (every page, with the generic model-name gate and the exact-field money check).
