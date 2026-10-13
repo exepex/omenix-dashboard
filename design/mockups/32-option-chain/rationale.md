@@ -1,7 +1,8 @@
 # 32-option-chain: rationale
 
-Mockup order item 3 of `design/PLATFORM_DESIGN.md` section 9 (screen 6, option chain). Status: **second version, for
-the owner's review** (13 Oct 2026).
+Mockup order item 3 of `design/PLATFORM_DESIGN.md` section 9 (screen 6, option chain). Status: **paused** (orchestrator, 13 Oct 2026: the owner moved the
+screener ahead of the chain). The second version is kept as it is, and its pictures went to the owner for review;
+work resumes after the screener.
 
 Files:
 - `data.json`, built from real NSE files (notes.md);

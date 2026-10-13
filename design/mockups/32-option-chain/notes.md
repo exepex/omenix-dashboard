@@ -1,6 +1,6 @@
 # 32-option-chain: data contract (what every element needs)
 
-**Status: for the owner's review** (13 Oct 2026). Not signed off.
+**Status: paused** (13 Oct 2026: the screener comes first). Not signed off.
 
 **Data source: real NSE data, not examples.** `source/nifty_fo.csv.gz` holds the NIFTY rows of NSE's daily F&O file
 (UDiFF bhavcopy, `BhavCopy_NSE_FO_0_0_0_<YYYYMMDD>_F_0000.csv.zip`) for every trading day from 1 Jun to 12 Oct 2026
