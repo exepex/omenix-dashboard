@@ -7,6 +7,7 @@ import { MarketsSources } from "../../../../../components/markets/markets-head.t
 import { LoadingState } from "../../../../../components/ui/states.tsx";
 import type { Market } from "../../../../../lib/data/constants.ts";
 import type { MarketsState } from "../../../../../lib/overview/state.ts";
+import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
 import { BreadthSectorsBlock, HeadBlock, HeroBlock, MoversFlowsBlock, VolRatesBlock, WorldEventsBlock } from "./blocks.tsx";
 import "./markets.css";
 
@@ -17,6 +18,7 @@ export function MarketsPage({ market, state }: { market: Market; state: MarketsS
     <div className="markets">
       <PicksHiddenHere />
       <Part label="the markets"><HeadBlock market={market} state={state} /></Part>
+      {market === "india" ? <Part label="how current the data is"><FreshnessBlock /></Part> : null}
       <Part label="the indices"><HeroBlock market={market} state={state} /></Part>
       <Part label="breadth and sectors"><BreadthSectorsBlock market={market} state={state} /></Part>
       <Part label="movers and flows"><MoversFlowsBlock market={market} state={state} /></Part>

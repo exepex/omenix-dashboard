@@ -6,6 +6,7 @@ import { StocksBar } from "../../../../../components/screener/stocks-bar.tsx";
 import { LoadingState } from "../../../../../components/ui/states.tsx";
 import type { Market } from "../../../../../lib/data/constants.ts";
 import type { ScreenerState } from "../../../../../lib/screener/state.ts";
+import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
 import { FnoLookBlock, FnoResultsBlock, HeadBlock, ResultsBlock, StocksLookBlock } from "./blocks.tsx";
 import "./screener.css";
 
@@ -17,6 +18,7 @@ export function ScreenerPage({ market, state }: { market: Market; state: Screene
     <div className="screener">
       <PicksHiddenHere />
       <Part label="the screener"><HeadBlock market={market} state={state} /></Part>
+      {india ? <Part label="how current the data is"><FreshnessBlock /></Part> : null}
       {state.tab === "fno" ? (
         <>
           <Part label="the build-ups"><FnoLookBlock state={state} /></Part>

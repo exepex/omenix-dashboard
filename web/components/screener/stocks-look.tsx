@@ -12,8 +12,9 @@ import { ScreenChip, useScreenerNav } from "./controls.tsx";
 
 const field = (state: ScreenerState, path: string) => sourceName("summary", `universes.${state.uni}.${path}`);
 
-function Count({ def, state, counts, tools, locale }: { def: ScreenDef; state: ScreenerState; counts: UniverseCounts; tools: ScreenerTools; locale: string }) {
+function Count({ def, state, counts, tools, locale }: { def: ScreenDef; state: ScreenerState; counts: UniverseCounts; tools: ScreenerTools | null; locale: string }) {
   const { n, path } = screenCount(def, state.uni, counts, tools);
+  if (n === null) return <span className="muted" data-tip="The stock tool’s records are not published here yet.">—</span>;
   return path ? <Num value={n} src={sourceName("summary", path)} decimals={0} locale={locale} /> : <span data-derived="tools">{n.toLocaleString(locale)}</span>;
 }
 
@@ -33,7 +34,7 @@ function Breadth({ state, c, locale }: { state: ScreenerState; c: UniverseCounts
   );
 }
 
-export function StocksLook({ state, summary, tools, india, locale }: { state: ScreenerState; summary: ScreenerSummary; tools: ScreenerTools; india: boolean; locale: string }) {
+export function StocksLook({ state, summary, tools, india, locale }: { state: ScreenerState; summary: ScreenerSummary; tools: ScreenerTools | null; india: boolean; locale: string }) {
   const to = useScreenerNav(state);
   const counts = summary.universes[state.uni];
   if (!counts) return null;

@@ -44,9 +44,10 @@ export const toolsSymbols = (tools: ScreenerTools, key: "picks" | "results") => 
 
 export const isToolsScreen = (key: string): key is "picks" | "results" => key === "picks" || key === "results";
 
-/** A screen's count in a universe, and its source path in the summary block (null for the tools-based screens). */
-export function screenCount(def: ScreenDef, uni: Universe, counts: UniverseCounts, tools: ScreenerTools): { n: number; path: string | null } {
-  if (!def.field) return { n: toolsSymbols(tools, def.key as "picks" | "results").length, path: null };
+/** A screen's count in a universe, and its source path in the summary block (null for the tools-based screens; their
+ * count is null when the stock tool's block is not published). */
+export function screenCount(def: ScreenDef, uni: Universe, counts: UniverseCounts, tools: ScreenerTools | null): { n: number | null; path: string | null } {
+  if (!def.field) return { n: tools ? toolsSymbols(tools, def.key as "picks" | "results").length : null, path: null };
   const n = def.field.split(".").reduce<unknown>((v, k) => (v as Record<string, unknown>)[k], counts) as number;
   return { n, path: `universes.${uni}.${def.field}` };
 }

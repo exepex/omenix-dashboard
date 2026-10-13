@@ -1,7 +1,8 @@
 "use client";
 // The Screener's results (story W12; 33 notes rows 7 and 8): how many match and in what order, then one page of rows as
 // a table (cards on a phone), then the pager. Columns sort through the route (W11's sort keys). The followed companies
-// are lent to the frame at their close, so their Buy / Sell open the order window as in the signed-off page.
+// are lent to the frame at their close, so their Buy / Sell open the order window as in the signed-off page. Without the
+// stock tool's block (not published yet), no company is followed and its column says so.
 import { useEffect } from "react";
 import type { ScreenerStock, ScreenerStocks, ScreenerTools } from "../../lib/screener/contract.ts";
 import { TOOLS_ORDER_WORDS, isToolsScreen, screenDef, toolsOrder } from "../../lib/screener/screens.ts";
@@ -25,7 +26,7 @@ function lend(rows: ScreenerStock[], asOf: string, followed: Set<string>): Recor
 interface Props {
   state: ScreenerState;
   stocks: ScreenerStocks;
-  tools: ScreenerTools;
+  tools: ScreenerTools | null;
   india: boolean;
   locale: string;
 }
@@ -33,13 +34,13 @@ interface Props {
 export function StocksTable({ state, stocks, tools, india, locale }: Props) {
   const to = useScreenerNav(state);
   const { addItems } = useFrame();
-  const at = new Map(tools.companies.map((c, j) => [c.s, j]));
+  const at = new Map((tools?.companies ?? []).map((c, j) => [c.s, j]));
   const followed = new Set(at.keys());
-  useEffect(() => addItems(lend(stocks.rows, stocks.as_of, new Set(tools.companies.map((c) => c.s)))), [stocks, tools, addItems]);
+  useEffect(() => addItems(lend(stocks.rows, stocks.as_of, new Set((tools?.companies ?? []).map((c) => c.s)))), [stocks, tools, addItems]);
   const key = sortOf(state);
   const def = state.pre ? screenDef(state.pre) : undefined;
-  const tooled = !state.sort && state.pre && isToolsScreen(state.pre) ? state.pre : null;
-  const shown = tooled ? toolsOrder(stocks.rows, tools, tooled) : stocks.rows.map((r, i) => ({ r, i }));
+  const tooled = tools && !state.sort && state.pre && isToolsScreen(state.pre) ? state.pre : null;
+  const shown = tools && tooled ? toolsOrder(stocks.rows, tools, tooled) : stocks.rows.map((r, i) => ({ r, i }));
   const words = tooled ? TOOLS_ORDER_WORDS[tooled] : key.replace("-", "") === "chg" ? `${key.startsWith("-") ? "biggest fall" : "change"} ${PERIOD_WORDS[state.per]}` : SORT_WORDS[key] ?? key;
   const th = (label: string, k: string | null, tip: string, cls = "") => (
     <th className={cls} data-tip={tip} aria-sort={k && key === k ? "descending" : k && key === `-${k}` ? "ascending" : undefined}>
@@ -51,7 +52,7 @@ export function StocksTable({ state, stocks, tools, india, locale }: Props) {
       ) : label}
     </th>
   );
-  const tool = (r: ScreenerStock) => <ToolsView c={tools.companies[at.get(r.s) ?? -1]} j={at.get(r.s) ?? -1} horizon={tools.horizon_days} />;
+  const tool = (r: ScreenerStock) => (tools ? <ToolsView c={tools.companies[at.get(r.s) ?? -1]} j={at.get(r.s) ?? -1} horizon={tools.horizon_days} /> : <span className="muted" data-tip="The stock tool’s records are not published here yet.">—</span>);
   const n = (i: number, f: keyof ScreenerStock, d = 0, unit = "") => <Num value={stocks.rows[i][f] as number | null} src={rowSrc(i, f)} decimals={d} locale={locale} unit={unit} />;
   return (
     <>

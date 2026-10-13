@@ -98,14 +98,14 @@ export interface StocksQuery {
 /** The rows' order: the reader's column, else the screen's own, else value traded. */
 export const sortOf = (s: ScreenerState) => s.sort || (s.pre ? screenDef(s.pre)!.sort : "value");
 
-export function stocksQuery(s: ScreenerState, tools: ScreenerTools): StocksQuery {
+export function stocksQuery(s: ScreenerState, tools: ScreenerTools | null): StocksQuery {
   const f = s.filters;
   const sort = sortOf(s);
   const tooled = s.pre && isToolsScreen(s.pre);
   return clean({
     u: s.uni,
     screen: s.pre && !tooled ? s.pre : undefined,
-    symbols: tooled ? toolsSymbols(tools, s.pre as "picks" | "results") : undefined,
+    symbols: tooled && tools ? toolsSymbols(tools, s.pre as "picks" | "results") : undefined,
     period: f.cmin !== undefined || sort.replace("-", "") === "chg" ? s.per : undefined,
     pmin: f.pmin,
     pmax: f.pmax,
