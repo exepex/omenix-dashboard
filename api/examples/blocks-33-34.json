@@ -15511,6 +15511,111 @@
    "from": "2026-10-13"
   }
  },
+ "getEvents_india_home20": {
+  "summary": "Mock (india): Home's query on the real calendar (the stock tool's 20 companies, from 13 Oct): market-wide events kept",
+  "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
+  "value": {
+   "market": "india",
+   "page_key": "events",
+   "as_of": "2026-10-12",
+   "cutoff": "2026-10-12T12:30:00Z",
+   "built_at": "2026-10-12T12:30:00Z",
+   "schema_version": "2.2.0",
+   "source_commit": "59b606d",
+   "payload_sha256": "564ff2b8aa3c0faf7da4c081719e1b4351483bc1c723bfafde40cfc4b63ef568",
+   "publisher": "stock",
+   "freshness": {
+    "state": "fresh",
+    "rule": "stock_age",
+    "built_at": "2026-10-12T12:30:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "payload": {
+    "events": [
+     {
+      "date": "2026-10-15",
+      "title": "HDFC Life results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "HDFCLIFE"
+     },
+     {
+      "date": "2026-10-16",
+      "title": "Reliance Industries results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "RELIANCE"
+     },
+     {
+      "date": "2026-10-17",
+      "title": "HDFC Bank results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "HDFCBANK"
+     },
+     {
+      "date": "2026-10-20",
+      "title": "NSE closed",
+      "kind": "holiday",
+      "major": false,
+      "inst": null
+     },
+     {
+      "date": "2026-10-27",
+      "title": "NSE monthly F&O expiry (last Tuesday)",
+      "kind": "fno_expiry",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-29",
+      "title": "FOMC rate decision (previous US evening)",
+      "kind": "fomc",
+      "major": true,
+      "inst": null
+     }
+    ]
+   }
+  },
+  "x-query": {
+   "kinds": [
+    "rbi_policy",
+    "earnings",
+    "holiday",
+    "fno_expiry",
+    "fomc",
+    "cpi",
+    "jobs_report"
+   ],
+   "limit": 6,
+   "market_first": true,
+   "from": "2026-10-13",
+   "tickers": [
+    "ADANIPORTS",
+    "DRREDDY",
+    "HDFCBANK",
+    "HDFCLIFE",
+    "HINDALCO",
+    "HINDUNILVR",
+    "ICICIBANK",
+    "INDIGO",
+    "INFY",
+    "ITC",
+    "LT",
+    "M&M",
+    "MARUTI",
+    "ONGC",
+    "RELIANCE",
+    "SBILIFE",
+    "SUNPHARMA",
+    "TATASTEEL",
+    "TCS",
+    "ULTRACEMCO"
+   ]
+  }
+ },
  "getEvents_us_calendar": {
   "summary": "Mock (us): the full calendar of 12 Oct (every kind; both screens query it)",
   "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
@@ -15841,6 +15946,111 @@
    ],
    "limit": 12,
    "from": "2026-10-13"
+  }
+ },
+ "getEvents_us_home20": {
+  "summary": "Mock (us): Home's query on the real calendar (the stock tool's 20 companies, from 13 Oct): market-wide events kept",
+  "description": "Taken from design/mockups/34-markets/data.json (signed off as of 59b606d; real NSE files and stock-tool records of 12 Oct 2026)",
+  "value": {
+   "market": "us",
+   "page_key": "events",
+   "as_of": "2026-10-12",
+   "cutoff": "2026-10-12T12:30:00Z",
+   "built_at": "2026-10-12T12:30:00Z",
+   "schema_version": "2.2.0",
+   "source_commit": "59b606d",
+   "payload_sha256": "1b899ddec6a09ce77a7d33f331fa8a3b659579ed956b3661255e8e76642ae371",
+   "publisher": "stock",
+   "freshness": {
+    "state": "fresh",
+    "rule": "stock_age",
+    "built_at": "2026-10-12T12:30:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "payload": {
+    "events": [
+     {
+      "date": "2026-10-13",
+      "title": "JPMorgan results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "JPM"
+     },
+     {
+      "date": "2026-10-14",
+      "title": "US CPI (September)",
+      "kind": "cpi",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-10-14",
+      "title": "Bank of America results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "BAC"
+     },
+     {
+      "date": "2026-10-14",
+      "title": "Progressive results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "PGR"
+     },
+     {
+      "date": "2026-10-28",
+      "title": "FOMC rate decision",
+      "kind": "fomc",
+      "major": true,
+      "inst": null
+     },
+     {
+      "date": "2026-11-06",
+      "title": "US jobs report (usually first Friday; check for shifts)",
+      "kind": "jobs_report",
+      "major": true,
+      "inst": null
+     }
+    ]
+   }
+  },
+  "x-query": {
+   "kinds": [
+    "rbi_policy",
+    "earnings",
+    "holiday",
+    "fno_expiry",
+    "fomc",
+    "cpi",
+    "jobs_report"
+   ],
+   "limit": 6,
+   "market_first": true,
+   "from": "2026-10-13",
+   "tickers": [
+    "AAPL",
+    "ALL",
+    "BAC",
+    "CAT",
+    "COST",
+    "CVX",
+    "DAL",
+    "DE",
+    "GM",
+    "GOOGL",
+    "JPM",
+    "LLY",
+    "META",
+    "MRK",
+    "NVDA",
+    "PGR",
+    "TSLA",
+    "UAL",
+    "WMT",
+    "XOM"
+   ]
   }
  }
 }

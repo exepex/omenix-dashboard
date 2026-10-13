@@ -163,7 +163,8 @@ def world(x: Screens, market):
 
 # One calendar, two screens (judge 27, finding 1): each screen's list is a documented query on the same calendar.
 ECONOMY = ["rbi_policy", "fomc", "cpi", "jobs_report", "budget"]
-HOME_VIEW = {"kinds": ["rbi_policy", "earnings", "holiday", "fno_expiry", "fomc", "cpi", "jobs_report"], "limit": 6}  # 31 row 6
+# Home (31 row 6, judge 32): market-wide events first, then each tracked company's next results, up to 6
+HOME_VIEW = {"kinds": ["rbi_policy", "earnings", "holiday", "fno_expiry", "fomc", "cpi", "jobs_report"], "limit": 6, "market_first": True}
 MARKETS_VIEW = {"kinds": ["earnings", "ex_dividend", "fno_expiry", "weekly_expiry", "filing", *ECONOMY], "limit": 12}  # 34 row 12
 
 
@@ -186,20 +187,35 @@ def calendar(x: Screens, home: dict, market) -> list:
 
 
 def view(events: list, query: dict) -> list:
-    """GET /events?kinds=…&from=…&limit=…: the calendar's rows of those kinds from that date, nearest first."""
+    """GET /events?kinds=…&from=…&tickers=…&limit=…[&order=market_first]: the calendar's rows of those kinds from that
+    date, nearest first. market_first: the market-wide rows first (nearest), then each company's next row (one per
+    company, nearest first, only `tickers` when given) up to the limit, shown by date."""
     rows = [e for e in events if e["date"] >= query["from"] and (query.get("kinds") is None or e["kind"] in query["kinds"])]
-    return rows[: query["limit"]] if query.get("limit") else rows
+    if not query.get("market_first"):
+        return rows[: query["limit"]] if query.get("limit") else rows
+    market = [e for e in rows if e["inst"] is None][: query["limit"]]
+    seen, companies = set(), []
+    for e in rows:
+        if e["inst"] is not None and e["inst"] not in seen and (query.get("tickers") is None or e["inst"] in query["tickers"]):
+            seen.add(e["inst"])
+            companies.append(e)
+    return sorted(market + companies[: query["limit"] - len(market)], key=lambda e: (e["date"], e["inst"] is not None, e["title"]))
 
 
 def events(x: Screens, market, home: dict):
     """The full calendar and the Markets overview's view (from its session, 13 Oct)."""
     full = calendar(x, home, market)
     query = {**MARKETS_VIEW, "from": x.K["markets"][market]["regime"]["session_date"]}
+    home20 = {**HOME_VIEW, "from": query["from"], "tickers": sorted(x.C["markets"][market]["signals"])}
     return {"_calendar": ("the full calendar of 12 Oct (every kind; both screens query it)", {"events": full}, {"from": full[0]["date"]}),
-            "_markets": ("the Markets overview's view: kinds=results, ex-dividend, expiries, filing, economy; limit=12", {"events": view(full, query)}, query)}
+            "_markets": ("the Markets overview's view: kinds=results, ex-dividend, expiries, filing, economy; limit=12", {"events": view(full, query)}, query),
+            "_home20": ("Home's query on the real calendar (the stock tool's 20 companies, from 13 Oct): market-wide events kept", {"events": view(full, home20)}, home20)}
 
 
-def home_events(x: Screens, market, home: dict):
-    """Home's view of the same calendar, from Home's session (7 Oct)."""
-    query = {**HOME_VIEW, "from": home["markets"][market]["session"]["date"]}
+def home_events(x: Screens, market, home: dict, shell: dict):
+    """Home's view of the same calendar, from Home's session (7 Oct), over the companies Home's world tracks (the active
+    stocks of 30-shell): exactly the signed-off "Coming up" of 31 (check_contract proves it)."""
+    items = shell["markets"][market]["items"]
+    tracked = sorted(i for i, it in items.items() if it["kind"] == "stock" and it.get("state") == "active")
+    query = {**HOME_VIEW, "from": home["markets"][market]["session"]["date"], "tickers": tracked}
     return {"": ("Home's view: kinds of 31 row 6; limit=6", {"events": view(calendar(x, home, market), query)}, query)}
