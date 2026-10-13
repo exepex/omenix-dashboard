@@ -105,6 +105,24 @@ check "check_tls.sh writes a complete evidence file" \
 check "check_tls.sh evidence holds no IP address" \
   "[ -n '$tls_file' ] && ! grep -Eq '[0-9]{1,3}(\\.[0-9]{1,3}){3}' '$tls_file' && grep -q 'host \"<IP address>\"' '$tls_file'"
 
+# Issue #3: large_objects.sh tells a database the server refuses to plain roles (CLOSED: exception 2 closed in
+# practice) from one it cannot count for another reason (FAIL). Fake psql: azure_sys refuses, azure_maintenance times out.
+mkdir "$work/lo_bin"
+cat > "$work/lo_bin/psql" <<'EOF'
+#!/usr/bin/env bash
+case " $* " in
+  *" -d omenix "*"pg_database"*) printf 'azure_maintenance:t\nazure_sys:t\nomenix:t\n' ;;
+  *" -d omenix "*) echo "0 0 none" ;;
+  *" -d azure_sys "*) echo 'psql: error: connection to server at "omenix-pg.postgres.database.azure.com" (198.51.100.20), port 5432 failed: FATAL:  no pg_hba.conf entry for host "203.0.113.45", user "db_monitor", database "azure_sys", SSL encryption' >&2; exit 2 ;;
+  *" -d azure_maintenance "*) echo 'psql: error: connection to server failed: timeout expired' >&2; exit 2 ;;
+esac
+EOF
+chmod +x "$work/lo_bin/psql"
+PATH="$work/lo_bin:$PATH" "$here/large_objects.sh" > "$work/lo.txt" 2>&1; lo_rc=$?
+check "a database refused to plain roles is CLOSED, not a failure" "grep -q '^CLOSED  database azure_sys: the server refuses this role' '$work/lo.txt'"
+check "a database that cannot be counted for another reason still FAILs" "grep -q '^FAIL  database azure_maintenance' '$work/lo.txt' && [ $lo_rc = 1 ]"
+check "the refusal's IP addresses are not printed" "! grep -Eq '203\\.0\\.113|198\\.51\\.100' '$work/lo.txt'"
+
 # setup_monitor.sh (issue #2) must never print or pass on the monitor's password or its verifier except to gh's stdin.
 check "setup_monitor.sh never prints the password, its verifier or the Slack token" \
   "! grep -nE '(echo|printf).*\\\$(\\{)?(password|verifier|slack_token)' '$owner/setup_monitor.sh' | grep -vE '\\| (python3 -I .*scram_verifier\\.py|gh secret set )'"

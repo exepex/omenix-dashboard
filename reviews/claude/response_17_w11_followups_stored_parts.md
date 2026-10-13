@@ -1,4 +1,4 @@
-# Response 16: W11 follow-ups found by P6 (stored parts, stored tables, the NSE session calendar)
+# Response 17: W11 follow-ups found by P6 (stored parts, stored tables, the NSE session calendar)
 
 The orchestrator relayed three findings from P6 (the exepex/trading builder) on W11's screener contract. Items 1 and 2
 are done as one additive push (contract 2.4.0; every served schema and example unchanged). Item 3 is not done: its
