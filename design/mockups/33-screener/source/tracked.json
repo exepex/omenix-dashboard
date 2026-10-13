@@ -1,0 +1,1938 @@
+{
+ "day": "2026-10-12",
+ "horizon_days": 5,
+ "markets": {
+  "india": {
+   "ADANIPORTS": {
+    "beta_1y": 1.36,
+    "days_to_results": 15,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Adani Ports",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 50.1,
+    "sector": "Transport",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "DRREDDY": {
+    "beta_1y": 0.47,
+    "days_to_results": 10,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Dr Reddy's",
+    "next_results": "2026-10-23",
+    "prob_up": 0.4659,
+    "rsi14": 58.7,
+    "sector": "Pharma",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "HDFCBANK": {
+    "beta_1y": 1.23,
+    "days_to_results": 4,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "HDFC Bank",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 45.1,
+    "sector": "Banks",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "HDFCLIFE": {
+    "beta_1y": 0.96,
+    "days_to_results": 2,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "HDFC Life",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 59.0,
+    "sector": "Insurance",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "HINDALCO": {
+    "beta_1y": 0.81,
+    "days_to_results": 24,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Hindalco",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 27.2,
+    "sector": "Metals",
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "HINDUNILVR": {
+    "beta_1y": 0.79,
+    "days_to_results": 16,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Hindustan Unilever",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 34.3,
+    "sector": "Consumer goods",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "ICICIBANK": {
+    "beta_1y": 0.9,
+    "days_to_results": 4,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "ICICI Bank",
+    "next_results": null,
+    "prob_up": 0.4658,
+    "rsi14": 45.0,
+    "sector": "Banks",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "INDIGO": {
+    "beta_1y": 1.82,
+    "days_to_results": 21,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "InterGlobe Aviation",
+    "next_results": "2026-11-03",
+    "prob_up": 0.4659,
+    "rsi14": 40.4,
+    "sector": "Transport",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "INFY": {
+    "beta_1y": 0.68,
+    "days_to_results": 10,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Infosys",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 44.5,
+    "sector": "IT",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "ITC": {
+    "beta_1y": 0.74,
+    "days_to_results": 16,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "ITC",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 44.1,
+    "sector": "Consumer goods",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "LT": {
+    "beta_1y": 1.46,
+    "days_to_results": 15,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Larsen & Toubro",
+    "next_results": null,
+    "prob_up": 0.466,
+    "rsi14": 35.1,
+    "sector": "Construction",
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "M&M": {
+    "beta_1y": 1.4,
+    "days_to_results": 23,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Mahindra & Mahindra",
+    "next_results": null,
+    "prob_up": 0.4669,
+    "rsi14": 28.5,
+    "sector": "Autos",
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "MARUTI": {
+    "beta_1y": 1.11,
+    "days_to_results": 16,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Maruti Suzuki",
+    "next_results": "2026-10-29",
+    "prob_up": 0.4659,
+    "rsi14": 30.2,
+    "sector": "Autos",
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "ONGC": {
+    "beta_1y": 0.04,
+    "days_to_results": 24,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "ONGC",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 32.5,
+    "sector": "Energy",
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "RELIANCE": {
+    "beta_1y": 0.94,
+    "days_to_results": 3,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Reliance Industries",
+    "next_results": null,
+    "prob_up": 0.4672,
+    "rsi14": 33.5,
+    "sector": "Energy",
+    "strategies": {
+     "buy": 1,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "SBILIFE": {
+    "beta_1y": 0.86,
+    "days_to_results": 10,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "SBI Life Insurance",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 41.1,
+    "sector": "Insurance",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "SUNPHARMA": {
+    "beta_1y": 0.46,
+    "days_to_results": 23,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Sun Pharma",
+    "next_results": "2026-11-05",
+    "prob_up": 0.4659,
+    "rsi14": 33.7,
+    "sector": "Pharma",
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "TATASTEEL": {
+    "beta_1y": 1.07,
+    "days_to_results": 29,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Tata Steel",
+    "next_results": "2026-11-11",
+    "prob_up": 0.4659,
+    "rsi14": 33.7,
+    "sector": "Metals",
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "TCS": {
+    "beta_1y": 0.77,
+    "days_to_results": null,
+    "ex_dividend": "2026-10-14",
+    "model_as_of": "2026-10-12",
+    "name": "Tata Consultancy Services",
+    "next_results": "2027-01-11",
+    "prob_up": 0.4649,
+    "rsi14": 46.7,
+    "sector": "IT",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "ULTRACEMCO": {
+    "beta_1y": 1.29,
+    "days_to_results": 6,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "UltraTech Cement",
+    "next_results": null,
+    "prob_up": 0.4659,
+    "rsi14": 38.4,
+    "sector": "Construction",
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   }
+  },
+  "us": {
+   "AAPL": {
+    "beta_1y": 0.67,
+    "days_to_results": 20,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Apple",
+    "next_results": null,
+    "prices": {
+     "close": 340.97,
+     "close_1m": 332.27,
+     "close_1w": 332.89,
+     "close_1y": 247.66,
+     "close_3m": 314.86,
+     "high_52w": 345.34,
+     "low_52w": 243.42,
+     "prev": 336.64,
+     "rsi14": 60.2,
+     "spark_1m": [
+      333.08,
+      331.34,
+      332.41,
+      337.0,
+      336.13,
+      338.98,
+      339.75,
+      337.02,
+      335.92,
+      341.07,
+      338.4,
+      329.4,
+      333.02,
+      330.32,
+      333.69,
+      332.89,
+      333.63,
+      336.67,
+      340.42,
+      336.64,
+      340.97
+     ],
+     "volume": 25796997,
+     "volume_avg20": 37720858
+    },
+    "prob_up": 0.5421,
+    "rsi14": 60.2,
+    "sector": "Tech",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -6.21,
+    "short_days_to_cover": 3.03,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "ALL": {
+    "beta_1y": -0.38,
+    "days_to_results": 22,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Allstate",
+    "next_results": "2026-11-04",
+    "prices": {
+     "close": 232.6,
+     "close_1m": 253.71,
+     "close_1w": 224.71,
+     "close_1y": 205.64,
+     "close_3m": 250.35,
+     "high_52w": 277.22,
+     "low_52w": 188.08,
+     "prev": 229.43,
+     "rsi14": 44.9,
+     "spark_1m": [
+      258.48,
+      257.21,
+      254.85,
+      252.21,
+      249.83,
+      242.86,
+      229.5,
+      225.66,
+      227.17,
+      227.6,
+      227.55,
+      225.42,
+      221.86,
+      224.41,
+      223.74,
+      224.71,
+      224.27,
+      223.95,
+      230.63,
+      229.43,
+      232.6
+     ],
+     "volume": 1393944,
+     "volume_avg20": 2454652
+    },
+    "prob_up": 0.5478,
+    "rsi14": 44.9,
+    "sector": "Insurance",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 16.38,
+    "short_days_to_cover": 2.35,
+    "strategies": {
+     "buy": 1,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "BAC": {
+    "beta_1y": 0.75,
+    "days_to_results": 1,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Bank of America",
+    "next_results": "2026-10-14",
+    "prices": {
+     "close": 54.58,
+     "close_1m": 62.69,
+     "close_1w": 54.0,
+     "close_1y": 48.86,
+     "close_3m": 60.62,
+     "high_52w": 65.23,
+     "low_52w": 46.12,
+     "prev": 54.32,
+     "rsi14": 34.3,
+     "spark_1m": [
+      59.47,
+      59.52,
+      57.9,
+      58.18,
+      57.73,
+      57.96,
+      56.2,
+      56.0,
+      56.03,
+      56.7,
+      55.47,
+      54.96,
+      54.43,
+      53.73,
+      53.75,
+      54.0,
+      54.09,
+      53.52,
+      53.61,
+      54.32,
+      54.58
+     ],
+     "volume": 23804076,
+     "volume_avg20": 40469306
+    },
+    "prob_up": 0.5495,
+    "rsi14": 34.3,
+    "sector": "Banks",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 2.88,
+    "short_days_to_cover": 2.25,
+    "strategies": {
+     "buy": 9,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 3,
+       "of": 3
+      },
+      "rule": {
+       "buy": 5,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "CAT": {
+    "beta_1y": 1.73,
+    "days_to_results": 16,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Caterpillar",
+    "next_results": null,
+    "prices": {
+     "close": 799.37,
+     "close_1m": 818.57,
+     "close_1w": 848.14,
+     "close_1y": 504.76,
+     "close_3m": 933.34,
+     "high_52w": 1073.46,
+     "low_52w": 499.01,
+     "prev": 800.47,
+     "rsi14": 44.3,
+     "spark_1m": [
+      784.0,
+      783.54,
+      782.72,
+      798.57,
+      808.99,
+      816.5,
+      808.01,
+      812.02,
+      805.25,
+      821.58,
+      819.95,
+      826.64,
+      810.79,
+      826.35,
+      845.42,
+      848.14,
+      863.44,
+      813.83,
+      796.18,
+      800.47,
+      799.37
+     ],
+     "volume": 1453228,
+     "volume_avg20": 2415447
+    },
+    "prob_up": 0.545,
+    "rsi14": 44.3,
+    "sector": "Industrials",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -4.43,
+    "short_days_to_cover": 3.23,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "COST": {
+    "beta_1y": -0.1,
+    "days_to_results": 58,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Costco",
+    "next_results": "2026-12-10",
+    "prices": {
+     "close": 959.44,
+     "close_1m": 904.77,
+     "close_1w": 923.52,
+     "close_1y": 935.56,
+     "close_3m": 921.75,
+     "high_52w": 1096.5,
+     "low_52w": 844.06,
+     "prev": 946.92,
+     "rsi14": 67.1,
+     "spark_1m": [
+      918.91,
+      901.35,
+      893.74,
+      893.93,
+      895.31,
+      898.48,
+      899.41,
+      904.7,
+      896.48,
+      922.77,
+      922.92,
+      924.59,
+      910.34,
+      914.94,
+      920.65,
+      923.52,
+      935.68,
+      942.25,
+      947.92,
+      946.92,
+      959.44
+     ],
+     "volume": 1465138,
+     "volume_avg20": 2358820
+    },
+    "prob_up": 0.5452,
+    "rsi14": 67.1,
+    "sector": "Retail",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -0.47,
+    "short_days_to_cover": 2.74,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "CVX": {
+    "beta_1y": -0.48,
+    "days_to_results": 17,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Chevron",
+    "next_results": null,
+    "prices": {
+     "close": 215.0,
+     "close_1m": 214.06,
+     "close_1w": 206.47,
+     "close_1y": 151.94,
+     "close_3m": 181.76,
+     "high_52w": 217.78,
+     "low_52w": 146.49,
+     "prev": 211.98,
+     "rsi14": 63.7,
+     "spark_1m": [
+      212.17,
+      217.77,
+      211.54,
+      211.57,
+      209.51,
+      203.67,
+      202.41,
+      205.51,
+      205.65,
+      204.45,
+      206.37,
+      204.38,
+      204.21,
+      207.1,
+      206.69,
+      206.47,
+      207.58,
+      205.15,
+      211.55,
+      211.98,
+      215.0
+     ],
+     "volume": 7994548,
+     "volume_avg20": 9501406
+    },
+    "prob_up": 0.5437,
+    "rsi14": 63.7,
+    "sector": "Energy",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 13.93,
+    "short_days_to_cover": 2.05,
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "DAL": {
+    "beta_1y": 1.68,
+    "days_to_results": null,
+    "ex_dividend": "2026-10-15",
+    "model_as_of": "2026-10-12",
+    "name": "Delta Air Lines",
+    "next_results": "2027-01-13",
+    "prices": {
+     "close": 80.11,
+     "close_1m": 79.91,
+     "close_1w": 83.08,
+     "close_1y": 58.72,
+     "close_3m": 85.51,
+     "high_52w": 95.68,
+     "low_52w": 55.03,
+     "prev": 82.17,
+     "rsi14": 41.7,
+     "spark_1m": [
+      79.8,
+      78.89,
+      77.87,
+      79.43,
+      79.62,
+      82.5,
+      83.92,
+      81.75,
+      82.76,
+      84.94,
+      84.03,
+      84.87,
+      83.46,
+      84.13,
+      84.09,
+      83.08,
+      83.66,
+      82.97,
+      82.14,
+      82.17,
+      80.11
+     ],
+     "volume": 6156624,
+     "volume_avg20": 8334729
+    },
+    "prob_up": 0.5469,
+    "rsi14": 41.7,
+    "sector": "Airlines",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -2.49,
+    "short_days_to_cover": 2.94,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "DE": {
+    "beta_1y": 0.48,
+    "days_to_results": 43,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Deere",
+    "next_results": "2026-11-25",
+    "prices": {
+     "close": 632.61,
+     "close_1m": 675.74,
+     "close_1w": 682.2,
+     "close_1y": 439.11,
+     "close_3m": 584.4,
+     "high_52w": 721.22,
+     "low_52w": 433.0,
+     "prev": 620.93,
+     "rsi14": 38.4,
+     "spark_1m": [
+      681.46,
+      684.04,
+      669.47,
+      685.63,
+      683.99,
+      684.73,
+      703.12,
+      709.48,
+      694.94,
+      690.46,
+      689.59,
+      680.5,
+      671.55,
+      667.26,
+      687.0,
+      682.2,
+      682.79,
+      656.87,
+      652.58,
+      620.93,
+      632.61
+     ],
+     "volume": 1036445,
+     "volume_avg20": 1292786
+    },
+    "prob_up": 0.5473,
+    "rsi14": 38.4,
+    "sector": "Industrials",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 2.32,
+    "short_days_to_cover": 4.31,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "GM": {
+    "beta_1y": 1.13,
+    "days_to_results": 7,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "General Motors",
+    "next_results": "2026-10-20",
+    "prices": {
+     "close": 82.37,
+     "close_1m": 85.62,
+     "close_1w": 80.23,
+     "close_1y": 55.62,
+     "close_3m": 76.87,
+     "high_52w": 91.85,
+     "low_52w": 54.33,
+     "prev": 82.73,
+     "rsi14": 49.6,
+     "spark_1m": [
+      87.16,
+      85.37,
+      84.29,
+      86.62,
+      82.2,
+      83.95,
+      83.45,
+      83.77,
+      80.57,
+      82.63,
+      80.64,
+      80.47,
+      77.0,
+      79.31,
+      78.27,
+      80.23,
+      82.01,
+      80.99,
+      82.25,
+      82.73,
+      82.37
+     ],
+     "volume": 5579241,
+     "volume_avg20": 7697595
+    },
+    "prob_up": 0.5445,
+    "rsi14": 49.6,
+    "sector": "Autos",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -3.52,
+    "short_days_to_cover": 2.32,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "GOOGL": {
+    "beta_1y": 1.34,
+    "days_to_results": 15,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Alphabet",
+    "next_results": null,
+    "prices": {
+     "close": 352.72,
+     "close_1m": 338.5,
+     "close_1w": 346.47,
+     "close_1y": 244.15,
+     "close_3m": 359.51,
+     "high_52w": 408.61,
+     "low_52w": 240.51,
+     "prev": 351.66,
+     "rsi14": 57.2,
+     "spark_1m": [
+      349.39,
+      344.98,
+      342.87,
+      347.33,
+      349.54,
+      354.97,
+      351.16,
+      337.83,
+      342.36,
+      343.92,
+      342.75,
+      340.92,
+      344.08,
+      338.24,
+      343.5,
+      346.47,
+      347.68,
+      350.5,
+      348.29,
+      351.66,
+      352.72
+     ],
+     "volume": 18116718,
+     "volume_avg20": 26267150
+    },
+    "prob_up": 0.5447,
+    "rsi14": 57.2,
+    "sector": "Internet",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -8.01,
+    "short_days_to_cover": 2.93,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "JPM": {
+    "beta_1y": 0.79,
+    "days_to_results": 0,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "JPMorgan",
+    "next_results": null,
+    "prices": {
+     "close": 334.3,
+     "close_1m": 356.23,
+     "close_1w": 332.38,
+     "close_1y": 307.97,
+     "close_3m": 342.89,
+     "high_52w": 366.5,
+     "low_52w": 279.1,
+     "prev": 332.99,
+     "rsi14": 40.6,
+     "spark_1m": [
+      350.13,
+      352.49,
+      348.92,
+      349.31,
+      349.67,
+      352.04,
+      340.0,
+      337.53,
+      338.56,
+      343.06,
+      336.59,
+      334.98,
+      330.83,
+      333.18,
+      332.38,
+      332.38,
+      331.28,
+      329.58,
+      331.42,
+      332.99,
+      334.3
+     ],
+     "volume": 5636960,
+     "volume_avg20": 8651993
+    },
+    "prob_up": 0.5484,
+    "rsi14": 40.6,
+    "sector": "Banks",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 0.54,
+    "short_days_to_cover": 2.57,
+    "strategies": {
+     "buy": 0,
+     "by_family": {},
+     "of": 0
+    }
+   },
+   "LLY": {
+    "beta_1y": 0.29,
+    "days_to_results": 16,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Eli Lilly",
+    "next_results": "2026-10-29",
+    "prices": {
+     "close": 1182.62,
+     "close_1m": 1115.7,
+     "close_1w": 1143.12,
+     "close_1y": 819.4,
+     "close_3m": 1152.54,
+     "high_52w": 1292.65,
+     "low_52w": 783.85,
+     "prev": 1179.27,
+     "rsi14": 55.1,
+     "spark_1m": [
+      1138.28,
+      1136.11,
+      1137.8199,
+      1152.4399,
+      1152.9301,
+      1164.89,
+      1170.14,
+      1150.99,
+      1181.89,
+      1183.46,
+      1184.78,
+      1184.63,
+      1157.08,
+      1149.85,
+      1142.85,
+      1143.12,
+      1157.49,
+      1188.72,
+      1169.6,
+      1179.27,
+      1182.62
+     ],
+     "volume": 1245032,
+     "volume_avg20": 2274484
+    },
+    "prob_up": 0.5438,
+    "rsi14": 55.1,
+    "sector": "Pharma",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -6.44,
+    "short_days_to_cover": 2.93,
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "META": {
+    "beta_1y": 1.46,
+    "days_to_results": 15,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Meta Platforms",
+    "next_results": null,
+    "prices": {
+     "close": 742.96,
+     "close_1m": 648.03,
+     "close_1w": 741.9,
+     "close_1y": 715.7,
+     "close_3m": 661.04,
+     "high_52w": 779.82,
+     "low_52w": 520.26,
+     "prev": 718.67,
+     "rsi14": 62.3,
+     "spark_1m": [
+      665.6,
+      670.24,
+      673.31,
+      682.31,
+      665.75,
+      741.25,
+      736.6,
+      744.1,
+      777.59,
+      751.66,
+      715.62,
+      738.79,
+      725.18,
+      725.93,
+      728.08,
+      741.9,
+      738.88,
+      721.31,
+      720.89,
+      718.67,
+      742.96
+     ],
+     "volume": 24749285,
+     "volume_avg20": 21673522
+    },
+    "prob_up": 0.5442,
+    "rsi14": 62.3,
+    "sector": "Internet",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 8.33,
+    "short_days_to_cover": 1.25,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "MRK": {
+    "beta_1y": 0.18,
+    "days_to_results": 16,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Merck",
+    "next_results": "2026-10-29",
+    "prices": {
+     "close": 145.45,
+     "close_1m": 143.93,
+     "close_1w": 139.54,
+     "close_1y": 85.7,
+     "close_3m": 120.78,
+     "high_52w": 156.92,
+     "low_52w": 82.01,
+     "prev": 145.6,
+     "rsi14": 51.3,
+     "spark_1m": [
+      144.85,
+      143.79,
+      144.91,
+      147.15,
+      146.87,
+      149.5,
+      150.91,
+      148.08,
+      147.98,
+      148.78,
+      148.69,
+      149.28,
+      145.31,
+      143.81,
+      144.3,
+      139.54,
+      141.94,
+      142.79,
+      142.38,
+      145.6,
+      145.45
+     ],
+     "volume": 6624466,
+     "volume_avg20": 9821412
+    },
+    "prob_up": 0.5465,
+    "rsi14": 51.3,
+    "sector": "Pharma",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -17.89,
+    "short_days_to_cover": 2.53,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "NVDA": {
+    "beta_1y": 1.88,
+    "days_to_results": 35,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Nvidia",
+    "next_results": null,
+    "prices": {
+     "close": 226.32,
+     "close_1m": 218.29,
+     "close_1w": 238.9,
+     "close_1y": 188.32,
+     "close_3m": 211.8,
+     "high_52w": 243.37,
+     "low_52w": 164.27,
+     "prev": 229.28,
+     "rsi14": 49.4,
+     "spark_1m": [
+      210.96,
+      212.17,
+      213.9,
+      219.34,
+      222.27,
+      227.38,
+      228.87,
+      225.51,
+      224.58,
+      225.07,
+      228.86,
+      227.21,
+      228.38,
+      230.86,
+      233.95,
+      238.9,
+      239.24,
+      237.47,
+      230.48,
+      229.28,
+      226.32
+     ],
+     "volume": 69908781,
+     "volume_avg20": 108699307
+    },
+    "prob_up": 0.5465,
+    "rsi14": 49.4,
+    "sector": "Tech",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 5.83,
+    "short_days_to_cover": 2.82,
+    "strategies": {
+     "buy": 1,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "PGR": {
+    "beta_1y": -0.5,
+    "days_to_results": 1,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Progressive",
+    "next_results": null,
+    "prices": {
+     "close": 220.28,
+     "close_1m": 217.62,
+     "close_1w": 212.62,
+     "close_1y": 236.28,
+     "close_3m": 226.58,
+     "high_52w": 241.01,
+     "low_52w": 189.2,
+     "prev": 217.43,
+     "rsi14": 60.1,
+     "spark_1m": [
+      221.02,
+      221.31,
+      216.99,
+      216.29,
+      213.48,
+      212.24,
+      206.94,
+      203.13,
+      202.17,
+      205.5,
+      209.47,
+      210.52,
+      207.31,
+      210.96,
+      210.31,
+      212.62,
+      212.05,
+      214.12,
+      218.73,
+      217.43,
+      220.28
+     ],
+     "volume": 1863484,
+     "volume_avg20": 3048451
+    },
+    "prob_up": 0.5446,
+    "rsi14": 60.1,
+    "sector": "Insurance",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 8.75,
+    "short_days_to_cover": 1.86,
+    "strategies": {
+     "buy": 1,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 1,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "TSLA": {
+    "beta_1y": 2.22,
+    "days_to_results": 8,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Tesla",
+    "next_results": null,
+    "prices": {
+     "close": 378.03,
+     "close_1m": 365.44,
+     "close_1w": 378.73,
+     "close_1y": 435.9,
+     "close_3m": 396.18,
+     "high_52w": 498.83,
+     "low_52w": 297.38,
+     "prev": 382.7,
+     "rsi14": 56.4,
+     "spark_1m": [
+      358.97,
+      356.58,
+      358.08,
+      366.2,
+      364.27,
+      375.3,
+      378.9,
+      380.12,
+      377.94,
+      372.11,
+      357.45,
+      352.84,
+      354.81,
+      354.11,
+      370.59,
+      378.73,
+      380.68,
+      377.81,
+      375.0,
+      382.7,
+      378.03
+     ],
+     "volume": 20131780,
+     "volume_avg20": 35810206
+    },
+    "prob_up": 0.5441,
+    "rsi14": 56.4,
+    "sector": "Autos",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 3.0,
+    "short_days_to_cover": 1.94,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "UAL": {
+    "beta_1y": 2.16,
+    "days_to_results": 7,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "United Airlines",
+    "next_results": "2026-10-20",
+    "prices": {
+     "close": 104.44,
+     "close_1m": 109.82,
+     "close_1w": 110.0,
+     "close_1y": 99.25,
+     "close_3m": 120.35,
+     "high_52w": 138.77,
+     "low_52w": 84.64,
+     "prev": 107.455,
+     "rsi14": 37.6,
+     "spark_1m": [
+      108.96,
+      106.92,
+      106.3,
+      107.64,
+      108.71,
+      114.39,
+      115.21,
+      110.72,
+      111.19,
+      113.99,
+      111.51,
+      112.65,
+      110.95,
+      111.78,
+      112.51,
+      110.0,
+      111.87,
+      110.17,
+      107.44,
+      107.455,
+      104.44
+     ],
+     "volume": 3178864,
+     "volume_avg20": 4348560
+    },
+    "prob_up": 0.5468,
+    "rsi14": 37.6,
+    "sector": "Airlines",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -7.86,
+    "short_days_to_cover": 4.24,
+    "strategies": {
+     "buy": 2,
+     "by_family": {
+      "ai": {
+       "buy": 0,
+       "of": 1
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 12
+    }
+   },
+   "WMT": {
+    "beta_1y": -0.04,
+    "days_to_results": 37,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "Walmart",
+    "next_results": null,
+    "prices": {
+     "close": 113.08,
+     "close_1m": 107.15,
+     "close_1w": 105.07,
+     "close_1y": 102.12,
+     "close_3m": 113.7,
+     "high_52w": 135.16,
+     "low_52w": 98.88,
+     "prev": 111.35,
+     "rsi14": 64.7,
+     "spark_1m": [
+      109.08,
+      108.09,
+      107.5,
+      106.79,
+      106.73,
+      107.44,
+      110.12,
+      110.53,
+      107.59,
+      107.98,
+      108.73,
+      106.8,
+      103.92,
+      104.26,
+      104.26,
+      105.07,
+      107.2,
+      108.16,
+      110.56,
+      111.35,
+      113.08
+     ],
+     "volume": 13691712,
+     "volume_avg20": 22328335
+    },
+    "prob_up": 0.5441,
+    "rsi14": 64.7,
+    "sector": "Retail",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": 0.44,
+    "short_days_to_cover": 3.39,
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   },
+   "XOM": {
+    "beta_1y": -0.55,
+    "days_to_results": 17,
+    "ex_dividend": null,
+    "model_as_of": "2026-10-12",
+    "name": "ExxonMobil",
+    "next_results": null,
+    "prices": {
+     "close": 172.15,
+     "close_1m": 165.99,
+     "close_1w": 164.0,
+     "close_1y": 112.24,
+     "close_3m": 145.09,
+     "high_52w": 176.41,
+     "low_52w": 110.39,
+     "prev": 168.94,
+     "rsi14": 69.0,
+     "spark_1m": [
+      165.08,
+      169.32,
+      163.32,
+      163.27,
+      163.54,
+      158.3,
+      158.71,
+      161.23,
+      162.14,
+      160.59,
+      162.52,
+      161.35,
+      162.75,
+      163.82,
+      164.01,
+      164.0,
+      164.48,
+      164.05,
+      168.5,
+      168.94,
+      172.15
+     ],
+     "volume": 8800320,
+     "volume_avg20": 13250355
+    },
+    "prob_up": 0.5435,
+    "rsi14": 69.0,
+    "sector": "Energy",
+    "short_as_of": "2026-09-30",
+    "short_change_pct": -1.23,
+    "short_days_to_cover": 2.64,
+    "strategies": {
+     "buy": 3,
+     "by_family": {
+      "ai": {
+       "buy": 1,
+       "of": 2
+      },
+      "baseline": {
+       "buy": 2,
+       "of": 3
+      },
+      "rule": {
+       "buy": 0,
+       "of": 8
+      }
+     },
+     "of": 13
+    }
+   }
+  }
+ },
+ "source": "contactexepex/agentic-stock-prediction data/<market>/ (published records)"
+}

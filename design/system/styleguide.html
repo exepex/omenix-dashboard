@@ -952,6 +952,50 @@ svg.spark { display: block; width: 100%; height: 56px; } svg.plot { display: blo
 .mb-fact .k { font: 600 11px/16px var(--md-ref-typeface-plain); letter-spacing: .04em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
 .mb-fact b { font: 700 16px/22px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; } .mb-fact small { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
 
+/* ---- screener (design/mockups/33-screener; PLATFORM_DESIGN.md section 4 screen 8) ----------------------------------
+   .mb-scr-look (tiles: today in one look; a tile that is a button applies its screen), .mb-breadth (up, unchanged,
+   down), .mb-scr-presets (ready-made screens: chips with their counts), .mb-scr-filters (number filters),
+   .mb-scr-wrap > table.mb-scr (results, sortable headers; the wrap is a size container: .c-l columns drop under 1000 px of
+   it) and ul.mb-scr-cards (the same results as cards under 760 px of it),
+   .mb-pos52 (where a value sits in its range: 52-week, or IV in its 3-month range), .mb-scr-tools (the tools' view). */
+.mb-scr-look { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; margin-top: 4px; }
+.mb-scr-tile { display: grid; gap: 4px; align-content: start; text-align: left; padding: 12px 14px; border-radius: var(--mb-card-radius); border: 1px solid transparent; background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); color: var(--md-sys-color-on-surface); font: inherit; min-width: 0; }
+button.mb-scr-tile { cursor: pointer; } button.mb-scr-tile:hover { border-color: var(--md-sys-color-outline-variant); }
+.mb-scr-tile[aria-pressed="true"] { border-color: var(--md-sys-color-primary); box-shadow: inset 0 0 0 1px var(--md-sys-color-primary); }
+.mb-scr-tile .k { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-tile b { font: 700 20px/26px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.mb-scr-tile small { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-breadth { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; }
+.mb-breadth i { display: block; min-width: 2px; } .mb-breadth .up { background: var(--mb-color-up); } .mb-breadth .down { background: var(--mb-color-down); } .mb-breadth .flat { background: var(--md-sys-color-outline-variant); }
+.mb-scr-presets { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 16px; }
+.mb-scr-presets .lbl { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); margin-right: 4px; }
+.mb-scr-presets .md-chip .n { font-weight: 700; color: var(--md-sys-color-primary); margin-left: 2px; }
+.mb-scr-presets .md-chip[aria-pressed="true"] .n { color: inherit; }
+.mb-scr-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px 12px; align-items: end; padding: 12px 14px; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); }
+.mb-scr-filters .mb-field > span { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-wrap { container-type: inline-size; background: var(--md-sys-color-surface-container-lowest); border-radius: var(--mb-card-radius); box-shadow: var(--mb-card-shadow); }
+.mb-scr th { position: sticky; top: var(--mb-appbar-height); z-index: 2; }
+.mb-scr th button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
+.mb-scr th button:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.mb-scr th .ms { width: 14px; height: 14px; }
+.mb-scr td small { display: block; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr td .nm, .mb-scr-cards .nm { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+.mb-scr td.act { text-align: right; white-space: nowrap; }
+.mb-pos52 { display: inline-grid; grid-template-columns: auto 72px auto; gap: 6px; align-items: center; font-variant-numeric: tabular-nums; }
+.mb-pos52 .track { position: relative; display: block; width: 72px; height: 6px; border-radius: 3px; background: var(--md-sys-color-surface-container-high); }
+.mb-pos52 .track i { position: absolute; top: -3px; width: 4px; height: 12px; margin-left: -2px; border-radius: 2px; background: var(--md-sys-color-primary); }
+.mb-pos52 small { display: inline; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-tools { display: grid; gap: 0; } .mb-scr-tools b { font-weight: 600; } .mb-scr-tools small { font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-cards { display: none; list-style: none; margin: 0; padding: 0; }
+.mb-scr-cards li { display: grid; gap: 6px; padding: 12px 14px; border-top: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-scr-cards li:first-child { border-top: 0; }
+.mb-scr-cards .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.mb-scr-cards .px { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mb-scr-cards small { font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-cards .row { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12.5px; }
+@container (max-width: 1000px) { .mb-scr .c-l { display: none; } }
+@container (max-width: 760px) { .mb-scr-wrap > .mb-scr { display: none; } .mb-scr-cards { display: block; } }
+
 </style>
 <style>
 /* style-guide-only layout */
@@ -1330,7 +1374,10 @@ code{font-family:var(--md-ref-typeface-mono);font-size:.92em;background:var(--md
           <div class="mb-chain-box" style="max-width:640px"><table class="mb-chain"><thead><tr class="side"><th class="c">Calls · gain if NIFTY rises</th><th class="k">27 Oct</th><th class="p">Puts · gain if NIFTY falls</th></tr><tr class="cols"><th class="c">Price</th><th class="k">Strike</th><th class="p">Price</th></tr></thead><tbody><tr class="atm"><td class="itm c oc-px">280.30<small><span class="mb-delta down">−34.52%</span></small></td><td class="k">22,350<small>ATM</small></td><td class="p oc-px">243.25<small><span class="mb-delta up">+52.46%</span></small></td></tr><tr class="oc-spot"><td class="c"></td><td class="k"><span>NIFTY 22,363.35</span></td><td class="p"></td></tr><tr><td class="c oc-px">253.10<small><span class="mb-delta down">−35.96%</span></small></td><td class="k">22,400</td><td class="itm p oc-px">267.10<small><span class="mb-delta up">+53.37%</span></small></td></tr></tbody></table></div>
           <div class="mb-scen buy" style="max-width:420px"><b>If you buy 1 lot: you pay ₹16,452</b><p>That is the most you can lose. You gain if NIFTY ends above 22,653.10 on 27 Oct.</p></div>
           <div class="mb-scen sell" style="max-width:420px"><b>If you sell 1 lot: you receive ₹16,452</b><p>Your loss has no limit if NIFTY rises above 22,653.10.</p></div>
-          <div class="mb-facts" style="max-width:420px;margin-top:12px"><div class="mb-fact"><span class="k">Delta</span><b>0.45</b><small>about ₹0.45 for a 1-point NIFTY move</small></div><div class="mb-fact"><span class="k">Theta</span><b>−8.90</b><small>lost a day as time passes</small></div></div>
+          <div class="mb-facts" style="max-width:420px;margin-top:12px"><div class="mb-fact"><span class="k">Delta</span><b>0.52</b><small>about ₹0.52 for a 1-point NIFTY move</small></div><div class="mb-fact"><span class="k">Theta</span><b>−10.07</b><small>about ₹10.07 lost a day as time passes</small></div></div>
+          <div class="mb-scr-look" style="max-width:640px"><div class="mb-scr-tile"><span class="k">Today: up and down</span><b>1,405 up · 1,476 down</b><span class="mb-breadth"><i class="up" style="flex:1405"></i><i class="flat" style="flex:43"></i><i class="down" style="flex:1476"></i></span><small>43 unchanged · of 2,924</small></div><button class="mb-scr-tile" type="button" aria-pressed="true"><span class="k">Near 52-week high</span><b>50</b><small>Closed within 2% of its highest price of the last year</small></button></div>
+          <div class="mb-scr-presets"><span class="lbl">Ready-made screens</span><button class="md-chip filter" type="button" aria-pressed="true">Near 52-week high <span class="n">50</span></button><button class="md-chip filter" type="button" aria-pressed="false">RSI under 30 <span class="n">265</span></button></div>
+          <div class="mb-scr-wrap" style="max-width:640px"><table class="md-table mb-scr"><thead><tr><th>Stock</th><th class="num">Price</th><th>52-week range</th><th>Our tools</th></tr></thead><tbody><tr><td><div class="nm"><b>RELIANCE</b><span class="mb-tag">F&amp;O</span><span class="mb-tag paper">Ours</span></div><small>Reliance Industries Limited</small></td><td class="num">1,158.90</td><td><span class="mb-pos52"><span class="track"><i style="left:1%"></i></span><small>1%</small></span></td><td><span class="mb-scr-tools"><b>1 of 12 buy</b><small>results in 3 days</small></span></td></tr></tbody></table></div>
         </div>
       </div>
     </section>

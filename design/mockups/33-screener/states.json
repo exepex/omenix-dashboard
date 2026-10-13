@@ -1,0 +1,212 @@
+{
+ "page": "page.html",
+ "states": [
+  {
+   "id": "stocks",
+   "section": "1. Stocks (real NSE data of Mon 12 Oct 2026)",
+   "title": "Stocks: today in one look, ready-made screens, every NSE stock sorted by value traded.",
+   "hash": "",
+   "widths": [
+    1280,
+    1024,
+    768,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "stocks-top",
+   "section": "1. Stocks (real NSE data of Mon 12 Oct 2026)",
+   "title": "The first screen: up and down today, near 52-week high and low, volume surges.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "ours",
+   "section": "1. Stocks (real NSE data of Mon 12 Oct 2026)",
+   "title": "The 20 companies our tools follow, with the strategies’ view and results dates.",
+   "hash": "uni=ours",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "year",
+   "section": "1. Stocks (real NSE data of Mon 12 Oct 2026)",
+   "title": "Change over one year, biggest first.",
+   "hash": "uni=n500&per=y1&sort=chg",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "high",
+   "section": "2. Ready-made screens and filters",
+   "title": "Near 52-week high (50 stocks).",
+   "hash": "pre=high",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "volume",
+   "section": "2. Ready-made screens and filters",
+   "title": "Volume 3× usual (64 stocks).",
+   "hash": "pre=volume",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "oversold",
+   "section": "2. Ready-made screens and filters",
+   "title": "RSI under 30, within the Nifty 500.",
+   "hash": "uni=n500&pre=oversold",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "picks",
+   "section": "2. Ready-made screens and filters",
+   "title": "Our strategies: 3 or more buy.",
+   "hash": "pre=picks",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "results",
+   "section": "2. Ready-made screens and filters",
+   "title": "Results within 7 days.",
+   "hash": "pre=results",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "filters",
+   "section": "2. Ready-made screens and filters",
+   "title": "Your filters: price from 100, up 5%+ in a month, delivery 60%+.",
+   "hash": "fopen=1&f=pmin:100,cmin:5,dl:60",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "buy",
+   "section": "3. Acting on a result",
+   "title": "Buy a followed company from the screener (market open example).",
+   "hash": "uni=ours&clock=open&drawer=order:RELIANCE:buy",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "not-followed",
+   "section": "3. Acting on a result",
+   "title": "A company our tools do not follow: Buy and Sell are grey, and the reason is on the button.",
+   "hash": "clock=open",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "hover": ".mb-scr tbody tr:nth-child(2) .mb-bs.buy"
+    }
+   ]
+  },
+  {
+   "id": "fno",
+   "section": "4. F&O (India only)",
+   "title": "F&O: futures build-up today, then every underlying with IV against its 3-month range.",
+   "hash": "tab=fno",
+   "widths": [
+    1280,
+    1024,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "fno-short",
+   "section": "4. F&O (India only)",
+   "title": "Short build-up: price down, open interest up.",
+   "hash": "tab=fno&fpre=short_buildup",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "fno-ivhigh",
+   "section": "4. F&O (India only)",
+   "title": "IV near its 3-month high: options cost more than usual.",
+   "hash": "tab=fno&fpre=ivhigh",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "fno-index",
+   "section": "4. F&O (India only)",
+   "title": "Indices.",
+   "hash": "tab=fno&fpre=index",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "us",
+   "section": "5. US, themes, other widths",
+   "title": "US: the 20 companies our tools follow; no F&O tab.",
+   "hash": "m=us",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "panel-on",
+   "section": "5. US, themes, other widths",
+   "title": "With the picks panel shown, the table keeps fewer columns.",
+   "hash": "wloff=0",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "dark",
+   "section": "5. US, themes, other widths",
+   "title": "Dark theme.",
+   "hash": "tab=fno&theme=dark",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "tablet",
+   "section": "5. US, themes, other widths",
+   "title": "Tablet 768 px: results as cards.",
+   "hash": "pre=high",
+   "widths": [
+    768
+   ]
+  }
+ ]
+}

@@ -1136,6 +1136,50 @@ svg.spark { display: block; width: 100%; height: 56px; } svg.plot { display: blo
 .mb-fact .k { font: 600 11px/16px var(--md-ref-typeface-plain); letter-spacing: .04em; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
 .mb-fact b { font: 700 16px/22px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; } .mb-fact small { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
 
+/* ---- screener (design/mockups/33-screener; PLATFORM_DESIGN.md section 4 screen 8) ----------------------------------
+   .mb-scr-look (tiles: today in one look; a tile that is a button applies its screen), .mb-breadth (up, unchanged,
+   down), .mb-scr-presets (ready-made screens: chips with their counts), .mb-scr-filters (number filters),
+   .mb-scr-wrap > table.mb-scr (results, sortable headers; the wrap is a size container: .c-l columns drop under 1000 px of
+   it) and ul.mb-scr-cards (the same results as cards under 760 px of it),
+   .mb-pos52 (where a value sits in its range: 52-week, or IV in its 3-month range), .mb-scr-tools (the tools' view). */
+.mb-scr-look { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; margin-top: 4px; }
+.mb-scr-tile { display: grid; gap: 4px; align-content: start; text-align: left; padding: 12px 14px; border-radius: var(--mb-card-radius); border: 1px solid transparent; background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); color: var(--md-sys-color-on-surface); font: inherit; min-width: 0; }
+button.mb-scr-tile { cursor: pointer; } button.mb-scr-tile:hover { border-color: var(--md-sys-color-outline-variant); }
+.mb-scr-tile[aria-pressed="true"] { border-color: var(--md-sys-color-primary); box-shadow: inset 0 0 0 1px var(--md-sys-color-primary); }
+.mb-scr-tile .k { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-tile b { font: 700 20px/26px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.mb-scr-tile small { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-breadth { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; }
+.mb-breadth i { display: block; min-width: 2px; } .mb-breadth .up { background: var(--mb-color-up); } .mb-breadth .down { background: var(--mb-color-down); } .mb-breadth .flat { background: var(--md-sys-color-outline-variant); }
+.mb-scr-presets { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 16px; }
+.mb-scr-presets .lbl { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); margin-right: 4px; }
+.mb-scr-presets .md-chip .n { font-weight: 700; color: var(--md-sys-color-primary); margin-left: 2px; }
+.mb-scr-presets .md-chip[aria-pressed="true"] .n { color: inherit; }
+.mb-scr-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px 12px; align-items: end; padding: 12px 14px; border-radius: var(--mb-card-radius); background: var(--md-sys-color-surface-container-lowest); box-shadow: var(--mb-card-shadow); }
+.mb-scr-filters .mb-field > span { font: 600 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-wrap { container-type: inline-size; background: var(--md-sys-color-surface-container-lowest); border-radius: var(--mb-card-radius); box-shadow: var(--mb-card-shadow); }
+.mb-scr th { position: sticky; top: var(--mb-appbar-height); z-index: 2; }
+.mb-scr th button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
+.mb-scr th button:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.mb-scr th .ms { width: 14px; height: 14px; }
+.mb-scr td small { display: block; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr td .nm, .mb-scr-cards .nm { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+.mb-scr td.act { text-align: right; white-space: nowrap; }
+.mb-pos52 { display: inline-grid; grid-template-columns: auto 72px auto; gap: 6px; align-items: center; font-variant-numeric: tabular-nums; }
+.mb-pos52 .track { position: relative; display: block; width: 72px; height: 6px; border-radius: 3px; background: var(--md-sys-color-surface-container-high); }
+.mb-pos52 .track i { position: absolute; top: -3px; width: 4px; height: 12px; margin-left: -2px; border-radius: 2px; background: var(--md-sys-color-primary); }
+.mb-pos52 small { display: inline; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-tools { display: grid; gap: 0; } .mb-scr-tools b { font-weight: 600; } .mb-scr-tools small { font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-cards { display: none; list-style: none; margin: 0; padding: 0; }
+.mb-scr-cards li { display: grid; gap: 6px; padding: 12px 14px; border-top: 1px solid var(--md-sys-color-surface-container-high); }
+.mb-scr-cards li:first-child { border-top: 0; }
+.mb-scr-cards .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.mb-scr-cards .px { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mb-scr-cards small { font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+.mb-scr-cards .row { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12.5px; }
+@container (max-width: 1000px) { .mb-scr .c-l { display: none; } }
+@container (max-width: 760px) { .mb-scr-wrap > .mb-scr { display: none; } .mb-scr-cards { display: block; } }
+
 </style>
 <style>
 /* Shared page CSS of the design-track mockups (scheme v2 "modern admin light"): cards, card heads, labels, page
@@ -1440,7 +1484,7 @@ const B = n => `../${n}/page.html`;
 const NAV = [
   {id: 'dashboard', label: 'Dashboard', icon: 'dashboard', items: [{id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: B('31-dashboard'), key: 'g h'}]},
   {id: 'markets', label: 'Markets', icon: 'monitoring', items: [{id: 'markets', label: 'Markets overview', icon: 'monitoring'}, {id: 'watchlists', label: 'Watchlists', icon: 'star'}, {id: 'chart', label: 'Chart', icon: 'show_chart'}, {id: 'calendar', label: 'Calendar', icon: 'calendar_month'}]},
-  {id: 'trade', label: 'Trade', icon: 'candlestick_chart', items: [{id: 'chain', label: 'Option chain', icon: 'layers', india: true, href: B('32-option-chain'), key: 'g c'}, {id: 'builder', label: 'Strategy builder', icon: 'calculate', india: true}, {id: 'screener', label: 'Screener', icon: 'filter_list', key: 'g s'}, {id: 'order', label: 'Order window', icon: 'receipt_long', action: 'order', key: 'B / S'}]},
+  {id: 'trade', label: 'Trade', icon: 'candlestick_chart', items: [{id: 'chain', label: 'Option chain', icon: 'layers', india: true, href: B('32-option-chain'), key: 'g c'}, {id: 'builder', label: 'Strategy builder', icon: 'calculate', india: true}, {id: 'screener', label: 'Screener', icon: 'filter_list', href: B('33-screener'), key: 'g s'}, {id: 'order', label: 'Order window', icon: 'receipt_long', action: 'order', key: 'B / S'}]},
   {id: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', items: [{id: 'positions', label: 'Positions', icon: 'account_balance_wallet', key: 'g p'}, {id: 'holdings', label: 'Holdings', icon: 'pie_chart'}, {id: 'funds', label: 'Accounts and funds', icon: 'payments'}, {id: 'orders', label: 'Orders', icon: 'receipt_long', key: 'g o'}, {id: 'reports', label: 'Reports', icon: 'bar_chart'}]},
   {id: 'strategies', label: 'Strategies', icon: 'science', items: [{id: 'lab', label: 'Strategy lab', icon: 'science'}, {id: 'track', label: 'Track record', icon: 'history'}, {id: 'scoreboards', label: 'Scoreboards', icon: 'leaderboard'}, {id: 'forecasts', label: 'Forecasts', icon: 'query_stats', india: true}]},
   {id: 'research', label: 'Research', icon: 'travel_explore', items: [{id: 'stock', label: 'Stock page', icon: 'apartment'}, {id: 'news', label: 'News', icon: 'newspaper'}, {id: 'events', label: 'Calendar', icon: 'event'}, {id: 'alerts', label: 'Alerts', icon: 'notifications'}]},
