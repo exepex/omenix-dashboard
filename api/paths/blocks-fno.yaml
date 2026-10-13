@@ -1,0 +1,134 @@
+# F&O block endpoints (exepex/trading, India only). The market is part of the path, so in the US these blocks do not
+# exist at all (absent, not empty). Rows are read from fno.current_publication only (P3), never mixing two days.
+/api/v1/markets/india/fno/search:
+  get:
+    tags: [blocks]
+    operationId: searchFnoContracts
+    summary: 'Search NIFTY futures and options by words or NSE code'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page contracts (proposed P1 page; the route filters by q)'
+    x-freshness: 'fno_calendar; end-of-day file and 3 pm snapshot'
+    x-cache: 'keyed by publication_id (a new current publication invalidates it); responses private, max-age=60'
+    x-empty: 'contracts empty'
+    x-feeds: [s30.search]
+    parameters:
+      - {name: q, in: query, required: true, description: 'Words or a code, e.g. reliance, nifty 22800 call, NIFTY26OCT22800CE', schema: {type: string, minLength: 1, maxLength: 60}}
+    responses:
+      '200':
+        description: 'The FnoSearch block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoSearchResponse'}
+            examples:
+              india: {$ref: '#/components/examples/searchFnoContracts_india'}
+              india_words: {$ref: '#/components/examples/searchFnoContracts_india_words'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/picks:
+  get:
+    tags: [blocks]
+    operationId: getFnoPicks
+    summary: 'The F&O books'' 3 pm state for the picks panel: approved or not, and approved rows with their baskets'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page today (P1)'
+    x-freshness: 'fno_calendar; 3 pm run'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'fno_state.approved false, rows empty, the note says why (today: Experiment 1 has not run)'
+    x-feeds: [h31.picks-inline, s30.order-margin, s30.picks-fno]
+    x-shared: 'one decision record: the panel shows the rows; the order window opens the same row''s basket (legs, margin)'
+    responses:
+      '200':
+        description: 'The FnoPicks block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoPicksResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFnoPicks_india'}
+              india_example: {$ref: '#/components/examples/getFnoPicks_india_example'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/contracts/{code}:
+  get:
+    tags: [blocks]
+    operationId: getFnoContract
+    summary: 'One NIFTY future or option: last price and the 3 pm bid, ask and implied volatility'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page quotes (proposed P1 page)'
+    x-freshness: 'fno_calendar; 3 pm snapshot or end-of-day file'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'unknown code: 404; no snapshot quote: bid, ask and iv null (the order window refuses it)'
+    x-feeds: [s30.hover, s30.order-price, s30.order-refusal]
+    x-shared: 'one quote: the hover card shows it; the order window prices and refuses on the same quote'
+    parameters:
+      - {name: code, in: path, required: true, description: 'An NSE contract code, e.g. NIFTY26OCT22800CE', schema: {$ref: '#/components/schemas/InstrumentRef'}}
+    responses:
+      '200':
+        description: 'The FnoContract block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoContractResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFnoContract_india'}
+              india_stale: {$ref: '#/components/examples/getFnoContract_india_stale'}
+              india_future: {$ref: '#/components/examples/getFnoContract_india_future'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/order-rules:
+  get:
+    tags: [blocks]
+    operationId: getFnoOrderRules
+    summary: 'The F&O order window''s charges, the owner''s limits, the margin estimate and the next snapshot'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page order_rules (proposed P1 page)'
+    x-freshness: 'fno_calendar; on version change'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'never empty'
+    x-feeds: [s30.order-charges, s30.order-fill, s30.order-limits, s30.order-margin]
+    responses:
+      '200':
+        description: 'The FnoOrderRules block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoOrderRulesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFnoOrderRules_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/books:
+  get:
+    tags: [blocks]
+    operationId: getFnoBooks
+    summary: 'The three F&O paper books: value, profit or loss, approved strategies, risk used'
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history pages risk and scoreboard_b (P1)'
+    x-freshness: 'fno_calendar; 3 pm run and post-close marks'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'never empty: three books always exist (Rs 5 lakh each); approved empty means no approved strategy yet'
+    x-feeds: [h31.who-trades, s30.order-account]
+    x-shared: 'one set of book accounts: the group cards show each book''s profit or loss; the order window lists the same books as not tradable'
+    responses:
+      '200':
+        description: 'The FnoBooks block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoBooksResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFnoBooks_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}

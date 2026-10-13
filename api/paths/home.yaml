@@ -1,9 +1,15 @@
-# The Home page (B11). Builder: scripts/marketbrief/warehouse/rm_home.py; route web/app/api/v1/markets/[market]/home.
+# The Home page (B11), superseded by the W10 block endpoints (api/paths/blocks-home.yaml). Builder: scripts/marketbrief/warehouse/rm_home.py; route web/app/api/v1/markets/[market]/home.
 /api/v1/markets/{market}/home:
   get:
     tags: [markets]
     operationId: getHome
     summary: The Home page (01-home) - agreement, head-to-head picks, open trades and alerts, rule vs AI, news
+    deprecated: true
+    description: >-
+      Superseded by the block endpoints of the signed-off Home (31-dashboard, story W10): picks, tracked-moves, groups,
+      strategy-trades, attention, events, top-news, with session, indices, accounts and positions from the frame. Kept
+      unchanged while the current app (built on 01-home) still reads it; removed when W9's Home ships.
+    x-superseded-by: [getPicks, getTrackedMoves, getGroups, getStrategyTrades, getAttention, getEvents, getTopNews, getSession, getIndices, getAccounts, getPositions]
     x-read-model: rm.home
     parameters:
       - $ref: '#/components/parameters/Market'

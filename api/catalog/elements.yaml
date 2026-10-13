@@ -1,0 +1,402 @@
+# Every element of the two signed-off data contracts (design/mockups/30-shell/notes.md, 31-dashboard/notes.md; frozen
+# 13 Oct 2026), with each backticked field token of its notes.md text and where it lands in the contract.
+#   row:     the element's first cell, exactly as in notes.md (null for a prose section: then every backticked token of
+#            that section, its heading included, belongs to the element)
+#   fields:  t = the notes.md token; k = its key(s) in the contract (a property carries x-notes "<id>:<key>"). Two keys
+#            only where notes.md itself names two publishers for the token (why says so).
+#   other:   a token that is not a field (an example value, an enum value, a source the publisher column names)
+#   static:  the element needs no data from an endpoint (fixed text, the reader's local choice, a mockup aid)
+#   block:   the independent screen block the element belongs to (default: the element alone); used by criterion 2
+# tools/api/check_mapping.py checks this file against notes.md (row text and tokens, both ways) and the contract.
+
+- {id: s30.brand, notes: 30-shell, section: App bar, row: 'Brand, "Research · Paper only"', static: 'fixed text in the app'}
+- id: s30.search
+  notes: 30-shell
+  section: App bar
+  row: Search (the only search box)
+  fields:
+    - {t: id, k: [instrument.id, contract.id], why: 'stock tool for stocks and indices, F&O tool for contracts (notes.md Publisher column)'}
+    - {t: sym, k: [instrument.sym, contract.sym], why: same split}
+    - {t: name, k: [instrument.name, contract.name], why: same split}
+    - {t: code, k: [instrument.code, contract.code], why: same split}
+    - {t: kind, k: [instrument.kind, contract.kind], why: same split}
+    - {t: last, k: [instrument.last, contract.last], why: same split}
+    - {t: chg_pct, k: [instrument.chg_pct, contract.chg_pct], why: same split}
+    - {t: as_of, k: [instrument.as_of, contract.as_of], why: same split}
+    - {t: source, k: [instrument.source, contract.source], why: same split}
+    - {t: id, k: [strategy.id]}
+    - {t: name, k: [strategy.name]}
+    - {t: title, k: [news.title]}
+    - {t: source, k: [news.source]}
+    - {t: tickers, k: [news.tickers]}
+  other:
+    - {t: NIFTY26OCT22800CE, why: an example of an NSE code}
+- id: s30.market-switch
+  notes: 30-shell
+  section: App bar
+  row: Market switch India · US
+  fields:
+    - {t: 'markets.<m>.label', k: [label]}
+    - {t: fno, k: [fno]}
+- id: s30.index-strip
+  notes: 30-shell
+  section: App bar
+  row: Index strip (hidden on Home, which has the market band)
+  fields:
+    - {t: 'indices[]', k: [indices]}
+    - {t: last, k: [last]}
+    - {t: chg_pct, k: [chg_pct]}
+    - {t: chg_5d_pct, k: [chg_5d_pct]}
+    - {t: as_of, k: [as_of]}
+    - {t: source, k: [source]}
+- id: s30.bell
+  notes: 30-shell
+  section: App bar
+  row: Bell
+  fields:
+    - {t: 'notifications.<m>[]', k: [notifications]}
+    - {t: icon, k: [icon]}
+    - {t: title, k: [title]}
+    - {t: sub, k: [sub]}
+    - {t: unread, k: [unread]}
+- {id: s30.theme, notes: 30-shell, section: App bar, row: 'Theme, profile', static: "the reader's local choice (light, dark, system; density; rail labels)"}
+- id: s30.picks-row
+  block: picks-panel
+  notes: 30-shell
+  section: Today's buy picks panel
+  row: Row
+  fields:
+    - {t: 'signals[]', k: [signals]}
+    - {t: id, k: [id]}
+    - {t: family, k: [family]}
+    - {t: strategy_id, k: [strategy_id]}
+    - {t: strategy, k: [strategy]}
+    - {t: 'pick_rules[]', k: [pick_rules]}
+    - {t: horizon, k: [horizon]}
+    - {t: prob_up, k: [prob_up]}
+    - {t: move_pct, k: [move_pct]}
+    - {t: loss_pct, k: [loss_pct]}
+    - {t: costs_pct, k: [costs_pct]}
+    - {t: exp_gain_pct, k: [exp_gain_pct]}
+    - {t: amount, k: [amount]}
+- id: s30.picks-agree
+  block: picks-panel
+  notes: 30-shell
+  section: Today's buy picks panel
+  row: Agreement ring "13/15"
+  fields:
+    - {t: agree.buy, k: [agree.buy]}
+    - {t: agree.of, k: [agree.of]}
+    - {t: 'agree.by_family.{rule,ai,baseline}.{buy,of}', k: [agree.by_family]}
+- id: s30.picks-yesno
+  block: picks-panel
+  notes: 30-shell
+  section: Today's buy picks panel
+  row: '"Yes / No after costs"'
+  fields:
+    - {t: exp_gain_pct, k: [exp_gain_pct]}
+- id: s30.picks-record
+  block: picks-panel
+  notes: 30-shell
+  section: Today's buy picks panel
+  row: '"Record here"'
+  fields:
+    - {t: record.trades, k: [record.trades]}
+    - {t: record.win_rate, k: [record.win_rate]}
+    - {t: record.net_pnl, k: [record.net_pnl]}
+    - {t: record.badge, k: [record.badge]}
+- id: s30.picks-golive
+  block: picks-panel
+  notes: 30-shell
+  section: Today's buy picks panel
+  row: '"Not proven yet · N trades to go"'
+  fields:
+    - {t: go_live.months_forward, k: [months_forward]}
+    - {t: go_live.trades_needed, k: [trades_needed]}
+    - {t: proven, k: [proven]}
+- id: s30.picks-nopick
+  block: picks-panel
+  notes: 30-shell
+  section: Today's buy picks panel
+  row: No-pick note
+  fields:
+    - {t: 'no_pick[]', k: [no_pick]}
+- id: s30.picks-fno
+  block: picks-panel
+  notes: 30-shell
+  section: Today's buy picks panel
+  row: F&O note / example rows
+  fields:
+    - {t: fno_state.approved, k: [fno_state.approved]}
+    - {t: fno_state.note, k: [fno_state.note]}
+    - {t: basket, k: [basket]}
+    - {t: name, k: [name]}
+    - {t: pop, k: [pop]}
+    - {t: max_loss, k: [max_loss]}
+    - {t: credit, k: [credit]}
+    - {t: debit, k: [debit]}
+- {id: s30.picks-chips, block: picks-panel, notes: 30-shell, section: Today's buy picks panel, row: 'Filter chips, pages', static: 'screen state only (6 rows a page)'}
+- id: s30.status-chip
+  block: market-status
+  notes: 30-shell
+  section: Market status chip and the trading lock
+  row: '"Open · closes 15:30 IST" / "Closed · opens Thu 8 Oct 09:15 IST" (top bar, every page)'
+  fields:
+    - {t: status.open_utc, k: [open_utc]}
+    - {t: status.close_utc, k: [close_utc]}
+    - {t: status.next_open_utc, k: [next_open_utc]}
+    - {t: zone, k: [zone]}
+- {id: s30.lock, block: market-status, notes: 30-shell, section: Market status chip and the trading lock, row: Lock}
+- id: s30.example-clock
+  block: market-status
+  notes: 30-shell
+  section: Market status chip and the trading lock
+  row: Example clock
+  static: 'mockup only (#clock=open shows the session as an example); the app uses the real clock'
+  other:
+    - {t: status.example_open_now, why: mockup only}
+    - {t: '#clock=open', why: mockup only}
+- id: s30.approaches
+  notes: 30-shell
+  section: Approaches
+  row: null
+  fields:
+    - {t: families, k: [families]}
+    - {t: 'markets.<m>.family_text', k: [family_text]}
+  other:
+    - {t: rule, why: 'an approach (Family enum value, families[].family)'}
+    - {t: hybrid, why: 'an approach (Family enum value)'}
+    - {t: ai, why: 'an approach (Family enum value)'}
+    - {t: baseline, why: 'an approach (Family enum value)'}
+    - {t: manual, why: 'an approach (Family enum value)'}
+    - {t: rule, why: "the stock tool's count of rule strategies (prose)"}
+    - {t: ai, why: "the stock tool's count of AI strategies (prose)"}
+    - {t: baseline, why: "the stock tool's count of baselines (prose)"}
+- id: s30.nav
+  notes: 30-shell
+  section: Navigation rail, flyouts, pinned
+  row: null
+  static: "static structure in the app's code; India-only entries absent in the US"
+  other:
+    - {t: platform.js, why: mockup file}
+    - {t: NAV, why: mockup constant}
+    - {t: PINS, why: mockup constant}
+- id: s30.hover
+  notes: 30-shell
+  section: Hover card, quick view
+  row: null
+  fields:
+    - {t: last, k: [stock.last, contract.last], why: 'stock tool for stocks and indices, F&O tool for contracts'}
+    - {t: chg_pct, k: [stock.chg_pct, contract.chg_pct], why: same split}
+    - {t: as_of, k: [stock.as_of, contract.as_of], why: same split}
+    - {t: source, k: [stock.source, contract.source], why: same split}
+    - {t: bid, k: [bid]}
+    - {t: ask, k: [ask]}
+    - {t: iv, k: [iv]}
+    - {t: held, k: [held]}
+    - {t: account, k: [account]}
+    - {t: qty, k: [qty]}
+    - {t: avg, k: [avg]}
+    - {t: spark, k: [spark]}
+  other:
+    - {t: 03-company, why: the mockup the closes come from}
+- id: s30.order-account
+  block: order-window
+  notes: 30-shell
+  section: Order window
+  row: Account
+  fields:
+    - {t: accounts, k: [accounts]}
+    - {t: name, k: [name@manual, name@strategy, name@book], why: 'the Manual account (dashboard), the stock strategies (dashboard config) and the F&O books (F&O tool) are listed together'}
+    - {t: kind, k: [kind@manual, kind@strategy], why: manual or strategy}
+    - {t: capital, k: [capital]}
+    - {t: cash, k: [cash]}
+    - {t: open_structures, k: [open_structures]}
+    - {t: at_risk, k: [at_risk]}
+- id: s30.order-price
+  block: order-window
+  notes: 30-shell
+  section: Order window
+  row: Price basis
+  fields:
+    - {t: last, k: [last]}
+    - {t: as_of, k: [as_of]}
+    - {t: bid, k: [bid]}
+    - {t: ask, k: [ask]}
+- id: s30.order-charges
+  block: order-window
+  notes: 30-shell
+  section: Order window
+  row: Charges (estimate)
+  fields:
+    - {t: charges, k: [stock.charges, fno.charges], why: 'C1 charges code (F&O) and config/costs.yaml (stock tool), as notes.md says'}
+- id: s30.order-limits
+  block: order-window
+  notes: 30-shell
+  section: Order window
+  row: Limits
+  fields:
+    - {t: limits.max_loss_per_trade, k: [limits.max_loss_per_trade]}
+    - {t: max_open_structures, k: [max_open_structures]}
+    - {t: max_at_risk, k: [max_at_risk]}
+- id: s30.order-margin
+  block: order-window
+  notes: 30-shell
+  section: Order window
+  row: Margin estimate
+  fields:
+    - {t: short_option_margin_per_lot, k: [short_option_margin_per_lot]}
+    - {t: margin_per_lot, k: [margin_per_lot]}
+- id: s30.order-fill
+  block: order-window
+  notes: 30-shell
+  section: Order window
+  row: Fill time
+  fields:
+    - {t: next_quotes.stock, k: [next_quotes.stock]}
+    - {t: next_quotes.option, k: [next_quotes.option]}
+- id: s30.order-refusal
+  block: order-window
+  notes: 30-shell
+  section: Order window
+  row: Refusal
+  fields:
+    - {t: source, k: [source]}
+    - {t: bid, k: [bid]}
+    - {t: ask, k: [ask]}
+- {id: s30.order-result, block: order-window, notes: 30-shell, section: Order window, row: Result, static: "a write (the paper order into the dashboard's inbox, W7 pattern; the Manual account story): no read field"}
+- id: s30.freshness
+  notes: 30-shell
+  section: Freshness rules
+  row: null
+  fields:
+    - {t: sources, k: [sources]}
+    - {t: close, k: [close]}
+    - {t: eod, k: [eod]}
+    - {t: snap3pm, k: [snap3pm]}
+- {id: s30.defaults, notes: 30-shell, section: Owner-changeable defaults, row: null}
+
+- id: h31.glance-account
+  block: glance
+  notes: 31-dashboard
+  section: Home
+  row: 'Today at a glance: your paper account'
+  fields:
+    - {t: cash, k: [cash]}
+    - {t: qty, k: [qty]}
+    - {t: avg_price, k: [avg_price]}
+    - {t: pnl, k: [pnl]}
+- id: h31.glance-pick
+  block: glance
+  notes: 31-dashboard
+  section: Home
+  row: 'Today at a glance: top pick'
+  fields:
+    - {t: signals, k: [signals]}
+    - {t: id, k: [id]}
+    - {t: agree.buy/of, k: [agree]}
+    - {t: exp_gain_pct, k: [exp_gain_pct]}
+- id: h31.glance-needs
+  block: glance
+  notes: 31-dashboard
+  section: Home
+  row: 'Today at a glance: needs you'
+  fields:
+    - {t: 'attention[]', k: [attention]}
+- id: h31.band
+  notes: 31-dashboard
+  section: Home
+  row: Market band
+  fields:
+    - {t: last, k: [last]}
+    - {t: chg_pct, k: [chg_pct@index]}
+    - {t: chg_5d_pct, k: [chg_5d_pct]}
+    - {t: as_of, k: [as_of]}
+    - {t: session.date, k: [session.date]}
+    - {t: session.regime, k: [session.regime]}
+    - {t: session.post_close_at, k: [session.post_close_at]}
+    - {t: chg_pct, k: [chg_pct@company]}
+- {id: h31.picks-inline, block: picks-panel, notes: 31-dashboard, section: Home, row: "Today's buy picks (inline below 1200 px)"}
+- id: h31.who-trades
+  notes: 31-dashboard
+  section: Home
+  row: "Who trades: one summary card each for You, Rule-based, Hybrid, AI team (owner, 13 Oct 2026: each group's total on Home, detail on the group's page)"
+  fields:
+    - {t: open_profit, k: [open_profit]}
+    - {t: total.net, k: [total.net@group]}
+    - {t: total.trades, k: [total.trades]}
+    - {t: total.wins, k: [total.wins]}
+    - {t: total.with_trades, k: [total.with_trades]}
+    - {t: pnl, k: [pnl]}
+    - {t: net, k: [net]}
+    - {t: total.net, k: [total.net@baselines]}
+  other:
+    - {t: net_pnl, why: "the scoreboard field a group total adds up (its source)"}
+    - {t: pick_rule, why: "the scoreboard scope of the AI team's record (its source)"}
+- id: h31.trades-yours
+  block: open-trades
+  notes: 31-dashboard
+  section: Home
+  row: 'Open paper trades: yours'
+  fields:
+    - {t: 'own[]', k: [own]}
+    - {t: id, k: [id]}
+    - {t: qty, k: [qty]}
+    - {t: avg, k: [avg]}
+    - {t: unrealised, k: [unrealised]}
+    - {t: source, k: [source]}
+- id: h31.trades-strategies
+  block: open-trades
+  notes: 31-dashboard
+  section: Home
+  row: "Open paper trades: strategies'"
+  fields:
+    - {t: 'strategy_trades[]', k: [strategy_trades]}
+    - {t: id, k: [id]}
+    - {t: family, k: [family]}
+    - {t: strategy_id, k: [strategy_id]}
+    - {t: strategy, k: [strategy]}
+    - {t: horizon, k: [horizon]}
+    - {t: qty, k: [qty]}
+    - {t: avg, k: [avg]}
+    - {t: unrealised, k: [unrealised]}
+    - {t: exit, k: [exit]}
+    - {t: amount, k: [amount]}
+- id: h31.needs-you
+  notes: 31-dashboard
+  section: Home
+  row: Needs you
+  fields:
+    - {t: 'attention[]', k: [attention]}
+    - {t: icon, k: [icon]}
+    - {t: tone, k: [tone]}
+    - {t: title, k: [title]}
+    - {t: sub, k: [sub]}
+    - {t: inst, k: [inst]}
+  other:
+    - {t: open_trade.exit_date, why: an input of the rule (stock tool record)}
+    - {t: runs.post_close.next_at, why: an input of the rule (stock tool record)}
+    - {t: events.major, why: an input of the rule (the events block)}
+    - {t: news_item.status, why: an input of the rule (stock tool record)}
+- id: h31.coming-up
+  notes: 31-dashboard
+  section: Home
+  row: Coming up
+  fields:
+    - {t: 'events[]', k: [events]}
+    - {t: date, k: [date]}
+    - {t: title, k: [title]}
+    - {t: kind, k: [kind]}
+    - {t: major, k: [major]}
+    - {t: inst, k: [inst]}
+- id: h31.top-news
+  notes: 31-dashboard
+  section: Home
+  row: Top news
+  fields:
+    - {t: 'news[]', k: [news]}
+    - {t: title, k: [title]}
+    - {t: src, k: [src]}
+    - {t: status, k: [status]}
+    - {t: at, k: [at]}
+    - {t: tickers, k: [tickers]}
