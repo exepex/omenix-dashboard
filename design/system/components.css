@@ -345,7 +345,8 @@ details.md-expansion .inner { padding: 0 0 18px; }
 .mb-rail-fly a:hover, .mb-rail-fly a:focus-visible { background: var(--md-sys-color-surface-container); }
 .mb-rail-fly a[aria-current="page"] { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font-weight: 600; }
 .mb-rail-fly a small { margin-left: auto; color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-small); }
-.mb-pf.rail-compact { grid-template-columns: var(--mb-navrail-compact) var(--mb-wl-width) minmax(0, 1fr); }
+.mb-pf { --mb-rail-now: var(--mb-navrail-width); }   /* the rail's current width: full, or icons only */
+.mb-pf.rail-compact { --mb-rail-now: var(--mb-navrail-compact); grid-template-columns: var(--mb-navrail-compact) var(--mb-wl-width) minmax(0, 1fr); }
 .mb-pf.rail-compact.wl-off { grid-template-columns: var(--mb-navrail-compact) minmax(0, 1fr); }
 .mb-pf.rail-compact .mb-rail-item, .mb-pf.rail-compact .mb-rail-pin { width: 52px; font-size: 0; gap: 0; }
 .mb-pf.rail-compact .mb-rail-pins-t { font-size: 0; }
@@ -496,9 +497,9 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
   .mb-idx-strip .mb-idx:nth-child(n+3) { display: none; }
 }
 @media (max-width: 1199px) {
-  .mb-pf, .mb-pf.wl-off, .mb-pf.rail-compact { grid-template-columns: var(--mb-navrail-width) minmax(0, 1fr); }
+  .mb-pf, .mb-pf.wl-off, .mb-pf.rail-compact { grid-template-columns: var(--mb-rail-now) minmax(0, 1fr); }
   .mb-pf > .mb-wl { display: none; }
-  .mb-pf.wl-on > .mb-wl { display: flex; position: fixed; left: var(--mb-navrail-width); top: var(--mb-appbar-height); bottom: 0; height: auto; width: var(--mb-wl-width); z-index: 30; box-shadow: var(--md-sys-elevation-3); }
+  .mb-pf.wl-on > .mb-wl { display: flex; position: fixed; left: var(--mb-rail-now); top: var(--mb-appbar-height); bottom: 0; height: auto; width: var(--mb-wl-width); z-index: 30; box-shadow: var(--md-sys-elevation-3); }
   .mb-appbar-name { display: none; }
 }
 @media (max-width: 899px) {
@@ -645,6 +646,13 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 
 @media (max-width: 1199px) { .mb-mband { grid-template-columns: repeat(3, minmax(0, 1fr)); } .mb-mband > :last-child { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--md-sys-color-surface-container-high); } }
 @media (max-width: 899px) { .mb-glance { grid-template-columns: 1fr; } }
+/* tablets (600-899 px): the rail stays, so the two-row app bar keeps the rail's navy column under the brand and the
+   wrapped search starts where the page does, never over the rail (owner, 13 Oct 2026: the search overlapped the side
+   menu). Phones have no rail, so their search keeps the full width. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .mb-appbar { background: linear-gradient(to right, var(--mb-sidebar-bg) var(--mb-rail-now), var(--md-sys-color-surface) var(--mb-rail-now)); }
+  .mb-gsearch { flex-basis: calc(100% - var(--mb-rail-now) - 2 * var(--mb-gutter-desktop)); margin: 0 var(--mb-gutter-desktop) 8px calc(var(--mb-rail-now) + var(--mb-gutter-desktop)); }
+}
 @media (max-width: 599px) {
   .mb-mband > * { padding: 10px 10px; }
   .mb-mband .v { font-size: 15px; }
