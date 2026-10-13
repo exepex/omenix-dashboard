@@ -1,9 +1,13 @@
-// The market layout (B7): every page lives under /{market}/... inside the app shell. An unknown market is a 404.
-// `chat` is the parallel route @chat (owned by B8): the F11 chat panel, rendered into the shell's slot.
+// The market layout (B7; the app frame since W8): every page lives under /{market}/... inside the signed-off app frame
+// (components/frame/frame.tsx). The frame's data is read here, through the ShellData interface chosen in
+// lib/shell/wiring.ts, and handed to the frame as the market's slice. An unknown market is a 404.
+// `chat` is the parallel route @chat (owned by B8): the F11 chat panel, rendered into the frame's slot.
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { AppShell } from "../../../components/shell/app-shell.tsx";
+import { Frame } from "../../../components/frame/frame.tsx";
 import { MARKETS } from "../../../lib/data/constants.ts";
+import { frameData } from "../../../lib/shell/view.ts";
+import { shellData } from "../../../lib/shell/wiring.ts";
 import { isMarket } from "../../../lib/ui/routes.ts";
 
 export function generateStaticParams() {
@@ -16,8 +20,8 @@ export default async function MarketLayout({ children, chat, params }: { childre
   const { market } = await params;
   if (!isMarket(market)) notFound();
   return (
-    <AppShell market={market} chat={chat}>
+    <Frame data={frameData(await shellData.read(), market)} chat={chat}>
       {children}
-    </AppShell>
+    </Frame>
   );
 }

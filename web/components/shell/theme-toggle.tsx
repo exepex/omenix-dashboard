@@ -1,14 +1,20 @@
 "use client";
 // The top bar's theme button (UX4): one press moves System -> Light -> Dark -> System; the label and tooltip name the
-// current choice and the next one. lib/ui/theme.ts holds the storage and the attribute.
+// current choice and the next one. lib/ui/theme.ts holds the storage and the attribute. A choice made elsewhere (the
+// frame's profile menu) fires THEME_EVENT, and the button follows it.
 import { useEffect, useState } from "react";
-import { THEME_ICON, THEME_LABEL, applyTheme, nextTheme, readTheme, saveTheme, type Theme } from "../../lib/ui/theme.ts";
+import { THEME_EVENT, THEME_ICON, THEME_LABEL, applyTheme, nextTheme, readTheme, saveTheme, type Theme } from "../../lib/ui/theme.ts";
 import { Icon } from "../ui/icon.tsx";
 
 export function ThemeToggle() {
   // The server renders "system"; the saved choice is read after mount (the boot script already applied it).
   const [theme, setTheme] = useState<Theme>("system");
-  useEffect(() => setTheme(readTheme()), []);
+  useEffect(() => {
+    const sync = () => setTheme(readTheme());
+    sync();
+    window.addEventListener(THEME_EVENT, sync);
+    return () => window.removeEventListener(THEME_EVENT, sync);
+  }, []);
   const next = nextTheme(theme);
   const tip = `Theme: ${THEME_LABEL[theme]}${theme === "system" ? " (follows your device)" : ""}. Press for ${THEME_LABEL[next]}.`;
   return (
