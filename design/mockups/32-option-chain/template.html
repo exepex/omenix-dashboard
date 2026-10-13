@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omenix · NIFTY options</title>
+<meta name="description" content="NIFTY options (India only), with NSE's real data of 12 Oct 2026: what NIFTY did, the range the options price in, where traders hold positions, the mood, then calls and puts by strike for every weekly and monthly expiry, each contract's cost, break-even, chance and history. Nothing is live; bid and ask appear once the F&O tool publishes its 3 pm recording. Research and paper trading only.">
+<!--@@SYSTEM_CSS@@-->
+<!--@@SHARED_CSS@@-->
+<style>
+/* 32-option-chain page layout only; every component is from design/system/components.css. Tokens only. */
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:16px 0 8px}
+.bar .grow{flex:1 1 auto}
+.exp{flex-wrap:wrap;height:auto}
+.exp>button{height:auto;min-height:40px;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;padding:4px 12px;line-height:1.2}
+.exp>button small{font-size:11px;font-weight:500;opacity:.85}
+.src{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12px;color:var(--md-sys-color-on-surface-variant);margin:0 0 8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:4px;vertical-align:-2px}
+.sec{margin-top:24px}
+.sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
+.sec-head h2{font:600 17px/1.3 var(--md-ref-typeface-plain);margin:0}
+.sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 240px}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.charts .card{padding:14px 16px}
+.chart-t{font:600 14px/1.3 var(--md-ref-typeface-plain);margin:0 0 2px;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.chart-s{font-size:12px;color:var(--md-sys-color-on-surface-variant);margin:0 0 8px}
+.axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);margin-top:4px;gap:8px}
+@media (max-width:899px){.charts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<!--@@ICONS@@-->
+<script>const SHELL = /*__SHELL__*/null; const D = /*__DATA__*/null;</script>
+<script>
+/* this page reads the latest real NSE day: the shell's clock, NIFTY and India VIX move to it; its contracts within 5% of
+   NIFTY become instruments (search, quick view, order window) */
+(() => { const C = D.chain, M = SHELL.markets.india, U = C.underlying, last = C.history.vix.length - 1;
+  SHELL.now = C.clock.now; Object.assign(M.status, C.clock); Object.assign(M.items, D.items);
+  Object.assign(M.items.NIFTY50, {last: U.spot, chg_pct: U.chg_pct, as_of: C.source.as_of});
+  Object.assign(M.items.INDIAVIX, {last: U.vix, chg_pct: +((U.vix / C.history.vix[last - 1] - 1) * 100).toFixed(2), as_of: C.source.as_of}); })();
+</script>
+<!--@@PLATFORM_JS@@-->
+<script>
+let EXP = 0, MODE = 'simple', RANGE = 'near', OIV = 'open', NR = '1m', CR = '1m', LEGS = [];   /* URL: x, mode, strikes, oi, nr, cr, legs */
+const C = D.chain, H = C.history, U = C.underlying, LOT = U.lot;
+const RANGES = {near: '21 strikes', band: 'Within 5%', all: 'All'}, SPANS = {'5d': ['5D', 5], '1m': ['1M', 21], '3m': ['3M', 63], life: ['Life', 999]};
+const ints = x => x == null ? '—' : Math.round(x).toLocaleString('en-IN');
+const lots = x => '₹' + Math.round(x * LOT).toLocaleString('en-IN');
+const lockWhy = c => c.tradeLock() || 'No bid or ask yet: the F&O tool’s 3 pm recording (from 13 Oct) is not published, so a paper order cannot be priced.';
+const contractOf = code => { for (const x of C.expiries) for (const r of x.rows) for (const k of ['CE', 'PE']) if (r[k].code === code) return {x, r, kind: k, k: r[k]}; return null; };
+PF.mount({screen: 'chain', group: 'trade', strip: false, dataLabel: 'NSE data of 12 Oct 2026',
+  readHash(h) {
+    EXP = Math.min(C.expiries.length - 1, Math.max(0, h.has('x') ? +h.get('x') - 1 : C.expiries.findIndex(x => x.monthly)));
+    MODE = ['detail', 'greeks'].includes(h.get('mode')) ? h.get('mode') : 'simple'; RANGE = RANGES[h.get('strikes')] ? h.get('strikes') : 'near';
+    OIV = h.get('oi') === 'added' ? 'added' : 'open'; NR = SPANS[h.get('nr')] && h.get('nr') !== 'life' ? h.get('nr') : '1m'; CR = SPANS[h.get('cr')] ? h.get('cr') : '1m';
+    LEGS = (h.get('legs') || '').split(',').filter(Boolean).map(s => { const [code, side] = s.split(':'); return {code, side: side === 's' ? 'sell' : 'buy'}; }).filter(l => contractOf(l.code));
+    PF.st.wlOff = h.get('wloff') !== '0';   /* the chain needs the width: the picks panel starts hidden here (the top-bar button shows it) */
+  },
+  writeHash(h) {
+    h.set('x', EXP + 1); if (MODE !== 'simple') h.set('mode', MODE); if (RANGE !== 'near') h.set('strikes', RANGE); if (OIV !== 'open') h.set('oi', OIV);
+    if (NR !== '1m') h.set('nr', NR); if (CR !== '1m') h.set('cr', CR); if (!PF.st.wlOff) h.set('wloff', '0');
+    if (LEGS.length) h.set('legs', LEGS.map(l => `${l.code}:${l.side[0]}`).join(','));
+  },
+  drawer(code, c) { return contractView(code, c); },
+  render(main, c) {
+  if (!c.P.fno) { location.replace('../31-dashboard/page.html#m=' + c.m); return; }   /* India only: absent in the US */
+  const {el, icon, num} = c, X = C.expiries[EXP], ST = X.stats, spot = U.spot, day = dayOf(c, C.day), xl = expLabel(c, X);
+
+  main.append(c.pagehead({crumbs: [['Trade'], ['Option chain'], ['NIFTY'], [xl]], title: 'NIFTY options',
+    meta: [el('span', {class: 'md-chip', 'data-tip': 'One lot of a NIFTY option is 65 units (NSE). A price of 100 costs ₹6,500 a lot.'}, icon('layers'), `Lot ${LOT}`),
+      el('span', {class: 'mb-tag', 'data-tip': C.source.eod}, `NSE data · ${day}`)]}));
+
+  /* 1. in one look: the four questions a user asks first, each answered in words with its number and source */
+  const look = (ic, title, tip, ...kids) => el('section', {class: 'mb-oclook-card', 'aria-label': title}, el('h2', {}, icon(ic), title, c.help(tip)), ...kids);
+  const n = H.nifty.length, from = Math.max(0, n - 1 - SPANS[NR][1]), first = H.nifty[from];
+  const vix3 = H.vix.slice(-63).filter(v => v != null).sort((a, b) => a - b), vixMed = vix3[Math.floor(vix3.length / 2)];
+  main.append(el('div', {class: 'mb-oclook'},
+    look('show_chart', 'NIFTY', 'The NIFTY 50 close of NSE’s daily index file. Not live: the next close arrives after 15:30 IST.',
+      el('div', {class: 'big'}, num(spot), ' ', el('span', {class: 'mb-delta ' + c.dir(U.chg)}, `${U.chg > 0 ? '+' : '−'}${num(Math.abs(U.chg))} (${c.sgn(U.chg_pct)})`)),
+      el('p', {}, `Close ${day}. ${{'5d': 'Five days', '1m': 'One month', '3m': 'Three months'}[NR]} before: ${num(first)} (${c.sgn((spot / first - 1) * 100)}).`),
+      line(c, H.nifty.slice(from), 'var(--mb-chart-1)', `NIFTY closes, the last ${SPANS[NR][0]}`),
+      seg(c, 'NIFTY period', Object.entries(SPANS).filter(([k]) => k !== 'life').map(([k, v]) => [k, v[0]]), NR, k => { NR = k; })),
+    look('swap_vert', `Range priced in by ${xl}`, 'The at-the-money call and put closes added together: the move, either way, that the options pay for by expiry. Not a forecast.',
+      el('div', {class: 'big'}, `±${num(ST.straddle, 0)}`, el('small', {}, ` ±${(ST.straddle / spot * 100).toFixed(1)}%`)),
+      el('p', {}, `The options price NIFTY between ${num(ST.range[0], 0)} and ${num(ST.range[1], 0)} on ${xl} (${X.days} day${X.days === 1 ? '' : 's'} left).`),
+      el('div', {class: 'mb-range', role: 'img', 'aria-label': `From ${num(ST.range[0], 0)} to ${num(ST.range[1], 0)}, NIFTY at ${num(spot, 0)}`},
+        el('span', {}, num(ST.range[0], 0)), el('span', {class: 'track'}, el('i', {})), el('span', {}, num(ST.range[1], 0)))),
+    look('bar_chart', 'Where traders hold positions', 'Open interest: contracts still open at the close. Many open calls above NIFTY are often read as a ceiling, many open puts below as a floor. A crowd reading, not a forecast.',
+      el('p', {class: 'lead'}, 'Most calls open above NIFTY at ', el('b', {}, num(ST.call_wall, 0)), ', most puts below at ', el('b', {}, num(ST.put_wall, 0)), '.'),
+      el('p', {}, `Most added today: calls at ${num(ST.call_add, 0)}, puts at ${num(ST.put_add, 0)}. Max pain ${num(ST.max_pain, 0)}.`),
+      el('p', {class: 'muted'}, 'Often read as a ceiling and a floor; a crowd reading, not a forecast.')),
+    look('sensors', 'Mood and fear', 'Put-call ratio: puts open ÷ calls open for this expiry. India VIX: the volatility NIFTY options price in for the next 30 days (NSE).',
+      el('div', {class: 'pair'},
+        el('div', {}, el('span', {class: 'k'}, 'Put-call ratio'), el('b', {}, ST.pcr.toFixed(2)), el('small', {}, ST.pcr < 1 ? 'more calls than puts open' : 'more puts than calls open')),
+        el('div', {}, el('span', {class: 'k'}, 'India VIX'), el('b', {}, num(U.vix)), el('small', {}, `${U.vix > vixMed ? 'above' : 'below'} its 3-month middle (${num(vixMed)}): options ${U.vix > vixMed ? 'cost more' : 'cost less'} than usual`))),
+      line(c, H.pcr[X.expiry].slice(-21), 'var(--mb-chart-3)', `Put-call ratio of ${xl}, last month`), el('p', {class: 'muted'}, `Put-call ratio of ${xl}, the last month`))));
+
+  /* 2. where the figures come from (never live) */
+  const tip = (text, kids, cls = 'mb-asof') => el('span', {class: cls, 'data-tip': text}, ...kids);
+  main.append(el('div', {class: 'src', role: 'note', 'aria-label': 'Where the figures come from'},
+    tip(`${C.source.eod}. NIFTY and India VIX: ${C.source.index}.`, [icon('schedule'), `Prices, OI, volume: NSE close ${day}`]),
+    tip(C.quotes.text, [icon('warning'), 'Bid and ask: not published yet'], 'mb-asof stale'),
+    tip(`IV: ${C.computed.iv}. Chances: ${C.computed.chance}.`, [icon('calculate'), 'IV, Greeks, chances: ours'], 'mb-tag derived'),
+    el('span', {class: 'mb-tag', 'data-tip': 'No streaming prices: the page changes with each day’s NSE file.'}, 'Not live'),
+    tip(C.books, [icon('shield'), 'Our F&O books: no position'])));
+
+  /* 3. controls: expiry (weekly and monthly), how much detail, how many strikes */
+  main.append(el('div', {class: 'bar'},
+    el('div', {class: 'md-segmented dense exp', role: 'group', 'aria-label': 'Expiry'}, ...C.expiries.map((x, i) => el('button', {type: 'button', 'aria-pressed': String(EXP === i),
+      'data-tip': x.monthly ? 'Monthly expiry: the F&O tool studies these and records their 3 pm bid and ask (from 13 Oct).' : 'Weekly expiry: end of day only; the F&O tool does not trade weeklies.', onclick: () => { EXP = i; c.rerender(); }},
+      expLabel(c, x), el('small', {}, `${x.monthly ? 'Monthly' : 'Weekly'} · ${x.days} day${x.days === 1 ? '' : 's'}`))))));
+  main.append(el('div', {class: 'bar'},
+    seg(c, 'Detail', [['simple', 'Simple'], ['detail', 'Detailed'], ['greeks', 'Greeks']], MODE, k => { MODE = k; }), el('span', {class: 'grow'}),
+    seg(c, 'Strikes', Object.entries(RANGES), RANGE, k => { RANGE = k; })));
+  main.append(el('div', {class: 'legend'}, el('span', {}, el('i', {style: 'background:var(--md-sys-color-surface-container)'}), 'In the money: worth something if expiry were today'),
+    el('span', {}, el('i', {style: 'background:var(--md-sys-color-primary)'}), `ATM: the strike nearest NIFTY (${num(ST.atm, 0)})`),
+    el('span', {}, 'Tap a price for its cost, break-even, chance and history')));
+
+  /* 4. options picked to combine (the strategy builder, screen 33, shows their joint profit and loss) */
+  if (LEGS.length) main.append(tray(c));
+  /* 5. the chain; 6. open interest and IV by strike */
+  main.append(chainTable(c, X), charts(c, X));
+}});
+
+/* ---- helpers ---------------------------------------------------------------------------------------------------- */
+function dayOf(c, iso) { return c.dateShort(iso + 'T10:00:00Z'); }
+function expLabel(c, x) { return c.dateShort(x.expiry + 'T10:00:00Z').replace(/^\w+ /, ''); }
+function seg(c, label, opts, cur, set) { return c.el('div', {class: 'md-segmented dense', role: 'group', 'aria-label': label}, ...opts.map(([k, v]) => c.el('button', {type: 'button', 'aria-pressed': String(cur === k), onclick: () => { set(k); c.rerender(); }}, v))); }
+function line(c, vals, color, label) {
+  const pts = vals.map((v, i) => [i, v]).filter(p => p[1] != null), lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1])), W = 300, Hh = 56;
+  const s = c.svgEl('svg', {viewBox: `0 0 ${W} ${Hh}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': label, class: 'spark'});
+  s.append(c.svgEl('polyline', {points: pts.map(([i, v]) => `${(i / Math.max(1, vals.length - 1) * W).toFixed(1)},${(Hh - 4 - (v - lo) / (hi - lo || 1) * (Hh - 8)).toFixed(1)}`).join(' '), fill: 'none', stroke: color, 'stroke-width': '2', 'vector-effect': 'non-scaling-stroke'}));
+  return s;
+}
+
+function chainTable(c, X) {
+  const {el, icon, num, delta} = c, ST = X.stats, spot = U.spot, xl = expLabel(c, X);
+  const atmI = X.rows.findIndex(r => r.strike === ST.atm);
+  const rows = RANGE === 'near' ? X.rows.slice(Math.max(0, atmI - 10), atmI + 11) : RANGE === 'band' ? X.rows.filter(r => Math.abs(r.strike - spot) <= spot * .05) : X.rows;
+  const maxOi = Math.max(...rows.flatMap(r => [r.CE.oi, r.PE.oi]));
+  const COLS = {simple: [['oi', 'Open interest', 'oc-wide'], ['lot', '1 lot costs', 'oc-m'], ['px', 'Price', '']],
+    detail: [['oi', 'OI', 'oc-wide'], ['oi_chg', 'OI change', 'oc-l'], ['volume', 'Volume', 'oc-l'], ['iv', 'IV %', 'oc-m'], ['px', 'Price', '']],
+    greeks: [['delta', 'Delta', 'oc-wide'], ['gamma', 'Gamma', 'oc-l'], ['theta', 'Theta', 'oc-wide'], ['vega', 'Vega', 'oc-m'], ['iv', 'IV %', 'oc-m'], ['px', 'Price', '']]}[MODE];
+  const TIPS = {oi: 'Contracts still open at the close', oi_chg: 'Change in open interest since the day before', volume: 'Units traded today', iv: 'Implied volatility, ours, from the close',
+    lot: `Price × ${LOT}: what one lot costs to buy`, delta: 'Price change for a 1-point NIFTY move', gamma: 'Change in delta for a 1-point move', theta: 'Value lost per day from time', vega: 'Price change for 1 point of IV', px: 'Close of the day; change on the day before'};
+  const cell = (r, side, [key, , cls]) => {
+    const k = r[side], itm = side === 'CE' ? r.strike < spot : r.strike > spot, base = (itm ? 'itm ' : '') + (side === 'CE' ? 'c ' : 'p ') + cls;
+    const muted = (t, why) => el('span', {class: 'muted', 'data-tip': why}, t);
+    if (key === 'oi') return el('td', {class: base + ' oc-oi', style: `--w:${Math.round(k.oi / maxOi * 100)}`}, ints(k.oi));
+    if (key === 'oi_chg') return el('td', {class: base}, el('span', {class: 'mb-delta ' + c.dir(k.oi_chg)}, (k.oi_chg > 0 ? '+' : k.oi_chg < 0 ? '−' : '') + ints(Math.abs(k.oi_chg))));
+    if (key === 'volume') return el('td', {class: base}, k.volume ? ints(k.volume) : muted('no trade', 'Not traded today: its close is not a traded price.'));
+    if (key === 'iv') return el('td', {class: base}, k.iv == null ? muted('—', 'No IV: not traded today, or no volatility gives its price.') : k.iv.toFixed(1));
+    if (key === 'lot') return el('td', {class: base}, lots(k.close));
+    if (key !== 'px') return el('td', {class: base}, k.greeks ? (key === 'gamma' ? k.greeks.gamma.toFixed(4) : key === 'delta' ? k.greeks.delta.toFixed(2) : num(k.greeks[key])) : muted('—', 'Not traded today: no Greeks.'));
+    const sel = LEGS.some(l => l.code === k.code), why = lockWhy(c);
+    const bs = (sd, t) => el('button', {class: 'mb-bs ' + sd, type: 'button', disabled: true, 'aria-label': `${t} ${k.code}`, 'data-tip': why}, t[0]);
+    return el('td', {class: base + ' oc-px' + (sel ? ' sel' : ''), tabindex: '0', 'aria-label': `${side === 'CE' ? 'Call' : 'Put'} ${ints(r.strike)}: price ${num(k.close)}`, onclick: () => c.openDrawer('page:' + k.code)},
+      el('span', {class: 'oc-acts'}, bs('buy', 'Buy'), bs('sell', 'Sell'),
+        el('button', {class: 'add', type: 'button', 'aria-label': `Combine ${k.code}`, 'data-tip': sel ? 'Already in your combination' : 'Add to a combination (see the strategy builder)', onclick: e => { e.stopPropagation(); if (!sel) LEGS.push({code: k.code, side: 'buy'}); c.rerender(); }}, icon(sel ? 'check' : 'add'))),
+      num(k.close), el('small', {}, delta(k.chg_pct)), el('small', {class: 'oc-narrow'}, `OI ${ints(k.oi)}`));
+  };
+  const head = el('thead', {},
+    el('tr', {class: 'side'}, ...COLS.map(k => el('th', {class: 'c ' + k[2]}, k[0] === 'px' ? 'Calls · gain if NIFTY rises' : '')), el('th', {class: 'k'}, xl), ...[...COLS].reverse().map(k => el('th', {class: 'p ' + k[2]}, k[0] === 'px' ? 'Puts · gain if NIFTY falls' : ''))),
+    el('tr', {class: 'cols'}, ...COLS.map(k => el('th', {class: 'c ' + k[2], 'data-tip': TIPS[k[0]]}, k[1])), el('th', {class: 'k'}, 'Strike'), ...[...COLS].reverse().map(k => el('th', {class: 'p ' + k[2], 'data-tip': TIPS[k[0]]}, k[1]))));
+  const body = el('tbody', {});
+  rows.forEach((r, i) => {
+    if (i && rows[i - 1].strike < spot && r.strike >= spot) body.append(el('tr', {class: 'oc-spot'}, ...COLS.map(k => el('td', {class: 'c ' + k[2]})), el('td', {class: 'k'}, el('span', {}, `NIFTY ${num(spot)}`)), ...[...COLS].reverse().map(k => el('td', {class: 'p ' + k[2]}))));
+    body.append(el('tr', {class: r.strike === ST.atm ? 'atm' : null}, ...COLS.map(k => cell(r, 'CE', k)), el('td', {class: 'k'}, ints(r.strike), r.strike === ST.atm ? el('small', {}, 'ATM') : null), ...[...COLS].reverse().map(k => cell(r, 'PE', k))));
+  });
+  return el('section', {class: 'mb-chain-box', 'aria-label': `NIFTY ${xl} options`}, el('table', {class: 'mb-chain'}, head, body));
+}
+
+function tray(c) {
+  const {el, icon} = c, legs = LEGS.map(l => ({...l, ...contractOf(l.code)}));
+  const net = legs.reduce((a, l) => a + (l.side === 'sell' ? l.k.close : -l.k.close), 0) * LOT;
+  return el('div', {class: 'mb-legtray', role: 'region', 'aria-label': 'Options to combine'},
+    el('b', {style: 'font-size:13px'}, `Your combination (${legs.length})`),
+    el('div', {class: 'legs'}, ...legs.map((l, i) => el('span', {class: 'mb-label ' + (l.side === 'buy' ? 'success' : 'danger')},
+      el('button', {type: 'button', class: 'md-btn text small', style: 'height:20px;padding:0 4px;color:inherit', 'data-tip': 'Switch between Buy and Sell', onclick: () => { LEGS[i].side = l.side === 'buy' ? 'sell' : 'buy'; c.rerender(); }}, l.side === 'buy' ? 'Buy' : 'Sell'),
+      `${expLabel(c, l.x)} ${ints(l.r.strike)} ${l.kind}`,
+      el('button', {type: 'button', class: 'md-icon-btn small', style: 'width:20px;height:20px;color:inherit', 'aria-label': 'Remove', onclick: () => { LEGS.splice(i, 1); c.rerender(); }}, icon('close'))))),
+    el('span', {class: 'sum'}, net >= 0 ? 'You receive ' : 'You pay ', el('b', {}, '₹' + Math.round(Math.abs(net)).toLocaleString('en-IN')), ` a lot, at ${dayOf(c, C.day)} closes`),
+    el('button', {class: 'md-btn text small', type: 'button', onclick: () => { LEGS = []; c.rerender(); }}, 'Clear'),
+    el('button', {class: 'md-btn filled small', type: 'button', 'data-tip': 'Next screen: the profit and loss of these options together at expiry, the most you can lose and gain, and the break-evens', onclick: () => c.go('builder')}, icon('calculate'), 'See profit and loss'));
+}
+
+function charts(c, X) {
+  const {el} = c, ST = X.stats, atmI = X.rows.findIndex(r => r.strike === ST.atm), near = X.rows.slice(Math.max(0, atmI - 10), atmI + 11), xl = expLabel(c, X);
+  const W = 600, Hh = 190, pad = 12, bw = (W - 2 * pad) / near.length, xAt = i => pad + i * bw, key = OIV === 'open' ? 'oi' : 'oi_chg';
+  const top = Math.max(...near.flatMap(r => [r.CE[key], r.PE[key]]).map(Math.abs)), zero = OIV === 'open' ? Hh - pad : Hh / 2;
+  const oi = c.svgEl('svg', {viewBox: `0 0 ${W} ${Hh}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': `${OIV === 'open' ? 'Open interest' : 'Open interest added today'} by strike, ${xl}`, class: 'plot'});
+  near.forEach((r, i) => ['CE', 'PE'].forEach((s, j) => { const v = r[s][key], h = Math.abs(v) / top * (OIV === 'open' ? Hh - 2 * pad : Hh / 2 - pad); oi.append(c.svgEl('rect', {x: (xAt(i) + bw * (.1 + j * .42)).toFixed(1), y: (v >= 0 ? zero - h : zero).toFixed(1), width: (bw * .38).toFixed(1), height: Math.max(.5, h).toFixed(1), fill: s === 'CE' ? 'var(--mb-chart-1)' : 'var(--mb-chart-2)'})); }));
+  const mark = svg => { const ai = near.findIndex(r => r.strike === ST.atm); svg.append(c.svgEl('line', {x1: xAt(ai) + bw / 2, x2: xAt(ai) + bw / 2, y1: 0, y2: Hh, stroke: 'var(--md-sys-color-outline)', 'stroke-dasharray': '4 4', 'vector-effect': 'non-scaling-stroke'})); };
+  mark(oi); oi.append(c.svgEl('line', {x1: 0, x2: W, y1: zero, y2: zero, stroke: 'var(--md-sys-color-outline-variant)', 'vector-effect': 'non-scaling-stroke'}));
+  const ivs = near.flatMap(r => [r.CE.iv, r.PE.iv]).filter(v => v != null), lo = Math.min(...ivs) - .3, hi = Math.max(...ivs) + .3;
+  const iv = c.svgEl('svg', {viewBox: `0 0 ${W} ${Hh}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': `IV by strike, ${xl}`, class: 'plot'});
+  ['CE', 'PE'].forEach(s => iv.append(c.svgEl('polyline', {points: near.map((r, i) => r[s].iv == null ? null : `${(xAt(i) + bw / 2).toFixed(1)},${(Hh - pad - (r[s].iv - lo) / (hi - lo) * (Hh - 2 * pad)).toFixed(1)}`).filter(Boolean).join(' '), fill: 'none', stroke: s === 'CE' ? 'var(--mb-chart-1)' : 'var(--mb-chart-2)', 'stroke-width': '2', 'vector-effect': 'non-scaling-stroke'})));
+  mark(iv);
+  const axis = () => el('div', {class: 'axis'}, el('span', {}, ints(near[0].strike)), el('span', {}, `dashed: ATM ${ints(ST.atm)}`), el('span', {}, ints(near[near.length - 1].strike)));
+  const key2 = () => el('div', {class: 'legend', style: 'margin:6px 0 0'}, el('span', {}, el('i', {style: 'background:var(--mb-chart-1)'}), 'Calls'), el('span', {}, el('i', {style: 'background:var(--mb-chart-2)'}), 'Puts'));
+  return el('section', {class: 'sec', 'aria-label': 'Open interest and IV by strike'},
+    el('div', {class: 'sec-head'}, el('h2', {}, 'Positions and volatility by strike'), el('span', {class: 'sub'}, `${xl} · the 21 strikes nearest NIFTY · NSE close ${dayOf(c, C.day)}`)),
+    el('div', {class: 'charts'},
+      el('div', {class: 'card'}, el('div', {class: 'chart-t'}, OIV === 'open' ? 'Open interest' : 'Open interest added today', seg(c, 'Open interest', [['open', 'Open now'], ['added', 'Added today']], OIV, k => { OIV = k; })),
+        el('p', {class: 'chart-s'}, OIV === 'open' ? 'Contracts open at the close, by strike' : 'Above the line: added today; below: closed today'), oi, axis(), key2()),
+      el('div', {class: 'card'}, el('div', {class: 'chart-t'}, 'Implied volatility (ours)'), el('p', {class: 'chart-s'}, `${lo.toFixed(1)}% to ${hi.toFixed(1)}%: higher means a dearer option for the same distance`), iv, axis(), key2())));
+}
+
+/* the contract view (right drawer; bottom sheet on phones): what it costs, when it pays, how likely, how it moved */
+function contractView(code, c) {
+  const f = contractOf(code); if (!f) return null;
+  const {el, icon, num, delta} = c, {x, r, kind, k} = f, call = kind === 'CE', xl = expLabel(c, x);
+  const be = k.breakeven, move = (be / U.spot - 1) * 100, h = H.contracts[code], g = k.greeks;
+  const scen = (cls, title, ...lines) => el('div', {class: 'mb-scen ' + cls}, el('b', {}, title), ...lines.map(t => el('p', {}, t)));
+  const fact = (label, value, plain) => el('div', {class: 'mb-fact'}, el('span', {class: 'k'}, label), el('b', {}, value), el('small', {}, plain));
+  return [c.drawerHead(`NIFTY ${xl} ${ints(r.strike)} ${call ? 'call' : 'put'}`, `${code} · ${x.monthly ? 'monthly' : 'weekly'} · ${x.days} day${x.days === 1 ? '' : 's'} left · lot ${LOT}`,
+      el('div', {style: 'margin-top:6px;display:flex;gap:6px;flex-wrap:wrap'}, el('span', {class: 'mb-asof'}, icon('schedule'), `NSE close ${dayOf(c, C.day)}`), el('span', {class: 'mb-tag'}, 'Not live'))),
+    el('div', {class: 'mb-drawer-body'},
+      el('div', {style: 'display:flex;align-items:baseline;gap:10px;flex-wrap:wrap'}, el('span', {style: 'font:700 28px/1.1 var(--md-ref-typeface-plain)'}, num(k.close)), delta(k.chg_pct), el('span', {class: 'muted', style: 'font-size:12.5px'}, `1 lot = ${lots(k.close)}`)),
+      scen('buy', `If you buy 1 lot: you pay ${lots(k.close)}`, `That is the most you can lose. You gain if NIFTY ends ${call ? 'above' : 'below'} ${num(be)} on ${xl} (${c.sgn(move)} from ${num(U.spot)}).`,
+        k.chance == null ? 'Chance: not computed (not traded today).' : `Chance of ending ${call ? 'above' : 'below'} that: about ${k.chance}% (risk-neutral, from the price; not a forecast).`),
+      scen('sell', `If you sell 1 lot: you receive ${lots(k.close)}`, `That is the most you can gain. Your loss has no limit if NIFTY ${call ? 'rises above' : 'falls below'} ${num(be)}, and selling needs margin (its source is not recorded yet).`),
+      el('h3', {class: 'mb-drawer-sub'}, 'How it moved'), priceHistory(c, code, h),
+      el('h3', {class: 'mb-drawer-sub'}, 'The numbers, in words'),
+      el('div', {class: 'mb-facts'},
+        fact('Open interest', ints(k.oi), `${k.oi_chg >= 0 ? '+' : '−'}${ints(Math.abs(k.oi_chg))} today: contracts still open`),
+        fact('Volume', k.volume ? ints(k.volume) : 'no trade', 'units traded today'),
+        fact('IV (ours)', k.iv == null ? '—' : k.iv + '%', 'the yearly swing the price implies'),
+        fact('Delta', g ? g.delta.toFixed(2) : '—', g ? `about ₹${Math.abs(g.delta).toFixed(2)} for a 1-point NIFTY move` : 'not traded today'),
+        fact('Theta', g ? num(g.theta) : '—', g ? `about ₹${num(Math.abs(g.theta))} lost a day as time passes` : ''),
+        fact('Vega', g ? num(g.vega) : '—', g ? `about ₹${num(g.vega)} for 1 point of IV` : ''))),
+    el('div', {class: 'mb-drawer-foot'}, el('div', {class: 'sub muted', style: 'font-size:12px'}, lockWhy(c)),
+      el('div', {style: 'display:flex;gap:8px;flex-wrap:wrap'}, el('button', {class: 'md-btn buy', type: 'button', disabled: true}, 'Buy'), el('button', {class: 'md-btn sell', type: 'button', disabled: true}, 'Sell'),
+        el('button', {class: 'md-btn outlined', type: 'button', onclick: () => { if (!LEGS.some(l => l.code === code)) LEGS.push({code, side: 'buy'}); c.closeDrawer(); c.rerender(); }}, icon('add'), 'Combine')))];
+}
+function priceHistory(c, code, h) {
+  const {el, num} = c;
+  if (!h) return el('p', {class: 'muted', style: 'font-size:12.5px'}, 'History is kept for the 21 strikes nearest NIFTY in this mockup.');
+  const all = h.close.length, take = Math.min(all, SPANS[CR][1]), closes = h.close.slice(all - take), ois = h.oi.slice(all - take), d0 = H.dates[h.from + all - take];
+  const W = 360, Hh = 120, top = Math.max(...ois), pts = closes.map((v, i) => [i, v]).filter(p => p[1] != null), lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1]));
+  const s = c.svgEl('svg', {viewBox: `0 0 ${W} ${Hh}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': `${code}: price and open interest since ${d0}`, class: 'plot sm'});
+  ois.forEach((o, i) => { const bh = o / top * (Hh * .45); s.append(c.svgEl('rect', {x: (i / take * W).toFixed(1), y: (Hh - bh).toFixed(1), width: Math.max(1, W / take * .7).toFixed(1), height: bh.toFixed(1), fill: 'var(--mb-chart-1-fill)'})); });
+  s.append(c.svgEl('polyline', {points: pts.map(([i, v]) => `${((i + .35) / take * W).toFixed(1)},${(Hh - 6 - (v - lo) / (hi - lo || 1) * (Hh - 12)).toFixed(1)}`).join(' '), fill: 'none', stroke: 'var(--mb-chart-1)', 'stroke-width': '2', 'vector-effect': 'non-scaling-stroke'}));
+  return el('div', {}, seg(c, 'History', Object.entries(SPANS).map(([key, v]) => [key, v[0]]), CR, key => { CR = key; c.openDrawer('page:' + code); }), s,
+    el('div', {class: 'axis'}, el('span', {}, dayOf(c, d0)), el('span', {}, `price ${num(lo)}–${num(hi)} · bars: open interest`), el('span', {}, dayOf(c, C.day))),
+    el('p', {class: 'muted', style: 'font-size:12px;margin:4px 0 0'}, `Listed ${dayOf(c, H.dates[h.from])}${H.dates[h.from] === C.source.history_from ? ' or earlier (these files start 1 Jun)' : ''}; the line skips days without trades.`));
+}
+</script>
+</body>
+</html>

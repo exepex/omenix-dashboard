@@ -85,3 +85,14 @@ weekend), `snap3pm` (stale after 26 h). A stale value is greyed and says "stale"
 ## Owner-changeable defaults
 Manual account Rs 5 lakh (US $5,000, owner 13 Oct 2026) with the F&O books' limits; it holds the owner's real own paper
 trades (RELIANCE 50 at ₹1,182; AAPL 3 at $330.80).
+
+## Changes after sign-off (each with its reason; for the owner through the orchestrator)
+- **13 Oct 2026: NIFTY lot 75 → 65 in the example contracts** (option and future names, basket credit and maximum loss,
+  short-option margin example 1,18,000 → 1,02,000). Reason: NSE's own F&O file says 65 (`NewBrdLotQty`, every day
+  checked from 1 Jun to 12 Oct 2026), and so does the F&O tool's config. The contract fields are unchanged.
+- **13 Oct 2026: the hover card's IV tip** now says "computed by us from the end-of-day close". It used to say "from the
+  snapshot". Reason: the F&O tool computes IV from closes only (story B1), and it keeps quote-based IV apart.
+- **13 Oct 2026: page hooks for 32-option-chain**, which change no field:
+  - a page can supply its own drawer (`drawer=page:<id>`);
+  - a page can name its data in the footer (`dataLabel`);
+  - the rail's "Option chain" opens 32, with the shortcut `g c`.

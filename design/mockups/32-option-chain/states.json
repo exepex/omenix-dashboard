@@ -1,0 +1,235 @@
+{
+ "page": "page.html",
+ "states": [
+  {
+   "id": "chain",
+   "section": "1. The page (NSE data of Mon 12 Oct 2026)",
+   "title": "Whole page: NIFTY, the range priced in, where traders hold positions, the mood; then the chain (Simple) and the charts.",
+   "hash": "x=3",
+   "widths": [
+    1280,
+    1024,
+    768,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "top",
+   "section": "1. The page (NSE data of Mon 12 Oct 2026)",
+   "title": "The first screen: four answers in words, and where every figure comes from.",
+   "hash": "x=3",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "nifty-3m",
+   "section": "1. The page (NSE data of Mon 12 Oct 2026)",
+   "title": "NIFTY over three months (5D, 1M, 3M).",
+   "hash": "x=3&nr=3m",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "source-quotes",
+   "section": "1. The page (NSE data of Mon 12 Oct 2026)",
+   "title": "Why there is no bid and ask yet (the 3 pm recording started 13 Oct; not published).",
+   "hash": "x=3",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "hover": ".src .mb-asof.stale"
+    }
+   ]
+  },
+  {
+   "id": "weekly",
+   "section": "2. Expiries, detail and strikes",
+   "title": "This week’s expiry (13 Oct, weekly, 1 day left): end of day only.",
+   "hash": "x=1",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "monthly-nov",
+   "section": "2. Expiries, detail and strikes",
+   "title": "23 Nov monthly expiry.",
+   "hash": "x=6",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "detailed",
+   "section": "2. Expiries, detail and strikes",
+   "title": "Detailed: OI, OI change, volume, IV.",
+   "hash": "x=3&mode=detail",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "greeks",
+   "section": "2. Expiries, detail and strikes",
+   "title": "Greeks: delta, gamma, theta, vega and IV, computed by us.",
+   "hash": "x=3&mode=greeks",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "within-5",
+   "section": "2. Expiries, detail and strikes",
+   "title": "Every strike within 5% of NIFTY.",
+   "hash": "x=3&strikes=band",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "oi-added",
+   "section": "2. Expiries, detail and strikes",
+   "title": "Open interest added and closed today, by strike.",
+   "hash": "x=3&oi=added",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Open interest and IV by strike']"
+    }
+   ]
+  },
+  {
+   "id": "contract-call",
+   "section": "3. One contract",
+   "title": "Tap a call: what 1 lot costs, the most you can lose, break-even, chance, how it moved, the numbers in words.",
+   "hash": "x=3&drawer=page:NIFTY26OCT22400CE",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "contract-put",
+   "section": "3. One contract",
+   "title": "A put, with its whole life since listing.",
+   "hash": "x=3&cr=life&drawer=page:NIFTY26OCT22300PE",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "contract-weekly",
+   "section": "3. One contract",
+   "title": "A weekly contract (NSE weekly code).",
+   "hash": "x=1&cr=5d&drawer=page:NIFTY26O1322400CE",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "hover",
+   "section": "4. Combining and trading",
+   "title": "Hover a price: Buy and Sell (grey: market closed, and no bid or ask yet) and Combine.",
+   "hash": "x=3",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "hover": "td[aria-label^='Call 22,400']"
+    },
+    {
+     "hover": "td[aria-label^='Call 22,400'] .mb-bs.buy"
+    }
+   ]
+  },
+  {
+   "id": "hover-open",
+   "section": "4. Combining and trading",
+   "title": "Market open (example time): still grey, the reason is the missing bid and ask.",
+   "hash": "x=3&clock=open",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "hover": "td[aria-label^='Call 22,400']"
+    },
+    {
+     "hover": "td[aria-label^='Call 22,400'] .mb-bs.buy"
+    }
+   ]
+  },
+  {
+   "id": "combine",
+   "section": "4. Combining and trading",
+   "title": "Options picked to combine: what you receive or pay a lot; “See profit and loss” opens the strategy builder (next screen).",
+   "hash": "x=3&legs=NIFTY26OCT22400CE:s,NIFTY26OCT22700CE:b,NIFTY26OCT22300PE:s,NIFTY26OCT22000PE:b",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "search",
+   "section": "4. Combining and trading",
+   "title": "Search finds any contract by its code.",
+   "hash": "x=3&pal=NIFTY26OCT22400CE",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "us",
+   "section": "5. Honest gaps, other screens, themes",
+   "title": "US market: no option chain (it opens Home in the US).",
+   "hash": "m=us",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "panel-on",
+   "section": "5. Honest gaps, other screens, themes",
+   "title": "With the picks panel shown, the table keeps fewer columns.",
+   "hash": "x=3&mode=detail&wloff=0",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "dark",
+   "section": "5. Honest gaps, other screens, themes",
+   "title": "Dark theme.",
+   "hash": "x=3&theme=dark",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "tablet",
+   "section": "5. Honest gaps, other screens, themes",
+   "title": "Tablet 768 px.",
+   "hash": "x=3",
+   "widths": [
+    768
+   ]
+  }
+ ]
+}
