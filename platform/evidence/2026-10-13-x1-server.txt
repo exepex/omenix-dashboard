@@ -19,7 +19,7 @@ ERROR: unrecognized arguments: -n omenix-pg
 
 https://aka.ms/cli_ref
 Read more about the command in reference docs
-FAIL  firewall rules =  (README says <IP address>-<IP address>)
+FAIL  firewall rules =  (README says 0.0.0.0-255.255.255.255)
 
 info  geo-redundant backup = Disabled
 info  high availability = Disabled
