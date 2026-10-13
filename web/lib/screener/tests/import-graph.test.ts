@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
-import { canonical, importsOf, reachable, sources, web, type Source } from "../../shell/tests/imports.ts";
+import { canonical, computedImports, importsOf, reachable, sources, web, type Source } from "../../shell/tests/imports.ts";
 
 const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].flatMap(sources).filter((f) => !/(^|\/)tests\//.test(f.path));
 const ADAPTERS = /^lib\/(screener|overview|home)\/(fixture-source$|fixture\/)|^lib\/fixtures\//;
@@ -52,6 +52,14 @@ test("the checks catch planted breaches: alias, extensionless, dynamic, re-expor
   assert.ok(forbiddenReach([wired], [...real, wired]).includes("lib/screener/wiring"));
   const client = comp('import { readMarketPage } from "@/lib/data/handler";');
   assert.ok(forbiddenReach([client], [...real, client]).includes("lib/data/handler"));
+});
+
+// Judge 45, minor 2: a computed import names no module the walk could follow, so it is refused outright.
+test("the pages' components and loaders make no computed import (one the walk could not follow)", () => {
+  const pages = [...components, ...sources("app/(cockpit)/[market]/screener"), ...sources("app/(cockpit)/[market]/markets")];
+  assert.deepEqual(pages.filter(computedImports).map((f) => f.path), []);
+  const planted: Source = { path: "components/markets/planted.tsx", text: 'const m = "../../lib/overview/" + "wiring";\nconst w = await import(m);\nexport const x = w;\n' };
+  assert.equal(computedImports(planted), true, "a computed import(m) of the overview wiring is caught");
 });
 
 test("the pages draw no Buy or Sell of their own: every one comes from the frame's trade.tsx, under the one lock rule", () => {

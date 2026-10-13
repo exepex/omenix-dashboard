@@ -6,9 +6,10 @@ import frameRaw from "../fixtures/blocks.generated.json" with { type: "json" };
 import { exampleReader } from "../fixtures/examples.ts";
 import type { OverviewData } from "./source.ts";
 
-const read = exampleReader(raw);
+/** Market data only: no strategy names, so no display-name rule (judge 45). */
+const read = exampleReader(raw, { strategies: false });
 /** The frame's blocks (W10's examples). */
-const readFrame = exampleReader(frameRaw);
+const readFrame = exampleReader(frameRaw, { strategies: false });
 
 export const fixtureOverviewData: OverviewData = {
   session: async (market) => readFrame(`getSession_${market}`),

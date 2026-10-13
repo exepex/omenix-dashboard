@@ -16,15 +16,17 @@ import { cases as portfolios } from "./paper-portfolios.mjs";
 import { cases as ruleVsAi } from "./rule-vs-ai.mjs";
 import { cases as shell } from "./shell.mjs";
 import { cases as lab } from "./strategy-lab.mjs";
+import { cases as markets } from "./markets.mjs";
+import { cases as screener } from "./screener.mjs";
 import { cases as track } from "./track-record.mjs";
 import { cases as watchlist } from "./watchlist.mjs";
 import { frameChecks, lockChecks, openChecks, orderChecks, searchChecks, usChecks } from "./frame-checks.mjs";
 
-const ALL = [...assistant, ...companies, ...company, ...help, ...home, ...news, ...portfolios, ...ruleVsAi, ...shell, ...lab, ...track, ...watchlist];
+const ALL = [...assistant, ...companies, ...company, ...help, ...home, ...news, ...portfolios, ...ruleVsAi, ...shell, ...lab, ...track, ...watchlist, ...screener, ...markets];
 const PAGE_CASES = [
   "home-india", "home-us", "watchlist-india", "news-india", "companies-india", "company-reliance", "company-aapl", "lifecycle-reliance",
   "strategies-reliance", "strategy-lab-india", "rule-vs-ai-india", "paper-portfolio-v3-india", "track-record-india", "help-india",
-  "assistant-india", "gallery",
+  "assistant-india", "gallery", "screener-stocks", "screener-us", "markets-india", "markets-us",
 ];
 const WIDTHS = [390, 768, 1280, 1680];
 

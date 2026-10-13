@@ -212,8 +212,15 @@ async function runCase(browser, c) {
     const text = await page.evaluate(() => document.body.innerText);
     for (const want of c.expectText ?? []) if (!text.includes(want)) errors.push(`${tag} missing text: ${want}`);
     for (const sel of c.expectSelector ?? []) if (!(await page.$(sel))) errors.push(`${tag} missing element: ${sel}`);
-    // Owner rule (W9 criterion 5): no screen names an AI model, in its text or in a tooltip, label or title.
-    const shown = await page.evaluate(() => [document.body.innerText, ...[...document.querySelectorAll("[data-tip], [aria-label], [title]")].flatMap((n) => [n.getAttribute("data-tip"), n.getAttribute("aria-label"), n.getAttribute("title")])].filter(Boolean).join("\n"));
+    // Owner rule (W9 criterion 5): no screen names an AI model, in its text or in a tooltip, label or title. A case may
+    // plant one (`modelPlant`: a selector and a text put there first) to prove the gate flags it rather than miss it.
+    const pageText = () => page.evaluate(() => [document.body.innerText, ...[...document.querySelectorAll("[data-tip], [aria-label], [title]")].flatMap((n) => [n.getAttribute("data-tip"), n.getAttribute("aria-label"), n.getAttribute("title")])].filter(Boolean).join("\n"));
+    if (c.modelPlant) {
+      const planted = await page.evaluate(([sel, text]) => { const n = [...document.querySelectorAll(sel)].find((x) => x.offsetParent !== null); if (!n) return false; const was = n.textContent; n.textContent = text; window.__unplant = () => (n.textContent = was); return true; }, c.modelPlant);
+      if (!planted || !modelNameIn(await pageText())) errors.push(`${tag} the model-name gate did not catch the plant "${c.modelPlant[1]}"`);
+      await page.evaluate(() => window.__unplant?.());
+    }
+    const shown = await pageText();
     const model = modelNameIn(shown);
     if (model) {
       const at = shown.indexOf(model);

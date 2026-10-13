@@ -15,6 +15,8 @@ const MODEL_FAMILIES = new Set(["ai", "hybrid"]);
 /** What a model-using strategy does, by the role in its id (`ai.<role>.<model>.<version>`): the allowlist. */
 const ROLE: Readonly<Record<string, string>> = { combined: "combined", news_results: "news & results", pattern_mood: "price pattern & mood" };
 
+/** A strategy id quoted inside a sentence ("… ai.combined.opus.v1 −3,807.75 INR …"): family, role, version. */
+const QUOTED_ID = /\b(?:ai|hybrid|rule|base)\.[a-z_]+(?:\.[a-z0-9_]+)*\.v\d+\b/g;
 /** A strategy id ("ai.combined.opus.v1"). */
 const STRATEGY_ID = /^[a-z]+\.[\w.]+$/;
 /** An identifier (a strategy, trade or record id: no spaces, with "." or ":"): a key for links and lookups, never
@@ -62,18 +64,23 @@ function collect(value: Json, found: Map<string, string>, key?: string): void {
   for (const [k, v] of Object.entries(o)) collect(v, found, k);
 }
 
-/** The payload with the rule applied: every strategy name replaced by its display name, wherever it appears (a field,
- *  a sentence), and any model mention left in free text removed. Returns a new value; the input is not changed. */
+/** The payload with the rule applied: every strategy's backend name, and its id where a sentence quotes it, replaced by
+ *  its display name wherever it appears. Nothing else is touched: security names, symbols and other text stay exactly
+ *  as published (a company called "GPT Healthcare" is a company), and a model name left anywhere is the UI harness's
+ *  to flag, never silently rewritten (judge 45). Returns a new value; the input is not changed. */
 export function applyDisplayNames<T>(payload: T): T {
   const pairs = new Map<string, string>();
   collect(payload, pairs);
   const shown = displayNames(pairs);
-  const renames = [...pairs].map(([id, from]) => [from, shown.get(id) ?? from] as const).filter(([from, to]) => from !== to).sort((a, b) => b[0].length - a[0].length);
+  const byName = [...pairs].map(([id, from]) => [from, shown.get(id) ?? from] as const).filter(([from, to]) => from !== to);
+  const byId = [...pairs].map(([id]) => [id, shown.get(id) ?? id] as const);
+  const renames = [...byName, ...byId].sort((a, b) => b[0].length - a[0].length);
   const fix = (s: string) => {
     if (IDENTIFIER(s)) return s;
     let t = s;
     for (const [from, to] of renames) t = t.split(from).join(to);
-    return withoutModelNames(t, AI_TEAM);
+    // a strategy the payload does not name, quoted by its id: the allowlist's name for that id (approach and role)
+    return t.replace(QUOTED_ID, (id) => allowlisted(id, id) ?? id);
   };
   const walk = (v: Json): Json => (typeof v === "string" ? fix(v) : Array.isArray(v) ? v.map(walk) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, walk(x)])) : v);
   return walk(payload) as T;

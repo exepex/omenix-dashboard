@@ -3,7 +3,7 @@
 // breadth counts; plants prove it bites. Criterion 4: F&O and India-only elements are absent in the US. Criterion 5:
 // Buy / Sell only for followed companies, grey with the reason otherwise.
 import { fixtureScreenerData as data } from "../../../lib/screener/fixture-source.ts";
-import { isToolsScreen, toolsOrder } from "../../../lib/screener/screens.ts";
+import { isToolsScreen } from "../../../lib/screener/screens.ts";
 import { fnoQuery, readState, stocksQuery } from "../../../lib/screener/state.ts";
 import { figureChecks, unsourced } from "./sourced.mjs";
 
@@ -34,14 +34,20 @@ export async function screenerChecks(page, { market }) {
   const rows = ".mb-scr tbody tr:not(:has(.quiet))";
   for (const col of state.tab === "fno" ? [2, 3, 6, 8] : [2, 3]) for (const t of await unsourced(page, `${rows} td:nth-child(${col})`)) problems.push(`row figure without a source: ${t}`);
   for (const t of await unsourced(page, ".mb-scr-look .mb-scr-tile b")) problems.push(`tile figure without a source: ${t}`);
-  if (state.tab === "stocks") problems.push(...(await tradeProblems(page, blocks)), ...(await orderProblems(page, state, blocks)));
+  if (state.tab === "stocks") problems.push(...(await tradeProblems(page, blocks)), ...(await orderProblems(page, state)));
   return problems;
 }
 
-/** The tools-based screens read in the tools block's order (most buying, soonest results), as signed off. */
-async function orderProblems(page, state, blocks) {
+/** The tools-based screens' rows in the signed-off order (33's gallery: picks most buying first, results soonest
+ *  first, ties by symbol), fixed here from the example and the pictures, not computed by the code under test. */
+const SIGNED_ORDER = {
+  picks: "HINDALCO LT M&M MARUTI ONGC SUNPHARMA TATASTEEL",
+  results: "HDFCLIFE RELIANCE HDFCBANK ICICIBANK ULTRACEMCO",
+};
+
+async function orderProblems(page, state) {
   if (state.sort || !state.pre || !isToolsScreen(state.pre)) return [];
-  const want = toolsOrder(blocks.stocks.rows, blocks.tools, state.pre).map(({ r }) => r.s).join(" ");
+  const want = SIGNED_ORDER[state.pre];
   const got = (await page.$$eval(".mb-scr tbody tr .nm > :first-child", (ns) => ns.map((n) => n.textContent))).join(" ");
   return got === want ? [] : [`the ${state.pre} rows read "${got}", not the tools order "${want}"`];
 }
