@@ -1,7 +1,11 @@
 # 31-dashboard (Home): data contract (what every element needs)
 
-**Data source:** `data.json` is composed by `design/mockups/_platform/real_data.py` from the application's own example
-records (`01-home`, `03-company`, `07-paper-portfolios`), with the shell's data (`30-shell/data.json`) for prices, picks
+**Status: signed off 13 Oct 2026 (owner), as of commit e8cd360.** This is the signed-off API contract for Home. Change
+it only for a very solid reason, brought to the owner first (through the orchestrator); record each change and its
+reason here.
+
+**Data source:** `data.json` is composed by `design/mockups/_platform/home_data.py` (with `real_data.py`) from the application's own example
+records (`01-home`, `03-company`, `05-strategy-lab`, `07-paper-portfolios`), with the shell's data (`30-shell/data.json`) for prices, picks
 and accounts. Clock: Wed 7 Oct 2026 17:30 IST / 08:00 ET (the catalogue cut-off). Labelled examples: the Manual
 account's starting cash; the F&O books' state follows the orchestrator's statement that no F&O strategy has passed
 testing (Experiment 1 has not run).
