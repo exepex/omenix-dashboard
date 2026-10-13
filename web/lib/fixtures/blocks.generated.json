@@ -2836,7 +2836,7 @@
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
    "market": "india",
-   "page_key": "fno_picks",
+   "page_key": "today",
    "as_of": "2026-10-06",
    "cutoff": "2026-10-07T12:00:00Z",
    "built_at": "2026-10-07T12:00:00Z",
@@ -2870,7 +2870,7 @@
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
    "market": "india",
-   "page_key": "fno_picks",
+   "page_key": "today",
    "as_of": "2026-10-06",
    "cutoff": "2026-10-07T12:00:00Z",
    "built_at": "2026-10-07T12:00:00Z",
@@ -3157,7 +3157,7 @@
   "description": "Taken from design/mockups/31-dashboard/data.json (signed off as of e8cd360)",
   "value": {
    "market": "india",
-   "page_key": "fno_books",
+   "page_key": "risk",
    "as_of": "2026-10-06",
    "cutoff": "2026-10-07T12:00:00Z",
    "built_at": "2026-10-07T12:00:00Z",

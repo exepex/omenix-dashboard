@@ -48,8 +48,8 @@ const PAGES: Record<FnoPageKey, unknown> = {
   flows: ex("getFlows_india"),
   session: home("getSessionIndia_india"),
   indices: home("getIndicesIndia_india"),
-  fno_picks: home("getFnoPicks_india"),
-  fno_books: home("getFnoBooks_india"),
+  today: home("getFnoPicks_india"),
+  risk: home("getFnoBooks_india"),
   fno_events: ex("getFnoEvents_india_calendar"),
 };
 const KEYS = Object.keys(PAGES) as FnoPageKey[];
@@ -123,11 +123,11 @@ test("W9-F&O: Home and the frame read P10's pages from the current publication",
   const r = reader(IST("2026-10-13", "10:00"));
   const home = fnoHomeData(r, fixtureHomeData);
   assert.deepEqual(await home.session("india"), PAGES.session);
-  assert.deepEqual(await home.fnoBooks(), PAGES.fno_books);
+  assert.deepEqual(await home.fnoBooks(), PAGES.risk);
   assert.deepEqual(await home.fnoEvents(), PAGES.fno_events);
   const frame = await fnoShellData(r, fixtureShellData, nseCalendar, () => IST("2026-10-13", "10:00")).read();
   assert.equal(frame.markets.india.items.NIFTY50.live, true);
-  assert.deepEqual(frame.markets.india.fno_state, (PAGES.fno_picks as { fno_state: unknown }).fno_state);
+  assert.deepEqual(frame.markets.india.fno_state, (PAGES.today as { fno_state: unknown }).fno_state);
   assert.deepEqual(frame.markets.india.fno_live?.missing, { session: undefined, indices: undefined, picks: undefined });
 });
 

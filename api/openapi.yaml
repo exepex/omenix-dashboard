@@ -56,7 +56,7 @@ info:
     getSessionUs and getIndicesUs (stock); the URLs are unchanged. India's NSE F&O expiries leave the stock calendar for
     their own block, getFnoEvents (/api/v1/markets/india/fno/events, page `fno_events`); a screen merges it with
     getEvents and applies its own query to the merged list. getFlows moves to `fno` (page `flows`). The F&O books and
-    picks name the pages exepex/trading publishes (`fno_books`, `fno_picks`; P10).
+    picks keep W10's pages `risk` and `today` (orchestrator, judge 63: the contract's names win over P10's).
 
     Serve-time fields (2.0 page payloads): the stored payload carries no time of its build, so a rebuild of the same data
     keeps its hash. The route adds `cutoff` and `built_at` (the row's envelope) at the top of a page payload and

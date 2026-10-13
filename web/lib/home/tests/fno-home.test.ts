@@ -19,7 +19,7 @@ const examples = { ...load("blocks.json"), ...load("blocks-33-34.json") };
 const freshness = { state: "fresh" as const, rule: "fno_calendar" as const, built_at: null, age_minutes: null, reason: null };
 const pages: Partial<Record<FnoPageKey, unknown>> = {
   session: { session_date: "2026-10-13", from: "fno" },
-  fno_books: { currency: "INR", books: [{ book: 1, from: "fno" }] },
+  risk: { currency: "INR", books: [{ book: 1, from: "fno" }] },
   fno_events: { events: [{ date: "2026-10-27", title: "NIFTY monthly expiry", kind: "fno_expiry", major: true, inst: null }] },
 };
 const reads: FnoPageKey[] = [];
@@ -34,13 +34,13 @@ const reader: FnoBlockReader = {
 test("India's session, the F&O books and expiry calendar come from exepex/trading; the stock blocks stay example", async () => {
   const home = fnoHomeData(reader, fixtureHomeData);
   assert.deepEqual(await home.session("india"), pages.session);
-  assert.deepEqual(await home.fnoBooks(), pages.fno_books);
+  assert.deepEqual(await home.fnoBooks(), pages.risk);
   assert.deepEqual(await home.fnoEvents(), pages.fno_events);
   assert.deepEqual(await home.session("us"), await fixtureHomeData.session("us"), "the US session is the stock adapter's");
   for (const stock of ["trackedMoves", "accounts", "positions", "groups", "strategyTrades", "attention", "events", "topNews"] as const) {
     assert.equal(home[stock], fixtureHomeData[stock], `${stock} is the stock adapter's own method`);
   }
-  assert.deepEqual(reads.sort(), ["fno_books", "fno_events", "session"], "the US read never touches the F&O publication");
+  assert.deepEqual(reads.sort(), ["fno_events", "risk", "session"], "the US read never touches the F&O publication");
 });
 
 const rows = (events: CalendarEvent[]) => events.map((event) => ({ event, live: false }));

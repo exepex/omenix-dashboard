@@ -5,15 +5,12 @@ import { BlockEmpty } from "../ui/block-states.ts";
 import type { SessionCalendar } from "./calendar.ts";
 import { fnoFreshness, type PublicationState } from "./freshness.ts";
 import type { AzureFnoRowStore } from "./store.ts";
+import type { FnoPageKey } from "./pages.ts";
 import { checkContractVersion } from "./version.ts";
 
 export const FNO_PRODUCT = "fno";
 
-/** The pages exepex/trading publishes for the Screener and Markets (fno.pages_history.page_key; contract 2.5). */
-export type ScreenerPageKey = "screener_summary" | "screener_stocks" | "fno_screener_summary" | "fno_screener_rows" | "overview_indices" | "overview_sectors" | "flows";
-/** The pages it publishes for Home and the frame (contract 2.5 x-read-model; India only). */
-export type HomePageKey = "session" | "indices" | "fno_picks" | "fno_books" | "fno_events";
-export type FnoPageKey = ScreenerPageKey | HomePageKey;
+export type { FnoPageKey };
 
 export interface FnoBlock<T> extends PublicationState {
   payload: T;

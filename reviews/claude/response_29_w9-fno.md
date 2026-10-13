@@ -114,8 +114,8 @@ All are in `fno.pages_history`, product `fno`, market `india`, behind `fno.curre
 | `getIndicesIndia` (new; was `getIndices`) | `GET /api/v1/markets/india/indices` | `indices` | `IndicesIndiaResponse` | `Indices`: `indices[]` exactly 2 (NIFTY 50 `role: benchmark`, INDIA VIX `role: vol_index`), each `id`, `sym`, `name`, `role`, `last`, `chg_pct`, `chg_5d_pct`, `as_of`, `source` |
 | `getFnoEvents` (new) | `GET /api/v1/markets/india/fno/events` | `fno_events` | `FnoEventsResponse` | `Events`: `events[]`, each `date`, `title`, `kind` (only `fno_expiry` or `weekly_expiry`), `major`, `inst` (always null). The stored page is the whole expiry calendar; the route applies `kinds`, `from` and `limit` |
 | `getFlows` (publisher moved) | `GET /api/v1/markets/india/overview/flows` | `flows` | `FlowsResponse` | `Flows`: `currency` (INR), `totals.{d1,w1,m1,m3,y1}` (`days_in_period`, `days`, `complete`, `fii`, `dii`: both null unless `complete`), `days[]` (`date`, `fii` and `dii` each `buy`, `sell`, `net`, `provisional`), `nsdl[]` (`date`, `net`) |
-| `getFnoBooks` (page key now P10's) | `GET /api/v1/markets/india/fno/books` | `fno_books` | `FnoBooksResponse` | unchanged |
-| `getFnoPicks` (page key now P10's) | `GET /api/v1/markets/india/fno/picks` | `fno_picks` | `FnoPicksResponse` | unchanged |
+| `getFnoBooks` | `GET /api/v1/markets/india/fno/books` | `risk` | `FnoBooksResponse` | unchanged |
+| `getFnoPicks` | `GET /api/v1/markets/india/fno/picks` | `today` | `FnoPicksResponse` | unchanged |
 
 The US keeps `getSessionUs` and `getIndicesUs` (stock, `SessionResponse` and `IndicesResponse`, now US-only) and
 `getEvents` (stock). In India, `getEvents` (stock) must carry no `fno_expiry` or `weekly_expiry` row; the schema
@@ -140,10 +140,12 @@ rejects one (`IndiaStockEventsRule`).
     stock tool.
 - **`getFlows` moved to `fno`.** Its story is P8 (status planned), and the period-total source no longer names the
   stock tool.
-- **Books and picks page keys aligned with what P10 publishes** (`fno_books`, `fno_picks`, from exepex/trading
-  `fno/market_read_models/home_blocks.py`). W10's examples said `risk` and `today`, P1's old page names, and my W9-F&O
-  code read those. One source of truth now: the contract's `x-read-model` names P10's keys, and the app reads the same
-  keys.
+- **Books and picks keep W10's page keys `risk` and `today`.** In my first push of 2.5 (13661c0) I had aligned them
+  with what P10 publishes (`fno_books`, `fno_picks`). Judge 63 then asked the contract owner to decide. The orchestrator
+  decided the contract's names win and P10 renames its pages, so I reverted that change in the contract and in the
+  reader. The keys now live in one map (`web/lib/fno/pages.ts`). `lib/fno/tests/pages.test.ts` fails if that map
+  differs from any contract example's `page_key` or publisher, or if a contract `fno` block that a screen reads is
+  missing. That is the judge's "test naming the agreed keys from the contract".
 - **Version and checks:**
   - `info.version` is 2.5.0 with a change note.
   - `stories.yaml` gains P8, P10 and `TR-MARKET-proposed`, the story the trading side needs for session, indices and
@@ -154,6 +156,17 @@ rejects one (`IndiaStockEventsRule`).
 
 ### The app on 2.5
 
+- **Example labels are tested (judge 63, criterion 2).**
+  - The three label rules are now pure functions in `web/lib/shell/labels.ts`, and the frame and Home draw them only
+    through those functions.
+  - `lib/shell/tests/labels.test.ts` covers four cases on the frame data the layout builds:
+    - With the fixtures alone, one "Example data" label and no per-figure tag.
+    - With the F&O parts read from a publication, no value from the publication is ever tagged; every stock record
+      beside it is.
+    - No F&O part of a runtime read contains any example text.
+    - With nothing example, nothing says Example.
+  - A static check fails if any component draws an Example tag outside those rules.
+  - I broke the rule on purpose (tagging live values) and the test caught it.
 - **Fixtures** read the new example names (`getSessionIndia_india`, `getSessionUs_us`, `getFnoEvents_india`,
   `getFnoEvents_india_markets`). They stay the source for the US and every stock part. US F&O stays absent, because no
   F&O read is made in the US (tested).
@@ -165,8 +178,8 @@ rejects one (`IndiaStockEventsRule`).
   ported to TypeScript as `eventsView` in `lib/home/events.ts`; a test holds it equal, row for row, to every `x-query`
   example. Each publisher's part shows its own reason when it has no data.
 - **Checks:**
-  - `npm test`: 429 passed, 0 failed, including the parity test and real-Postgres reads of `flows`, `session`,
-    `fno_events`, `fno_books` and `fno_picks`.
+  - `npm test`: 436 passed, 0 failed, including the events-query parity test, the page-key and label tests, and
+    real-Postgres reads of `flows`, `session`, `fno_events`, `risk` and `today`.
   - Typecheck, build and code size: passed.
   - UI harness: the result is in the commit message.
 

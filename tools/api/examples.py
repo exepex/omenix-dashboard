@@ -60,10 +60,10 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getEvents": (lambda x, m: screens.home_events(x.screens, m, x.H, x.S, "stock"), "events", "home", ["india", "us"]),  # one calendar per publisher
     "getTopNews": (home.top_news, "top_news", "home", ["india", "us"]),
     "searchFnoContracts": (frame.fno_search, "contracts", "shell", ["india"]),
-    "getFnoPicks": (home.fno_picks, "fno_picks", "shell", ["india"]),
+    "getFnoPicks": (home.fno_picks, "today", "shell", ["india"]),
     "getFnoContract": (frame.fno_contract, "quotes", "shell", ["india"]),
     "getFnoOrderRules": (frame.fno_order_rules, "order_rules", "shell", ["india"]),
-    "getFnoBooks": (home.fno_books, "fno_books", "home", ["india"]),
+    "getFnoBooks": (home.fno_books, "risk", "home", ["india"]),
     "getFnoEvents": (lambda x, m: screens.home_events(x.screens, m, x.H, x.S, "fno"), "fno_events", "home", ["india"]),
 }
 SCREEN_BUILDERS = {  # the same, for api/examples/blocks-33-34.json
