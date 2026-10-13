@@ -44,6 +44,7 @@ def esc(text: str) -> str:
 
 def section(sec: dict) -> str:
     parts = [f"<h2>{esc(sec['h'])}</h2>"]
+    parts += [f"<p>{esc(par)}</p>" for par in sec.get("intro", [])]   # paragraphs before the list
     if sec.get("li"):
         parts.append("<ul>" + "".join(f"<li>{esc(item)}</li>" for item in sec["li"]) + "</ul>")
     parts += [f"<p>{esc(par)}</p>" for par in sec.get("p", [])]
