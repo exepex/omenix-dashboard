@@ -252,13 +252,13 @@
      "kind": "future",
      "sym": "NIFTY 27 OCT FUT",
      "code": "NIFTY26OCTFUT",
-     "name": "Future · lot 75",
+     "name": "Future · lot 65",
      "last": 22842.15,
      "chg_pct": 0.95,
      "source": "eod",
      "as_of": "2026-10-06T12:30:00Z",
      "underlying": "NIFTY",
-     "lot": 75,
+     "lot": 65,
      "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
     "NIFTY26OCT22800CE": {
@@ -266,7 +266,7 @@
      "kind": "option",
      "sym": "NIFTY 27 OCT 22800 CE",
      "code": "NIFTY26OCT22800CE",
-     "name": "Option · lot 75",
+     "name": "Option · lot 65",
      "last": 281.4,
      "chg_pct": 21.3,
      "bid": 280.6,
@@ -275,7 +275,7 @@
      "source": "snap3pm",
      "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
-     "lot": 75,
+     "lot": 65,
      "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
     "NIFTY26OCT22800PE": {
@@ -283,7 +283,7 @@
      "kind": "option",
      "sym": "NIFTY 27 OCT 22800 PE",
      "code": "NIFTY26OCT22800PE",
-     "name": "Option · lot 75",
+     "name": "Option · lot 65",
      "last": 292.75,
      "chg_pct": -24.6,
      "bid": 292.0,
@@ -292,7 +292,7 @@
      "source": "snap3pm",
      "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
-     "lot": 75,
+     "lot": 65,
      "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
     "NIFTY26OCT23100CE": {
@@ -300,7 +300,7 @@
      "kind": "option",
      "sym": "NIFTY 27 OCT 23100 CE",
      "code": "NIFTY26OCT23100CE",
-     "name": "Option · lot 75",
+     "name": "Option · lot 65",
      "last": 158.2,
      "chg_pct": 26.8,
      "bid": 157.7,
@@ -309,7 +309,7 @@
      "source": "snap3pm",
      "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
-     "lot": 75,
+     "lot": 65,
      "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
     "NIFTY26OCT23300CE": {
@@ -317,7 +317,7 @@
      "kind": "option",
      "sym": "NIFTY 27 OCT 23300 CE",
      "code": "NIFTY26OCT23300CE",
-     "name": "Option · lot 75",
+     "name": "Option · lot 65",
      "last": 92.4,
      "chg_pct": 29.5,
      "bid": 92.0,
@@ -326,7 +326,7 @@
      "source": "snap3pm",
      "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
-     "lot": 75,
+     "lot": 65,
      "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
     "NIFTY26OCT22500PE": {
@@ -334,7 +334,7 @@
      "kind": "option",
      "sym": "NIFTY 27 OCT 22500 PE",
      "code": "NIFTY26OCT22500PE",
-     "name": "Option · lot 75",
+     "name": "Option · lot 65",
      "last": 168.35,
      "chg_pct": -27.1,
      "bid": 167.8,
@@ -343,7 +343,7 @@
      "source": "snap3pm",
      "as_of": "2026-10-07T09:30:00Z",
      "underlying": "NIFTY",
-     "lot": 75,
+     "lot": 65,
      "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet."
     },
     "NIFTY26NOV22000PE": {
@@ -351,7 +351,7 @@
      "kind": "option",
      "sym": "NIFTY 23 NOV 22000 PE",
      "code": "NIFTY26NOV22000PE",
-     "name": "Option · lot 75",
+     "name": "Option · lot 65",
      "last": 196.1,
      "chg_pct": -9.4,
      "bid": null,
@@ -360,7 +360,7 @@
      "source": "eod",
      "as_of": "2026-10-01T12:30:00Z",
      "underlying": "NIFTY",
-     "lot": 75,
+     "lot": 65,
      "example": "EXAMPLE value: the F&O tool's read model is not in this repository yet.",
      "note": "No trades since 1 Oct: the last end-of-day price is old."
     }
@@ -702,7 +702,7 @@
      "gst_pct": 18
     }
    },
-   "short_option_margin_per_lot": 118000,
+   "short_option_margin_per_lot": 102000,
    "next_quotes": {
     "stock": "the stock tool's next price check (8 Oct, first run after 09:15 IST)",
     "option": "the next 3 pm snapshot (8 Oct)"
@@ -716,8 +716,8 @@
       "strategy": "F&O Book 2 (example)",
       "name": "NIFTY 27 Oct short iron fly 22800 ±300",
       "pop": 61,
-      "max_loss": 4132.5,
-      "credit": 18367.5
+      "max_loss": 3581.5,
+      "credit": 15918.5
      },
      {
       "basket": "BCS-22800-23100",
@@ -725,8 +725,8 @@
       "strategy": "F&O Book 1 (example)",
       "name": "NIFTY 27 Oct bull call spread 22800 / 23100",
       "pop": 43,
-      "max_loss": 9330.0,
-      "debit": 9330.0
+      "max_loss": 8086.0,
+      "debit": 8086.0
      }
     ],
     "baskets": {

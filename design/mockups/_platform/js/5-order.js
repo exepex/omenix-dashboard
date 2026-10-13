@@ -4,7 +4,7 @@ function openDrawer(view) {
   closeHc(); closeMenu(); closePal();
   if (!F.drawer.classList.contains('open')) lastFocus = document.activeElement;
   const [kind, id, side] = view.split(':');
-  const body = kind === 'order' ? orderView(id, side) : kind === 'quick' ? quickView(id) : kind === 'basket' ? basketView(id) : navView();
+  const body = kind === 'order' ? orderView(id, side) : kind === 'quick' ? quickView(id) : kind === 'basket' ? basketView(id) : kind === 'page' && page.drawer ? page.drawer(id, ctx()) : navView();
   if (!body) return;
   F.drawer.replaceChildren(el('div', {class: 'mb-sheet-grip', 'aria-hidden': 'true'}), ...body);
   F.drawer.classList.add('open'); F.veil.classList.add('on'); st.drawer = view; writeHash();

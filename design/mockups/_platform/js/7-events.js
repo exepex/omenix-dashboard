@@ -42,7 +42,7 @@ function bind() {
     if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === '/') { e.preventDefault(); openPal(''); return; }
     if (e.key === '?') { e.preventDefault(); openKeys(); return; }
-    if (gPending && Date.now() - gPending < 1200) { gPending = 0; const to = {h: 'dashboard', p: 'positions', o: 'orders', s: 'screener'}[e.key]; if (to) { e.preventDefault(); go(to); } return; }
+    if (gPending && Date.now() - gPending < 1200) { gPending = 0; const to = {h: 'dashboard', c: 'chain', p: 'positions', o: 'orders', s: 'screener'}[e.key]; if (to) { e.preventDefault(); go(to); } return; }
     if (e.key === 'g') { gPending = Date.now(); return; }
     if (e.key === 'b' || e.key === 's') { const r = e.target.closest('[data-inst]'); if (r && tradable(item(r.dataset.inst))) { e.preventDefault(); if (tradeLock()) { snack(tradeLock()); return; } openOrder(r.dataset.inst, e.key === 'b' ? 'buy' : 'sell'); } }
   });
@@ -68,7 +68,7 @@ function pagehead({crumbs = [], title, meta = [], actions = []}) {
     el('div', {style: 'min-width:0'}, el('h1', {}, title)), el('div', {class: 'mb-pagehead-meta'}, ...meta), el('div', {class: 'mb-pagehead-actions'}, ...actions));
 }
 const inst = (id, text) => { const it = item(id); return el('a', {class: 'tk', href: '#', 'data-inst': id, onclick: e => { e.preventDefault(); openDrawer('quick:' + id); }}, text || (it ? it.sym : id)); };
-function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, openOrder, openDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, bsPair, market, tradeLock, tradable, apBadge, signalsBody, rerender: renderAll}; }
+function ctx() { return {m: st.m, P: P(), S, st, cur: cur(), el, icon, svgEl, help, num, money, sgn, dir, delta, moneyDelta, when, dateShort, nowLabel, asOf, asOfEl, item, inst, isFno, paperTag, mockTag, pagehead, drawerHead, openOrder, openDrawer, closeDrawer, openPal, openKeys, openHc, openMenu, go, snack, screen, bsPair, market, tradeLock, tradable, apBadge, signalsBody, rerender: renderAll}; }
 function mount(cfg) { page = cfg; frame(); readHash(); renderAll(); bind(); openFromHash(); }
 return {mount, el, icon, svgEl, money, num, sgn, delta, P, st};
 })();

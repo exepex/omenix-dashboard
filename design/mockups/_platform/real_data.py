@@ -81,11 +81,11 @@ def stock_items(m: str) -> dict:
 def fno_items(spot: float) -> dict:
     """NIFTY monthly contracts in NSE trading-symbol form; prices are EXAMPLES around the real NIFTY close."""
     def opt(code, sym, last, chg, bid, ask, iv, src="snap3pm", as_of="2026-10-07T09:30:00Z", **kw):
-        return {"id": code, "kind": "option", "sym": sym, "code": code, "name": "Option · lot 75", "last": last, "chg_pct": chg,
-                "bid": bid, "ask": ask, "iv": iv, "source": src, "as_of": as_of, "underlying": "NIFTY", "lot": 75, "example": EXAMPLE, **kw}
+        return {"id": code, "kind": "option", "sym": sym, "code": code, "name": "Option · lot 65", "last": last, "chg_pct": chg,
+                "bid": bid, "ask": ask, "iv": iv, "source": src, "as_of": as_of, "underlying": "NIFTY", "lot": 65, "example": EXAMPLE, **kw}
     items = {
-        "NIFTY26OCTFUT": {"id": "NIFTY26OCTFUT", "kind": "future", "sym": "NIFTY 27 OCT FUT", "code": "NIFTY26OCTFUT", "name": "Future · lot 75",
-                          "last": r2(spot * 1.0029), "chg_pct": 0.95, "source": "eod", "as_of": "2026-10-06T12:30:00Z", "underlying": "NIFTY", "lot": 75, "example": EXAMPLE},
+        "NIFTY26OCTFUT": {"id": "NIFTY26OCTFUT", "kind": "future", "sym": "NIFTY 27 OCT FUT", "code": "NIFTY26OCTFUT", "name": "Future · lot 65",
+                          "last": r2(spot * 1.0029), "chg_pct": 0.95, "source": "eod", "as_of": "2026-10-06T12:30:00Z", "underlying": "NIFTY", "lot": 65, "example": EXAMPLE},
         "NIFTY26OCT22800CE": opt("NIFTY26OCT22800CE", "NIFTY 27 OCT 22800 CE", 281.40, 21.3, 280.60, 282.10, 13.1),
         "NIFTY26OCT22800PE": opt("NIFTY26OCT22800PE", "NIFTY 27 OCT 22800 PE", 292.75, -24.6, 292.00, 293.50, 13.6),
         "NIFTY26OCT23100CE": opt("NIFTY26OCT23100CE", "NIFTY 27 OCT 23100 CE", 158.20, 26.8, 157.70, 158.80, 12.7),
@@ -184,7 +184,7 @@ def shell_payload() -> dict:
             markets[m]["charges"] = {"label": "Example rates (the C1 charges code supplies the real schedule)",
                                      "equity_delivery": {"brokerage_flat": 20, "stt_pct": 0.1, "exchange_pct": 0.00297, "sebi_pct": 0.0001, "stamp_buy_pct": 0.015, "gst_pct": 18},
                                      "option": {"brokerage_flat": 20, "stt_sell_pct": 0.1, "exchange_pct": 0.03503, "sebi_pct": 0.0001, "stamp_buy_pct": 0.003, "gst_pct": 18}}
-            markets[m]["short_option_margin_per_lot"] = 118000
+            markets[m]["short_option_margin_per_lot"] = 102000
             markets[m]["next_quotes"] = {"stock": "the stock tool's next price check (8 Oct, first run after 09:15 IST)", "option": "the next 3 pm snapshot (8 Oct)"}
             items_ = markets[m]["items"]
             def credit(legs): return sum((items_[i]["bid"] if sd == "sell" else -items_[i]["ask"]) * n for i, sd, n in legs)
@@ -194,8 +194,8 @@ def shell_payload() -> dict:
             legs = lambda L: [{"id": i, "side": sd, "lots": n} for i, sd, n in L]
             markets[m]["fno_example"] = {
                 "note": "EXAMPLE state, not today: how F&O signals look once a book's strategy has passed testing. " + EXAMPLE,
-                "rows": [{"basket": "IFLY-22800", "family": "hybrid", "strategy": "F&O Book 2 (example)", "name": "NIFTY 27 Oct short iron fly 22800 ±300", "pop": 61, "max_loss": r2((300 - cf) * 75), "credit": r2(cf * 75)},
-                         {"basket": "BCS-22800-23100", "family": "rule", "strategy": "F&O Book 1 (example)", "name": "NIFTY 27 Oct bull call spread 22800 / 23100", "pop": 43, "max_loss": r2(-cb * 75), "debit": r2(-cb * 75)}],
+                "rows": [{"basket": "IFLY-22800", "family": "hybrid", "strategy": "F&O Book 2 (example)", "name": "NIFTY 27 Oct short iron fly 22800 ±300", "pop": 61, "max_loss": r2((300 - cf) * 65), "credit": r2(cf * 65)},
+                         {"basket": "BCS-22800-23100", "family": "rule", "strategy": "F&O Book 1 (example)", "name": "NIFTY 27 Oct bull call spread 22800 / 23100", "pop": 43, "max_loss": r2(-cb * 65), "debit": r2(-cb * 65)}],
                 "baskets": {"IFLY-22800": {"name": "NIFTY 27 Oct short iron fly 22800 ±300", "kind": "credit", "width": 300, "pop": 61, "breakevens": [round(22800 - cf, 1), round(22800 + cf, 1)], "margin_per_lot": 52000, "legs": legs(fly)},
                             "BCS-22800-23100": {"name": "NIFTY 27 Oct bull call spread 22800 / 23100", "kind": "debit", "width": 300, "pop": 43, "breakevens": [round(22800 - cb, 1)], "margin_per_lot": 0, "legs": legs(bull)}}}
             markets[m]["fno_state"] = {"approved": False, "note": "No F&O strategy has passed testing yet: Experiment 1 has not run, so at 3 pm each F&O book recorded “no approved strategy”."}

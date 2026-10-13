@@ -15,7 +15,7 @@ function hcContent(it) {
   const pnl = held ? (it.last - held.avg) * held.qty * (isFno(it) ? 1 : 1) : null;
   return [
     el('div', {class: 'top'}, el('div', {}, el('b', {}, it.sym), el('small', {}, it.name)), el('div', {class: 'px'}, price(it), delta(it.chg_pct))),
-    el('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center'}, asOfEl(it), it.bid != null ? el('span', {class: 'mb-asof', 'data-tip': 'Best bid and ask of the 3 pm snapshot: no market depth is recorded.'}, `bid ${num(it.bid)} · ask ${num(it.ask)}`) : null, it.iv != null ? el('span', {class: 'mb-asof', 'data-tip': 'Implied volatility computed by us from the snapshot (labelled, not exchange data).'}, `IV ${it.iv.toFixed(1)}% (ours)`) : null),
+    el('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center'}, asOfEl(it), it.bid != null ? el('span', {class: 'mb-asof', 'data-tip': 'Best bid and ask of the 3 pm snapshot: no market depth is recorded.'}, `bid ${num(it.bid)} · ask ${num(it.ask)}`) : null, it.iv != null ? el('span', {class: 'mb-asof', 'data-tip': 'Implied volatility computed by us from the end-of-day close (close-proxy; not from the 3 pm quotes, not exchange data).'}, `IV ${it.iv.toFixed(1)}% (ours, close)`) : null),
     held ? el('div', {class: 'held'}, el('b', {}, `${held.qty > 0 ? 'Long' : 'Short'} ${Math.abs(held.qty)}`), ` at ${num(held.avg)} · ${acc.name}${held.structure ? ' · ' + held.structure : ''} · `, moneyDelta(pnl)) : el('div', {class: 'held'}, 'No paper position in this market.'),
     el('div', {class: 'acts'},
       el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => go('chart')}, icon('show_chart'), 'Chart'),

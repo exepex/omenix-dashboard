@@ -2695,7 +2695,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "8844c801696fdf45b02e7cb5ba777352e7ceacfdb83fb28181fea543346e640c",
+   "payload_sha256": "d5610aa21f5504b85f8af39133eea2c3362de1cbf0c0d0ee19544e3bb262f531",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -2714,11 +2714,11 @@
      {
       "id": "NIFTY26OCT22800CE",
       "sym": "NIFTY 27 OCT 22800 CE",
-      "name": "Option · lot 75",
+      "name": "Option · lot 65",
       "code": "NIFTY26OCT22800CE",
       "kind": "option",
       "underlying": "NIFTY",
-      "lot": 75,
+      "lot": 65,
       "last": 281.4,
       "chg_pct": 21.3,
       "as_of": "2026-10-07T09:30:00Z",
@@ -2739,7 +2739,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "fb3acf737deb0e7392a08560f55250da88793bb3ab26272ef8846caf4ca9bacd",
+   "payload_sha256": "c90ed3809b4558ece46f7f07d52e9c235a048fd90c4b311d4fafffe03604bc9e",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -2758,11 +2758,11 @@
      {
       "id": "NIFTY26OCT22800CE",
       "sym": "NIFTY 27 OCT 22800 CE",
-      "name": "Option · lot 75",
+      "name": "Option · lot 65",
       "code": "NIFTY26OCT22800CE",
       "kind": "option",
       "underlying": "NIFTY",
-      "lot": 75,
+      "lot": 65,
       "last": 281.4,
       "chg_pct": 21.3,
       "as_of": "2026-10-07T09:30:00Z",
@@ -2771,11 +2771,11 @@
      {
       "id": "NIFTY26OCT22800PE",
       "sym": "NIFTY 27 OCT 22800 PE",
-      "name": "Option · lot 75",
+      "name": "Option · lot 65",
       "code": "NIFTY26OCT22800PE",
       "kind": "option",
       "underlying": "NIFTY",
-      "lot": 75,
+      "lot": 65,
       "last": 292.75,
       "chg_pct": -24.6,
       "as_of": "2026-10-07T09:30:00Z",
@@ -2830,7 +2830,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "8228b575ff34a6324909bec2e310315d4ad843595eef6e59294a2ed7264c13ac",
+   "payload_sha256": "8cdf4cd7d1f2add33dae167ff8f65eb18b3c22eefc2b05cafc1993fbd8b6651d",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -2855,8 +2855,8 @@
       "strategy": "F&O Book 2 (example)",
       "name": "NIFTY 27 Oct short iron fly 22800 ±300",
       "pop": 61,
-      "max_loss": 4132.5,
-      "credit": 18367.5
+      "max_loss": 3581.5,
+      "credit": 15918.5
      },
      {
       "basket": "BCS-22800-23100",
@@ -2864,8 +2864,8 @@
       "strategy": "F&O Book 1 (example)",
       "name": "NIFTY 27 Oct bull call spread 22800 / 23100",
       "pop": 43,
-      "max_loss": 9330.0,
-      "debit": 9330.0
+      "max_loss": 8086.0,
+      "debit": 8086.0
      }
     ],
     "baskets": {
@@ -2939,7 +2939,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "1cc7394aabeb9bc9f96f19f04ff52101ea7a5a76f6f2d0c7611dbe94212376bc",
+   "payload_sha256": "a47882fc769992c230dd48b3d90e986f95068f3553e0a93ea0b614af7407ab47",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -2954,11 +2954,11 @@
    "payload": {
     "id": "NIFTY26OCT22800CE",
     "sym": "NIFTY 27 OCT 22800 CE",
-    "name": "Option · lot 75",
+    "name": "Option · lot 65",
     "code": "NIFTY26OCT22800CE",
     "kind": "option",
     "underlying": "NIFTY",
-    "lot": 75,
+    "lot": 65,
     "last": 281.4,
     "chg_pct": 21.3,
     "as_of": "2026-10-07T09:30:00Z",
@@ -2982,7 +2982,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "f3d2be663b8a00e7b23207ef66422ae6e98330aba889de3760e9bc20d80f1022",
+   "payload_sha256": "32cb820f78c75c3f9a4ba1e614ae5a0010f0d942e3c320a30d4b8a29ab93e6d1",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -2997,11 +2997,11 @@
    "payload": {
     "id": "NIFTY26NOV22000PE",
     "sym": "NIFTY 23 NOV 22000 PE",
-    "name": "Option · lot 75",
+    "name": "Option · lot 65",
     "code": "NIFTY26NOV22000PE",
     "kind": "option",
     "underlying": "NIFTY",
-    "lot": 75,
+    "lot": 65,
     "last": 196.1,
     "chg_pct": -9.4,
     "as_of": "2026-10-01T12:30:00Z",
@@ -3025,7 +3025,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "5d8cdea8e7983a639b0d65480117f885a83f5ef392ceb267f256c189a7ff986e",
+   "payload_sha256": "eff13735dfc7ddb40c9d4c1bcb47a0790ea147a98322b07ca6b137532ab2b2cc",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -3040,11 +3040,11 @@
    "payload": {
     "id": "NIFTY26OCTFUT",
     "sym": "NIFTY 27 OCT FUT",
-    "name": "Future · lot 75",
+    "name": "Future · lot 65",
     "code": "NIFTY26OCTFUT",
     "kind": "future",
     "underlying": "NIFTY",
-    "lot": 75,
+    "lot": 65,
     "last": 22842.15,
     "chg_pct": 0.95,
     "as_of": "2026-10-06T12:30:00Z",
@@ -3068,7 +3068,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
-   "payload_sha256": "9897af785ee98174093b4a788d726959518cbe9854615ea6624d7287078b214e",
+   "payload_sha256": "696537c402e41c40ae43cc141909b8d1903dc9ab392d995666bc731feee0aa93",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -3099,7 +3099,7 @@
      "max_open_structures": 3,
      "max_at_risk": 30000
     },
-    "short_option_margin_per_lot": 118000,
+    "short_option_margin_per_lot": 102000,
     "next_quotes": {
      "option": "the next 3 pm snapshot (8 Oct)"
     }
