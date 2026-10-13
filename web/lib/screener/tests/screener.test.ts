@@ -76,5 +76,6 @@ test("picks read most buying first and results soonest first, ordered on the pag
     ordered.forEach(({ r, i }) => assert.equal(page.rows[i], r, "the index is the row's place in the block"));
     const values = ordered.map(({ r }) => (key === "picks" ? -by.get(r.s)!.strategies.buy : by.get(r.s)!.days_to_results!));
     assert.deepEqual(values, [...values].sort((a, b) => a - b), key);
+    for (let k = 1; k < ordered.length; k++) if (values[k] === values[k - 1]) assert.ok(ordered[k - 1].r.s.localeCompare(ordered[k].r.s) < 0, "ties by symbol");
   }
 });

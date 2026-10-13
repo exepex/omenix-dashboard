@@ -77,6 +77,20 @@ Running them found two things in the checks, both fixed:
 - **The model plant went into the table, which is hidden at 390 and 768 px.** The harness now plants into the first
   visible match (the phone's result card there), so the gate is proven at every width.
 
+## Addendum 2: the picks-order check was circular
+
+**Agreed.** The UI check computed its expected order with the same `toolsOrder` it was meant to test. It now compares
+the rendered rows with fixed symbol lists. I took them from the example and checked them against 33's gallery
+pictures (`picks-1280.png`, `results-1280.png`):
+- picks: HINDALCO, LT, M&M, MARUTI, ONGC, SUNPHARMA, TATASTEEL;
+- results: HDFCLIFE, RELIANCE, HDFCBANK, ICICIBANK, ULTRACEMCO.
+
+Comparing with the pictures also showed my tie order was off. All seven picks have 3 buys, and 33 lists ties by
+symbol (its data file is in symbol order), while my page kept the route's value order.
+- `toolsOrder` now breaks ties by symbol: deterministic, and the same as the signed-off pictures.
+- The contract does not define a tie order, so this is a choice, not a fix of the data (reasoning only).
+- The unit test now checks that ties go by symbol.
+
 ## The `home-open` claim: restated
 
 The judge could not reproduce my "12 locked → 0" result.
