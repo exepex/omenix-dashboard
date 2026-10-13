@@ -1,15 +1,45 @@
-# X1 evidence from the real server
+# X1 evidence from the real server (`omenix-pg`, 13 Oct 2026)
 
-Files written by the owner scripts in `platform/owner/` when the owner runs them against `omenix-pg`, then read and
-committed by the owner. Nothing here may contain a password, token, connection string, subscription ID or the admin
-user name; the scripts print none of them (the catalog snapshot shows the admin as `<admin>`, and the `az` queries
-select named fields only). Read each file before committing it.
+The owner ran `platform/owner/` steps 1 to 4 on the Mac against `omenix-pg` and saved the outputs to Drive
+(`fno-research/evidence/x1/`). They are committed here unchanged except for scrubbing:
+- every IPv4/IPv6 address is replaced by `<IP address>` (`owner/lib.sh` `redact_ips`; it hit 2 addresses in the TLS
+  file: the client's public IP and the server's);
+- the local path of the owner's clone is shown as `<repository>`;
+- the admin login is shown as `<admin>`, as the catalog snapshot prints it.
 
-| File | Criterion | Script |
+No password, token, connection string, subscription ID, e-mail or human user name is in these files. The only host
+name is the server's.
+
+Owner decision (13 Oct 2026, recorded in `exepex/trading` `docs/DESK_DECISIONS.md`): "let's skip these checks. we
+don't need them". There are no more owner steps for X1: no rerun of steps 3 and 4 with the fixed scripts, no step 5
+(restore test), no step 6 (delete lock, alerts).
+
+| File | Step | Script version |
 |---|---|---|
-| `<date>-x1-apply.txt` | declared state (no PUBLIC EXECUTE on functions) | `owner/apply_real.sh` |
-| `<date>-x1-real-matrix.txt` | 1, 2 | `owner/run_real_matrix.sh` |
-| `<date>-x1-tls.txt` | 3 | `owner/check_tls.sh` |
-| `<date>-x1-restore.txt` | 4 | `owner/restore_test.sh` |
-| `<date>-x1-server.txt` | 5 (and tier, region, backups) | `owner/server_evidence.sh` |
-| `<date>-x1-protect.txt` | delete lock and failed-connection alert | `owner/protect_server.sh` |
+| `2026-10-13-x1-apply.txt` | 1, apply `platform/sql` | current at the time |
+| `2026-10-13-x1-real-matrix.txt` | 2, role matrix with each runtime credential | current at the time |
+| `2026-10-13-x1-tls.txt` | 3, TLS | before the IP-redaction fix (redacted here by hand with the same function) |
+| `2026-10-13-x1-server.txt` | 4, server settings | before the az firewall-rule fix (`742443d`) |
+
+## Per criterion
+
+| # | Criterion | Result on the real server | Evidence |
+|---|---|---|---|
+| 1 | Role matrix passes for every role | **PASS.** All 4 runtime credentials, over verified TLS (`sslmode=verify-full`): 312 checks, 280 passed, 0 failed, 32 OPEN (exactly the 8 named exceptions per role). The catalog snapshot is identical to `tests/expected_catalog.txt` (the owner of schema `public` is Azure's `azure_pg_admin`, printed as `<platform default>`; see `README.md`). There are no large objects in any of the 5 databases. | `x1-real-matrix.txt`; `x1-apply.txt` (step 1: `catalog identical … yes`) |
+| 2 | A runtime role cannot create an object anywhere | **Met inside `omenix`; NOT met in full, with named exceptions.** Every create, alter, drop and temp check was refused (42501) for all 4 runtime roles. Still OPEN: large objects in all 5 databases (Azure's admin may not revoke them), and connect plus temp tables on `azure_maintenance` and `azure_sys` (Azure-owned). `postgres` and `template1` are now closed. Also open: own timeout and own password (PostgreSQL behaviour). | `x1-apply.txt` ("still open" blocks); `x1-real-matrix.txt` (OPEN lines) |
+| 3 | TLS required, non-TLS refused | **PASS.** `require_secure_transport` = on, minimum TLSv1.2. A plain connection was refused by the server ("no pg_hba.conf entry … no encryption"). The verified connection used TLSv1.3 with TLS_AES_256_GCM_SHA384. | `x1-tls.txt` |
+| 4 | Backups with stated retention; one restore tested | **Retention PASS:** 14 days, as the README states (earliest restore point 12 Oct 21:17 UTC). **Restore test: NOT MET, by owner decision** (step 5 not run). | `x1-server.txt` |
+| 5 | Firewall and public-access policy written and matching the server | **Mostly read; firewall rule UNREAD.** These match the README: location, SKU, tier, version, storage, performance tier, backup retention, public network access, encryption, and `require_secure_transport`. The firewall rule could not be read because of the old script's bug (`unrecognized arguments: -n omenix-pg`; fixed in `742443d`, not rerun by owner decision). The owner set the one rule (0.0.0.0-255.255.255.255) when creating the server. | `x1-server.txt` |
+
+## Not met by owner decision, and the risk accepted with it
+
+- **Restore test (criterion 4):** backups are enabled with 14-day retention, but a restore has never been tried. The
+  first real restore will be the first test.
+- **Firewall rule read-back (criterion 5):** the server's firewall rule is not recorded by `az` output. The policy
+  rests on the owner's setup and on the README.
+- **Delete lock:** deleting `omenix-pg` by mistake also deletes all its backups. Nothing but the portal's own
+  confirmation prevents it.
+- **Failed-login alert:** password guessing against the open firewall goes unnoticed. The defences are TLS, least
+  privilege and long passwords.
+- **Storage alert:** a leaked credential filling the 32 GiB disk with large objects (named exception 1) goes
+  unnoticed until writes fail. `tests/large_objects.sh` finds such objects only when someone runs it.
