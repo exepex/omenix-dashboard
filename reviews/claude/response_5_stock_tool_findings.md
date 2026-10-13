@@ -62,3 +62,29 @@ strong evidence, some evidence or reasoning only.
   close, the "calm" reading of 12 Oct may be based on the wrong level: `config/markets/india.yaml` has `calm_vol` 14
   and `event_vol` 17. 14.36 is closer to "calm" than 15.25.
 - **To check in the stock tool:** how `vol_level` is taken.
+
+## 5. The model gives almost every company the same chance: calibration slope 0 (strong evidence; update 13 Oct 2026)
+- **Files:** `data/<market>/model_versions/2026/10/2026-10-07.jsonl` and `2026-10-08.jsonl` (versions
+  `<market>-<h>d-…-logit-v1-2026-10-01`, trained to 1 Oct), field `platt_slope`:
+
+  | Horizon | India `platt_slope` (`platt_offset`) | US `platt_slope` (`platt_offset`) |
+  |---|---|---|
+  | N+1 | **0.0** (-0.1159) | 0.0868 (0.0779) |
+  | N+2 | 0.0552 (-0.1118) | **0.0** (0.1203) |
+  | N+3 | **0.0** (-0.1285) | 0.0489 (0.1453) |
+  | N+4 | **0.0** (-0.1184) | 0.1764 (0.1132) |
+  | N+5 | **0.0** (-0.1366) | 0.0990 (0.1654) |
+
+- **Effect, `data/<market>/model_scores/` of 12 Oct (`as_of_date` 2026-10-12, 20 companies each):**
+  - India: N+1 13 of 20 at exactly 0.4711, N+3 12 of 20 at 0.4679, N+4 12 of 20 at 0.4704, N+5 13 of 20 at 0.4659.
+    All 20 lie within 46.5%–47.3% over every horizon.
+  - US: N+2 16 of 20 at 0.5300. At the other horizons the values are spread a little (51.6%–54.9%).
+  - The horizons with slope 0 are exactly the ones where most companies share one value.
+- **Meaning:** a Platt slope of 0 multiplies the model's score by zero. Every chart and price signal is erased, and
+  the chance is the calibration offset plus the news adjustment (the `contributions` show `news` and `baseline` as the
+  only non-zero groups). The other slopes are small (0.05–0.18), so even there the signals barely move the chance.
+  The dashboard now marks the chance "not proven" and shows the range over all companies (page 35).
+- **To check in the stock tool:**
+  - why the Platt fit returns slope 0 on 6,100–6,660 rows. Possibly the raw scores carry no information on the
+    calibration sample, or a regularisation or clipping in the fit;
+  - whether the model should be used before its slope is positive and checked on settled outcomes.
