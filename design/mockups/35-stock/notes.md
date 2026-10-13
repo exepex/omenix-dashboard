@@ -1,7 +1,7 @@
 # 35-stock: data contract (what every element needs)
 
-**Status: for the owner's review** (13 Oct 2026). Not signed off. Reworked the same day after the owner's feedback
-(through the orchestrator): sections A to G of that brief.
+**Status: signed off 13 Oct 2026 (owner), as of commit 7b10cc0.** This is the signed-off data contract of the stock
+page. Change it only for a very solid reason, brought to the owner first; record each change in `changes.md`.
 
 ## Data: real records, not examples
 - `source/stock.json`: the stock tool's own published records of RELIANCE (India) and NVDA (US) up to 13 Oct 2026
