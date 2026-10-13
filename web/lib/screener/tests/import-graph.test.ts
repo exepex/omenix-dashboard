@@ -1,6 +1,6 @@
 // Story W12 criterion 2: the Screener's and the Markets overview's components depend only on the W11 typed block
 // contracts (and the frame's), never on an adapter or a data client; each adapter is one line of its wiring file, read
-// only by that page's block loaders. Uses the one import resolver of the W8 structure tests (alias, extensionless,
+// only by that page's block loaders (W2: the line picks the database adapter or, lazily, the fixtures). Uses the one import resolver of the W8 structure tests (alias, extensionless,
 // re-exports, dynamic, transitive).
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -9,10 +9,12 @@ import { test } from "node:test";
 import { canonical, computedImports, importsOf, reachable, sources, web, type Source } from "../../shell/tests/imports.ts";
 
 const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].flatMap(sources).filter((f) => !/(^|\/)tests\//.test(f.path));
-const ADAPTERS = /^lib\/(screener|overview|home)\/(fixture-source$|fixture\/)|^lib\/fixtures\//;
-const WIRINGS = { screener: "lib/screener/wiring", overview: "lib/overview/wiring" };
+const ADAPTERS = /^lib\/(screener|overview|home)\/(fixture-source$|azure-source$|fixture\/)|^lib\/fixtures\//;
+const WIRINGS = { screener: "lib/screener/wiring", overview: "lib/overview/wiring", fno: "lib/fno/wiring" };
+const FRESHNESS = "app/(cockpit)/[market]/_fno/freshness-block.tsx";
+const PICK = (name: string, type: string) => new RegExp(`^export const ${name}: ${type} = fnoReader \\? \\w+\\(fnoReader\\) : lazyAdapter\\(\\(\\) => import\\("\\./fixture-source\\.ts"\\)\\.then\\(\\(m\\) => m\\.\\w+\\)\\);$`, "gm");
 const LOADERS = { screener: "app/(cockpit)/[market]/screener/_parts/blocks.tsx", markets: "app/(cockpit)/[market]/markets/_parts/blocks.tsx" };
-const FORBIDDEN = [ADAPTERS, /^lib\/(screener|overview|home|shell)\/wiring$/, /^lib\/shell\/(fixture-source$|fixture\/)/, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
+const FORBIDDEN = [ADAPTERS, /^lib\/(screener|overview|home|shell|fno)\/wiring$/, /^lib\/fno\//, /^lib\/shell\/(fixture-source$|fixture\/)/, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
 /** The modules allowed to import an adapter: the wirings, and the adapters' own shared reader. */
 const MAY_IMPORT_ADAPTERS = [WIRINGS.screener, WIRINGS.overview, "lib/home/wiring", "lib/screener/fixture-source", "lib/overview/fixture-source", "lib/home/fixture-source", "lib/shell/wiring", "lib/shell/fixture-source", "lib/fixtures/examples"];
 
@@ -33,8 +35,9 @@ test("no module but a wiring imports an adapter; only each page's loaders read i
   assert.deepEqual(adapterImports(appCode()), []);
   assert.deepEqual(readersOf(appCode(), WIRINGS.screener), [LOADERS.markets, LOADERS.screener].sort());
   assert.deepEqual(readersOf(appCode(), WIRINGS.overview), [LOADERS.markets]);
-  assert.equal([...readFileSync(join(web, "lib/screener/wiring.ts"), "utf8").matchAll(/^export const screenerData: ScreenerData = (\w+);$/gm)].length, 1);
-  assert.equal([...readFileSync(join(web, "lib/overview/wiring.ts"), "utf8").matchAll(/^export const overviewData: OverviewData = (\w+);$/gm)].length, 1);
+  assert.deepEqual(readersOf(appCode(), WIRINGS.fno), [FRESHNESS, WIRINGS.screener + ".ts", WIRINGS.overview + ".ts"].sort());
+  assert.equal([...readFileSync(join(web, "lib/screener/wiring.ts"), "utf8").matchAll(PICK("screenerData", "ScreenerData"))].length, 1);
+  assert.equal([...readFileSync(join(web, "lib/overview/wiring.ts"), "utf8").matchAll(PICK("overviewData", "OverviewData"))].length, 1);
 });
 
 test("the checks catch planted breaches: alias, extensionless, dynamic, re-export through a helper, a data client", () => {

@@ -10,6 +10,7 @@ import { FlowsCard, Movers } from "../../../../../components/markets/movers-flow
 import { IndexOptions, Vix, Yields } from "../../../../../components/markets/vol-rates.tsx";
 import { EventsCard, WorldCard } from "../../../../../components/markets/world-events.tsx";
 import type { Market } from "../../../../../lib/data/constants.ts";
+import { orAbsent } from "../../../../../lib/ui/block-states.ts";
 import { NoExample } from "../../../../../lib/ui/no-example.ts";
 import { moversQuery, type MarketsState } from "../../../../../lib/overview/state.ts";
 import { overviewData } from "../../../../../lib/overview/wiring.ts";
@@ -26,8 +27,8 @@ const localeOf = (market: Market) => (market === "india" ? "en-IN" : "en-US");
 const movers = (p: P) => screenerData.stocks(p.market, moversQuery(p.state, p.market)).catch((e) => (e instanceof NoExample ? null : Promise.reject(e)));
 
 export const HeadBlock = (p: P) =>
-  blockSection("The markets", () => Promise.all([overviewData.indices(p.market), overviewData.session(p.market)]), ([indices, session]) => (
-    <MarketsHead state={p.state} asOf={indices.indices[0].as_of} regime={session.regime || null} />
+  blockSection("The markets", () => Promise.all([overviewData.indices(p.market), orAbsent(overviewData.session(p.market))]), ([indices, session]) => (
+    <MarketsHead state={p.state} asOf={indices.indices[0].as_of} regime={session?.regime || null} />
   ));
 
 export const HeroBlock = (p: P) => blockSection("The indices", () => overviewData.indices(p.market), (indices) => <Hero indices={indices} state={p.state} india={p.market === "india"} locale={localeOf(p.market)} />);

@@ -83,3 +83,16 @@ export function PageState<P>({ result, children, loadingLabel }: { result: ApiSt
   if (result.state === "error") return <ErrorState problem={result.problem} onRetry={result.reload} />;
   return <>{children(result.envelope.payload, result.envelope)}</>;
 }
+
+/** Data in a contract version this app does not read (story W2): said as such, never drawn as a broken page. */
+export function IncompatibleState({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="mb-alert mb-state" role="alert" aria-label="Incompatible data version">
+      <Icon name="warning" />
+      <div>
+        <b className="t">{title}</b>
+        <div className="s">{children}</div>
+      </div>
+    </section>
+  );
+}
