@@ -2,7 +2,7 @@
 // The app frame's shared state (story W8): the market's frame data (lib/shell/contract.ts, read through the ShellData
 // interface by the market layout), the clock, the one trade lock, and the open overlays. Components read it with
 // useFrame(); none imports an adapter or a data client.
-import { createContext, useContext } from "react";
+import { createContext, useContext, useSyncExternalStore } from "react";
 import type { Market } from "../../lib/data/constants.ts";
 import type { FrameData, Instrument, MarketShell } from "../../lib/shell/contract.ts";
 import type { MarketState } from "../../lib/shell/market.ts";
@@ -36,6 +36,8 @@ export interface FrameUi {
   lock: string | null;
   fmt: Formats;
   item: (id: string) => Instrument | undefined;
+  /** Lends the frame instruments from a page's own blocks (kept until the market changes). */
+  addItems: (items: Record<string, Instrument>) => void;
   drawer: DrawerView | null;
   openDrawer: (view: DrawerView) => void;
   /** Closes the drawer; focus returns where it was unless `restore` is false (the next view takes focus itself). */
@@ -70,10 +72,18 @@ export interface FrameUi {
   closeTop: () => void;
 }
 
-export const FrameContext = createContext<FrameUi | null>(null);
+/** The live frame state, and the view of it the server rendered (the clock without the page's hash, no instruments a
+ *  page lent). */
+export const FrameContext = createContext<{ live: FrameUi; server: FrameUi } | null>(null);
 
+const never = () => () => {};
+
+/** The frame state. While a component hydrates it reads the server's view, so its first render matches the HTML even
+ *  when it streams in after the frame has applied client-only state (the `#clock=open` hash, lent instruments); React
+ *  then re-renders it with the live state (useSyncExternalStore's server snapshot, the documented pattern). */
 export function useFrame(): FrameUi {
   const ui = useContext(FrameContext);
+  const hydrated = useSyncExternalStore(never, () => true, () => false);
   if (!ui) throw new Error("useFrame outside the app frame");
-  return ui;
+  return hydrated ? ui.live : ui.server;
 }

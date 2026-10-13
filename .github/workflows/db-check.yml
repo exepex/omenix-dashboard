@@ -2,8 +2,8 @@ name: db-check
 
 # Issue #2: hourly read-only check of omenix-pg for the owner's accepted exceptions (large objects in any database,
 # drift such as a persistent statement_timeout). Logs in as db_monitor, which can read catalogs and large-object sizes
-# only. Secrets (Settings > Secrets and variables > Actions): OMENIX_DB_MONITOR_PASSWORD and FNO_SLACK_BOT_TOKEN
-# (the owner's #fno-desk bot, for the private details). Variable DB_CHECK_ENABLED=true (set by setup_monitor.sh): from
+# only. Secrets (Settings > Secrets and variables > Actions): OMENIX_DB_MONITOR_PASSWORD and OMENIX_DB_ALERT_WEBHOOK
+# (a Slack incoming webhook bound to #fno-desk, for the private details). Variable DB_CHECK_ENABLED=true (set by setup_monitor.sh): from
 # then on a missing secret is UNKNOWN, never a silent pass. Never runs on pull requests, so no fork reaches a secret.
 # The repository is public: the log and the alert issue carry only status, counts and the check time; details go to
 # Slack only. On ALERT or UNKNOWN the run fails (GitHub e-mails the owner) and the issue "Database check: alert" is
@@ -32,7 +32,7 @@ jobs:
       PGSSLMODE: verify-full
       PGSSLROOTCERT: system      # the runner's trusted roots (libpq 16 or later)
       PGPASSWORD: ${{ secrets.OMENIX_DB_MONITOR_PASSWORD }}
-      FNO_SLACK_BOT_TOKEN: ${{ secrets.FNO_SLACK_BOT_TOKEN }}
+      OMENIX_DB_ALERT_WEBHOOK: ${{ secrets.OMENIX_DB_ALERT_WEBHOOK }}
       DB_CHECK_ENABLED: ${{ vars.DB_CHECK_ENABLED }}
       PGCONNECT_TIMEOUT: "20"
       GH_TOKEN: ${{ github.token }}

@@ -125,9 +125,9 @@ check "the refusal's IP addresses are not printed" "! grep -Eq '203\\.0\\.113|19
 
 # setup_monitor.sh (issue #2) must never print or pass on the monitor's password or its verifier except to gh's stdin.
 check "setup_monitor.sh never prints the password, its verifier or the Slack token" \
-  "! grep -nE '(echo|printf).*\\\$(\\{)?(password|verifier|slack_token)' '$owner/setup_monitor.sh' | grep -vE '\\| (python3 -I .*scram_verifier\\.py|gh secret set )'"
+  "! grep -nE '(echo|printf).*\\\$(\\{)?(password|verifier|webhook)' '$owner/setup_monitor.sh' | grep -vE '\\| (python3 -I .*scram_verifier\\.py|gh secret set )'"
 check "setup_monitor.sh sends the password and token only through stdin" \
-  "! grep -nE -- '(-c|-v|--body)[^|]*\\\$(\\{)?(password|slack_token)' '$owner/setup_monitor.sh'"
+  "! grep -nE -- '(-c|-v|--body)[^|]*\\\$(\\{)?(password|webhook)' '$owner/setup_monitor.sh'"
 
 # Every trap must be set in the main shell: no owner script may wrap its body in a "{ ...; } | tee" block, where bash
 # 3.2 never runs an EXIT trap (13 Oct 2026: the restore marker stayed on omenix-pg). tests/bash32_trap_test.sh runs it.

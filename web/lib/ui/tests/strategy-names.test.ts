@@ -13,7 +13,8 @@ const repo = join(web, "..");
 const json = (path: string) => JSON.parse(readFileSync(path, "utf8").replace(/\bNaN\b/g, "null"));
 const mockups = readdirSync(join(repo, "design", "mockups")).filter((d) => /^\d\d-/.test(d)).map((d) => join(repo, "design", "mockups", d, "data.json"));
 const stored = ["b16", "ux3"].flatMap((d) => readdirSync(join(web, "tests", "ui", d)).filter((f) => f.endsWith(".json")).map((f) => join(web, "tests", "ui", d, f)));
-const FIXTURES = [...mockups, ...stored, join(web, "lib", "home", "fixture", "blocks.generated.json")];
+const examples = readdirSync(join(web, "lib", "fixtures")).filter((f) => f.endsWith(".json")).map((f) => join(web, "lib", "fixtures", f));
+const FIXTURES = [...mockups, ...stored, ...examples];
 
 /** Every text value a screen could show as prose: string values that are not identifiers (strategy, trade and record
  *  ids are keys; a page that shows one as text passes it through citedId, tested below). */

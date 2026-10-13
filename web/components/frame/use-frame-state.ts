@@ -3,8 +3,8 @@
 // the frame data. The URL hash opens a state directly, as the signed-off mockup's links do (#drawer=order:RELIANCE:buy,
 // #pal=NIFTY26OCT22800CE, #keys=1, #picks=1, #ap=rule, and #clock=open for the labelled example clock of example data).
 import { useRouter } from "next/navigation";
-import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { FrameData } from "../../lib/shell/contract.ts";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { FrameData, Instrument } from "../../lib/shell/contract.ts";
 import { frameClock, marketState, tradeLock } from "../../lib/shell/market.ts";
 import { SOON, screenById, screenHref, type NavScreen } from "../../lib/shell/nav.ts";
 import { money, moneyDecimals, price } from "../../lib/ui/format.ts";
@@ -19,7 +19,8 @@ function parseDrawer(value: string | null): DrawerView | null {
   return kind === "nav" ? { kind } : null;
 }
 
-export function useFrameState(data: FrameData): FrameUi & { snackText: string | null; dismissSnack: () => void } {
+/** The frame state, and the view of it the server rendered (no hash, no lent instruments): see frame-context.tsx. */
+export function useFrameState(data: FrameData): FrameUi & { snackText: string | null; dismissSnack: () => void; asServer: Partial<FrameUi> } {
   const router = useRouter();
   const { shell, market } = data;
   const [exampleClock, setExampleClock] = useState(false);
@@ -34,12 +35,21 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
   const [density, setDensity] = useState<Density>("comfortable");
   const [rail, setRail] = useState<RailMode>("labels");
   const [snackText, setSnackText] = useState<string | null>(null);
+  // Instruments a page lends the frame from its own blocks (the Screener's followed companies at their close), so the
+  // order window and quick view work for them as for the shell's own.
+  const [pageItems, setPageItems] = useState<Record<string, Instrument>>({});
+  const addItems = useCallback((items: Record<string, Instrument>) => setPageItems((had) => ({ ...had, ...items })), []);
   const snackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
 
   const nowMs = frameClock(shell, data.now, data.example, exampleClock);
   const status = useMemo(() => marketState(shell, nowMs), [shell, nowMs]);
   const lock = tradeLock(status);
+  const asServer = useMemo(() => {
+    const serverNow = frameClock(shell, data.now, data.example, false);
+    const serverStatus = marketState(shell, serverNow);
+    return { exampleClock: false, nowMs: serverNow, status: serverStatus, lock: tradeLock(serverStatus), approach: "all" as const, item: (id: string) => shell.items[id] };
+  }, [shell, data.now, data.example]);
   const fmt = useMemo(
     () => ({
       money: (x: number | null | undefined, decimals?: number, sign = false) => money(shell.currency, x, decimals ?? moneyDecimals(shell.currency), sign),
@@ -102,11 +112,9 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
     if (picksOpen) setPicksOpen(false);
   }, [menu, hover, palette, keysOpen, drawer, picksOpen, closePalette, closeDrawer]);
 
-  // Bookmarkable states in the hash (read on load and on every hash change). Applied as a transition: the server
-  // rendered without the hash, and Home's sections stream in; an urgent update could reach a section before it has
-  // hydrated and make it hydrate against the new state (a text mismatch). A transition lets React hydrate first.
+  // Bookmarkable states in the hash (read on load and on every hash change).
   useEffect(() => {
-    const read = () => startTransition(() => {
+    const read = () => {
       const h = new URLSearchParams(window.location.hash.slice(1));
       setExampleClock(h.get("clock") === "open");
       setDrawer(parseDrawer(h.get("drawer")));
@@ -115,7 +123,7 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
       setPicksOpen(h.get("picks") === "1");
       const ap = h.get("ap");
       setApproach(ap === "rule" || ap === "hybrid" || ap === "ai" ? ap : "all");
-    });
+    };
     read();
     window.addEventListener("hashchange", read);
     return () => window.removeEventListener("hashchange", read);
@@ -125,11 +133,13 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
     setHover(null);
     setMenu(null);
     setPicksOpen(false);
+    setPageItems({});
   }, [market]);
 
   return {
     data, market, shell, nowMs, exampleClock, status, lock, fmt,
-    item: (id: string) => shell.items[id],
+    item: (id: string) => shell.items[id] ?? pageItems[id],
+    addItems,
     drawer, openDrawer, closeDrawer, openOrder,
     palette, openPalette, closePalette,
     keysOpen, setKeysOpen,
@@ -139,5 +149,6 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
     approach, setApproach, density, setDensity, rail, setRail,
     snack, go, closeTop,
     snackText, dismissSnack: () => setSnackText(null),
+    asServer,
   };
 }

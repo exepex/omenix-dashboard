@@ -3,8 +3,10 @@
 //                                                                        _shared/shell.css
 //   web/components/icons/sprite.generated.ts        <- icons.svg as a string constant (inlined once in the root layout)
 //   web/lib/shell/fixture/shell.generated.json      <- mockups/30-shell/data.json (the app frame's fixture adapter, W8)
-//   web/lib/home/fixture/blocks.generated.json      <- api/examples/blocks.json (Home's block examples, W9: the W10
+//   web/lib/fixtures/blocks.generated.json          <- api/examples/blocks.json (the frame's and Home's block examples, W9: the W10
 //                                                     contract's examples, taken from 30-shell and 31-dashboard)
+//   web/lib/fixtures/blocks-33-34.generated.json    <- api/examples/blocks-33-34.json (the Screener's and Markets'
+//                                                     block examples, W12: W11's contract examples from 33 and 34)
 //   web/lib/legal/pages.generated.json              <- mockups/36-legal/app.json (the privacy and terms pages)
 //   web/app/icon.svg, favicon.ico, apple-icon.png   <- brand/favicon/ (the logo tile; Next.js serves them as the icons)
 // Run from web/: `node tools/sync-design.mjs`; `--check` exits 1 when a copy is out of date (lib/ui/tests/design-sync.test.ts).
@@ -28,7 +30,8 @@ export function expectedCopies() {
       "// design/system/LICENSE-material-symbols.txt). Do not edit; run `node tools/sync-design.mjs`.\n" +
       `export const ICON_SPRITE = ${JSON.stringify(sprite)};\n`,
     "lib/shell/fixture/shell.generated.json": read("mockups/30-shell/data.json"),
-    "lib/home/fixture/blocks.generated.json": readFileSync(join(design, "..", "api", "examples", "blocks.json"), "utf8"),
+    "lib/fixtures/blocks.generated.json": readFileSync(join(design, "..", "api", "examples", "blocks.json"), "utf8"),
+    "lib/fixtures/blocks-33-34.generated.json": readFileSync(join(design, "..", "api", "examples", "blocks-33-34.json"), "utf8"),
     "lib/legal/pages.generated.json": read("mockups/36-legal/app.json"),
     "app/icon.svg": read("brand/favicon/tile.svg"),
     "app/favicon.ico": readFileSync(join(design, "brand", "favicon", "favicon.ico")),
