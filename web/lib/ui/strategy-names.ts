@@ -15,6 +15,8 @@ const MODEL_FAMILIES = new Set(["ai", "hybrid"]);
 /** What a model-using strategy does, by the role in its id (`ai.<role>.<model>.<version>`): the allowlist. */
 const ROLE: Readonly<Record<string, string>> = { combined: "combined", news_results: "news & results", pattern_mood: "price pattern & mood" };
 
+/** A strategy id quoted inside a sentence ("… ai.combined.opus.v1 −3,807.75 INR …"): family, role, version. */
+const QUOTED_ID = /\b(?:ai|hybrid|rule|base)\.[a-z_]+(?:\.[a-z0-9_]+)*\.v\d+\b/g;
 /** A strategy id ("ai.combined.opus.v1"). */
 const STRATEGY_ID = /^[a-z]+\.[\w.]+$/;
 /** An identifier (a strategy, trade or record id: no spaces, with "." or ":"): a key for links and lookups, never
@@ -77,7 +79,8 @@ export function applyDisplayNames<T>(payload: T): T {
     if (IDENTIFIER(s)) return s;
     let t = s;
     for (const [from, to] of renames) t = t.split(from).join(to);
-    return t;
+    // a strategy the payload does not name, quoted by its id: the allowlist's name for that id (approach and role)
+    return t.replace(QUOTED_ID, (id) => allowlisted(id, id) ?? id);
   };
   const walk = (v: Json): Json => (typeof v === "string" ? fix(v) : Array.isArray(v) ? v.map(walk) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, walk(x)])) : v);
   return walk(payload) as T;

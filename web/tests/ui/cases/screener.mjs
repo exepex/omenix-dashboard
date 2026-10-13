@@ -10,7 +10,7 @@ const base = { mockup: MOCKUP, waitFor: ".screener .count", check: screenerCheck
 
 export const cases = [
   // judge 45: a model planted in a security's name is flagged by the page gate (the display rule never rewrites it)
-  { ...base, name: "screener-stocks", path: "/india/screener", widths: [1280, 1024, 768, 390], mockupShot: shot("stocks"), expectText: ["Today: up and down", "Ready-made screens", "2,924 stocks"], modelPlant: [".mb-scr tbody tr:nth-child(2) td small", "Moneyview GPT-4o Limited"] },
+  { ...base, name: "screener-stocks", path: "/india/screener", widths: [1280, 1024, 768, 390], mockupShot: shot("stocks"), expectText: ["Today: up and down", "Ready-made screens", "2,924 stocks"], modelPlant: [".mb-scr tbody tr:nth-child(2) td small, .mb-scr-cards li:nth-child(2) > small", "Moneyview GPT-4o Limited"] },
   { ...base, name: "screener-high", path: "/india/screener?pre=high", widths: [1280, 390], mockupShot: shot("high"), expectText: ["sorted by closest to the 52-week high"] },
   { ...base, name: "screener-tablet", path: "/india/screener?pre=high", widths: [768], mockupShot: shot("tablet") },
   { ...base, name: "screener-fno", path: "/india/screener?tab=fno", widths: [1280, 1024, 390], mockupShot: shot("fno"), expectText: ["Long build-up", "219 underlyings"] },

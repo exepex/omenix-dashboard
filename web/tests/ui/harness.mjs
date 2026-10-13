@@ -216,7 +216,7 @@ async function runCase(browser, c) {
     // plant one (`modelPlant`: a selector and a text put there first) to prove the gate flags it rather than miss it.
     const pageText = () => page.evaluate(() => [document.body.innerText, ...[...document.querySelectorAll("[data-tip], [aria-label], [title]")].flatMap((n) => [n.getAttribute("data-tip"), n.getAttribute("aria-label"), n.getAttribute("title")])].filter(Boolean).join("\n"));
     if (c.modelPlant) {
-      const planted = await page.evaluate(([sel, text]) => { const n = document.querySelector(sel); if (!n) return false; const was = n.textContent; n.textContent = text; window.__unplant = () => (n.textContent = was); return true; }, c.modelPlant);
+      const planted = await page.evaluate(([sel, text]) => { const n = [...document.querySelectorAll(sel)].find((x) => x.offsetParent !== null); if (!n) return false; const was = n.textContent; n.textContent = text; window.__unplant = () => (n.textContent = was); return true; }, c.modelPlant);
       if (!planted || !modelNameIn(await pageText())) errors.push(`${tag} the model-name gate did not catch the plant "${c.modelPlant[1]}"`);
       await page.evaluate(() => window.__unplant?.());
     }

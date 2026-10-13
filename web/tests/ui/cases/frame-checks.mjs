@@ -13,7 +13,10 @@ export async function frameChecks(page, { width, market }) {
   const visible = (sel) => page.$eval(sel, (n) => getComputedStyle(n).display !== "none").catch(() => false);
   if (width >= 600 && !(await visible(".mb-navrail"))) problems.push("no navigation rail at this width");
   if (width < 600 && !(await visible(".mb-navbar"))) problems.push("no phone tabs at this width");
-  if (width >= 1200 && !(await visible(".mb-wl"))) problems.push("no picks panel at this width");
+  // A page that needs the width starts with the panel hidden (33 and 34, signed off); then the app bar must offer it.
+  const hiddenByPage = await page.$(".mb-pf.wl-off");
+  if (width >= 1200 && hiddenByPage && !(await page.$('.mb-appbar [aria-label="Show today’s picks"]'))) problems.push("the picks panel is hidden and the app bar does not offer it");
+  if (width >= 1200 && !hiddenByPage && !(await visible(".mb-wl"))) problems.push("no picks panel at this width");
   if (market === "us" && (await page.$$eval(".mb-pf .mb-appbar, .mb-pf .mb-navrail, .mb-pf .mb-wl", (n) => n.some((x) => /F&O|Option chain/.test(x.textContent))))) problems.push("an F&O element in the US frame");
   return problems;
 }

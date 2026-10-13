@@ -84,6 +84,12 @@ test("security names are never touched: GPT Healthcare and GPT Infraprojects sta
   assert.equal(modelNameIn("Moneyview GPT-4o Limited"), "GPT-4o", "the page gate flags it");
 });
 
+test("a quoted id of a strategy the payload does not name reads as its approach and role, never raw", () => {
+  const out = applyDisplayNames({ line: "First settled week: rule.model_news.v1 +7.99 USD on 6 trades, ai.combined.opus.v1 -6.64 USD on 3" });
+  assert.equal(out.line, `First settled week: rule.model_news.v1 +7.99 USD on 6 trades, ${AI_TEAM} · combined -6.64 USD on 3`);
+  assert.equal(namesModel(out.line), false);
+});
+
 test("a strategy id quoted in a sentence reads as its display name (06's first settled week)", () => {
   const payload = { strategies: { "ai.combined.opus.v1": { name: "AI combined (Opus)" }, "rule.model_news.v1": { name: "Model + news" } }, line: "First settled week: rule.model_news.v1 -3,807.75 INR on 2 trades, ai.combined.opus.v1 -3,807.75 INR on 2" };
   assert.equal(applyDisplayNames(payload).line, `First settled week: Model + news -3,807.75 INR on 2 trades, ${AI_TEAM} · combined -3,807.75 INR on 2`);
