@@ -4,8 +4,8 @@
 // F&O book its own line in India, the strategies collapsed under one button, "Open <group>" for the detail. Baselines
 // are one comparison line. Every figure is a block field; nothing is added up here.
 import type { ReactNode } from "react";
-import type { Accounts, FnoBook, Groups, Positions, StockGroup } from "../../lib/home/contract.ts";
-import { groupCard, plural } from "../../lib/home/groups.ts";
+import type { Accounts, FnoBook, Groups, Positions } from "../../lib/home/contract.ts";
+import { groupCards, plural, type GroupCard } from "../../lib/home/groups.ts";
 import { src } from "../../lib/home/sources.ts";
 import { HelpTip, Icon } from "../ui/icon.tsx";
 import { useFrame } from "../frame/frame-context.tsx";
@@ -59,27 +59,24 @@ function YouCard({ accounts, positions }: { accounts: Accounts; positions: Posit
   );
 }
 
-/** A group's card; `at` is the group's index in the Groups block, the source of its figures. */
-function GroupCardView({ group, at, books }: { group: StockGroup; at: number; books: FnoBook[] | null }) {
+function GroupCardView({ c }: { c: GroupCard }) {
   const { data } = useFrame();
-  const c = groupCard(group, books);
-  const fig = (path: string) => src("groups", `groups[${at}].${path}`);
   return (
     <article className="mb-apcard">
       <CardHead family={c.family} />
       <Figure label={c.totalLabel} sub={c.totalSub}>
-        {c.total ? <span className="val"><MoneyDelta value={c.total.net} src={fig("total.net")} /></span> : <span className="none">No strategy yet</span>}
+        {c.total ? <span className="val"><MoneyDelta value={c.total.net} src={c.totalSrc} /></span> : <span className="none">No strategy yet</span>}
       </Figure>
-      {c.book ? (
+      {c.book && c.bookSrc ? (
         <Figure label="F&O: total profit / loss" sub={c.bookSub}>
-          <span className="val"><MoneyDelta value={c.book.pnl} src={src("fnoBooks", `books[${books?.indexOf(c.book)}].pnl`)} /></span>
+          <span className="val"><MoneyDelta value={c.book.pnl} src={c.bookSrc} /></span>
         </Figure>
       ) : null}
       {c.hasList ? (
         <details className="mb-apcard-more">
           <summary><span>{c.countLine}</span><Icon name="expand_more" /></summary>
           <ul>
-            {c.ran.map((s) => <li key={s.id}><span>{s.name}</span><MoneyDelta value={s.net} src={fig(`strategies[${group.strategies.indexOf(s)}].net`)} /></li>)}
+            {c.ran.map(({ result: s, src: from }) => <li key={s.id}><span>{s.name}</span><MoneyDelta value={s.net} src={from} /></li>)}
             {c.idle ? <li className="idle"><span>{`${c.idle} more: no trade yet`}</span></li> : null}
           </ul>
           <p>Each strategy’s own result; the total above adds them up.</p>
@@ -100,7 +97,7 @@ export function WhoTrades({ groups, books, accounts, positions }: { groups: Grou
       <SectionHead title="Who trades, and how it is going" sub="Each group’s total paper profit or loss. Open a group for each of its strategies." go={["Strategies", "scoreboards"]} />
       <div className="aps">
         <YouCard accounts={accounts} positions={positions} />
-        {groups.groups.map((g, at) => <GroupCardView key={g.family} group={g} at={at} books={books} />)}
+        {groupCards(groups, books).map((c) => <GroupCardView key={c.family} c={c} />)}
       </div>
       <p className="note">
         <Icon name="trending_flat" />

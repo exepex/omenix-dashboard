@@ -116,7 +116,7 @@ test("the detector knows families and id shapes, not a list: each of these is on
     ["claude-3-5-haiku", "claude-3-5-haiku"],
     ["GPT-4o-mini scored it", "GPT-4o-mini"],
     ["gpt-4.1", "gpt-4.1"],
-    ["Gemini 2.5 Pro", "Gemini 2.5 Pro"],
+    ["gemini-2.5-pro", "gemini-2.5-pro"],
     ["Llama-3.1 and Qwen", "Llama-3.1"],
     ["o4-mini", "o4-mini"],
     ["DeepSeek-R1", "DeepSeek-R1"],
@@ -124,6 +124,25 @@ test("the detector knows families and id shapes, not a list: each of these is on
     ["on the claude API", "claude"],
   ]) assert.equal(modelNameIn(text), token, text);
   for (const clean of ["Model + news", "a fable about markets", "claude_app", "Hybrid", "O2 margin", "Model + news, 60% bar"]) assert.equal(modelNameIn(clean), null, clean);
+});
+
+// Judge 29 (W9 rejudge), minor 1: model names in model-like shapes only, in any case and with any separator.
+test("the detector finds model-like shapes in any case and with -, _, . or a space, also inside dotted ids", () => {
+  for (const [text, token] of [
+    ["picked by fable-5", "fable-5"],
+    ["FABLE 5.1 scored", "FABLE 5.1"],
+    ["claude_opus_4 only", "claude_opus_4"],
+    ["Claude Opus 4", "Claude Opus 4"],
+    ["acc:ai.combined.claude_opus_4.v1:x", "claude_opus_4.v1"],
+    ["ai.combined.opus.v1", "opus.v1"],
+    ["llama3-70b", "llama3-70b"],
+    ["AI combined (Opus)", "Opus"],
+  ]) assert.equal(modelNameIn(text), token, text);
+});
+
+test("ordinary words stay: sonnet, opus, haiku, fable alone are not models", () => {
+  for (const clean of ["a magnum opus of a quarter", "Shakespeare's sonnet", "a haiku on rates", "Opus and Sonnet without a version", "the fable of the ant", "(magnum opus)", "Gemini sign"]) assert.equal(modelNameIn(clean), null, clean);
+  assert.equal(applyDisplayNames({ headline: "Tata's magnum opus: a new plant" }).headline, "Tata's magnum opus: a new plant");
 });
 
 test("model ids are replaced as whole tokens: no 'claude--5', no 'claude-AI team-4'", () => {
@@ -135,4 +154,12 @@ test("model ids are replaced as whole tokens: no 'claude--5', no 'claude-AI team
   const out = applyDisplayNames(payload);
   assert.deepEqual(out.strategies.map((x) => x.name), [`${AI_TEAM} · combined`, AI_TEAM]);
   assert.equal(out.line, `Best: ${AI_TEAM}`);
+});
+
+test("judge 29, minor 2: a baseline named after a model never reaches the screen, in its field or in free text", () => {
+  const payload = { strategies: [{ id: "base.llm_only.v1", name: "claude_opus_4 only" }, { id: "base.always_up.v1", name: "Always buy" }], line: "Beaten by claude_opus_4 only today" };
+  const out = applyDisplayNames(payload);
+  assert.deepEqual(out.strategies.map((x) => x.name), ["Baseline", "Always buy"]);
+  assert.equal(out.line, "Beaten by Baseline today");
+  assert.equal(namesModel(JSON.stringify(out)), false);
 });

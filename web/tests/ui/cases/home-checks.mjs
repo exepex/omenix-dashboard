@@ -73,8 +73,13 @@ export function moneyProblems({ sourced, rest }, market, blocks) {
   return problems;
 }
 
-/** The judge's plants, injected into the real page on every run; each must be caught. */
-const PLANTS = [
+/** A value as Home shows a money figure with cents, in the market's currency. */
+const shown = (value, market) => `${value < 0 ? "\u2212" : ""}${SYMBOL[market]}${Math.abs(value).toLocaleString(market === "india" ? "en-IN" : "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+/** The judges' plants, injected into the real page on every run; each must be caught. */
+const plants = (blocks, market) => [
+  // judge 29, minor 3: a real group figure under another group's source (Rule-based's total labelled as the AI team's)
+  { why: "a group figure under another group's source", src: `groups:groups[${blocks.groups.groups.findIndex((g) => g.family === "ai")}].total.net`, text: shown(blocks.groups.groups.find((g) => g.family === "rule").total.net, market) },
   { why: "a sum of two groups (Rule-based + AI team) that equals another figure (the Baselines total)", src: "groups:groups[0].total.net", text: "\u2212₹8,293.55" },
   { why: "a figure with no source", text: "₹4,44,907.60" },
   { why: "a cross-currency sum carrying a real source", src: "accounts:accounts.manual.value", text: "₹4,44,907.60" },
@@ -85,7 +90,7 @@ const PLANTS = [
 export async function homeMoneyChecks(page, { market }) {
   const blocks = await sourceBlocks(market);
   const problems = moneyProblems(await shownMoney(page), market, blocks);
-  for (const plant of PLANTS) {
+  for (const plant of plants(blocks, market)) {
     const caught = moneyProblems(await shownMoney(page, [plant]), market, blocks).length > problems.length;
     if (!caught) problems.push(`the check did not catch ${plant.why}`);
   }
