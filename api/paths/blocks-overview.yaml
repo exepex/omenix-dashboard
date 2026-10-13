@@ -108,9 +108,9 @@
     operationId: getFlows
     summary: 'FII/FPI and DII net buying per day (NSE, provisional) and NSDL''s FPI equity net'
     x-status: planned
-    x-publisher: stock
-    x-read-model: 'rm.blocks page_key flows (K5-proposed)'
-    x-freshness: 'stock_age; next morning'
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page flows (product fno, market india; P8)'
+    x-freshness: 'fno_calendar; next morning'
     x-cache: 'tag rm:blocks:<market>:flows, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'days empty: the card says no figures yet'
     x-feeds: [h34.flows]

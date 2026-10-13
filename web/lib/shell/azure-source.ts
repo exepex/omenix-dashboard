@@ -21,7 +21,7 @@ function fallbackSession(now: Date, payload: ShellPayload, calendar: SessionCale
 }
 
 export function fnoShellData(reader: FnoBlockReader, examples: ShellData, calendar: SessionCalendar, now: () => Date = () => new Date()): ShellData {
-  const payload = async <T>(key: "session" | "indices" | "today") => (await reader.page<T>(key)).payload;
+  const payload = async <T>(key: "session" | "indices" | "fno_picks") => (await reader.page<T>(key)).payload;
   return {
     read: async () => {
       const t = now();
@@ -29,7 +29,7 @@ export function fnoShellData(reader: FnoBlockReader, examples: ShellData, calend
         examples.read(),
         settle("The session", payload<Session & { regime?: string }>("session")),
         settle("The indices", payload<Indices>("indices")),
-        settle("The F&O picks", payload<FnoPicks>("today")),
+        settle("The F&O picks", payload<FnoPicks>("fno_picks")),
       ]);
       const missing = "missing" in session ? { missing: `${session.missing} Market hours are NSE’s calendar at regular hours (09:15–15:30 IST).` } : session;
       return withFnoParts(base, { session: missing, indices, picks }, t.toISOString(), fallbackSession(t, base, calendar));

@@ -9,7 +9,7 @@ import { ComingUp, NeedsYou, TopNewsList } from "../../../../components/home/hom
 import { OpenTrades } from "../../../../components/home/open-trades.tsx";
 import { WhoTrades } from "../../../../components/home/who-trades.tsx";
 import type { Market } from "../../../../lib/data/constants.ts";
-import { comingUp } from "../../../../lib/home/events.ts";
+import { comingUp, dayAt, HOME_EVENTS } from "../../../../lib/home/events.ts";
 import { settle, type Part } from "../../../../lib/ui/block-outcome.ts";
 import { homeData, homeLive } from "../../../../lib/home/wiring.ts";
 
@@ -48,7 +48,11 @@ export const ListsBlock = ({ market }: { market: Market }) =>
     ([attention, events, fno, news, session]) => (
     <div className="trio sec">
       <NeedsYou attention={attention} />
-      <ComingUp rows={comingUp(events, homeLive.stock, fno ? (valueOf(fno) ?? { events: [] }) : null, homeLive.fno)} fnoMissing={missingOf(fno)} sessionDate={valueOf(session)?.session_date ?? null} />
+      <ComingUp
+        rows={comingUp(events, homeLive.stock, fno ? (valueOf(fno) ?? { events: [] }) : null, homeLive.fno, HOME_EVENTS, valueOf(session)?.session_date ?? dayAt(new Date(), market === "india" ? 330 : -240))}
+        fnoMissing={missingOf(fno)}
+        sessionDate={valueOf(session)?.session_date ?? null}
+      />
       <TopNewsList news={news} />
     </div>
     ),

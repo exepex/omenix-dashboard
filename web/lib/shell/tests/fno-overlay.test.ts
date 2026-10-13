@@ -30,7 +30,7 @@ function reader(pages: Partial<Record<FnoPageKey, unknown>>, fail: Partial<Recor
   };
 }
 
-const live = { session: { ...page("getSession_india"), session_date: "2026-10-13", open_utc: "2026-10-13T03:45:00Z", close_utc: "2026-10-13T10:00:00Z", next_open_utc: "2026-10-14T03:45:00Z" }, indices: page("getIndices_india"), today: page("getFnoPicks_india") };
+const live = { session: { ...page("getSessionIndia_india"), session_date: "2026-10-13", open_utc: "2026-10-13T03:45:00Z", close_utc: "2026-10-13T10:00:00Z", next_open_utc: "2026-10-14T03:45:00Z" }, indices: page("getIndicesIndia_india"), fno_picks: page("getFnoPicks_india") };
 live.indices.indices[0].last = 25123.45; // differs from the example, so the test sees which one is shown
 
 test("India's index levels, session and F&O picks are the publication's; the stock parts stay example", async () => {
@@ -44,7 +44,7 @@ test("India's index levels, session and F&O picks are the publication's; the sto
   assert.equal(india.items.NIFTY50.live, true);
   assert.equal(india.items.INDIAVIX.live, true);
   assert.deepEqual(india.status, { session_date: "2026-10-13", open_utc: "2026-10-13T03:45:00Z", close_utc: "2026-10-13T10:00:00Z", next_open_utc: "2026-10-14T03:45:00Z" });
-  assert.deepEqual(india.fno_state, live.today.fno_state);
+  assert.deepEqual(india.fno_state, live.fno_picks.fno_state);
   assert.deepEqual(india.fno_rows, []);
   assert.deepEqual(india.fno_live, { missing: { session: undefined, indices: undefined, picks: undefined } });
   assert.deepEqual(india.items.RELIANCE, base.markets.india.items.RELIANCE, "a stock item is untouched");
@@ -61,7 +61,7 @@ test("the US frame has no F&O element, whatever India reads", async () => {
 
 test("a part with no data carries its reason, never the example value", async () => {
   const empty = new BlockEmpty("page_missing", "2026-10-13T05:00:00.000Z");
-  const got = await fnoShellData(reader(live, { indices: empty, today: new FnoUnavailable("network") }), fixtureShellData, nseCalendar, () => NOW).read();
+  const got = await fnoShellData(reader(live, { indices: empty, fno_picks: new FnoUnavailable("network") }), fixtureShellData, nseCalendar, () => NOW).read();
   const india = got.markets.india;
   assert.deepEqual(india.indices, [], "no example index level is shown");
   assert.equal(india.items.NIFTY50, undefined);

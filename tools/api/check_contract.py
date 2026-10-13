@@ -33,7 +33,7 @@ from check_semantics import check_flows, check_home_events, check_views  # noqa:
 from walk import CATALOG_KEYS, block_fields, block_operations, resolve  # noqa: E402
 
 URN = "urn:omenix:api"
-PLANTED = 60  # planted breaks in planted()
+PLANTED = 64  # planted breaks in planted()
 STATUSES = {"published", "planned"}
 AGGREGATES = {"group_total": "GroupTotal", "single_account": None}
 BLOCK_FILE = "blocks-"
@@ -218,12 +218,17 @@ def planted(doc: dict, found: dict, problems: list[str]) -> None:
     must_fail("F&O expiry in the US calendar", "getEvents", "us", lambda v: v["payload"]["events"][0].update(kind="fno_expiry"))
     must_fail("USD in India", "getPositions", "india", lambda v: v["payload"].update(currency="USD"))
     must_fail("INR in the US", "getGroups", "us", lambda v: v["payload"].update(currency="INR"))
-    must_fail("a price without as_of", "getIndices", "india", lambda v: v["payload"]["indices"][0].pop("as_of"))
+    must_fail("a price without as_of", "getIndicesIndia", "india", lambda v: v["payload"]["indices"][0].pop("as_of"))
     must_fail("a position without as_of", "getPositions", "india", lambda v: v["payload"]["own"][0].pop("as_of"))
     must_fail("an F&O row for the US market", "getFnoBooks", "india", lambda v: v.update(market="us"))
     must_fail("a stock pick from the hybrid family", "getPicks", "india", lambda v: v["payload"]["signals"][0].update(family="hybrid"))
     must_fail("a future in stock search", "searchInstruments", "india", lambda v: v["payload"]["instruments"][0].update(kind="future"))
-    must_fail("a block without the Paper label", "getSession", "us", lambda v: v.pop("paper"))
+    must_fail("a block without the Paper label", "getSessionUs", "us", lambda v: v.pop("paper"))
+    # 2.5 (owner, 14 Oct 2026): India's market blocks are exepex/trading's, the US's the stock tool's
+    must_fail("India's session in the stock tool's envelope", "getSessionIndia", "india", lambda v: v.update(publisher="stock"))
+    must_fail("the US indices served for India", "getIndicesUs", "us", lambda v: v.update(market="india"))
+    must_fail("an NSE F&O expiry in India's stock calendar", "getEvents", "india", lambda v: v["payload"]["events"][0].update(kind="fno_expiry"))
+    must_fail("a company row in the F&O expiry calendar", "getFnoEvents", "india", lambda v: v["payload"]["events"][0].update(inst="RELIANCE"))
     # W11: the screener and the Markets overview
     must_fail("an F&O universe in the US screener", "getScreenerSummaryUs", "us", lambda v: v["payload"]["universes"].update(fno=v["payload"]["universes"]["ours"]))
     must_fail("an F&O tag on a US screener row", "getScreenerStocksUs", "us", lambda v: v["payload"]["rows"][0].update(u=["fno"]))

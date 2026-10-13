@@ -149,12 +149,13 @@
     summary: 'Coming up: the market''s events and the tracked companies'' results'
     x-status: planned
     x-publisher: stock
+    x-catalog: {publisher: stock, source: 'calendar_event (config/events.yaml via core/calendar.market_events, the events kind, the market calendar); in India without the NSE F&O expiries (getFnoEvents)', freshness: daily (pre-open run), story: K4-proposed, status: planned}
     x-read-model: 'rm.blocks page_key events (calendar_event)'
     x-freshness: 'stock_age; pre-open run'
     x-cache: 'tag rm:blocks:<market>:events, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'events empty'
     x-feeds: [h31.coming-up, h34.coming-up]
-    x-shared: 'one calendar, one query per screen: Home asks kinds=rbi_policy,earnings,holiday,fno_expiry,fomc,cpi,jobs_report&order=market_first&tickers=<its tracked companies>&limit=6 (31 row 6: market-wide events first, then each company''s next results), the Markets overview kinds=earnings,ex_dividend,fno_expiry,weekly_expiry,filing,rbi_policy,fomc,cpi,jobs_report,budget&limit=12 (34 row 12); both from the session being predicted. check_contract recomputes each screen''s example from the calendar example'
+    x-shared: 'one calendar per publisher, one query per screen (in India merged with getFnoEvents''s expiries, the same query applied to the merged list): Home asks kinds=rbi_policy,earnings,holiday,fno_expiry,fomc,cpi,jobs_report&order=market_first&tickers=<its tracked companies>&limit=6 (31 row 6: market-wide events first, then each company''s next results), the Markets overview kinds=earnings,ex_dividend,fno_expiry,weekly_expiry,filing,rbi_policy,fomc,cpi,jobs_report,budget&limit=12 (34 row 12); both from the session being predicted. check_contract recomputes each screen''s example from the calendar example'
     parameters:
       - $ref: '#/components/parameters/Market'
       - {name: kinds, in: query, description: 'Comma-separated event kinds (default every kind); each screen''s list is a query, so Home never receives ex-dividend or filing rows', schema: {type: string, maxLength: 300}}

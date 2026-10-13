@@ -44,12 +44,13 @@ const PAGES: Record<FnoPageKey, unknown> = {
   fno_screener_rows: table(day.fno),
   overview_indices: ex("getOverviewIndicesIndia_india"),
   overview_sectors: ex("getIndiaSectors_india"),
-  // P10's pages for Home and the frame, shaped as W10's examples (W9-F&O): the expiry rows only in the F&O events.
-  session: home("getSession_india"),
-  indices: home("getIndices_india"),
-  today: home("getFnoPicks_india"),
-  risk: home("getFnoBooks_india"),
-  events: { events: home("getEvents_india").events.filter((e: { kind: string }) => e.kind === "fno_expiry") },
+  // exepex/trading's pages for Home, the frame and Markets, shaped as contract 2.5's examples
+  flows: ex("getFlows_india"),
+  session: home("getSessionIndia_india"),
+  indices: home("getIndicesIndia_india"),
+  fno_picks: home("getFnoPicks_india"),
+  fno_books: home("getFnoBooks_india"),
+  fno_events: ex("getFnoEvents_india_calendar"),
 };
 const KEYS = Object.keys(PAGES) as FnoPageKey[];
 const IST = (date: string, time: string) => new Date(`${date}T${time}:00+05:30`);
@@ -108,7 +109,10 @@ test("the database adapters serve the published pages and say what no backend pu
   assert.deepEqual(page.rows.map((x) => x.s), ex("getScreenerStocksIndia_india_gainers").rows.map((x: ScreenerStock) => x.s));
   assert.equal((await screener.fnoRows({ sort: "oi", page: 1, page_size: 25 })).total, day.fno.length);
   assert.deepEqual(await azureOverviewData(r).indices("india"), PAGES.overview_indices);
-  for (const read of [screener.tools("india"), screener.summary("us"), azureOverviewData(r).flows()]) {
+  assert.deepEqual(await azureOverviewData(r).flows(), PAGES.flows, "contract 2.5: flows are exepex/trading's");
+  assert.deepEqual(await azureOverviewData(r).session("india"), PAGES.session);
+  assert.deepEqual(await azureOverviewData(r).fnoEvents(), PAGES.fno_events);
+  for (const read of [screener.tools("india"), screener.summary("us"), azureOverviewData(r).world("india")]) {
     await assert.rejects(read, (e) => e instanceof BlockEmpty && e.reason === "no_producer");
   }
 });
@@ -119,17 +123,17 @@ test("W9-F&O: Home and the frame read P10's pages from the current publication",
   const r = reader(IST("2026-10-13", "10:00"));
   const home = fnoHomeData(r, fixtureHomeData);
   assert.deepEqual(await home.session("india"), PAGES.session);
-  assert.deepEqual(await home.fnoBooks(), PAGES.risk);
-  assert.deepEqual(await home.fnoEvents(), PAGES.events);
+  assert.deepEqual(await home.fnoBooks(), PAGES.fno_books);
+  assert.deepEqual(await home.fnoEvents(), PAGES.fno_events);
   const frame = await fnoShellData(r, fixtureShellData, nseCalendar, () => IST("2026-10-13", "10:00")).read();
   assert.equal(frame.markets.india.items.NIFTY50.live, true);
-  assert.deepEqual(frame.markets.india.fno_state, (PAGES.today as { fno_state: unknown }).fno_state);
+  assert.deepEqual(frame.markets.india.fno_state, (PAGES.fno_picks as { fno_state: unknown }).fno_state);
   assert.deepEqual(frame.markets.india.fno_live?.missing, { session: undefined, indices: undefined, picks: undefined });
 });
 
 test("W9-F&O: a publication without P10's pages (today's P6) leaves each F&O part's reason, never an example", { skip }, async () => {
   await reset();
-  await publish("nse-2026-10-12-ffff", "2026-10-12", KEYS.slice(0, 6));
+  await publish("nse-2026-10-12-ffff", "2026-10-12", KEYS.slice(0, 7));
   const frame = await fnoShellData(reader(IST("2026-10-13", "10:00")), fixtureShellData, nseCalendar, () => IST("2026-10-13", "10:00")).read();
   const missing = frame.markets.india.fno_live?.missing ?? {};
   for (const part of ["session", "indices", "picks"] as const) assert.match(missing[part] ?? "", /The current publication has no page for this part/, part);

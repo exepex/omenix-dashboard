@@ -81,21 +81,47 @@
       '404': {$ref: '#/components/responses/NotFound'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}
-/api/v1/markets/{market}/session:
+/api/v1/markets/india/session:
   get:
     tags: [blocks]
-    operationId: getSession
+    operationId: getSessionIndia
+    summary: 'Today''s session: open, close, next open, regime and when the post-close run is due'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'exepex/trading''s NSE session calendar (research/data/calendar/nse_sessions.csv: holidays, special and muhurat sessions and their hours); exchange and zone: India (NSE), IST; regime: null until the F&O tool records one; post_close_at: when the next market run (07:10 IST) brings the close; major_event_names: the major events of its event calendar', freshness: 'each F&O market run (07:10 IST)', story: TR-MARKET-proposed, status: planned}
+    x-read-model: 'fno.pages_history page session (product fno, market india)'
+    x-freshness: 'fno_calendar; each F&O market run'
+    x-cache: 'tag rm:blocks:<market>:session, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'non-trading day: open_utc and close_utc null, next_open_utc set'
+    x-feeds: [h31.band, h34.header, s30.lock, s30.status-chip]
+    x-shared: 'one session record: the top bar''s chip and lock and Home''s band show the same times (serving it twice would duplicate one fact)'
+    responses:
+      '200':
+        description: 'The Session block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SessionIndiaResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getSessionIndia_india'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/us/session:
+  get:
+    tags: [blocks]
+    operationId: getSessionUs
     summary: 'Today''s session: open, close, next open, regime and when the post-close run is due'
     x-status: planned
     x-publisher: stock
+    x-catalog: {publisher: stock, source: 'rm.status payload.session (StatusBlock.session, pipeline/market_status.py over the NYSE calendar); exchange: config/markets/us.yaml; regime: rm.status payload.regime; post_close_at: rm.status payload.runs.post_close.next_at; next_open_utc: pipeline/market_status.py next session (not in rm.status yet); major_event_names: the stock tool''s regime record (K5-proposed)', freshness: 'each stock run (pre-open, intraday, post-close)', story: K4-proposed, status: published}
     x-read-model: 'rm.blocks page_key session (interim: projected from rm.status)'
     x-freshness: 'stock_age; each stock run'
     x-cache: 'tag rm:blocks:<market>:session, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'non-trading day: open_utc and close_utc null, next_open_utc set'
     x-feeds: [h31.band, h34.header, s30.lock, s30.status-chip]
     x-shared: 'one session record: the top bar''s chip and lock and Home''s band show the same times (serving it twice would duplicate one fact)'
-    parameters:
-      - $ref: '#/components/parameters/Market'
     responses:
       '200':
         description: 'The Session block'
@@ -105,26 +131,51 @@
           application/json:
             schema: {$ref: '#/components/schemas/SessionResponse'}
             examples:
-              india: {$ref: '#/components/examples/getSession_india'}
-              us: {$ref: '#/components/examples/getSession_us'}
+              us: {$ref: '#/components/examples/getSessionUs_us'}
       '404': {$ref: '#/components/responses/NotFound'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}
-/api/v1/markets/{market}/indices:
+/api/v1/markets/india/indices:
   get:
     tags: [blocks]
-    operationId: getIndices
+    operationId: getIndicesIndia
+    summary: 'The benchmark and volatility index at their last close (index strip, market band)'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'NSE''s daily index file (ind_close_all): NIFTY 50 and INDIA VIX close, change on the previous close, change over 5 sessions, close date', freshness: 'daily, after the NSE index file (the 07:10 IST market run)', story: TR-MARKET-proposed, status: planned}
+    x-read-model: 'fno.pages_history page indices (product fno, market india)'
+    x-freshness: 'fno_calendar; each F&O market run'
+    x-cache: 'tag rm:blocks:<market>:indices, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'an index without a stored close makes the block 503 (never a made-up level)'
+    x-feeds: [h31.band, s30.index-strip]
+    x-shared: 'one pair of levels: the top bar''s strip and Home''s band show the same closes, never both at once'
+    responses:
+      '200':
+        description: 'The Indices block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/IndicesIndiaResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getIndicesIndia_india'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/us/indices:
+  get:
+    tags: [blocks]
+    operationId: getIndicesUs
     summary: 'The benchmark and volatility index at their last close (index strip, market band)'
     x-status: planned
     x-publisher: stock
+    x-catalog: {publisher: stock, source: 'rm.status payload.benchmark, payload.vol_index (LevelBlock: close, change_pct, change_5d_pct, close_date)', freshness: "the stock tool's post-close run", story: K4-proposed, status: published}
     x-read-model: 'rm.blocks page_key indices (interim: projected from rm.status)'
     x-freshness: 'stock_age; post-close run'
     x-cache: 'tag rm:blocks:<market>:indices, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'an index without a stored close makes the block 503 (never a made-up level)'
     x-feeds: [h31.band, s30.index-strip]
     x-shared: 'one pair of levels: the top bar''s strip and Home''s band show the same closes, never both at once'
-    parameters:
-      - $ref: '#/components/parameters/Market'
     responses:
       '200':
         description: 'The Indices block'
@@ -134,8 +185,7 @@
           application/json:
             schema: {$ref: '#/components/schemas/IndicesResponse'}
             examples:
-              india: {$ref: '#/components/examples/getIndices_india'}
-              us: {$ref: '#/components/examples/getIndices_us'}
+              us: {$ref: '#/components/examples/getIndicesUs_us'}
       '404': {$ref: '#/components/responses/NotFound'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}

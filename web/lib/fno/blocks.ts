@@ -9,10 +9,10 @@ import { checkContractVersion } from "./version.ts";
 
 export const FNO_PRODUCT = "fno";
 
-/** The pages P6 publishes for the Screener and Markets (fno.pages_history.page_key). */
-export type ScreenerPageKey = "screener_summary" | "screener_stocks" | "fno_screener_summary" | "fno_screener_rows" | "overview_indices" | "overview_sectors";
-/** The pages P10 publishes for Home and the frame: W10's own page keys (W9-F&O; India only). */
-export type HomePageKey = "session" | "indices" | "today" | "risk" | "events";
+/** The pages exepex/trading publishes for the Screener and Markets (fno.pages_history.page_key; contract 2.5). */
+export type ScreenerPageKey = "screener_summary" | "screener_stocks" | "fno_screener_summary" | "fno_screener_rows" | "overview_indices" | "overview_sectors" | "flows";
+/** The pages it publishes for Home and the frame (contract 2.5 x-read-model; India only). */
+export type HomePageKey = "session" | "indices" | "fno_picks" | "fno_books" | "fno_events";
 export type FnoPageKey = ScreenerPageKey | HomePageKey;
 
 export interface FnoBlock<T> extends PublicationState {

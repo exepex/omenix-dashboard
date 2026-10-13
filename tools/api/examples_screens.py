@@ -184,9 +184,20 @@ def view(events: list, query: dict) -> list:
     return sorted(market + companies[: query["limit"] - len(market)], key=lambda e: (e["date"], e["inst"] is not None, e["title"]))
 
 
-def events(x: Screens, market, home: dict):
-    """The full calendar and the Markets overview's view (from its session, 13 Oct)."""
-    full = calendar(x, home, market)
+# Contract 2.5 (owner, 14 Oct 2026): India's NSE F&O expiries are exepex/trading's calendar, the rest the stock tool's.
+EXPIRIES = {"fno_expiry", "weekly_expiry"}
+
+
+def published_by(rows: list, market: str, publisher: str) -> list:
+    """The rows of one publisher's calendar: in India the expiries are exepex/trading's; the US has none."""
+    if market != "india":
+        return rows
+    return [e for e in rows if (e["kind"] in EXPIRIES) == (publisher == "fno")]
+
+
+def events(x: Screens, market, home: dict, publisher: str = "stock"):
+    """One publisher's full calendar and the Markets overview's view (from its session, 13 Oct)."""
+    full = published_by(calendar(x, home, market), market, publisher)
     query = {**MARKETS_VIEW, "from": x.K["markets"][market]["regime"]["session_date"]}
     home20 = {**HOME_VIEW, "from": query["from"], "tickers": sorted(x.C["markets"][market]["signals"])}
     return {"_calendar": ("the full calendar of 12 Oct (every kind; both screens query it)", {"events": full}, {"from": full[0]["date"]}),
@@ -194,10 +205,10 @@ def events(x: Screens, market, home: dict):
             "_home20": ("Home's query on the real calendar (the stock tool's 20 companies, from 13 Oct): market-wide events kept", {"events": view(full, home20)}, home20)}
 
 
-def home_events(x: Screens, market, home: dict, shell: dict):
+def home_events(x: Screens, market, home: dict, shell: dict, publisher: str = "stock"):
     """Home's view of the same calendar, from Home's session (7 Oct), over the companies Home's world tracks (the active
     stocks of 30-shell): exactly the signed-off "Coming up" of 31 (check_contract proves it)."""
     items = shell["markets"][market]["items"]
     tracked = sorted(i for i, it in items.items() if it["kind"] == "stock" and it.get("state") == "active")
     query = {**HOME_VIEW, "from": home["markets"][market]["session"]["date"], "tickers": tracked}
-    return {"": ("Home's view: kinds of 31 row 6; limit=6", {"events": view(calendar(x, home, market), query)}, query)}
+    return {"": ("Home's view: kinds of 31 row 6; limit=6", {"events": view(published_by(calendar(x, home, market), market, publisher), query)}, query)}

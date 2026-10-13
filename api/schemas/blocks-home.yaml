@@ -151,8 +151,9 @@ Events:
   type: object
   description: >-
     "Coming up": the market's scheduled events and the active companies' results from the session being predicted
-    onwards, as known at the cut-off. In the US, F&O expiries are absent. Empty state: `events` empty
-  x-catalog: {publisher: stock, source: 'calendar_event (config/events.yaml via core/calendar.market_events, the events kind, the market calendar)', freshness: daily (pre-open run), story: K4-proposed, status: planned}
+    onwards, as known at the cut-off. In the US, F&O expiries are absent. In India they are exepex/trading's own block
+    (getFnoEvents, 2.5, owner 14 Oct 2026) and the stock tool's calendar lists none; a screen merges the two and applies
+    its own query to the merged list. Each path carries its x-catalog. Empty state: `events` empty
   x-element: [h31.coming-up]
   required: [events]
   properties:

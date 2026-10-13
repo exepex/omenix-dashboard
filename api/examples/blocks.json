@@ -252,7 +252,7 @@
    }
   }
  },
- "getSession_india": {
+ "getSessionIndia_india": {
   "summary": "Mock (india): closed: before the 7 Oct open in the US, after the close in India",
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
@@ -264,15 +264,17 @@
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
    "payload_sha256": "16a255ab1eb466741869389d6a4ef48e971673729e92e20758faa231a96010cb",
-   "publisher": "stock",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "stock_age",
+    "rule": "fno_calendar",
     "built_at": "2026-10-07T12:00:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "exchange": "India (NSE)",
     "zone": "IST",
@@ -288,7 +290,7 @@
    }
   }
  },
- "getSession_us": {
+ "getSessionUs_us": {
   "summary": "Mock (us): closed: before the 7 Oct open in the US, after the close in India",
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
@@ -322,7 +324,7 @@
    }
   }
  },
- "getIndices_india": {
+ "getIndicesIndia_india": {
   "summary": "Mock (india): benchmark and volatility index",
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
@@ -334,15 +336,17 @@
    "schema_version": "2.1.0",
    "source_commit": "cadf1d2",
    "payload_sha256": "0c528fdfccaad6250b279b1ceeb18ebab9824d0e36ff097e1f3cb7d46d45706e",
-   "publisher": "stock",
+   "publisher": "fno",
    "freshness": {
     "state": "fresh",
-    "rule": "stock_age",
+    "rule": "fno_calendar",
     "built_at": "2026-10-07T12:00:00Z",
     "age_minutes": 0,
     "reason": null
    },
    "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
    "payload": {
     "indices": [
      {
@@ -371,7 +375,7 @@
    }
   }
  },
- "getIndices_us": {
+ "getIndicesUs_us": {
   "summary": "Mock (us): benchmark and volatility index",
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
@@ -2434,7 +2438,7 @@
    "built_at": "2026-10-07T12:00:00Z",
    "schema_version": "2.1.0",
    "source_commit": "e8cd360",
-   "payload_sha256": "4b68b18484a55a8564f1479905ffb6e366864c4ed0c2cebf60dfabcfa38b5d3b",
+   "payload_sha256": "c8e8a2c946aee6cd6e86e427317123bc631fe390233f6e78078cbe29ecd0cafd",
    "publisher": "stock",
    "freshness": {
     "state": "fresh",
@@ -2475,18 +2479,18 @@
       "inst": null
      },
      {
-      "date": "2026-10-27",
-      "title": "NSE monthly F&O expiry (last Tuesday)",
-      "kind": "fno_expiry",
-      "major": true,
-      "inst": null
-     },
-     {
       "date": "2026-10-29",
       "title": "FOMC rate decision (previous US evening)",
       "kind": "fomc",
       "major": true,
       "inst": null
+     },
+     {
+      "date": "2026-10-29",
+      "title": "Maruti Suzuki results",
+      "kind": "earnings",
+      "major": false,
+      "inst": "MARUTI"
      }
     ]
    }
@@ -2832,7 +2836,7 @@
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
    "market": "india",
-   "page_key": "today",
+   "page_key": "fno_picks",
    "as_of": "2026-10-06",
    "cutoff": "2026-10-07T12:00:00Z",
    "built_at": "2026-10-07T12:00:00Z",
@@ -2866,7 +2870,7 @@
   "description": "Taken from design/mockups/30-shell/data.json (signed off as of cadf1d2)",
   "value": {
    "market": "india",
-   "page_key": "today",
+   "page_key": "fno_picks",
    "as_of": "2026-10-06",
    "cutoff": "2026-10-07T12:00:00Z",
    "built_at": "2026-10-07T12:00:00Z",
@@ -3153,7 +3157,7 @@
   "description": "Taken from design/mockups/31-dashboard/data.json (signed off as of e8cd360)",
   "value": {
    "market": "india",
-   "page_key": "risk",
+   "page_key": "fno_books",
    "as_of": "2026-10-06",
    "cutoff": "2026-10-07T12:00:00Z",
    "built_at": "2026-10-07T12:00:00Z",
@@ -3209,6 +3213,61 @@
      }
     ]
    }
+  }
+ },
+ "getFnoEvents_india": {
+  "summary": "Mock (india): Home's view: kinds of 31 row 6; limit=6",
+  "description": "Taken from design/mockups/31-dashboard/data.json (signed off as of e8cd360)",
+  "value": {
+   "market": "india",
+   "page_key": "fno_events",
+   "as_of": "2026-10-06",
+   "cutoff": "2026-10-07T12:00:00Z",
+   "built_at": "2026-10-07T12:00:00Z",
+   "schema_version": "2.1.0",
+   "source_commit": "e8cd360",
+   "payload_sha256": "6167d2cbf3fe6acdbf216ead48df8bb65680f0cb60c9c1d9fc366b075a6228e8",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-10-07T12:00:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-2026-10-07",
+   "payload": {
+    "events": [
+     {
+      "date": "2026-10-27",
+      "title": "NSE monthly F&O expiry (last Tuesday)",
+      "kind": "fno_expiry",
+      "major": true,
+      "inst": null
+     }
+    ]
+   }
+  },
+  "x-query": {
+   "kinds": [
+    "rbi_policy",
+    "earnings",
+    "holiday",
+    "fno_expiry",
+    "fomc",
+    "cpi",
+    "jobs_report"
+   ],
+   "limit": 6,
+   "market_first": true,
+   "from": "2026-10-07",
+   "tickers": [
+    "HDFCBANK",
+    "MARUTI",
+    "RELIANCE"
+   ]
   }
  }
 }
