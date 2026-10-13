@@ -127,3 +127,36 @@ The check is not a CI step. The CI bash 3.2 container has no pseudo-terminal, an
 `/dev/tty`. CI's `bash32_trap_test.sh` covers the same trap pattern without a terminal. Run the check before the next
 quarterly restore test (reminder 11 Jan 2027), from the repository root, on a machine with Docker and util-linux
 `script`.
+
+## 4. Judge 65 addendum 1: the projection is now an allow-list (accepted, strong evidence)
+
+**I agree with the judge:** the deny-list and its test shared one list, so the test was circular. Removing `threshold`
+from the list passed every test, and any new registry field would have leaked.
+
+**What changed:**
+- **Projection:** `public-strategies.ts` now keeps only `id`, `family`, `name`, `horizons`, `live`, `live_from` and
+  `settled_trades`, the fields of the page's `Strategy` type. Everything else is dropped, including fields no registry
+  has yet. The contract's description in `api/paths/strategy-lab.yaml` says so; `check_contract.py` passes.
+- **API tests** (`public-strategies.test.ts`):
+  - they name the forbidden keys literally (`threshold`, `parameters`, `news_weight`, `regime_filter`,
+    `sees_model_score` and others) and forbidden text ("Buys when the model gives", "0.55");
+  - they plant a brand-new field, `planted_secret_setting`, on every strategy in the stored registry;
+  - a first test proves the stored registry really carries `threshold` 0.55, `news_weight` and a description, so the
+    guard is not vacuous;
+  - the answer must carry none of these anywhere, and each entry must hold exactly the public fields.
+- **Page tests:** the UI cases `w14-no-internals-lab` and `-help` serve the registry with the same planted field and
+  fail if it shows.
+
+**Mutation checks** (each run 3 tests, restored after):
+
+| Mutation | Result |
+|---|---|
+| `threshold` added to the allow-list | 2 of 3 tests fail |
+| the old deny-list without `threshold` | 2 of 3 tests fail |
+| the entry passed through whole | 2 of 3 tests fail |
+
+I did not mutation-check the page-level cases: the pages render only typed fields.
+
+**Checks run:**
+- code size, typecheck, 451 unit tests and the build: pass;
+- the UI cases `w14-no-internals-*`, `strategy-lab*` and `help*` (19 cases): 0 failed.
