@@ -7,9 +7,10 @@
 // decisions, 13 Oct 2026: no model or vendor name on any screen). Pure.
 
 /** Names that are no ordinary word: a model or an AI vendor on their own. */
-const BRANDS = ["anthropic", "openai", "claude", "chatgpt", "gpt", "deepseek", "qwen", "mixtral", "codestral", "ministral", "command-r"];
-/** Names that are also ordinary words: a model only with a version or size after them, or alone in brackets. */
-const WORDS = ["opus", "sonnet", "haiku", "fable", "gemini", "gemma", "llama", "mistral", "grok", "phi", "bard", "kimi", "glm"];
+const BRANDS = ["anthropic", "openai", "claude", "chatgpt", "deepseek", "qwen", "mixtral", "codestral", "ministral", "command-r"];
+/** Names that are also ordinary words or company names: a model only with a version or size after them, or alone in
+ *  brackets ("GPT Healthcare Limited" is a company; "GPT-4o" is a model). */
+const WORDS = ["gpt", "opus", "sonnet", "haiku", "fable", "gemini", "gemma", "llama", "mistral", "grok", "phi", "bard", "kimi", "glm"];
 const VARIANTS = ["mini", "nano", "pro", "turbo", "flash", "lite", "ultra", "preview", "instant", "latest", "coder", "vision"];
 /** What may follow a family: a version or size ("-4o", " 5", ".1", "_4", "-r1", "70b"), a variant joined by a
  *  separator ("-mini"), or another family word ("claude_opus", "Claude Opus"). */

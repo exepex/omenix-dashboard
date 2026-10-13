@@ -8,7 +8,8 @@ import type { Market } from "../data/constants.ts";
 import { queryKey, type FnoQuery, type StocksQuery } from "./state.ts";
 import type { ScreenerData } from "./source.ts";
 
-const read = exampleReader(raw);
+/** Securities and market data only: no strategy names, so no display-name rule (judge 45). */
+const read = exampleReader(raw, { strategies: false });
 
 /** Every paged example with the query it answers (its `x-query`), symbols in a canonical order. */
 const QUERIES: readonly [string, object][] = Object.entries(raw as Record<string, { "x-query"?: Record<string, unknown> }>)

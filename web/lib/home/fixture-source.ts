@@ -9,7 +9,7 @@ import type { HomeData } from "./source.ts";
 
 /** The payload of one example (`getGroups_india`), strategy names through the display-name rule; a missing example is
  *  a broken fixture, never an empty block. */
-export const example = exampleReader(raw);
+export const example = exampleReader(raw, { strategies: true });
 
 const block = <T>(operation: string) => async (market: Market): Promise<T> => example<T>(`${operation}_${market}`);
 

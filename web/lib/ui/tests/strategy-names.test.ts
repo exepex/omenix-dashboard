@@ -68,11 +68,25 @@ test("clean names are kept as published, even when several AI strategies share o
   assert.deepEqual(applyDisplayNames(payload), payload);
 });
 
-test("a model named in free text, outside any strategy name, is removed too", () => {
-  assert.equal(applyDisplayNames({ note: "Scored by GPT-4o (beta)" }).note, "Scored by AI team (beta)");
-  assert.equal(applyDisplayNames({ note: "Model A (Claude Sonnet) won" }).note, "Model A won");
-  assert.equal(applyDisplayNames({ note: "Asked in the Claude app" }).note, `Asked in the ${AI_TEAM} app`);
-  assert.equal(applyDisplayNames({ note: "Model + news" }).note, "Model + news");
+// Judge 45: the rule renames strategies only. Other text is never rewritten; a model name in it is flagged by the
+// detector (the UI harness's gate on every page), so a leak is seen, not hidden.
+test("text outside any strategy name stays exactly as published, and a model named in it is flagged, not rewritten", () => {
+  for (const note of ["Scored by GPT-4o (beta)", "Asked in the Claude app", "Model + news"]) assert.equal(applyDisplayNames({ note }).note, note);
+  assert.equal(namesModel("Scored by GPT-4o (beta)"), true);
+  assert.equal(namesModel("Asked in the Claude app"), true);
+});
+
+test("security names are never touched: GPT Healthcare and GPT Infraprojects stay; a planted model in a name is caught", () => {
+  const rows = [{ s: "GPTHEALTH", n: "GPT Healthcare Limited" }, { s: "GPTINFRA", n: "GPT Infraprojects Limited" }, { s: "MONEYVIEW", n: "Moneyview GPT-4o Limited" }];
+  assert.deepEqual(applyDisplayNames({ rows }).rows, rows, "the rule leaves security text alone");
+  assert.equal(modelNameIn("GPT Healthcare Limited"), null);
+  assert.equal(modelNameIn("GPT Infraprojects Limited"), null);
+  assert.equal(modelNameIn("Moneyview GPT-4o Limited"), "GPT-4o", "the page gate flags it");
+});
+
+test("a strategy id quoted in a sentence reads as its display name (06's first settled week)", () => {
+  const payload = { strategies: { "ai.combined.opus.v1": { name: "AI combined (Opus)" }, "rule.model_news.v1": { name: "Model + news" } }, line: "First settled week: rule.model_news.v1 -3,807.75 INR on 2 trades, ai.combined.opus.v1 -3,807.75 INR on 2" };
+  assert.equal(applyDisplayNames(payload).line, `First settled week: Model + news -3,807.75 INR on 2 trades, ${AI_TEAM} · combined -3,807.75 INR on 2`);
 });
 
 test("identifiers (trade and record ids) are keys: never rewritten, so lookups by id keep working", () => {
@@ -148,11 +162,10 @@ test("ordinary words stay: sonnet, opus, haiku, fable alone are not models", () 
   assert.equal(applyDisplayNames({ headline: "Tata's magnum opus: a new plant" }).headline, "Tata's magnum opus: a new plant");
 });
 
-test("model ids are replaced as whole tokens: no 'claude--5', no 'claude-AI team-4'", () => {
+test("model ids are replaced as whole tokens where the rule replaces (cited ids): no 'claude--5', no 'claude-AI team-4'", () => {
   assert.equal(withoutModelNames("picked by claude-sonnet-5 today", AI_TEAM), `picked by ${AI_TEAM} today`);
-  assert.equal(applyDisplayNames({ note: "Reviewed by claude-haiku-4 overnight" }).note, `Reviewed by ${AI_TEAM} overnight`);
-  assert.equal(applyDisplayNames({ id: "claude-sonnet-5" }).id, AI_TEAM);
-  assert.equal(applyDisplayNames({ note: "AI reasoning (o3) and AI combined (Fable 5)" }).note, "AI reasoning and AI combined");
+  assert.equal(withoutModelNames("Reviewed by claude-haiku-4 overnight", AI_TEAM), `Reviewed by ${AI_TEAM} overnight`);
+  assert.equal(withoutModelNames("AI reasoning (o3) and AI combined (Fable 5)", AI_TEAM), "AI reasoning and AI combined");
   const payload = { strategies: [{ id: "ai.combined.fable5.v1", name: "AI combined (Fable 5)" }, { id: "ai.reasoning.o3.v1", name: "AI reasoning (o3)" }], line: "Best: AI reasoning (o3)" };
   const out = applyDisplayNames(payload);
   assert.deepEqual(out.strategies.map((x) => x.name), [`${AI_TEAM} · combined`, AI_TEAM]);
