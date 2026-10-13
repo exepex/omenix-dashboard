@@ -6,7 +6,7 @@ import { test } from "node:test";
 import { NoExample } from "../../ui/no-example.ts";
 import { resolveSource } from "../../ui/sources.ts";
 import { fixtureScreenerData as data } from "../fixture-source.ts";
-import { STOCK_SCREENS, screenCount, screensOf, toolsSymbols } from "../screens.ts";
+import { STOCK_SCREENS, screenCount, screensOf, toolsOrder, toolsSymbols } from "../screens.ts";
 import { fnoQuery, readState, stateSearch, stocksQuery } from "../state.ts";
 
 test("the URL state reads the signed-off keys, falls back to defaults, and writes back only what differs", () => {
@@ -40,11 +40,17 @@ test("each paged example answers only the query it was taken with; any other vie
   assert.equal((await data.stocks("india", q({}))).total, 2924);
   const near = (await data.summary("india")).universes.all!.near_high;
   assert.equal((await data.stocks("india", q({ pre: "high" }))).total, near, "the screen's rows are as many as its count");
-  await assert.rejects(data.stocks("india", q({ pre: "volume" })), NoExample);
+  const summary = await data.summary("india");
+  // W11's examples for the signed-off states (round 2): each screen's rows are as many as its own count field
+  for (const [pre, uni, field] of [["volume", "all", "volume"], ["oversold", "n500", "oversold"]] as const) assert.equal((await data.stocks("india", q({ pre, uni }))).total, summary.universes[uni]!.screens[field], pre);
+  assert.equal((await data.stocks("india", q({ uni: "ours" }))).total, 20);
+  assert.equal((await data.stocks("india", q({ pre: "picks" }))).total, toolsSymbols(tools, "picks").length, "the picks' symbols, whatever their order, find the example");
+  await assert.rejects(data.stocks("india", q({ pre: "trend" })), NoExample);
   await assert.rejects(data.stocks("india", q({ pg: "2" })), NoExample);
   assert.equal((await data.stocks("us", stocksQuery(readState({}, "us"), await data.tools("us")))).rows.length, 20);
   assert.equal((await data.fnoRows(fnoQuery(readState({ tab: "fno" }, "india")))).total, 219);
-  await assert.rejects(data.fnoRows(fnoQuery(readState({ tab: "fno", fpre: "index" }, "india"))), NoExample);
+  assert.equal((await data.fnoRows(fnoQuery(readState({ tab: "fno", fpre: "index" }, "india")))).total, (await data.fnoSummary()).screens.index);
+  await assert.rejects(data.fnoRows(fnoQuery(readState({ tab: "fno", fpre: "ivlow" }, "india"))), NoExample);
 });
 
 test("every screen's count is its summary field (resolved by its source path), except the two tools-based ones", async () => {
@@ -59,4 +65,16 @@ test("every screen's count is its summary field (resolved by its source path), e
     }
   }
   assert.equal(STOCK_SCREENS.filter((d) => d.field === null).map((d) => d.key).join(), "picks,results");
+});
+
+test("picks read most buying first and results soonest first, ordered on the page by the tools block, each row keeping its source index", async () => {
+  const tools = await data.tools("india");
+  const by = new Map(tools.companies.map((c) => [c.s, c]));
+  for (const key of ["picks", "results"] as const) {
+    const page = await data.stocks("india", stocksQuery(readState({ pre: key }, "india"), tools));
+    const ordered = toolsOrder(page.rows, tools, key);
+    ordered.forEach(({ r, i }) => assert.equal(page.rows[i], r, "the index is the row's place in the block"));
+    const values = ordered.map(({ r }) => (key === "picks" ? -by.get(r.s)!.strategies.buy : by.get(r.s)!.days_to_results!));
+    assert.deepEqual(values, [...values].sort((a, b) => a - b), key);
+  }
 });

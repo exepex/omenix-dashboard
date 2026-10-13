@@ -4,7 +4,7 @@
 // are lent to the frame at their close, so their Buy / Sell open the order window as in the signed-off page.
 import { useEffect } from "react";
 import type { ScreenerStock, ScreenerStocks, ScreenerTools } from "../../lib/screener/contract.ts";
-import { screenDef } from "../../lib/screener/screens.ts";
+import { TOOLS_ORDER_WORDS, isToolsScreen, screenDef, toolsOrder } from "../../lib/screener/screens.ts";
 import { sortOf, type ScreenerState } from "../../lib/screener/state.ts";
 import type { Instrument } from "../../lib/shell/contract.ts";
 import { sourceName } from "../../lib/ui/sources.ts";
@@ -38,7 +38,9 @@ export function StocksTable({ state, stocks, tools, india, locale }: Props) {
   useEffect(() => addItems(lend(stocks.rows, stocks.as_of, new Set(tools.companies.map((c) => c.s)))), [stocks, tools, addItems]);
   const key = sortOf(state);
   const def = state.pre ? screenDef(state.pre) : undefined;
-  const words = key.replace("-", "") === "chg" ? `${key.startsWith("-") ? "biggest fall" : "change"} ${PERIOD_WORDS[state.per]}` : SORT_WORDS[key] ?? key;
+  const tooled = !state.sort && state.pre && isToolsScreen(state.pre) ? state.pre : null;
+  const shown = tooled ? toolsOrder(stocks.rows, tools, tooled) : stocks.rows.map((r, i) => ({ r, i }));
+  const words = tooled ? TOOLS_ORDER_WORDS[tooled] : key.replace("-", "") === "chg" ? `${key.startsWith("-") ? "biggest fall" : "change"} ${PERIOD_WORDS[state.per]}` : SORT_WORDS[key] ?? key;
   const th = (label: string, k: string | null, tip: string, cls = "") => (
     <th className={cls} data-tip={tip} aria-sort={k && key === k ? "descending" : k && key === `-${k}` ? "ascending" : undefined}>
       {k ? (
@@ -75,7 +77,7 @@ export function StocksTable({ state, stocks, tools, india, locale }: Props) {
             </tr>
           </thead>
           <tbody>
-            {stocks.rows.map((r, i) => (
+            {shown.map(({ r, i }) => (
               <tr key={r.s} data-inst={followed.has(r.s) ? r.s : undefined}>
                 <td><Name r={r} followed={followed.has(r.s)} /><small>{r.n}{r.g ? ` · ${r.g}` : ""}</small></td>
                 <td className="num">{n(i, "p", 2)}</td>
@@ -92,7 +94,7 @@ export function StocksTable({ state, stocks, tools, india, locale }: Props) {
           </tbody>
         </table>
         <ul className="mb-scr-cards" aria-label="Results">
-          {stocks.rows.map((r, i) => (
+          {shown.map(({ r, i }) => (
             <li key={r.s}>
               <div className="top"><Name r={r} followed={followed.has(r.s)} /><span className="px">{n(i, "p", 2)} <Chg value={r[state.per]} src={rowSrc(i, state.per)} /></span></div>
               <small>{r.n}</small>
