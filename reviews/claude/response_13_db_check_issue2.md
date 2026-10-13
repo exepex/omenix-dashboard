@@ -33,15 +33,30 @@ fires for each, and checks that a clean server gives no alert.
   permission refusal into "read-only transaction", which hid whether the permissions are right. The role can also
   switch it off itself, and with no privileges at all it needs nothing more.
 
-## Owner steps (once)
+## Orchestrator's notes (13 Oct 2026), answered
 
-`platform/README.md`, "Scheduled check":
-1. Run `owner/apply_real.sh`.
-2. In psql as admin, run `\password db_monitor`.
-3. Add the repository secret `OMENIX_DB_MONITOR_PASSWORD`.
-4. Run the workflow by hand and expect `RESULT: OK`.
+1. **Password changes:** stated plainly as not detectable read-only, in the report on every run and in the README.
+2. **One script and one checklist** (`owner/setup_monitor.sh`, `owner/CHECKLIST_MONITOR.md`). The owner types only
+   the admin name and password, at a hidden prompt. The script:
+   - generates the monitor's password (40 random letters and digits), which nobody types or sees;
+   - stores it as a SCRAM-SHA-256 verifier computed on the Mac (`owner/scram_verifier.py`), so the plain password
+     never reaches the server;
+   - runs the first check;
+   - saves the secret through `gh`'s stdin and starts the workflow.
 
-Until the secret exists, runs only print a notice.
+   Proof (strong evidence, local):
+   - the verifier logs in through real SCRAM authentication, and a wrong password is refused;
+   - an end-to-end run against a TLS copy with SCRAM for `db_monitor` gave `first check: OK; GitHub secret saved:
+     yes`, and the saved 40-character secret logs in;
+   - the password is not in the evidence file;
+   - a static test fails if the script ever prints the password or verifier, or passes it as an argument (shown with
+     a planted `echo`).
+3. **Never a silent pass:** results are `OK` (exit 0), `ALERT` (1) or `UNKNOWN` (2: no connection, or part of the
+   check could not run). `ALERT` and `UNKNOWN` both fail the run and raise the issue, whose text says "could NOT
+   check the server" for `UNKNOWN`. Planted test: an unreachable port gives UNKNOWN, exit 2, and the alert. Job
+   limit 5 minutes, connection timeout 20 s.
+4. **The monitor's own forbidden checks:** it is refused SELECT and INSERT on `stock`, `fno` and `app` tables, has
+   no USAGE on any of the three schemas, and has its own "no schema" value check. 94 checks, 0 failed.
 
 ## Doubts
 

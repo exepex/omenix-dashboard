@@ -6,8 +6,12 @@
 set -eu
 report="$1"; run_url="${2:-}"
 title="Database check: alert"
-body="$(printf 'The scheduled database check found something to look at (issue #2, platform/README.md "Scheduled check").\n\n%s\n\n```\n%s\n```\n' \
-  "${run_url:+Run: $run_url}" "$(cat "$report")")"
+case "$(grep '^RESULT: ' "$report")" in
+  "RESULT: UNKNOWN"*) what="could NOT check the server (UNKNOWN: nothing below is a pass)" ;;
+  *) what="found something to look at (ALERT)" ;;
+esac
+body="$(printf 'The scheduled database check %s. Issue #2, platform/README.md "Scheduled check".\n\n%s\n\n```\n%s\n```\n' \
+  "$what" "${run_url:+Run: $run_url}" "$(cat "$report")")"
 number="$(gh issue list --state open --search "\"$title\" in:title" --json number,title \
   --jq "map(select(.title == \"$title\")) | .[0].number // empty")"
 if [ -n "$number" ]; then
