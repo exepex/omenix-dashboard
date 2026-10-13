@@ -33,6 +33,13 @@ screenshots `styleguide-1280-full.png`, `styleguide-390-full.png`, `styleguide-3
 - **Strategy internals stay private (owner, 13 Oct 2026):** screens and APIs show what a strategy family decided (buys,
   holds, results), never how it decides (its data, filters or rules).
 
+- **Separate experiments are never merged (owner, 13 Oct 2026):** each paper account, book and scoreboard is shown on
+  its own; currencies are never summed (INR and USD apart); the two backends' scoreboards are never combined into one
+  figure. Two named exceptions, both labelled as totals: (1) Home shows each group's total stock profit or loss (the sum
+  of its own strategies' paper results; groups never added together; the F&O book its own line); (2) the Strategy lab
+  shows, per family, one "both books together" profit-or-loss total line in rupees, India only (stocks plus F&O), and
+  never a combined leaderboard, win rate or winner.
+
 ## Palette (one scheme; contrast is WCAG on the colour named)
 | Role | Hex | Use | Contrast |
 |---|---|---|---|

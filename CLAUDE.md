@@ -67,7 +67,10 @@ Work on `main`; `git pull --no-rebase origin main` before every push (several se
   shown on its own; currencies are never summed (INR and USD apart); scoreboards of the two backends are never
   combined into one figure. One exception (owner, 13 Oct 2026): Home shows each group's (Rule-based, Hybrid, AI team,
   Baselines) total stock profit or loss, the sum of that group's own strategies' paper results, labelled as a total;
-  groups are never added together, and the F&O book stays its own line.
+  groups are never added together, and the F&O book stays its own line. Second exception (owner, 13 Oct 2026, choice
+  (a)): the Strategy lab may show, per family, one "both books together" profit-or-loss **total line** in rupees,
+  India only, labelled as a total (stocks plus F&O); never a combined leaderboard, combined win rate or combined
+  "which family wins", which stay separate for Stocks and for F&O.
 - F&O appears only in the India market; in the US market every F&O element is absent (not empty, absent).
 - **Positive and negative cases (owner, 13 Oct 2026):** every mockup shows each element in its good case, its bad case
   and its empty case (e.g. a family winning, a family losing, no settled trade yet; a suggestion, one refused, none).
