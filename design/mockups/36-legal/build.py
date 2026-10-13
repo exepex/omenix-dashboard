@@ -25,7 +25,7 @@ from system import inline_system  # noqa: E402
 BRAND = os.path.join(os.path.dirname(os.path.dirname(HERE)), "brand")
 
 MOCKUP_LINKS = {"privacy": "privacy.html", "terms": "terms.html", "home": "index.html", "contact": "", "verify": ""}
-# The app fills the contact at request time (web/lib/legal/legal.ts); the mockup shows the text without it.
+# The app fills the contact and the verification tag when it is built (web/lib/legal/legal.ts); the mockup has neither.
 APP_LINKS = {"privacy": "/privacy", "terms": "/terms", "home": "/", "contact": "@@CONTACT@@", "verify": "<!--@@VERIFY@@-->"}
 
 
