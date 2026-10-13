@@ -5,6 +5,10 @@ Source: NSE's corporate actions (`/api/corporates-corporateActions?index=equitie
 to the actions that change the share count of the same equity:
 - "Face Value Split (Sub-Division) - From Rs X/- ... To Rs Y/-": prices before the ex-date times Y / X;
 - "Bonus a:b" (a new shares for every b held): prices before the ex-date times b / (a + b).
+- "Demerger": prices before the ex-date times (ex-date open ÷ previous close). On a demerger's ex-date NSE runs a
+  special pre-open call auction and the open is the price it discovers, so this is NSE's own reference for the share
+  without the demerged business (the factor is set by `demerger_factors`; a demerger without an ex-date trade stays
+  unadjusted and is marked so in actions.csv).
 Not adjusted: rights issues (the factor needs the rights price and the market price; it is small) and bonus
 preference shares ("Scheme Of Arrangement - Bonus NCRPS", another security).
 """
@@ -33,27 +37,49 @@ def factor(subject: str) -> float | None:
     return None
 
 
+def is_demerger(subject: str) -> bool:
+    return subject.strip().lower().startswith("demerger")
+
+
 def actions(rows: list) -> list:
-    """[symbol, ex_date (ISO), factor, subject] for every split and bonus among NSE's corporate-action rows."""
+    """[symbol, ex_date (ISO), factor, subject] for every split, bonus and demerger among NSE's corporate-action rows
+    (a demerger's factor is None until `demerger_factors` sets it from the prices)."""
     out = []
     for r in rows:
         f = factor(r.get("subject", ""))
-        if f is not None and r.get("series") in ("EQ", "BE"):
+        if (f is not None or is_demerger(r.get("subject", ""))) and r.get("series") in ("EQ", "BE"):
             ex = dt.datetime.strptime(r["exDate"], "%d-%b-%Y").date().isoformat()
-            out.append([r["symbol"], ex, round(f, 6), r["subject"].strip()])
+            out.append([r["symbol"], ex, round(f, 6) if f is not None else None, r["subject"].strip()])
     return sorted(out)
 
 
-def adjust(series: list, symbol_actions: list) -> list:
-    """Rows (date, series, close, high, low, volume) with prices before each ex-date times its factor and volumes
-    divided by it, so every price compares with today's share count."""
+def demerger_factors(acts: list, series: dict) -> list:
+    """Each demerger's factor: ex-date open ÷ the previous session's close of the same symbol; None (and a note) when
+    the symbol did not trade on its ex-date."""
     out = []
-    for date, srs, close, high, low, volume in series:
-        f = 1.0
-        for _sym, ex, fac, _subject in symbol_actions:
-            if date < ex:
+    for sym, ex, fac, subject in acts:
+        if fac is None and is_demerger(subject):
+            rows = series.get(sym, [])
+            i = next((k for k, r in enumerate(rows) if r[0] == ex), None)
+            if i and rows[i - 1][2]:
+                fac = round(rows[i][6] / rows[i - 1][2], 6)
+            else:
+                subject += " (not adjusted: no trade on the ex-date)"
+        out.append((sym, ex, fac, subject))
+    return out
+
+
+def adjust(series: list, symbol_actions: list) -> list:
+    """Rows (date, series, close, high, low, volume, open) with prices before each ex-date times its factor, and volumes
+    divided by split and bonus factors (not a demerger's), so every figure compares with today's shares."""
+    out = []
+    for date, srs, close, high, low, volume, opening in series:
+        f = shares = 1.0
+        for _sym, ex, fac, subject in symbol_actions:
+            if fac and date < ex:
                 f *= fac
-        out.append((date, srs, round(close * f, 2), round(high * f, 2), round(low * f, 2), round(volume / f)))
+                shares *= 1.0 if is_demerger(subject) else fac   # a demerger keeps the share count
+        out.append((date, srs, round(close * f, 2), round(high * f, 2), round(low * f, 2), round(volume / shares), round(opening * f, 2)))
     return out
 
 

@@ -81,7 +81,7 @@ def equity(last: dt.date) -> None:
             continue
         for r in rows:
             if r["SctySrs"] in ("EQ", "BE"):
-                series[r["TckrSymb"]].append((r["TradDt"], r["SctySrs"], float(r["ClsPric"]), float(r["HghPric"]), float(r["LwPric"]), int(float(r["TtlTradgVol"]))))
+                series[r["TckrSymb"]].append((r["TradDt"], r["SctySrs"], float(r["ClsPric"]), float(r["HghPric"]), float(r["LwPric"]), int(float(r["TtlTradgVol"])), float(r["OpnPric"])))
     series = adjusted(series, last)
     back = lambda s, n: s[-1 - n][2] if len(s) > n else ""
     with open(os.path.join(OUT, "equity.csv"), "w", newline="") as handle:
@@ -91,14 +91,14 @@ def equity(last: dt.date) -> None:
         for sym, s in sorted(series.items()):
             if s[-1][0] != last.isoformat():
                 continue                           # not traded on the last day
-            vols = [v for *_, v in s[-21:-1]]
+            vols = [x[5] for x in s[-21:-1]]
             out.writerow([sym, s[-1][1], s[-1][0], s[-1][2], back(s, 1), back(s, 5), back(s, 21), back(s, 63), back(s, 250),
                           max(x[3] for x in s[-250:]), min(x[4] for x in s[-250:]), s[-1][5], round(sum(vols) / len(vols)) if vols else "",
                           rsi14([x[2] for x in s]), len(s), ";".join("%g" % x[2] for x in s[-21:])])
 
 
 def adjusted(series: dict, last: dt.date) -> dict:
-    """Prices adjusted for the year's splits and bonus issues (NSE's corporate actions; the bulk list, then one lookup
+    """Prices adjusted for the year's splits, bonus issues and demergers (NSE's corporate actions; the bulk list, then one lookup
     per symbol with an unexplained jump); the actions used are written to actions.csv."""
     span = f"&from_date={last - dt.timedelta(days=372):%d-%m-%Y}&to_date={last:%d-%m-%Y}"
     acts = nse_actions.actions(json.loads(get(nse_actions.API + span)))
@@ -106,7 +106,7 @@ def adjusted(series: dict, last: dt.date) -> dict:
         # no date span here: with one, NSE answers [] for some symbols (BANKNIFTY1); the window is applied below
         acts += nse_actions.actions(json.loads(get(nse_actions.API + "&symbol=" + urllib.parse.quote(sym))))
     first = (last - dt.timedelta(days=372)).isoformat()
-    acts = sorted({tuple(a) for a in acts if first <= a[1] <= last.isoformat()})
+    acts = nse_actions.demerger_factors(sorted({tuple(a) for a in acts if first <= a[1] <= last.isoformat()}), series)
     with open(os.path.join(OUT, "actions.csv"), "w", newline="") as handle:
         out = csv.writer(handle)
         out.writerow(["symbol", "ex_date", "factor", "subject"])
