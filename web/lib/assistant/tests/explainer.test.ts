@@ -194,7 +194,7 @@ test("a model refusal is a decline, an API error a failure with plain words, and
   r.model.script = [new Anthropic.RateLimitError(429, { error: { message: "slow down" } }, "rate", new Headers())];
   const failed = await r.ask({ market: "us", question: "Anything?" });
   assert.equal(failed.result, "failed");
-  assert.equal(failed.message, "The Claude API is rate limited now; try again in a minute.");
+  assert.equal(failed.message, "The AI service is rate limited now; try again in a minute.");
   assert.equal(r.store.answers.at(-1)?.status, "failed");
   assert.equal(r.store.answers.at(-1)?.cost_usd, 0);
   r.model.script = [{ stop_reason: "end_turn", content: [{ type: "text", text: "not json", citations: null } as Anthropic.Beta.BetaTextBlock] }];

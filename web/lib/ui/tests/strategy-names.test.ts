@@ -70,6 +70,7 @@ test("clean names are kept as published, even when several AI strategies share o
 test("a model named in free text, outside any strategy name, is removed too", () => {
   assert.equal(applyDisplayNames({ note: "Scored by GPT-4o (beta)" }).note, "Scored by AI team (beta)");
   assert.equal(applyDisplayNames({ note: "Model A (Claude Sonnet) won" }).note, "Model A won");
+  assert.equal(applyDisplayNames({ note: "Asked in the Claude app" }).note, `Asked in the ${AI_TEAM} app`);
   assert.equal(applyDisplayNames({ note: "Model + news" }).note, "Model + news");
 });
 
@@ -119,8 +120,10 @@ test("the detector knows families and id shapes, not a list: each of these is on
     ["Llama-3.1 and Qwen", "Llama-3.1"],
     ["o4-mini", "o4-mini"],
     ["DeepSeek-R1", "DeepSeek-R1"],
+    ["the Claude app", "Claude"],
+    ["on the claude API", "claude"],
   ]) assert.equal(modelNameIn(text), token, text);
-  for (const clean of ["Model + news", "a fable about markets", "the Claude app", "Hybrid", "O2 margin", "Model + news, 60% bar"]) assert.equal(modelNameIn(clean), null, clean);
+  for (const clean of ["Model + news", "a fable about markets", "claude_app", "Hybrid", "O2 margin", "Model + news, 60% bar"]) assert.equal(modelNameIn(clean), null, clean);
 });
 
 test("model ids are replaced as whole tokens: no 'claude--5', no 'claude-AI team-4'", () => {

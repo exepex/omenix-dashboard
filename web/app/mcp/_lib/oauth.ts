@@ -143,7 +143,7 @@ export async function callback(request: Request, cfg: McpConfig, deps: CallbackD
   const params = new URL(request.url).searchParams;
   const state = await verifyToken(cfg.tokenSecret, params.get("state") ?? "", nowSeconds);
   if (!state || state.typ !== "state" || cookie(request, NONCE_COOKIE) !== state.nonce) {
-    return page("This sign-in expired or was not started here. Start again from the Claude app.", 400);
+    return page("This sign-in expired or was not started here. Start again from the AI app.", 400);
   }
   const code = params.get("code");
   if (!code) return page("GitHub sign-in was cancelled.", 400);

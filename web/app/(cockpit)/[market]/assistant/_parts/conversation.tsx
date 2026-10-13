@@ -17,7 +17,7 @@ import type { Pending } from "./use-assistant.ts";
 const CHANNEL: Record<string, [string, string]> = {
   dashboard: ["dashboard", "home"],
   slack: ["Slack /ask", "public"],
-  claude_app: ["Claude app", "bolt"],
+  claude_app: ["AI app", "bolt"],
 };
 
 /** The state of an answer: bubble class, badge tone, icon, words and the explanation in the tooltip. */

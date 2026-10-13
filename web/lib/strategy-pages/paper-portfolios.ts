@@ -109,7 +109,7 @@ export interface PaperPortfoliosPayload {
 }
 
 export const SOURCE: Readonly<Record<string, string>> = {
-  dashboard: "the dashboard", slack: "Slack", cli: "the command line", claude_app: "the Claude app", claude_code: "Claude Code",
+  dashboard: "the dashboard", slack: "Slack", cli: "the command line", claude_app: "the AI app", claude_code: "the coding agent",
 };
 
 /** Sums of numbers that may be missing: null when none is known. */

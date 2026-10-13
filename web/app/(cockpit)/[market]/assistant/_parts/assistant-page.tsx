@@ -71,7 +71,7 @@ function RecordsCard({ market, localTime, answers }: { market: Market; localTime
 export function SpendCard({ spend, state }: { spend: SpendState | null; state: "loading" | "ready" | "error" }) {
   return (
     <Card label="Spend">
-      <CardHead title="Spend" help="What the assistant's answers cost on the Claude API, from each answer's logged token use, in every channel and both markets together. There is no cap in the cockpit; the owner's spend limit is set in the Anthropic console." />
+      <CardHead title="Spend" help="What the assistant's answers cost in AI usage, from each answer's logged token use, in every channel and both markets together. There is no cap in the cockpit; the owner's spend limit is set in the Anthropic console." />
       {spend ? (
         <>
           <div className="budget">

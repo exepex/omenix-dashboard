@@ -162,7 +162,7 @@ function RequestsCard({ p, market, sent }: { p: CompaniesPayload; market: Market
     <Card label="Requests">
       <CardHead
         title="Requests"
-        help="Every company command from any channel (the dashboard, Slack, the command line, the Claude app) is logged with who asked (from the channel’s sign-in, never typed in), its result and the reason when refused. Accepted requests are pending until the next run imports them. A deleted company is hidden here."
+        help="Every company command from any channel (the dashboard, Slack, the command line, the AI app) is logged with who asked (from the channel’s sign-in, never typed in), its result and the reason when refused. Accepted requests are pending until the next run imports them. A deleted company is hidden here."
         end={`${sent.length} sent from this page · ${p.commands.length} recent`}
       />
       {sent.length ? (

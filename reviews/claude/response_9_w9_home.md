@@ -86,14 +86,24 @@ know passed through ("Fable 5", "o3"), and replacing words inside an id broke it
 | a rule name with a model id in brackets | "Rule-based" |
 
 The detector test lists ten model forms, each found as exactly one whole token. It also lists names that must not
-match: "Model + news", "a fable about markets", "the Claude app", "O2 margin". The earlier tests still hold: every
+match: "Model + news", "a fable about markets", the key "claude_app", "O2 margin". The earlier tests still hold: every
 fixture after the rule names no model, ids stay keys, and the input is not changed. **Strong evidence** for these
 forms. **Some evidence** for the future: a brand-new model family with an ordinary-word name would still need one
 entry in the family list. The allowlist means such a name never reaches a strategy label anyway; free text and
 headlines are where it could slip through.
 
-**Not changed:** "Claude" alone stays unmatched until the owner decides (open question). The detector's header says
-so, and changing it is one entry.
+**"Claude" alone (owner decision, 13 Oct 2026: remove it from every screen).** The detector now matches "Claude"
+as a whole word in any case, so the harness gate fails on it on every page. A key such as `claude_app` is not a word
+and is not matched. The visible text was reworded:
+- channel labels: "the Claude app" → "the AI app", "Claude Code" → "the coding agent" (companies and paper portfolios),
+  and the assistant's channel badge → "AI app";
+- the companies help tip;
+- the assistant's Spend card: "on the Claude API" → "in AI usage";
+- the explainer's error messages: "The Claude API ..." → "The AI service ...";
+- the MCP sign-in error page: "Start again from the AI app."
+
+Code comments that mention Claude are not screen text and are unchanged. The Spend tip still says "the Anthropic
+console". That is the vendor, not a model, and the owner did not ask to change it; it is one edit if wanted.
 
 ## Minors
 
