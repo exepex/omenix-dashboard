@@ -89,7 +89,7 @@ Instrument:
   type: object
   description: One stock or index for the hover card, the quick view and the order window's price basis
   x-catalog: {publisher: stock, source: 'rm.companies (CompanyRecord last_close, change_pct) and rm.bars (the last 30 daily closes)', freshness: "the stock tool's post-close run", story: K4-proposed, status: published}
-  x-element: [s30.hover, s30.order-price]
+  x-element: [s30.hover]
   required: [id, sym, name, code, kind, currency, last, chg_pct, as_of, source, state, spark, note]
   properties:
     id: {$ref: '#/components/schemas/InstrumentRef'}
@@ -119,7 +119,7 @@ FnoContract:
     implied volatility. A contract is executable in the order window only when `source` is snap3pm and bid and ask
     are present (the dashboard's refusal rule over these fields)
   x-catalog: {publisher: fno, source: "fno.pages_history page 'quotes' (proposed P1 page: A4's canonical 3 pm snapshot, A2's end-of-day reader)", freshness: '3 pm snapshot (26 h) or NSE end-of-day file (78 h)', story: P1-extension-proposed, status: planned}
-  x-element: [s30.hover, s30.order-price, s30.order-refusal]
+  x-element: [s30.hover]
   required: [id, sym, name, code, kind, underlying, lot, currency, last, chg_pct, bid, ask, iv, as_of, source, note]
   properties:
     id: {$ref: '#/components/schemas/InstrumentRef'}

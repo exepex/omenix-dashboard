@@ -8,7 +8,7 @@ Picks:
     company, approach and horizon), with agreement, the picking strategy's record on that company and the go-live
     position. Empty state: `signals` empty and the screen says "No pick today"; `no_pick` names companies nobody buys
   x-catalog: {publisher: stock, source: 'rm.home payload.head_to_head (kind head_to_head_picks)', freshness: 'pre-open run (02:10 UTC India, 11:45 UTC US)', story: K4-proposed, status: published}
-  x-element: [s30.picks-row, h31.picks-inline, h31.glance-pick]
+  x-element: [s30.picks-row, h31.picks-inline]
   required: [currency, signals, no_pick, go_live]
   properties:
     currency: {$ref: '#/components/schemas/Currency'}
@@ -56,13 +56,12 @@ PickSignal:
     agree:
       type: object
       description: How many strategies buy this company at the pick's horizon
-      x-element: [s30.picks-agree, h31.glance-pick]
-      x-notes: ['h31.glance-pick:agree']
+      x-element: [s30.picks-agree]
       x-catalog: {source: 'rm.home payload.agreement (Agreement, derived from today''s predictions)'}
       required: [buy, of, by_family]
       properties:
-        buy: {type: integer, minimum: 0, x-unit: count, x-notes: ['s30.picks-agree:agree.buy']}
-        of: {type: integer, minimum: 0, x-unit: count, x-notes: ['s30.picks-agree:agree.of']}
+        buy: {type: integer, minimum: 0, x-unit: count, x-notes: ['s30.picks-agree:agree.buy', 'h31.glance-pick:agree.buy']}
+        of: {type: integer, minimum: 0, x-unit: count, x-notes: ['s30.picks-agree:agree.of', 'h31.glance-pick:agree.of']}
         by_family:
           type: object
           x-notes: ['s30.picks-agree:agree.by_family']
