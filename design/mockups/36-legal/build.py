@@ -24,6 +24,7 @@ from system import inline_system  # noqa: E402
 
 BRAND = os.path.join(os.path.dirname(os.path.dirname(HERE)), "brand")
 
+LOGO = '<svg class="mb-logo" aria-hidden="true"><use href="#mb-logo"/></svg>'
 MOCKUP_LINKS = {"privacy": "privacy.html", "terms": "terms.html", "home": "index.html", "contact": "", "verify": ""}
 # The app fills the contact and the verification tag when it is built (web/lib/legal/legal.ts); the mockup has neither.
 APP_LINKS = {"privacy": "/privacy", "terms": "/terms", "home": "/", "contact": "@@CONTACT@@", "verify": "<!--@@VERIFY@@-->"}
@@ -62,9 +63,12 @@ def nav(docs: dict, current: str, links: dict) -> str:
 def page(data: dict, key: str, links: dict) -> str:
     doc = data["docs"][key]
     updated = [f'<p class="updated">Last updated {esc(data["updated"])}</p>'] if doc.get("nav", True) else []
-    body = "\n".join([f"<h1>{esc(doc['title'])}</h1>", *updated,
+    heading = (f'<h1 class="mb-legal-hero"><span class="mb-brand-mark">{LOGO}</span>{esc(doc["title"])}</h1>' if doc.get("hero")
+               else f"<h1>{esc(doc['title'])}</h1>")
+    body = "\n".join([heading, *updated,
                       f"<p>{esc(doc['lead'])}</p>", *(section(s) for s in doc["sections"])])
-    out = (read("template.html").replace("<!--@@TITLE@@-->", esc(doc["title"]))
+    title = "Omenix: research and paper trading" if doc.get("hero") else f"{esc(doc['title'])} · Omenix"
+    out = (read("template.html").replace("<!--@@TITLE@@--> · Omenix", title)
            .replace("<!--@@LEAD@@-->", html.escape(doc["lead"])).replace("<!--@@NAV@@-->", nav(data["docs"], key, links))
            .replace('href="/" aria-label="Omenix home"', f'href="{links["home"]}" aria-label="Omenix home"')
            .replace('<link rel="icon" href="data:,">', f'<link rel="icon" type="image/svg+xml" href="{favicon()}">')

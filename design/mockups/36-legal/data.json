@@ -5,7 +5,7 @@
     "home": {
       "file": "index.html",
       "nav": false,
-      "title": "About Omenix",
+      "title": "Omenix",
       "lead": "Omenix is a private research dashboard for stock and F&O research and paper trading, run by one person, its owner, for their own use and for the few people they invite.",
       "sections": [
         {
@@ -28,7 +28,8 @@
             "Read the privacy policy (including how Google Drive access is used) and the terms of service, linked at the top and bottom of this page."
           ]
         }
-      ]
+      ],
+      "hero": true
     },
     "privacy": {
       "file": "privacy.html",

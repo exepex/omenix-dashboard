@@ -19,6 +19,8 @@ const BRIEF_ROUTE = /^\/brief\/(india|us)\/\d{4}-\d{2}-\d{2}-[0-9a-f]{32}$/;
 /** The public pages (lib/legal/legal.ts): static, GET or HEAD; the gateway's / is the public home page, /about. */
 const LEGAL_ROUTES = new Set(["/about", "/privacy", "/terms"]);
 const READ = ["GET", "HEAD"];
+/** Google Search Console's ownership file (web/public/google<16 hex>.html, the "HTML file" method). */
+const GOOGLE_FILE = /^\/google[0-9a-f]{16}\.html$/;
 const OAUTH_ROUTES: Record<string, { method: string; target: string }> = {
   "/oauth/authorize": { method: "GET", target: "/mcp/oauth/authorize" },
   "/oauth/token": { method: "POST", target: "/mcp/oauth/token" },
@@ -40,7 +42,7 @@ export function gatewayDecision(pathname: string, method: string, gateway: boole
   if (SLACK_ROUTES.has(pathname)) return method === "POST" ? { action: "slack" } : { action: "not_found" };
   if (pathname === "/mcp" && MCP_METHODS.includes(method)) return { action: "next" };
   if (method === "GET" && BRIEF_ROUTE.test(pathname)) return { action: "next" };
-  if (READ.includes(method) && LEGAL_ROUTES.has(pathname)) return { action: "next" };
+  if (READ.includes(method) && (LEGAL_ROUTES.has(pathname) || GOOGLE_FILE.test(pathname))) return { action: "next" };
   if (READ.includes(method) && pathname === "/") return { action: "rewrite", target: "/about" };
   const oauth = Object.hasOwn(OAUTH_ROUTES, pathname) ? OAUTH_ROUTES[pathname] : null;
   if (oauth && oauth.method === method) return { action: "rewrite", target: oauth.target };

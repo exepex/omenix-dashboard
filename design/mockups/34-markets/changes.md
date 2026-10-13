@@ -39,3 +39,34 @@ listed here.
   | Nifty PSU Bank | 1-year % 5.46 → 5.89 |
   | Nifty FMCG | 1-year % -19.88 → -19.45 |
   - Nothing else changed (other fields and the US market are identical).
+
+- **13 Oct 2026: data correction, split and bonus adjustment (orchestrator; judge 42; data fix, not a contract change).**
+  - Root cause: the screener's sources (33) used raw NSE closes, which are never adjusted for splits or bonus issues,
+    so 34's breadth, sector and mover figures that read them were off for split stocks (see 33's changes.md).
+  - Breadth: all near_high 50 → 54; all near_low 254 → 247; all up_1m 689 → 692; n500 near_high 6 → 7; n500 near_low 55 → 54.
+  - Sector 1-year changes (average over the sector's stocks):
+
+  | Sector | Before → after |
+  |---|---|
+  | Financial Services | y1 -9.49 → -0.21 |
+  | Capital Goods | y1 22.75 → 25.24; m3 -1.46 → -0.4 |
+  | Healthcare | y1 13.87 → 15.21 |
+  | Automobile and Auto Components | y1 8.94 → 10.71 |
+  | Fast Moving Consumer Goods | y1 -4.11 → 20.06 |
+  | Chemicals | y1 2.25 → 2.37 |
+  | Information Technology | y1 -11.86 → -12.34 |
+  | Consumer Services | y1 -20.14 → -18.8 |
+  | Metals & Mining | y1 2.86 → 3.28 |
+  | Power | y1 -6.25 → -6.2 |
+  | Oil Gas & Consumable Fuels | y1 1.7 → 1.29 |
+  | Consumer Durables | y1 -3.88 → -3.8 |
+  | Services | y1 0.11 → 4.2 |
+  | Construction | y1 -20.93 → -18.16 |
+  | Realty | y1 -15.5 → -14.68 |
+  | Construction Materials | y1 -23.04 → -23.57 |
+  | Telecommunication | y1 82.86 → 81.56 |
+  | Textiles | y1 19.03 → 19.57 |
+  | Media Entertainment & Publication | y1 15.29 → 13.72 |
+  | Diversified | y1 -12.48 → -10.87 |
+  - Mover: the first loser's 20-day average volume 101959.0 → 394213.0
+    (its volumes before a split are now divided by the split factor). Nothing else changed.
