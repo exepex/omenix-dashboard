@@ -95,3 +95,110 @@ I have no write access there, and the rules forbid writing to a backend reposito
 >
 > Built 13 Oct 2026 in exepex/omenix-dashboard (claims: `reviews/claude/response_29_w9-fno.md`); judged once P10
 > publishes.
+
+## Addendum: contract 2.5, India's market blocks published by exepex/trading (owner, 14 Oct 2026)
+
+Owner decision, relayed by the orchestrator: India's NSE market blocks are published by the F&O backend
+(`x-publisher: fno`); the US equivalents stay with the stock tool. This covers the market band, the `fno_expiry`
+events, and FII/DII flows. I made the contract change in `api/`; the reasoning for each choice is below. I then moved
+the app's reads onto it. Nothing deployed.
+
+### The blocks exepex/trading publishes (exact names, for the trading-side builder)
+
+All are in `fno.pages_history`, product `fno`, market `india`, behind `fno.current_publication`. The envelope is
+`FnoBlockMeta`, the schema version 2.5.x, and every payload is validated against the response schema named.
+
+| operationId | Path (URL unchanged) | page_key | Response schema | Payload fields |
+|---|---|---|---|---|
+| `getSessionIndia` (new; was `getSession`) | `GET /api/v1/markets/india/session` | `session` | `SessionIndiaResponse` | `Session`: `exchange`, `zone` (IST), `session_date`, `open_utc`, `close_utc` (both null on a non-trading day), `next_open_utc`, `regime` (nullable: null until the F&O tool records one), `post_close_at` (nullable), optional `major_event_names[]` |
+| `getIndicesIndia` (new; was `getIndices`) | `GET /api/v1/markets/india/indices` | `indices` | `IndicesIndiaResponse` | `Indices`: `indices[]` exactly 2 (NIFTY 50 `role: benchmark`, INDIA VIX `role: vol_index`), each `id`, `sym`, `name`, `role`, `last`, `chg_pct`, `chg_5d_pct`, `as_of`, `source` |
+| `getFnoEvents` (new) | `GET /api/v1/markets/india/fno/events` | `fno_events` | `FnoEventsResponse` | `Events`: `events[]`, each `date`, `title`, `kind` (only `fno_expiry` or `weekly_expiry`), `major`, `inst` (always null). The stored page is the whole expiry calendar; the route applies `kinds`, `from` and `limit` |
+| `getFlows` (publisher moved) | `GET /api/v1/markets/india/overview/flows` | `flows` | `FlowsResponse` | `Flows`: `currency` (INR), `totals.{d1,w1,m1,m3,y1}` (`days_in_period`, `days`, `complete`, `fii`, `dii`: both null unless `complete`), `days[]` (`date`, `fii` and `dii` each `buy`, `sell`, `net`, `provisional`), `nsdl[]` (`date`, `net`) |
+| `getFnoBooks` | `GET /api/v1/markets/india/fno/books` | `risk` | `FnoBooksResponse` | unchanged |
+| `getFnoPicks` | `GET /api/v1/markets/india/fno/picks` | `today` | `FnoPicksResponse` | unchanged |
+
+The US keeps `getSessionUs` and `getIndicesUs` (stock, `SessionResponse` and `IndicesResponse`, now US-only) and
+`getEvents` (stock). In India, `getEvents` (stock) must carry no `fno_expiry` or `weekly_expiry` row; the schema
+rejects one (`IndiaStockEventsRule`).
+
+### Contract changes and why (no signed-off field shape changed)
+
+- **Split by market, like W11's blocks:** session and indices now have an India path and a US path, sharing one schema.
+  The URLs are unchanged.
+  - Each path carries its own `x-catalog`. I moved the stock-only field sources (`rm.status payload.regime`,
+    `LevelBlock.close`, …) from the shared schemas into the US path's catalog, so India's fields no longer claim a stock
+    source. A shared schema cannot carry two sources for one field.
+- **Expiries as their own India block (`getFnoEvents`).** Expiries came from a calendar both screens query, so moving
+  them meant one calendar per publisher.
+  - Each screen merges the two calendars and applies its own query again. The query keeps market-wide rows first, then
+    takes the nearest rows up to a limit, so merging two lists that were each cut the same way gives exactly what the
+    single calendar gave. Reasoning, then tested: `check_home_events` and `lib/home/tests/fno-home.test.ts` show the
+    merged Home list equals the signed-off 31 "Coming up", and the merged Markets list equals the view of the joined
+    calendars.
+  - Weekly expiries (`weekly_expiry`) moved with the monthly one. Reasoning only: both are NSE F&O expiries, and the
+    owner's "fno_expiry events" most likely means expiries in general. Tell me if weekly expiries should stay with the
+    stock tool.
+- **`getFlows` moved to `fno`.** Its story is P8 (status planned), and the period-total source no longer names the
+  stock tool.
+- **Books and picks keep W10's page keys `risk` and `today`.** In my first push of 2.5 (13661c0) I had aligned them
+  with what P10 publishes (`fno_books`, `fno_picks`). Judge 63 then asked the contract owner to decide. The orchestrator
+  decided the contract's names win and P10 renames its pages, so I reverted that change in the contract and in the
+  reader. The keys now live in one map (`web/lib/fno/pages.ts`). `lib/fno/tests/pages.test.ts` fails if that map
+  differs from any contract example's `page_key` or publisher, or if a contract `fno` block that a screen reads is
+  missing. That is the judge's "test naming the agreed keys from the contract".
+- **Version and checks:**
+  - `info.version` is 2.5.0 with a change note.
+  - `stories.yaml` gains P8, P10 and `TR-MARKET-proposed`, the story the trading side needs for session, indices and
+    expiries.
+  - Four new planted breaks, all caught: India's session in the stock envelope; the US indices served for India; an
+    expiry in India's stock calendar; a company row in the expiry calendar. That makes 64 planted breaks.
+  - `check_mapping`, `check_contract` and `render_catalog --check` are green, and the examples were regenerated.
+
+### The app on 2.5
+
+- **Example labels are tested (judge 63, criterion 2).**
+  - The three label rules are now pure functions in `web/lib/shell/labels.ts`, and the frame and Home draw them only
+    through those functions.
+  - `lib/shell/tests/labels.test.ts` covers four cases on the frame data the layout builds:
+    - With the fixtures alone, one "Example data" label and no per-figure tag.
+    - With the F&O parts read from a publication, no value from the publication is ever tagged; every stock record
+      beside it is.
+    - No F&O part of a runtime read contains any example text.
+    - With nothing example, nothing says Example.
+  - A static check fails if any component draws an Example tag outside those rules.
+  - I broke the rule on purpose (tagging live values) and the test caught it.
+- **Fixtures** read the new example names (`getSessionIndia_india`, `getSessionUs_us`, `getFnoEvents_india`,
+  `getFnoEvents_india_markets`). They stay the source for the US and every stock part. US F&O stays absent, because no
+  F&O read is made in the US (tested).
+- **With the database set, from exepex/trading's publication:**
+  - Home: India's session, the F&O books, the expiries.
+  - Frame: India's indices, session and F&O picks.
+  - Markets: India's session, flows and expiries, beside W2's indices and sectors.
+- **"Coming up" (Home) and "What is coming?" (Markets)** merge the two calendars with the contract's query. That is
+  ported to TypeScript as `eventsView` in `lib/home/events.ts`; a test holds it equal, row for row, to every `x-query`
+  example. Each publisher's part shows its own reason when it has no data.
+- **Checks:**
+  - `npm test`: 436 passed, 0 failed, including the events-query parity test, the page-key and label tests, and
+    real-Postgres reads of `flows`, `session`, `fno_events`, `risk` and `today`.
+  - Typecheck, build and code size: passed.
+  - UI harness (fixture mode, on the 13661c0 build): 183 cases, 0 failed. Home's "Coming up" and Markets' "What is coming?" look the same as before.
+
+### Still open
+
+- Until the trading side publishes `session`, `indices`, `fno_events` and `flows`, each of those parts shows "The
+  current publication has no page for this part" when the database is set. Tested with today's P6-only publication.
+- Markets in database mode still shows no stock example parts (W2's rule); Home shows labelled stock examples (W9-F&O's
+  rule). The orchestrator set both rules; I kept each as given. Say if they should match.
+- `api/catalog/README.md` still says "37 small read endpoints"; there are 46. That count was already stale before this
+  change.
+
+### Contract follow-up (orchestrator, 13 Oct 2026, after P10's fix 8cf2584)
+
+- The books block now names one page, `risk`, in both places: the path's `x-read-model` and the schema's catalog
+  source. The catalog story is P10. `scoreboard_b` belongs to S2 (not built) and will get its own field or block
+  through a normal contract change.
+- Checked in exepex/trading 8cf2584: P10 publishes `today` for FnoPicks and `risk` for FnoBooks. These equal the
+  contract and `web/lib/fno/pages.ts` (held by `lib/fno/tests/pages.test.ts`).
+- W13's chain page keys: unchanged, as decided.
+- The India publisher split and its page keys (`session`, `indices`, `fno_events`, `flows`) are in 13661c0
+  (contract 2.5). That is the exact list the P6 session publishes.

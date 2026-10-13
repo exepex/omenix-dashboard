@@ -114,7 +114,7 @@
     summary: 'The three F&O paper books: value, profit or loss, approved strategies, risk used'
     x-status: planned
     x-publisher: fno
-    x-read-model: 'fno.pages_history pages risk and scoreboard_b (P1)'
+    x-read-model: 'fno.pages_history page risk (P1''s page, published by P10)'
     x-freshness: 'fno_calendar; 3 pm run and post-close marks'
     x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
     x-empty: 'never empty: three books always exist (Rs 5 lakh each); approved empty means no approved strategy yet'
@@ -130,5 +130,38 @@
             schema: {$ref: '#/components/schemas/FnoBooksResponse'}
             examples:
               india: {$ref: '#/components/examples/getFnoBooks_india'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/events:
+  get:
+    tags: [blocks]
+    operationId: getFnoEvents
+    summary: 'Coming up, India: the NSE F&O expiries (monthly and weekly), merged by each screen with the stock tool''s events'
+    x-status: planned
+    x-publisher: fno
+    x-catalog: {publisher: fno, source: 'exepex/trading''s NSE session calendar and expiry rules (the monthly expiry, the weekly NIFTY expiries, each moved by holidays)', freshness: 'each F&O market run (07:10 IST)', story: TR-MARKET-proposed, status: planned}
+    x-read-model: 'fno.pages_history page fno_events (product fno, market india): the expiry calendar; the route applies the query'
+    x-freshness: 'fno_calendar; each F&O market run'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'events empty'
+    x-feeds: [h31.coming-up, h34.coming-up]
+    x-shared: 'one expiry calendar, the same query per screen as getEvents (Home: market_first, limit 6; the Markets overview: limit 12), applied again to the merged list'
+    parameters:
+      - {name: kinds, in: query, description: 'Comma-separated event kinds (fno_expiry, weekly_expiry; default both)', schema: {type: string, maxLength: 300}}
+      - {name: from, in: query, description: 'The first date (default the session being predicted)', schema: {type: string, format: date}}
+      - {name: limit, in: query, description: The nearest N rows (default all), schema: {type: integer, minimum: 1, maximum: 100}}
+    responses:
+      '200':
+        description: 'The F&O expiries block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoEventsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getFnoEvents_india'}
+              india_markets: {$ref: '#/components/examples/getFnoEvents_india_markets'}
+              india_calendar: {$ref: '#/components/examples/getFnoEvents_india_calendar'}
+              india_home20: {$ref: '#/components/examples/getFnoEvents_india_home20'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}

@@ -30,7 +30,7 @@ function reader(pages: Partial<Record<FnoPageKey, unknown>>, fail: Partial<Recor
   };
 }
 
-const live = { session: { ...page("getSession_india"), session_date: "2026-10-13", open_utc: "2026-10-13T03:45:00Z", close_utc: "2026-10-13T10:00:00Z", next_open_utc: "2026-10-14T03:45:00Z" }, indices: page("getIndices_india"), today: page("getFnoPicks_india") };
+const live = { session: { ...page("getSessionIndia_india"), session_date: "2026-10-13", open_utc: "2026-10-13T03:45:00Z", close_utc: "2026-10-13T10:00:00Z", next_open_utc: "2026-10-14T03:45:00Z" }, indices: page("getIndicesIndia_india"), today: page("getFnoPicks_india") };
 live.indices.indices[0].last = 25123.45; // differs from the example, so the test sees which one is shown
 
 test("India's index levels, session and F&O picks are the publication's; the stock parts stay example", async () => {

@@ -6,6 +6,8 @@ W8: {exists: true, repo: dashboard, file: X-cross-repository.md, title: 'The sig
 W9: {exists: true, repo: dashboard, file: X-cross-repository.md, title: "The signed-off Home screen in the real app (the needs-you rules)"}
 P1: {exists: true, repo: trading, file: P-publishing.md, title: 'F&O read-model contract: pages today, positions, risk, scoreboard_b, ...'}
 P3: {exists: true, repo: trading, file: P-publishing.md, title: 'Atomic publisher to Azure: fno.pages_history, fno.current_publication, run status'}
+P8: {exists: true, repo: trading, file: P-publishing.md, title: 'FII/DII cash-market flows for Markets 34 (owner 14 Oct 2026: publisher fno)'}
+P10: {exists: true, repo: trading, file: P-publishing.md, title: "Home's F&O read models (the F&O books and picks)"}
 C2: {exists: true, repo: trading, file: C-code-roles.md, title: 'Risk manager: the owner limits'}
 K4-proposed:
   exists: false
@@ -75,3 +77,12 @@ TR-CHAIN-proposed:
     the sources and the 3 pm quotes' status (A4). 32-option-chain/notes.md: "The F&O tool needs a publishing story".
     Acceptance includes (judge 38): every expiry's computed figures recompute from its full strike set as
     tools/api/check_chain.py does (range, ATM, straddle, break-evens, put-call ratio, walls, max pain, monthly)
+TR-MARKET-proposed:
+  exists: false
+  repo: trading
+  title: "India's NSE market blocks for the frame and Home (owner 14 Oct 2026)"
+  scope: >-
+    Three pages in the market run's publication (product fno, market india): session (the NSE session calendar's
+    session, open, close and next open; regime null until recorded), indices (NIFTY 50 and INDIA VIX from NSE's index
+    file) and fno_events (the NSE F&O expiry calendar: monthly and weekly expiries, market-wide), validated against
+    the pinned contract 2.5 (getSessionIndia, getIndicesIndia, getFnoEvents)

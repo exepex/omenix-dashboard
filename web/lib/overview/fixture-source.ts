@@ -12,7 +12,7 @@ const read = exampleReader(raw, { strategies: false });
 const readFrame = exampleReader(frameRaw, { strategies: false });
 
 export const fixtureOverviewData: OverviewData = {
-  session: async (market) => readFrame(`getSession_${market}`),
+  session: async (market) => readFrame(market === "india" ? "getSessionIndia_india" : "getSessionUs_us"),
   indices: async (market) => read(market === "india" ? "getOverviewIndicesIndia_india" : "getOverviewIndicesUs_us"),
   indiaSectors: async () => read("getIndiaSectors_india"),
   usSectors: async () => read("getUsSectors_us"),
@@ -20,4 +20,5 @@ export const fixtureOverviewData: OverviewData = {
   rates: async () => read("getRates_us"),
   world: async (market) => read(`getWorld_${market}`),
   events: async (market) => read(`getEvents_${market}_markets`),
+  fnoEvents: async () => read("getFnoEvents_india_markets"),
 };

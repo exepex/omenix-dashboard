@@ -36,7 +36,8 @@ export function WorldCard({ world, state, india, locale }: { world: World; state
   );
 }
 
-export function EventsCard({ events, india }: { events: Events; india: boolean }) {
+/** `missing`: the reasons a publisher's part of the list has no data (contract 2.5: two publishers in India). */
+export function EventsCard({ events, missing, india }: { events: Events; missing: string[]; india: boolean }) {
   const { shell, item } = useFrame();
   return (
     <section className="card" aria-label="Coming up">
@@ -55,6 +56,7 @@ export function EventsCard({ events, india }: { events: Events; india: boolean }
             </li>
           );
         })}
+        {missing.map((m) => <li key={m} className="quiet">{m}</li>)}
       </ul>
     </section>
   );

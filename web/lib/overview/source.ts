@@ -15,4 +15,6 @@ export interface OverviewData {
   rates(): Promise<Rates>;
   world(market: Market): Promise<World>;
   events(market: Market): Promise<Events>;
+  /** India only: exepex/trading's NSE F&O expiries (contract 2.5), merged with `events` by the page's query. */
+  fnoEvents(): Promise<Events>;
 }

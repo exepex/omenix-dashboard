@@ -42,8 +42,10 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getFrameMarkets": (frame.frame_markets, "markets", "shell", ["_all"]),
     "getApproaches": (frame.approaches, "approaches", "shell", ["india", "us"]),
     "getPriceSources": (frame.price_sources, "price_sources", "shell", ["india", "us"]),
-    "getSession": (frame.session, "session", "shell", ["india", "us"]),
-    "getIndices": (frame.indices, "indices", "shell", ["india", "us"]),
+    "getSessionIndia": (frame.session, "session", "shell", ["india"]),
+    "getSessionUs": (frame.session, "session", "shell", ["us"]),
+    "getIndicesIndia": (frame.indices, "indices", "shell", ["india"]),
+    "getIndicesUs": (frame.indices, "indices", "shell", ["us"]),
     "getNotifications": (frame.notifications, "notifications", "shell", ["india", "us"]),
     "searchInstruments": (frame.search, "search_index", "shell", ["india", "us"]),
     "getInstrument": (frame.instrument, "instrument", "shell", ["india", "us"]),
@@ -55,13 +57,14 @@ BUILDERS = {  # operationId -> (builder, page_key, which mockup's data, markets)
     "getGroups": (home.groups, "groups", "home", ["india", "us"]),
     "getStrategyTrades": (home.strategy_trades, "strategy_trades", "home", ["india", "us"]),
     "getAttention": (home.attention, "attention", "home", ["india", "us"]),
-    "getEvents": (lambda x, m: screens.home_events(x.screens, m, x.H, x.S), "events", "home", ["india", "us"]),  # one calendar
+    "getEvents": (lambda x, m: screens.home_events(x.screens, m, x.H, x.S, "stock"), "events", "home", ["india", "us"]),  # one calendar per publisher
     "getTopNews": (home.top_news, "top_news", "home", ["india", "us"]),
     "searchFnoContracts": (frame.fno_search, "contracts", "shell", ["india"]),
     "getFnoPicks": (home.fno_picks, "today", "shell", ["india"]),
     "getFnoContract": (frame.fno_contract, "quotes", "shell", ["india"]),
     "getFnoOrderRules": (frame.fno_order_rules, "order_rules", "shell", ["india"]),
     "getFnoBooks": (home.fno_books, "risk", "home", ["india"]),
+    "getFnoEvents": (lambda x, m: screens.home_events(x.screens, m, x.H, x.S, "fno"), "fno_events", "home", ["india"]),
 }
 SCREEN_BUILDERS = {  # the same, for api/examples/blocks-33-34.json
     "getScreenerSummaryIndia": (screens.screener_summary, "screener_summary", "screener", ["india"]),
@@ -78,7 +81,8 @@ SCREEN_BUILDERS = {  # the same, for api/examples/blocks-33-34.json
     "getFlows": (screens.flows, "flows", "markets", ["india"]),
     "getRates": (screens.rates, "rates", "markets", ["us"]),
     "getWorld": (screens.world, "world", "markets", ["india", "us"]),
-    "getEvents": (lambda x, m: screens.events(x, m, x.home), "events", "markets", ["india", "us"]),
+    "getEvents": (lambda x, m: screens.events(x, m, x.home, "stock"), "events", "markets", ["india", "us"]),
+    "getFnoEvents": (lambda x, m: screens.events(x, m, x.home, "fno"), "fno_events", "markets", ["india"]),
 }
 CHAIN_BUILDERS = {  # the same, for api/examples/blocks-32.json (India only)
     "getChainUnderlying": (chain.underlying, "chain_underlying", "chain", ["india"]),

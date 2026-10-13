@@ -3,6 +3,7 @@
 // (lib/shell/fno-overlay.ts). Each F&O part is read on its own; one with no data carries its reason, the frame still
 // draws. Without a published session the status uses NSE's calendar at regular hours, said as such.
 import type { FnoBlockReader } from "../fno/blocks.ts";
+import { FNO_PAGES, type FnoPageKey } from "../fno/pages.ts";
 import { CalendarUnknown, type SessionCalendar } from "../fno/calendar.ts";
 import { calendarSession } from "../fno/session-fallback.ts";
 import { settle } from "../ui/block-outcome.ts";
@@ -21,15 +22,15 @@ function fallbackSession(now: Date, payload: ShellPayload, calendar: SessionCale
 }
 
 export function fnoShellData(reader: FnoBlockReader, examples: ShellData, calendar: SessionCalendar, now: () => Date = () => new Date()): ShellData {
-  const payload = async <T>(key: "session" | "indices" | "today") => (await reader.page<T>(key)).payload;
+  const payload = async <T>(key: FnoPageKey) => (await reader.page<T>(key)).payload;
   return {
     read: async () => {
       const t = now();
       const [base, session, indices, picks] = await Promise.all([
         examples.read(),
-        settle("The session", payload<Session & { regime?: string }>("session")),
-        settle("The indices", payload<Indices>("indices")),
-        settle("The F&O picks", payload<FnoPicks>("today")),
+        settle("The session", payload<Session & { regime?: string }>(FNO_PAGES.getSessionIndia)),
+        settle("The indices", payload<Indices>(FNO_PAGES.getIndicesIndia)),
+        settle("The F&O picks", payload<FnoPicks>(FNO_PAGES.getFnoPicks)),
       ]);
       const missing = "missing" in session ? { missing: `${session.missing} Market hours are NSE’s calendar at regular hours (09:15–15:30 IST).` } : session;
       return withFnoParts(base, { session: missing, indices, picks }, t.toISOString(), fallbackSession(t, base, calendar));
