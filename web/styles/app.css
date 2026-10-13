@@ -133,3 +133,8 @@ details.mb-tech[open] > summary { margin-bottom: var(--mb-space-2); }
 .mb-menu .mb-frame-notif{height:auto;padding:8px 10px;align-items:flex-start}
 .mb-menu .mb-frame-notif span{display:grid;gap:2px;white-space:normal;max-width:280px}
 .mb-menu .mb-pal-group.plain{text-transform:none;letter-spacing:0;font-weight:500}
+/* The KPI row (page.css .kpis: 4 columns from a 1200 px viewport) follows the room the frame leaves the page, not the
+   viewport: at 1280 px the rail and picks panel leave ~850 px, where 4 cards break a ticker mid-word. The page area is
+   a size container; every fixed-position part of the frame sits outside it. */
+.mb-pf-inner{container-type:inline-size}
+@container (max-width:1039px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} }

@@ -1,79 +1,115 @@
 // Story W8 AC5 and AC6 (structure): components depend on the frame's contract and the ShellData interface only, never
 // on an adapter or a data client; the adapter is chosen in one line of lib/shell/wiring.ts, read only by the market
-// layout; and the frame has no path that submits an order. Each rule is a pure check over (path, source) pairs,
-// proven to catch a planted breach.
+// layout; and the frame has no path that submits an order. One resolver (./imports.ts) reads every import form; each
+// rule is a pure check over (path, source) pairs, proven to catch planted breaches.
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { dirname, join, normalize, relative } from "node:path";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
+import { canonical, importsOf, reachable, sources, web, type Source } from "./imports.ts";
 
-const web = join(import.meta.dirname, "..", "..", "..");
-type Source = { path: string; text: string };
+/** The whole app's code (tests aside): every place an import of the adapter could hide. */
+const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].flatMap(sources).filter((f) => !/(^|\/)tests\//.test(f.path));
+const ADAPTER = /^lib\/shell\/(fixture-source$|fixture\/)/;
+const WIRING = "lib/shell/wiring";
+/** May import the adapter: the wiring (the one place that picks it) and the adapter itself (its fixture). */
+const MAY_IMPORT_ADAPTER = (path: string) => [WIRING, "lib/shell/fixture-source"].includes(canonical(path));
+/** May import the wiring: only the market layout. */
+const LAYOUT = "app/(cockpit)/[market]/layout.tsx";
 
-function sources(dir: string): Source[] {
-  const out: Source[] = [];
-  for (const name of readdirSync(join(web, dir))) {
-    const rel = join(dir, name);
-    if (statSync(join(web, rel)).isDirectory()) out.push(...sources(rel));
-    else if (/\.(ts|tsx)$/.test(name)) out.push({ path: rel, text: readFileSync(join(web, rel), "utf8") });
-  }
-  return out;
+/** Rule 1 (KISS): no module but the wiring imports the adapter or its fixture, so no re-export can carry it. */
+export function adapterImports(files: Source[]): string[] {
+  return files.filter((f) => !MAY_IMPORT_ADAPTER(f.path)).flatMap((f) => importsOf(f).filter((m) => ADAPTER.test(m)).map((m) => `${f.path} imports ${m}`));
 }
 
-/** The modules a file imports (static, dynamic and re-exports), relative ones resolved to web-relative paths. */
-export function importsOf(file: Source): string[] {
-  const specs = [...file.text.matchAll(/(?:import|export)\s[^'";]*?from\s*["']([^"']+)["']|import\(\s*["']([^"']+)["']\s*\)|require\(\s*["']([^"']+)["']\s*\)/g)].map((m) => m[1] ?? m[2] ?? m[3]);
-  return specs.map((s) => (s.startsWith(".") ? normalize(join(dirname(file.path), s)) : s));
+/** Rule 2: no module but the market layout imports the wiring. */
+export function wiringReaders(files: Source[]): string[] {
+  return files.filter((f) => importsOf(f).includes(WIRING)).map((f) => f.path);
 }
 
-/** What no component may import: the adapter, the wiring, the fixture, the backends' clients and the server SDKs. */
-const FORBIDDEN = [/^lib\/shell\/fixture-source\.ts$/, /^lib\/shell\/wiring\.ts$/, /^lib\/shell\/fixture\//, /^lib\/data\/(?!constants\.ts$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)\.ts$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
-
-export function forbiddenImports(files: Source[]): string[] {
-  return files.flatMap((f) => importsOf(f).filter((m) => FORBIDDEN.some((re) => re.test(m))).map((m) => `${f.path} imports ${m}`));
+/** Rule 3: nothing the frame's components reach, directly or through any chain of modules, is an adapter, the
+ *  wiring, a backend's data client or a server SDK. */
+const FORBIDDEN = [ADAPTER, /^lib\/shell\/wiring$/, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
+export function forbiddenReach(start: Source[], all: Source[]): string[] {
+  return [...reachable(start, all)].filter((m) => FORBIDDEN.some((re) => re.test(m))).sort();
 }
 
 const frame = sources("components/frame");
 const shell = sources("lib/shell").filter((f) => !f.path.includes("/tests/"));
 
-test("frame components import no adapter, wiring, fixture or data client", () => {
+test("frame components reach no adapter, wiring, fixture or data client, directly or transitively", () => {
   assert.ok(frame.length >= 10, "the frame's components are scanned");
-  assert.deepEqual(forbiddenImports(frame), []);
+  assert.ok(reachable(frame, appCode()).has("lib/shell/market"), "the walk follows the frame's own imports");
+  assert.deepEqual(forbiddenReach(frame, appCode()), []);
 });
 
-test("no component and no page part anywhere imports the adapter or the wiring", () => {
-  const all = [...sources("components"), ...sources("app")].filter((f) => !f.path.endsWith("app/(cockpit)/[market]/layout.tsx"));
-  const adapters = all.flatMap((f) => importsOf(f).filter((m) => /^lib\/shell\/(fixture-source|wiring)\.ts$|^lib\/shell\/fixture\//.test(m)).map((m) => `${f.path} imports ${m}`));
-  assert.deepEqual(adapters, []);
+test("no module but the wiring imports the adapter; only the market layout imports the wiring", () => {
+  assert.deepEqual(adapterImports(appCode()), []);
+  assert.deepEqual(wiringReaders(appCode()), [LAYOUT]);
+  assert.match(readFileSync(join(web, LAYOUT), "utf8"), /from "\.\.\/\.\.\/\.\.\/lib\/shell\/wiring\.ts"/);
 });
 
-test("the check catches a planted import of the fixture adapter, the wiring and a data client", () => {
-  const planted = (line: string): Source => ({ path: "components/frame/planted.tsx", text: `${line}\nexport const x = 1;\n` });
-  assert.deepEqual(forbiddenImports([planted('import { fixtureShellData } from "../../lib/shell/fixture-source.ts";')]), ["components/frame/planted.tsx imports lib/shell/fixture-source.ts"]);
-  assert.equal(forbiddenImports([planted('import { shellData } from "../../lib/shell/wiring.ts";')]).length, 1);
-  assert.equal(forbiddenImports([planted('import raw from "../../lib/shell/fixture/shell.generated.json" with { type: "json" };')]).length, 1);
-  assert.equal(forbiddenImports([planted('import { readMarketPage } from "../../lib/data/handler.ts";')]).length, 1);
-  assert.equal(forbiddenImports([planted('const m = await import("../../lib/shell/fixture-source.ts");')]).length, 1);
-  assert.equal(forbiddenImports([planted('import type { Market } from "../../lib/data/constants.ts";')]).length, 0, "the market type is allowed");
+test("one resolver: the @/ alias, extensionless, .ts, .tsx and index imports name the same module", () => {
+  const from = "components/frame/x.tsx";
+  for (const spec of ["@/lib/shell/fixture-source", "@/lib/shell/fixture-source.ts", "../../lib/shell/fixture-source", "../../lib/shell/fixture-source.ts", "../../lib/shell/fixture-source/index.ts"]) {
+    assert.deepEqual(importsOf({ path: from, text: `import { a } from "${spec}";` }), ["lib/shell/fixture-source"], spec);
+  }
+  assert.deepEqual(importsOf({ path: from, text: '// import { a } from "../../lib/shell/fixture-source";\nexport {};' }), [], "comments are not imports");
 });
 
-test("the adapter is one line of the wiring, and only the market layout reads the wiring", () => {
+test("the checks catch a planted breach: alias, extensionless, dynamic, JSON, re-export through a helper, client via a helper", () => {
+  const real = appCode();
+  const plant = (...files: Source[]) => [...real, ...files];
+  const comp = (line: string): Source => ({ path: "components/frame/planted.tsx", text: `${line}\nexport const x = 1;\n` });
+  for (const line of [
+    'import { fixtureShellData } from "@/lib/shell/fixture-source";',
+    'import { fixtureShellData } from "../../lib/shell/fixture-source";',
+    'import { fixtureShellData } from "../../lib/shell/fixture-source.ts";',
+    'const m = await import("@/lib/shell/fixture-source.ts");',
+    'import raw from "../../lib/shell/fixture/shell.generated.json" with { type: "json" };',
+  ]) {
+    assert.deepEqual(adapterImports(plant(comp(line))).length, 1, line);
+    assert.ok(forbiddenReach([comp(line)], plant(comp(line))).some((m) => ADAPTER.test(m)), line);
+  }
+  // a helper that re-exports the adapter is itself a breach (rule 1), and the component using it reaches it (rule 3)
+  const helper: Source = { path: "lib/shell/helpers-x.ts", text: 'export { fixtureShellData } from "./fixture-source";\n' };
+  const user = comp('import { fixtureShellData } from "@/lib/shell/helpers-x";');
+  assert.deepEqual(adapterImports(plant(helper, user)), ["lib/shell/helpers-x.ts imports lib/shell/fixture-source"]);
+  assert.ok(forbiddenReach([user], plant(helper, user)).includes("lib/shell/fixture-source"));
+  // a data client through a helper, and the wiring read by a component
+  const client: Source = { path: "lib/shell/reader-x.ts", text: 'export { readMarketPage } from "../data/handler";\n' };
+  const reader = comp('import { readMarketPage } from "../../lib/shell/reader-x";');
+  assert.ok(forbiddenReach([reader], plant(client, reader)).includes("lib/data/handler"));
+  const wired = comp('import { shellData } from "@/lib/shell/wiring";');
+  assert.deepEqual(wiringReaders(plant(wired)).sort(), [LAYOUT, "components/frame/planted.tsx"].sort());
+  // allowed: the market type
+  assert.deepEqual(forbiddenReach([comp('import type { Market } from "@/lib/data/constants";')], real), []);
+});
+
+test("the adapter is one line of the wiring", () => {
   const wiring = readFileSync(join(web, "lib/shell/wiring.ts"), "utf8");
   assert.equal([...wiring.matchAll(/^export const shellData: ShellData = (\w+);$/gm)].length, 1);
-  const readers = [...sources("app"), ...sources("components"), ...sources("lib")].filter((f) => importsOf(f).includes("lib/shell/wiring.ts")).map((f) => f.path);
-  assert.deepEqual(readers, ["app/(cockpit)/[market]/layout.tsx"]);
 });
 
-const SUBMIT = /\bfetch\s*\(|XMLHttpRequest|sendBeacon|new\s+WebSocket|EventSource|<form\b|onSubmit|method\s*:\s*["'](POST|PUT|PATCH|DELETE)|["'`]\/api\//;
+/** A network call or a form: what any submit path needs. */
+const NETWORK = /\bfetch\s*\(|XMLHttpRequest|sendBeacon|new\s+WebSocket|EventSource|<form\b|onSubmit|method\s*:\s*["'](POST|PUT|PATCH|DELETE)/;
+/** In the frame's own code, not even an API path (lib/ui/routes.ts, reached for page links, builds read paths only). */
+const API_PATH = /["'`]\/api\//;
 
-export function submitPaths(files: Source[]): string[] {
-  return files.filter((f) => SUBMIT.test(f.text.replace(/\/\/.*$/gm, ""))).map((f) => relative(".", f.path));
+export function submitPaths(files: Source[], pattern: RegExp): string[] {
+  return files.filter((f) => pattern.test(f.text.replace(/\/\/.*$/gm, ""))).map((f) => f.path);
 }
 
-test("AC6: the frame and its logic have no network call, form or API path: nothing can submit an order", () => {
-  assert.deepEqual(submitPaths([...frame, ...shell]), []);
-  assert.deepEqual(submitPaths([{ path: "planted.tsx", text: 'await fetch("/api/v1/orders", { method: "POST" });' }]), ["planted.tsx"]);
-  assert.deepEqual(submitPaths([{ path: "planted.tsx", text: "<form onSubmit={send}>" }]), ["planted.tsx"]);
+test("AC6: no network call or form in the frame, its logic or any module they reach; no API path in the frame's own code", () => {
+  const all = appCode();
+  const reached = [...reachable(frame, all)];
+  const local = all.filter((f) => reached.includes(canonical(f.path)));
+  assert.ok(local.length > frame.length, "the reached modules are scanned too");
+  assert.deepEqual(submitPaths([...local, ...shell], NETWORK), []);
+  assert.deepEqual(submitPaths([...frame, ...shell], API_PATH), []);
+  assert.deepEqual(submitPaths([{ path: "planted.tsx", text: 'await fetch("/api/v1/orders", { method: "POST" });' }], NETWORK), ["planted.tsx"]);
+  assert.deepEqual(submitPaths([{ path: "planted.tsx", text: "<form onSubmit={send}>" }], NETWORK), ["planted.tsx"]);
+  assert.deepEqual(submitPaths([{ path: "planted.tsx", text: 'const u = "/api/v1/orders";' }], API_PATH), ["planted.tsx"]);
 });
 
 test("AC6: the order window's foot button is always disabled and has no action", () => {
