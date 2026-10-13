@@ -32,8 +32,8 @@ export interface Command {
 export interface InactiveNews { id: string; tickers: string[] }
 
 export const CHANNEL: Record<string, string> = {
-  dashboard: "the dashboard", slack: "Slack", cli: "the command line", claude_app: "the Claude app",
-  claude_code: "Claude Code", seed: "the seed (config)",
+  dashboard: "the dashboard", slack: "Slack", cli: "the command line", claude_app: "the AI app",
+  claude_code: "the coding agent", seed: "the seed (config)",
 };
 export const EVENT_WORDS: Record<string, string> = {
   add: "added", deactivate: "deactivated", reactivate: "reactivated", delete: "deleted", set_amount: "amount set",

@@ -35,7 +35,7 @@ export interface ExplainerDeps {
   newId: () => string;
 }
 
-export const NOT_CONFIGURED = "The assistant is not set up yet (no Claude API key), so nothing was asked.";
+export const NOT_CONFIGURED = "The assistant is not set up yet (no AI service key), so nothing was asked.";
 export const SWITCHED_OFF = "The assistant is switched off by the owner, so nothing was asked.";
 export const LOG_DOWN = "The conversation log is unavailable, so nothing was asked.";
 export const STOPPED =
@@ -98,14 +98,14 @@ function sourcesOf(outcome: ToolOutcome): { sources: AnswerSource[]; parts: Read
 
 /** A model error in words that carry no driver or key text out. */
 function modelError(error: unknown): string {
-  if (error instanceof Anthropic.RateLimitError) return "The Claude API is rate limited now; try again in a minute.";
+  if (error instanceof Anthropic.RateLimitError) return "The AI service is rate limited now; try again in a minute.";
   if (error instanceof Anthropic.AuthenticationError || error instanceof Anthropic.PermissionDeniedError) {
-    return "The Claude API refused the key; the owner can check it.";
+    return "The AI service refused the key; the owner can check it.";
   }
   if (error instanceof Anthropic.APIError && typeof error.status === "number") {
-    return `The Claude API answered ${error.status}; try again later.`;
+    return `The AI service answered ${error.status}; try again later.`;
   }
-  return "The Claude API could not be reached; try again later.";
+  return "The AI service could not be reached; try again later.";
 }
 
 export class AssistantExplainer implements Explainer {

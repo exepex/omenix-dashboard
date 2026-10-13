@@ -1,14 +1,13 @@
 // Finds AI model names in text (owner rule: no screen names an AI model; story W9 criterion 5). Generic on purpose: it
 // knows the model families and the shapes of their ids and versions, not a list of today's names, so "Fable 5",
-// "o3", "claude-sonnet-5" and "GPT-4o-mini" are all caught, each as one whole token. "Claude" alone is not matched:
-// it also names the vendor's app and API (a channel and a cost source on two pages); whether it stays is the owner's
-// call (open question, 13 Oct 2026). Pure.
+// "o3", "claude-sonnet-5" and "GPT-4o-mini" are all caught, each as one whole token. "Claude" alone is a model name
+// too (owner decision, 13 Oct 2026): no screen names it, not even as the vendor's app or API. Pure.
 
 /** A version or variant after a family name: "-4o", " 5", "-3.5", "-R1", "-mini", " Pro". */
 const SUFFIX = String.raw`(?:[-_ ]?(?:[a-z]?\d+(?:\.\d+)*[a-z]*|mini|nano|pro|turbo|flash|lite|ultra|preview|instant|latest|coder|vision)\b)*`;
-/** Families whose names are not ordinary words: matched in any case. `claude-...` is the id form (claude-sonnet-5,
- *  claude-3-5-haiku), which names a model; "Claude" alone does not (see above). */
-const ANY_CASE = ["claude(?:-[a-z0-9]+)+(?:\\.\\d+)*", "opus", "sonnet", "haiku", "chatgpt", "gpt", "gemini", "gemma", "bard", "llama", "mistral", "mixtral", "codestral", "ministral", "grok", "deepseek", "qwen", "phi-?\\d", "command-r", "kimi", "glm"];
+/** Families whose names are not ordinary words: matched in any case, with their id forms (claude-sonnet-5,
+ *  claude-3-5-haiku). A key such as `claude_app` is not a word and is not matched. */
+const ANY_CASE = ["claude(?:-[a-z0-9]+)*(?:\\.\\d+)*", "opus", "sonnet", "haiku", "chatgpt", "gpt", "gemini", "gemma", "bard", "llama", "mistral", "mixtral", "codestral", "ministral", "grok", "deepseek", "qwen", "phi-?\\d", "command-r", "kimi", "glm"];
 /** Families whose names are also ordinary words or symbols: matched only as the makers write them ("Fable", "o3"). */
 const EXACT_CASE = ["Fable", "o[1-9]"];
 
