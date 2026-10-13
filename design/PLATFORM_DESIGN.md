@@ -211,4 +211,4 @@ reasons, go in its `changes.md`.
 | `34-markets` | Markets overview (02-markets), real NSE data | signed off 13 Oct 2026, as of 59b606d |
 | `35-stock` | Stock page (04-stock-page), the stock tool's real records | signed off 13 Oct 2026 (7b10cc0) |
 | `37-forecasts` | Forecast lab (slice 2 of exepex/trading `docs/BUILD_MAP.md`), India F&O only; real state empty, labelled Examples | draft for sign-off, 13 Oct 2026 |
-| `38-strategy-lab` | Strategy lab (owner's brief of 13 Oct 2026): which family makes money on paper and whether it is ready for real money; stocks, F&O and both; real settled trades and labelled Examples | draft for sign-off, 13 Oct 2026 |
+| `38-strategy-lab` | Strategy lab (owner's brief of 13 Oct 2026): which family makes money on paper and whether it is ready for real money; stocks, F&O and both; real settled trades and labelled Examples | signed off 13 Oct 2026, as of 32ad873 |

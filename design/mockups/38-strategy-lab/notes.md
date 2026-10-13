@@ -1,6 +1,7 @@
 # 38 Strategy lab: data used, where it comes from, the proposed contract
 
-**Status:** first draft for the owner's sign-off (13 Oct 2026). Supersedes the stock-repository-era
+**Status:** signed off by the owner on 13 Oct 2026, as of 32ad873 ("I sign-off the design"). This file is now the frozen
+contract; later changes, with their reasons, go in `changes.md`. Supersedes the stock-repository-era
 `05-strategy-lab` (built on the stock tool's invented catalogue examples) as the menu's Strategies > Strategy lab.
 `37-forecasts` (Forecast lab) stays as the side view on F&O predictions, linked from here.
 
