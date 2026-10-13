@@ -5,6 +5,7 @@
 // accessible name and a text summary; the page keeps its numbers in tables, so the chart is never the only source.
 import { useEffect, useRef, useState } from "react";
 import { useShownTheme } from "../../lib/ui/use-theme.ts";
+import { LOCALE } from "../../lib/ui/constants.ts";
 import { LIGHTWEIGHT_CHARTS } from "../../lib/ui/vendor.ts";
 
 export interface Candle {
@@ -69,7 +70,9 @@ export function loadLightweightCharts(): Promise<Lwc> {
 
 const token = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-export function Candles({ candles, lines = NO_LINES, label, summary, height = 300 }: { candles: readonly Candle[]; lines?: readonly PriceLine[]; label: string; summary?: string; height?: number }) {
+/** `currency` sets the axis numbers' locale, as everywhere else in the app (the market's, never the viewer's): left to
+ *  itself the library takes navigator.language, which can be a tag Intl refuses (a POSIX "en-US@posix"). */
+export function Candles({ candles, lines = NO_LINES, label, summary, height = 300, currency }: { candles: readonly Candle[]; lines?: readonly PriceLine[]; label: string; summary?: string; height?: number; currency: string }) {
   const box = useRef<HTMLDivElement>(null);
   const [failed, setFailed] = useState(false);
   // The library paints into a canvas with colours copied from the tokens, so a theme change redraws the chart.
@@ -89,6 +92,7 @@ export function Candles({ candles, lines = NO_LINES, label, summary, height = 30
           grid: { vertLines: { color: grid }, horzLines: { color: grid } },
           rightPriceScale: { borderVisible: false },
           timeScale: { borderVisible: false },
+          localization: { locale: LOCALE[currency] ?? "en-US" },
         });
         const up = token("--mb-color-up"), down = token("--mb-color-down");
         const series = chart.addSeries(lib.CandlestickSeries, { upColor: up, downColor: down, wickUpColor: up, wickDownColor: down, borderVisible: false });
@@ -107,7 +111,7 @@ export function Candles({ candles, lines = NO_LINES, label, summary, height = 30
       observer?.disconnect();
       chart?.remove();
     };
-  }, [candles, lines, height, theme]);
+  }, [candles, lines, height, theme, currency]);
   return (
     <figure className="mb-candles">
       <div ref={box} role="img" aria-label={label} style={{ height }} />

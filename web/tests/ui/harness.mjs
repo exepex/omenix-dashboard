@@ -151,6 +151,8 @@ async function runCase(browser, c) {
     const mobile = width < 600;
     const ctx = await browser.newContext({ viewport: { width, height: mobile ? 844 : 900 }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile, colorScheme: theme });
     const page = await ctx.newPage();
+    // A case may run code in the page before its scripts (e.g. a browser language the CI runner gives: "en-US@posix").
+    if (c.initScript) await page.addInitScript(c.initScript);
     const tag = `${c.name} @${width}`;
     page.on("console", (m) => {
       if ((m.type() === "error" || m.type() === "warning") && ![...BENIGN_CONSOLE, ...(fallbackFonts ? [FONT_BLOCKED] : []), ...(c.allowConsole ?? [])].some((re) => re.test(m.text()))) errors.push(`${tag} console.${m.type()}: ${m.text()}`);

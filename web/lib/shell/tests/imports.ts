@@ -20,9 +20,10 @@ export function sources(dir: string): Source[] {
 
 const withoutComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`])\/\/.*$/gm, "$1");
 
-/** The specifiers a file imports: static imports, re-exports, dynamic imports and requires. */
+/** The specifiers a file imports: static imports, re-exports, dynamic imports and requires (quoted or a template
+ *  literal without interpolation). A computed one, import(`${x}`), cannot be resolved: see computedImports. */
 export function specifiers(text: string): string[] {
-  const re = /(?:import|export)\s[^'";]*?from\s*["']([^"']+)["']|import\s*["']([^"']+)["']|import\(\s*["']([^"']+)["']\s*\)|require\(\s*["']([^"']+)["']\s*\)/g;
+  const re = /(?:import|export)\s[^'";]*?from\s*["']([^"']+)["']|import\s*["']([^"']+)["']|import\(\s*["'`]([^"'`$]+)["'`]\s*\)|require\(\s*["'`]([^"'`$]+)["'`]\s*\)/g;
   return [...withoutComments(text).matchAll(re)].map((m) => m[1] ?? m[2] ?? m[3] ?? m[4]);
 }
 
@@ -52,3 +53,9 @@ export function reachable(start: Source[], all: Source[]): Set<string> {
   }
   return seen;
 }
+
+/** Dynamic imports or requires whose target is computed (a variable or an interpolated template): no static check can
+ *  follow them, so app code must not use them. */
+export const computedImports = (file: Source): boolean =>
+  /\b(?:import|require)\(\s*(?!["'`][^"'`$]*["'`]\s*\))[^)]/.test(withoutComments(file.text));
+

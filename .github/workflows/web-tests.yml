@@ -68,8 +68,8 @@ jobs:
         run: npm run build
       - name: UI harness
         run: node tests/ui/harness.mjs --out ../work/ui
-      - name: Screenshots and report
-        if: always()
+      - name: Screenshots and report (on failure only: the full set is about 300 MB)
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: ui-harness

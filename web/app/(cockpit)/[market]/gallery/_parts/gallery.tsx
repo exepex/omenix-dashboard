@@ -66,7 +66,7 @@ export function Gallery({ market }: { market: Market }) {
         </Card>
         <Card label="Candlesticks">
           <CardHead title="Candles (sample)" help="The vendored Lightweight Charts with price lines." />
-          <Candles candles={CANDLES} lines={LINES} label="Sample candlesticks" summary={`30 sample sessions; ${SAMPLE}.`} height={240} />
+          <Candles candles={CANDLES} lines={LINES} currency={currency} label="Sample candlesticks" summary={`30 sample sessions; ${SAMPLE}.`} height={240} />
         </Card>
       </div>
       <div className="grid even">

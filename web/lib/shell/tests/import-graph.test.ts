@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
-import { canonical, importsOf, reachable, sources, web, type Source } from "./imports.ts";
+import { canonical, computedImports, importsOf, reachable, sources, web, type Source } from "./imports.ts";
 
 /** The whole app's code (tests aside): every place an import of the adapter could hide. */
 const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].flatMap(sources).filter((f) => !/(^|\/)tests\//.test(f.path));
@@ -54,6 +54,9 @@ test("one resolver: the @/ alias, extensionless, .ts, .tsx and index imports nam
   for (const spec of ["@/lib/shell/fixture-source", "@/lib/shell/fixture-source.ts", "../../lib/shell/fixture-source", "../../lib/shell/fixture-source.ts", "../../lib/shell/fixture-source/index.ts"]) {
     assert.deepEqual(importsOf({ path: from, text: `import { a } from "${spec}";` }), ["lib/shell/fixture-source"], spec);
   }
+  for (const text of ["const m = await import(`@/lib/shell/fixture-source`);", "const m = require(`../../lib/shell/fixture-source.ts`);"]) {
+    assert.deepEqual(importsOf({ path: from, text }), ["lib/shell/fixture-source"], text);
+  }
   assert.deepEqual(importsOf({ path: from, text: '// import { a } from "../../lib/shell/fixture-source";\nexport {};' }), [], "comments are not imports");
 });
 
@@ -66,6 +69,7 @@ test("the checks catch a planted breach: alias, extensionless, dynamic, JSON, re
     'import { fixtureShellData } from "../../lib/shell/fixture-source";',
     'import { fixtureShellData } from "../../lib/shell/fixture-source.ts";',
     'const m = await import("@/lib/shell/fixture-source.ts");',
+    "const m = await import(`@/lib/shell/fixture-source`);",
     'import raw from "../../lib/shell/fixture/shell.generated.json" with { type: "json" };',
   ]) {
     assert.deepEqual(adapterImports(plant(comp(line))).length, 1, line);
@@ -84,6 +88,16 @@ test("the checks catch a planted breach: alias, extensionless, dynamic, JSON, re
   assert.deepEqual(wiringReaders(plant(wired)).sort(), [LAYOUT, "components/frame/planted.tsx"].sort());
   // allowed: the market type
   assert.deepEqual(forbiddenReach([comp('import type { Market } from "@/lib/data/constants";')], real), []);
+});
+
+test("no computed dynamic import in the app: every import target is a literal the checks can follow", () => {
+  assert.deepEqual(appCode().filter(computedImports).map((f) => f.path), []);
+  for (const text of ["const m = await import(`@/lib/shell/${name}`);", "const m = await import(target);", 'const m = require("@/lib/" + x);']) {
+    assert.equal(computedImports({ path: "components/frame/planted.tsx", text }), true, text);
+  }
+  for (const text of ['const m = await import("@/lib/shell/market");', "const m = await import(`@/lib/shell/market`);", "export {};"]) {
+    assert.equal(computedImports({ path: "components/frame/planted.tsx", text }), false, text);
+  }
 });
 
 test("the adapter is one line of the wiring", () => {

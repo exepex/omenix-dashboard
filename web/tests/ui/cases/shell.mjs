@@ -1,4 +1,4 @@
-// UI cases of the shell and shared components (B7). A case: {name, path, market?, widths?, mockup?, expectText?,
+// UI cases of the shell and shared components (B7). A case: {name, path, market?, widths?, mockup?, initScript?, expectText?,
 // expectSelector?, waitFor?, status?, apiStatus?, api?, routes? ({path: async (request) => ({status, body})} for
 // same-origin routes outside /api/v1, e.g. /api/assistant), keyboard?, allowConsole? (regexes of expected console
 // messages, e.g. the browser's own line for a 503 the case asked for), check?(page, {width, market}) -> string[]}.
@@ -52,6 +52,16 @@ export const cases = [
       if (!(await page.$('.pager button[aria-current="page"]:has-text("2")'))) problems.push("Next did not move the pager to page 2");
       return problems;
     },
+  },
+  {
+    // The CI runner's POSIX locale reaches the browser as navigator.language "en-US@posix", a tag Intl refuses; the
+    // chart must format in the market's locale, never the viewer's (components/charts/candles.tsx).
+    name: "gallery-posix-locale",
+    path: "/india/gallery",
+    widths: [1280],
+    waitFor: ".mb-candles canvas",
+    keyboard: false,
+    initScript: () => Object.defineProperty(Navigator.prototype, "language", { get: () => "en-US@posix" }),
   },
   {
     name: "phone-tab-order",
