@@ -70,6 +70,20 @@ def valuation(close: float, quarters: list) -> dict:
     return {"eps_ttm": ttm, "pe": round(close / ttm, 1) if ttm and ttm > 0 else None, "eps_to": last4[-1]["end"] if last4 else None}
 
 
+def peers(M: dict, h: int, prob) -> dict | None:
+    """The chance over all companies that day: its range, the most common value (as shown, 0.1 point) and how many share
+    it and this one's, and the calibration slope (0 = the features are flattened: only the base rate and news move it)."""
+    market = M["model_market"]
+    chances = list(market["chances"].get(str(h), {}).values())
+    if prob is None or not chances:
+        return None
+    shown = [round(p, 3) for p in chances]
+    common = max(set(shown), key=lambda v: (shown.count(v), v))
+    same = shown.count(round(prob, 3))
+    slope = (market["versions"].get(str(h)) or {}).get("platt_slope")
+    return {"same": same, "common": common, "common_n": shown.count(common), "n": len(chances), "lo": min(chances), "hi": max(chances), "slope": slope, "as_of": market["as_of_date"]}
+
+
 def tools(m: str, M: dict) -> dict:
     names = display_names(m)
     horizons = []
@@ -82,7 +96,7 @@ def tools(m: str, M: dict) -> dict:
             f["of"] += 1
             f["buy"] += int(v["qualifies"] and v["direction"] == "up")
         prob = next((s["prob_up"] for s in M["model"] if s["horizon_days"] == h), None)
-        horizons.append({"h": h, "target_date": r["target_date"], "prob": prob, "lo80": r["lo80"], "lo50": r["lo50"], "hi50": r["hi50"], "hi80": r["hi80"],
+        horizons.append({"h": h, "target_date": r["target_date"], "prob": prob, "peers": peers(M, h, prob), "lo80": r["lo80"], "lo50": r["lo50"], "hi50": r["hi50"], "hi80": r["hi80"],
                          "buy": sum(f["buy"] for f in fam.values()), "of": sum(f["of"] for f in fam.values()), "family": fam})
     R = M["reasoning"] or {}
     cost = M["costs"][0] if M["costs"] else None

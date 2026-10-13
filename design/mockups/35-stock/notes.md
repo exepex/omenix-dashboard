@@ -37,7 +37,7 @@ every field.
 | 3 | Price chart | `chart.dates`, `close` (two years), `bench` (the benchmark's closes); periods 1M, 3M, 6M, 1Y, 2Y; compare from 100 | daily | stock tool (`prices`) |
 | 4 | Key figures, in words | 52-week high and low (ours); `valuation.pe` (close ÷ the sum of the last four quarters' diluted EPS) with `eps_ttm` and `eps_to`; `stats.rsi` (14), `beta` (1 year), `atr_pct` (14-day range), `vol_avg20`; delivery % (India) or days to results (US) | daily; on each filing | stock tool (`features`, `financials` / `fundamentals`, `delivery`); computed by us |
 | 5 | The last quarters | `quarters[]`: `end`, `revenue`, `profit` (India), `eps` (diluted). US fourth quarter = the year minus nine months | on each filing | stock tool (`financials` from NSE XBRL; `fundamentals` from SEC) |
-| 6 | What our tools think | per horizon N+1..N+5: `target_date`, `prob` (the model's chance of a rise), `buy` of `of` strategies and by family (rule-based, AI team, baselines), `lo50`, `hi50`, `lo80`, `hi80` (expected range); the session and when it was made | before the open | stock tool (`strategy_predictions`, `model_scores`, `ranges`) |
+| 6 | What our tools think | per horizon N+1..N+5: `target_date`, `prob` (the model's chance of a rise), `peers` (honesty note, orchestrator 13 Oct 2026: over every tracked company that day the chance's `lo`, `hi`, most common value `common` and its count `common_n`, `same` as this one, `n`, and the model version's calibration `slope`; shown as "all 20: 47.0%–47.3% · not proven"), `buy` of `of` strategies and by family (rule-based, AI team, baselines), `lo50`, `hi50`, `lo80`, `hi80` (expected range); the session and when it was made | before the open | stock tool (`strategy_predictions`, `model_scores` of every company, `model_versions` `platt_slope`, `ranges`) |
 | 7 | The AI team's reading | `verdict`, `bull_case`, `bear_case`, `decision_1d`, `decision_5d`, `made_at`, quoted as recorded | before the open | stock tool (`agent_reasoning`) |
 | 8 | Costs | `round_trip_pct` (market charges of a buy and sell of `amount`), `your_pct` (with your broker's) | per session | stock tool (`cost_views`) |
 | 9 | Open paper trades | per strategy and buy date: `name`, `family`, horizons, `entry_date`, exits, `entry`, `last`, `ret`, `band` (inside 50% / 80% of the expected range); the record on this stock once trades settle | each price check | stock tool (`trade_checks`; settled: `cost_views.net_pnl_market`) |
@@ -55,3 +55,13 @@ every field.
   and 0.37). The page takes the adjusted value.
 - **Many NVDA news items are "not checked yet"**, mostly 13F-filing notices from MarketBeat-style sites. The status is
   shown as recorded.
+
+## Honesty note on the model's chance (13 Oct 2026, orchestrator's request)
+
+On 12 Oct the model gave every tracked company nearly the same chance: India 46.5%–47.3% over all horizons, with 16 of 20 at
+exactly 47.1% for N+1; US 51.6%–54.9%, with 19 of 20 at 53.0% for N+2. Root cause, from the stock tool's own records:
+the model versions in use (`logit-v1`, trained to 1 Oct) have a calibration slope (`platt_slope`) of 0 for India N+1, N+3,
+N+4 and N+5 and US N+2, so calibration flattens every chart and price signal and only the base rate and news move the number.
+The other slopes are small (0.05 to 0.18). The model has no settled track record (the range calibration shows `n_live` 0).
+The page therefore shows the range over all companies under each chance, marked "not proven". RELIANCE is not in the
+identical group (47.3% vs 47.1%), so "same for N of 20" would have been misleading for this company; the range is honest.
