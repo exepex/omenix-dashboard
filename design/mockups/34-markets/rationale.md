@@ -2,7 +2,8 @@
 
 Screen 2 of `design/PLATFORM_DESIGN.md` section 4, the market overview. It was built on 13 Oct 2026 while the owner
 was offline, under the orchestrator's exception (go on after the screener without waiting for its sign-off).
-Status: **for the owner's review**. Its decisions are listed in notes.md.
+Status: **signed off 13 Oct 2026 (owner)**, including the decisions listed in notes.md; its notes.md is the frozen
+contract.
 
 **Files:**
 - `data.json`, built from real records;

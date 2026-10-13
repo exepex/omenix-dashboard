@@ -1,7 +1,8 @@
 # 31-dashboard (Home): rationale
 
 Mockup order item 2 of `design/PLATFORM_DESIGN.md` section 9 (screen 1: the home page after login). Supersedes the
-layout of `01-home` (kept unchanged for the web tests). Status: **third round, for the owner's review** (13 Oct 2026).
+layout of `01-home` (kept unchanged for the web tests). Status: **signed off 13 Oct 2026 (owner)**, as of
+commit e8cd360; its notes.md is the frozen contract.
 
 Files: `data.json` (composed from the application's own example records: notes.md), `template.html`, `build.py`,
 `page.html`, `notes.md` (the data contract). Screenshots: `shot-<width>-full` at 390, 768, 1024, 1280 and 1680 px,

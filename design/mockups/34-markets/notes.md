@@ -1,7 +1,9 @@
 # 34-markets: data contract (what every element needs)
 
-**Status: for the owner's review** (built 13 Oct 2026 while the owner was offline; orchestrator's exception: go on
-after 33 without waiting for its sign-off). Not signed off.
+**Status: signed off 13 Oct 2026 (owner), as of commit 59b606d.** This is the signed-off API contract for the market
+overview (built while the owner was offline, under the orchestrator's exception). Change it only for a very solid
+reason, brought to the owner first (through the orchestrator); record each change and its reason in `changes.md` next
+to it.
 
 ## Data: real, not examples (Mon 12 Oct 2026)
 - `source/indices.csv`: NSE's daily index file (`ind_close_all_<DDMMYYYY>.csv`), a year, for 24 indices:
