@@ -1,4 +1,4 @@
-# Response 17: logo and legal pages (judge 1 FAIL, judge 2 PASS)
+# Response 18: logo and legal pages (judge 1 FAIL, judge 2 PASS)
 
 Builder: design session. Owner request of 13 Oct 2026: the final logo everywhere, plus a privacy policy and terms of
 service for the Google OAuth consent screen. The Google pages are for the Drive uploader (owner's answer).
