@@ -1,10 +1,11 @@
 # The screener's blocks (design/mockups/33-screener/notes.md; story W11), also read by the Markets overview (34): the
 # breadth counts ("Is the move broad?") and the movers ("Who moved most?") are the same counts and rows. The India
-# stock and F&O rows come from NSE's daily files (publisher nse_ingest: neither backend publishes them yet); the US rows
+# stock and F&O rows come from NSE's daily files (publisher fno: exepex/trading, owner 13 Oct 2026; not published yet); the US rows
 # and the tools' view come from the stock tool. A shared schema takes its publisher from the operation's x-catalog.
 
 ScreenerSummary:
   type: object
+  additionalProperties: false
   description: >-
     Counts over each universe's rows of the day (the screener's tabs, "Today: up and down", the three tiles and the
     ready-made screens' chips; the Markets overview's breadth). India: every NSE stock (all), the Nifty 500, the F&O
@@ -23,6 +24,7 @@ ScreenerSummary:
         ours: {$ref: '#/components/schemas/UniverseCounts'}
 UniverseCounts:
   type: object
+  additionalProperties: false
   required: [n, up, down, flat, high, near_high, low, near_low, up_1m, screens]
   properties:
     n: {type: integer, minimum: 0, x-unit: count, x-element: [h33.tabs, h33.updown, h34.breadth], x-notes: ['h34.breadth:n']}
@@ -36,19 +38,21 @@ UniverseCounts:
     up_1m: {type: integer, minimum: 0, x-unit: count, x-notes: ['h34.breadth:up_1m'], description: Stocks up over the last 21 sessions}
     screens:
       type: object
-      description: 'Counts of the other ready-made screens (the screener''s definitions in 33-screener/notes.md row 4); delivery is null in the US (no such figure)'
+      additionalProperties: false
+      description: 'Counts of the other ready-made screens (the screener''s definitions in 33-screener/notes.md row 4); delivery is India only (absent in the US)'
       x-element: [h33.screens]
-      required: [movers, volume, trend, fall, delivery, oversold]
+      required: [movers, volume, trend, fall, oversold]
       properties:
         movers: {type: integer, minimum: 0, x-unit: count, description: 'abs(d1) >= 5'}
         volume: {type: integer, minimum: 0, x-unit: count, x-element: [h33.tiles, h33.screens], description: 'v >= 3 va and va >= 50,000'}
         trend: {type: integer, minimum: 0, x-unit: count, description: 'm1 >= 10'}
         fall: {type: integer, minimum: 0, x-unit: count, description: 'm1 <= -10'}
-        delivery: {type: ['integer', 'null'], minimum: 0, x-unit: count, description: 'dl >= 70 and va >= 1,00,000 (India)'}
+        delivery: {type: integer, minimum: 0, x-unit: count, x-market: india, description: 'dl >= 70 and va >= 1,00,000. India only: absent in the US'}
         oversold: {type: integer, minimum: 0, x-unit: count, description: 'r < 30'}
 
 ScreenerStocks:
   type: object
+  additionalProperties: false
   description: >-
     One page of the day's stock rows, filtered and sorted by the route over the published table (query: u, screen,
     period, filters, symbols, sort, page). The Markets overview's movers are pages of it (sort d1 or value). Every
@@ -66,8 +70,9 @@ ScreenerStocks:
       items: {$ref: '#/components/schemas/ScreenerStock'}
 ScreenerStock:
   type: object
+  additionalProperties: false
   x-as-of-from: ScreenerStocks
-  required: [s, n, g, p, d1, w1, m1, m3, y1, h, l, v, va, dl, r, u]
+  required: [s, n, g, p, d1, w1, m1, m3, y1, h, l, v, va, r, u]
   properties:
     s: {type: string, x-unit: exchange symbol, x-element: [h33.table, h34.movers], x-notes: ['h33.table:s', 'h34.movers:s']}
     n: {type: string, x-unit: text, x-element: [h33.table, h34.movers], x-notes: ['h33.table:n', 'h34.movers:n']}
@@ -82,7 +87,7 @@ ScreenerStock:
     l: {type: ['number', 'null'], x-unit: price (market currency), x-price: true, x-element: [h33.table, h33.screens], x-notes: ['h33.table:l', 'h33.screens:l'], description: 52-week low, x-catalog: {status: planned, source: 'computed: ours, from the daily closes'}}
     v: {type: integer, minimum: 0, x-unit: shares, x-element: [h33.table, h33.screens, h33.filters, h33.sort, h34.movers], x-notes: ['h33.table:v', 'h33.screens:v', 'h33.filters:v', 'h33.sort:v', 'h34.movers:v'], description: 'Volume of the day (value traded = p × v, the default sort)'}
     va: {type: ['number', 'null'], minimum: 0, x-unit: shares, x-element: [h33.table, h33.screens, h33.filters, h34.movers], x-notes: ['h33.table:va', 'h33.screens:va', 'h33.filters:va', 'h34.movers:va'], description: 20-day average volume, x-catalog: {status: planned, source: 'computed: ours, from the daily volumes'}}
-    dl: {type: ['number', 'null'], minimum: 0, maximum: 100, x-unit: percent, x-element: [h33.table, h33.screens, h33.filters], x-notes: ['h33.table:dl', 'h33.screens:dl', 'h33.filters:dl'], description: 'Delivery % (NSE security-wise file); null in the US (no such figure)'}
+    dl: {type: ['number', 'null'], minimum: 0, maximum: 100, x-unit: percent, x-element: [h33.table, h33.screens, h33.filters], x-notes: ['h33.table:dl', 'h33.screens:dl', 'h33.filters:dl'], x-market: india, description: 'Delivery % (NSE security-wise file; null when NSE gives none). India only: absent in the US'}
     r: {type: ['number', 'null'], minimum: 0, maximum: 100, x-unit: index 0-100, x-element: [h33.table, h33.screens, h33.filters], x-notes: ['h33.table:r', 'h33.screens:r', 'h33.filters:r'], description: 'RSI 14 (Wilder, over the year''s closes; computed: ours)', x-catalog: {status: planned, source: 'computed: ours, from the daily closes'}}
     u:
       type: array
@@ -98,6 +103,7 @@ PeriodChange:
 
 ScreenerTools:
   type: object
+  additionalProperties: false
   description: >-
     The stock tool's view of the companies it follows (20 per market), for the next N sessions: how many strategies
     buy (by family), the model's chance of a rise and days to results. A company with `strategies.of` 0 shows "No view
@@ -112,11 +118,13 @@ ScreenerTools:
       type: array
       items:
         type: object
+        additionalProperties: false
         required: [s, strategies, prob_up, days_to_results]
         properties:
           s: {type: string, x-unit: ticker}
           strategies:
             type: object
+            additionalProperties: false
             required: [buy, of, by_family]
             properties:
               buy: {type: integer, minimum: 0, x-unit: count, x-element: [h33.tools, h33.screens], x-notes: ['h33.tools:strategies.buy', 'h33.screens:strategies.buy']}
@@ -130,8 +138,9 @@ ScreenerTools:
 
 FnoScreenerSummary:
   type: object
+  additionalProperties: false
   description: "Counts over the day's F&O underlyings (India only): the four build-ups (the tiles) and the other F&O screens"
-  x-catalog: {publisher: nse_ingest, source: "NSE's daily F&O file (nearest monthly future, ATM call and put), computed the F&O tool's way", freshness: 'daily, after the NSE F&O file', story: NSE1-proposed, status: planned}
+  x-catalog: {publisher: fno, source: "NSE's daily F&O file (nearest monthly future, ATM call and put), computed the F&O tool's way", freshness: 'daily, after the NSE F&O file', story: TR-NSE-proposed, status: planned}
   x-element: [h33.buildup, h33.fno-screens]
   required: [as_of, n, expiry, buildups, screens]
   properties:
@@ -140,6 +149,7 @@ FnoScreenerSummary:
     expiry: {type: string, format: date, x-unit: date, description: The nearest monthly expiry}
     buildups:
       type: object
+      additionalProperties: false
       x-element: [h33.buildup, h33.fno-screens]
       x-notes: ['h33.buildup:b']
       required: [long_buildup, short_buildup, short_covering, long_unwinding]
@@ -150,6 +160,7 @@ FnoScreenerSummary:
         long_unwinding: {type: integer, minimum: 0, x-unit: count}
     screens:
       type: object
+      additionalProperties: false
       x-element: [h33.fno-screens]
       required: [ivhigh, ivlow, oiup, index]
       properties:
@@ -160,11 +171,12 @@ FnoScreenerSummary:
 
 FnoScreenerRows:
   type: object
+  additionalProperties: false
   description: >-
     One page of the day's F&O underlyings (India only), filtered and sorted by the route (query: screen, symbols,
     sort, page). The Markets overview's index options are the rows of NIFTY, BANKNIFTY, FINNIFTY and MIDCPNIFTY.
     Empty state: rows empty
-  x-catalog: {publisher: nse_ingest, source: "NSE's daily F&O file (nearest monthly future, ATM call and put), computed the F&O tool's way (ATM IV: Black-Scholes on the ATM closes, rate 6.5%, no dividend)", freshness: 'daily, after the NSE F&O file', story: NSE1-proposed, status: planned}
+  x-catalog: {publisher: fno, source: "NSE's daily F&O file (nearest monthly future, ATM call and put), computed the F&O tool's way (ATM IV: Black-Scholes on the ATM closes, rate 6.5%, no dividend)", freshness: 'daily, after the NSE F&O file', story: TR-NSE-proposed, status: planned}
   x-element: [h33.fno-table]
   required: [as_of, currency, total, page, page_size, rows]
   properties:
@@ -178,6 +190,7 @@ FnoScreenerRows:
       items: {$ref: '#/components/schemas/FnoScreenerRow'}
 FnoScreenerRow:
   type: object
+  additionalProperties: false
   x-as-of-from: FnoScreenerRows
   required: [s, n, kind, fut, fc, oi, oc, b, iv, ivl, ivh, ivr, pcr, mv, x, lot]
   properties:

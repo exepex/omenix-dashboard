@@ -17,7 +17,7 @@ import bundle  # noqa: E402
 from walk import block_fields, block_operations  # noqa: E402
 
 OUT = bundle.API / "catalog/catalog.md"
-PUBLISHER = {"stock": "stock tool", "fno": "F&O tool", "nse_ingest": "NSE ingest (no backend yet)", "dashboard": "dashboard"}
+PUBLISHER = {"stock": "stock tool", "fno": "exepex/trading", "dashboard": "dashboard"}
 STATUS = {"published": "published", "planned": "not yet published"}
 
 
@@ -70,7 +70,6 @@ def render() -> str:
     for sid, s in stories.items():
         lines.append(f"| `{sid}` | {'yes' if s['exists'] else '**no: to be written**'} | {planned.get(sid, 0)} | {cell(s.get('scope') or s['title'])} |")
     lines += ["", "## Open questions (owner)", "",
-              "- Who publishes NSE's daily files (publisher `nse_ingest`, story `NSE1-proposed`): exepex/trading or `platform/`?",
               "- Should the stock tool publish a year of daily FII/DII flows (5 days today: 1D and 1W totals only)?",
               "- Events: 34's data has no `major` flag; it is derived from the regime record's `major_event_names` until published.",
               "", "## Fields", ""]

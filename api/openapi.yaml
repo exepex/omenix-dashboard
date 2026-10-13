@@ -35,8 +35,8 @@ info:
     api/catalog/catalog.md; /api/v1/markets/{market}/home is superseded by the blocks.
 
     Version 2.2 (story W11, 13 Oct 2026; additions only): the screener (33-screener) and the Markets overview
-    (34-markets) as block endpoints (api/paths/blocks-screener.yaml, blocks-overview.yaml). A fourth publisher,
-    `nse_ingest`, names blocks built from NSE's daily files, which no backend publishes yet; those paths are India only.
+    (34-markets) as block endpoints (api/paths/blocks-screener.yaml, blocks-overview.yaml). The blocks built from NSE's
+    daily files are exepex/trading's (publisher `fno`, owner 13 Oct 2026), not published yet; those paths are India only.
     Where a block's publisher differs by market, India and the US have their own paths sharing one schema. Session gains
     the optional `major_event_names`; Events gains the kind `filing`.
 

@@ -17,7 +17,7 @@ BlockFreshness:
   x-element: [s30.freshness]
   properties:
     state: {type: string, enum: [fresh, stale, publishing, unknown], x-unit: enum}
-    rule: {type: string, enum: [stock_age, fno_calendar, nse_calendar, static, inputs], x-unit: enum, description: 'stock_age = FRESH_MINUTES; fno_calendar = session calendar + run status; nse_calendar = the same rule for the NSE ingest; static = deploy-time config; inputs = the oldest input block'}
+    rule: {type: string, enum: [stock_age, fno_calendar, static, inputs], x-unit: enum, description: 'stock_age = FRESH_MINUTES; fno_calendar = session calendar + run status; static = deploy-time config; inputs = the oldest input block'}
     built_at: {type: ['string', 'null'], format: date-time, x-unit: UTC time}
     age_minutes: {type: ['integer', 'null'], x-unit: minutes}
     reason: {type: ['string', 'null'], x-unit: text, description: 'Why it is stale or publishing (e.g. the failed run id and reason); null when fresh'}
@@ -28,7 +28,7 @@ BlockMetaFields:
   x-element: [s30.freshness]
   x-catalog: {publisher: dashboard, source: 'the route envelope (story by product: W6 stock, W2 F&O, W8 dashboard blocks)', freshness: each request, status: planned}
   properties:
-    publisher: {type: string, enum: [stock, fno, nse_ingest, dashboard], x-unit: enum, description: 'stock = contactexepex/agentic-stock-prediction; fno = exepex/trading; nse_ingest = the daily NSE file ingest (owner not decided: exepex/trading or platform/; nothing publishes it yet); dashboard = this repository'}
+    publisher: {type: string, enum: [stock, fno, dashboard], x-unit: enum, description: 'stock = contactexepex/agentic-stock-prediction; fno = exepex/trading (its F&O read models and, owner 13 Oct 2026, the blocks built from NSE''s daily files); dashboard = this repository'}
     freshness: {$ref: '#/components/schemas/BlockFreshness'}
     paper: {type: string, const: Paper, x-unit: text, description: 'Every block is research and paper trading only; the screen shows Paper on every signal and money figure'}
 StockBlockMeta:
@@ -41,8 +41,9 @@ StockBlockMeta:
         publisher: {const: stock}
 FnoBlockMeta:
   description: >-
-    Envelope of an F&O-tool block: the stock envelope plus `product` and `publication_id` (exepex/trading P1
-    criterion 4); the dashboard reads only rows of `fno.current_publication` (P3). India only
+    Envelope of an exepex/trading block (its F&O read models and the blocks it builds from NSE's daily files): the
+    stock envelope plus `product` and `publication_id` (exepex/trading P1 criterion 4); the dashboard reads only rows of
+    `fno.current_publication` (P3). India only
   allOf:
     - $ref: '#/components/schemas/ReadModelMeta'
     - $ref: '#/components/schemas/BlockMetaFields'
@@ -54,17 +55,6 @@ FnoBlockMeta:
         publisher: {const: fno}
         product: {type: string, const: fno, x-unit: enum, x-element: [s30.freshness], x-catalog: {publisher: fno, source: fno.pages_history.product, freshness: each publication, story: P3, status: planned}}
         publication_id: {type: string, x-unit: id, x-element: [s30.freshness], x-catalog: {publisher: fno, source: fno.current_publication.publication_id, freshness: each publication, story: P3, status: planned}}
-NseBlockMeta:
-  description: >-
-    Envelope of a block built from NSE's daily files (equity, security-wise delivery, F&O, index close) by the NSE
-    ingest. India only. Which repository publishes it is an open owner question (W11); until then nothing does
-  allOf:
-    - $ref: '#/components/schemas/ReadModelMeta'
-    - $ref: '#/components/schemas/BlockMetaFields'
-    - type: object
-      properties:
-        market: {const: india}
-        publisher: {const: nse_ingest}
 DashboardBlockMeta:
   description: >-
     Envelope of a block the dashboard composes (static config or rules over backend rows). as_of, cutoff and built_at

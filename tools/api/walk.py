@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 CATALOG_KEYS = ("publisher", "source", "freshness", "story", "status")
 BLOCK_TAG = "blocks"
 # Who serves the envelope's block fields (publisher, freshness, paper): the read path of each product
-ENVELOPE_STORY = {"stock": "W6", "fno": "W2", "dashboard": "W8", "nse_ingest": "NSE1-proposed"}
+ENVELOPE_STORY = {"stock": "W6", "fno": "W2", "dashboard": "W8"}
 METHODS = ("get", "put", "post", "delete", "patch")
 
 

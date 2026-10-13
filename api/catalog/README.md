@@ -4,7 +4,8 @@ The owner (13 Oct 2026): "multiple small APIs which could populate the screen in
 call". The signed-off frame (`design/mockups/30-shell/notes.md`), Home (`31-dashboard`), screener (`33-screener`) and
 Markets overview (`34-markets`) are served by 37 small read endpoints, one per independent screen block, each with its
 own schema, envelope, freshness, cache rule, empty state and examples. The catalog's "Published today?" column says
-plainly which blocks no backend publishes yet (the NSE-file blocks: publisher `nse_ingest`, story `NSE1-proposed`).
+plainly which blocks no backend publishes yet (the NSE-file blocks: publisher `fno`, i.e. exepex/trading by the
+owner's decision of 13 Oct 2026, story `TR-NSE-proposed`).
 
 | File | What it is |
 |---|---|
@@ -18,8 +19,8 @@ The catalog lives in the schemas, so it cannot drift from them (`api/schemas/blo
 - `x-catalog: {publisher, source, freshness, story, status}` on a schema or property, inherited downward; a property
   overrides single keys; an operation's own `x-catalog` is the base, so one schema can serve India's and the US's
   paths with different publishers. `publisher` is `stock` (contactexepex/agentic-stock-prediction), `fno`
-  (exepex/trading), `nse_ingest` (NSE's daily files; no backend publishes them yet and the owner has not chosen the
-  repository) or `dashboard` (this repository). `status: published` means the publisher stores the value today in the named source
+  (exepex/trading: its F&O read models and, owner 13 Oct 2026, the blocks built from NSE's daily files) or
+  `dashboard` (this repository). `status: published` means the publisher stores the value today in the named source
   and only the block row is new; `planned` means no backend publishes it yet and `story` will.
 - `x-element`: the notes.md elements a field feeds (inherited); `x-notes: ["<element>:<key>"]`: the notes.md field
   token it implements; `x-unit` on every leaf. A field serves only the elements its operation lists in `x-feeds`
