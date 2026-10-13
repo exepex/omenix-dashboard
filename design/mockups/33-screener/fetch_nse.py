@@ -103,8 +103,10 @@ def adjusted(series: dict, last: dt.date) -> dict:
     span = f"&from_date={last - dt.timedelta(days=372):%d-%m-%Y}&to_date={last:%d-%m-%Y}"
     acts = nse_actions.actions(json.loads(get(nse_actions.API + span)))
     for sym in nse_actions.unexplained(series, acts):
-        acts += nse_actions.actions(json.loads(get(nse_actions.API + "&symbol=" + urllib.parse.quote(sym) + span)))
-    acts = sorted({tuple(a) for a in acts if a[1] <= last.isoformat()})
+        # no date span here: with one, NSE answers [] for some symbols (BANKNIFTY1); the window is applied below
+        acts += nse_actions.actions(json.loads(get(nse_actions.API + "&symbol=" + urllib.parse.quote(sym))))
+    first = (last - dt.timedelta(days=372)).isoformat()
+    acts = sorted({tuple(a) for a in acts if first <= a[1] <= last.isoformat()})
     with open(os.path.join(OUT, "actions.csv"), "w", newline="") as handle:
         out = csv.writer(handle)
         out.writerow(["symbol", "ex_date", "factor", "subject"])

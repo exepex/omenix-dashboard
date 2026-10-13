@@ -53,7 +53,7 @@ def adjust(series: list, symbol_actions: list) -> list:
         for _sym, ex, fac, _subject in symbol_actions:
             if date < ex:
                 f *= fac
-        out.append((date, srs, close * f, high * f, low * f, round(volume / f)))
+        out.append((date, srs, round(close * f, 2), round(high * f, 2), round(low * f, 2), round(volume / f)))
     return out
 
 
