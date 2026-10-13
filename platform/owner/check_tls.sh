@@ -5,9 +5,11 @@
 # 2. psql with sslmode=disable (no encryption) must be refused. It uses a role name that does not exist
 #    (x1_tls_probe), so no password is involved at all; the server refuses before authentication.
 # 3. psql as dashboard_app with sslmode=verify-full (asks its password) shows the TLS version and cipher in use.
-# Output: platform/evidence/<date>-x1-tls.txt (no secrets). Set X1_SKIP_AZ=1 to skip step 1 (e.g. a local test).
+# Output: platform/evidence/<date>-x1-tls.txt (no secrets; every IPv4/IPv6 address, such as this Mac's public IP in
+# the server's refusal, replaced by <IP address>). Set X1_SKIP_AZ=1 to skip step 1 (e.g. a local test).
 here="$(cd "$(dirname "$0")" && pwd)"
 . "$here/lib.sh"
+. "$here/az.sh"
 need_psql16
 [ "${X1_SKIP_AZ:-0}" = "1" ] || need_az
 mkdir -p "$evidence_dir"
@@ -19,8 +21,11 @@ out="$evidence_dir/$today-x1-tls.txt"
     for p in require_secure_transport ssl_min_protocol_version; do
       az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n "$p" --query "{name:name, value:value}" -o tsv
     done
-    rst="$(az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n require_secure_transport --query value -o tsv | tr 'A-Z' 'a-z')"
-    if [ "$rst" = on ]; then rst_ok=yes; else rst_ok=no; fi
+    if rst="$(az_value az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n require_secure_transport --query value -o tsv)"; then
+      if [ "$(printf '%s' "$rst" | tr 'A-Z' 'a-z')" = on ]; then rst_ok=yes; else rst_ok=no; fi
+    else
+      rst_ok="$rst"   # "ERROR, could not read (...)": never shown as a value
+    fi
   else
     rst_ok="not checked (X1_SKIP_AZ=1)"
   fi
@@ -42,5 +47,5 @@ out="$evidence_dir/$today-x1-tls.txt"
   PGUSER=dashboard_app psql -X -d omenix -A -F ' ' -c "SELECT 'ssl=' || ssl, 'version=' || version, 'cipher=' || cipher FROM pg_stat_ssl WHERE pid = pg_backend_pid()" -t \
     && tls_ok=yes || tls_ok=no
   echo; echo "RESULT: require_secure_transport on: $rst_ok; non-TLS refused: $plain_refused; verified TLS connection works: $tls_ok"
-} 2>&1 | tee "$out"
+} 2>&1 | redact_ips | tee "$out"   # the server's refusal quotes this Mac's public IP
 echo "Saved: $out"

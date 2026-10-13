@@ -154,6 +154,8 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `tests/reference_catalog.txt`, `tests/catalog_difference.txt` | the listing the original script gives, and the only allowed difference from it |
 | `tests/fixtures_up.sql`, `tests/fixtures_down.sql` | probe table `x1_probe` and function `x1_probe_f` in each schema, created by the owner roles |
 | `tests/large_objects.sh` | counts large objects in every database that accepts connections (as the admin); fails on any |
+| `tests/owner_scripts_test.sh` | tests the owner scripts' Azure handling with a fake `az`: both firewall-rule flag forms (current `--server-name`, older `--name`), an az failure shown as "ERROR, could not read", and IP addresses redacted from evidence |
+| `owner/az.sh` | az helpers shared by the owner scripts: firewall-rule calls for both az flag forms, and reads that report a failure as an error, never as a value |
 | `tests/ci.sh` | the whole test on a disposable PostgreSQL 16 (CI: `.github/workflows/platform-tests.yml`) |
 | `owner/` | the owner's scripts for the real server; checklist in `owner/CHECKLIST_X1.md` |
 | `evidence/` | outputs of the owner's scripts, committed by the owner |

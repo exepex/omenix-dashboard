@@ -15,6 +15,7 @@
 # Output: platform/evidence/<date>-x1-restore.txt (no secrets).
 here="$(cd "$(dirname "$0")" && pwd)"
 . "$here/lib.sh"
+. "$here/az.sh"
 need_psql16
 need_az
 scratch="${server}-x1restore"
@@ -70,12 +71,12 @@ utc_plus() {  # minutes -> ISO time (macOS date or GNU date)
   echo "restore finished $(date -u '+%H:%M:%S UTC') after $(( (finished - started) / 60 )) minutes"
 
   echo; echo "== 3. check the scratch server"
-  rules="$(az postgres flexible-server firewall-rule list -g "$X1_RG" -n "$scratch" --query "[].[startIpAddress, endIpAddress]" -o tsv)"
-  echo "firewall rules copied to the scratch server: ${rules:-none}"
+  rules="$(az_firewall_list "$scratch" --query "[].[startIpAddress, endIpAddress]" -o tsv)" \
+    || die "could not read the scratch server's firewall rules"
+  echo "firewall rules copied to the scratch server: $(printf '%s' "${rules:-none}" | redact_ips)"
   if [ -z "$rules" ]; then
     my_ip="$(curl -fsS https://api.ipify.org)" || die "could not find this Mac's public IP to open the scratch firewall"
-    az postgres flexible-server firewall-rule create -g "$X1_RG" -n "$scratch" --rule-name x1-owner-mac \
-      --start-ip-address "$my_ip" --end-ip-address "$my_ip" -o none && echo "opened the scratch firewall to this Mac only"
+    az_firewall_create "$scratch" x1-owner-mac "$my_ip" "$my_ip" && echo "opened the scratch firewall to this Mac only"
   fi
   scratch_host="$scratch.postgres.database.azure.com"
   got="$(PGHOST="$scratch_host" admin_psql -d omenix -A -t -c "SELECT token FROM fno.x1_restore_marker WHERE token = '$token'")"

@@ -8,10 +8,19 @@ export PGHOST="$host" PGPORT="${X1_PORT:-5432}"
 export PGSSLMODE="${X1_SSLMODE:-verify-full}"                  # verified TLS, as the apps will use it
 export PGSSLROOTCERT="${X1_SSLROOTCERT:-system}"               # the Mac's trusted roots (needs libpq 16 or later)
 [ "$PGSSLROOTCERT" != "none" ] || unset PGSSLROOTCERT           # X1_SSLROOTCERT=none: only for a local test copy
-evidence_dir="$platform/evidence"
+evidence_dir="${X1_EVIDENCE_DIR:-$platform/evidence}"           # X1_EVIDENCE_DIR: only for tests
 today="$(date +%Y-%m-%d)"
 
 die() { echo "STOPPED: $*" >&2; exit 1; }
+
+# Replace IPv4 and IPv6 addresses with <IP address> in text bound for an evidence file: a server's refusal quotes the
+# client's public IP ("no pg_hba.conf entry for host ..."), and psql's own errors quote the server's. IPv6 is matched
+# only in its full 8-group form or with "::", so times such as 22:58:01 are left alone.
+redact_ips() {
+  sed -E -e 's/[0-9]{1,3}(\.[0-9]{1,3}){3}/<IP address>/g' \
+         -e 's/[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){7}/<IP address>/g' \
+         -e 's/[0-9A-Fa-f:]*::[0-9A-Fa-f:]*[0-9A-Fa-f]/<IP address>/g'
+}
 
 need_psql16() {
   command -v psql > /dev/null || die "psql not found (brew install libpq, then add its bin folder to PATH)"

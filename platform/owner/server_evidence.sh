@@ -8,6 +8,7 @@
 # Output: platform/evidence/<date>-x1-server.txt
 here="$(cd "$(dirname "$0")" && pwd)"
 . "$here/lib.sh"
+. "$here/az.sh"
 
 # Each check: name in the README table | az JMESPath query on "flexible-server show" (or a special source).
 checks='location|location
@@ -41,34 +42,38 @@ need_az
 mkdir -p "$evidence_dir"
 out="$evidence_dir/$today-x1-server.txt"
 {
-  fails=0
+  fails=0; errors=0
   echo "X1 server settings of $server, $(date -u '+%Y-%m-%d %H:%M UTC') (az CLI), compared with platform/README.md"
   echo
+  show() { az_value az postgres flexible-server show -g "$X1_RG" -n "$server" --query "$1" -o tsv; }
+  param() { az_value az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n "$1" --query value -o tsv; }
   while IFS='|' read -r name query; do
     want="$(expected_of "$name")"
     case "$query" in
-      @parameter)
-        got="$(az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n require_secure_transport --query value -o tsv | tr 'A-Z' 'a-z')" ;;
+      @parameter) got="$(param require_secure_transport)" && got="$(printf '%s' "$got" | tr 'A-Z' 'a-z')" ;;
       @firewall)
         echo "firewall rules (name, start, end):"
-        az postgres flexible-server firewall-rule list -g "$X1_RG" -n "$server" --query "[].[name, startIpAddress, endIpAddress]" -o tsv
-        got="$(az postgres flexible-server firewall-rule list -g "$X1_RG" -n "$server" --query "[].[startIpAddress, endIpAddress]" -o tsv \
-               | awk -F '\t' '{printf "%s%s-%s", (NR > 1 ? ", " : ""), $1, $2}')" ;;
-      *)
-        got="$(az postgres flexible-server show -g "$X1_RG" -n "$server" --query "$query" -o tsv)" ;;
+        az_firewall_list "$server" --query "[].[name, startIpAddress, endIpAddress]" -o tsv
+        if rules="$(az_value az_firewall_list "$server" --query "[].[startIpAddress, endIpAddress]" -o tsv)"; then
+          got="$(printf '%s\n' "$rules" | awk -F '\t' 'NF {printf "%s%s-%s", (n++ ? ", " : ""), $1, $2}')"
+        else got="$rules"; fi ;;
+      *) got="$(show "$query")" ;;
     esac
-    if [ "$got" = "$want" ]; then echo "PASS  $name = $got"; else echo "FAIL  $name = $got (README says $want)"; fails=$((fails + 1)); fi
+    case "$got" in
+      "ERROR, could not read"*) echo "ERROR $name: $got"; errors=$((errors + 1)) ;;
+      "$want") echo "PASS  $name = $got" ;;
+      *) echo "FAIL  $name = $got (README says $want)"; fails=$((fails + 1)) ;;
+    esac
   done <<< "$checks"
   echo
-  q() { az postgres flexible-server show -g "$X1_RG" -n "$server" --query "$1" -o tsv; }
-  echo "info  geo-redundant backup = $(q backup.geoRedundantBackup)"
-  echo "info  high availability = $(q highAvailability.mode)"
-  echo "info  storage auto-grow = $(q storage.autoGrow)"
-  echo "info  password authentication = $(q authConfig.passwordAuth); Entra authentication = $(q authConfig.activeDirectoryAuth)"
-  echo "info  earliest restore point (UTC) = $(q backup.earliestRestoreDate)"
-  echo "info  ssl_min_protocol_version = $(az postgres flexible-server parameter show -g "$X1_RG" -s "$server" -n ssl_min_protocol_version --query value -o tsv)"
-  echo "info  state = $(q state)"
+  echo "info  geo-redundant backup = $(show backup.geoRedundantBackup)"
+  echo "info  high availability = $(show highAvailability.mode)"
+  echo "info  storage auto-grow = $(show storage.autoGrow)"
+  echo "info  password authentication = $(show authConfig.passwordAuth); Entra authentication = $(show authConfig.activeDirectoryAuth)"
+  echo "info  earliest restore point (UTC) = $(show backup.earliestRestoreDate)"
+  echo "info  ssl_min_protocol_version = $(param ssl_min_protocol_version)"
+  echo "info  state = $(show state)"
   echo
-  echo "RESULT: $fails difference(s) from platform/README.md"
+  echo "RESULT: $fails difference(s) from platform/README.md; $errors setting(s) could not be read"
 } 2>&1 | tee "$out"
 echo "Saved: $out"

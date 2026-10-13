@@ -59,6 +59,9 @@ echo "== 0. owner scripts read their expected server settings from platform/READ
 "$platform/owner/server_evidence.sh" --list-expected > "$work/settings.txt" \
   || { cat "$work/settings.txt"; echo "FAILED: README server-settings table" >&2; exit 1; }
 echo "ok: $(wc -l < "$work/settings.txt" | tr -d ' ') expected settings parsed from README.md"
+"$here/owner_scripts_test.sh" > "$work/owner_tests.txt" \
+  || { cat "$work/owner_tests.txt"; echo "FAILED: owner script tests" >&2; exit 1; }
+echo "ok: owner scripts handle both az flag forms and az errors, and redact IP addresses ($(grep -c '^ok:' "$work/owner_tests.txt") checks)"
 
 echo "== 1. the owner's original script"
 reset
