@@ -103,3 +103,27 @@ The Help page reads the same endpoint and showed:
 - UI harness, all cases: **209 cases, 0 failed** (including `w14-no-internals-lab` and `-help`).
 - The 7 signed-off mockups (rebuilt) and 37-forecasts (template changed): `check_page.js` finds no console errors, no
   external requests and no overflow. `check_text.js` finds 0 on the 7 signed-off ones.
+
+## 3. Restore test on bash 3.2: verified at HEAD, no change needed (strong evidence)
+
+This was asked after round 2: verify that `platform/owner/restore_test.sh` at HEAD drops `fno.x1_restore_marker` on
+bash 3.2. The fix itself (a0bb4bb: the body stays in the main shell; `record_evidence` uses `exec > >(tee …)`) was
+already in place.
+
+**How I checked:** a new dry run, `platform/tests/restore_marker_check.sh`.
+- It runs the real script in Docker's `mirror.gcr.io/library/bash:3.2` image (bash 3.2.57, the macOS version), under a
+  pseudo-terminal for the password and name prompts.
+- `psql`, `az`, `sleep` and `curl` are stubs that log their calls. There is no Azure and no database, and nothing is
+  deleted.
+
+| Ending | At HEAD | At 742443d (before the fix) |
+|---|---|---|
+| Normal end | DROP sent; evidence says "marker table dropped on omenix-pg" | **no DROP**: the 13 Oct failure, reproduced |
+| Stop before the restore (restore fails) | DROP sent, recorded | DROP sent, recorded |
+| Stop at the delete prompt (wrong name) | DROP sent, recorded | DROP sent, recorded |
+| Ctrl-C during the 15-minute wait | DROP sent, recorded | DROP sent, **not recorded** in the evidence file |
+
+The check is not a CI step. The CI bash 3.2 container has no pseudo-terminal, and the script reads its prompts from
+`/dev/tty`. CI's `bash32_trap_test.sh` covers the same trap pattern without a terminal. Run the check before the next
+quarterly restore test (reminder 11 Jan 2027), from the repository root, on a machine with Docker and util-linux
+`script`.
