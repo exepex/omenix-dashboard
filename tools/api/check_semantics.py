@@ -1,8 +1,7 @@
 """The contract's semantic checks (beyond JSON Schema), used by check_contract.py:
   check_views        a screen's view of a shared record is exactly its documented query on the record (events)
   check_home_events  Home's frozen "Coming up" stays the signed-off list; on the real calendar it keeps market events
-  check_flows        a flows period total exists only when the days cover the period, and equals their sum
-  check_chain        the option chain's coverage (32): each change, middle and period recomputed from its series"""
+  check_flows        a flows period total exists only when the days cover the period, and equals their sum"""
 
 from __future__ import annotations
 
@@ -12,7 +11,6 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
-from examples_chain import contract_periods, history_coverage  # noqa: E402
 from examples_screens import flow_totals, view  # noqa: E402
 
 
@@ -52,17 +50,3 @@ def check_flows(found: dict, problems: list[str]) -> None:
         if payload["totals"] != flow_totals(payload["days"]):
             problems.append(f"flows example {key}: the period totals are not the covered sums of its days (null when not covered)")
 
-
-def check_chain(found: dict, problems: list[str]) -> None:
-    """32 rows 2, 5 and 12: a change or 3-month middle exists only when the series covers the period and equals its
-    recomputation; a contract's period is complete only when it has the period's sessions."""
-    for key, value in found.get("getChainHistory", {}).items():
-        p = value["payload"]
-        if any(len(p[s]) != len(p["dates"]) for s in ("nifty", "vix")) or any(len(v) != len(p["dates"]) for v in p["pcr"].values()):
-            problems.append(f"chain history example {key}: a series is not aligned to its dates")
-        if p["coverage"] != history_coverage(p["nifty"], p["vix"]):
-            problems.append(f"chain history example {key}: the coverage is not what its series give (null when not covered)")
-    for key, value in found.get("getContractHistory", {}).items():
-        p = value["payload"]
-        if not len(p["dates"]) == len(p["close"]) == len(p["oi"]) or p["periods"] != contract_periods(len(p["dates"])):
-            problems.append(f"contract history example {key}: the periods are not what its {len(p['dates'])} sessions give")

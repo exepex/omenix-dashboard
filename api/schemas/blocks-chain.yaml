@@ -35,10 +35,14 @@ ChainExpiries:
         additionalProperties: false
         x-as-of-from: ChainExpiries
         required: [expiry, days, monthly, future, stats]
+        description: 'A monthly expiry has a future; a weekly has none (null). check_chain: monthly = the last listed expiry of its month'
+        if: {properties: {monthly: {const: true}}, required: [monthly]}
+        then: {properties: {future: {type: number}}}
+        else: {properties: {future: {type: 'null'}}}
         properties:
           expiry: {type: string, format: date, x-unit: date, x-notes: ['c32.expiries:expiry']}
           days: {type: integer, minimum: 0, x-unit: calendar days, x-element: [c32.expiries, c32.range], x-notes: ['c32.expiries:days', 'c32.range:days']}
-          monthly: {type: boolean, x-unit: yes/no, x-notes: ['c32.expiries:monthly'], description: The last expiry of its month}
+          monthly: {type: boolean, x-unit: yes/no, x-notes: ['c32.expiries:monthly'], description: 'The last expiry of its month. A weekly is end of day only: its 3 pm quotes are not recorded today (A4 records monthlies)'}
           future: {type: ['number', 'null'], x-unit: index points, x-price: true, description: "The expiry's future close; null for a weekly expiry (no future)"}
           stats: {$ref: '#/components/schemas/ChainStats'}
 ChainStats:
@@ -96,6 +100,9 @@ ChainSide:
   additionalProperties: false
   x-as-of-from: ChainRows
   required: [code, close, chg, chg_pct, oi, oi_chg, volume, iv, greeks, breakeven, chance]
+  description: 'A leg that did not trade (volume 0) has no IV, Greeks or chance (null): notes row 8, "Blank when the contract did not trade"'
+  if: {properties: {volume: {const: 0}}, required: [volume]}
+  then: {properties: {iv: {type: 'null'}, greeks: {type: 'null'}, chance: {type: 'null'}}}
   properties:
     code: {type: string, x-unit: NSE trading symbol, x-element: [c32.tray, c32.contract], x-notes: ['c32.tray:code', 'c32.contract:code'], description: 'NIFTY26OCT22400CE (monthly), NIFTY26O1322400CE (weekly)'}
     close: {type: number, minimum: 0, x-unit: INR (₹ a unit; × lot = ₹ a lot), x-price: true, x-element: [c32.chain-simple, c32.tray, c32.contract], x-notes: ['c32.chain-simple:close', 'c32.tray:close', 'c32.contract:close'], description: "NSE's ClsPric (not a traded price when volume is 0)"}
