@@ -996,6 +996,29 @@ button.mb-scr-tile { cursor: pointer; } button.mb-scr-tile:hover { border-color:
 @container (max-width: 1000px) { .mb-scr .c-l { display: none; } }
 @container (max-width: 760px) { .mb-scr-wrap > .mb-scr { display: none; } .mb-scr-cards { display: block; } }
 
+/* ---- market overview (design/mockups/34-markets; PLATFORM_DESIGN.md section 4 screen 2) ----------------------------
+   .mb-heat (tiles: a name, its change with the sign, one line), .mb-heat-tile.up/.down with strength .s1-.s3 (the
+   shade deepens with the size of the move; the sign and number always carry the meaning, never colour alone), .plain
+   for neutral tiles; .mb-flowbar.in/.out (net buying or selling as a bar with its value), ul.mb-flows rows. */
+.mb-heat { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr)); gap: 8px; }
+.mb-heat-tile { display: grid; gap: 2px; padding: 10px 12px; border-radius: var(--mb-panel-radius); background: var(--md-sys-color-surface-container-low); min-width: 0; }
+.mb-heat-tile .n { font: 600 12.5px/17px var(--md-ref-typeface-plain); overflow-wrap: anywhere; }
+.mb-heat-tile b { font: 700 16px/22px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.mb-heat-tile small { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
+.mb-heat-tile.up.s1 { background: color-mix(in srgb, var(--mb-color-up-container) 55%, var(--md-sys-color-surface-container-lowest)); }
+.mb-heat-tile.up.s2 { background: var(--mb-color-up-container); }
+.mb-heat-tile.up.s3 { background: color-mix(in srgb, var(--mb-color-up) 22%, var(--mb-color-up-container)); }
+.mb-heat-tile.down.s1 { background: color-mix(in srgb, var(--mb-color-down-container) 55%, var(--md-sys-color-surface-container-lowest)); }
+.mb-heat-tile.down.s2 { background: var(--mb-color-down-container); }
+.mb-heat-tile.down.s3 { background: color-mix(in srgb, var(--mb-color-down) 22%, var(--mb-color-down-container)); }
+.mb-heat-tile.up b { color: var(--mb-color-on-up-container); } .mb-heat-tile.down b { color: var(--mb-color-on-down-container); }
+.mb-flowbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; font: 600 12.5px/18px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.mb-flowbar i { display: block; height: 8px; border-radius: 4px; min-width: 2px; }
+.mb-flowbar.in i { background: var(--mb-color-up); } .mb-flowbar.out i { background: var(--mb-color-down); }
+.mb-flowbar.in > span { color: var(--mb-color-on-up-container); } .mb-flowbar.out > span { color: var(--mb-color-on-down-container); }
+ul.mb-flows li { grid-template-columns: 76px minmax(0, 1fr) minmax(0, 1fr); gap: 4px 16px; }
+@media (max-width: 599px) { ul.mb-flows li { grid-template-columns: 1fr; } }
+
 </style>
 <style>
 /* style-guide-only layout */
@@ -1377,6 +1400,8 @@ code{font-family:var(--md-ref-typeface-mono);font-size:.92em;background:var(--md
           <div class="mb-facts" style="max-width:420px;margin-top:12px"><div class="mb-fact"><span class="k">Delta</span><b>0.52</b><small>about ₹0.52 for a 1-point NIFTY move</small></div><div class="mb-fact"><span class="k">Theta</span><b>−10.07</b><small>about ₹10.07 lost a day as time passes</small></div></div>
           <div class="mb-scr-look" style="max-width:640px"><div class="mb-scr-tile"><span class="k">Today: up and down</span><b>1,405 up · 1,476 down</b><span class="mb-breadth"><i class="up" style="flex:1405"></i><i class="flat" style="flex:43"></i><i class="down" style="flex:1476"></i></span><small>43 unchanged · of 2,924</small></div><button class="mb-scr-tile" type="button" aria-pressed="true"><span class="k">Near 52-week high</span><b>50</b><small>Closed within 2% of its highest price of the last year</small></button></div>
           <div class="mb-scr-presets"><span class="lbl">Ready-made screens</span><button class="md-chip filter" type="button" aria-pressed="true">Near 52-week high <span class="n">50</span></button><button class="md-chip filter" type="button" aria-pressed="false">RSI under 30 <span class="n">265</span></button></div>
+          <div class="mb-heat"><div class="mb-heat-tile up s1"><span class="n">Nifty Media</span><b>+6.44%</b><small>P/E 42.9</small></div><div class="mb-heat-tile down s1"><span class="n">Nifty IT</span><b>−1.95%</b><small>P/E 17.7</small></div><div class="mb-heat-tile down s3"><span class="n">Nifty Metal</span><b>−10.76%</b><small>P/E 15.7</small></div><div class="mb-heat-tile plain"><span class="n">USD/INR</span><b>96.78</b><small>11 Oct</small></div></div>
+          <div style="max-width:420px;display:grid;gap:6px"><span class="mb-flowbar out"><i style="width:28%"></i><span>−₹3,569 cr</span></span><span class="mb-flowbar in"><i style="width:37%"></i><span>+₹4,743 cr</span></span></div>
           <div class="mb-scr-wrap" style="max-width:640px"><table class="md-table mb-scr"><thead><tr><th>Stock</th><th class="num">Price</th><th>52-week range</th><th>Our tools</th></tr></thead><tbody><tr><td><div class="nm"><b>RELIANCE</b><span class="mb-tag">F&amp;O</span><span class="mb-tag paper">Ours</span></div><small>Reliance Industries Limited</small></td><td class="num">1,158.90</td><td><span class="mb-pos52"><span class="track"><i style="left:1%"></i></span><small>1%</small></span></td><td><span class="mb-scr-tools"><b>1 of 12 buy</b><small>results in 3 days</small></span></td></tr></tbody></table></div>
         </div>
       </div>

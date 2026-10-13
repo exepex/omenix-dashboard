@@ -1,0 +1,217 @@
+{
+ "page": "page.html",
+ "states": [
+  {
+   "id": "india",
+   "section": "1. India (real data of Mon 12 Oct 2026)",
+   "title": "Whole page: the market today, breadth and sectors, movers and flows, options and volatility, world cues, what is coming.",
+   "hash": "",
+   "widths": [
+    1280,
+    1024,
+    768,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "top",
+   "section": "1. India (real data of Mon 12 Oct 2026)",
+   "title": "The first screen: NIFTY 50 over a month with its valuation in words, and the broad indices.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "breadth",
+   "section": "1. India (real data of Mon 12 Oct 2026)",
+   "title": "Is the move broad, and which sectors led (sector indices).",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Breadth']"
+    }
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "flows",
+   "section": "1. India (real data of Mon 12 Oct 2026)",
+   "title": "Who moved most, and what foreign and domestic institutions did (₹ crore, provisional).",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Movers']"
+    }
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "options",
+   "section": "1. India (real data of Mon 12 Oct 2026)",
+   "title": "How nervous the market is (India VIX), and what index options say.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='India VIX']"
+    }
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "world",
+   "section": "1. India (real data of Mon 12 Oct 2026)",
+   "title": "World cues, currency and commodities, each at its own close; and what is coming.",
+   "hash": "",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='World']"
+    }
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "year",
+   "section": "2. Periods, views and lists",
+   "title": "One year: NIFTY 50 and every index over 1Y.",
+   "hash": "per=y1",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "today",
+   "section": "2. Periods, views and lists",
+   "title": "Today only (1D).",
+   "hash": "per=d1",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "midcap",
+   "section": "2. Periods, views and lists",
+   "title": "Tap an index to chart it: NIFTY Midcap 100.",
+   "hash": "idx=NIFTY%20Midcap%20100&per=m3",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "industries",
+   "section": "2. Periods, views and lists",
+   "title": "Nifty 500 industries (equal-weighted, ours) instead of sector indices.",
+   "hash": "sec=industry",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Breadth']"
+    }
+   ]
+  },
+  {
+   "id": "losers",
+   "section": "2. Periods, views and lists",
+   "title": "Biggest losers, all NSE (liquid stocks).",
+   "hash": "mov=losers&mu=all",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Movers']"
+    }
+   ]
+  },
+  {
+   "id": "active",
+   "section": "2. Periods, views and lists",
+   "title": "Most traded within the Nifty 500.",
+   "hash": "mov=active",
+   "widths": [
+    1280
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Movers']"
+    }
+   ]
+  },
+  {
+   "id": "us",
+   "section": "3. US, themes, widths",
+   "title": "US: S&P 500 fund and VIX, our 20 companies, sector funds, Treasury yields, world, what is coming (US CPI tomorrow).",
+   "hash": "m=us",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "us-yields",
+   "section": "3. US, themes, widths",
+   "title": "US Treasury yield curve.",
+   "hash": "m=us",
+   "widths": [
+    1280,
+    390
+   ],
+   "actions": [
+    {
+     "scroll": "[aria-label='Treasury yields']"
+    }
+   ],
+   "phone_screen": true
+  },
+  {
+   "id": "panel-on",
+   "section": "3. US, themes, widths",
+   "title": "With the picks panel shown.",
+   "hash": "wloff=0",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "dark",
+   "section": "3. US, themes, widths",
+   "title": "Dark theme.",
+   "hash": "theme=dark",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "tablet",
+   "section": "3. US, themes, widths",
+   "title": "Tablet 768 px.",
+   "hash": "",
+   "widths": [
+    768
+   ]
+  }
+ ]
+}
