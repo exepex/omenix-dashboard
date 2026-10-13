@@ -1,0 +1,102 @@
+{
+ "page": "page.html",
+ "states": [
+  {
+   "id": "real",
+   "section": "1. Real today (13 Oct 2026)",
+   "title": "REAL, stocks: 39 settled paper trades, all by the baselines (−₹543 after charges, 46% won); no family trade closed yet, so every family block is empty with its reason.",
+   "hash": "",
+   "widths": [
+    1280,
+    1024,
+    768,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "real-fno",
+   "section": "1. Real today (13 Oct 2026)",
+   "title": "REAL, F&O: no paper trade yet (slice 3), with the reason.",
+   "hash": "asset=fno",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "real-us",
+   "section": "1. Real today (13 Oct 2026)",
+   "title": "REAL, US: stocks only (no US F&O); no settled trade yet.",
+   "hash": "m=us",
+   "widths": [
+    1280
+   ],
+   "full": true
+  },
+  {
+   "id": "early",
+   "section": "2. Examples (made-up trades on future dates)",
+   "title": "EXAMPLE, the first month: few trades, nothing ready, every check still waiting or failing.",
+   "hash": "ex=early",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "review",
+   "section": "2. Examples (made-up trades on future dates)",
+   "title": "EXAMPLE seven months in, stocks: Rule-based 1st (+₹90,403, 5 of 6 checks; fails in the stormy month), AI team losing (−₹1,24,474), Hybrid has no stock strategy; one chart against the baselines, month by month, what drove the results, strategies inside the family.",
+   "hash": "ex=review",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "review-fno",
+   "section": "2. Examples (made-up trades on future dates)",
+   "title": "EXAMPLE seven months in, F&O: Hybrid READY for real money (all 5 checks), Rule-based made only +₹215 after giving its gains back in the stormy month, AI team −₹59,925; compared with holding NIFTY with ₹5 lakh.",
+   "hash": "ex=review&asset=fno",
+   "widths": [
+    1280,
+    390
+   ],
+   "full": true
+  },
+  {
+   "id": "review-all-pro",
+   "section": "2. Examples (made-up trades on future dates)",
+   "title": "EXAMPLE: Stocks + F&O together (India, rupees), detailed view for a professional.",
+   "hash": "ex=review&asset=all&view=pro",
+   "widths": [
+    1280
+   ],
+   "full": true
+  },
+  {
+   "id": "review-period",
+   "section": "2. Examples (made-up trades on future dates)",
+   "title": "EXAMPLE: dates the user picked (Jan to Feb 2027), weekly bars.",
+   "hash": "ex=review&range=custom&from=2027-01-01&to=2027-02-28&rv=week",
+   "widths": [
+    1280
+   ],
+   "full": false
+  },
+  {
+   "id": "review-us",
+   "section": "2. Examples (made-up trades on future dates)",
+   "title": "EXAMPLE, US stocks in dollars, detailed view.",
+   "hash": "ex=review&m=us&view=pro",
+   "widths": [
+    1280
+   ],
+   "full": true
+  }
+ ]
+}
