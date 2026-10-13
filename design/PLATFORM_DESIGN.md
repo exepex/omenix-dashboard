@@ -209,3 +209,4 @@ reasons, go in its `changes.md`.
 | `32-option-chain` | NIFTY option chain (06-option-chain), real NSE data | signed off 13 Oct 2026, as of 9d9c401 |
 | `33-screener` | Screener (08-screener), real NSE data | signed off 13 Oct 2026, as of e28b43d |
 | `34-markets` | Markets overview (02-markets), real NSE data | signed off 13 Oct 2026, as of 59b606d |
+| `35-stock` | Stock page (04-stock-page), the stock tool's real records | for the owner's review |

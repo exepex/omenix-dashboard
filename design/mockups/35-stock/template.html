@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omenix · Stock page</title>
+<meta name="description" content="Everything about one stock, from real records of 13 Oct 2026: price and its chart over 1 month to 2 years against the index, valuation and key figures in words, what our strategies, the model and the AI team think and the range they expect, the strategies' open paper trades, the news with how far each story is confirmed, results and filings, and, in India, its futures and options. Nothing is live. Research and paper trading only.">
+<!--@@SYSTEM_CSS@@-->
+<!--@@SHARED_CSS@@-->
+<style>
+/* 35-stock page layout only; every component is from design/system/components.css. Tokens only. */
+.head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 20px;align-items:end}
+.price{font:700 30px/1.1 var(--md-ref-typeface-plain);font-variant-numeric:tabular-nums;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.price .mb-delta{font-size:16px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.tabs{margin:18px 0 12px;flex-wrap:wrap;max-width:100%}
+.grid2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px}
+.grid2.even{grid-template-columns:repeat(2,minmax(0,1fr))}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sec{margin-top:16px}
+.sec-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:10px}
+.sec-head h2{font:600 16px/1.3 var(--md-ref-typeface-plain);margin:0}
+.sec-head .sub{font-size:12.5px;color:var(--md-sys-color-on-surface-variant);flex:1 1 220px}
+.axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);margin-top:4px;gap:8px}
+.muted{color:var(--md-sys-color-on-surface-variant)} .small{font-size:12.5px}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:10px 0;border-top:1px solid var(--md-sys-color-surface-container-high);display:grid;gap:4px}
+.list li:first-child{border-top:0}
+.list li .m{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.scroll{overflow-x:auto}
+.md-table td small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+.ai p{margin:6px 0 0;font-size:13px} .ai b{font-weight:600}
+@media (max-width:899px){table.stack thead{display:none}table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:auto}table.stack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.stack td{border:0;padding:2px 0;text-align:left}table.stack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}}
+.src{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:16px 0 0}
+@media (max-width:1100px){.grid2,.grid2.even{grid-template-columns:1fr}}
+@media (max-width:599px){.md-table th,.md-table td{padding:8px 6px;white-space:normal}.head{grid-template-columns:1fr}.facts{grid-template-columns:1fr}.price{font-size:26px}}
+</style>
+</head>
+<body>
+<!--@@ICONS@@-->
+<script>const SHELL = /*__SHELL__*/null; const D = /*__DATA__*/null;</script>
+<script>
+/* this page reads the stock tool's records up to 13 Oct 2026 14:30 IST: India is open (the price is the 12 Oct close
+   and the tool's last price check), the US is closed (its 12 Oct close) */
+(() => { SHELL.now = D.clock;
+  Object.assign(SHELL.markets.india.status, {open_utc: '2026-10-13T03:45:00Z', close_utc: '2026-10-13T10:00:00Z', next_open_utc: '2026-10-14T03:45:00Z', example_open_now: '2026-10-13T09:00:00Z'});
+  Object.assign(SHELL.markets.us.status, {open_utc: '2026-10-13T13:30:00Z', close_utc: '2026-10-13T20:00:00Z', next_open_utc: '2026-10-13T13:30:00Z', example_open_now: '2026-10-13T15:00:00Z'});
+  SHELL.sources.check = {label: 'Price check', detail: 'the stock tool’s intraday price check, not a live price', max_age_h: 6};
+  Object.assign(SHELL.markets.india.next_quotes, {stock: "the stock tool's next price check (today)"});
+  Object.assign(SHELL.markets.us.next_quotes, {stock: "the stock tool's next price check (13 Oct, after the 09:30 ET open)"});
+  for (const [m, S] of Object.entries(D.markets)) { const q = S.quote, it = SHELL.markets[m].items[S.ticker] || {};
+    SHELL.markets[m].items[S.ticker] = {...it, id: S.ticker, kind: 'stock', sym: S.ticker, code: S.ticker, name: `${S.name} · ${S.exchange}`, state: 'active', fno: !!S.fno,
+      ...(q.check ? {last: q.check.price, chg_pct: q.check.chg_pct, source: 'check', as_of: q.check.at} : {last: q.close, chg_pct: q.chg_pct, source: 'close', as_of: q.date + (m === 'india' ? 'T10:00:00Z' : 'T20:00:00Z')})}; } })();
+</script>
+<!--@@PLATFORM_JS@@-->
+<script>
+let TAB = 'overview', PER = '1y', CMP = false, LOC = 'en-IN';   /* URL: tab, per, cmp */
+const TABS = [['overview', 'Overview'], ['tools', 'Our strategies'], ['news', 'News'], ['results', 'Results and filings'], ['fno', 'F&O']];
+const SPANS = {'1m': ['1M', 21], '3m': ['3M', 63], '6m': ['6M', 126], '1y': ['1Y', 250], '2y': ['2Y', 504]};
+const STATUS = {confirmed_primary: ['confirmed', 'success'], corroborated: ['corroborated', 'success'], single_source: ['single source', 'neutral'], unverified: ['unverified', 'warn'], rumour: ['rumour', 'danger'], promotional: ['promotional', 'danger'], contradicted: ['contradicted', 'danger'], not_checked: ['not checked yet', 'neutral']};
+PF.mount({screen: 'stock', group: 'research', strip: false, dataLabel: 'Real records of 13 Oct 2026',
+  readHash(h) { TAB = TABS.some(t => t[0] === h.get('tab')) ? h.get('tab') : 'overview'; PER = SPANS[h.get('per')] ? h.get('per') : '1y'; CMP = h.get('cmp') === '1'; PF.st.wlOff = h.get('wloff') !== '0'; },
+  writeHash(h) { if (TAB !== 'overview') h.set('tab', TAB); if (PER !== '1y') h.set('per', PER); if (CMP) h.set('cmp', '1'); if (!PF.st.wlOff) h.set('wloff', '0'); },
+  render(main, c) {
+    const S = D.markets[c.m], {el} = c, it = c.item(S.ticker);
+    LOC = c.m === 'india' ? 'en-IN' : 'en-US';
+    if (TAB === 'fno' && !S.fno) TAB = 'overview';
+    header(main, c, S, it);
+    main.append(el('div', {class: 'md-segmented tabs', role: 'tablist', 'aria-label': 'Sections'}, ...TABS.filter(t => t[0] !== 'fno' || S.fno).map(([k, v]) => el('button', {type: 'button', role: 'tab', 'aria-selected': String(TAB === k), 'aria-pressed': String(TAB === k), onclick: () => { TAB = k; c.rerender(); }}, v))));
+    ({overview, tools, news, results, fno: fnoTab})[TAB](main, c, S);
+    main.append(el('div', {class: 'src', role: 'note', 'aria-label': 'Where the figures come from'},
+      el('span', {class: 'mb-asof', 'data-tip': D.source}, c.icon('schedule'), 'The stock tool’s records'),
+      S.fno ? el('span', {class: 'mb-asof', 'data-tip': 'NSE’s daily F&O files'}, c.icon('schedule'), `NSE F&O close of ${c.dateShort(S.fno.date + 'T10:00:00Z')}`) : null,
+      el('span', {class: 'mb-tag derived', 'data-tip': 'Returns, 52-week figures, the trailing P/E, the agreement counts, build-up and IV: computed by us'}, 'Computed: ours'),
+      el('span', {class: 'mb-tag', 'data-tip': 'No streaming prices: closes and the stock tool’s price checks.'}, 'Not live')));
+  }});
+
+function fmt(x, d = 2) { return x == null ? '—' : x.toLocaleString(LOC, {minimumFractionDigits: d, maximumFractionDigits: d}); }
+function cur(c, x, d = 2) { return x == null ? '—' : (LOC === 'en-IN' ? '₹' : '$') + fmt(x, d); }
+function big(x) { return x == null ? '—' : LOC === 'en-IN' ? `₹${fmt(x / 1e7, 0)} cr` : `$${fmt(x / 1e9, 1)}B`; }
+function seg(c, label, opts, cur0, set) { return c.el('div', {class: 'md-segmented dense', role: 'group', 'aria-label': label}, ...opts.map(([k, v]) => c.el('button', {type: 'button', 'aria-pressed': String(cur0 === k), onclick: () => { set(k); c.rerender(); }}, v))); }
+function head(c, title, sub) { return c.el('div', {class: 'sec-head'}, c.el('h2', {}, title), sub ? c.el('span', {class: 'sub'}, sub) : null); }
+function fact(c, k, v, s) { return c.el('div', {class: 'mb-fact'}, c.el('span', {class: 'k'}, k), c.el('b', {}, v), s ? c.el('small', {}, s) : null); }
+function quarterOf(iso) { const d = new Date(iso + 'T00:00:00Z'); return d.toLocaleString('en-GB', {month: 'short', year: 'numeric', timeZone: 'UTC'}); }
+function groupTrades(T) {   /* one row per strategy and buy date: the horizons it holds for */
+  const g = {}; for (const t of T) (g[t.name + '|' + t.entry_date] ||= {...t, hs: [], exits: []}).hs.push(t.h), g[t.name + '|' + t.entry_date].exits.push(t.exit_date);
+  return Object.values(g);
+}
+function day(c, iso) { return c.dateShort(iso.length > 10 ? iso : iso + 'T10:00:00Z'); }
+
+/* the header: who, the price and how old it is, your position, Buy and Sell */
+function header(main, c, S, it) {
+  const {el} = c, q = S.quote, held = it.held, india = c.m === 'india', res = S.stats.days_to_results;
+  const pnl = held ? ((q.check ? q.check.price : q.close) - held.avg) * held.qty : null;
+  main.append(c.pagehead({crumbs: [['Research'], ['Stock page'], [S.ticker]], title: S.name,
+    meta: [el('span', {class: 'md-chip'}, S.ticker), el('span', {class: 'md-chip'}, `${S.exchange} · ${S.sector}`), S.fno ? el('span', {class: 'mb-tag', 'data-tip': 'Has futures and options on NSE'}, 'F&O') : null,
+      el('span', {class: 'mb-tag paper', 'data-tip': 'Followed by our tools'}, 'Ours')]}));
+  main.append(el('section', {class: 'card head', 'aria-label': 'Price'},
+    el('div', {}, el('div', {class: 'price'}, fmt(q.close), c.delta(q.chg_pct), el('span', {class: 'muted small'}, `close of ${day(c, q.date)}`)),
+      el('div', {class: 'chips'}, q.check ? el('span', {class: 'mb-asof', 'data-tip': 'The stock tool’s intraday price check: the price at that time, not live.'}, c.icon('schedule'), `Price check ${c.when(q.check.at)}: ${fmt(q.check.price)} `, c.delta(q.check.chg_pct)) : el('span', {class: 'mb-asof'}, c.icon('schedule'), 'No price check since the close'),
+        res != null && res <= 14 ? el('span', {class: 'mb-label warn'}, c.icon('event'), `Results in ${res} day${res === 1 ? '' : 's'}`) : null,
+        el('span', {class: 'small'}, held ? ['Your paper position: ', el('b', {}, `${fmt(held.qty, 0)} shares at ${fmt(held.avg)}`), ' · ', c.moneyDelta(pnl, 2)] : 'No paper position in your account'))),
+    el('div', {class: 'acts', 'data-tip': c.tradeLock()}, el('button', {class: 'md-btn buy', type: 'button', disabled: !!c.tradeLock(), onclick: () => c.openOrder(S.ticker, 'buy')}, 'Buy'),
+      el('button', {class: 'md-btn sell', type: 'button', disabled: !!c.tradeLock(), onclick: () => c.openOrder(S.ticker, 'sell')}, 'Sell'))));
+}
+
+/* Overview: the chart, key figures in words, the last quarters */
+function overview(main, c, S) {
+  const {el} = c, C = S.chart, n = Math.min(SPANS[PER][1], C.close.length - 1), from = C.close.length - 1 - n;
+  const own = C.close.slice(from), bench = C.bench.slice(from), dates = C.dates.slice(from), base = own[0], bbase = bench.find(v => v != null);
+  const W = 600, H = 200, all = CMP ? own.map(v => v / base * 100).concat(bench.filter(v => v != null).map(v => v / bbase * 100)) : own;
+  const lo = Math.min(...all), hi = Math.max(...all), y = v => (H - 8 - (v - lo) / (hi - lo || 1) * (H - 16)).toFixed(1), x = i => (i / (own.length - 1) * W).toFixed(1);
+  const svg = c.svgEl('svg', {viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': `${S.ticker} over ${SPANS[PER][0]}`, class: 'plot', style: `height:${H}px`});
+  const up = own[own.length - 1] >= base;
+  svg.append(c.svgEl('polyline', {points: own.map((v, i) => `${x(i)},${y(CMP ? v / base * 100 : v)}`).join(' '), fill: 'none', stroke: up ? 'var(--mb-color-up)' : 'var(--mb-color-down)', 'stroke-width': '2', 'vector-effect': 'non-scaling-stroke'}));
+  if (CMP) svg.append(c.svgEl('polyline', {points: bench.map((v, i) => v == null ? null : `${x(i)},${y(v / bbase * 100)}`).filter(Boolean).join(' '), fill: 'none', stroke: 'var(--mb-chart-2)', 'stroke-width': '1.6', 'stroke-dasharray': '5 4', 'vector-effect': 'non-scaling-stroke'}));
+  const ret = (own[own.length - 1] / base - 1) * 100, bret = (bench[bench.length - 1] / bbase - 1) * 100;
+  const St = S.stats, V = S.valuation, pos = Math.round((S.quote.close - St.lo52) / (St.hi52 - St.lo52) * 100);
+  const rsiWords = St.rsi == null ? '' : St.rsi < 30 ? 'fell fast lately (often read as oversold)' : St.rsi > 70 ? 'rose fast lately (often read as overbought)' : 'neither stretched up nor down';
+  const chart = el('section', {class: 'card', 'aria-label': 'Price chart'}, head(c, 'Price', `${c.sgn(ret)} over ${SPANS[PER][0]}${CMP ? `, ${C.bench_name} ${c.sgn(bret)}` : ''}`),
+    el('div', {class: 'acts', style: 'margin-bottom:8px'}, seg(c, 'Period', Object.entries(SPANS).map(([k, v]) => [k, v[0]]), PER, k => { PER = k; }),
+      el('button', {class: 'md-chip filter', type: 'button', 'aria-pressed': String(CMP), onclick: () => { CMP = !CMP; c.rerender(); }}, `Compare with ${C.bench_name}`)),
+    svg, el('div', {class: 'axis'}, el('span', {}, day(c, dates[0])), el('span', {}, CMP ? `solid: ${S.ticker}, dashed: ${C.bench_name} (both from 100)` : `low ${fmt(Math.min(...own))} · high ${fmt(Math.max(...own))}`), el('span', {}, day(c, dates[dates.length - 1]))));
+  const figures = el('section', {class: 'card', 'aria-label': 'Key figures'}, head(c, 'Key figures, in words'),
+    el('div', {class: 'mb-pos52', style: 'margin-bottom:12px', role: 'img', 'aria-label': `${pos}% of the way from the 52-week low to the high`}, el('small', {}, `52-week low ${fmt(St.lo52)}`), el('span', {class: 'track'}, el('i', {style: `left:${pos}%`})), el('small', {}, `high ${fmt(St.hi52)}`)),
+    el('div', {class: 'facts'},
+      fact(c, 'P/E (ours)', V.pe == null ? '—' : fmt(V.pe, 1), V.pe == null ? 'not enough filed quarters' : `price is ${fmt(V.pe, 1)} times the last four quarters’ earnings (${cur(c, V.eps_ttm)} a share, to ${day(c, V.eps_to)})`),
+      fact(c, 'RSI 14', St.rsi == null ? '—' : fmt(St.rsi, 0), rsiWords),
+      fact(c, 'Beta', St.beta == null ? '—' : fmt(St.beta), St.beta == null ? '' : `moves about ${fmt(St.beta, 1)}× the index`),
+      fact(c, 'Daily swing', St.atr_pct == null ? '—' : `${fmt(St.atr_pct * 100, 1)}%`, 'its usual day’s range (ATR 14)'),
+      fact(c, 'Average volume', fmt(St.vol_avg20, 0), 'shares a day, last 20 sessions'),
+      S.corporate.delivery ? fact(c, 'Delivery', `${fmt(S.corporate.delivery.at(-1).pct, 0)}%`, `of shares traded on ${day(c, S.corporate.delivery.at(-1).date)} were taken for keeping`) : fact(c, 'Results', St.days_to_results == null ? '—' : `in ${St.days_to_results} days`, 'next quarterly results')));
+  const Q = S.quarters;
+  const quarters = el('section', {class: 'card', 'aria-label': 'Quarterly results'}, head(c, 'The last quarters', c.m === 'india' ? 'consolidated, as filed with NSE' : 'as filed with the SEC (a fourth quarter is the year minus nine months)'),
+    el('div', {class: 'scroll'}, el('table', {class: 'md-table'}, el('thead', {}, el('tr', {}, el('th', {}, 'Quarter to'), el('th', {class: 'num'}, 'Revenue'), Q.some(q => q.profit) ? el('th', {class: 'num'}, 'Profit') : null, el('th', {class: 'num'}, 'EPS (diluted)'))),
+      el('tbody', {}, ...Q.slice(-4).reverse().map(q => el('tr', {}, el('td', {}, quarterOf(q.end)), el('td', {class: 'num'}, big(q.revenue)), Q.some(x => x.profit) ? el('td', {class: 'num'}, big(q.profit)) : null, el('td', {class: 'num'}, cur(c, q.eps))))))));
+  main.append(el('div', {class: 'grid2'}, chart, figures), el('div', {class: 'sec'}, quarters));
+}
+
+/* Our strategies: the view for the next sessions, the AI team's reasoning, costs, open paper trades */
+function tools(main, c, S) {
+  const {el} = c, T = S.tools, q = S.quote.close;
+  const FAM = T.families, famText = h => ['rule', 'ai', 'baseline'].filter(f => h.family[f]).map(f => `${FAM[f].label} ${h.family[f].buy} of ${h.family[f].of}`).join(' · ') + (h.family.ai ? '' : ` · ${FAM.ai.label}: abstained`);
+  const lo = Math.min(...T.horizons.map(h => h.lo80)), hi = Math.max(...T.horizons.map(h => h.hi80)), pct = v => ((v - lo) / (hi - lo) * 100).toFixed(1);
+  const view = el('section', {class: 'card', 'aria-label': 'What our tools think'}, head(c, 'What our tools think', `for the session of ${day(c, T.session)}, made before the open (${c.when(T.made_at)})`),
+    el('div', {class: 'scroll'}, el('table', {class: 'md-table mb-fan stack'}, el('thead', {}, el('tr', {}, el('th', {}, 'Exit'), el('th', {class: 'num'}, 'Chance up'), el('th', {}, 'Strategies buying'), el('th', {}, 'Expected range (50% · 80%)'))),
+      el('tbody', {}, ...T.horizons.map(h => el('tr', {}, el('td', {'data-k': 'Exit'}, `N+${h.h}`, el('small', {}, day(c, h.target_date))), el('td', {class: 'num', 'data-k': 'Chance up'}, h.prob == null ? '—' : `${fmt(h.prob * 100, 1)}%`),
+        el('td', {'data-k': 'Strategies buying'}, el('b', {}, `${h.buy} of ${h.of}`), el('small', {}, famText(h))),
+        el('td', {'data-k': 'Expected range'}, el('span', {class: 'mb-fanbar', role: 'img', 'aria-label': `50%: ${fmt(h.lo50)} to ${fmt(h.hi50)}; 80%: ${fmt(h.lo80)} to ${fmt(h.hi80)}`},
+          el('i', {class: 'b80', style: `left:${pct(h.lo80)}%;width:${pct(h.hi80) - pct(h.lo80)}%`}), el('i', {class: 'b50', style: `left:${pct(h.lo50)}%;width:${pct(h.hi50) - pct(h.lo50)}%`}), el('i', {class: 'now', style: `left:${pct(q)}%`})),
+          el('small', {}, `${fmt(h.lo50, 0)}–${fmt(h.hi50, 0)} · ${fmt(h.lo80, 0)}–${fmt(h.hi80, 0)}`))))))),
+    el('p', {class: 'muted small', style: 'margin:8px 0 0'}, `Chance up: the stock tool’s model. Expected range: where the price should end with 50% and 80% likelihood (the line marks today’s ${fmt(q)}). Strategies buy only when their own rule clears its bar.`));
+  const A = T.ai_team;
+  const ai = el('section', {class: 'card ai', 'aria-label': 'The AI team'}, head(c, 'The AI team’s reading', A ? `made ${c.when(A.made_at)}` : 'none recorded'),
+    A ? [el('span', {class: 'mb-label ' + (A.decision_5d === 'abstain' ? 'neutral' : 'info')}, c.icon('smart_toy'), `N+1: ${A.decision_1d || '—'} · N+5: ${A.decision_5d || '—'}`),
+      el('p', {}, el('b', {}, 'Verdict. '), A.verdict), el('p', {}, el('b', {}, 'For a rise. '), A.bull_case), el('p', {}, el('b', {}, 'Against. '), A.bear_case),
+      el('p', {class: 'muted small'}, 'Written by the AI team (several agents with their own expertise); quoted as recorded. Codes in brackets are the evidence’s ids.')] : el('p', {class: 'muted'}, 'The AI team recorded no reading for this company.'));
+  const cost = T.cost && el('p', {class: 'small', style: 'margin:10px 0 0'}, `A buy and sell of ${cur(c, T.cost.amount, 0)} costs about ${fmt(T.cost.round_trip_pct, 2)}% in market charges (${fmt(T.cost.your_pct, 2)}% with your broker’s), so a trade needs to gain more than that to make money.`);
+  const trades = el('section', {class: 'card', 'aria-label': 'Open paper trades'}, head(c, 'Our strategies’ open paper trades here', S.trades.length ? `at the price check of ${c.when(S.trades[0].check_at)}` : ''),
+    S.trades.length ? el('div', {class: 'scroll'}, el('table', {class: 'md-table stack'}, el('thead', {}, el('tr', {}, el('th', {}, 'Strategy'), el('th', {}, 'Held'), el('th', {class: 'num'}, 'Bought at'), el('th', {class: 'num'}, 'Now'), el('th', {class: 'num'}, 'Change'), el('th', {}, 'In the expected range?'))),
+      el('tbody', {}, ...groupTrades(S.trades).map(t => el('tr', {}, el('td', {}, c.apBadge(t.family), ' ', t.name), el('td', {'data-k': 'Held'}, `N+${t.hs.join(', N+')}`, el('small', {}, `bought ${day(c, t.entry_date)}, exits ${t.exits.map(e => day(c, e).replace(/^\w+ /, '')).join(', ')}`)), el('td', {class: 'num', 'data-k': 'Bought at'}, fmt(t.entry)), el('td', {class: 'num', 'data-k': 'Now'}, fmt(t.last)), el('td', {class: 'num', 'data-k': 'Change'}, c.delta(t.ret)),
+        el('td', {'data-k': 'Expected range'}, el('span', {class: 'mb-label ' + (t.band === 'inside50' ? 'success' : t.band === 'inside80' ? 'info' : 'warn')}, {inside50: 'Inside 50%', inside80: 'Inside 80%'}[t.band] || 'Outside')))))))
+      : el('p', {class: 'muted'}, 'No strategy holds a paper trade here.'),
+    el('p', {class: 'muted small', style: 'margin:8px 0 0'}, 'No strategy trade here has settled in the records yet, so there is no record on this stock to show.'), cost || null);
+  main.append(view, el('div', {class: 'sec'}, ai), el('div', {class: 'sec'}, trades));
+}
+
+/* News: the latest stories with how far each is confirmed */
+function news(main, c, S) {
+  const {el} = c;
+  main.append(el('section', {class: 'card', 'aria-label': 'News'}, head(c, 'News', `the ${S.news.length} latest stories of the last 30 days, with how far each is confirmed`),
+    el('ul', {class: 'list'}, ...S.news.map(n => { const [word, tone] = STATUS[n.status] || [n.status, 'neutral'];
+      return el('li', {}, el('b', {}, n.title), el('span', {class: 'm'}, el('span', {class: 'mb-label ' + tone}, word), `${n.outlets.join(', ')}${n.n > 1 ? ` · ${n.n} items` : ''} · ${c.when(n.last)}`),
+        ...n.claims.map(k => el('span', {class: 'm'}, c.icon('info'), `${k.claim_type}: ${k.subject} ${k.predicate}`))); }))));
+}
+
+/* Results and filings: the next results, past surprises, and what the exchange or the SEC shows */
+function results(main, c, S) {
+  const {el} = c, K = S.corporate, india = c.m === 'india', R = K.results, next = R.find(r => r.reported == null);
+  const past = R.filter(r => r.reported != null).reverse();
+  const res = el('section', {class: 'card', 'aria-label': 'Results'}, head(c, 'Results', next ? `next on ${day(c, next.date)}, expected ${cur(c, next.estimate)} a share` : ''),
+    el('ul', {class: 'list'}, ...past.map(r => el('li', {style: 'grid-template-columns:minmax(0,1fr) auto;display:grid'}, el('span', {}, el('b', {}, day(c, r.date)), el('small', {class: 'muted', style: 'display:block'}, `expected ${cur(c, r.estimate)}, reported ${cur(c, r.reported)}`)),
+      el('span', {class: 'mb-label ' + (r.surprise_pct >= 0 ? 'success' : 'danger')}, c.icon(r.surprise_pct >= 0 ? 'arrow_upward' : 'arrow_downward'), `${r.surprise_pct >= 0 ? 'Beat' : 'Missed'} by ${fmt(Math.abs(r.surprise_pct), 1)}%`)))),
+    el('p', {class: 'muted small', style: 'margin:8px 0 0'}, 'Estimates and reported earnings per share as Yahoo Finance records them (the stock tool’s copy).'));
+  const rows = india
+    ? [['Promoter pledge', K.pledge ? `${fmt(K.pledge.pledged_pct_of_promoter, 1)}% of promoter shares pledged` : '—', K.pledge ? `promoters hold ${fmt(K.pledge.sdd_promoter_pct, 1)}%, quarter to ${day(c, K.pledge.period_end)} (NSE)` : ''],
+       ...K.deals.map(d => [`Block deal, ${day(c, d.date)}`, `${d.side === 'buy' ? 'Bought' : 'Sold'} ${fmt(d.shares, 0)} shares at ${fmt(d.price)}`, d.client]),
+       ...K.announcements.map(a => [`Announcement, ${c.when(a.published_at)}`, a.category, a.subject]),
+       ['Delivery, last sessions', K.delivery.slice(-5).map(d => `${fmt(d.pct, 0)}%`).join(' · '), 'share of traded shares taken for keeping (NSE)']]
+    : [...K.insiders.map(i => [`Insider filing, ${day(c, i.filing_date)}`, `${i.insider_name} (${i.role})`, `${fmt(i.shares, 0)} shares, Form 4 (details in the filing)`]),
+       ...K.short.slice(-1).map(s => ['Short interest', `${fmt(s.short_interest / 1e6, 1)} million shares (${c.sgn(s.change_pct)})`, `${fmt(s.days_to_cover, 1)} days of usual volume to cover, as of ${day(c, s.settlement_date)} (FINRA)`]),
+       ...K.holders.map(h => [`Holder, 13F to ${day(c, h.period)}`, h.name, `${fmt(h.shares / 1e6, 0)} million shares, ${big(h.value_usd)}`])];
+  const filings = el('section', {class: 'card', 'aria-label': 'Filings'}, head(c, india ? 'From the exchange' : 'From the SEC and FINRA', 'as the stock tool records them'),
+    el('ul', {class: 'list'}, ...rows.map(([k, v, s]) => el('li', {}, el('span', {class: 'm'}, k), el('b', {}, v), s ? el('small', {class: 'muted'}, s) : null))));
+  main.append(el('div', {class: 'grid2 even'}, res, filings));
+}
+
+/* F&O (India only): the future, its build-up, IV against its 3-month range, the move priced in */
+function fnoTab(main, c, S) {
+  const {el} = c, F = S.fno, B = {long_buildup: ['Long build-up', 'success', 'Price up, open interest up: new buyers'], short_buildup: ['Short build-up', 'danger', 'Price down, open interest up: new sellers'],
+    short_covering: ['Short covering', 'info', 'Price up, open interest down: sellers closing'], long_unwinding: ['Long unwinding', 'warn', 'Price down, open interest down: buyers closing']}[F.buildup];
+  const ivr = F.iv != null && F.iv_hi > F.iv_lo ? Math.round((F.iv - F.iv_lo) / (F.iv_hi - F.iv_lo) * 100) : null;
+  const H = F.history, W = 600, h = 160, line = (vals, color, label) => { const p = vals.map((v, i) => [i, v]).filter(x => x[1] != null), lo = Math.min(...p.map(x => x[1])), hi = Math.max(...p.map(x => x[1]));
+    const s = c.svgEl('svg', {viewBox: `0 0 ${W} ${h}`, preserveAspectRatio: 'none', role: 'img', 'aria-label': label, class: 'plot', style: `height:${h}px`});
+    const runs = [[]]; vals.forEach((v, i) => v == null ? runs.push([]) : runs[runs.length - 1].push([i, v]));   /* a missing day breaks the line */
+    for (const r of runs.filter(r => r.length > 1)) s.append(c.svgEl('polyline', {points: r.map(([i, v]) => `${(i / (vals.length - 1) * W).toFixed(1)},${(h - 6 - (v - lo) / (hi - lo || 1) * (h - 12)).toFixed(1)}`).join(' '), fill: 'none', stroke: color, 'stroke-width': '2', 'vector-effect': 'non-scaling-stroke'})); return s; };
+  main.append(el('div', {class: 'grid2 even'},
+    el('section', {class: 'card', 'aria-label': 'Future'}, head(c, `${S.ticker} future, ${day(c, F.expiry)}`, `NSE close of ${day(c, F.date)} · lot ${fmt(F.lot, 0)} shares`),
+      el('div', {class: 'price'}, fmt(F.fut), c.delta(F.fut_chg_pct)),
+      el('div', {class: 'chips'}, el('span', {class: 'mb-label ' + B[1]}, B[0]), el('span', {class: 'small'}, B[2])),
+      el('div', {class: 'facts', style: 'margin-top:12px'},
+        fact(c, 'Open interest', fmt(F.oi, 0), `${c.sgn(F.oi_chg_pct)} today (shares in open futures)`),
+        fact(c, 'ATM IV (ours)', F.iv == null ? '—' : `${F.iv}%`, ivr == null ? '' : `${ivr}% of its 3-month range (${F.iv_lo}%–${F.iv_hi}%)`),
+        fact(c, 'Put-call ratio', F.pcr == null ? '—' : fmt(F.pcr), F.pcr < 1 ? 'more calls than puts open' : 'more puts than calls open'),
+        fact(c, 'Move priced in', `±${F.move_pct}%`, `by ${day(c, F.expiry)} (at-the-money call + put)`)),
+      el('div', {class: 'acts', style: 'margin-top:12px'}, el('button', {class: 'md-btn outlined small', type: 'button', onclick: () => c.snack(`${S.ticker} option chain: the same page as the NIFTY chain, for this stock.`)}, c.icon('layers'), 'Option chain'),
+        el('a', {class: 'md-btn outlined small', href: '../33-screener/page.html#tab=fno'}, c.icon('filter_list'), 'F&O screener'))),
+    el('section', {class: 'card', 'aria-label': 'F&O history'}, head(c, 'The last three months', `${day(c, H.dates[0])} to ${day(c, H.dates[H.dates.length - 1])}`),
+      el('p', {class: 'small', style: 'margin:0'}, 'Futures price (nearest monthly)'), line(H.fut, 'var(--mb-chart-1)', 'Futures price'),
+      el('p', {class: 'small', style: 'margin:8px 0 0'}, 'ATM IV, ours (gaps: days within 7 days of expiry)'), line(H.iv, 'var(--mb-chart-3)', 'ATM IV'))));
+}
+</script>
+</body>
+</html>
