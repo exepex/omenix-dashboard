@@ -120,6 +120,31 @@ admin, like Azure's) they stay open; CI step 6a shows that a large object made i
 
 The story owner decides whether these exceptions are acceptable; X1 does not claim them away.
 
+**Can exceptions 1 and 2 be closed? (issue #3, checked 13 Oct 2026; re-check at each major-version upgrade)**
+- **Exception 1, large objects: no supported way, today or in PostgreSQL 18.**
+  - PostgreSQL has no privilege for *creating* a large object (strong evidence: the PostgreSQL 18 docs on large
+    objects state privileges only for reading, writing and owner actions). The only lever is revoking `EXECUTE` on
+    `lo_create`, `lo_creat` and `lo_from_bytea`, which belong to the bootstrap superuser.
+  - PostgreSQL 18's new `ALTER DEFAULT PRIVILEGES … ON LARGE OBJECTS` and `has_largeobject_privilege()` govern
+    reading and writing large objects only, not creating them (release notes, "Privileges").
+  - `lo_compat_privileges` only relaxes checks, and is superuser-only.
+  - On Azure the admin is not a superuser (`azure_pg_admin`, "doesn't have full superuser permissions"). Azure's
+    access-control and server pages document no parameter or support route for this (some evidence: the docs are
+    silent, not explicit).
+  - What remains: the storage alert and the scheduled check (large-object bytes in every database). Optional: a
+    support request asking Microsoft to run, as the superuser, in every database
+    `REVOKE EXECUTE ON FUNCTION pg_catalog.lo_create(oid), pg_catalog.lo_creat(integer), pg_catalog.lo_from_bytea(oid, bytea) FROM PUBLIC;`.
+    The answer is unknown; if done, `12_large_objects.sql` would report "none" and the matrix's OPEN count would fall
+    by 3 per role.
+- **Exception 2, Azure's own databases: may already be closed in practice; now measured.**
+  - Azure's docs say of `azure_maintenance` "You don't have access to this database". Yet its access list grants
+    `PUBLIC` CONNECT, and the admin did connect to it in step 1. `azure_sys` is not documented for Flexible Server.
+  - What decides is whether a *plain* role can connect, and `db_monitor` is one, like the runtime roles. From its
+    first run, `tests/large_objects.sh` reports a database the server refuses to it at connection as
+    `CLOSED … plain roles cannot reach it`, instead of a failure. The scheduled check and `setup_monitor.sh`'s first
+    check will therefore show, per Azure database, whether exception 2 is open in fact or only on paper.
+  - The role matrix still counts it OPEN, because its check reads the access list, which is what PostgreSQL grants.
+
 ## Scheduled check (issue #2)
 
 What it watches, hourly, read-only (`platform/monitor/`, workflow `.github/workflows/db-check.yml`):
