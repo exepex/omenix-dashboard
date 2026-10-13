@@ -58,8 +58,11 @@ TR-NSE-proposed:
     underlyings (nearest monthly future, ATM IV computed its way, build-up, put-call ratio, move priced in) and their
     counts, the broad and sector index rows (with NSE's P/E, P/B, dividend yield) and the Nifty 500 industries.
     exepex/trading docs/DESK_DECISIONS.md (12 Oct 2026) already says "F&O screener rows need a new publishing story".
-    The "ours" tag and counts come from the stock tool's FollowedCompaniesIndia list over its own NSE rows. Acceptance:
-    its stored tables and summary pass tools/api/check_stored.py (the tables are built there, not kept as files)
+    The "ours" tag and counts come from the stock tool's FollowedCompaniesIndia list over its own NSE rows. Past closes
+    are adjusted for splits and bonuses from NSE's corporate-actions file before any period change, 52-week range, RSI
+    or 1Y close series is computed. Acceptance: its stored tables and summary pass tools/api/check_stored.py (the tables
+    are built there, not kept as files); and a known split (judge 42): KOTAKBANK's 1Y change on 12 Oct 2026 is about
+    +3 % (5:1 split; NSE closes 2,152.10 on 13 Oct 2025, 443.40 on 12 Oct 2026), not −79 %
 TR-CHAIN-proposed:
   exists: false
   repo: trading
