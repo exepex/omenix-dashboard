@@ -57,7 +57,7 @@ The rules, one by one:
 - `npm run typecheck`: passed.
 - `npm test`: 427 passed, 0 failed (10 new unit tests here plus 2 new integration tests).
 - `npm run build`: passed.
-- The UI harness in fixture mode: the result is in the commit message.
+- The UI harness in fixture mode: 183 cases, 0 failed (on the build before the merge that brought the regenerated 33/34 examples, 1e6e576).
 
 ## Findings and risks (please weigh these)
 
