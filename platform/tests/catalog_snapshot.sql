@@ -1,7 +1,8 @@
 -- X1: a normalised, sorted listing of everything the setup controls: the seven roles' attributes, settings and
 -- memberships, the database's owner and privileges, the four schemas' owners and privileges, and the default
 -- privileges. Run as the server admin connected to "omenix" (psql -X -A -t -f). The admin's own name prints as
--- <admin> and any superuser (the bootstrap one on Azure is not ours) as <superuser>, so the output of a local copy and
+-- <admin>, any superuser (the bootstrap one on Azure is not ours) as <superuser> and the platform's default owner of
+-- schema public (pg_database_owner, or azure_pg_admin on Azure) as <platform default>, so the output of a local copy and
 -- of the real server can be compared line by line with expected_catalog.txt. Reads catalogs only; no secrets.
 WITH ours(name) AS (
   VALUES ('stock_owner'), ('fno_owner'), ('app_owner'),
@@ -11,6 +12,9 @@ who AS (  -- display name of a role oid
   SELECT oid,
          CASE WHEN rolname = current_user THEN '<admin>'
               WHEN rolsuper THEN '<superuser>'
+              -- The platform's default owner of schema public: PostgreSQL 16 uses pg_database_owner, Azure its own
+              -- azure_pg_admin (seen on omenix-pg, 13 Oct 2026). Only these two names; any other owner shows as drift.
+              WHEN rolname IN ('pg_database_owner', 'azure_pg_admin') THEN '<platform default>'
               ELSE rolname END AS name
   FROM pg_roles
 ),

@@ -107,6 +107,16 @@ admin, like Azure's) they stay open; CI step 6a shows that a large object made i
 | 3 | **Switch off its own statement timeout**, for its session (`SET statement_timeout = 0`) or persistently (`ALTER ROLE CURRENT_USER SET statement_timeout = 0`) | `statement_timeout` is a user setting; PostgreSQL 16 has no setting a non-superuser cannot override for itself | Unbounded queries on a 1-vCore server (slow or unavailable dashboard) | The persistent change shows in the catalog snapshot (a `role setting` line) and fails the matrix's timeout check (CI drift test as the role itself); `apply.sh` (`RESET ALL`) removes it. The session change leaves no trace. Enforceable limit, not built (reasoning only): a scheduled watchdog run by the admin (for example `pg_cron`, if allowed on Azure) that ends runtime-role queries older than the timeout with `pg_terminate_backend`; CPU alerting is the cheaper first step |
 | 4 | **Change or remove its own password** (`ALTER ROLE CURRENT_USER PASSWORD ...`) | Every role may change its own password in PostgreSQL | Lock its own deployment out (denial of service), not escalate | The deployment's connections then fail, which trips the failed-connection alert; the owner resets the password as admin |
 
+**Real outcome on `omenix-pg` (owner's `apply_real.sh`, 13 Oct 2026; strong evidence, read from the evidence file):**
+- Exception 1 stays **open in all 5 databases** (`azure_maintenance`, `azure_sys`, `omenix`, `postgres`,
+  `template1`): Azure's admin may not revoke `EXECUTE` on the large-object functions. Mitigation and detection are
+  the storage alert and `tests/large_objects.sh`.
+- Exception 2 is **closed on `postgres` and `template1`**: the admin revoked `CONNECT` and `TEMPORARY` from
+  `PUBLIC` there. It stays **open on `azure_maintenance` and `azure_sys`**, which Azure owns. That is by their access
+  rights; whether Azure's own connection rules also let a runtime role in is not yet tested (the role matrix of step
+  2 lists them as OPEN either way).
+- Exceptions 3 and 4 cannot be closed by any admin (PostgreSQL behaviour); they are unchanged.
+
 The story owner decides whether these exceptions are acceptable; X1 does not claim them away.
 
 ## Scope: infrastructure only; dashboard tables come later (follow-up for W7)
@@ -140,7 +150,7 @@ restore test's temporary marker (in `fno`) are not dashboard tables.
 | `sql/reference/azure_setup.sql` | the script the owner ran on 12 Oct 2026 (copy of `exepex/trading` `docs/migration/azure_setup.sql` at `a8cdad4`, sha256 `7315f0ac…3491`) |
 | `tests/role_matrix.txt` | the matrix: 428 checks over 7 roles (allowed, forbidden, expected values, named exceptions) |
 | `tests/role_matrix.sh` | runs the matrix, one connection per role; `X1_REQUIRE_TLS=1` adds a TLS check |
-| `tests/catalog_snapshot.sql`, `tests/expected_catalog.txt` | normalised listing of roles, memberships, ACLs and default privileges, and its declared content |
+| `tests/catalog_snapshot.sql`, `tests/expected_catalog.txt` | normalised listing of roles, memberships, ACLs and default privileges, and its declared content; the owner of schema `public` prints as `<platform default>` when it is `pg_database_owner` (PostgreSQL) or `azure_pg_admin` (Azure), and by name otherwise (CI step 2b tests both) |
 | `tests/reference_catalog.txt`, `tests/catalog_difference.txt` | the listing the original script gives, and the only allowed difference from it |
 | `tests/fixtures_up.sql`, `tests/fixtures_down.sql` | probe table `x1_probe` and function `x1_probe_f` in each schema, created by the owner roles |
 | `tests/large_objects.sh` | counts large objects in every database that accepts connections (as the admin); fails on any |
