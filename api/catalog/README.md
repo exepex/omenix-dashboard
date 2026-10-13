@@ -48,7 +48,8 @@ The catalog lives in the schemas, so it cannot drift from them (`api/schemas/blo
 
 ```
 pip install -r tools/api/requirements.txt
-python3 tools/api/check_mapping.py      # criteria 1-2: notes.md <-> elements.yaml <-> schema fields, zero both ways; independence
+python3 tools/api/check_mapping.py      # criteria 1-2: notes.md <-> elements.yaml <-> schema fields, zero both ways; independence;
+                                        # leaf use per endpoint and block (FLAG under 50 %: a block downloading data it never shows)
 python3 tools/api/check_contract.py     # criteria 3-5: OpenAPI 3.1 validation, examples, catalog completeness, screen rules, planted breaks
 python3 tools/api/examples.py --check   # the examples are exactly what the mockups' data gives
 python3 tools/api/render_catalog.py --check

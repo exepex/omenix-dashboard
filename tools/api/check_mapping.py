@@ -105,6 +105,29 @@ def independence(fields, ops, block_of: dict, problems: list[str]) -> int:
     return shared
 
 
+LOW_USE = 0.5  # a block reading under half of an endpoint's leaves is flagged: the start of bundling creep
+
+
+def leaf_use(fields, ops, block_of: dict) -> list[str]:
+    """Per endpoint, the share of its payload leaves each screen block uses (judge 17, minor 1). A low share means the
+    block downloads data it never shows; the report makes that visible in CI instead of resting on x-shared alone."""
+    lines, flags = ["leaf use per endpoint and screen block (FLAG: under 50 %):"], []
+    for path, _, op in ops:
+        leaves = [f for f in fields if f.op == op["operationId"] and f.leaf and f.path.startswith("payload.")]
+        use = Counter(b for f in leaves for b in {block_of[e] for e in f.elements})
+        for f in fields:  # a block fed only by a container (a count of a list) uses 0 leaves
+            if f.op == op["operationId"] and f.path.startswith("payload."):
+                use.update({block_of[e]: 0 for e in f.elements})
+        parts = []
+        for block, n in sorted(use.items(), key=lambda kv: -kv[1]):
+            low = n / len(leaves) < LOW_USE
+            parts.append(f"{block} {n}/{len(leaves)}{' FLAG' if low else ''}")
+            if low:
+                flags.append(f"  FLAG {path}: {block} uses {n} of {len(leaves)} leaves ({n / len(leaves):.0%})")
+        lines.append(f"  {path}: " + ", ".join(parts))
+    return lines + [f"flagged blocks: {len(flags)}"] + flags
+
+
 def main() -> int:
     problems: list[str] = []
     declared = yaml.safe_load(ELEMENTS.read_text(encoding="utf-8"))
@@ -155,6 +178,8 @@ def main() -> int:
     block_of = {d["id"]: d.get("block", d["id"]) for d in declared}
     shared = independence(fields, ops, block_of, problems)
 
+    report = leaf_use(fields, ops, block_of)
+
     static = sum(1 for d in declared if d.get("static"))
     leaves = sum(1 for f in fields if f.leaf)
     print(f"elements: {len(declared)} ({len(declared) - static} need data, {static} static with a reason); "
@@ -162,6 +187,7 @@ def main() -> int:
     print(f"elements without an endpoint field: {sum(1 for d in declared if not d.get('static') and not served.get(d['id']))}; "
           f"endpoint fields without an element: {sum(1 for f in fields if not f.elements)}")
     print(f"endpoints feeding more than one screen block (the same record, with x-shared): {shared} of {len(ops)}")
+    print("\n".join(report))
     print("\n".join(problems) if problems else "mapping: zero gaps both ways; no endpoint mixes two independent blocks")
     return 1 if problems else 0
 

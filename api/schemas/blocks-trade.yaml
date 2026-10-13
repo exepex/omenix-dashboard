@@ -65,11 +65,11 @@ Positions:
   type: object
   description: >-
     The Manual account's open positions (the owner's own paper trades, FIFO), each marked to the stock tool's last
-    close, before costs. Feeds Home's "yours" rows, the glance's account line, the You card's open count and every
-    hover card's "held".
+    close, before costs. Feeds Home's "yours" rows, the glance's account line (qty, avg, unrealised) and every
+    hover card's "held" (account, qty, avg); the You card's open count is the length of `own`.
     Empty state: `own` empty ("Nothing open here")
   x-catalog: {publisher: stock, source: 'rm.portfolio owner positions (OwnerPosition over portfolio_trades)', freshness: 'post-close run (marks); on record (trades)', story: K4-proposed, status: published}
-  x-element: [h31.trades-yours, s30.hover, h31.glance-account, h31.who-trades, s30.defaults]
+  x-element: [h31.trades-yours, s30.defaults]
   required: [currency, own]
   properties:
     currency: {$ref: '#/components/schemas/Currency'}

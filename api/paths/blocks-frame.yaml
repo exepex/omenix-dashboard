@@ -268,8 +268,8 @@
     x-freshness: 'stock_age; post-close run and each recorded trade'
     x-cache: 'tag rm:blocks:<market>:positions, revalidated on publish; browser private, no-cache + ETag'
     x-empty: 'own empty: "Nothing open here"'
-    x-feeds: [h31.glance-account, h31.trades-yours, h31.who-trades, s30.defaults, s30.hover]
-    x-shared: 'one list of the owner''s positions: Home''s rows, the glance line, the You card''s open count and every hover card''s held quantity'
+    x-feeds: [h31.glance-account, h31.trades-yours, s30.defaults, s30.hover]
+    x-shared: 'one list of the owner''s positions: Home''s rows, the glance line and every hover card''s held quantity'
     parameters:
       - $ref: '#/components/parameters/Market'
     responses:

@@ -143,3 +143,25 @@ size" (largest new code file `tools/api/check_contract.py`, 230 lines; largest Y
   `price_source` on positions. The F&O books' `as_of` in the example is the 3 pm snapshot time of 30's data.
 - **The dashboard-composed blocks' envelope** (attention, notifications, accounts) takes the oldest input's times
   (reasoning only); W8/W9 may refine it.
+
+## Follow-up after judge 17 (PASS), minor 1: leaf use per block
+
+`x-shared` was the only guard against bundling, and it is a statement a person writes. `check_mapping.py` now prints,
+for every endpoint, how many of its payload leaves each screen block uses, and flags a block using under 50 %. CI's
+`api-contract` job prints the report. Flags are reported but do not fail the job; the orchestrator asked for a report.
+To make the counts true, element declarations were tightened first. Before, inheritance credited a block with every
+leaf of an endpoint it touched; for example, the Home glance appeared to use all 25 pick leaves. Now:
+- the glance's top pick uses `id`, `exp_gain_pct`, `agree.buy` and `agree.of` (the `agree.buy/of` token now maps to
+  both counts);
+- the band alone uses `session_date`, `regime` and `post_close_at`;
+- the order window uses only the price fields of `/instruments` and `/fno/contracts`, and only the book names of
+  `/fno/books`;
+- the glance uses the count of `/attention`;
+- the hover card uses `account`, `qty` and `avg` of `/positions`. The You card's open count is the length of `own`,
+  so `/positions` no longer claims to feed the You card.
+
+Result: 11 flagged blocks of 23 endpoints. Every one is a small block reading part of a record whose main block reads
+all of it: the glance (picks 4/25, accounts 3/17, positions 3/10, attention 0/5), the order window (instruments 2/13,
+contracts 3/16, books 1/10, F&O picks 9/20), the hover's held (positions 3/10), the pick-rule labels (approaches
+2/11), and Who trades You (accounts 2/17). Splitting any of them would serve one fact twice. Confidence: some evidence.
+The over-fetch is at most a few hundred bytes per block, and a new flag now shows up in CI output.

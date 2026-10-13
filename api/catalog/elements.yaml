@@ -294,7 +294,7 @@
   fields:
     - {t: signals, k: [signals]}
     - {t: id, k: [id]}
-    - {t: agree.buy/of, k: [agree]}
+    - {t: agree.buy/of, k: [agree.buy, agree.of], why: 'the token names both counts ("13 of 15 strategies buy")'}
     - {t: exp_gain_pct, k: [exp_gain_pct]}
 - id: h31.glance-needs
   block: glance

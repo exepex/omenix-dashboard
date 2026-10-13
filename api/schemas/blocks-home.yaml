@@ -69,7 +69,7 @@ FnoBooks:
     Book 3 AI team. Feeds the "F&O: total profit / loss" line of each group card (never added to the stock total) and
     the order window's account list (books are listed, never tradable by hand)
   x-catalog: {publisher: fno, source: "fno.pages_history pages 'risk' and 'scoreboard_b' (P1) over E1's paper accounts", freshness: '3 pm run and the post-close marks (NSE session calendar)', story: P1, status: planned}
-  x-element: [h31.who-trades, s30.order-account]
+  x-element: [h31.who-trades]
   required: [currency, books]
   properties:
     currency: {$ref: '#/components/schemas/Currency'}
@@ -131,7 +131,7 @@ Attention:
     the post-close run not done from runs.post_close.next_at, a major event today from events.major, promotional or
     rumour news on a tracked stock from news_item.status). Empty state: `attention` empty ("Nothing needs you")
   x-catalog: {publisher: dashboard, source: 'dashboard rules over rm.trades, rm.status runs, the events block and rm.news', freshness: each run, story: W9, status: planned}
-  x-element: [h31.needs-you, h31.glance-needs]
+  x-element: [h31.needs-you]
   required: [attention]
   properties:
     attention:
