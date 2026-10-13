@@ -125,3 +125,63 @@ Proposed for the owner to choose (reasoning only):
 4. "Tell me when a strategy buys this stock": a per-stock alert in the bell.
 5. The option chain page for this stock (the NIFTY chain's design, for any F&O stock).
 6. A small delivery-% trend line (India) next to the delivery figure.
+
+## Second rework, the owner's own feedback (13 Oct 2026)
+- **Forecast fan:** stronger fills (22% and 50%) with edge lines, so the two bands read crisply.
+- **Key numbers in colour:**
+  - The 52-week bar runs red (near the low), neutral, green (near the high).
+  - The RSI dial is green from 30 to 70 and red outside it.
+  - Volatility is green when calmer than the index and red when more jumpy.
+  - Each reading has a glyph and a word next to it (the colour rule: never colour alone). These describe today; they
+    are not buy or sell verdicts.
+- **Financials in detail** (Results tab): one small chart per measure with a one-line takeaway (revenue, net profit,
+  growth from a year earlier, margins, earnings per share). Debt and cash flow keep empty frames marked "not recorded
+  yet", so the gap shows rather than hides. The overview keeps a compact results chart with a link to the detail.
+- **Our price forecast, explained:** where it comes from, how to read it, and what it means today. It is one forecast
+  that every family reads; it is not the rule-based, hybrid or AI team. In plain words: "it gives almost every company
+  the same chance, so it says little about RELIANCE; not proven; do not decide on it alone".
+- **Families without their internals** (owner): only names, counts and votes; the one-line "how it thinks" is removed
+  from the screen and from the data.
+- **Holders family by family:** every family has a line, even when it holds nothing.
+- **Which family is winning:** today's "no settled trades yet", plus a labelled winning example (rule-based leads,
+  ahead of the baselines) and a labelled losing example (no family beats the baselines). The verdict is always measured
+  against the baselines.
+- **What the AI team thinks:**
+  - A plain summary with what could push the price up and what could pull it down.
+  - It says the AI team is one of the four families and the only one that writes down why.
+  - The recorded text sits behind "Read the full reasoning".
+  - The plain wording is written by hand for this mockup and labelled. The AI team does not record one yet (data gap).
+- **F&O for a beginner:**
+  - Three things to know first.
+  - What each family suggests: today none, because no F&O strategy has passed testing. A labelled example shows one
+    suggestion, one refused by your loss limit and one staying out.
+  - Every contract with its NSE code (RELIANCE26OCTFUT, RELIANCE26OCT1160CE) and Buy / Sell, for the future and the
+    option chain near the price; the strike nearest today's price is marked, and untraded contracts are greyed.
+  - Picking a strike shows its call and put, and a "what if you buy one lot" chart: the most you can lose is what you
+    pay, and the price where it starts making money.
+  - "Where traders hold contracts" (open contracts by strike).
+  - "How big a move options expect" (IV in words).
+  - The last three months, with a plain reading.
+- **Owner's rules** for every screen (positive and negative cases, beginners, private strategy internals) are now in
+  CLAUDE.md and design/system/README.md.
+
+### Doubts (reasoning only)
+- **Colours on RSI:** red on both sides of 30–70 marks a fast move, not good or bad. Some apps colour oversold green
+  (a "buy" hint). I chose not to, because that would be advice.
+- **Buy / Sell on stock contracts opens the order window, which explains that it cannot fill.** Only NIFTY's 3 pm
+  snapshot is recorded today. The F&O tool would need stock option snapshots to make these tradable on paper.
+- **"Built from this stock's past prices and recent news"** describes the forecast model only in general terms, so
+  that nothing private is exposed. Say if even that is too much.
+
+## Proposed, not asked (second round)
+Built:
+- The strike nearest today's price is marked "≈ today".
+- Contracts that did not trade are greyed and say so.
+- Each verdict line on the winning card compares with the baselines.
+
+Proposed:
+1. A "payoff" chart for the future as well (a straight line; loss without a limit), with the margin once it is
+   recorded.
+2. A glossary chip next to each term (IV, OI, build-up, strike), opening a one-line meaning.
+3. A "simple / detailed" switch for the whole page: beginners see the pictures and the plain lines; detail shows the
+   tables.

@@ -4,7 +4,7 @@
   {
    "id": "overview",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Overview: price, our tools’ one grey line, your paper position, Buy and Sell; the chart with the model’s 5-session fan and paper buys; key numbers explained (52-week bar, RSI dial, volatility against NIFTY); results as bars with the margin line.",
+   "title": "Overview: the price with our 5-session forecast fan and paper buys; key numbers in colour (52-week position, RSI dial, how jumpy against NIFTY), each with a word; results with a link to the detail.",
    "hash": "",
    "widths": [
     1280,
@@ -24,16 +24,6 @@
    ]
   },
   {
-   "id": "years",
-   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Results by year, with year-on-year growth.",
-   "hash": "res=y",
-   "widths": [
-    1280,
-    390
-   ]
-  },
-  {
    "id": "week",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
    "title": "5D period: the last five sessions and the fan.",
@@ -45,13 +35,32 @@
   {
    "id": "tools",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Our strategies: the model’s view shared by all strategies (chance and expected range), how each family decides with its votes as small bars, who holds RELIANCE now with each paper result, which family is winning (no settled trades yet), the AI team’s reading.",
+   "title": "Our strategies, for a beginner: the price forecast explained (where it comes from, how to read it, what it means today); which families buy; who holds RELIANCE family by family; which family is winning (today: no settled trades); what the AI team thinks, in plain words.",
    "hash": "tab=tools",
    "widths": [
     1280,
     390
    ],
    "full": true
+  },
+  {
+   "id": "tools-win",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "EXAMPLE, not today: a winning case of “Which family is winning here” (rule-based leads, ahead of the baselines).",
+   "hash": "tab=tools&ex=win",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "tools-lose",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "EXAMPLE, not today: a losing case (no family beats the baselines).",
+   "hash": "tab=tools&ex=lose",
+   "widths": [
+    1280
+   ]
   },
   {
    "id": "tools-phone",
@@ -77,7 +86,7 @@
   {
    "id": "results",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Results and filings: past surprises, the next results; pledges, block deals, announcements, delivery.",
+   "title": "Results and filings: financials in detail (revenue, profit, growth, margins, earnings per share; debt and cash flow not recorded yet), then results surprises and exchange filings.",
    "hash": "tab=results",
    "widths": [
     1280,
@@ -86,15 +95,35 @@
    "phone_screen": true
   },
   {
+   "id": "results-years",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "Financials by year, with growth from the year before.",
+   "hash": "tab=results&res=y",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
    "id": "fno",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "F&O (market data, not your position): the three listed monthly futures with OI and build-up, three months of the future with OI, IV in its 3-month range, your own paper F&O apart.",
+   "title": "F&O for a beginner: three things to know, what each family suggests (none yet), the contracts with NSE codes and Buy / Sell (future and option chain), what buying a call would make or lose, where traders hold contracts, how big a move options expect, the last three months.",
    "hash": "tab=fno",
    "widths": [
     1280,
     390
    ],
    "phone_screen": true
+  },
+  {
+   "id": "fno-example",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "EXAMPLE, not today: the families’ F&O suggestions (one suggested, one refused by your loss limit, one staying out).",
+   "hash": "tab=fno&ex=win",
+   "widths": [
+    1280,
+    390
+   ]
   },
   {
    "id": "buy",

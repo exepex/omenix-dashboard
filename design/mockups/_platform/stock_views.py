@@ -14,14 +14,7 @@ MOCKUPS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDICES = os.path.join(MOCKUPS, "34-markets", "source", "indices.csv")
 EXPIRIES = os.path.join(MOCKUPS, "35-stock", "source", "fno_expiries.csv")
 
-# How each family decides, in one line (orchestrator's wording of the owner's feedback, 13 Oct 2026; checked against
-# the strategy ids: rule.model_news_*, ai.combined, base.always_up / model_only / momentum).
-THINKS = {
-    "rule": "Fixed rules on the model's chance plus news, each with a different filter.",
-    "hybrid": "The AI team proposes, the rules can veto.",
-    "ai": "Reads prices, news and the model, then decides itself and writes its reasons.",
-    "baseline": "Yardsticks: always buy, buy on the model alone, follow the last move. A strategy that cannot beat them has no edge.",
-}
+# Families are shown by name, count and votes only: how each decides is ours to keep (owner, 13 Oct 2026).
 ORDER = ("rule", "hybrid", "ai", "baseline")
 
 # NSE industry (Nifty 500 list) -> the NSE sector index to compare with (only indices the markets page records).
@@ -35,12 +28,12 @@ SECTOR_INDEX = {
 
 
 def families(views: list, horizons: list) -> list:
-    """One row per family: its strategies, how it thinks, and its vote per horizon (buy of its strategies)."""
+    """One row per family: its number of strategies and its vote per horizon (buy of its strategies)."""
     out = []
     for fam in ORDER:
         ids = sorted({v["strategy_id"] for v in views if v["family"] == fam})
         votes = [{"h": h["h"], **h["family"].get(fam, {"buy": 0, "of": 0})} for h in horizons]
-        out.append({"family": fam, "n": len(ids), "thinks": THINKS[fam], "votes": votes})
+        out.append({"family": fam, "n": len(ids), "votes": votes})
     return out
 
 
@@ -114,8 +107,19 @@ def expiries(ticker: str) -> list:
 def gaps(m: str) -> list:
     """What the page would show but the records do not hold yet (owner's feedback, 13 Oct 2026: "not recorded yet")."""
     common = ["Debt and the balance sheet", "Cash flow", "A three-year history of results (the records hold the last quarters only)",
-              "Settled strategy trades on this stock (none has closed yet)", "Hybrid strategies (none built yet)"]
+              "Settled strategy trades on this stock (none has closed yet)", "Hybrid strategies (none built yet)",
+              "A plain summary of the AI team's view for beginners (the page shows example wording)"]
     if m == "india":
         return common + ["The sector index before 6 Oct 2025 (the markets page records one year)"]
     return common + ["A sector fund to compare with (the stock tool records only the S&P 500 fund)",
                      "Profit before tax and profit to owners (not in the copied SEC concepts)"]
+
+
+def example_records(m: str) -> dict:
+    """EXAMPLE (not today): each family's settled record on this stock, a winning and a losing case (owner, 13 Oct
+    2026: mockups show both). Paper results in the market's currency; wins of settled trades."""
+    k = 1 if m == "india" else 0.012   # rupee figures, or about the same in dollars for a $1,000 trade size
+    case = lambda rows: [{"family": f, "settled": s, "wins": w, "pnl": None if p is None else round(p * k)} for f, s, w, p in rows]
+    return {"note": "EXAMPLE state, not today: how each family's record on this stock looks once its trades settle.",
+            "win": case([("rule", 18, 11, 12400), ("hybrid", 0, 0, None), ("ai", 9, 4, -2100), ("baseline", 15, 7, 1800)]),
+            "lose": case([("rule", 18, 6, -9300), ("hybrid", 0, 0, None), ("ai", 9, 3, -4400), ("baseline", 15, 8, 2600)])}

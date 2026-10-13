@@ -2,7 +2,7 @@
    across (or pinch) to zoom, double-click or "Reset zoom" to go back; NIFTY 50 and the sector index to compare with;
    the model's 50% and 80% expected range for N+1..N+5 as a fan past the last close; open paper trades' buys marked. */
 let ZOOM = null;   /* [from, to] indices within the period, or null */
-const FAN = 5, CW = 640, CH = 280;
+const FAN = 5, CW = 640, CH = 330;
 
 function priceChart(c, S) {
   const {el} = c, C = S.chart, n = Math.min(SPANS[PER][1], C.close.length - 1), start = C.close.length - 1 - n;
@@ -47,7 +47,7 @@ function priceChart(c, S) {
     const ret = (D0.own.at(-1) / D0.base - 1) * 100;
     legend.replaceChildren(el('span', {}, day(c, D0.dates[0])),
       el('span', {class: 'keys'}, el('i', {class: 'k1'}), `${S.ticker} ${pct(ret)}`, D0.bench ? [el('i', {class: 'k2'}), C.bench_name] : null, D0.sector ? [el('i', {class: 'k3'}), C.sector.name] : null,
-        fan.length ? [el('i', {class: 'kf'}), 'model’s range N+1..N+5'] : null, S.trades.length ? [el('i', {class: 'ke'}), 'paper buys'] : null),
+        fan.length ? [el('i', {class: 'kf'}), 'our forecast range, next 5 sessions'] : null, S.trades.length ? [el('i', {class: 'ke'}), 'paper buys'] : null),
       el('span', {}, fan.length ? `+5 sessions` : day(c, D0.dates.at(-1))));
     interact(c, S, svg, cross, sel, tip, D0, X, fx => Math.round(Math.min(fx / frac, 1) * hist), draw);
   }

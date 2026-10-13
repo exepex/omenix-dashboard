@@ -25,5 +25,5 @@ function results(main, c, S) {
        ...K.holders.map(h => [`Holder, 13F to ${day(c, h.period)}`, h.name, `${fmt(h.shares / 1e6, 0)} million shares, ${big(h.value_usd)}`])];
   const filings = el('section', {class: 'card', 'aria-label': 'Filings'}, head(c, india ? 'From the exchange' : 'From the SEC and FINRA', 'as the stock tool records them'),
     el('ul', {class: 'list'}, ...rows.map(([k, v, s]) => el('li', {}, el('span', {class: 'm'}, k), el('b', {}, v), s ? el('small', {class: 'muted'}, s) : null))));
-  main.append(el('div', {class: 'grid2 even'}, res, filings));
+  main.append(financials(c, S), el('div', {class: 'grid2 even sec'}, res, filings));
 }
