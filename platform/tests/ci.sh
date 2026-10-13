@@ -62,6 +62,9 @@ echo "ok: $(wc -l < "$work/settings.txt" | tr -d ' ') expected settings parsed f
 "$here/owner_scripts_test.sh" > "$work/owner_tests.txt" \
   || { cat "$work/owner_tests.txt"; echo "FAILED: owner script tests" >&2; exit 1; }
 echo "ok: owner scripts handle both az flag forms and az errors, and redact IP addresses ($(grep -c '^ok:' "$work/owner_tests.txt") checks)"
+"$here/bash32_trap_test.sh" > "$work/trap_tests.txt" \
+  || { cat "$work/trap_tests.txt"; echo "FAILED: trap tests" >&2; exit 1; }
+echo "ok: owner scripts' cleanup traps run and are recorded ($(head -1 "$work/trap_tests.txt"))"
 
 echo "== 1. the owner's original script"
 reset

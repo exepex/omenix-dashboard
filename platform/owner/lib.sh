@@ -13,6 +13,13 @@ today="$(date +%Y-%m-%d)"
 
 die() { echo "STOPPED: $*" >&2; exit 1; }
 
+# From here on, send everything the script prints to the terminal and to the evidence file. The script body stays in
+# the main shell, so its EXIT trap runs on every bash. bash 3.2 (macOS) never runs an EXIT trap set inside a
+# "{ ...; } | tee" block: on 13 Oct 2026 that left the restore test's marker table on omenix-pg.
+# Only tee here: a filter such as sed buffers its output in a pipe and can be cut off at exit, so text that may hold
+# an IP address is passed through redact_ips before it is printed.
+record_evidence() { exec > >(tee "$1") 2>&1; }
+
 # Replace IPv4 and IPv6 addresses with <IP address> in text bound for an evidence file: a server's refusal quotes the
 # client's public IP ("no pg_hba.conf entry for host ..."), and psql's own errors quote the server's. IPv6 is matched
 # only in its full 8-group form or with "::", so times such as 22:58:01 are left alone.

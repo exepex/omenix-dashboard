@@ -1,0 +1,26 @@
+X1 restore test of omenix-pg, started 2026-10-13 08:58 UTC
+backup retention days: 14
+earliest restore point: 2026-10-12T21:17:57.188671+00:00
+
+== 1. marker on omenix-pg
+marker token x1-20261013085801-325654089 written at 2026-10-13 08:58:07 UTC
+
+== 2. wait 15 minutes, then restore to 2026-10-13T09:03:07Z as omenix-pg-x1restore
+restore started 09:13:07 UTC
+omenix-pg-x1restore	Ready	Central India	Standard_B1ms
+restore finished 09:20:22 UTC after 7 minutes
+
+== 3. check the scratch server
+firewall rules copied to the scratch server: none
+opened the scratch firewall to this Mac only
+marker row on the scratch server: yes
+-- diff of the scratch server's catalog against expected_catalog.txt (empty = identical)
+catalog identical: yes
+
+== 4. delete the scratch server
+scratch server gone: yes; it existed for about 1 billed hour(s)
+
+== 5. the marker on omenix-pg is dropped when the script ends (also after a stop)
+
+RESULT: marker restored: yes; catalog identical: yes; scratch server deleted: yes
+COST: fill in from Azure Cost Management a day later (resource omenix-pg-x1restore): ____
