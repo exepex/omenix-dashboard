@@ -44,3 +44,19 @@ export function TradePair({ id, variant = "small", className, before }: { id: st
     </span>
   );
 }
+
+/** Buy and Sell for something the frame cannot trade (a company our tools do not follow: no price checks to fill a
+ *  paper order). Both grey and disabled; the reason is on the pair, the lock's first when the market is closed. */
+export function TradeUnavailable({ sym, reason, variant = "letter" }: { sym: string; reason: string; variant?: "small" | "letter" }) {
+  const { lock } = useFrame();
+  const why = lock ?? reason;
+  return (
+    <span className="mb-bs-pair" data-tip={why} data-unavailable="">
+      {(["buy", "sell"] as const).map((side) => (
+        <button key={side} className={variant === "letter" ? `mb-bs ${side}` : `md-btn small ${side}`} type="button" disabled aria-label={`${WORD[side]} ${sym}: ${why}`}>
+          {variant === "letter" ? WORD[side][0] : WORD[side]}
+        </button>
+      ))}
+    </span>
+  );
+}

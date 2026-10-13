@@ -8,13 +8,13 @@ import { test } from "node:test";
 import { canonical, importsOf, reachable, sources, web, type Source } from "../../shell/tests/imports.ts";
 
 const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].flatMap(sources).filter((f) => !/(^|\/)tests\//.test(f.path));
-const ADAPTER = /^lib\/home\/(fixture-source$|fixture\/)/;
+const ADAPTER = /^lib\/home\/(fixture-source$|fixture\/)|^lib\/fixtures\//;
 const WIRING = "lib/home/wiring";
 const LOADERS = "app/(cockpit)/[market]/_home/blocks.tsx";
 const FORBIDDEN = [ADAPTER, /^lib\/home\/wiring$/, /^lib\/shell\/(fixture-source$|fixture\/|wiring$)/, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
 
 export const adapterImports = (files: Source[]) =>
-  files.filter((f) => ![WIRING, "lib/home/fixture-source"].includes(canonical(f.path))).flatMap((f) => importsOf(f).filter((m) => ADAPTER.test(m)).map((m) => `${f.path} imports ${m}`));
+  files.filter((f) => ![WIRING, "lib/home/fixture-source", "lib/overview/fixture-source", "lib/screener/fixture-source", "lib/fixtures/examples"].includes(canonical(f.path))).flatMap((f) => importsOf(f).filter((m) => ADAPTER.test(m)).map((m) => `${f.path} imports ${m}`));
 export const wiringReaders = (files: Source[]) => files.filter((f) => importsOf(f).includes(WIRING)).map((f) => f.path);
 export const forbiddenReach = (start: Source[], all: Source[]) => [...reachable(start, all)].filter((m) => FORBIDDEN.some((re) => re.test(m))).sort();
 

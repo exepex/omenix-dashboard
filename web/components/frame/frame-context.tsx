@@ -36,6 +36,8 @@ export interface FrameUi {
   lock: string | null;
   fmt: Formats;
   item: (id: string) => Instrument | undefined;
+  /** Lends the frame instruments from a page's own blocks (kept until the market changes). */
+  addItems: (items: Record<string, Instrument>) => void;
   drawer: DrawerView | null;
   openDrawer: (view: DrawerView) => void;
   /** Closes the drawer; focus returns where it was unless `restore` is false (the next view takes focus itself). */

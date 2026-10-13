@@ -3,10 +3,17 @@ import { test } from "node:test";
 import { apiPath, companyPath, isMarket, lifecyclePath, marketOfPath, pageOfPath, pagePath, PAGES, switchMarketPath } from "../routes.ts";
 
 test("every page of SPEC section 6 has one route and a mockup", () => {
-  const spec = PAGES.filter((p) => p.mockup);
+  const spec = PAGES.filter((p) => p.mockup && p.owner !== "W12");
   assert.equal(spec.length, 12);
   assert.equal(new Set(PAGES.map((p) => p.segment)).size, PAGES.length);
   assert.deepEqual(spec.map((p) => p.mockup.slice(0, 2)), ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]);
+});
+
+test("story W12 adds the signed-off Screener (33) and Markets (34) as pages of the frame", () => {
+  assert.deepEqual(PAGES.filter((p) => p.owner === "W12").map((p) => [p.key, p.mockup, pagePath("us", p.key)]), [
+    ["screener", "33-screener", "/us/screener"],
+    ["markets", "34-markets", "/us/markets"],
+  ]);
 });
 
 test("page paths", () => {

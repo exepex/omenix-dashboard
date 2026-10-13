@@ -4,7 +4,7 @@
 // #pal=NIFTY26OCT22800CE, #keys=1, #picks=1, #ap=rule, and #clock=open for the labelled example clock of example data).
 import { useRouter } from "next/navigation";
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { FrameData } from "../../lib/shell/contract.ts";
+import type { FrameData, Instrument } from "../../lib/shell/contract.ts";
 import { frameClock, marketState, tradeLock } from "../../lib/shell/market.ts";
 import { SOON, screenById, screenHref, type NavScreen } from "../../lib/shell/nav.ts";
 import { money, moneyDecimals, price } from "../../lib/ui/format.ts";
@@ -34,6 +34,10 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
   const [density, setDensity] = useState<Density>("comfortable");
   const [rail, setRail] = useState<RailMode>("labels");
   const [snackText, setSnackText] = useState<string | null>(null);
+  // Instruments a page lends the frame from its own blocks (the Screener's followed companies at their close), so the
+  // order window and quick view work for them as for the shell's own.
+  const [pageItems, setPageItems] = useState<Record<string, Instrument>>({});
+  const addItems = useCallback((items: Record<string, Instrument>) => setPageItems((had) => ({ ...had, ...items })), []);
   const snackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
 
@@ -125,11 +129,13 @@ export function useFrameState(data: FrameData): FrameUi & { snackText: string | 
     setHover(null);
     setMenu(null);
     setPicksOpen(false);
+    setPageItems({});
   }, [market]);
 
   return {
     data, market, shell, nowMs, exampleClock, status, lock, fmt,
-    item: (id: string) => shell.items[id],
+    item: (id: string) => shell.items[id] ?? pageItems[id],
+    addItems,
     drawer, openDrawer, closeDrawer, openOrder,
     palette, openPalette, closePalette,
     keysOpen, setKeysOpen,
