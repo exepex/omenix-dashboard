@@ -1,0 +1,37 @@
+# The stories that build or publish the block endpoints' data (x-catalog.story). exists: false marks a story that is
+# needed but not written yet; its scope says what it must cover. Story files: exepex/trading docs/stories/.
+W2: {exists: true, repo: dashboard, file: X-cross-repository.md, title: 'Azure read path for F&O: publication-aware reads, contract checks, F&O freshness'}
+W6: {exists: true, repo: dashboard, file: X-cross-repository.md, title: Stock reads on Azure and parity}
+W8: {exists: true, repo: dashboard, file: X-cross-repository.md, title: 'The signed-off app frame in the real app (frame config, the bell rules, fixture adapter)'}
+W9: {exists: true, repo: dashboard, file: X-cross-repository.md, title: "The signed-off Home screen in the real app (the needs-you rules)"}
+P1: {exists: true, repo: trading, file: P-publishing.md, title: 'F&O read-model contract: pages today, positions, risk, scoreboard_b, ...'}
+P3: {exists: true, repo: trading, file: P-publishing.md, title: 'Atomic publisher to Azure: fno.pages_history, fno.current_publication, run status'}
+C2: {exists: true, repo: trading, file: C-code-roles.md, title: 'Risk manager: the owner limits'}
+K4-proposed:
+  exists: false
+  repo: agentic-stock-prediction
+  title: Stock backend publishes the frame and Home blocks
+  scope: >-
+    One read-model row per block and market (rm.blocks, page_key = the block: session, indices, tracked_moves,
+    search_index, instrument:<id>, positions, order_rules, picks, groups, strategy_trades, events, top_news) in the
+    stock envelope, built from the records the stock tool already publishes (rm.status, rm.home, rm.companies, rm.bars,
+    rm.portfolio, rm.strategies, rm.trades, rm.news) plus the new values the contract marks planned (next_open_utc,
+    the group totals, the market event calendar, the order rules); written through K1's publication pattern. Until it
+    lands, the dashboard routes may project the same fields from the existing rows (x-read-model "interim")
+P1-extension-proposed:
+  exists: false
+  repo: trading
+  title: "F&O pages the frame needs beyond P1's list"
+  scope: >-
+    Three more P1 pages (a minor version): contracts (the searchable NIFTY futures and options list with codes, lots
+    and last prices: A3, A5), quotes (per contract last, bid, ask, IV, source and as-of: A4's canonical 3 pm snapshot,
+    A2's end-of-day reader) and order_rules (C1's option charge schedule, C2's limits, the margin estimate, the next
+    snapshot time); built by P2 and published by P3
+MA1-proposed:
+  exists: false
+  repo: dashboard
+  title: The Manual paper account and its store
+  scope: >-
+    The owner's own paper account per market (capital Rs 5 lakh / US $5,000, owner-changeable; cash; positions from
+    the owner's recorded trades; India: open structures and at-risk against the F&O limits), stored in the app schema
+    (W7 pattern) and read by the accounts block; named as "a later story" in W8's out-of-scope list

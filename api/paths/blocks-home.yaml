@@ -1,0 +1,200 @@
+# Block endpoints of Home (31-dashboard) and the picks panel the frame shares with it. Each operation states the
+# blocks it feeds (x-feeds).
+/api/v1/markets/{market}/picks:
+  get:
+    tags: [blocks]
+    operationId: getPicks
+    summary: 'Today''s buy picks of the stock tool (agreement, record, go-live, no-pick list)'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key picks (interim: rm.home head_to_head, agreement, go_live)'
+    x-freshness: 'stock_age; pre-open run'
+    x-cache: 'tag rm:blocks:<market>:picks, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'signals empty: "No pick today"; no_pick lists companies nobody buys'
+    x-feeds: [h31.glance-pick, h31.picks-inline, s30.picks-agree, s30.picks-golive, s30.picks-nopick, s30.picks-record, s30.picks-row, s30.picks-yesno]
+    x-shared: 'one list of picks: Home''s top pick is the first row of the same list'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Picks block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PicksResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getPicks_india'}
+              us: {$ref: '#/components/examples/getPicks_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/tracked-moves:
+  get:
+    tags: [blocks]
+    operationId: getTrackedMoves
+    summary: 'How the tracked companies moved on the last close (market band)'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key tracked_moves (interim: rm.companies)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:tracked_moves, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'companies empty: the band leaves the line out'
+    x-feeds: [h31.band]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The TrackedMoves block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/TrackedMovesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getTrackedMoves_india'}
+              us: {$ref: '#/components/examples/getTrackedMoves_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/groups:
+  get:
+    tags: [blocks]
+    operationId: getGroups
+    summary: 'Who trades on stocks: each group''s total, its strategies'' own results and the Baselines line'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key groups (interim: rm.strategies)'
+    x-freshness: 'stock_age; post-close run'
+    x-cache: 'tag rm:blocks:<market>:groups, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'a group with no strategy: total null and empty says why'
+    x-feeds: [h31.who-trades]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Groups block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/GroupsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getGroups_india'}
+              us: {$ref: '#/components/examples/getGroups_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/strategy-trades:
+  get:
+    tags: [blocks]
+    operationId: getStrategyTrades
+    summary: 'The strategies'' open paper trades, one row per trade'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key strategy_trades (interim: rm.trades)'
+    x-freshness: 'stock_age; intraday checks and post-close run'
+    x-cache: 'tag rm:blocks:<market>:strategy_trades, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'strategy_trades empty: "Nothing open here"'
+    x-feeds: [h31.trades-strategies]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The StrategyTrades block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/StrategyTradesResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getStrategyTrades_india'}
+              us: {$ref: '#/components/examples/getStrategyTrades_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/attention:
+  get:
+    tags: [blocks]
+    operationId: getAttention
+    summary: 'Needs you: trades exiting today, the close not in yet, major events, doubtful news'
+    x-status: planned
+    x-publisher: dashboard
+    x-read-model: 'composed by the dashboard''s rules'
+    x-freshness: 'inputs; each run'
+    x-cache: 'recomputed when an input tag changes (strategy_trades, session, events, top_news); browser private, no-cache + ETag'
+    x-empty: 'attention empty: "Nothing needs you"'
+    x-feeds: [h31.glance-needs, h31.needs-you]
+    x-shared: 'one list: the glance shows its count, Needs you its items'
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Attention block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AttentionResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getAttention_india'}
+              us: {$ref: '#/components/examples/getAttention_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/events:
+  get:
+    tags: [blocks]
+    operationId: getEvents
+    summary: 'Coming up: the market''s events and the tracked companies'' results'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key events (calendar_event)'
+    x-freshness: 'stock_age; pre-open run'
+    x-cache: 'tag rm:blocks:<market>:events, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'events empty'
+    x-feeds: [h31.coming-up]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The Events block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/EventsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getEvents_india'}
+              us: {$ref: '#/components/examples/getEvents_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/{market}/top-news:
+  get:
+    tags: [blocks]
+    operationId: getTopNews
+    summary: 'Top news with each item''s verification status'
+    x-status: planned
+    x-publisher: stock
+    x-read-model: 'rm.blocks page_key top_news (interim: rm.news)'
+    x-freshness: 'stock_age; news run'
+    x-cache: 'tag rm:blocks:<market>:top_news, revalidated on publish; browser private, no-cache + ETag'
+    x-empty: 'news empty'
+    x-feeds: [h31.top-news]
+    parameters:
+      - $ref: '#/components/parameters/Market'
+    responses:
+      '200':
+        description: 'The TopNews block'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/TopNewsResponse'}
+            examples:
+              india: {$ref: '#/components/examples/getTopNews_india'}
+              us: {$ref: '#/components/examples/getTopNews_us'}
+      '404': {$ref: '#/components/responses/NotFound'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
