@@ -154,8 +154,14 @@
 @media (max-width:640px){
   .p-portfolios .pp-card{padding:16px;border-radius:16px} .p-portfolios .pp-hero{padding:24px 16px}
   .p-portfolios .pp-hv .pp-money.big{font-size:36px;line-height:44px} .p-portfolios .pp-money.big{font-size:24px;line-height:32px}
-  .p-portfolios .pp-hide-s{display:none} .p-portfolios .pp-only-s{display:flex;align-items:center;margin-top:4px}
   .p-portfolios .pp-strip,.p-portfolios .pp-fin-sides,.p-portfolios .pp-picks{grid-template-columns:minmax(0,1fr)}
-  .p-portfolios .pp-trades .nm{max-width:120px} .p-portfolios .pp-pct{display:none} .p-portfolios .pp-bn{text-align:left}
+  .p-portfolios .pp-pct{display:none} .p-portfolios .pp-bn{text-align:left}
+}
+/* The trade tables take their compact columns by the room they have, not the viewport's: inside the app frame (W8) a
+   768 px tablet leaves the page less room than the full table needs. */
+.p-portfolios :has(> table.pp-trades){container-type:inline-size}
+@container (max-width:679px){
+  .p-portfolios .pp-hide-s{display:none} .p-portfolios .pp-only-s{display:flex;align-items:center;margin-top:4px}
+  .p-portfolios .pp-trades .nm{max-width:120px} .p-portfolios .pp-pct{display:none}
   .p-portfolios .pp-trades td,.p-portfolios .pp-trades th{padding-left:4px;padding-right:4px} .p-portfolios .pp-why td{padding:0 4px 16px!important}
 }

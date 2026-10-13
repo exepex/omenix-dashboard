@@ -8,23 +8,23 @@ const PAPER = "Not proven yet: these are tests, not tips.";
 const HOME_VERDICT = "Can I rely on this yet?";
 const HTTP_ERROR_LINE = /^Failed to load resource: the server responded with a status of (404|503)/;
 
-/** The shell's own checks on any page: one current nav item, the market switch pressed on the market, Paper visible. */
+/** The frame's own checks on any page (W8): one current rail group, the market switch pressed on the market, Paper visible. */
 async function shellChecks(page, { market }) {
   const problems = [];
   const pressed = await page.$$eval('[aria-label="Market"] button[aria-pressed="true"]', (b) => b.map((x) => x.textContent));
   if (pressed.length !== 1 || pressed[0] !== (market === "us" ? "US" : "India")) problems.push(`market switch pressed: ${pressed.join(",")}`);
-  const current = await page.$$eval('.mb-sidebar [aria-current="page"]', (a) => a.length);
-  if (current !== 1) problems.push(`sidebar has ${current} current items`);
+  const current = await page.$$eval('.mb-navrail .mb-rail-item[aria-current="page"]', (a) => a.length);
+  if (current !== 1) problems.push(`rail has ${current} current groups`);
   const paper = await page.$$eval(".mb-tag.paper", (t) => t.length);
   if (!paper) problems.push("no Paper tag on the page");
   return problems;
 }
 
 export const cases = [
-  { name: "shell-home-india", path: "/india", mockup: "01-home", widths: [1280, 1024, 768, 390], waitFor: ".phead", expectText: [HOME_VERDICT, "Market mood:", "Home"], check: shellChecks },
+  { name: "shell-home-india", path: "/india", mockup: "01-home", widths: [1280, 1024, 768, 390], waitFor: ".phead", expectText: [HOME_VERDICT, "Market mood:"], check: shellChecks },
   { name: "shell-home-us", path: "/us", market: "us", mockup: "01-home", widths: [1280], waitFor: ".phead", expectText: [HOME_VERDICT], check: shellChecks },
   { name: "shell-watchlist", path: "/india/watchlist", mockup: "02-watchlist", waitFor: ".phead", expectText: [PAPER, "Watchlist"], check: shellChecks },
-  { name: "shell-company", path: "/india/stocks/RELIANCE", mockup: "03-company", waitFor: ".phead", expectText: ["Company"], check: shellChecks },
+  { name: "shell-company", path: "/india/stocks/RELIANCE", mockup: "03-company", waitFor: ".phead", expectText: ["RELIANCE"], check: shellChecks },
   { name: "state-error-503", path: "/india/watchlist", apiStatus: 503, allowConsole: [HTTP_ERROR_LINE], widths: [1280, 390], waitFor: '[role="alert"]', expectText: ["Data service unavailable", "Try again", "omenix.vercel.app/india"] },
   { name: "state-loading", path: "/india/news", apiStatus: "slow", widths: [1280], waitFor: '[aria-busy="true"]', expectText: ["Loading the page data"] },
   { name: "state-bad-ticker", path: "/india/stocks/not-a-ticker", widths: [1280], waitFor: '[role="alert"]', expectText: ["Not found"] },
@@ -37,7 +37,7 @@ export const cases = [
     expectText: ["Component gallery", "after your broker’s fees"],
     check: async (page) => {
       const problems = [];
-      if (await page.$('.mb-sidebar [aria-current="page"]')) problems.push("the gallery marks a sidebar page as current");
+      if (await page.$('.mb-navrail .mb-rail-item[aria-current="page"]')) problems.push("the gallery marks a rail group as current");
       const failed = await page.$(".mb-candles .quiet");
       if (failed) problems.push("the vendored chart did not draw");
       const hit = page.locator(".mb-chart rect.hit").first();
@@ -63,7 +63,7 @@ export const cases = [
       const problems = [];
       for (let i = 0; i < 4; i++) {
         await page.keyboard.press("Tab");
-        if (await page.evaluate(() => !!document.activeElement?.closest(".mb-sidebar"))) problems.push(`Tab stop ${i + 1} is inside the closed drawer`);
+        if (await page.evaluate(() => !!document.activeElement?.closest(".mb-navrail, .mb-drawer:not(.open), .mb-wl"))) problems.push(`Tab stop ${i + 1} is inside a hidden part of the frame`);
       }
       return problems;
     },
@@ -90,10 +90,10 @@ export const cases = [
     waitFor: ".phead",
     check: async (page) => {
       const problems = [];
-      await page.click('.mb-navbar button:has-text("More")');
-      if (!(await page.$(".mb-sidebar.open"))) problems.push("More did not open the drawer");
+      await page.click('.mb-navbar a:has-text("More")');
+      if (!(await page.$(".mb-drawer.open:has-text('All screens')"))) problems.push("More did not open the drawer with every screen");
       await page.keyboard.press("Escape");
-      if (await page.$(".mb-sidebar.open")) problems.push("Escape did not close the drawer");
+      if (await page.$(".mb-drawer.open")) problems.push("Escape did not close the drawer");
       return problems;
     },
   },

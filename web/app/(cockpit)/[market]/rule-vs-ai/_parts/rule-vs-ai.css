@@ -31,7 +31,7 @@
 .p-compare .pk{display:grid;gap:3px;padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high);font-size:12.5px;min-width:0}
 .p-compare .pk .l1,.p-compare .pk .l2{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
 .p-compare .pk .l1 small{color:var(--md-sys-color-on-surface-variant)}
-.p-compare .pk .mb-label{font-size:11px;padding:1px 6px}
+.p-compare .pk .mb-label{font-size:11px;padding:1px 6px;white-space:normal}
 .p-compare .pk .g{font-weight:700}
 .p-compare .mt td{vertical-align:middle}
 .p-compare .mt .res b{display:block;font-weight:700}
