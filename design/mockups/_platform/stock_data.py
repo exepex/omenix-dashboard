@@ -18,6 +18,7 @@ from datetime import date
 
 from real_data import FAMILY, display_names
 from screener_data import SRC as SCREENER, atm_iv, buildup
+import stock_views as V
 
 SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "35-stock", "source")
 CLOCK = "2026-10-13T09:00:00Z"
@@ -60,8 +61,27 @@ def quarters_us(M: dict) -> list:
             if nine is not None and e not in q:
                 q[e] = round(v - nine, 2)
         return q
-    eps, rev = series("eps_diluted"), series("revenue")
-    return [{"end": e, "revenue": rev.get(e), "profit": None, "eps": eps[e]} for e in sorted(eps)]
+    eps, rev, profit = series("eps_diluted"), series("revenue"), series("net_income")
+    return [{"end": e, "revenue": rev.get(e), "profit": profit.get(e), "eps": eps[e]} for e in sorted(eps)]
+
+
+def years_us(M: dict) -> list:
+    """Fiscal years from SEC filings: revenue and net income over a span of about a year."""
+    by = {}
+    for r in M["fundamentals"]:
+        if r["period_start"] and r["concept"] in ("revenue", "net_income") and \
+                (date.fromisoformat(r["period_end"]) - date.fromisoformat(r["period_start"])).days > 350:
+            by.setdefault(r["period_end"], {"end": r["period_end"]})["profit" if r["concept"] == "net_income" else "revenue"] = r["value"]
+    return [by[e] for e in sorted(by)]
+
+
+def results(m: str, M: dict, quarters: list) -> dict:
+    """Revenue, profit and margin by quarter and by year, with year-on-year growth (ours)."""
+    if m == "india":
+        R = V.results_india(M["financials"])
+    else:
+        R = {"quarters": V.with_yoy([{k: q[k] for k in ("end", "revenue", "profit")} for q in quarters], 4), "years": V.with_yoy(years_us(M), 1)}
+    return {"quarters": R["quarters"][-8:], "years": R["years"][-3:]}
 
 
 def valuation(close: float, quarters: list) -> dict:
@@ -108,8 +128,9 @@ def tools(m: str, M: dict) -> dict:
 
 
 def trades(m: str, M: dict) -> list:
-    names = display_names(m)
-    return [{"name": names.get(t["strategy_id"], t["strategy_id"]), "family": t["family"], "h": t["horizon_days"], "entry_date": t["entry_date"],
+    """Open paper trades; `amount` is the paper size every strategy trades (the views' one amount per market)."""
+    names, amount = display_names(m), next((v["amount"] for v in M["views"]), None)
+    return [{"name": names.get(t["strategy_id"], t["strategy_id"]), "family": t["family"], "h": t["horizon_days"], "entry_date": t["entry_date"], "amount": amount,
              "exit_date": t["exit_date"], "entry": t["entry_price"], "last": t["last_price"], "ret": round(t["ret_since_entry_pct"], 2), "band": t["band"],
              "check_at": t["check_at"]} for t in sorted(M["open_trades"], key=lambda t: (t["strategy_id"], t["horizon_days"]))]
 
@@ -163,7 +184,9 @@ def fno(ticker: str) -> dict | None:
 def stock_payload() -> dict:
     src = json.load(open(os.path.join(SRC, "stock.json")))
     tracked = json.load(open(os.path.join(SCREENER, "tracked.json")))["markets"]
-    names = {r["symbol"]: r["name"] for r in csv.DictReader(open(os.path.join(SCREENER, "names.csv")))}
+    names, industries = {}, {}
+    for r in csv.DictReader(open(os.path.join(SCREENER, "names.csv"))):
+        names[r["symbol"]], industries[r["symbol"]] = r["name"], r.get("nifty500_industry")
     out = {"clock": CLOCK, "source": src["source"], "markets": {}}
     for m, M in src["markets"].items():
         t = M["ticker"]
@@ -171,12 +194,16 @@ def stock_payload() -> dict:
         quarters = quarters_india(M) if m == "india" else quarters_us(M)
         f = M["features"] or {}
         bars = M["prices"][t]
+        C, T = chart(M), tools(m, M)
         out["markets"][m] = {
             "ticker": t, "name": names.get(t) or tracked[m][t]["name"], "sector": tracked[m][t]["sector"], "exchange": "NSE" if m == "india" else "NASDAQ",
-            "quote": q, "chart": chart(M), "quarters": quarters[-6:], "valuation": valuation(q["close"], quarters),
+            "quote": q, "chart": {**C, "sector": V.sector(industries.get(t), C["dates"]) if m == "india" else None},
+            "quarters": quarters[-6:], "valuation": valuation(q["close"], quarters), "results": results(m, M, quarters),
+            "risk": V.risk(C["close"], C["bench"], f.get("beta_1y")), "families": V.families(M["views"], T["horizons"]),
+            "holders": V.holders(M["views"], M["open_trades"]), "gaps": V.gaps(m),
             "stats": {"hi52": max(b[2] for b in bars[-250:]), "lo52": min(b[3] for b in bars[-250:]), "vol_avg20": round(sum(b[5] for b in bars[-21:-1]) / 20),
                       "beta": f.get("beta_1y"), "rsi": f.get("rsi_14"), "atr_pct": f.get("atr_pct"), "vol_10d": f.get("realized_vol_10d"),
                       "days_to_results": f.get("days_to_earnings"), "as_of": f.get("as_of_date")},
-            "tools": tools(m, M), "trades": trades(m, M), "news": news(M), "corporate": corporate(m, M),
-            "fno": fno(t) if m == "india" else None}
+            "tools": T, "trades": trades(m, M), "news": news(M), "corporate": corporate(m, M),
+            "fno": {**fno(t), "expiries": V.expiries(t)} if m == "india" and fno(t) else None}
     return out

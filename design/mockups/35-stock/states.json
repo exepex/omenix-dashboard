@@ -4,7 +4,7 @@
   {
    "id": "overview",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Overview: price, the last price check, results in 3 days, your paper position, Buy and Sell; the chart, key figures in words, the last quarters.",
+   "title": "Overview: price, our tools’ one grey line, your paper position, Buy and Sell; the chart with the model’s 5-session fan and paper buys; key numbers explained (52-week bar, RSI dial, volatility against NIFTY); results as bars with the margin line.",
    "hash": "",
    "widths": [
     1280,
@@ -17,8 +17,27 @@
   {
    "id": "compare",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Two years against NIFTY 50.",
-   "hash": "per=2y&cmp=1",
+   "title": "One year against NIFTY 50 and Nifty Oil & Gas, all from 100.",
+   "hash": "cmp=1&sec=1",
+   "widths": [
+    1280
+   ]
+  },
+  {
+   "id": "years",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "Results by year, with year-on-year growth.",
+   "hash": "res=y",
+   "widths": [
+    1280,
+    390
+   ]
+  },
+  {
+   "id": "week",
+   "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
+   "title": "5D period: the last five sessions and the fan.",
+   "hash": "per=5d",
    "widths": [
     1280
    ]
@@ -26,7 +45,7 @@
   {
    "id": "tools",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Our strategies: chance up, strategies buying by family, the expected range for each of the next 5 sessions; the AI team’s reading; open paper trades.",
+   "title": "Our strategies: the model’s view shared by all strategies (chance and expected range), how each family decides with its votes as small bars, who holds RELIANCE now with each paper result, which family is winning (no settled trades yet), the AI team’s reading.",
    "hash": "tab=tools",
    "widths": [
     1280,
@@ -37,7 +56,7 @@
   {
    "id": "tools-phone",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "Our strategies on a phone: each session’s view stacked, with its labels.",
+   "title": "Our strategies on a phone: rows stacked, votes and paper results as bars.",
    "hash": "tab=tools",
    "widths": [
     390
@@ -69,7 +88,7 @@
   {
    "id": "fno",
    "section": "1. RELIANCE (India, market open, 13 Oct 14:30 IST)",
-   "title": "F&O: the future, its build-up, IV against its 3-month range, the move priced in; three months of history.",
+   "title": "F&O (market data, not your position): the three listed monthly futures with OI and build-up, three months of the future with OI, IV in its 3-month range, your own paper F&O apart.",
    "hash": "tab=fno",
    "widths": [
     1280,

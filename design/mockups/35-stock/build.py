@@ -4,7 +4,8 @@
 
 Composes `data.json` from design/mockups/_platform/stock_data.py: REAL records (the stock tool's own published data of
 RELIANCE and NVDA up to 13 Oct 2026 14:30 IST, in source/, copied read-only by fetch_stock.py; NSE's F&O files from
-the screener's source). Inlines it with 30-shell/data.json into `template.html`; writes `page.html`. Deterministic.
+the screener's source and the day's listed futures from fetch_fno.py; the NSE sector index from the markets page's
+source). Inlines it with 30-shell/data.json and the page's own js/*.js into `template.html`; writes `page.html`. Deterministic.
 """
 import os
 import sys

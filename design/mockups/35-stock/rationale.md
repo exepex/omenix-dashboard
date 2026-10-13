@@ -72,3 +72,56 @@ followed, the most traded). Both are real cases with something to show.
   Reasoning only.
 - **The option chain button** on an Indian stock opens a note for now. The chain mockup shows NIFTY, and the same page
   serves stocks.
+
+## Rework after the owner's feedback (13 Oct 2026, through the orchestrator)
+- **A. Our strategies.**
+  - The chance and the expected range are shown once as **the model's view, shared by all strategies**. No family has
+    its own range, so the page no longer suggests one.
+  - One row per family says how it decides in one line, with its votes per exit as small stacked bars (filled = buys).
+    The AI team shows "out" where it recorded no view. Hybrid shows "none built yet".
+  - "Strategies holding RELIANCE now (1 of 12)" lists only the holder, each trade's paper result in money and % as a
+    bar.
+  - "Which family is winning here" says "No settled trades yet" and links to the scoreboard: one stock has too few
+    trades to name a winner.
+- **B. Header.** One grey line: "Our tools today: 1 of 12 strategies buy · model 47% (not proven) · AI team: stays
+  out". It stays grey because nothing is proven. Today the model gives every company about the same chance, so a
+  green or red signal would mislead.
+- **C. Price chart.**
+  - Crosshair with the date, price and the comparisons.
+  - Drag (or pinch on a phone) to zoom; double-click or "Reset zoom" to go back.
+  - A 5D period.
+  - NIFTY 50 and the stock's NSE sector index (Nifty Oil & Gas for RELIANCE, from its Nifty 500 industry), all from 100.
+  - The model's 50% and 80% range for N+1..N+5 as a fan past the last close, which keeps 14% of the width so it
+    stays visible at every period.
+  - The paper buys marked as rings.
+- **D. Results.**
+  - Revenue and net profit as bars with the net margin as a labelled line.
+  - A Quarters / Years toggle; growth against the same period a year earlier.
+  - Profit before tax and profit to owners (India).
+  - Debt, cash flow and a 3-year history marked "not recorded yet".
+- **E. Key numbers, explained** ("Where the stock stands today. Not a forecast."):
+  - the 52-week range bar with today's position;
+  - an RSI dial marking 30 and 70;
+  - one year's volatility of the stock against NIFTY 50 as bars, with beta in words.
+- **F. F&O.**
+  - It says first that it is market data, not your position, and that stock F&O has monthly expiries only.
+  - The three listed futures in a table: price, OI and its change, build-up.
+  - Three months of the future over its open interest; IV as a gauge in its 3-month range.
+  - Your own paper F&O on its own line ("None").
+- **Code.** The page's script is split into `js/1-base.js` to `js/9-mount.js` (one purpose each, all under 350 lines).
+  The platform builder now inlines a page's own `js/` folder (`<!--@@PAGE_JS@@-->`).
+
+## Proposed, not asked (G)
+Built:
+- The crosshair also names the comparison values, not only the price.
+- Paper results are shown in money, not only in %, with the trade size stated (₹1,00,000 / $1,000 per exit).
+- The IV gauge says in words whether options are cheap or dear for this stock.
+- "out" in the votes where a strategy recorded no view, instead of a misleading "0 of 0".
+
+Proposed for the owner to choose (reasoning only):
+1. Mark the results date and the ex-dividend date on the price chart (both are recorded in `features` and `events`).
+2. Arrow keys move the crosshair one session at a time, for keyboard users.
+3. Turn the AI team's evidence ids into links to the matching news items.
+4. "Tell me when a strategy buys this stock": a per-stock alert in the bell.
+5. The option chain page for this stock (the NIFTY chain's design, for any F&O stock).
+6. A small delivery-% trend line (India) next to the delivery figure.
