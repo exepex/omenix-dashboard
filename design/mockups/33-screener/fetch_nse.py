@@ -4,7 +4,7 @@
 
 Writes into source/:
 - equity.csv: one row per EQ/BE stock that traded on the last day, reduced from a year of NSE's daily equity file
-  (UDiFF `BhavCopy_NSE_CM_*`): closes 1 week, 1 month, 3 months and 1 year back, 52-week high and low, volume and
+  (UDiFF `BhavCopy_NSE_CM_*`; prices and volumes adjusted for splits and bonus issues, the actions used in actions.csv): closes 1 week, 1 month, 3 months and 1 year back, 52-week high and low, volume and
   its 20-day average, RSI 14, the last 21 closes;
 - delivery.csv: the last day's delivery % per stock (`sec_bhavdata_full_<DDMMYYYY>.csv`);
 - names.csv: company names (`EQUITY_L.csv`) and Nifty 500 industries (`ind_nifty500list.csv`);
@@ -17,15 +17,18 @@ import csv
 import datetime as dt
 import gzip
 import io
+import json
 import os
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import zipfile
 from collections import defaultdict
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "_platform"))
 from nse_calendar import sessions  # noqa: E402  (NSE's sessions, never weekdays: the 1 Feb 2026 Sunday Budget session)
+import nse_actions  # noqa: E402  (splits and bonus issues: NSE's files never adjust past prices)
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "source")
 BASE = "https://nsearchives.nseindia.com"
@@ -35,7 +38,8 @@ def get(path: str) -> bytes:
     """One NSE file; a holiday's 404 is final, a dropped connection is tried twice more."""
     for attempt in range(3):
         try:
-            return urllib.request.urlopen(urllib.request.Request(BASE + path, headers={"User-Agent": "Mozilla/5.0"}), timeout=60).read()
+            url = path if path.startswith("http") else BASE + path
+            return urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=60).read()
         except urllib.error.HTTPError:
             raise
         except Exception:
@@ -78,6 +82,7 @@ def equity(last: dt.date) -> None:
         for r in rows:
             if r["SctySrs"] in ("EQ", "BE"):
                 series[r["TckrSymb"]].append((r["TradDt"], r["SctySrs"], float(r["ClsPric"]), float(r["HghPric"]), float(r["LwPric"]), int(float(r["TtlTradgVol"]))))
+    series = adjusted(series, last)
     back = lambda s, n: s[-1 - n][2] if len(s) > n else ""
     with open(os.path.join(OUT, "equity.csv"), "w", newline="") as handle:
         out = csv.writer(handle)
@@ -90,6 +95,24 @@ def equity(last: dt.date) -> None:
             out.writerow([sym, s[-1][1], s[-1][0], s[-1][2], back(s, 1), back(s, 5), back(s, 21), back(s, 63), back(s, 250),
                           max(x[3] for x in s[-250:]), min(x[4] for x in s[-250:]), s[-1][5], round(sum(vols) / len(vols)) if vols else "",
                           rsi14([x[2] for x in s]), len(s), ";".join("%g" % x[2] for x in s[-21:])])
+
+
+def adjusted(series: dict, last: dt.date) -> dict:
+    """Prices adjusted for the year's splits and bonus issues (NSE's corporate actions; the bulk list, then one lookup
+    per symbol with an unexplained jump); the actions used are written to actions.csv."""
+    span = f"&from_date={last - dt.timedelta(days=372):%d-%m-%Y}&to_date={last:%d-%m-%Y}"
+    acts = nse_actions.actions(json.loads(get(nse_actions.API + span)))
+    for sym in nse_actions.unexplained(series, acts):
+        acts += nse_actions.actions(json.loads(get(nse_actions.API + "&symbol=" + urllib.parse.quote(sym) + span)))
+    acts = sorted({tuple(a) for a in acts if a[1] <= last.isoformat()})
+    with open(os.path.join(OUT, "actions.csv"), "w", newline="") as handle:
+        out = csv.writer(handle)
+        out.writerow(["symbol", "ex_date", "factor", "subject"])
+        out.writerows(acts)
+    by = defaultdict(list)
+    for a in acts:
+        by[a[0]].append(a)
+    return {sym: nse_actions.adjust(rows, by[sym]) if sym in by else rows for sym, rows in series.items()}
 
 
 def fno(last: dt.date) -> None:
