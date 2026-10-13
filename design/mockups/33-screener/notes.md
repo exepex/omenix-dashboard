@@ -50,11 +50,15 @@ Neither backend publishes screener rows yet. This file is the proposed contract:
 | 12 | Source chips | the files and the day; "computed: ours"; "our tools: followed companies only"; "not live" | daily | dashboard |
 
 ## Findings for the backends (from these real records)
-- **Stock tool (strong evidence).** On 12 Oct the model gives every India company the same N+5 chance of a rise
-  (0.4659). The `model_scores` records show every feature contribution as zero, so the model has fallen back to its
-  base rate. The screener shows the number as recorded; the stock tool should find out why.
+- **Stock tool (strong evidence).** On 12 Oct the model gives 15 of 20 India companies the same N+5 chance of a rise
+  (0.4659); the other five differ only through news. In `model_scores` every price and technical feature contributes
+  exactly 0; only the constant term (−0.0829) and news do not. The screener shows the number as recorded; the stock
+  tool should find out why (`reviews/claude/response_5_stock_tool_findings.md`).
 - **Stock tool (strong evidence).** US `options` records from yfinance carry impossible IVs, for example JPM ATM IV
   0.0156 (1.6%) on 12 Oct. They are not used here.
-- **Stock tool (some evidence).** `financials` hold 2 quarters for 7 of 20 India companies, so no P/E can be computed.
-  Valuation (P/E, market cap) is therefore absent from the screener, not shown as blank columns.
+- **Valuation (corrected 13 Oct 2026).** I first wrote that the stock tool's `financials` were too thin for a P/E. That
+  came from reading only its latest daily file. Across all its files there are four or more consecutive quarters of
+  consolidated diluted EPS for 15 of 20 India companies (TCS to 30 Sep 2026; HINDUNILVR, INFY and LT have two; SBILIFE
+  has none). So a trailing P/E (ours) is possible for the followed companies; it is not on the page yet. NSE's daily
+  files carry no P/E or market cap for the other stocks.
 - JPM has no strategy view for 12 Oct (results due), and the page says "No view today".

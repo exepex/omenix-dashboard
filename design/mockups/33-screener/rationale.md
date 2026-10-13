@@ -60,8 +60,9 @@ on 13 Oct 2026. Status: **for the owner's review**.
   alphabet.
 - **The picks panel starts hidden** here, as on the chain: results need the width. The table drops low-priority
   columns by its own width (delivery and RSI; put-call ratio and lot in F&O), then turns into cards below 760 px.
-- **No valuation columns.** P/E and market cap are not in NSE's daily files. The stock tool's financials are too thin
-  for a P/E (notes.md). An empty column would only look broken.
+- **No valuation columns yet.** P/E and market cap are not in NSE's daily files, so the whole-market list cannot
+  have them. For the followed companies a trailing P/E is possible from the stock tool's financials (15 of 20; notes.md,
+  corrected). It is a candidate for the owner's review rather than added unasked.
 - **Sectors only for the Nifty 500.** NSE's files give no industry for the other 2,400 stocks, so the page says
   where sectors come from.
 
