@@ -1,0 +1,15 @@
+X1 TLS check on omenix-pg.postgres.database.azure.com, 2026-10-13 01:44 UTC
+
+== 1. server parameters (az)
+require_secure_transport	on
+ssl_min_protocol_version	TLSv1.2
+
+== 2. connection without TLS (sslmode=disable) must be refused
+psql exit code: 2
+server answer: psql: error: connection to server at "omenix-pg.postgres.database.azure.com" (<IP address>), port 5432 failed: FATAL:  no pg_hba.conf entry for host "<IP address>", user "x1_tls_probe", database "omenix", no encryption
+refused because it was not encrypted: yes
+
+== 3. verified TLS connection as dashboard_app (sslmode=verify-full)
+ssl=true version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384
+
+RESULT: require_secure_transport on: yes; non-TLS refused: yes; verified TLS connection works: yes

@@ -1,0 +1,32 @@
+X1 server settings of omenix-pg, 2026-10-13 01:45 UTC (az CLI), compared with platform/README.md
+
+PASS  location = Central India
+PASS  sku = Standard_B1ms
+PASS  tier = Burstable
+PASS  PostgreSQL version = 16
+PASS  storage GiB = 32
+PASS  storage performance tier = P4
+PASS  backup retention days = 14
+PASS  public network access = Enabled
+PASS  data encryption = SystemManaged
+PASS  require_secure_transport = on
+firewall rules (name, start, end):
+ERROR: unrecognized arguments: -n omenix-pg
+
+https://aka.ms/cli_ref
+Read more about the command in reference docs
+ERROR: unrecognized arguments: -n omenix-pg
+
+https://aka.ms/cli_ref
+Read more about the command in reference docs
+FAIL  firewall rules =  (README says <IP address>-<IP address>)
+
+info  geo-redundant backup = Disabled
+info  high availability = Disabled
+info  storage auto-grow = Enabled
+info  password authentication = Enabled; Entra authentication = Disabled
+info  earliest restore point (UTC) = 2026-10-12T21:17:57.188671+00:00
+info  ssl_min_protocol_version = TLSv1.2
+info  state = Ready
+
+RESULT: 1 difference(s) from platform/README.md

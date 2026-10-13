@@ -1,0 +1,339 @@
+X1 role matrix on omenix-pg.postgres.database.azure.com, 2026-10-13 01:30 UTC, sslmode=verify-full, repository commit unknown
+
+== catalog snapshot compared with platform/tests/expected_catalog.txt (no output between the markers = identical)
+-- diff start
+-- diff end
+snapshot identical: yes
+
+== large objects in every database (named exceptions 1 and 2)
+PASS  database azure_maintenance: no large object
+OPEN  database azure_maintenance: PUBLIC may still create large objects (lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea))
+PASS  database azure_sys: no large object
+OPEN  database azure_sys: PUBLIC may still create large objects (lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea))
+PASS  database omenix: no large object
+OPEN  database omenix: PUBLIC may still create large objects (lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea))
+PASS  database postgres: no large object
+OPEN  database postgres: PUBLIC may still create large objects (lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea))
+PASS  database template1: no large object
+OPEN  database template1: PUBLIC may still create large objects (lo_create(oid), lo_creat(integer), lo_from_bytea(oid,bytea))
+
+== stock_writer (psql exit 0)
+PASS  stock_writer       value=false 00000     SELECT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls)::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  stock_writer       value=0     00000     SELECT count(*)::text AS v FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.member WHERE r.rolname = current_user
+PASS  stock_writer       deny        42501     CREATE ROLE x1_matrix_role
+PASS  stock_writer       deny        42501     CREATE SCHEMA x1_matrix_schema
+PASS  stock_writer       deny        42501     CREATE TEMP TABLE x1_matrix_temp (i int)
+PASS  stock_writer       deny        42501     SELECT count(*) FROM pg_authid
+PASS  stock_writer       deny        42501     SELECT pg_read_file('PG_VERSION')
+PASS  stock_writer       value=true  00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
+PASS  stock_writer       value=false 00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
+PASS  stock_writer       value=false 00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
+OPEN  stock_writer       known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  stock_writer       known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
+OPEN  stock_writer       known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
+OPEN  stock_writer       known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
+OPEN  stock_writer       known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'TEMP')   (known exception: create temporary tables in a database other than omenix)
+OPEN  stock_writer       known:deny  got 00000           SET statement_timeout = 0   (known exception: switch off its own statement timeout for its session)
+OPEN  stock_writer       known:deny  got 00000           ALTER ROLE CURRENT_USER SET statement_timeout = 0   (known exception: switch off its own statement timeout persistently (caught by the catalog snapshot))
+OPEN  stock_writer       known:deny  got 00000           ALTER ROLE CURRENT_USER PASSWORD NULL   (known exception: change or remove its own password (rolled back here))
+PASS  stock_writer       value=0     00000     SELECT count(*)::text AS v FROM pg_largeobject_metadata
+PASS  stock_writer       deny        42501     CREATE TABLE public.x1_matrix (i int)
+PASS  stock_writer       deny        42501     CREATE VIEW public.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_writer       deny        42501     CREATE SEQUENCE public.x1_matrix_s
+PASS  stock_writer       deny        42501     CREATE FUNCTION public.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_writer       deny        42501     CREATE TYPE public.x1_matrix_t AS (i int)
+PASS  stock_writer       deny        42501     CREATE TABLE stock.x1_matrix (i int)
+PASS  stock_writer       deny        42501     CREATE VIEW stock.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_writer       deny        42501     CREATE SEQUENCE stock.x1_matrix_s
+PASS  stock_writer       deny        42501     CREATE FUNCTION stock.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_writer       deny        42501     CREATE TYPE stock.x1_matrix_t AS (i int)
+PASS  stock_writer       deny        42501     CREATE INDEX x1_matrix_idx ON stock.x1_probe (note)
+PASS  stock_writer       deny        42501     ALTER TABLE stock.x1_probe ADD COLUMN x1_extra int
+PASS  stock_writer       deny        42501     DROP TABLE stock.x1_probe
+PASS  stock_writer       deny        42501     TRUNCATE stock.x1_probe
+PASS  stock_writer       deny        42501     CREATE TABLE fno.x1_matrix (i int)
+PASS  stock_writer       deny        42501     CREATE VIEW fno.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_writer       deny        42501     CREATE SEQUENCE fno.x1_matrix_s
+PASS  stock_writer       deny        42501     CREATE FUNCTION fno.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_writer       deny        42501     CREATE TYPE fno.x1_matrix_t AS (i int)
+PASS  stock_writer       deny        42501     CREATE INDEX x1_matrix_idx ON fno.x1_probe (note)
+PASS  stock_writer       deny        42501     ALTER TABLE fno.x1_probe ADD COLUMN x1_extra int
+PASS  stock_writer       deny        42501     DROP TABLE fno.x1_probe
+PASS  stock_writer       deny        42501     TRUNCATE fno.x1_probe
+PASS  stock_writer       deny        42501     CREATE TABLE app.x1_matrix (i int)
+PASS  stock_writer       deny        42501     CREATE VIEW app.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_writer       deny        42501     CREATE SEQUENCE app.x1_matrix_s
+PASS  stock_writer       deny        42501     CREATE FUNCTION app.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_writer       deny        42501     CREATE TYPE app.x1_matrix_t AS (i int)
+PASS  stock_writer       deny        42501     CREATE INDEX x1_matrix_idx ON app.x1_probe (note)
+PASS  stock_writer       deny        42501     ALTER TABLE app.x1_probe ADD COLUMN x1_extra int
+PASS  stock_writer       deny        42501     DROP TABLE app.x1_probe
+PASS  stock_writer       deny        42501     TRUNCATE app.x1_probe
+PASS  stock_writer       allow       00000     SELECT count(*) FROM stock.x1_probe
+PASS  stock_writer       allow       00000     INSERT INTO stock.x1_probe (note) VALUES ('x1 matrix')
+PASS  stock_writer       allow       00000     UPDATE stock.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  stock_writer       allow       00000     DELETE FROM stock.x1_probe WHERE id = -1
+PASS  stock_writer       allow       00000     SELECT nextval('stock.x1_probe_id_seq')
+PASS  stock_writer       deny        42501     SELECT count(*) FROM fno.x1_probe
+PASS  stock_writer       deny        42501     INSERT INTO fno.x1_probe (note) VALUES ('x1 matrix')
+PASS  stock_writer       deny        42501     UPDATE fno.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  stock_writer       deny        42501     DELETE FROM fno.x1_probe WHERE id = -1
+PASS  stock_writer       deny        42501     SELECT nextval('fno.x1_probe_id_seq')
+PASS  stock_writer       deny        42501     SELECT count(*) FROM app.x1_probe
+PASS  stock_writer       deny        42501     INSERT INTO app.x1_probe (note) VALUES ('x1 matrix')
+PASS  stock_writer       deny        42501     UPDATE app.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  stock_writer       deny        42501     DELETE FROM app.x1_probe WHERE id = -1
+PASS  stock_writer       deny        42501     SELECT nextval('app.x1_probe_id_seq')
+PASS  stock_writer       deny        42501     SELECT stock.x1_probe_f()
+PASS  stock_writer       deny        42501     SELECT fno.x1_probe_f()
+PASS  stock_writer       deny        42501     SELECT app.x1_probe_f()
+PASS  stock_writer       deny        42501     SET ROLE stock_owner
+PASS  stock_writer       deny        42501     SET ROLE fno_owner
+PASS  stock_writer       deny        42501     SET ROLE app_owner
+PASS  stock_writer       deny        42501     SET ROLE fno_writer
+PASS  stock_writer       deny        42501     SET ROLE dashboard_app
+PASS  stock_writer       deny        42501     SET ROLE stock_inbox_reader
+PASS  stock_writer       value=1min  00000     SELECT current_setting('statement_timeout') AS v
+PASS  stock_writer       value=5     00000     SELECT rolconnlimit::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  stock_writer       value=true  00000     SELECT ssl::text AS v FROM pg_stat_ssl WHERE pid = pg_backend_pid()
+== fno_writer (psql exit 0)
+PASS  fno_writer         value=false 00000     SELECT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls)::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  fno_writer         value=0     00000     SELECT count(*)::text AS v FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.member WHERE r.rolname = current_user
+PASS  fno_writer         deny        42501     CREATE ROLE x1_matrix_role
+PASS  fno_writer         deny        42501     CREATE SCHEMA x1_matrix_schema
+PASS  fno_writer         deny        42501     CREATE TEMP TABLE x1_matrix_temp (i int)
+PASS  fno_writer         deny        42501     SELECT count(*) FROM pg_authid
+PASS  fno_writer         deny        42501     SELECT pg_read_file('PG_VERSION')
+PASS  fno_writer         value=false 00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
+PASS  fno_writer         value=true  00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
+PASS  fno_writer         value=false 00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
+OPEN  fno_writer         known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  fno_writer         known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
+OPEN  fno_writer         known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
+OPEN  fno_writer         known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
+OPEN  fno_writer         known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'TEMP')   (known exception: create temporary tables in a database other than omenix)
+OPEN  fno_writer         known:deny  got 00000           SET statement_timeout = 0   (known exception: switch off its own statement timeout for its session)
+OPEN  fno_writer         known:deny  got 00000           ALTER ROLE CURRENT_USER SET statement_timeout = 0   (known exception: switch off its own statement timeout persistently (caught by the catalog snapshot))
+OPEN  fno_writer         known:deny  got 00000           ALTER ROLE CURRENT_USER PASSWORD NULL   (known exception: change or remove its own password (rolled back here))
+PASS  fno_writer         value=0     00000     SELECT count(*)::text AS v FROM pg_largeobject_metadata
+PASS  fno_writer         deny        42501     CREATE TABLE public.x1_matrix (i int)
+PASS  fno_writer         deny        42501     CREATE VIEW public.x1_matrix_v AS SELECT 1 AS i
+PASS  fno_writer         deny        42501     CREATE SEQUENCE public.x1_matrix_s
+PASS  fno_writer         deny        42501     CREATE FUNCTION public.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  fno_writer         deny        42501     CREATE TYPE public.x1_matrix_t AS (i int)
+PASS  fno_writer         deny        42501     CREATE TABLE stock.x1_matrix (i int)
+PASS  fno_writer         deny        42501     CREATE VIEW stock.x1_matrix_v AS SELECT 1 AS i
+PASS  fno_writer         deny        42501     CREATE SEQUENCE stock.x1_matrix_s
+PASS  fno_writer         deny        42501     CREATE FUNCTION stock.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  fno_writer         deny        42501     CREATE TYPE stock.x1_matrix_t AS (i int)
+PASS  fno_writer         deny        42501     CREATE INDEX x1_matrix_idx ON stock.x1_probe (note)
+PASS  fno_writer         deny        42501     ALTER TABLE stock.x1_probe ADD COLUMN x1_extra int
+PASS  fno_writer         deny        42501     DROP TABLE stock.x1_probe
+PASS  fno_writer         deny        42501     TRUNCATE stock.x1_probe
+PASS  fno_writer         deny        42501     CREATE TABLE fno.x1_matrix (i int)
+PASS  fno_writer         deny        42501     CREATE VIEW fno.x1_matrix_v AS SELECT 1 AS i
+PASS  fno_writer         deny        42501     CREATE SEQUENCE fno.x1_matrix_s
+PASS  fno_writer         deny        42501     CREATE FUNCTION fno.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  fno_writer         deny        42501     CREATE TYPE fno.x1_matrix_t AS (i int)
+PASS  fno_writer         deny        42501     CREATE INDEX x1_matrix_idx ON fno.x1_probe (note)
+PASS  fno_writer         deny        42501     ALTER TABLE fno.x1_probe ADD COLUMN x1_extra int
+PASS  fno_writer         deny        42501     DROP TABLE fno.x1_probe
+PASS  fno_writer         deny        42501     TRUNCATE fno.x1_probe
+PASS  fno_writer         deny        42501     CREATE TABLE app.x1_matrix (i int)
+PASS  fno_writer         deny        42501     CREATE VIEW app.x1_matrix_v AS SELECT 1 AS i
+PASS  fno_writer         deny        42501     CREATE SEQUENCE app.x1_matrix_s
+PASS  fno_writer         deny        42501     CREATE FUNCTION app.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  fno_writer         deny        42501     CREATE TYPE app.x1_matrix_t AS (i int)
+PASS  fno_writer         deny        42501     CREATE INDEX x1_matrix_idx ON app.x1_probe (note)
+PASS  fno_writer         deny        42501     ALTER TABLE app.x1_probe ADD COLUMN x1_extra int
+PASS  fno_writer         deny        42501     DROP TABLE app.x1_probe
+PASS  fno_writer         deny        42501     TRUNCATE app.x1_probe
+PASS  fno_writer         deny        42501     SELECT count(*) FROM stock.x1_probe
+PASS  fno_writer         deny        42501     INSERT INTO stock.x1_probe (note) VALUES ('x1 matrix')
+PASS  fno_writer         deny        42501     UPDATE stock.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  fno_writer         deny        42501     DELETE FROM stock.x1_probe WHERE id = -1
+PASS  fno_writer         deny        42501     SELECT nextval('stock.x1_probe_id_seq')
+PASS  fno_writer         allow       00000     SELECT count(*) FROM fno.x1_probe
+PASS  fno_writer         allow       00000     INSERT INTO fno.x1_probe (note) VALUES ('x1 matrix')
+PASS  fno_writer         allow       00000     UPDATE fno.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  fno_writer         allow       00000     DELETE FROM fno.x1_probe WHERE id = -1
+PASS  fno_writer         allow       00000     SELECT nextval('fno.x1_probe_id_seq')
+PASS  fno_writer         deny        42501     SELECT count(*) FROM app.x1_probe
+PASS  fno_writer         deny        42501     INSERT INTO app.x1_probe (note) VALUES ('x1 matrix')
+PASS  fno_writer         deny        42501     UPDATE app.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  fno_writer         deny        42501     DELETE FROM app.x1_probe WHERE id = -1
+PASS  fno_writer         deny        42501     SELECT nextval('app.x1_probe_id_seq')
+PASS  fno_writer         deny        42501     SELECT stock.x1_probe_f()
+PASS  fno_writer         deny        42501     SELECT fno.x1_probe_f()
+PASS  fno_writer         deny        42501     SELECT app.x1_probe_f()
+PASS  fno_writer         deny        42501     SET ROLE stock_owner
+PASS  fno_writer         deny        42501     SET ROLE fno_owner
+PASS  fno_writer         deny        42501     SET ROLE app_owner
+PASS  fno_writer         deny        42501     SET ROLE stock_writer
+PASS  fno_writer         deny        42501     SET ROLE dashboard_app
+PASS  fno_writer         deny        42501     SET ROLE stock_inbox_reader
+PASS  fno_writer         value=1min  00000     SELECT current_setting('statement_timeout') AS v
+PASS  fno_writer         value=5     00000     SELECT rolconnlimit::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  fno_writer         value=true  00000     SELECT ssl::text AS v FROM pg_stat_ssl WHERE pid = pg_backend_pid()
+== dashboard_app (psql exit 0)
+PASS  dashboard_app      value=false 00000     SELECT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls)::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  dashboard_app      value=0     00000     SELECT count(*)::text AS v FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.member WHERE r.rolname = current_user
+PASS  dashboard_app      deny        42501     CREATE ROLE x1_matrix_role
+PASS  dashboard_app      deny        42501     CREATE SCHEMA x1_matrix_schema
+PASS  dashboard_app      deny        42501     CREATE TEMP TABLE x1_matrix_temp (i int)
+PASS  dashboard_app      deny        42501     SELECT count(*) FROM pg_authid
+PASS  dashboard_app      deny        42501     SELECT pg_read_file('PG_VERSION')
+PASS  dashboard_app      value=true  00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
+PASS  dashboard_app      value=true  00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
+PASS  dashboard_app      value=true  00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
+OPEN  dashboard_app      known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  dashboard_app      known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
+OPEN  dashboard_app      known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
+OPEN  dashboard_app      known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
+OPEN  dashboard_app      known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'TEMP')   (known exception: create temporary tables in a database other than omenix)
+OPEN  dashboard_app      known:deny  got 00000           SET statement_timeout = 0   (known exception: switch off its own statement timeout for its session)
+OPEN  dashboard_app      known:deny  got 00000           ALTER ROLE CURRENT_USER SET statement_timeout = 0   (known exception: switch off its own statement timeout persistently (caught by the catalog snapshot))
+OPEN  dashboard_app      known:deny  got 00000           ALTER ROLE CURRENT_USER PASSWORD NULL   (known exception: change or remove its own password (rolled back here))
+PASS  dashboard_app      value=0     00000     SELECT count(*)::text AS v FROM pg_largeobject_metadata
+PASS  dashboard_app      deny        42501     CREATE TABLE public.x1_matrix (i int)
+PASS  dashboard_app      deny        42501     CREATE VIEW public.x1_matrix_v AS SELECT 1 AS i
+PASS  dashboard_app      deny        42501     CREATE SEQUENCE public.x1_matrix_s
+PASS  dashboard_app      deny        42501     CREATE FUNCTION public.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  dashboard_app      deny        42501     CREATE TYPE public.x1_matrix_t AS (i int)
+PASS  dashboard_app      deny        42501     CREATE TABLE stock.x1_matrix (i int)
+PASS  dashboard_app      deny        42501     CREATE VIEW stock.x1_matrix_v AS SELECT 1 AS i
+PASS  dashboard_app      deny        42501     CREATE SEQUENCE stock.x1_matrix_s
+PASS  dashboard_app      deny        42501     CREATE FUNCTION stock.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  dashboard_app      deny        42501     CREATE TYPE stock.x1_matrix_t AS (i int)
+PASS  dashboard_app      deny        42501     CREATE INDEX x1_matrix_idx ON stock.x1_probe (note)
+PASS  dashboard_app      deny        42501     ALTER TABLE stock.x1_probe ADD COLUMN x1_extra int
+PASS  dashboard_app      deny        42501     DROP TABLE stock.x1_probe
+PASS  dashboard_app      deny        42501     TRUNCATE stock.x1_probe
+PASS  dashboard_app      deny        42501     CREATE TABLE fno.x1_matrix (i int)
+PASS  dashboard_app      deny        42501     CREATE VIEW fno.x1_matrix_v AS SELECT 1 AS i
+PASS  dashboard_app      deny        42501     CREATE SEQUENCE fno.x1_matrix_s
+PASS  dashboard_app      deny        42501     CREATE FUNCTION fno.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  dashboard_app      deny        42501     CREATE TYPE fno.x1_matrix_t AS (i int)
+PASS  dashboard_app      deny        42501     CREATE INDEX x1_matrix_idx ON fno.x1_probe (note)
+PASS  dashboard_app      deny        42501     ALTER TABLE fno.x1_probe ADD COLUMN x1_extra int
+PASS  dashboard_app      deny        42501     DROP TABLE fno.x1_probe
+PASS  dashboard_app      deny        42501     TRUNCATE fno.x1_probe
+PASS  dashboard_app      deny        42501     CREATE TABLE app.x1_matrix (i int)
+PASS  dashboard_app      deny        42501     CREATE VIEW app.x1_matrix_v AS SELECT 1 AS i
+PASS  dashboard_app      deny        42501     CREATE SEQUENCE app.x1_matrix_s
+PASS  dashboard_app      deny        42501     CREATE FUNCTION app.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  dashboard_app      deny        42501     CREATE TYPE app.x1_matrix_t AS (i int)
+PASS  dashboard_app      deny        42501     CREATE INDEX x1_matrix_idx ON app.x1_probe (note)
+PASS  dashboard_app      deny        42501     ALTER TABLE app.x1_probe ADD COLUMN x1_extra int
+PASS  dashboard_app      deny        42501     DROP TABLE app.x1_probe
+PASS  dashboard_app      deny        42501     TRUNCATE app.x1_probe
+PASS  dashboard_app      allow       00000     SELECT count(*) FROM stock.x1_probe
+PASS  dashboard_app      deny        42501     INSERT INTO stock.x1_probe (note) VALUES ('x1 matrix')
+PASS  dashboard_app      deny        42501     UPDATE stock.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  dashboard_app      deny        42501     DELETE FROM stock.x1_probe WHERE id = -1
+PASS  dashboard_app      deny        42501     SELECT nextval('stock.x1_probe_id_seq')
+PASS  dashboard_app      allow       00000     SELECT count(*) FROM fno.x1_probe
+PASS  dashboard_app      deny        42501     INSERT INTO fno.x1_probe (note) VALUES ('x1 matrix')
+PASS  dashboard_app      deny        42501     UPDATE fno.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  dashboard_app      deny        42501     DELETE FROM fno.x1_probe WHERE id = -1
+PASS  dashboard_app      deny        42501     SELECT nextval('fno.x1_probe_id_seq')
+PASS  dashboard_app      allow       00000     SELECT count(*) FROM app.x1_probe
+PASS  dashboard_app      allow       00000     INSERT INTO app.x1_probe (note) VALUES ('x1 matrix')
+PASS  dashboard_app      allow       00000     UPDATE app.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  dashboard_app      deny        42501     DELETE FROM app.x1_probe WHERE id = -1
+PASS  dashboard_app      allow       00000     SELECT nextval('app.x1_probe_id_seq')
+PASS  dashboard_app      deny        42501     SELECT stock.x1_probe_f()
+PASS  dashboard_app      deny        42501     SELECT fno.x1_probe_f()
+PASS  dashboard_app      deny        42501     SELECT app.x1_probe_f()
+PASS  dashboard_app      deny        42501     SET ROLE stock_owner
+PASS  dashboard_app      deny        42501     SET ROLE fno_owner
+PASS  dashboard_app      deny        42501     SET ROLE app_owner
+PASS  dashboard_app      deny        42501     SET ROLE stock_writer
+PASS  dashboard_app      deny        42501     SET ROLE fno_writer
+PASS  dashboard_app      deny        42501     SET ROLE stock_inbox_reader
+PASS  dashboard_app      value=15s   00000     SELECT current_setting('statement_timeout') AS v
+PASS  dashboard_app      value=20    00000     SELECT rolconnlimit::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  dashboard_app      value=true  00000     SELECT ssl::text AS v FROM pg_stat_ssl WHERE pid = pg_backend_pid()
+== stock_inbox_reader (psql exit 0)
+PASS  stock_inbox_reader value=false 00000     SELECT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls)::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  stock_inbox_reader value=0     00000     SELECT count(*)::text AS v FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.member WHERE r.rolname = current_user
+PASS  stock_inbox_reader deny        42501     CREATE ROLE x1_matrix_role
+PASS  stock_inbox_reader deny        42501     CREATE SCHEMA x1_matrix_schema
+PASS  stock_inbox_reader deny        42501     CREATE TEMP TABLE x1_matrix_temp (i int)
+PASS  stock_inbox_reader deny        42501     SELECT count(*) FROM pg_authid
+PASS  stock_inbox_reader deny        42501     SELECT pg_read_file('PG_VERSION')
+PASS  stock_inbox_reader value=false 00000     SELECT has_schema_privilege('stock', 'USAGE')::text AS v
+PASS  stock_inbox_reader value=false 00000     SELECT has_schema_privilege('fno', 'USAGE')::text AS v
+PASS  stock_inbox_reader value=true  00000     SELECT has_schema_privilege('app', 'USAGE')::text AS v
+OPEN  stock_inbox_reader known:deny  got 00000           SELECT lo_from_bytea(0, 'x1'<IP address>ytea)   (known exception: create a large object (stored on disk, outlives the session))
+OPEN  stock_inbox_reader known:deny  got 00000           SELECT lo_create(0)   (known exception: create a large object)
+OPEN  stock_inbox_reader known:deny  got 00000           SELECT lo_creat(-1)   (known exception: create a large object)
+OPEN  stock_inbox_reader known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'CONNECT')   (known exception: connect to a database other than omenix (and create large objects and temporary tables there))
+OPEN  stock_inbox_reader known:value= got 00000 value=azure_maintenance,azure_sys SELECT coalesce(string_agg(datname, ',' ORDER BY datname), '') AS v FROM pg_database WHERE datname <> 'omenix' AND datallowconn AND has_database_privilege(datname, 'TEMP')   (known exception: create temporary tables in a database other than omenix)
+OPEN  stock_inbox_reader known:deny  got 00000           SET statement_timeout = 0   (known exception: switch off its own statement timeout for its session)
+OPEN  stock_inbox_reader known:deny  got 00000           ALTER ROLE CURRENT_USER SET statement_timeout = 0   (known exception: switch off its own statement timeout persistently (caught by the catalog snapshot))
+OPEN  stock_inbox_reader known:deny  got 00000           ALTER ROLE CURRENT_USER PASSWORD NULL   (known exception: change or remove its own password (rolled back here))
+PASS  stock_inbox_reader value=0     00000     SELECT count(*)::text AS v FROM pg_largeobject_metadata
+PASS  stock_inbox_reader deny        42501     CREATE TABLE public.x1_matrix (i int)
+PASS  stock_inbox_reader deny        42501     CREATE VIEW public.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_inbox_reader deny        42501     CREATE SEQUENCE public.x1_matrix_s
+PASS  stock_inbox_reader deny        42501     CREATE FUNCTION public.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_inbox_reader deny        42501     CREATE TYPE public.x1_matrix_t AS (i int)
+PASS  stock_inbox_reader deny        42501     CREATE TABLE stock.x1_matrix (i int)
+PASS  stock_inbox_reader deny        42501     CREATE VIEW stock.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_inbox_reader deny        42501     CREATE SEQUENCE stock.x1_matrix_s
+PASS  stock_inbox_reader deny        42501     CREATE FUNCTION stock.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_inbox_reader deny        42501     CREATE TYPE stock.x1_matrix_t AS (i int)
+PASS  stock_inbox_reader deny        42501     CREATE INDEX x1_matrix_idx ON stock.x1_probe (note)
+PASS  stock_inbox_reader deny        42501     ALTER TABLE stock.x1_probe ADD COLUMN x1_extra int
+PASS  stock_inbox_reader deny        42501     DROP TABLE stock.x1_probe
+PASS  stock_inbox_reader deny        42501     TRUNCATE stock.x1_probe
+PASS  stock_inbox_reader deny        42501     CREATE TABLE fno.x1_matrix (i int)
+PASS  stock_inbox_reader deny        42501     CREATE VIEW fno.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_inbox_reader deny        42501     CREATE SEQUENCE fno.x1_matrix_s
+PASS  stock_inbox_reader deny        42501     CREATE FUNCTION fno.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_inbox_reader deny        42501     CREATE TYPE fno.x1_matrix_t AS (i int)
+PASS  stock_inbox_reader deny        42501     CREATE INDEX x1_matrix_idx ON fno.x1_probe (note)
+PASS  stock_inbox_reader deny        42501     ALTER TABLE fno.x1_probe ADD COLUMN x1_extra int
+PASS  stock_inbox_reader deny        42501     DROP TABLE fno.x1_probe
+PASS  stock_inbox_reader deny        42501     TRUNCATE fno.x1_probe
+PASS  stock_inbox_reader deny        42501     CREATE TABLE app.x1_matrix (i int)
+PASS  stock_inbox_reader deny        42501     CREATE VIEW app.x1_matrix_v AS SELECT 1 AS i
+PASS  stock_inbox_reader deny        42501     CREATE SEQUENCE app.x1_matrix_s
+PASS  stock_inbox_reader deny        42501     CREATE FUNCTION app.x1_matrix_f() RETURNS int LANGUAGE sql AS 'SELECT 1'
+PASS  stock_inbox_reader deny        42501     CREATE TYPE app.x1_matrix_t AS (i int)
+PASS  stock_inbox_reader deny        42501     CREATE INDEX x1_matrix_idx ON app.x1_probe (note)
+PASS  stock_inbox_reader deny        42501     ALTER TABLE app.x1_probe ADD COLUMN x1_extra int
+PASS  stock_inbox_reader deny        42501     DROP TABLE app.x1_probe
+PASS  stock_inbox_reader deny        42501     TRUNCATE app.x1_probe
+PASS  stock_inbox_reader deny        42501     SELECT count(*) FROM stock.x1_probe
+PASS  stock_inbox_reader deny        42501     INSERT INTO stock.x1_probe (note) VALUES ('x1 matrix')
+PASS  stock_inbox_reader deny        42501     UPDATE stock.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  stock_inbox_reader deny        42501     DELETE FROM stock.x1_probe WHERE id = -1
+PASS  stock_inbox_reader deny        42501     SELECT nextval('stock.x1_probe_id_seq')
+PASS  stock_inbox_reader deny        42501     SELECT count(*) FROM fno.x1_probe
+PASS  stock_inbox_reader deny        42501     INSERT INTO fno.x1_probe (note) VALUES ('x1 matrix')
+PASS  stock_inbox_reader deny        42501     UPDATE fno.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  stock_inbox_reader deny        42501     DELETE FROM fno.x1_probe WHERE id = -1
+PASS  stock_inbox_reader deny        42501     SELECT nextval('fno.x1_probe_id_seq')
+PASS  stock_inbox_reader allow       00000     SELECT count(*) FROM app.x1_probe
+PASS  stock_inbox_reader deny        42501     INSERT INTO app.x1_probe (note) VALUES ('x1 matrix')
+PASS  stock_inbox_reader deny        42501     UPDATE app.x1_probe SET note = 'x1 matrix' WHERE id = -1
+PASS  stock_inbox_reader deny        42501     DELETE FROM app.x1_probe WHERE id = -1
+PASS  stock_inbox_reader deny        42501     SELECT nextval('app.x1_probe_id_seq')
+PASS  stock_inbox_reader deny        42501     SELECT stock.x1_probe_f()
+PASS  stock_inbox_reader deny        42501     SELECT fno.x1_probe_f()
+PASS  stock_inbox_reader deny        42501     SELECT app.x1_probe_f()
+PASS  stock_inbox_reader deny        42501     SET ROLE stock_owner
+PASS  stock_inbox_reader deny        42501     SET ROLE fno_owner
+PASS  stock_inbox_reader deny        42501     SET ROLE app_owner
+PASS  stock_inbox_reader deny        42501     SET ROLE stock_writer
+PASS  stock_inbox_reader deny        42501     SET ROLE fno_writer
+PASS  stock_inbox_reader deny        42501     SET ROLE dashboard_app
+PASS  stock_inbox_reader value=30s   00000     SELECT current_setting('statement_timeout') AS v
+PASS  stock_inbox_reader value=5     00000     SELECT rolconnlimit::text AS v FROM pg_roles WHERE rolname = current_user
+PASS  stock_inbox_reader value=true  00000     SELECT ssl::text AS v FROM pg_stat_ssl WHERE pid = pg_backend_pid()
+role matrix: 312 checks, 280 passed, 0 failed, 32 open known exceptions (roles: stock_writer fno_writer dashboard_app stock_inbox_reader)
+OPEN = a named exception the server does not enforce (platform/README.md, "Named exceptions"); not a pass.
+
+RESULT: matrix passed: yes; snapshot identical: yes; no large objects anywhere: yes; open named exceptions: 32 (see platform/README.md)
