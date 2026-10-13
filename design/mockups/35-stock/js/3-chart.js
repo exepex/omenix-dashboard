@@ -113,7 +113,7 @@ function chartCard(c, S) {
 /* the forecast's numbers in one plain line under the chart (the fan shows them as a picture) */
 function forecastLine(c, S) {
   const h = S.tools.horizons.at(-1);
-  return c.el('p', {class: 'fline'}, c.el('b', {}, `Our forecast for ${day(c, h.target_date)}`), ` (in ${h.h} sessions): middle ₹${fmt(h.mid)} · 1 in 2 chance between ₹${fmt(h.lo50, 0)} and ₹${fmt(h.hi50, 0)} · 4 in 5 chance between ₹${fmt(h.lo80, 0)} and ₹${fmt(h.hi80, 0)}. `,
+  return c.el('p', {class: 'fline'}, c.el('b', {}, `Our forecast for ${day(c, h.target_date)}`), ` (in ${h.h} sessions): middle ${cur(c, h.mid)} · 1 in 2 chance between ${cur(c, h.lo50, 0)} and ${cur(c, h.hi50, 0)} · 4 in 5 chance between ${cur(c, h.lo80, 0)} and ${cur(c, h.hi80, 0)}. `,
     c.el('span', {class: 'mb-tag'}, 'not proven'), ' Hover or tap the fan for each day.');
 }
 

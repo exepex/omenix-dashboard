@@ -3264,20 +3264,6 @@
       "stamp_duty": 14.95,
       "stt": 199.33
      }
-    },
-    "names": {
-     "ai.combined.sonnet.v1": "AI team",
-     "base.always_up.v1": "Always buy",
-     "base.model_only.v1": "Model without news",
-     "base.momentum.v1": "Follow yesterday",
-     "rule.model_news.v1": "Model + news",
-     "rule.model_news_calm.v1": "Model + news, calm markets only",
-     "rule.model_news_confirmed.v1": "Model + confirmed news only",
-     "rule.model_news_double.v1": "Model + double news",
-     "rule.model_news_global.v1": "Model + news + global cues",
-     "rule.model_news_half.v1": "Model + half news",
-     "rule.model_news_high.v1": "Model + major news only",
-     "rule.model_news_strict.v1": "Model + news, 60% bar"
     }
    },
    "trades": [
@@ -8302,20 +8288,6 @@
       "order_fee": 2.22,
       "sec_fee": 0.02
      }
-    },
-    "names": {
-     "ai.combined.sonnet.v1": "AI team",
-     "base.always_up.v1": "Always buy",
-     "base.model_only.v1": "Model without news",
-     "base.momentum.v1": "Follow yesterday",
-     "rule.model_news.v1": "Model + news",
-     "rule.model_news_calm.v1": "Model + news, calm markets only",
-     "rule.model_news_confirmed.v1": "Model + confirmed news only",
-     "rule.model_news_double.v1": "Model + double news",
-     "rule.model_news_global.v1": "Model + news + global cues",
-     "rule.model_news_half.v1": "Model + half news",
-     "rule.model_news_high.v1": "Model + major news only",
-     "rule.model_news_strict.v1": "Model + news, 60% bar"
     }
    },
    "trades": [

@@ -28,11 +28,11 @@ function pickedPanel(c, S, ch, bs) {
   const be = kind === 'ce' ? r.strike + o.price : r.strike - o.price, cost = o.price * lot;
   const leg = (k, word) => r[k] ? el('div', {class: 'legrow' + (k === kind ? ' on' : '')}, el('button', {class: 'md-chip filter', type: 'button', 'aria-pressed': String(k === kind), onclick: () => { KIND = k; c.rerender(); }}, word),
     el('span', {}, el('b', {}, r[k].code), el('small', {class: 'muted', style: 'display:block'}, `${fmt(r[k].price)} × ${fmt(lot, 0)} = ${cur(c, r[k].price * lot, 0)} to buy one lot`)), bs(r[k].code)) : null;
-  return el('div', {class: 'picked', 'aria-label': `Strike ${r.strike}`}, el('h3', {}, `Strike ₹${fmt(r.strike, 0)}, ${dm(ch.expiry)}`),
+  return el('div', {class: 'picked', 'aria-label': `Strike ${r.strike}`}, el('h3', {}, `Strike ${cur(c, r.strike, 0)}, ${dm(ch.expiry)}`),
     leg('ce', 'Call (CE)'), leg('pe', 'Put (PE)'),
     el('p', {class: 'small', style: 'margin:10px 0 4px'}, el('b', {}, 'What if you buy one lot of the ' + (kind === 'ce' ? 'call' : 'put') + '?')),
     payoff(c, r.strike, o.price, kind, lot, ch.spot),
-    el('p', {class: 'small', style: 'margin:6px 0 0'}, `It makes money at expiry if ${S.ticker} ends ${kind === 'ce' ? 'above' : 'below'} ₹${fmt(be)} (strike ${kind === 'ce' ? '+' : '−'} price paid). The most you can lose is ${cur(c, cost, 0)}, what you pay. Today it is ₹${fmt(ch.spot)}.`),
+    el('p', {class: 'small', style: 'margin:6px 0 0'}, `It makes money at expiry if ${S.ticker} ends ${kind === 'ce' ? 'above' : 'below'} ${cur(c, be)} (strike ${kind === 'ce' ? '+' : '−'} price paid). The most you can lose is ${cur(c, cost, 0)}, what you pay. Today it is ${cur(c, ch.spot)}.`),
     el('p', {class: 'muted small', style: 'margin:4px 0 0'}, 'At expiry only, before charges; not a forecast and not advice.'));
 }
 

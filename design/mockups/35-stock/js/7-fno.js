@@ -29,7 +29,7 @@ function basics(c, S) {
     el('ul', {class: 'tri'},
       el('li', {}, el('b', {}, 'A future'), ` is a deal to buy or sell ${fmt(lot, 0)} ${S.ticker} shares (one lot) on the expiry day at today’s agreed price. You put down a margin, not the full value, but you gain or lose on all ${fmt(lot, 0)} shares, and the loss has no fixed limit.`),
       el('li', {}, el('b', {}, 'A call (CE)'), ' pays when the price ends above its strike; ', el('b', {}, 'a put (PE)'), ` pays when it ends below. Buying one costs the premium × ${fmt(lot, 0)} shares, and that is the most you can lose.`),
-      el('li', {}, el('b', {}, 'Every contract has a code'), `: ${F.expiries[0].code} is the ${dm(F.expiries[0].expiry)} future${call ? `; ${call.code} is the call at ₹${fmt(ch.atm, 0)} for the same day` : ''}. You buy or sell by the code.`)));
+      el('li', {}, el('b', {}, 'Every contract has a code'), `: ${F.expiries[0].code} is the ${dm(F.expiries[0].expiry)} future${call ? `; ${call.code} is the call at ${cur(c, ch.atm, 0)} for the same day` : ''}. You buy or sell by the code.`)));
 }
 
 /* what each family suggests on this stock's F&O; today none (no F&O strategy has passed testing), or the labelled example */
@@ -59,7 +59,7 @@ function oiCard(c, S) {
   const at = rows.findIndex(r => r.strike === ch.atm); s.append(c.svgEl('line', {class: 'spot', x1: at * slot + slot / 2, x2: at * slot + slot / 2, y1: 0, y2: H}));
   return el('section', {class: 'card', 'aria-label': 'Open contracts by strike'}, head(c, 'Where traders hold contracts', `${day(c, ch.expiry)} expiry`), s,
     el('div', {class: 'axis'}, el('span', {}, el('i', {class: 'key callk'}), 'calls (CE)'), el('span', {}, el('i', {class: 'key putk'}), 'puts (PE)'), el('span', {}, el('i', {class: 'key spotk'}), 'today’s price')),
-    el('p', {class: 'small', style: 'margin:8px 0 0'}, `Most calls are open at ₹${fmt(ch.most_calls, 0)} and most puts at ₹${fmt(ch.most_puts, 0)}. Big piles show the prices many traders are betting around: a crowd’s position, not a forecast.`));
+    el('p', {class: 'small', style: 'margin:8px 0 0'}, `Most calls are open at ${cur(c, ch.most_calls, 0)} and most puts at ${cur(c, ch.most_puts, 0)}. Big piles show the prices many traders are betting around: a crowd’s position, not a forecast.`));
 }
 
 /* IV in plain words: how big a move option prices expect, and how dear options are against their own 3 months */

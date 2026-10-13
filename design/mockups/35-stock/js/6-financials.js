@@ -10,7 +10,7 @@ function financials(c, S) {
     tile(c, 'Net profit', big(last.profit), said(last.profit_yoy, 'Profit'), bars(c, rows, r => r.profit, lbl, null, 'prof')),
     tile(c, 'Growth from a year earlier', last.rev_yoy == null ? '—' : pct(last.rev_yoy), 'Revenue and profit against the same period a year earlier; bars below the line are falls.',
       bars(c, rows, r => r.rev_yoy, lbl, r => r.profit_yoy)),
-    tile(c, 'Margins', last.margin == null ? '—' : `${fmt(last.margin, 1)}%`, `Of every ${LOC === 'en-IN' ? '₹' : '$'}100 of revenue, about ${last.margin == null ? '—' : fmt(last.margin, 0)} is net profit${india ? '; the second line is profit before tax' : ''}.`,
+    tile(c, 'Margins', last.margin == null ? '—' : `${fmt(last.margin, 1)}%`, `Of every ${cur(c, 100, 0)} of revenue, about ${last.margin == null ? '—' : fmt(last.margin, 0)} is net profit${india ? '; the second line is profit before tax' : ''}.`,
       lines(c, rows, [r => r.margin, india ? r => r.pbt && r.revenue ? r.pbt / r.revenue * 100 : null : null].filter(Boolean), lbl)),
     eps.length ? tile(c, 'Earnings per share', cur(c, eps.at(-1).eps), 'Net profit for each share (diluted).', bars(c, eps, q => q.eps, q => quarterOf(q.end).replace(' 20', " '"))) : null,
     tile(c, 'Debt', null, 'How much the company owes and whether it is going up or down.', null),

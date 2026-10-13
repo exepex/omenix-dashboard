@@ -126,8 +126,7 @@ def tools(m: str, M: dict) -> dict:
     return {"session": M["views"][0]["session_date"] if M["views"] else None, "made_at": max((v["made_at"] for v in M["views"]), default=None),
             "horizons": horizons, "families": {k: {"label": v[0], "long": v[2]} for k, v in FAMILY.items()},
             "ai_team": {k: R.get(k) for k in ("as_of_date", "made_at", "bull_case", "bear_case", "verdict", "decision_1d", "decision_5d")} if R else None,
-            "cost": {"round_trip_pct": cost["market_cost_pct"], "your_pct": cost["your_cost_pct"], "amount": cost["amount"], "lines": cost["market_cost_lines"]} if cost else None,
-            "names": {v["strategy_id"]: names.get(v["strategy_id"], v["strategy_id"]) for v in M["views"]}}
+            "cost": {"round_trip_pct": cost["market_cost_pct"], "your_pct": cost["your_cost_pct"], "amount": cost["amount"], "lines": cost["market_cost_lines"]} if cost else None}
 
 
 def trades(m: str, M: dict) -> list:

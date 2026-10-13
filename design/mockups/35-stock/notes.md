@@ -23,7 +23,8 @@ page. Change it only for a very solid reason, brought to the owner first; record
   not built in the backend yet.
 - **The page's clock is Tue 13 Oct 2026 14:30 IST** (09:00 UTC). India's market is open, so the price is the 12 Oct
   close plus the stock tool's 14:14 IST price check. The US market is closed (its 12 Oct close).
-- AI strategies appear as the one AI team, and no model is named. The fetch refuses to write a file containing a
+- Strategies are served by family and display name only, never by internal id (judge 50). AI strategies appear as the
+  one AI team, and no model is named. Money uses the market's currency on every line (`design/system/check_currency.js`). The fetch refuses to write a file containing a
   model name.
 
 Neither backend publishes a stock page yet. This file is the proposed contract, and the stock tool already records
