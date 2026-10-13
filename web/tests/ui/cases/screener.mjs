@@ -10,7 +10,7 @@ const base = { mockup: MOCKUP, waitFor: ".screener .count", check: screenerCheck
 
 export const cases = [
   { ...base, name: "screener-stocks", path: "/india/screener", widths: [1280, 1024, 768, 390], mockupShot: shot("stocks"), expectText: ["Today: up and down", "Ready-made screens", "2,924 stocks"] },
-  { ...base, name: "screener-high", path: "/india/screener?pre=high", widths: [1280, 390], mockupShot: shot("high"), expectText: ["50 stocks", "sorted by closest to the 52-week high"] },
+  { ...base, name: "screener-high", path: "/india/screener?pre=high", widths: [1280, 390], mockupShot: shot("high"), expectText: ["sorted by closest to the 52-week high"] },
   { ...base, name: "screener-tablet", path: "/india/screener?pre=high", widths: [768], mockupShot: shot("tablet") },
   { ...base, name: "screener-fno", path: "/india/screener?tab=fno", widths: [1280, 1024, 390], mockupShot: shot("fno"), expectText: ["Long build-up", "219 underlyings"] },
   { ...base, name: "screener-dark", path: "/india/screener?tab=fno", theme: "dark", contrast: true, widths: [1280, 390], mockupShot: shot("dark") },

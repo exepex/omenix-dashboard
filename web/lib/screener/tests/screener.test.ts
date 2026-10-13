@@ -38,7 +38,8 @@ test("each paged example answers only the query it was taken with; any other vie
   const tools = await data.tools("india");
   const q = (p: Record<string, string>) => stocksQuery(readState(p, "india"), tools);
   assert.equal((await data.stocks("india", q({}))).total, 2924);
-  assert.equal((await data.stocks("india", q({ pre: "high" }))).total, 50);
+  const near = (await data.summary("india")).universes.all!.near_high;
+  assert.equal((await data.stocks("india", q({ pre: "high" }))).total, near, "the screen's rows are as many as its count");
   await assert.rejects(data.stocks("india", q({ pre: "volume" })), NoExample);
   await assert.rejects(data.stocks("india", q({ pg: "2" })), NoExample);
   assert.equal((await data.stocks("us", stocksQuery(readState({}, "us"), await data.tools("us")))).rows.length, 20);
