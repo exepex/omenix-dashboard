@@ -32,3 +32,14 @@ listed here.
     (98 52-week high, 86 1-year %, 49 RSI 14, 46 52-week low, 20 3-month %, 7 1-month %, 7 20-day avg volume, 4 1-week %). Examples: KOTAKBANK 1 year −79.15% → +4.24%, 52-week high
     2,266.00 → 453.20; ANGELONE −86.57% → +34.30%; BANKNIFTY1 −90.19% → −1.94%.
   - Every before → after value: `changes_2026-10-13_splits.csv`.
+  - Screen counts (India, all stocks), from the split fix. The 1 Feb fix changed none of them:
+
+    | Screen | Before → after |
+    |---|---|
+    | Near 52-week high | 50 → 54 |
+    | Near 52-week low | 254 → 247 |
+    | Volume 3× usual | 64 → 63 |
+    | Up 10%+ in a month | 246 → 247 |
+    | Down 10%+ in a month | 653 → 648 |
+    | RSI under 30 | 265 → 248 |
+    | Big moves today, High delivery | unchanged (165, 145) |
