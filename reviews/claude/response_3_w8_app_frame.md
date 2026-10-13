@@ -55,7 +55,7 @@ overflow and elements past the edge. It also checks the first Tab stop and the s
 
 ## Visible differences from the mockup (and why)
 
-1. *(Withdrawn in round 2: grey is the owner's signed-off rule, design e8cd360; see response_5.)* **Locked Buy and Sell are grey, not faded green and red.** The design system's `components.css:386,390` turns
+1. *(Withdrawn in round 2: grey is the owner's signed-off rule, design e8cd360; see response_6.)* **Locked Buy and Sell are grey, not faded green and red.** The design system's `components.css:386,390` turns
    disabled Buy/Sell grey. The owner's rule (30 `rationale.md:55`) says faded. The mockup's own screenshots disagree
    with each other (`shot-1280-full` grey, `shot-closed-order`/`shot-palette-code` faded colour). The app uses the
    design CSS unchanged, so this is asked of the design session (sent to the orchestrator). The fix is a design-system
