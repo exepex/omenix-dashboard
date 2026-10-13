@@ -60,7 +60,7 @@ function renderAll() {
   inner.replaceChildren();
   page.render(inner, ctx());
   inner.append(el('footer', {}, 'Omenix · research and paper trading only: nothing here places a real order · ', el('b', {}, page.dataLabel || 'Example data'), ` as of ${nowLabel()}`,
-    el('div', {class: 'legal'}, el('a', {href: '../36-legal/privacy.html'}, 'Privacy policy'), ' · ', el('a', {href: '../36-legal/terms.html'}, 'Terms of service'))));
+    el('div', {class: 'mb-legal-links'}, el('a', {href: '../36-legal/privacy.html'}, 'Privacy policy'), ' · ', el('a', {href: '../36-legal/terms.html'}, 'Terms of service'))));
   writeHash();
 }
 

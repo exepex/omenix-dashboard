@@ -75,7 +75,7 @@ test("gateway mode serves only the Slack routes, /mcp and its OAuth routes", () 
   for (const path of ["/mcp/oauth/token", "/mcp/oauth/callback", "/oauth/constructor", "/oauth/__proto__"]) {
     assert.deepEqual(gatewayDecision(path, "POST", true), { action: "not_found" }, `${path}: only reached through the public paths`);
   }
-  for (const path of ["/", "/api/v1/markets", "/api/assistant", "/markets/us", "/slack/other", "/mcp/../api", "/_next/static/x.js", "/favicon.ico"]) {
+  for (const path of ["/api/v1/markets", "/api/assistant", "/markets/us", "/slack/other", "/mcp/../api", "/_next/static/x.js", "/favicon.ico"]) {
     assert.deepEqual(gatewayDecision(path, "GET", true), { action: "not_found" }, path);
   }
 });
@@ -99,8 +99,10 @@ test("gateway mode serves the public brief by GET with a well-formed token only"
   assert.deepEqual(gatewayDecision(`/brief/us/2026-10-12-${token}`, "GET", false), { action: "next" }, "dashboard: as usual");
 });
 
-test("gateway mode serves the legal pages by GET or HEAD, exact paths only", () => {
-  for (const path of ["/privacy", "/terms"]) {
+test("gateway mode serves the public pages by GET or HEAD, exact paths only; / is the public home page", () => {
+  for (const method of ["GET", "HEAD"]) assert.deepEqual(gatewayDecision("/", method, true), { action: "rewrite", target: "/about" }, method);
+  assert.deepEqual(gatewayDecision("/", "POST", true), { action: "not_found" });
+  for (const path of ["/about", "/privacy", "/terms"]) {
     for (const method of ["GET", "HEAD"]) assert.deepEqual(gatewayDecision(path, method, true), { action: "next" }, `${method} ${path}`);
     for (const method of ["POST", "PUT", "DELETE"]) assert.deepEqual(gatewayDecision(path, method, true), { action: "not_found" }, `${method} ${path}`);
     assert.deepEqual(gatewayDecision(path, "GET", false), { action: "next" }, `dashboard: ${path} as usual`);

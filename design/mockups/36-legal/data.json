@@ -1,7 +1,35 @@
 {
-  "_note": "REAL TEXT, not mock: the privacy policy and terms of service the app serves at /privacy and /terms (web/app/privacy, web/app/terms) and that the Google Cloud Console OAuth consent screen links to. Written 13 Oct 2026 from what the code does (notes.md lists the source of each statement). @@CONTACT@@ is filled at request time from MB_CONTACT_EMAIL.",
+  "_note": "REAL TEXT, not mock: the privacy policy and terms of service the app serves at /privacy and /terms (web/app/privacy, web/app/terms) and that the Google Cloud Console OAuth consent screen links to. Written 13 Oct 2026 from what the code does (notes.md lists the source of each statement). @@CONTACT@@ is filled from MB_CONTACT_EMAIL when the deployment is built (the routes are static).",
   "updated": "13 October 2026",
   "docs": {
+    "home": {
+      "file": "index.html",
+      "nav": false,
+      "title": "About Omenix",
+      "lead": "Omenix is a private research dashboard for stock and F&O research and paper trading, run by one person, its owner, for their own use.",
+      "sections": [
+        {
+          "h": "What it does",
+          "li": [
+            "Shows research on Indian and US stocks and Indian F&O: prices, model outputs, news and the track record of paper strategies.",
+            "Runs paper (simulated) trades to test strategies. It never places, changes or cancels a real order, and no money moves through it.",
+            "Its F&O research tool keeps copies of public NSE market data files in the owner's own Google Drive folder."
+          ]
+        },
+        {
+          "h": "Who can use it",
+          "p": [
+            "Only the owner and people the owner invites; the dashboard itself needs a sign-in. This page, the privacy policy and the terms of service are public."
+          ]
+        },
+        {
+          "h": "Policies",
+          "p": [
+            "Read the privacy policy (including how Google Drive access is used) and the terms of service, linked at the top and bottom of this page."
+          ]
+        }
+      ]
+    },
     "privacy": {
       "file": "privacy.html",
       "title": "Privacy policy",
@@ -22,7 +50,7 @@
         {
           "h": "Data Omenix collects about you",
           "li": [
-            "Sign-in identity: the name and e-mail address of the sign-in you use for the dashboard (GitHub or the hosting provider's sign-in), used only to let you in and to show who is signed in.",
+            "Sign-in identity: the account name and id of the sign-in you use for the dashboard (GitHub or the hosting provider's sign-in), used only to check that the account may enter. A refused GitHub sign-in's account name is written to the security log.",
             "What you do in the app: your paper trades, watchlists, settings and the questions you ask the assistant. They are stored so the app can show them back to you.",
             "Slack: when you use Omenix from Slack, the command you type and your Slack user and channel ids, to answer you in Slack.",
             "Technical logs: the hosting provider's standard request logs (time, page, browser, IP address), kept for security and fault finding."
@@ -37,7 +65,7 @@
           "li": [
             "lists the folders and files there, to see what is already stored;",
             "creates folders and uploads files there: copies of public NSE market data files (daily F&O reports) that the tool downloads;",
-            "reads a file back only when a file with the same name is already there, to check it is identical before skipping it."
+            "reads a file back only when a file with the same name is already there, to check it is a complete, valid file before skipping it."
           ],
           "p": [
             "It never opens, reads, changes, shares or deletes anything outside that folder, never deletes or shares any file, and receives no Google profile, contacts or e-mail data. The access is kept as a refresh token in the protected settings of the cloud machine that runs the research jobs, never in code or files, and no person reads Drive content through it.",
@@ -81,7 +109,7 @@
         {
           "h": "Security",
           "p": [
-            "All traffic is encrypted (HTTPS). Secrets live only in the hosting provider's protected settings, never in code. Access is limited to the owner."
+            "All traffic is encrypted (HTTPS). Secrets live only in the hosting provider's protected settings, never in code. Access is limited to the owner and the people the owner invites."
           ]
         },
         {

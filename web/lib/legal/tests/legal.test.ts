@@ -24,6 +24,16 @@ test("the contact is a mailto link only for a plain e-mail address", () => {
   assert.match(legalHtml("terms", undefined), /write to the developer contact/);
 });
 
+test("the home page links both policies; the verification tag only for a well-formed token", () => {
+  const home = legalHtml("home", undefined, "abcDEF123_-xyz");
+  assert.ok(home.includes('href="/privacy"') && home.includes('href="/terms"'));
+  assert.ok(home.includes('<meta name="google-site-verification" content="abcDEF123_-xyz">'));
+  for (const bad of [undefined, "", "short", 'x"><script>alert(1)</script>']) {
+    assert.ok(!legalHtml("home", undefined, bad).includes("google-site-verification"), String(bad));
+  }
+  assert.ok(!legalHtml("privacy", undefined, undefined).includes("@@VERIFY@@"));
+});
+
 test("the Google user data section states the Limited Use commitment", () => {
   assert.match(legalHtml("privacy", undefined), /Google API Services User Data Policy, including the Limited Use requirements/);
 });

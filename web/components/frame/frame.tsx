@@ -19,6 +19,7 @@ import { PicksPanel } from "./picks-panel.tsx";
 import { KeysDialog, useShortcuts } from "./shortcuts.tsx";
 import { TabBar } from "./tab-bar.tsx";
 import { useFrameState } from "./use-frame-state.ts";
+import { LegalLinks } from "./legal-links.tsx";
 
 function Veil() {
   const { drawer, palette, keysOpen, closeTop } = useFrame();
@@ -40,7 +41,10 @@ function Layout({ children, chat }: { children: ReactNode; chat?: ReactNode }) {
         <NavRail />
         <PicksPanel />
         <main className="mb-pf-main" id="mb-main" tabIndex={-1}>
-          <div className="mb-pf-inner">{children}</div>
+          <div className="mb-pf-inner">
+            {children}
+            <LegalLinks />
+          </div>
         </main>
         <TabBar />
       </div>

@@ -6,6 +6,7 @@
 <title>Privacy policy · Omenix</title>
 <meta name="description" content="Omenix is a private research dashboard for stock and F&amp;O research and paper trading. It is run by one person, its owner, for their own use and for the few people they invite. This page says what data Omenix uses, why, and who else sees it.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCIgeTE9IjY0IiB4Mj0iNjQiIHkyPSIwIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1YTVlZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTdkZjAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSI3IiBmaWxsPSJ1cmwoI2cpIi8+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOC45NiA4Ljk2KSBzY2FsZSgwLjcyKSI+PHBhdGggZD0iTTUyLjMgMjkuMTUgQTIwLjUgMjAuNSAwIDEgMSAzNi45NiAxMi4xMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjcuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTIxIDQ1IEwzMyAzMSBMMzkgMzYgTDU3IDExIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNy41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L2c+PC9zdmc+Cg==">
+
 <style>
 /* Omenix cockpit: design tokens, scheme v2 "modern admin light" (2026-10-08).
    The owner asked for the look of modern admin templates (Pixinvent Materialize with its semi-dark vertical
@@ -1252,7 +1253,7 @@ body.mb-legal { margin: 0; background: var(--md-sys-color-surface-container-low)
 </svg>
 
 <header class="mb-legal-head">
-  <a class="mb-legal-brand" href="../31-dashboard/page.html" aria-label="Omenix home"><span class="mb-brand-mark"><svg class="mb-logo" aria-hidden="true"><use href="#mb-logo"/></svg></span>Omenix</a>
+  <a class="mb-legal-brand" href="index.html" aria-label="Omenix home"><span class="mb-brand-mark"><svg class="mb-logo" aria-hidden="true"><use href="#mb-logo"/></svg></span>Omenix</a>
   <nav aria-label="Legal"><a href="privacy.html" aria-current="page">Privacy policy</a> <a href="terms.html">Terms of service</a></nav>
 </header>
 <main class="mb-legal-doc">
@@ -1264,11 +1265,11 @@ body.mb-legal { margin: 0; background: var(--md-sys-color-surface-container-low)
 <h2>Who can use it</h2>
 <p>Only the owner and people the owner invites. There is no public sign-up. Every page with research or personal data needs a sign-in; only these two pages and the private-link daily briefs open without one.</p>
 <h2>Data Omenix collects about you</h2>
-<ul><li>Sign-in identity: the name and e-mail address of the sign-in you use for the dashboard (GitHub or the hosting provider's sign-in), used only to let you in and to show who is signed in.</li><li>What you do in the app: your paper trades, watchlists, settings and the questions you ask the assistant. They are stored so the app can show them back to you.</li><li>Slack: when you use Omenix from Slack, the command you type and your Slack user and channel ids, to answer you in Slack.</li><li>Technical logs: the hosting provider's standard request logs (time, page, browser, IP address), kept for security and fault finding.</li></ul>
+<ul><li>Sign-in identity: the account name and id of the sign-in you use for the dashboard (GitHub or the hosting provider's sign-in), used only to check that the account may enter. A refused GitHub sign-in's account name is written to the security log.</li><li>What you do in the app: your paper trades, watchlists, settings and the questions you ask the assistant. They are stored so the app can show them back to you.</li><li>Slack: when you use Omenix from Slack, the command you type and your Slack user and channel ids, to answer you in Slack.</li><li>Technical logs: the hosting provider's standard request logs (time, page, browser, IP address), kept for security and fault finding.</li></ul>
 <h2>Google user data (Google Drive)</h2>
 <p>Omenix's F&amp;O research tool asks Google for access to Google Drive with the scope https://www.googleapis.com/auth/drive (Google shows it as "See, edit, create and delete all of your Google Drive files"). Only the owner signs in, once, with the Google account that owns the research folder. Google's narrower Drive scope covers only files an app created itself; the tool must add files inside a folder the owner created, so it needs this one.</p>
 <p>With that access the tool does only this, and only inside the owner's research folder (fno-research) and the folders under it:</p>
-<ul><li>lists the folders and files there, to see what is already stored;</li><li>creates folders and uploads files there: copies of public NSE market data files (daily F&amp;O reports) that the tool downloads;</li><li>reads a file back only when a file with the same name is already there, to check it is identical before skipping it.</li></ul>
+<ul><li>lists the folders and files there, to see what is already stored;</li><li>creates folders and uploads files there: copies of public NSE market data files (daily F&amp;O reports) that the tool downloads;</li><li>reads a file back only when a file with the same name is already there, to check it is a complete, valid file before skipping it.</li></ul>
 <p>It never opens, reads, changes, shares or deletes anything outside that folder, never deletes or shares any file, and receives no Google profile, contacts or e-mail data. The access is kept as a refresh token in the protected settings of the cloud machine that runs the research jobs, never in code or files, and no person reads Drive content through it.</p>
 <p>Omenix's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements. Google user data is never sold, never used for advertising, never used to train AI models, and never transferred to anyone else.</p>
 <p>To stop the access at any time, remove it at myaccount.google.com/permissions.</p>
@@ -1282,7 +1283,7 @@ body.mb-legal { margin: 0; background: var(--md-sys-color-surface-container-low)
 <h2>Your choices</h2>
 <p>You can ask to see, correct or delete your data, or to stop using Omenix, at any time. The Google Drive access can be removed at myaccount.google.com/permissions.</p>
 <h2>Security</h2>
-<p>All traffic is encrypted (HTTPS). Secrets live only in the hosting provider's protected settings, never in code. Access is limited to the owner.</p>
+<p>All traffic is encrypted (HTTPS). Secrets live only in the hosting provider's protected settings, never in code. Access is limited to the owner and the people the owner invites.</p>
 <h2>Children</h2>
 <p>Omenix is not meant for anyone under 18.</p>
 <h2>Changes</h2>

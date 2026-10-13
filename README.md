@@ -41,5 +41,23 @@ npm run build
 ## Deployment
 
 One app, two Vercel projects: the dashboard (owner-only Vercel Authentication) and the gateway (`MB_GATEWAY=1`;
-serves only `/slack/*`, `/mcp` and the MCP OAuth routes). Automatic deployments are off (`web/vercel.json`); deploy
-by hand from Vercel. Secrets live only in Vercel's environment variables, never in this repository.
+serves only `/slack/*`, `/mcp`, the MCP OAuth routes, the public daily brief and the public pages `/` (= `/about`),
+`/privacy` and `/terms`). Automatic deployments are off (`web/vercel.json`); deploy by hand from Vercel. Secrets live
+only in Vercel's environment variables, never in this repository.
+
+### Public pages for Google's OAuth consent screen (Drive uploader)
+
+The dashboard project is behind Vercel Authentication, so Google can only reach the **gateway** project. Steps:
+
+1. In the gateway project's environment variables set `MB_CONTACT_EMAIL` (the contact shown on the pages) and,
+   for domain verification, `MB_GOOGLE_SITE_VERIFICATION` (the `content` value of Search Console's "HTML tag"
+   method). Both are read when the app is built (the pages are static), so set them **before** deploying.
+2. Deploy the gateway project from this repository's `main` (`web/`). Until the cutover, the production
+   *dashboard* still deploys from the stock repository's frozen `web/` (CLAUDE.md); the gateway pages need only
+   this repository.
+3. In Google Cloud Console (OAuth consent screen, Branding): home page `https://<gateway-host>/`, privacy policy
+   `https://<gateway-host>/privacy`, terms of service `https://<gateway-host>/terms`, authorised domain
+   `<gateway-host>`, app logo `design/brand/google-cloud/oauth-app-logo-120.png`.
+4. Verify the domain in Google Search Console with the HTML-tag method (step 1's variable), then redeploy.
+
+Text and look: `design/mockups/36-legal` (`data.json`, `build.py`); copied into the app by `web/tools/sync-design.mjs`.

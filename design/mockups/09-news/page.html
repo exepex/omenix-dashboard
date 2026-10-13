@@ -64,6 +64,7 @@
   --mb-sidebar-ink: #d7d8e5;         /* 8.8:1 on the sidebar */
   --mb-sidebar-muted: #9fa2b7;       /* 4.9:1 */
   --mb-sidebar-active: linear-gradient(72deg, #5a5ee6 0%, #7a7df0 100%);
+  --mb-brand-tile: linear-gradient(to top right, #5a5ee6, #7a7df0); /* the logo tile (design/brand/), same colours as the active rail item */
   --mb-sidebar-active-shadow: 0 4px 12px rgba(90, 94, 230, .45);
 
   /* ---- Semantic tokens (finance) --------------------------------------------------------
@@ -247,7 +248,7 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 .mb-app { min-height: 100vh; display: grid; grid-template-columns: var(--mb-sidebar-width) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
 .mb-sidebar, .mb-rail { grid-row: 1 / span 2; background: var(--mb-sidebar-bg); color: var(--mb-sidebar-ink); display: flex; flex-direction: column; gap: 2px; padding: var(--mb-space-4) var(--mb-space-3); position: sticky; top: 0; height: 100vh; overflow-y: auto; }
 .mb-sidebar-brand, .mb-rail-brand { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 var(--mb-space-2); margin-bottom: var(--mb-space-4); color: #fff; font: var(--md-sys-typescale-title-medium); letter-spacing: .2px; }
-.mb-sidebar-brand .mb-brand-mark, .mb-rail-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-sidebar-active); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; color: #fff; flex: none; }
+.mb-sidebar-brand .mb-brand-mark, .mb-rail-brand .mb-brand-mark { width: 36px; height: 36px; border-radius: 4px; background: var(--mb-brand-tile); box-shadow: var(--mb-sidebar-active-shadow); display: grid; place-items: center; color: #fff; flex: none; }
 .mb-brand-mark .mb-logo { width: 72%; height: 72%; display: block; }
 .mb-sidebar-brand small { display: block; font: var(--md-sys-typescale-label-small); color: var(--mb-sidebar-muted); letter-spacing: .3px; }
 .mb-sidebar-section { font: var(--md-sys-typescale-label-small); letter-spacing: .08em; text-transform: uppercase; color: var(--mb-sidebar-muted); padding: var(--mb-space-4) var(--mb-space-3) var(--mb-space-1); }

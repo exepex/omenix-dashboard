@@ -14,7 +14,6 @@ import type { GoLive, PageBase, StatusBlock } from "../../lib/ui/types.ts";
 import { Icon } from "../ui/icon.tsx";
 import { SessionChip } from "./session-chip.tsx";
 import { PaperTag } from "../ui/primitives.tsx";
-import { LegalLinks } from "../frame/legal-links.tsx";
 
 export function StatusChips({ status, cutoff }: { status: StatusBlock; cutoff?: string }) {
   const fr = status.freshness;
@@ -127,7 +126,6 @@ export function PageFooter({ page, endpoint }: { page: PageBase; endpoint?: stri
           </>
         ) : null}
       </details>
-      <LegalLinks />
     </footer>
   );
 }
