@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { fixtureShellData, fromMockup } from "../fixture-source.ts";
-import { applyDisplayNames } from "../../ui/strategy-names.ts";
+import { publicView } from "../../ui/public-view.ts";
 
 const mockup = JSON.parse(readFileSync(new URL("../../../../design/mockups/30-shell/data.json", import.meta.url), "utf8"));
 
@@ -12,7 +12,7 @@ test("the fixture adapter returns the mockup's records without its notes, labell
   const p = await fixtureShellData.read();
   assert.equal(p.example, true);
   assert.equal("_note" in p, false);
-  assert.deepEqual(p.markets, applyDisplayNames(mockup.markets), "the mockup's records, with strategies named by their public labels");
+  assert.deepEqual(p.markets, publicView(mockup.markets), "the mockup's records in their public view");
   assert.equal(p.now, mockup.now);
 });
 

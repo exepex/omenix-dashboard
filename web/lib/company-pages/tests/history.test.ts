@@ -5,13 +5,16 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
-  centreMovePct, hasEvening, historyAt, historyEntries, historyGeometry, rangeChangeWords, runName, scoreChangeWords, scoreParts, type HistoryEntry,
+  hasEvening, historyAt, historyEntries, historyGeometry, rangeChangeWords, runName, scoreChangeWords, type HistoryEntry,
 } from "../history-logic.ts";
+import { withoutInternals } from "../../strategy-pages/public-strategies.ts";
 import type { ForecastHistory, HistoryRange, HistoryScore } from "../types.ts";
 
 const asRange = (e: HistoryEntry) => e as Extract<HistoryEntry, { kind: "range" }>;
 const asScore = (e: HistoryEntry) => e as Extract<HistoryEntry, { kind: "score" }>;
-const hdfc: ForecastHistory = JSON.parse(readFileSync(new URL("./fixtures/forecast-history-hdfcbank.json", import.meta.url), "utf8"));
+// As the API serves it: through the public view (lib/strategy-pages/public-strategies.ts).
+const stored = JSON.parse(readFileSync(new URL("./fixtures/forecast-history-hdfcbank.json", import.meta.url), "utf8"));
+const hdfc = (withoutInternals({ forecast_history: stored }) as { forecast_history: ForecastHistory }).forecast_history;
 
 test("runs of one horizon in time order; nothing without a history", () => {
   const { ranges, scores } = historyAt(hdfc, 1);
@@ -34,39 +37,28 @@ test("entries: newest first, each paired with the run its change was taken again
   }
 });
 
-test("range change words: B12's example (HDFCBANK N+5, 8 Oct against 7 Oct: target -1.2983%, new calibration)", () => {
+test("range change words: B12's example (HDFCBANK N+5, 8 Oct against 7 Oct: target -1.2983%; the new calibration is how it was made, never shown)", () => {
   const { ranges } = historyAt(hdfc, 5);
   const [first, second] = historyEntries(ranges, []).reverse();
   assert.deepEqual(rangeChangeWords(asRange(first)), ["first range run in the window"]);
-  assert.deepEqual(rangeChangeWords(asRange(second)), ["new close", "target −1.30%", "80% range narrower by 0.52%", "new calibration"]);
-  const r = second.row as HistoryRange;
-  assert.ok(Math.abs(r.base_close * (1 + (centreMovePct(r) as number) / 100) - r.target_price) < 0.01, "target = base close x exp(center)");
+  assert.deepEqual(rangeChangeWords(asRange(second)), ["new close", "target −1.30%", "80% range narrower by 0.52%"]);
 });
 
-test("range change words name the regime and the inputs that changed, and a revision of the same close", () => {
-  const before = { ...hdfc.ranges[0], regime: "CALM", inputs: ["cue"] } as HistoryRange;
-  const after = { ...before, made_at: "2026-10-08T21:30:00Z", regime: "TRENDING", inputs: ["beta"],
-    change: { from_id: before.id, from_made_at: before.made_at, target_pct: 0, width80_pct: 0.5, changed: ["regime", "inputs"] } } as HistoryRange;
+test("range change words name the market mood that changed, and a revision of the same close", () => {
+  const before = { ...hdfc.ranges[0], regime: "CALM" } as HistoryRange;
+  const after = { ...before, made_at: "2026-10-08T21:30:00Z", regime: "EVENT_HEAVY",
+    change: { from_id: before.id, from_made_at: before.made_at, target_pct: 0, width80_pct: 0.5, changed: ["regime"] } } as HistoryRange;
   const [e] = historyEntries([before, after], []);
-  assert.deepEqual(rangeChangeWords(asRange(e)), ["revised for the same close", "target 0.00%", "80% range wider by 0.50%", "regime CALM → TRENDING", "range inputs changed: added beta; dropped cue"]);
+  assert.deepEqual(rangeChangeWords(asRange(e)), ["revised for the same close", "target 0.00%", "80% range wider by 0.50%", "market mood calm → busy with events"]);
 });
 
 test("score change words: B12's example (HDFCBANK, 9 Oct re-score after the news append)", () => {
   const { scores } = historyAt(hdfc, 5);
   const last = asScore(historyEntries([], scores)[0]);
   assert.equal(last.at, "2026-10-09T02:21:45Z");
-  assert.deepEqual(scoreChangeWords(last), ["re-scored for the same close", "P(up) −0.2 pts", "points moved: news −0.23 pts", "3 news items added"]);
+  assert.deepEqual(scoreChangeWords(last), ["re-scored for the same close", "P(up) −0.2 pts", "3 news items added"]);
   const refit = { ...last.row, model_version: "logit-v2", change: { ...(last.row as HistoryScore).change!, changed: ["model_version", "trained_until"] } } as HistoryScore;
   assert.deepEqual(scoreChangeWords({ row: refit, previous: last.previous as HistoryScore }).slice(-2), ["model logit-v1 → logit-v2", "trained until 2026-10-01"]);
-});
-
-test("score parts: base rate plus the group points give P(up) (explain.py), zero groups left out", () => {
-  for (const s of hdfc.scores) {
-    const { base, parts, sum } = scoreParts(s);
-    assert.ok(base != null && sum != null);
-    assert.ok(parts.every(([, v]) => v !== 0));
-    assert.ok(Math.abs(sum - (s.prob_up as number) * 100) < 0.1, `${s.id} ${s.computed_at}: ${sum} vs ${s.prob_up}`);
-  }
 });
 
 test("geometry: one time axis for both panels, bands around the target, P(up) points, day labels on the market clock", () => {

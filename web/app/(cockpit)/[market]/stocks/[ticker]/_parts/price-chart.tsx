@@ -56,7 +56,7 @@ export function PriceChart({ p, ctx, horizon }: { p: CompanyPayload; ctx: PageCt
   const head = (
     <CardHead
       title="Price with today’s targets and ranges"
-      help="Daily candles of the stored sessions (hollow = closed above the open, filled = below). To the right of the last close: the likely closing prices for 1- to 5-day holds (dots on a dashed line), their 50% and 80% ranges as the shaded fan, and at the selected horizon the spread of every strategy’s target (the thin bar). Triangles mark the paper trades: entries below, exits above, hollow = still open. Hover, tap or use the arrow keys for each day’s prices. Zoom with the buttons, Ctrl + scroll or a pinch; drag to move in time."
+      help="Daily candles of the stored sessions (hollow = closed above the open, filled = below). To the right of the last close: the likely closing prices for 1- to 5-day holds (dots on a dashed line), their 50% and 80% ranges as the shaded fan, and at the selected horizon the spread of every strategy’s target (the thin line). Triangles mark the paper trades: entries below, exits above, hollow = still open. Hover, tap or use the arrow keys for each day’s prices. Zoom with the buttons, Ctrl + scroll or a pinch; drag to move in time."
       end={n ? (<span className="ctl">{n} sessions to {fmtDate(p.bars[n - 1].date)}<span className="muted">·</span><PaperTag label={p.status.paper_label} /></span>) : undefined}
     />
   );

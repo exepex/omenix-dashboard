@@ -59,13 +59,14 @@ test("the one-line reason of a finished trade names the main part and the parts 
   assert.equal(settledCause(check()), null);
 });
 
-test("the rule strategies' empty state says why, from their best chance against their bar", () => {
-  const rule = { session_date: "2026-10-12", predictions: 800, qualifying: 0, best_prob_up: 0.5034, bar: 0.55 };
+test("the rule strategies' empty state says what they decided, never their bar", () => {
+  const rule = { session_date: "2026-10-12", predictions: 800, qualifying: 0, best_prob_up: 0.5034 };
   assert.equal(ruleStayedOut(rule), true);
   assert.equal(ruleStayedOut({ ...rule, qualifying: 3 }), false);
   const words = ruleNoneWords(rule);
   assert.equal(words.line, "No trades today: the signal model saw no clear rise");
-  assert.match(words.tip, /at least a 55% chance\. On the newest session the highest chance was 50%, so none of their 800 predictions cleared it/);
+  assert.match(words.tip, /On the newest session the highest chance of a rise the signal model gave was 50%, and none of the rule strategies’ 800 predictions led to a buy/);
+  assert.doesNotMatch(words.tip, /bar|threshold|at least|55%/);
 });
 
 test("open rows of one scope by hold, shortest first", () => {

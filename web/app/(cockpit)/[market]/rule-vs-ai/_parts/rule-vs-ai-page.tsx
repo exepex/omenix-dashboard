@@ -264,13 +264,13 @@ function Slices({ p, cost }: { p: Payload; cost: CostView }) {
   const pr = p.rows.filter((r) => r.scope === "pick_rule" && r.horizon_days === "all" && r.basis === "forward").sort((a, b) => a.family.localeCompare(b.family) || String(a.pick_rule).localeCompare(String(b.pick_rule)));
   const rg = p.rows.filter((r) => r.scope === "strategy_regime" && r.basis === "forward").sort((a, b) => a.family.localeCompare(b.family) || String(a.regime).localeCompare(String(b.regime)));
   return (
-    <Card label="By pick rule and regime">
-      <CardHead title={<>Gain-pick vs probability-pick, and by regime <PaperTag label={p.status.paper_label || PAPER_LABEL} /></>}
+    <Card label="By pick rule and market mood">
+      <CardHead title={<>Gain-pick vs probability-pick, and by market mood <PaperTag label={p.status.paper_label || PAPER_LABEL} /></>}
         help="The same rule-vs-AI trades cut two ways: by how the holding period was picked (biggest expected gain vs highest chance) and by the market’s mood on the day of the prediction." />
       <div className="sub2" style={{ margin: "0 0 8px" }}>By pick rule</div>
       {pr.length ? <SliceTable p={p} rows={pr} cost={cost} first="Family × pick rule" firstOf={(r) => PICK_RULE[r.pick_rule ?? ""] ?? r.pick_rule} /> : <Quiet>No pick-rule row yet.</Quiet>}
       <div className="sub2" style={{ margin: "14px 0 8px" }}>By the market’s mood on the day of the prediction</div>
-      {rg.length ? <SliceTable p={p} rows={rg} cost={cost} first="Family × regime" firstOf={(r) => <span>{REGIME_WORDS[r.regime ?? ""] ?? r.regime}<small className="muted" style={{ display: "block", fontSize: 11 }}>{strategyName(p, r.strategy_id)}</small></span>} /> : <Quiet>No regime row yet.</Quiet>}
+      {rg.length ? <SliceTable p={p} rows={rg} cost={cost} first="Family × market mood" firstOf={(r) => <span>{REGIME_WORDS[r.regime ?? ""] ?? r.regime}<small className="muted" style={{ display: "block", fontSize: 11 }}>{strategyName(p, r.strategy_id)}</small></span>} /> : <Quiet>No market-mood row yet.</Quiet>}
     </Card>
   );
 }

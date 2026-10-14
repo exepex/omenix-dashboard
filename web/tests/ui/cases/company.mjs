@@ -331,7 +331,8 @@ function denseHistory(ticker, close) {
   return { ranges, scores };
 }
 
-/** The forecast history card: drawn, every text inside the chart, the list newest first, nothing wider than the page. */
+/** The forecast history card: drawn, every text inside the chart, the list newest first, nothing wider than the page,
+ *  never how a run was made. */
 async function historyChecks(page, { points, more }) {
   const problems = [];
   const card = page.locator("section.card").filter({ hasText: "Forecast history: how each run changed" }).last();
@@ -349,9 +350,8 @@ async function historyChecks(page, { points, more }) {
   if (!times) problems.push("no run listed");
   const wide = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   if (wide) problems.push("the page scrolls sideways");
-  await page.locator(".fh-runs > .fh-run details summary").first().click();
-  const how = await page.locator(".fh-runs > .fh-run .fh-how").first().textContent();
-  if (!/base rate|base close/.test(how)) problems.push("the first run's calculation does not open");
+  if (await page.$(".fh-runs .fh-how, .fh-runs details")) problems.push("a run still opens how it was calculated (private, owner 13 Oct 2026)");
+  if (/base rate|points moved|calibration|range inputs/i.test(text)) problems.push("the forecast history says how a run was made");
   return problems;
 }
 
@@ -363,7 +363,7 @@ cases.push(
     waitFor: ".fh-chart svg",
     api: companyApi((p) => ({ ...p, forecast_history: hdfcHistory })),
     // N+1 opens: 2 range runs and 5 score runs; the newest is the 9 Oct re-score after the news append
-    expectText: ["Forecast history: how each run changed", "re-scored for the same close", "new calibration", "first range run in the window"],
+    expectText: ["Forecast history: how each run changed", "re-scored for the same close", "target −1.30%", "first range run in the window"],
     check: (page) => historyChecks(page, { points: 7, more: true }),
   },
   {
@@ -372,7 +372,7 @@ cases.push(
     widths: [1280, 1024, 390],
     waitFor: ".fh-chart svg",
     api: companyApi((p) => ({ ...p, forecast_history: denseHistory("RELIANCE", p.bars[p.bars.length - 1].close) })),
-    expectText: ["Earlier runs (34)", "regime CALM → TRENDING", "revised for the same close", "2 news items added"],
+    expectText: ["Earlier runs (34)", "market mood calm → trending", "revised for the same close", "2 news items added"],
     check: (page) => historyChecks(page, { points: 40, more: true }),
   },
   {

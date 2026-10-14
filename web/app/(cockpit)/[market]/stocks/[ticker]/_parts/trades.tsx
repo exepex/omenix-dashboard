@@ -112,7 +112,7 @@ export function SettledCard({ settled, ctx, paperLabel, ticker, openTrades }: { 
     <Card label="Settled paper trades">
       <CardHead
         title={<>Settled results and why each moved <PaperTag label={paperLabel} /></>}
-        help="Every paper trade on this company that has finished, newest first (all trades: one per qualifying prediction; rule vs AI: the daily picks). Net = profit after brokerage, taxes and fees. “Why” splits the move into: the whole market, the sector, verified news, and the company itself; bars to the right of the centre line pushed the price up, to the left down."
+        help="Every paper trade on this company that has finished, newest first (all trades: one per qualifying prediction; rule vs AI: the daily picks). Net = profit after brokerage, taxes and fees. “Why” splits the move into: the whole market, the sector, verified news, and the company itself; segments to the right of the centre line pushed the price up, to the left down."
         end={<GoLink href={stockStrategiesPath(ctx.market, ticker)}>By strategy</GoLink>}
       />
       {rows.length ? (
@@ -126,7 +126,7 @@ export function SettledCard({ settled, ctx, paperLabel, ticker, openTrades }: { 
           </div>
           <DataTable columns={columns} rows={rows} rowKey={(t) => t.id} label="Settled paper trades" className="sd" />
           <div className="chleg">
-            <span>Why bars: </span>
+            <span>Why it moved: </span>
             <span><i className="sw r" />market</span>
             <span><i className="sw b" />sector</span>
             <span><i className="sw a" />news</span>

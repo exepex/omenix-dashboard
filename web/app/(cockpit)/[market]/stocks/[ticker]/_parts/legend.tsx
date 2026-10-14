@@ -24,7 +24,7 @@ export function StrategiesLegend() {
   return (
     <div className="legend2" aria-label="Legend">
       <Common />
-      <span><span className="mb-label success"><Icon name="check" />would buy</span> an up call at or above the strategy’s bar</span>
+      <span><span className="mb-label success"><Icon name="check" />would buy</span> an up call the strategy buys</span>
       <span><span className="mb-label neutral">too few to rank</span> under {MIN_TRADES_TO_RANK} settled trades on this company</span>
       <span><span className="mb-tag paper">paper</span> every signal and trade until proven</span>
     </div>

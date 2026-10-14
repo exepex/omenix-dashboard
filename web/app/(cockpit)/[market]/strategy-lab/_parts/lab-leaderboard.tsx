@@ -34,7 +34,7 @@ export function Leaderboard({ p, v, selected, onSelect }: { p: Payload; v: View;
   const other: CostView = v.cost === "your" ? "market" : "your";
   const head = (
     <CardHead title="Every strategy, ranked by profit after costs"
-      help={`All ${ids.length} strategies of the registry (rule strategies, the three simple benchmarks, the AI traders) on the ${viewWords} view, ${v.basis === "backtest" ? "replayed on past years" : "real time"}, ${hzWords}. Ranked after market fees; the ${other}-fee figure sits under each profit. Fewer than ${MIN_TRADES_TO_RANK} finished trades is "too early to tell" and greyed: a handful of trades is mostly luck. The luck bar shows the ${LUCK_INTERVAL_PCT}% interval of the mean return per trade, thin uncorrected and thick corrected for the rows compared at once; only a thick bar clear of the zero tick counts as an edge. Click a name to see how that strategy is doing.`}
+      help={`All ${ids.length} strategies of the registry (rule strategies, the three simple benchmarks, the AI traders) on the ${viewWords} view, ${v.basis === "backtest" ? "replayed on past years" : "real time"}, ${hzWords}. Ranked after market fees; the ${other}-fee figure sits under each profit. Fewer than ${MIN_TRADES_TO_RANK} finished trades is "too early to tell" and greyed: a handful of trades is mostly luck. The luck line shows the ${LUCK_INTERVAL_PCT}% interval of the mean return per trade, thin uncorrected and thick corrected for the rows compared at once; only a thick line clear of the zero tick counts as an edge. Click a name to see how that strategy is doing.`}
       end={`${viewWords} view · ${v.basis === "backtest" ? "replayed on past years" : "real time"} · ${hzWords} · data up to the ${fmtDate(p.as_of, false)} close · Paper`} />
   );
   const hasBack = p.rows.some((r) => r.basis === "backtest");
@@ -49,7 +49,7 @@ export function Leaderboard({ p, v, selected, onSelect }: { p: Payload; v: View;
       {v.basis === "backtest" && run ? (
         <div className="quiet" style={{ marginBottom: 10 }}>
           <b>Replay on past years. </b>
-          {`Bars stored from ${fmtDateYear(run.first_date)} to ${fmtDateYear(run.last_date)}, ${run.history ? `with the ${BACKTEST_YEARS}-year history cache` : `without the ${BACKTEST_YEARS}-year history cache (not in the repository)`}${run.note ? `; ${run.note}` : ""}${run.eurusd ? `; EUR/USD: ${run.eurusd}` : ""}. Never mixed with real-time results; no targets or ranges, so those figures are empty.`}
+          {`Daily prices stored from ${fmtDateYear(run.first_date)} to ${fmtDateYear(run.last_date)}, ${run.history ? `with the ${BACKTEST_YEARS}-year history cache` : `without the ${BACKTEST_YEARS}-year history cache (not in the repository)`}${run.note ? `; ${run.note}` : ""}${run.eurusd ? `; EUR/USD: ${run.eurusd}` : ""}. Never mixed with real-time results; no targets or ranges, so those figures are empty.`}
         </div>
       ) : null}
       <div className="md-table-wrap">

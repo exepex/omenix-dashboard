@@ -71,7 +71,8 @@ export interface BacktestScore {
 
 export interface BacktestStrategyRow {
   key: string;
-  threshold: string | number;
+  /** The back-test variant (A, B, C …): which rows belong together, never the threshold that tells them apart. */
+  variant?: string;
   positions: number;
   baseline: string;
   dates: number;

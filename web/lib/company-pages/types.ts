@@ -16,8 +16,8 @@ export interface Prediction {
   id: string; strategy_id: string; family: Family; ticker: string; made_at: IsoTime; as_of_date: IsoDate;
   session_date: IsoDate; exit_date: IsoDate; horizon_days: number; direction: "up" | "down"; prob_up: number | null;
   qualifies: boolean; base_close?: number | null; target_price: number | null; lo50: number | null; hi50: number | null;
-  lo80: number | null; hi80: number | null; range_widen?: number | null; threshold?: number | null; confidence?: number | null;
-  model_prob?: number | null; agent_adjustment?: number | null; adjustment_reason?: string | null; reason?: string | null;
+  lo80: number | null; hi80: number | null; range_widen?: number | null; confidence?: number | null;
+  reason?: string | null;
   evidence_ids?: string[] | null; regime?: string | null; quality?: string | null;
 }
 
@@ -107,28 +107,25 @@ export interface PublishedRange {
   lo80: number | null; hi80: number | null; regime?: string | null; run?: ForecastRun;
 }
 
-/** One stored ranges.py run of the forecast history (schema HistoryRange): target_price = base_close x exp(center);
- *  `change` against the previous run of the same horizon (null for the first). */
+/** One stored ranges.py run of the forecast history as the API serves it: what it forecast, never how the range
+ *  model made it (lib/strategy-pages/public-strategies.ts); `change` against the previous run of the same horizon
+ *  (null for the first). */
 export interface HistoryRange {
   id: string; ticker: string; made_at: IsoTime; as_of_date: IsoDate; session_date: IsoDate; exit_date: IsoDate;
-  horizon_days: number; base_close: number; target_price: number; center?: number | null; sigma_h?: number | null;
-  lo50: number; hi50: number; lo80: number; hi80: number; regime?: string | null; calibration_id?: string | null;
-  inputs: string[]; notes: string[]; run?: ForecastRun;
+  horizon_days: number; base_close: number; target_price: number;
+  lo50: number; hi50: number; lo80: number; hi80: number; regime?: string | null; run?: ForecastRun;
   change: { from_id: string; from_made_at: IsoTime; target_pct: number | null; width80_pct: number | null; changed: string[] } | null;
 }
 
-export interface ScoreDriver { feature: string; points: number; text?: string | null }
-
-/** One stored signal-model run (schema HistoryScore): the points per group add up to 100 x (prob_up - base_rate);
- *  change.prob_up is a fraction (0.01 = one percentage point). */
+/** One stored signal-model run as the API serves it: what it forecast and what changed, never how it was made
+ *  (lib/strategy-pages/public-strategies.ts); change.prob_up is a fraction (0.01 = one percentage point). */
 export interface HistoryScore {
   id: string; ticker: string; computed_at: IsoTime; as_of_date: IsoDate; entry_date: IsoDate; exit_date: IsoDate;
-  horizon_days: number; prob_up: number | null; prob_model?: number | null; base_rate?: number | null;
-  news_score?: number | null; model_version: string | null; model_id?: string | null; trained_until?: string | null;
-  groups: Record<string, number>; drivers_up: ScoreDriver[]; drivers_down: ScoreDriver[]; news_items?: number | null;
+  horizon_days: number; prob_up: number | null;
+  model_version: string | null; model_id?: string | null; trained_until?: string | null; news_items?: number | null;
   news_ids: string[]; run?: ForecastRun;
   change: {
-    from_id: string; from_computed_at: IsoTime; prob_up: number | null; groups: Record<string, number>;
+    from_id: string; from_computed_at: IsoTime; prob_up: number | null;
     news_added: string[]; news_dropped: string[]; changed: string[];
   } | null;
 }

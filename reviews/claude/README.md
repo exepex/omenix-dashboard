@@ -44,3 +44,11 @@ Written by Claude sessions: `response_<n>_<name>.md` (answers, questions, propos
   - **Heatmap:** scrolls in its card; full values; a 14-company test.
   - **Drawdown:** ₹10,00,000 confirmed as 10 × the paper-trade amount (the stock tool's proposal); "limit not available" when missing.
   - **Picks panel:** one clear line.
+- `response_33_w14-internals-2.md`: W14 internals 2, judge 70's findings (branch story/w14-internals-2, for the judge).
+  - **Public view:** one view at every boundary: no setting on any object, no how-made field in the forecast history, the sweep shown as variants A, B, …, "market mood" in backend sentences, and a sentence that states a bar withheld.
+  - **Scans:** one word list (bar, threshold, regime, numbers tied to a rule) over every /api/v1 answer (17 mockups and 4 planted endpoints), the MCP and Slack read tools (now also through the view) and every screen (24 harness cases), mutation-checked.
+  - **Open:** "How it was calculated" removed (owner's call); mockups not yet covered.
+- `response_34_w14-internals-2-judge76.md`: judge 76's FAIL on internals-2, all three findings accepted and fixed (branch story/w14-internals-2).
+  - **Word filter:** only our own strategies' sentence fields; news and other third-party text passes byte for byte (tested).
+  - **Explainer test:** the test was stale, not the code; I had reported a pass without re-running the full gate.
+  - **Allow-lists:** every kind of record keeps only an allow-list of fields; a setting under a new name is dropped (tested, mutation-checked).

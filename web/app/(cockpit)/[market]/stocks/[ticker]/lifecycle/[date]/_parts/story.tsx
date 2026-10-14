@@ -89,7 +89,6 @@ export function StoryCard({ day, ctx, benchmark, companyName, ids }: {
       ? [{ label: "Whole market", value: latest.market_pull_pct ?? (latest.beta === null ? latest.market_pct : latest.market_pct * latest.beta) }, { label: `${day.ticker} on its own`, value: latest.own_pct }]
       : [];
   const exitWhen = settled?.exit_date_actual ?? prediction.exit_date;
-  const bar = prediction.threshold ?? ctx.strategies[prediction.strategy_id]?.threshold ?? null;
   return (
     <section className="card story-card" aria-label="The full story" id="story">
       <div className="st-hero">
@@ -127,7 +126,7 @@ export function StoryCard({ day, ctx, benchmark, companyName, ids }: {
       <h3>What happened, step by step</h3>
       <ol className="st-tl">
         <Step icon="description" when={`${ctx.at(prediction.made_at, true)}`} title={`Predicted: ${up ? "a rise" : "a fall"} by the close ${prediction.horizon_days === 1 ? "1 session" : `${prediction.horizon_days} sessions`} after the buy`}>
-          {prediction.prob_up != null ? <>Chance of a rise <b>{Math.round(prediction.prob_up * 100)}%</b>{bar != null ? ` (its bar: ${Math.round(bar * 100)}%)` : ""}. </> : "No forecast: this simple benchmark buys every day. "}
+          {prediction.prob_up != null ? <>Chance of a rise <b>{Math.round(prediction.prob_up * 100)}%</b>. </> : "No forecast: this simple benchmark buys every day. "}
           {words ? <q>{words}</q> : null}
         </Step>
         <Step icon="receipt_long" when={`${fmtDate(day.session_date)}, at the open`} title={entry === null ? "Bought at the open" : `Bought at ${price(ctx.currency, entry)}`}>Paper only: the price is the session’s open.</Step>

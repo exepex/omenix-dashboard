@@ -162,7 +162,7 @@ export const cases = [
     api: realApi(),
     widths: [1280, 390],
     waitFor: "[aria-label='The full story']",
-    expectText: ["Why is it going against the prediction?", "Whole market", "LT on its own", "What happened, step by step", "Chance of a rise 55%", "(its bar: 55%)",
+    expectText: ["Why is it going against the prediction?", "Whole market", "LT on its own", "What happened, step by step", "Chance of a rise 55%",
       "Exchange-confirmed large order wins", "AI note, checked against the stored data", "Sells at the close and is settled", "What the system learned",
       "This strategy doesn’t get lessons", "Needs the owner’s approval"],
     check: async (page) => {

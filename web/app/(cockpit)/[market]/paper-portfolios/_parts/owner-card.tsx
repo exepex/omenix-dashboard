@@ -159,7 +159,7 @@ function TradeDialog({ p, onClose, onSent }: { p: Payload; onClose: () => void; 
       <form onSubmit={submit} noValidate>
         <div className="dbody">
           <h3 id="trade-title">Add an own paper trade</h3>
-          <div>A paper trade is a record of what you would have done, never an order. The price must be the stored bar’s open or close, or a typed price inside that day’s low-high; the next run checks it. Whole shares in India, fractions in the US.</div>
+          <div>A paper trade is a record of what you would have done, never an order. The price must be the stored day’s open or close, or a typed price inside that day’s low-high; the next run checks it. Whole shares in India, fractions in the US.</div>
           <label>Company
             <select value={form.ticker} onChange={(e) => update({ ticker: e.target.value })}>
               {active.map((c) => <option key={c.ticker} value={c.ticker}>{`${c.ticker} · ${c.name}`}</option>)}

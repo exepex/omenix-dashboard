@@ -37,7 +37,7 @@ import { usePage } from "../../../../../lib/ui/use-api.ts";
 import "./help.css";
 
 const SECTIONS: [string, string][] = [
-  [WHY_NO_BUY_SELL_ANCHOR, "Why no buy or sell"], ["when", "When will each page fill?"], ["paper", "Paper and the go-live bar"], ["horizons", "Horizons, chances and ranges"], ["strategies", "The strategies"],
+  [WHY_NO_BUY_SELL_ANCHOR, "Why no buy or sell"], ["when", "When will each page fill?"], ["paper", "Paper and the go-live test"], ["horizons", "Horizons, chances and ranges"], ["strategies", "The strategies"],
   ["scores", "Scores and the luck test"], ["h2h", "Head-to-head and costs"], ["news", "News and its status"],
   ["intraday", "Intraday checks"], ["pages", "The pages"], ["numbers", "Where the numbers come from"], ["glossary", "Glossary"],
 ];
@@ -85,19 +85,19 @@ function Paper({ market, lab }: { market: Market; lab: LabForHelp | null }) {
   };
   const checks = g ? goLiveChecks(g, GO_LIVE_MONTHS) : Object.keys(words).map((key) => ({ key, passed: null }));
   return (
-    <HelpCard id="paper" title="Paper, and the go-live bar">
+    <HelpCard id="paper" title="Paper, and the go-live test">
       <p>
         Everything in this cockpit is a <b>paper trade</b>: a record of what a strategy would have done, settled against the stored prices. Nothing is bought or sold, no broker is connected, and no page ever tells you to buy or sell. The <span className="mb-tag paper">paper</span> tag on a figure means &quot;measured, not acted on&quot;.
       </p>
       <p>
-        A strategy stays Paper until it meets the <b>go-live bar</b> (measured after your own fees). Until one does, the pages that rank signals (
+        A strategy stays Paper until it meets the <b>go-live test</b> (measured after your own fees). Until one does, the pages that rank signals (
         {signalPages.map(([t, key], i) => (
           <span key={t}>
             {i ? (i === signalPages.length - 1 ? " and " : ", ") : ""}
             {key ? <Link href={pagePath(market, key)}>{t}</Link> : <span data-tip="Opens from a company on the watchlist.">{t}</span>}
           </span>
         ))}
-        ) say &quot;{NO_PROVEN_SIGNALS}&quot;. The bar has {checks.length} checks; here is where the reference strategy stands in {lab?.name ?? MARKET_LABEL[market]}:
+        ) say &quot;{NO_PROVEN_SIGNALS}&quot;. The test has {checks.length} checks; here is where the reference strategy stands in {lab?.name ?? MARKET_LABEL[market]}:
       </p>
       <ul className="chk">
         {checks.map(({ key, passed }) => (
@@ -138,7 +138,7 @@ function Horizons({ lab, companies }: { lab: LabForHelp | null; companies: Compa
         . A strategy buys only when it judges the chance high enough; otherwise it shows &quot;no trade&quot;.
       </p>
       <p>
-        The <b>target</b> is the expected exit close. The <b>50% and 80% ranges</b> are where the close is expected to land that often. The range bar draws them around the last close:{" "}
+        The <b>target</b> is the expected exit close. The <b>50% and 80% ranges</b> are where the close is expected to land that often. The range strip draws them around the last close:{" "}
         <span className="sample">
           <RangeBar currency={cur} bands={{ lo80: 96, lo50: 98.5, hi50: 102, hi80: 104, target_price: 101 }} last={100} />
           <span className="l muted">(sample: the triangle is the target, the dark line the last close)</span>
@@ -211,7 +211,7 @@ function Scores({ companies, currency }: { companies: CompaniesForHelp | null; c
     <HelpCard id="scores" title="Scores, and the luck test">
       <Terms
         rows={[
-          ["Profit after costs", "The headline. Market cost = brokerage, taxes and fees; strategies are ranked on it. Your cost adds the charges only you pay (in India the depository charge on each sale, in the US the currency markup and the pro-rated portfolio fee); the go-live bar and your own decisions use it."],
+          ["Profit after costs", "The headline. Market cost = brokerage, taxes and fees; strategies are ranked on it. Your cost adds the charges only you pay (in India the depository charge on each sale, in the US the currency markup and the pro-rated portfolio fee); the go-live test and your own decisions use it."],
           ["Return per trade", `Profit as a percent of the amount per paper trade (${amount ? `${amount} by default` : "the market’s default amount"}, or the company’s own amount), so companies with different amounts compare.`],
           ["Win rate", "The share of trades that made money after costs."],
           ["Target reached", "The share of trades whose price touched the target at some point in the window, and the typical session it happened."],
@@ -221,7 +221,7 @@ function Scores({ companies, currency }: { companies: CompaniesForHelp | null; c
         ]}
       />
       <p>
-        <b>The luck test.</b> The pages draw it as a bar: a thin line for the {LUCK_INTERVAL_PCT}% interval of the mean return per trade, a thick line for the same interval corrected for how many strategies were compared at once (the more you compare, the more one looks good by chance), and a tick at zero. Only when the thick bar clears zero does the label say <span className="mb-label success">edge</span>; otherwise <span className="mb-label neutral">luck?</span>. On fewer than {MIN_TRADES_TO_RANK} trades the label is qualified.
+        <b>The luck test.</b> The pages draw it as a line: a thin line for the {LUCK_INTERVAL_PCT}% interval of the mean return per trade, a thick line for the same interval corrected for how many strategies were compared at once (the more you compare, the more one looks good by chance), and a tick at zero. Only when the thick line clears zero does the label say <span className="mb-label success">edge</span>; otherwise <span className="mb-label neutral">luck?</span>. On fewer than {MIN_TRADES_TO_RANK} trades the label is qualified.
       </p>
     </HelpCard>
   );
@@ -307,7 +307,7 @@ function Pages({ market }: { market: Market }) {
   ];
   return (
     <HelpCard id="pages" title="The pages">
-      <p>Every page shows the session, the regime and its freshness in the chips at the top and its &quot;as of&quot; time in the footer, works on a phone and with the keyboard, and marks every signal Paper.</p>
+      <p>Every page shows the session, the market mood and its freshness in the chips at the top and its &quot;as of&quot; time in the footer, works on a phone and with the keyboard, and marks every signal Paper.</p>
       <div className="pages">
         {rows.map(([key, ico, title, text]) => (
           <Link key={title} href={pagePath(market, key)}>
@@ -339,7 +339,7 @@ function WhenFill() {
     ["Finished paper trades, wins and losses", "After the close of a trade’s last day, at the after-close run (India 17:45 IST; US 18:15 New York time). A 1-day hold bought on a Monday finishes at Tuesday’s close."],
     ["The after-close write-up (end-of-day analysis)", "At the after-close run, once the first trades have finished."],
     ["Rule vs AI rankings", `After ${MIN_TRADES_TO_RANK} finished trades per side; before that each figure says “too early to tell”.`],
-    ["A strategy proven (the go-live bar)", `At the earliest ${GO_LIVE_MONTHS} months after paper testing starts, with about ${GO_LIVE_TRADES_ABOUT} finished trades and all the other checks passed.`],
+    ["A strategy proven (the go-live test)", `At the earliest ${GO_LIVE_MONTHS} months after paper testing starts, with about ${GO_LIVE_TRADES_ABOUT} finished trades and all the other checks passed.`],
     ["The weekly research review and the Strategy lab’s replay on past years", "Every Friday evening, New York time."],
     ["Track record’s replay of the signal model", "The weekly review, on the first trading day of each week."],
     ["The daily forecast’s track record", "A 1-day forecast is checked after the next trading day’s close."],
@@ -357,7 +357,7 @@ function Numbers() {
   return (
     <HelpCard id="numbers" title="Where the numbers come from">
       <p>
-        Prices, news, filings and events are collected from free public sources every session; predictions are made before the open; trades are settled after the close against the stored closes; the scoreboard, the luck test and the go-live bar are recomputed from the settled trades. No figure on a page is typed in by hand: prices, outcomes and scores come from the stored records. The hand-entered records are your own: the watchlist and each company’s paper amount (the Companies page), your own paper trades, and the broker cost rates (marked &quot;verify&quot; until a contract note confirms them); the chances, targets and ranges are the strategies’ estimates, and the pages say so.
+        Prices, news, filings and events are collected from free public sources every session; predictions are made before the open; trades are settled after the close against the stored closes; the scoreboard, the luck test and the go-live test are recomputed from the settled trades. No figure on a page is typed in by hand: prices, outcomes and scores come from the stored records. The hand-entered records are your own: the watchlist and each company’s paper amount (the Companies page), your own paper trades, and the broker cost rates (marked &quot;verify&quot; until a contract note confirms them); the chances, targets and ranges are the strategies’ estimates, and the pages say so.
       </p>
       <p>
         Every page reads data only up to its cut-off time (nothing stored after it), so a page about a past day never uses anything learned later; its &quot;as of&quot; is the newest trading date inside that. The <b>freshness</b> chip says when the page was built and how old its data is; a stale page says so.
@@ -387,7 +387,7 @@ function Glossary() {
             ["Importance (materiality)", "How important a news story is: high, medium or low."],
             ["k-day hold (N+k)", "Buy at the open of the trading day being predicted, sell at the close k trading days later."],
             ["Luck test (edge / luck? / loss)", "Could this result be chance? “edge” = probably not luck, “luck?” = could be, “loss” = loses after fees, and that’s not luck."],
-            ["Market mood (regime)", "How the whole market has behaved lately: calm, trending, busy with events (EVENT_HEAVY) or jumpy (UNSTABLE). Rule strategies either sit out the last two or not; AI traders lower their chances in them."],
+            ["Market mood", "How the whole market has behaved lately: calm, trending, busy with events (EVENT_HEAVY) or jumpy (UNSTABLE). The pages show each strategy’s results by market mood."],
             ["Paper long", "A pretend purchase, held for the stated days."],
             ["Too early to tell", `Under ${MIN_TRADES_TO_RANK} finished trades: the numbers are mostly luck.`],
             ["Wilson 95% interval", "The range the true hit rate is very likely in; it is wide when there are few calls."],
@@ -453,7 +453,7 @@ export function HelpPage({ market }: { market: Market }) {
       <div className="note2">
         <Icon name="info" />
         <div>
-          <b>Research only.</b> This is a personal research project. Nothing here is investment advice, nothing trades, and no broker is connected. Every figure is a paper record until a strategy meets the go-live bar; even then the cockpit ranks and explains, it never instructs.
+          <b>Research only.</b> This is a personal research project. Nothing here is investment advice, nothing trades, and no broker is connected. Every figure is a paper record until a strategy meets the go-live test; even then the cockpit ranks and explains, it never instructs.
         </div>
       </div>
       {head ? (

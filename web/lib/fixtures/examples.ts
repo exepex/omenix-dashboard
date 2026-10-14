@@ -3,7 +3,7 @@
 // the display-name rule (`strategies: true`, as at every adapter boundary of such blocks); blocks of securities and
 // market data do not, so a company's name is never touched (judge 45). Pure.
 import { NoExample } from "../ui/no-example.ts";
-import { applyDisplayNames } from "../ui/strategy-names.ts";
+import { publicView } from "../ui/public-view.ts";
 
 export type Examples = Record<string, { value: { payload: unknown } }>;
 
@@ -15,6 +15,6 @@ export function exampleReader(raw: unknown, { strategies }: { strategies: boolea
   return function read<T>(operation: string): T {
     const found = examples[operation];
     if (!found) throw new NoExample(operation);
-    return (strategies ? applyDisplayNames(found.value.payload) : found.value.payload) as T;
+    return (strategies ? publicView(found.value.payload) : found.value.payload) as T;
   };
 }
