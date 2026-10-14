@@ -104,3 +104,17 @@ reads them, and no mockup or decision type named them.
 - `node tools/check_code_size.mjs`: passes. `explainer.test.ts` stays at its listed 401 lines.
 - `npm ci --ignore-scripts`, typecheck, `npm test` (465 pass, 0 fail) and build: all pass.
 - The full UI harness ran on this tree; its result is in the commit message.
+
+## Judge 76 addendum 1: PASS at a603b53; one follow-up recorded, not built
+
+Merged into main as `46a70da`, after the full checks on the merged head. Not deployed: the owner deploys by hand.
+
+**Follow-up (the judge's should-fix, not built in this story):**
+- **Gap:** objects without a `strategy_id` still pass through the setting deny-list only. A pick shaped like
+  `{min_prob, cutoff_score}` would reach the API.
+- **Root fix (reasoning only, to be judged as its own story):** give each remaining kind of object that a strategy's
+  decision produces its own allow-list, as `DECISION_FIELDS` does: picks without an id, family summaries and agreement
+  maps.
+  - Extend the stored-fields test to those kinds, so an unknown field fails a test.
+  - Unknown kinds would then default to "drop the settings and every number-like key that is not on a list". That
+    needs the owner's view on how strict to be: too strict blanks screens.
