@@ -59,36 +59,63 @@ async function noInternals(page) {
   return problems;
 }
 
-/** The heatmap "By company" (owner, 13 Oct 2026: labels ran into each other, values were cut off): every value shows
- *  whole, every column label fits or ends in … with the full name as its tooltip, and the map scrolls inside its card. */
-async function heatmapReadable(page) {
+/** The "By company" map (owner, 13 Oct 2026: "wrong format, data overlap over each other"): companies are rows, the
+ *  card never grows sideways, no two texts overlap (bounding boxes), no value is clipped, 8 rows then "Show all", worst
+ *  first, and one strategy column with its selector on a phone. */
+async function companyMapReadable(page, { width }) {
   const problems = [];
-  const sel = '.p-lab .hm:has(h3:text-is("By company"))';
-  if (!(await page.$(sel))) return ["no By company heatmap"];
-  const r = await page.$eval(sel, (hm) => {
-    const cut = [...hm.querySelectorAll("td span")].filter((s) => s.scrollWidth > s.clientWidth + 1 || s.scrollWidth > s.parentElement.clientWidth + 1).map((s) => s.textContent);
-    const heads = [...hm.querySelectorAll("thead th:not(.r)")];
-    const badHead = heads.filter((th) => th.scrollWidth > th.clientWidth + 1 && getComputedStyle(th).textOverflow !== "ellipsis").map((th) => th.textContent);
-    const noTip = heads.filter((th) => !th.title).map((th) => th.textContent);
-    const box = hm.querySelector(".md-table-wrap");
-    return { cut, badHead, noTip, scrolls: box ? getComputedStyle(box).overflowX : "none", heads: heads.length };
+  const sel = ".p-lab .hm.cm";
+  if (!(await page.$(sel))) return ["no By company map"];
+  const read = () => page.$eval(sel, (cm) => {
+    const box = (el) => el.getBoundingClientRect();
+    const over = (a, b) => a.left < b.right - 0.5 && b.left < a.right - 0.5 && a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5;
+    const leaves = [...cm.querySelectorAll("thead th, td span, th .cm-name, th small")].filter((e) => e.textContent.trim());
+    const overlaps = [];
+    for (let i = 0; i < leaves.length; i++) for (let j = i + 1; j < leaves.length; j++) {
+      if (leaves[i].contains(leaves[j]) || leaves[j].contains(leaves[i])) continue;
+      if (over(box(leaves[i]), box(leaves[j]))) overlaps.push(`${leaves[i].textContent.trim()} / ${leaves[j].textContent.trim()}`);
+    }
+    const clipped = [...cm.querySelectorAll("td span, th")].filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent.trim());
+    const card = box(cm);
+    const past = [...cm.querySelectorAll("*")].filter((e) => box(e).right > card.right + 1).map((e) => e.textContent.trim().slice(0, 20));
+    const values = [...cm.querySelectorAll("tbody tr td:nth-child(2) span")].map((s) => s.textContent);
+    return { overlaps: overlaps.slice(0, 5), clipped: clipped.slice(0, 5), past: past.slice(0, 5), sideways: cm.scrollWidth > cm.clientWidth + 1,
+      rows: cm.querySelectorAll("tbody tr").length, cols: cm.querySelectorAll("thead th:not(.r)").length, values, picker: Boolean(cm.querySelector("select")) };
   });
-  if (r.cut.length) problems.push(`values cut off: ${r.cut.slice(0, 5).join(", ")}`);
-  if (r.badHead.length) problems.push(`column labels overflow without …: ${r.badHead.slice(0, 5).join(", ")}`);
-  if (r.noTip.length) problems.push(`column labels without their full name: ${r.noTip.slice(0, 5).join(", ")}`);
-  if (r.scrolls !== "auto") problems.push(`the map does not scroll inside its card (${r.scrolls})`);
+  let r = await read();
+  if (r.overlaps.length) problems.push(`overlapping texts: ${r.overlaps.join("; ")}`);
+  if (r.clipped.length) problems.push(`clipped texts: ${r.clipped.join(", ")}`);
+  if (r.past.length || r.sideways) problems.push(`the card grows sideways: ${r.past.join(", ")}`);
+  if (r.rows !== 8) problems.push(`${r.rows} companies shown at first, not 8`);
+  if (!r.picker) problems.push("no strategy selector");
+  if (width < 600 && r.cols !== 1) problems.push(`${r.cols} strategy columns on a phone, not 1`);
+  if (width >= 1200 && r.cols < 3) problems.push(`only ${r.cols} strategy columns at ${width} px`);
+  const num = (t) => Number(t.replace("−", "-").replace(/[+Lk,]/g, "")) * (/L/.test(t) ? 1e5 : /k/.test(t) ? 1e3 : 1);
+  const vals = r.values.filter((t) => t !== "·").map(num);
+  if (vals.some((v, i) => i > 0 && v < vals[i - 1])) problems.push(`not worst first: ${r.values.join(" ")}`);
+  await page.click(`${sel} button:has-text("Show all")`);
+  r = await read();
+  if (r.rows !== 25) problems.push(`Show all gave ${r.rows} companies, not 25`);
+  if (r.overlaps.length || r.clipped.length || r.sideways) problems.push(`with all companies: overlap ${r.overlaps.join("; ")} clipped ${r.clipped.join(", ")} sideways ${r.sideways}`);
   return problems;
 }
 
-/** The registry's company map as the owner saw it (13 Oct 2026): 14 companies, long tickers, six-figure results. */
-const MANY = ["ADANIPORTS", "DRREDDY", "HDFCBANK", "HINDALCO", "HINDUNILVR", "ICICIBANK", "INFY", "ITC", "LT", "M&M", "MARUTI", "ONGC", "RELIANCE", "TCS"];
+/** The registry's company map as the owner saw it (13 Oct 2026), grown to 25 companies with long names and six-figure
+ *  results. */
+const MANY = [["ADANIPORTS", "Adani Ports and Special Economic Zone Limited"], ["ULTRACEMCO", "UltraTech Cement Limited"], ["BAJAJFINSV", "Bajaj Finserv Limited"],
+  ["HINDUNILVR", "Hindustan Unilever Limited"], ["DRREDDY", "Dr. Reddy's Laboratories Limited"], ["HDFCBANK", "HDFC Bank Limited"], ["HINDALCO", "Hindalco Industries Limited"],
+  ["ICICIBANK", "ICICI Bank Limited"], ["INFY", "Infosys Limited"], ["ITC", "ITC Limited"], ["LT", "Larsen & Toubro Limited"], ["M&M", "Mahindra & Mahindra Limited"],
+  ["MARUTI", "Maruti Suzuki India Limited"], ["ONGC", "Oil and Natural Gas Corporation Limited"], ["RELIANCE", "Reliance Industries Limited"], ["TCS", "Tata Consultancy Services Limited"],
+  ["KOTAKBANK", "Kotak Mahindra Bank Limited"], ["SUNPHARMA", "Sun Pharmaceutical Industries Limited"], ["TATAMOTORS", "Tata Motors Limited"], ["POWERGRID", "Power Grid Corporation of India Limited"],
+  ["BHARTIARTL", "Bharti Airtel Limited"], ["ASIANPAINT", "Asian Paints Limited"], ["NESTLEIND", "Nestle India Limited"], ["APOLLOHOSP", "Apollo Hospitals Enterprise Limited"], ["BAJFINANCE", "Bajaj Finance Limited"]];
 const manyCompaniesApi = (rest, market) => {
   if (rest !== "strategies") return undefined;
   const lab = mockupPayload("05-strategy-lab", market);
   const base = lab.cells.find((c) => c.dimension === "company");
-  const ids = [...new Set(lab.cells.filter((c) => c.dimension === "company").map((c) => c.strategy_id))];
-  const cells = ids.flatMap((id, i) => MANY.map((t, j) => ({ ...base, week: "all", strategy_id: id, column: t, trades: 3, wins: (i + j) % 3, win_rate: ((i + j) % 3) / 3, net_pnl: ((i + j) % 2 ? -1 : 1) * (823456.78 - 41000 * j) })));
-  return { status: 200, body: envelope(market, "_", { ...lab, cells: [...lab.cells.filter((c) => c.dimension !== "company"), ...cells] }) };
+  const ids = Object.keys(lab.strategies);
+  const cells = ids.flatMap((id, i) => MANY.map(([t], j) => ({ ...base, week: "all", strategy_id: id, column: t, trades: 3, wins: (i + j) % 3, win_rate: ((i + j) % 3) / 3, net_pnl: ((i + j) % 2 ? -1 : 1) * (823456.78 - 31000 * j) })));
+  const companies = [...lab.companies.filter((c) => !MANY.some(([t]) => t === c.ticker)), ...MANY.map(([ticker, name]) => ({ ticker, name }))];
+  return { status: 200, body: envelope(market, "_", { ...lab, companies, cells: [...lab.cells.filter((c) => c.dimension !== "company"), ...cells] }) };
 };
 
 /** No page shows a backend strategy name or id (owner, 13 Oct 2026): they state how a strategy decides. */
@@ -240,8 +267,7 @@ export const cases = [
   }),
   { name: "w14-no-internals-lab", path: "/india/strategy-lab", widths: [1280], waitFor: ".p-lab .lb", api: plantedApi, check: noInternals },
   { name: "w14-no-internals-help", path: "/india/help", widths: [1280], waitFor: "#strategies", api: plantedApi, check: noInternals },
-  { name: "w14-lab-heatmap", path: "/india/strategy-lab", widths: [1280, 390], waitFor: ".p-lab .hm", check: heatmapReadable },
-  { name: "w14-lab-heatmap-14-companies", path: "/india/strategy-lab", widths: [1280, 390], waitFor: ".p-lab .hm", api: manyCompaniesApi, check: heatmapReadable },
+  { name: "w14-lab-company-map-25", path: "/india/strategy-lab", widths: [1280, 390], waitFor: ".p-lab .hm.cm", api: manyCompaniesApi, check: companyMapReadable },
   ...[["home", "/india"], ["lab", "/india/strategy-lab"], ["help", "/india/help"], ["rule-vs-ai", "/india/rule-vs-ai"], ["portfolios", "/india/paper-portfolios"], ["stock", "/india/stocks/RELIANCE"], ["strategies", "/india/stocks/RELIANCE/strategies"], ["track-record", "/india/track-record"], ["us-home", "/us"]]
     .map(([name, path]) => ({ ...(name === "rule-vs-ai" ? ruleVsAi.find((c) => c.name === "rule-vs-ai-india") : {}), mockup: undefined, expectText: undefined, name: `w14-no-backend-names-${name}`, path, widths: [1280], check: noBackendNames })),
   { name: "w14-block-loader", path: "/india/screener", widths: [1280, 390], waitFor: ".mb-scr-presets", check: blockLoader },

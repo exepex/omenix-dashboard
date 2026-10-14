@@ -62,7 +62,7 @@ function StrategyLab({ p }: { p: Payload }) {
         <Detail p={p} v={v} selected={selected} />
         <CumulativeCard p={p} v={v} selected={selected} />
       </div>
-      <div style={{ marginTop: 16 }}><Heatmaps p={p} v={v} /></div>
+      <div style={{ marginTop: 16 }}><Heatmaps p={p} v={v} selected={selected} /></div>
       <Legend p={p} />
       <PageFooter page={p} endpoint="strategies" />
     </>

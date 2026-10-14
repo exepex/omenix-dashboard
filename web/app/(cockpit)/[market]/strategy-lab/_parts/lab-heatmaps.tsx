@@ -8,8 +8,9 @@ import { Card, CardHead, Label, PaperTag, Quiet } from "../../../../../component
 import { CURRENCY_SYMBOL, MIN_TRADES_TO_RANK, PAPER_LABEL } from "../../../../../lib/ui/constants.ts";
 import { fmtDateYear, holdLabel, money, moneyDecimals, pct } from "../../../../../lib/ui/format.ts";
 import { REGIME_WORDS, type ScoreboardRow } from "../../../../../lib/strategy-pages/scoreboard.ts";
-import { cellValue, compactProfit, heatShares, heatWeeks, REASON, type HeatValue } from "../../../../../lib/strategy-pages/strategy-lab.ts";
+import { cellValue, compactProfit, heatShares, heatWeeks, ranking, REASON, type HeatValue } from "../../../../../lib/strategy-pages/strategy-lab.ts";
 import { Control } from "../../_b16/parts.tsx";
+import { CompanyMap } from "./lab-company-map.tsx";
 import { noneYet, plural, type Payload, type View } from "./lab-shared.tsx";
 
 interface HeatColumn { label: string; full: string; key: string }
@@ -48,14 +49,13 @@ function Heat({ title, help, ids, cols, cellOf, p, metric }: {
   );
 }
 
-export function Heatmaps({ p, v }: { p: Payload; v: View }) {
+export function Heatmaps({ p, v, selected }: { p: Payload; v: View; selected: string }) {
   const [metric, setMetric] = useState<"net" | "win">("net");
   const [week, setWeek] = useState("all");
   const picked = heatWeeks(p.cells, v.view, v.basis, week);
   const cells = picked.cells;
   const strategyRows = p.rows.filter((r) => r.scope === "strategy" && r.view === v.view && r.basis === v.basis);
   const ids = Object.keys(p.strategies).filter((id) => (v.basis === "backtest" && strategyRows.some((r) => r.strategy_id === id)) || cells.some((c) => c.strategy_id === id));
-  const nameOf = (t: string) => p.companies.find((c) => c.ticker === t)?.name ?? t;
   const end = (
     <>
       <Control label="Show"><Segmented label="Show" value={metric} onChange={setMetric} options={[{ value: "net", label: `Profit (${CURRENCY_SYMBOL[p.currency] ?? p.currency})` }, { value: "win", label: "Win rate" }]} /></Control>
@@ -66,7 +66,7 @@ export function Heatmaps({ p, v }: { p: Payload; v: View }) {
   );
   const head = (
     <CardHead title="Where each strategy wins and loses" end={end}
-      help="Heatmaps of profit after market fees or win rate by strategy × holding period, × company, × market mood and × reason, for the selected view and basis. Green = profit (or win rate above half), red = loss, darker = larger; the number is in every cell, so colour never stands alone; a dot means no trade. The reason map is derived from the finished trades’ automatic reason (market, sector, news, company). The maps by horizon, company and reason read the cells per ISO week of exit, all weeks pooled by default (the Week control); the regime map is the scoreboard’s, all weeks." />
+      help="Heatmaps of profit after market fees or win rate by strategy × holding period, × market mood, × company (companies as rows, sorted by the strategy you choose) and × reason, for the selected view and basis. Green = profit (or win rate above half), red = loss, darker = larger; the number is in every cell, so colour never stands alone; a dot means no trade. The reason map is derived from the finished trades’ automatic reason (market, sector, news, company). The maps by horizon, company and reason read the cells per ISO week of exit, all weeks pooled by default (the Week control); the regime map is the scoreboard’s, all weeks." />
   );
   if (!ids.length) return <Card label="Heatmaps">{head}<Quiet>{noneYet(p)}</Quiet></Card>;
   const horizonCols = (p.horizons ?? []).map((k) => ({ label: `${k}d`, full: holdLabel(k), key: String(k) }));
@@ -82,15 +82,14 @@ export function Heatmaps({ p, v }: { p: Payload; v: View }) {
       <div className="hms">
         <Heat title="By horizon" help="Which holding period works for each strategy." ids={ids} cols={horizonCols} p={p} metric={metric}
           cellOf={(id, c) => (v.basis === "forward" ? cellValue(cells, id, "horizon", c.key) : fromRow(strategyRows.find((x) => x.strategy_id === id && String(x.horizon_days) === c.key)))} />
-        {tickers.length
-          ? <Heat title="By company" help="Which companies each strategy reads well (all horizons pooled). A per-company lead on a handful of trades is mostly luck; the Stock strategies page shows the luck test." ids={ids} p={p} metric={metric}
-            cols={tickers.map((t) => ({ label: t, full: nameOf(t), key: t }))} cellOf={(id, c) => cellValue(cells, id, "company", c.key)} />
-          : <Quiet>{v.basis === "backtest" ? "By company: the back-test stores no split by company." : "By company: no per-company row in this view yet."}</Quiet>}
         {regimes.length
           ? <Heat title={picked.week === "all" ? "By market regime" : "By market regime (all weeks)"} p={p} metric={metric} ids={rgIds}
             help="The market’s mood on the day of the prediction; the scoreboard stores this split for all weeks only, so this map does not follow the week picker."
             cols={regimes.map((r) => ({ label: REGIME_WORDS[r] ?? r, full: r, key: r }))} cellOf={(id, c) => fromRow(rgRows.find((x) => x.strategy_id === id && x.regime === c.key))} />
           : <Quiet>{v.basis === "backtest" ? "By market regime: the back-test stores no split by regime." : "By market regime: no per-regime row in this view yet."}</Quiet>}
+        {tickers.length
+          ? <CompanyMap p={p} cells={cells} ids={ids} ranked={ranking(p, v).ids} selected={selected} metric={metric} />
+          : <Quiet>{v.basis === "backtest" ? "By company: the back-test stores no split by company." : "By company: no per-company row in this view yet."}</Quiet>}
         {codes.length
           ? <Heat title="By reason the price moved" p={p} metric={metric} ids={ids}
             help="The main cause of each finished trade’s move, from the automatic reason split: did the strategy make its money when the market lifted, when the sector did, on verified news, or on something company-specific?"
