@@ -12,6 +12,7 @@ import { readPage, type PageSpec } from "../../data/handler.ts";
 import { TRACK_RECORD_PAGE } from "../../data/track-record.ts";
 import { MemoryRowStore, NOW, row } from "../../data/tests/fakes.ts";
 import { internalWordsIn } from "../../ui/internal-words.ts";
+import { DECISION_FIELDS } from "../public-fields.ts";
 import { publicView } from "../../ui/public-view.ts";
 
 const mockups = join(import.meta.dirname, "..", "..", "..", "..", "design", "mockups");
@@ -82,6 +83,26 @@ for (const [name, spec, path, payload] of ENDPOINTS) {
 test("track record: the sweep's rows keep apart by a neutral variant letter and keep only their public fields", () => {
   const out = publicView({ backtest: { strategy: [{ baseline: "a", threshold: 0.6, mean_pct: 1, cutoff_used: 0.6 }, { baseline: "a", threshold: 0.55, mean_pct: 2 }] } });
   assert.deepEqual(out.backtest.strategy, [{ baseline: "a", variant: "B", mean_pct: 1 }, { baseline: "a", variant: "A", mean_pct: 2 }]);
+});
+
+/** Fields the stored data carries on a decision record that stay private on purpose: the settings, the model's chance
+ *  and an AI trader's adjustment, and how a check is computed. Named here literally. */
+const PRIVATE = ["threshold", "model_prob", "agent_adjustment", "adjustment_reason", "basis_factor", "elapsed_fraction", "entry_adj", "entry_source",
+  "hi50_adj", "hi80_adj", "lo50_adj", "lo80_adj", "target_adj", "method_version", "notes", "sigma_1d", "target_z", "z_since_entry"];
+const STORED_PAGES = [...MOCKUPS.map((m) => join(mockups, m, "data.json")), ...readdirSync(join(import.meta.dirname, "..", "..", "..", "tests", "ui"), { recursive: true, withFileTypes: true })
+  .filter((f) => f.isFile() && f.name.endsWith(".json")).map((f) => join(f.parentPath, f.name))];
+
+test("every field the stored pages carry on a decision record is public or private on purpose: the allow-list misses none a screen reads", () => {
+  const unknown = new Set<string>();
+  const walk = (v: unknown): void => {
+    if (Array.isArray(v)) return v.forEach(walk);
+    if (!v || typeof v !== "object") return;
+    if ("strategy_id" in v) for (const k of Object.keys(v)) if (!(DECISION_FIELDS as readonly string[]).includes(k) && !PRIVATE.includes(k)) unknown.add(k);
+    Object.values(v).forEach(walk);
+  };
+  for (const file of STORED_PAGES) { try { walk(JSON.parse(readFileSync(file, "utf8").replace(/: NaN\b/g, ": null"))); } catch { /* not JSON data */ } }
+  assert.ok(STORED_PAGES.length >= 30, `only ${STORED_PAGES.length} stored pages read`);
+  assert.deepEqual([...unknown].sort(), [], "a stored field is neither public nor private: decide which in public-fields.ts");
 });
 
 test("a record of a strategy's decision keeps only its public fields: a setting under a new name is dropped", () => {

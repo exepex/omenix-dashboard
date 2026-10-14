@@ -74,8 +74,15 @@ The setting deny-list stays only as a second line for objects of no known kind.
 - The track record endpoint, served from a planted stored row with `planted_cutoff` and a verdict that states a bar,
   leaks neither.
 
-**Risk (some evidence):** an allow-list can drop a field a screen needs that no mockup or type names. The full UI
-harness is the check for that; see "Checks" below.
+**Risk, and it happened:** the first full harness run on the allow-list failed 5 of 243 cases, all on the paper
+portfolio page. The real stored pages carry `check`, `outcome`, `sessions` and `why` on open trades; the portfolio
+reads them, and no mockup or decision type named them.
+- **Fix:** I added those four fields, plus `last_time`.
+- **New test:** every field that any stored page carries on a decision record (17 mockups plus every real stored page
+  in `web/tests/ui`) must be either in `DECISION_FIELDS` or in a private list written in the test. A missing field now
+  fails a unit test instead of a screen.
+- **Mutation check:** removing `check`, `outcome` and `why` from the allow-list makes that test fail and name all
+  three fields.
 
 ## Mutation checks (each applied alone, then reverted; full `npm test`)
 
@@ -90,9 +97,10 @@ harness is the check for that; see "Checks" below.
 | No withholding | 6 tests fail |
 | No public words step | 6 tests fail |
 | Read tools raw | 2 tests fail |
+| `check`, `outcome`, `why` removed from the allow-list | the stored-fields test fails, naming all three |
 
 ## Checks (run on the pushed tree)
 
 - `node tools/check_code_size.mjs`: passes. `explainer.test.ts` stays at its listed 401 lines.
-- `npm ci --ignore-scripts`, typecheck, `npm test` (464 pass, 0 fail) and build: all pass.
+- `npm ci --ignore-scripts`, typecheck, `npm test` (465 pass, 0 fail) and build: all pass.
 - The full UI harness ran on this tree; its result is in the commit message.

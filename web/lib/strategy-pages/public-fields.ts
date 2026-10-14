@@ -1,7 +1,8 @@
 // The fields a reader may see of each kind of record that says what a strategy decided (owner, 13 Oct 2026: screens
 // and APIs show what a strategy decided, never how). Allow-lists, so a setting a backend adds later, under any name,
 // stays private until it is added here on purpose (judge 76). Each list is the fields the screens and the assistant read
-// (the typed read-model contracts, lib/**/types.ts), checked against every stored mockup. Left out on purpose: the
+// (the typed read-model contracts, lib/**/types.ts), checked against every stored mockup and real stored page
+// (lib/strategy-pages/tests/public-view.test.ts: each stored field is listed here or named private there). Left out on purpose: the
 // chance threshold, the model's chance and an AI trader's adjustment, and how a check was computed (its z-scores,
 // spread, adjusted ranges, elapsed share, notes).
 
@@ -16,11 +17,11 @@ export const DECISION_FIELDS = [
   "strongest_basis", "status", "state", "flags", "flagged", "band", "agree", "record", "regime", "quality", "confidence", "direction",
   "qualifies", "prob_up", "made_at", "created_at", "computed_at", "as_of", "as_of_date", "session_date", "session_number", "check_at",
   "check_id", "check_row_id", "prediction_id", "trade_id", "entry_date", "exit_date", "exit_date_actual", "settled_at", "first_entry",
-  "last_exit", "exit", "sessions_held", "sessions_left", "base_close", "target_price", "lo50", "hi50", "lo80", "hi80", "range_widen",
-  "entry_price", "entry_price_source", "exit_price", "exit_or_last_price", "last_price", "last_price_date", "last_price_time",
+  "last_exit", "exit", "sessions", "sessions_held", "sessions_left", "base_close", "target_price", "lo50", "hi50", "lo80", "hi80", "range_widen",
+  "entry_price", "entry_price_source", "exit_price", "exit_or_last_price", "last_price", "last_price_date", "last_price_time", "last_time",
   "last_price_source", "price_pending", "amount", "qty", "quantity", "side", "costs", "costs_pct", "gross_pnl", "net_pnl", "pnl_market",
   "pnl_your", "return_pct", "return_pct_market", "return_pct_your", "unrealised", "unrealised_pct", "unrealised_pnl", "ret_since_entry_pct",
-  "to_target_pct", "high_since_entry_pct", "low_since_entry_pct", "target_reached", "target_reached_session", "range_hit",
+  "to_target_pct", "check", "outcome", "why", "high_since_entry_pct", "low_since_entry_pct", "target_reached", "target_reached_session", "range_hit",
   "max_favourable_pct", "max_adverse_pct", "move_pct", "market_pct", "sector_pct", "news_pct", "company_pct", "loss_pct",
   "exp_gain_pct", "expected_gain_pct", "reason", "reason_code", "reason_codes", "reason_detail", "not_entered_reason", "text",
   "cited_ids", "evidence_ids", "news_ids", "trades", "wins", "win_rate", "avg", "mean_return_pct", "net_pnl_your", "avg_target_error_pct",
