@@ -75,7 +75,7 @@ export function Detail({ p, v, selected }: { p: Payload; v: View; selected: stri
           return <MiniRow key={h} label={holdTab(h)} value={net} max={hzMax} tip={tip} text={r ? `${net === null ? "not stored" : money(cur, net, d, true)} · ${r.trades}` : s.horizons.includes(h) ? DASH : "n/a"} />;
         })}
       </div>
-      <h3>Per market regime at prediction time</h3>
+      <h3>Per market mood at prediction time</h3>
       {regimes.length ? (
         <div className="mini">
           {regimes.map((r, i) => (
@@ -84,7 +84,7 @@ export function Detail({ p, v, selected }: { p: Payload; v: View; selected: stri
               tip={`${regimeWords(r.regime)}: ${r.trades} trades, ${pct(figure(r, "win_rate", v.cost))} won. Measured on its finished trades, by the market’s mood on the day of the prediction.`} />
           ))}
         </div>
-      ) : <Quiet>{v.basis === "backtest" ? "The back-test stores no split by regime." : "No finished trade in this view yet, so no split by market mood."}</Quiet>}
+      ) : <Quiet>{v.basis === "backtest" ? "The back-test stores no split by market mood." : "No finished trade in this view yet, so no split by market mood."}</Quiet>}
       <h3>{`Per company · ${v.horizon === "all" ? "all holding periods" : holdLabel(Number(v.horizon))}`}</h3>
       {companies.length ? (
         <div className="md-table-wrap">
@@ -117,7 +117,7 @@ export function Detail({ p, v, selected }: { p: Payload; v: View; selected: stri
             {li(g.drawdown_within_limit, g.drawdown_within_limit ? "Drawdown within the limit" : g.drawdown_within_limit === false ? "Drawdown beyond the limit" : "Drawdown: not measured yet", drawdownLimitWords(cur, g.drawdown_limit))}
             {li(g.holds_in_calm_and_volatile, g.holds_in_calm_and_volatile === null || g.holds_in_calm_and_volatile === undefined ? "Calm and jumpy markets: not enough data yet" : g.holds_in_calm_and_volatile ? "Works in calm and jumpy markets" : "Fails in calm or in jumpy markets", "measured per market mood")}
           </ul>
-          <p className="note">{g.proven ? "Proven: this strategy has met the bar; Strong signals may appear." : `Not proven. ${p.status.paper_label || PAPER_LABEL}: nothing here is advice.`}</p>
+          <p className="note">{g.proven ? "Proven: this strategy has passed the go-live test; Strong signals may appear." : `Not proven. ${p.status.paper_label || PAPER_LABEL}: nothing here is advice.`}</p>
         </>
       ) : <Quiet>{`This strategy has no finished paper trade yet${s.live_from ? `: its ${GO_LIVE_MONTHS}-month test started on ${fmtDate(s.live_from)}` : ""}.`}</Quiet>}
     </Card>

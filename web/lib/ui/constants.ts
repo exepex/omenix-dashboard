@@ -35,7 +35,7 @@ export const REFERENCE_STRATEGY_WORDS = "The main rule strategy";
 export const WHY_NO_BUY_SELL = [
   "This app does not tell you when to buy or sell, and right now it cannot.",
   "Every strategy here is being tested on paper. Nothing has yet shown that it beats simply holding the market after costs, over enough trades and long enough to rule out luck.",
-  "Until a strategy passes that test (the go-live bar), any “buy” here would be a guess dressed up as a signal.",
+  "Until a strategy passes that test (the go-live test), any “buy” here would be a guess dressed up as a signal.",
   "Even after a strategy passes, the app will show what the tested strategy would do and how well it has done, not instructions for your money. This is a personal research project, not investment advice.",
 ] as const;
 /** The Help page's anchor of that section (the Home block and the assistant's decline link to it). */
@@ -96,7 +96,7 @@ export const NEWS_STATUS: Record<string, readonly [string, string, string | null
 };
 /** The statuses that can carry a call as its main evidence. */
 export const CAN_CARRY = ["confirmed_primary", "corroborated"] as const;
-export const REGIME_TIP = "How the whole market has behaved lately. Some strategies sit out the busy and jumpy days.";
+export const REGIME_TIP = "How the whole market has behaved lately: calm, trending, busy with events or jumpy.";
 /** The market mood (regime code) in words. */
 export const REGIME_WORDS: Record<string, string> = {
   CALM: "calm", TRENDING: "trending", EVENT_HEAVY: "busy with events", UNSTABLE: "jumpy",

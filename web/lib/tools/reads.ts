@@ -1,6 +1,7 @@
 // Read tools: each maps to fixed read models (schema rm in market_brief, docs/SPEC.md section 4) fetched by one keyed
 // SELECT each (ARCHITECTURE.md section 6). Table names come from this fixed map, never from input.
 import type { ReadModelRow, ReadStore, ToolArgs } from "./types.ts";
+import { publicView } from "../ui/public-view.ts";
 
 export const READ_MODEL_TABLES = [
   "home",
@@ -134,7 +135,7 @@ export async function runRead(store: ReadStore, tool: string, args: ToolArgs): P
       found: row !== null,
       as_of: row?.as_of ?? null,
       built_at: row?.built_at ?? null,
-      payload: row && lookup.select ? lookup.select.apply(row.payload) : row?.payload ?? null,
+      payload: row ? publicView(lookup.select ? lookup.select.apply(row.payload) : row.payload) : null,
     };
     if (lookup.select && row !== null) source.selection = lookup.select.note;
     sources.push(source);

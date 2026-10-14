@@ -38,7 +38,7 @@ function PathCell({ path, ctx }: { path: PredictionPath; ctx: PageCtx }) {
   return (
     <span className="path">
       <span className="step on" data-tip={`Made ${ctx.at(path.prediction.made_at, true)}.`} tabIndex={0}><Icon name="check" />made</span>
-      {notTraded ? <span className="step muted">no trade ({path.prediction.direction === "down" ? "a down call" : "below its bar"})</span> : (
+      {notTraded ? <span className="step muted">no trade ({path.prediction.direction === "down" ? "a down call" : "no buy"})</span> : (
         <>
           <span className={"step" + (path.checks.length ? " on" : "")} tabIndex={0} data-tip={path.checks.length ? `${path.checks.length} intraday ${plural(path.checks.length, "check")}; the latest ${ctx.at(last.check_at, true)}.` : "No intraday check of its trades stored yet."}>
             {path.checks.length ? <>{path.checks.length} {plural(path.checks.length, "check")}{last.flagged ? <Icon name="warning" /> : null}</> : "no check yet"}
@@ -72,7 +72,7 @@ function CallsCard({ day, ctx, paperLabel }: { day: LifecyclePayload; ctx: PageC
   return (
     <Card label="The calls made for this session">
       <CardHead title={<>The calls made for {fmtDate(day.session_date)} <PaperTag label={paperLabel} /></>}
-        help="Every prediction made for this session on this company, by horizon then strategy: its chance of a rise and whether it would trade, its target and ranges, and its path: made before the open, checked during the holding window, settled after the exit close, explained by the end-of-day analyst. A down call or an up call below the strategy’s bar is scored but never traded."
+        help="Every prediction made for this session on this company, by horizon then strategy: its chance of a rise and whether it would trade, its target and ranges, and its path: made before the open, checked during the holding window, settled after the exit close, explained by the end-of-day analyst. A down call, or an up call the strategy does not buy, is scored but never traded."
         end={`${paths.length} ${plural(paths.length, "call")}`} />
       {paths.length ? <DataTable columns={columns} rows={paths} rowKey={(r) => r.prediction.id} label="Calls" className="lcy" /> : <Quiet>No prediction was made for this session on this company.</Quiet>}
     </Card>

@@ -14,7 +14,7 @@
 // A page-mode page's freshness counts from the market's last sync (deps.syncedAt: rm.status built_at, rewritten by
 // every sync) when that is later than its own built_at, since an unchanged page keeps its built_at; never for a page
 // that failed validation in that sync (rm.status invalid_pages: its old row is served).
-import { applyDisplayNames } from "../ui/strategy-names.ts";
+import { publicView } from "../ui/public-view.ts";
 import { CONTRACT_MAJOR, MARKETS, PAGE_KEY_PATTERN, type ServeMode, TABLE_PATTERN, TICKER_PATTERN } from "./constants.ts";
 import { notFound, unavailable } from "./problem.ts";
 import { serve, type StoredRow } from "./serve.ts";
@@ -24,8 +24,6 @@ export interface PageSpec {
   /** The rm table (a constant of the page's module, never from input). */
   table: string;
   serve: ServeMode;
-  /** What of the stored payload a reader may see (e.g. the Strategy lab without strategy internals); default all. */
-  project?: (payload: unknown) => unknown;
 }
 
 export interface ReadDeps {
@@ -99,10 +97,8 @@ export function respond(
 ): Response {
   if (notModified(request, row)) return new Response(null, { status: 304, headers: headers(row) });
   const body = serve(row, spec.serve, now, syncedAt);
-  // Every page answer names strategies by their public labels and ids only (lib/ui/strategy-names.ts): a backend name
-  // or id says how a strategy decides (owner, 13 Oct 2026).
-  const payload = applyDisplayNames(spec.project ? spec.project(body.payload) : body.payload);
-  return Response.json({ ...body, payload }, { headers: headers(row) });
+  // Every page answer shows what a strategy decided, never how it decides (owner, 13 Oct 2026; lib/ui/public-view.ts).
+  return Response.json({ ...body, payload: publicView(body.payload) }, { headers: headers(row) });
 }
 
 export async function readPage(

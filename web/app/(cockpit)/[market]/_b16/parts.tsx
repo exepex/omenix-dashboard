@@ -34,8 +34,8 @@ export function LuckBar({ row, cost, span = 88, none = "none yet" }: { row: Scor
     : verdict === "loss" ? "The corrected interval lies wholly below zero: the strategy loses money after costs, and that is not luck."
       : "The corrected interval includes zero: the result could be luck; no edge claimed.";
   const corrected = test.corrected_low_pct !== null && test.corrected_high_pct !== null;
-  const tip = `Luck test (${test.n} trades): the mean return per trade is ${signed(mean)}; a bootstrap puts it between ${signed(test.low_pct)} and ${signed(test.high_pct)} (thin bar, ${LUCK_INTERVAL_PCT}%).`
-    + (corrected ? ` Corrected for the ${test.m} rows compared at once: ${signed(test.corrected_low_pct)} to ${signed(test.corrected_high_pct)} (thick bar).` : "")
+  const tip = `Luck test (${test.n} trades): the mean return per trade is ${signed(mean)}; a bootstrap puts it between ${signed(test.low_pct)} and ${signed(test.high_pct)} (thin line, ${LUCK_INTERVAL_PCT}%).`
+    + (corrected ? ` Corrected for the ${test.m} rows compared at once: ${signed(test.corrected_low_pct)} to ${signed(test.corrected_high_pct)} (thick line).` : "")
     + ` ${said} The tick is zero.`;
   return (
     <span className="luck" data-tip={tip}>

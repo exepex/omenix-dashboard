@@ -198,7 +198,7 @@ function PicksCard({ p, all, ctx }: { p: Payload; all: V3Trades; ctx: BlockCtx }
           const mine = rows.filter((t) => t.family === side), s = splitOf(mine);
           if (!mine.length && !(r?.closed)) {
             const why = side === "rule" && ruleStayedOut(ctx.rule) ? ruleNoneWords(ctx.rule) : null;
-            return <div key={side} className="pp-ps none"><SideTag side={side} /><div className="muted pp-psn">{why ? <>No pick yet: no rule strategy cleared its bar <InfoTip tip={why.tip} label="Why no rule picks" /></> : "No open pick right now."}</div></div>;
+            return <div key={side} className="pp-ps none"><SideTag side={side} /><div className="muted pp-psn">{why ? <>No pick yet: no rule strategy bought today <InfoTip tip={why.tip} label="Why no rule picks" /></> : "No open pick right now."}</div></div>;
           }
           return (
             <div key={side} className="pp-ps">

@@ -1,7 +1,8 @@
 // The company page's forecast history (B12's rm.stock `forecast_history`; owner, 2026-10-10: see how each forecast
 // was calculated and what changed between runs, as a chart and as text). Per horizon: every stored ranges.py run and
-// signal-model run of the last 10 as-of dates, the words of each run's change from the run before, how its numbers
-// were made, and the geometry of the two-panel chart (price ranges over the runs' times above, P(up) below). Pure.
+// signal-model run of the last 10 as-of dates, the words of each run's change from the run before (never how the
+// numbers were made: owner, 13 Oct 2026), and the geometry of the two-panel chart (price ranges over the runs' times above, P(up) below). Pure.
+import { regimeWords } from "../ui/constants.ts";
 import { extent, linearScale, niceDomain, niceTicks } from "../ui/scales.ts";
 import type { ForecastHistory, ForecastRun, HistoryRange, HistoryScore } from "./types.ts";
 
@@ -59,19 +60,11 @@ export function rangeChangeWords(e: { row: HistoryRange; previous: HistoryRange 
   if (c.width80_pct == null) words.push("80% width move not computable");
   else words.push(c.width80_pct === 0 ? "80% range as wide as before" : `80% range ${c.width80_pct > 0 ? "wider" : "narrower"} by ${Math.abs(c.width80_pct).toFixed(2)}%`);
   for (const field of c.changed) {
-    if (field === "regime") words.push(previous ? `regime ${previous.regime ?? "none"} → ${row.regime ?? "none"}` : `regime now ${row.regime ?? "none"}`);
-    else if (field === "calibration_id") words.push("new calibration");
-    else if (field === "inputs") {
-      const before = new Set(previous?.inputs ?? []), now = new Set(row.inputs);
-      const added = row.inputs.filter((x) => !before.has(x)), dropped = [...before].filter((x) => !now.has(x));
-      words.push(previous ? `range inputs changed${added.length ? `: added ${added.join(", ")}` : ""}${dropped.length ? `${added.length ? ";" : ":"} dropped ${dropped.join(", ")}` : ""}` : "range inputs changed");
-    } else words.push(`${field} changed`);
+    if (field === "regime") words.push(previous ? `market mood ${regimeWords(previous.regime)} → ${regimeWords(row.regime)}` : `market mood now ${regimeWords(row.regime)}`);
+    else words.push(`${field.replace(/_/g, " ")} changed`);
   }
   return words;
 }
-
-const groupWords = (groups: Record<string, number>) =>
-  Object.entries(groups).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]) || a[0].localeCompare(b[0])).map(([g, v]) => `${g} ${sgn(v, 2, " pts")}`);
 
 /** What changed in a model-score run since the run before. */
 export function scoreChangeWords(e: { row: HistoryScore; previous: HistoryScore | null }): string[] {
@@ -79,8 +72,6 @@ export function scoreChangeWords(e: { row: HistoryScore; previous: HistoryScore 
   if (!c) return ["first score run in the window"];
   const words: string[] = [revisionWords(row, previous, "re-scored for the same close")];
   words.push(c.prob_up == null ? "P(up) move not computable" : `P(up) ${sgn(c.prob_up * 100, 1, " pts")}`);
-  const moved = groupWords(c.groups);
-  words.push(moved.length ? `points moved: ${moved.join(", ")}` : "no group’s points moved");
   if (c.news_added.length) words.push(`${c.news_added.length} news ${c.news_added.length === 1 ? "item" : "items"} added`);
   if (c.news_dropped.length) words.push(`${c.news_dropped.length} news ${c.news_dropped.length === 1 ? "item" : "items"} dropped`);
   for (const field of c.changed) {
@@ -92,16 +83,6 @@ export function scoreChangeWords(e: { row: HistoryScore; previous: HistoryScore 
   return words;
 }
 
-/** How a score was made: the base rate plus the points of every group that has some (they add up to P(up) - base
- *  rate in percentage points, explain.py; stored rounded, so the sum can differ by a few hundredths). */
-export function scoreParts(s: HistoryScore): { base: number | null; parts: Array<[string, number]>; sum: number | null } {
-  const parts = Object.entries(s.groups).filter(([, v]) => v !== 0).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]) || a[0].localeCompare(b[0]));
-  const base = s.base_rate ?? null;
-  return { base, parts, sum: base == null ? null : base * 100 + parts.reduce((t, [, v]) => t + v, 0) };
-}
-
-/** The range's centre as a percent move from the base close: exp(center) - 1 (target = base close x exp(center)). */
-export const centreMovePct = (r: HistoryRange) => (r.center == null ? null : (Math.exp(r.center) - 1) * 100);
 
 export interface HistoryPoint { x: number; y: number; at: string; id: string }
 

@@ -125,15 +125,11 @@ export interface SkillVerdict {
   why: string;
 }
 
+/** A registry entry as every API answer serves it: its public fields only (lib/strategy-pages/public-strategies.ts). */
 export interface StrategyEntry {
   id: string;
   family: Family;
   name: string;
-  description?: string;
-  compared_to?: string | null;
-  differs_in?: string | null;
-  parameters?: Record<string, unknown>;
-  threshold?: number | null;
   horizons?: number[];
   live_from?: IsoDate | null;
   live?: boolean;

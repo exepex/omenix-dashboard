@@ -77,7 +77,7 @@ export function PicksBody({ where }: { where: "panel" | "home" }) {
         <div className="mb-wl-note">
           <Icon name="remove" />
           <span>
-            <b>{shell.no_pick.join(", ") + ": "}</b>no strategy picks it today (no candidate clears the bar).
+            <b>{shell.no_pick.join(", ") + ": "}</b>no strategy picks it today.
           </span>
         </div>
       ) : null}

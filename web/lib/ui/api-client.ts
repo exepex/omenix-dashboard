@@ -2,7 +2,7 @@
 // answer 304 when If-None-Match matches, web/lib/data/handler.ts), errors as RFC 9457 problems with the static
 // fallback links the API gives; strategy names pass the display-name rule (strategy-names.ts). Pure apart from the
 // injected fetch; the React hooks (use-api.ts) wrap it.
-import { applyDisplayNames } from "./strategy-names.ts";
+import { publicView } from "./public-view.ts";
 import type { Envelope, Problem } from "./types.ts";
 
 export type ReadResult<P> = { ok: true; envelope: Envelope<P>; notModified: boolean } | { ok: false; problem: Problem };
@@ -83,8 +83,9 @@ export async function readPage<P>(
   if (typeof envelope !== "object" || envelope === null || !("payload" in envelope)) {
     return { ok: false, problem: { title: "Unreadable answer", status: response.status, detail: "The answer has no payload." } };
   }
-  // The read models' strategy names pass the one display-name rule here, so no page shows an AI model's name.
-  envelope = { ...envelope, payload: applyDisplayNames(envelope.payload) };
+  // Every payload takes the public view here too (no strategy setting, public labels and ids; lib/ui/public-view.ts),
+  // whatever served it.
+  envelope = { ...envelope, payload: publicView(envelope.payload) };
   const etag = response.headers.get("ETag");
   if (etag) cache.set(url, { etag, envelope: envelope as Envelope<unknown> });
   return { ok: true, envelope, notModified: false };

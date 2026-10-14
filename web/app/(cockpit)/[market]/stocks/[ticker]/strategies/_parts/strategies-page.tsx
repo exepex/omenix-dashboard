@@ -126,7 +126,7 @@ function AgreementCard({ p, horizon, onPick }: { p: StockStrategiesPayload; hori
   return (
     <Card label="Who agrees, by horizon">
       <CardHead title="Who agrees, by horizon"
-        help="For each holding period from 1 to 5 days: how many strategies would buy this company (a call counts when it is “up” and at or above the strategy’s own bar), stacked by family. Rule strategies and benchmarks predict every holding period; AI traders predict the 1-, 3- and 5-day holds. Click a bar or use the tabs."
+        help="For each holding period from 1 to 5 days: how many strategies would buy this company (a call counts when it is “up” and the strategy would buy), stacked by family. Rule strategies and benchmarks predict every holding period; AI traders predict the 1-, 3- and 5-day holds. Click a column or use the tabs."
         end={<HorizonTabs horizons={p.horizons} value={horizon} onChange={onPick} />} />
       <div className="sub2">{holdLabel(horizon)}: buy at the open, sell at {horizonWords(horizon)} · data up to the {fmtDate(p.as_of, false)} close · Paper</div>
       <AgreementChart p={p} horizon={horizon} onPick={onPick} />
@@ -263,15 +263,15 @@ function RankedCard({ p, horizon, onPick, strategies }: { p: StockStrategiesPayl
               if (isRanked(r)) rank += 1;
               const bands = pr ? bandsOf(pr) : null;
               const cls = [r ? (r.sample_badge === "too_few_to_rank" ? "few" : "") : "none", best && r === best ? "best" : ""].filter(Boolean).join(" ");
-              const sub = st.differs_in ? `same as the main rule strategy except: ${st.differs_in.replace(/_/g, " ")}` : st.family === "baseline" ? "simple benchmark, not a contender" : st.family === "ai" ? (st.parameters?.sees_model_score ? "sees the model score" : "blind to the model score") : "the main rule strategy";
+              const sub = st.family === "baseline" ? "simple benchmark, not a contender" : null;
               const predicts = (st.horizons ?? p.horizons).includes(horizon);
               return (
                 <tr key={id} className={cls || undefined}>
                   <td className="rank cm">{isRanked(r) ? String(rank) : "—"}</td>
                   <td>
                     <span className="nm">
-                      <b><Link className="tk" href={`${pagePath(p.market, "lab")}#${id}`} data-tip={`${st.description ?? st.name} Open it in the Strategy lab.`}>{st.name}</Link> <FamilyLabel family={st.family}>{FAMILY_SHORT[st.family]}</FamilyLabel></b>
-                      <small>{sub}</small>
+                      <b><Link className="tk" href={`${pagePath(p.market, "lab")}#${id}`} data-tip={`${st.name}: open its results in the Strategy lab.`}>{st.name}</Link> <FamilyLabel family={st.family}>{FAMILY_SHORT[st.family]}</FamilyLabel></b>
+                      {sub ? <small>{sub}</small> : null}
                     </span>
                   </td>
                   <td className="num pn">
@@ -292,12 +292,12 @@ function RankedCard({ p, horizon, onPick, strategies }: { p: StockStrategiesPayl
                     {pr ? (
                       <span className="call">
                         {pr.prob_up != null ? (
-                          <Odds p={pr.prob_up} tip={`${pct(pr.prob_up, 1)} chance of a rise from the open to the close ${horizon} trading day${horizon === 1 ? "" : "s"} later${pr.model_prob != null ? ` (model ${pct(pr.model_prob, 1)}, adjustment ${signed((pr.agent_adjustment ?? 0) * 100, 1)}: ${pr.adjustment_reason || "none"})` : ""}.${pr.reason ? " " + pr.reason : ""}`} />
+                          <Odds p={pr.prob_up} tip={`${pct(pr.prob_up, 1)} chance of a rise from the open to the close ${horizon} trading day${horizon === 1 ? "" : "s"} later.${pr.reason ? " " + pr.reason : ""}`} />
                         ) : <span className="muted" tabIndex={0} data-tip="Always-buy and follow-yesterday give a direction, not a probability.">{pr.direction === "up" ? "up, no probability" : "down"}</span>}
                         {pr.qualifies ? (
-                          <Label tone="success" icon="check" tip={`Up call at or above the strategy’s bar${pr.threshold != null ? ` (${pct(pr.threshold)})` : ""}: it would buy ${c.name} at the open for a ${holdLabel(horizon)}. Paper.`}>would buy</Label>
+                          <Label tone="success" icon="check" tip={`Up call that leads to a buy: it would buy ${c.name} at the open for a ${holdLabel(horizon)}. Paper.`}>would buy</Label>
                         ) : (
-                          <Label tone="neutral" tip={pr.direction === "down" ? "Predicted down: we score it, but paper trades only buy, never short." : `Up call below the strategy’s bar${pr.threshold != null ? ` (${pct(pr.threshold)})` : ""}, or filtered out by its regime rule: no trade.`}>{pr.direction === "down" ? "down, no trade" : "no trade"}</Label>
+                          <Label tone="neutral" tip={pr.direction === "down" ? "Predicted down: we score it, but paper trades only buy, never short." : "Up call that does not lead to a buy for this strategy today: no trade."}>{pr.direction === "down" ? "down, no trade" : "no trade"}</Label>
                         )}
                         <span className="muted" style={{ fontSize: 12 }} tabIndex={0} data-tip={`Target ${price(cur, pr.target_price)} = the expected exit close; 80% range ${price(cur, pr.lo80)}–${price(cur, pr.hi80)}${pr.range_widen ? ` (widened ${Math.round(pr.range_widen * 100)}% by the trader)` : ""}.`}>target {price(cur, pr.target_price)}</span>
                       </span>

@@ -2,51 +2,20 @@
 // The company page's forecast history (owner, 2026-10-10; B12's rm.stock `forecast_history`): for the selected
 // horizon, every stored ranges.py run and signal-model run of the last 10 as-of dates. Above, a chart over the runs'
 // times: the 80% and 50% ranges as bands, the target and the base close (the price the run started from), then P(up)
-// against the 50% line. Below, one line per run, newest first: what changed since the run before and, opened, how its
-// numbers were made. Every point is focusable and reads its run. Logic: lib/company-pages/history-logic.ts.
+// against the 50% line. Below, one line per run, newest first: what changed since the run before (never how the
+// numbers were made: owner, 13 Oct 2026). Every point is focusable and reads its run. Logic: lib/company-pages/history-logic.ts.
 import { useMemo } from "react";
 import { HorizonTabs } from "../../../../../../components/ui/controls.tsx";
 import { Card, CardHead } from "../../../../../../components/ui/primitives.tsx";
-import { regimeWords } from "../../../../../../lib/ui/constants.ts";
 import { fmtDate, holdLabel, offsetMinutes, pct, price, signed } from "../../../../../../lib/ui/format.ts";
 import {
-  centreMovePct, hasEvening, historyAt, historyEntries, historyGeometry, isEvening, rangeChangeWords, runName, scoreChangeWords, scoreParts, type HistoryEntry,
+  hasEvening, historyAt, historyEntries, historyGeometry, isEvening, rangeChangeWords, runName, scoreChangeWords, type HistoryEntry,
 } from "../../../../../../lib/company-pages/history-logic.ts";
 import type { CompanyPayload, HistoryRange, HistoryScore } from "../../../../../../lib/company-pages/types.ts";
 import type { PageCtx } from "./context.ts";
 import { useWidth } from "../../../../../../lib/ui/use-width.ts";
 
 const SHOWN = 6;
-
-function RangeHow({ r, ctx }: { r: HistoryRange; ctx: PageCtx }) {
-  const cur = ctx.currency, move = centreMovePct(r);
-  return (
-    <ul className="fh-how">
-      <li>Target {price(cur, r.target_price)} = base close {price(cur, r.base_close)} (the {fmtDate(r.as_of_date)} close){move == null ? "" : ` moved by its centre ${signed(move)}`}; exit at the close of {fmtDate(r.exit_date)}, entry at the open of {fmtDate(r.session_date)}.</li>
-      <li>50% range {price(cur, r.lo50)}–{price(cur, r.hi50)}, 80% range {price(cur, r.lo80)}–{price(cur, r.hi80)}{r.sigma_h == null ? "" : `; spread over the horizon (σ) ${(r.sigma_h * 100).toFixed(2)}%`}.</li>
-      <li>Market mood {regimeWords(r.regime)}{r.inputs.length ? ` · inputs ${r.inputs.join(", ")}` : ""}{r.notes.length ? ` · notes: ${r.notes.join("; ")}` : ""}.</li>
-      <li><details className="mb-tech"><summary>Technical details</summary>calibration {r.calibration_id ?? "not stored"}</details></li>
-    </ul>
-  );
-}
-
-function ScoreHow({ s }: { s: HistoryScore }) {
-  const { base, parts, sum } = scoreParts(s);
-  const drivers = [...s.drivers_up, ...s.drivers_down].map((d) => d.text || `${d.feature} ${signed(d.points, 2, " pts")}`);
-  return (
-    <ul className="fh-how">
-      <li>
-        Chance of a rise {pct(s.prob_up, 1)}{base == null ? "" : `: it starts from the usual rate of ${pct(base, 1)}; what pushed it up or down:${parts.map(([g, v]) => ` ${g} ${v < 0 ? "−" : "+"}${Math.abs(v).toFixed(2)} points`).join(",")}${sum == null ? "" : ` (${sum.toFixed(1)}% from the stored, rounded points)`}`}.
-        {s.prob_model != null ? ` Without news ${pct(s.prob_model, 1)}.` : ""}
-      </li>
-      <li>
-        News: {s.news_items ?? 0} {s.news_items === 1 ? "item" : "items"} counted{s.news_score != null ? `, score ${signed(s.news_score, 2, "")}` : ""}.
-        {drivers.length ? ` Strongest drivers: ${drivers.join("; ")}.` : " No driver of 0.05 points or more."}
-      </li>
-      <li>Model {s.model_version ?? "not stored"}{s.model_id ? ` (${s.model_id})` : ""}{s.trained_until ? `, trained until ${fmtDate(s.trained_until, false)} ${s.trained_until.slice(0, 4)}` : ""}; window {fmtDate(s.entry_date)} open to {fmtDate(s.exit_date)} close.</li>
-    </ul>
-  );
-}
 
 function RunLine({ e, ctx, anyEvening }: { e: HistoryEntry; ctx: PageCtx; anyEvening: boolean }) {
   const cur = ctx.currency;
@@ -61,10 +30,6 @@ function RunLine({ e, ctx, anyEvening }: { e: HistoryEntry; ctx: PageCtx; anyEve
       <div className="fh-what">
         <b>{run ? <span className="fh-tag" data-tip={isEvening(e.row) ? "Evening run on the day’s close: a preview, never traded; the pre-open run replaces it." : "Pre-open run: the forecast of record, made before the open."}>{run}</span> : null}{head}</b>
         <span className="fh-chg">{words.join(" · ")}</span>
-        <details>
-          <summary>How it was calculated</summary>
-          {e.kind === "range" ? <RangeHow r={e.row} ctx={ctx} /> : <ScoreHow s={e.row} />}
-        </details>
       </div>
     </li>
   );
@@ -80,7 +45,7 @@ export function ForecastHistoryCard({ p, ctx, horizon, onHorizon }: { p: Company
   const head = (
     <CardHead
       title="Forecast history: how each run changed"
-      help="Every stored run of the last 10 as-of dates for the selected holding period: the likely price range (the target, the 50% and 80% ranges and the close it started from) and the statistical model’s chance of a rise. Each line says what changed since the run before; open it to see how the numbers were made. A range or score run again for the same close is a revision. History only: it says how the forecast moved, not whether it was right."
+      help="Every stored run of the last 10 as-of dates for the selected holding period: the likely price range (the target, the 50% and 80% ranges and the close it started from) and the statistical model’s chance of a rise. Each line says what changed since the run before. A range or score run again for the same close is a revision. History only: it says how the forecast moved, not whether it was right."
       end={<HorizonTabs horizons={p.horizons} value={horizon} onChange={onHorizon} />}
     />
   );

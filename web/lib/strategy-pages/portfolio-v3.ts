@@ -15,7 +15,7 @@ export const SIDE_NAME: Record<Side, string> = { rule: "Rule strategies", baseli
 export const SIDE_SHORT: Record<Side, string> = { rule: "Rule", baseline: "Benchmark", ai: "AI" };
 export const SIDE_ONE: Record<Side, string> = { rule: "Rule strategy", baseline: "Simple benchmark", ai: "AI trader" };
 export const SIDE_ABOUT: Record<Side, string> = {
-  rule: "Fixed rules on the signal model’s chance of a rise and the checked news. They buy only when that chance clears their bar.",
+  rule: "Fixed rules on the signal model’s chance of a rise and the checked news. The same inputs always give the same decision.",
   baseline: "Simple yardsticks the others must beat: “Always buy”, “Follow yesterday” and “Baseline 3”. A clever strategy that can’t beat these has no edge.",
   ai: "AI traders reading the news, the prices, or both. Each says how likely a rise is and why, or stays out.",
 };
@@ -47,7 +47,7 @@ export interface Learning {
   lessons: { count: number; read_by: string; newest: { id: string; prediction_id: string; ticker: string; horizon_days: number | null; lesson: string | null; written_at: string | null } | null };
   review: { id: string; iso_week: string | null; written_at: string | null; first_finding: string | null; findings: number; proposals: number } | null;
   next_review_at: string;
-  rule_today: { session_date: string; predictions: number; qualifying: number; best_prob_up: number | null; bar: number | null } | null;
+  rule_today: { session_date: string; predictions: number; qualifying: number; best_prob_up: number | null } | null;
 }
 export interface HoldPage { market: string; as_of: string | null; horizon_days: number; summary: OpenHold; trades: StoryRow[]; paper: boolean }
 export interface FinishedPage { market: string; as_of: string | null; session_date: string; summary: FinishedSession; trades: StoryRow[]; paper: boolean }
@@ -147,16 +147,16 @@ export function settledCause(why: TradeWhy | null | undefined): string | null {
 }
 
 /** Why the rule strategies have no trade, in plain words, from the learning block's rule_today (the line is for a
- * session where none of their predictions cleared the bar: `ruleStayedOut`). */
+ * session where none of their predictions led to a trade: `ruleStayedOut`). What they decided, never their settings. */
 export const ruleStayedOut = (rule: Learning["rule_today"] | null | undefined) => !!rule && rule.qualifying === 0;
 
 export function ruleNoneWords(rule: Learning["rule_today"] | null | undefined): { line: string; tip: string } {
   const line = "No trades today: the signal model saw no clear rise";
-  if (!rule || rule.best_prob_up === null || rule.bar === null) return { line, tip: "Rule strategies buy only when the signal model’s chance of a rise clears their bar." };
-  const best = Math.round(rule.best_prob_up * 100), bar = Math.round(rule.bar * 100);
+  if (!rule || rule.best_prob_up === null) return { line, tip: "The rule strategies saw no rise likely enough to buy. Staying out is a result too." };
+  const best = Math.round(rule.best_prob_up * 100);
   return {
     line,
-    tip: `Rule strategies buy only when the signal model gives a rise at least a ${bar}% chance. On the newest session the highest chance was ${best}%, so ${rule.qualifying ? `${rule.qualifying} of their ${rule.predictions} predictions cleared it` : `none of their ${rule.predictions} predictions cleared it`}. Staying out is a result too.`,
+    tip: `On the newest session the highest chance of a rise the signal model gave was ${best}%, and ${rule.qualifying ? `${rule.qualifying} of the rule strategies’ ${rule.predictions} predictions led to a buy` : `none of the rule strategies’ ${rule.predictions} predictions led to a buy`}. Staying out is a result too.`,
   };
 }
 

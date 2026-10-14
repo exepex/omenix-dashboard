@@ -318,7 +318,7 @@ function BacktestCard({ p }: { p: Payload }) {
       <p className="verd"><b>Verdict. </b>{b.verdict}</p>
       <div className="kv">
         <div><div className="l">Companies</div><div className="v">{d.tickers}</div></div>
-        <div><div className="l">Bars from</div><div className="v">{fmtDateYear(d.first_bar)}</div></div>
+        <div><div className="l">Daily prices from</div><div className="v">{fmtDateYear(d.first_bar)}</div></div>
         <div><div className="l">Scored days</div><div className="v">{`${fmtDateYear(d.first_panel_date)} – ${fmtDateYear(d.last_panel_date)}`}</div></div>
         <div><div className="l">Rows</div><div className="v">{d.panel_rows.toLocaleString("en-US")}</div></div>
         <div data-tip="The round-trip (buy and sell) cost in percent at a price of 100, taken off every back-test position."><div className="l">Round-trip cost</div><div className="v">{`${d.round_trip_cost_pct_at_100}%`}</div></div>
@@ -358,22 +358,22 @@ function BacktestCard({ p }: { p: Payload }) {
         <table className="md-table tbl x">
           <thead>
             <tr>
-              <th>Benchmark</th><th className="num c2">Would buy when chance ≥</th><th className="num c2">Times it would have bought</th><th className="num c3">Days tested</th>
+              <th>Benchmark</th><th className="num c2">Variant</th><th className="num c2">Times it would have bought</th><th className="num c3">Days tested</th>
               <th className="num">Extra return per trade <HelpTip tip="Extra return per trade compared with the benchmark, for 1-day and 5-day holds, averaged per entry date, in percent, with its 95% interval; the dashed tick is zero. Positive = the model did better. (A “paper long” is a pretend purchase held for the stated days.)" /></th>
               <th className="cw">Verdict</th>
             </tr>
           </thead>
           <tbody>
             {groupByKey(b.strategy).map(([key, rows]) => [
-              <tr key={key} className="grp"><td colSpan={6}><b>{keyWords(key)}</b><small> · a pretend purchase whenever the model’s chance clears its threshold, against each benchmark</small></td></tr>,
+              <tr key={key} className="grp"><td colSpan={6}><b>{keyWords(key)}</b><small> · a pretend purchase on each buy call of the model, in each variant, against each benchmark</small></td></tr>,
               ...rows.map((r, i) => {
                 const lo = r.ci95_pct ? r.ci95_pct[0] : null, hi = r.ci95_pct ? r.ci95_pct[1] : null, span = symmetricSpan(lo, hi, r.mean_pct);
                 const verdict = <Label tone={verdictKind(r.verdict)}>{r.verdict}</Label>;
-                const bar = pct(Number(r.threshold));
+                const variant = r.variant ?? "—";
                 return (
                   <tr key={`${key}-${i}`} className={r.positions ? "" : "few"}>
-                    <td><b>{BASELINE[r.baseline] ?? r.baseline}</b><small className="ph">{`bar ${bar} · `}{verdict}</small></td>
-                    <td className="num c2">{bar}</td>
+                    <td><b>{BASELINE[r.baseline] ?? r.baseline}</b><small className="ph">{`variant ${variant} · `}{verdict}</small></td>
+                    <td className="num c2">{variant}</td>
                     <td className="num c2">{r.positions}</td>
                     <td className="num c3">{r.dates}</td>
                     <td className="num">{r.mean_pct === null ? DASH : <CiBar lo={lo} hi={hi} point={r.mean_pct} min={-span} max={span} mid={0} text={signed(r.mean_pct)} cls={intervalClass(lo, hi, 0)}
