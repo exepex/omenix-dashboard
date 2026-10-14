@@ -96,3 +96,34 @@ mockups' picks script (`_platform/js/3-picks.js`); the signed-off mockups were r
 - UI harness, all cases: **219 cases, 0 failed**, then the two heatmap cases: **2 of 2 passed**;
 - the 7 rebuilt signed-off mockups: `check_page` finds no console errors, no external requests and no overflow;
   `check_text` finds 0.
+
+## Addendum: "By company" redesigned (the owner: "wrong format, data overlap over each other, not a good design")
+
+**I agree with the owner, and the round-3 fix above was a patch.** Sideways scrolling kept a layout that can never fit
+about 20 companies as columns. This addendum is on branch `story/w14-round3`, for the judge before `main` (owner's
+rule of 14 Oct).
+
+**The design now** (`lab-company-map.tsx`):
+- **Rows and columns:** companies are rows, with their full names and tickers. Strategies are columns: as many as the
+  card's width holds with every value whole (220 px for names, 92 px per column), the chosen strategy first, then the
+  scoreboard's order.
+- **Values:** every cell shows its full signed value (₹ with k, L or Cr).
+- **Sorting:** "Sort by" picks the strategy; "Worst first" or "Best first" orders the rows by its result.
+- **Length:** the first 8 companies show, then "Show all N companies"; the card grows only downwards. A line says how
+  many strategies fit, and how to see another.
+- **Layout:** full width, under By horizon and By market regime.
+- **Phone (390 px):** one strategy column; the "Sort by" selector switches it.
+
+**Test** (`w14-lab-company-map-25`, at 1280 and 390 px): 25 companies with long names (ULTRACEMCO, BAJAJFINSV,
+HINDUNILVR, "Oil and Natural Gas Corporation Limited", …) and six-figure results. It fails on:
+- any two texts whose boxes overlap;
+- any clipped value or label;
+- any element past the card's right edge, or a card that scrolls sideways;
+- anything other than 8 rows at first and 25 after "Show all";
+- not worst first;
+- more than one column on a phone, or fewer than 3 at 1280 px.
+
+**Mutation check:** with 40 px columns, the test fails ("clipped texts: −7.92L, …").
+
+Screenshots: `w14/round3-company-map-1280.png` and `-390.png`. The earlier `round3-heatmap-by-company-*.png` show the
+superseded scroll version.
