@@ -51,6 +51,11 @@ This is the owner's personal research platform; wrong screens or numbers cost re
 
 ## Branch
 
+**Temporary owner rule (14 Oct 2026, `exepex/trading` `docs/DESK_DECISIONS.md`), in force until the owner lifts it: no
+code reaches `main` without a judge PASS.** Push code to a branch `story/<id>-<short>`, tell the orchestrator, and merge into
+`main` only after the judge passes that branch (pull, full checks on the merged tree, then push). Not affected: judge files and
+conversation logs.
+
 Work on `main`; `git pull --no-rebase origin main` before every push (several sessions push here in parallel).
 
 ## Design rules (from `design/system/README.md`; it is the reference)
