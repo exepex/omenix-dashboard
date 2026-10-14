@@ -234,3 +234,30 @@ missing", an error.
   - Code size: passed.
   - `npm test`: 450 passed, 0 failed.
   - Build: passed.
+
+### End-to-end verification after the first real publish (14 Oct 2026, 03:15 UTC; verification only, no code change)
+
+What I checked from this container, which cannot reach Azure on port 5432:
+
+- **Pages published.** exepex/trading judge 66, addendum 4 (bc7a8f9) records run 38501152610, dispatched by hand at
+  02:27 UTC because GitHub skipped the 01:40 UTC cron. It published publication `nse-2026-10-13-41a81b0efcff`, 1,110
+  blocks, read back with every SHA-256 equal.
+  - Its page list includes `session`, `indices`, `fno_events`, `flows`, `risk` and `today`, the six keys
+    `web/lib/fno/pages.ts` reads. They are held equal to the contract's examples by `lib/fno/tests/pages.test.ts`
+    (passes).
+  - The trading code at HEAD (78e0ed1) names the same keys.
+- **Read path.** The throwaway-Postgres integration test passes again (8 of 8): pointer joined to history, freshness,
+  empty states, incompatible version, TLS refusal, leak test, Home's, the frame's and Markets' reads.
+  - By the freshness rule, publication 13 Oct read at 08:45 IST on 14 Oct is "fresh".
+- **Found, trading side (judge 66 must-fix, P8):** the live `flows` page for 13 Oct went out empty, because
+  `first_day` is 14 Oct.
+  - The dashboard does not break on it: the Markets flows card shows no day rows and the period total "—" with its
+    coverage.
+  - **Dashboard gap (mine):** the card does not say the contract's `x-empty` words ("the card says no figures yet").
+    A small fix, for a story branch and the judge under the new rule.
+- **Not verified:**
+  - the real read from Azure (needs Vercel or the owner's Mac);
+  - the live payloads' contents against the screens;
+  - the published `session` page's `hours_status`, which judge 66 addendum 2 reports as built.
+
+What the owner or Vercel needs to check for the real read is in `docs/W2_OWNER_STEPS.md` step 6.
