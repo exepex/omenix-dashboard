@@ -23,17 +23,23 @@ const MOCKUPS = readdirSync(mockups).filter((d) => /^\d\d-/.test(d)).filter((d) 
 const SETTINGS = ["threshold", "bar", "parameters", "differs_in", "compared_to", "model_prob", "agent_adjustment", "adjustment_reason", "description"];
 const HOW_MADE = ["groups", "drivers_up", "drivers_down", "base_rate", "prob_model", "news_score", "inputs", "calibration_id", "sigma_h", "center"];
 
-/** Every problem of a served value: a setting key, a forecast run's how-made key, an internal word in a sentence (a
- *  value with a space; a one-word value is a code of the contract, like a section key "regimes"). */
-function problems(value: unknown, path = "", list = ""): string[] {
-  if (typeof value === "string") return /\s/.test(value) ? internalWordsIn(value).map((w) => `${path}: ${w}`) : [];
-  if (Array.isArray(value)) return value.flatMap((v, i) => problems(v, `${path}[${i}]`, path.split(".").pop()));
+/** The stock tool's own sentences about its strategies, named here literally: the lists and objects that hold them. A
+ *  record of a strategy's decision (an object with a strategy_id) is ours in every field. */
+const OURS = ["prediction_reasons", "lessons", "deviation_notes", "luck_test", "backtest_run", "strategy"];
+
+/** Every problem of a served value: a setting key, a forecast run's how-made key, an internal word in one of our own
+ *  sentences (a value with a space; a one-word value is a code of the contract, like a section key "regimes").
+ *  Third-party text (news, results) is not ours to reword: it must pass unchanged (tested below). */
+function problems(value: unknown, path = "", list = "", ours = false): string[] {
+  if (typeof value === "string") return ours && /\s/.test(value) ? internalWordsIn(value).map((w) => `${path}: ${w}`) : [];
+  if (Array.isArray(value)) return value.flatMap((v, i) => problems(v, `${path}[${i}]`, path.split(".").pop(), ours));
   if (!value || typeof value !== "object") return [];
+  const mine = ours || "strategy_id" in value;
   return Object.entries(value).flatMap(([k, v]) => [
     ...(SETTINGS.includes(k) && !path.endsWith(".strategies") ? [`${path}.${k}: a setting`] : []),
     ...(HOW_MADE.includes(k) && (list === "ranges" || list === "scores" || path.endsWith(".change")) ? [`${path}.${k}: how a forecast was made`] : []),
     ...(k === "changed" && Array.isArray(v) ? v.filter((f) => HOW_MADE.includes(String(f))).map((f) => `${path}.changed names ${f}`) : []),
-    ...problems(v, `${path}.${k}`, list),
+    ...problems(v, `${path}.${k}`, list, mine || OURS.includes(k)),
   ]);
 }
 
@@ -58,7 +64,7 @@ const ENDPOINTS: Array<[string, PageSpec, string, Record<string, unknown>]> = [
   ["lifecycle", LIFECYCLE_PAGE, "stocks/RELIANCE/lifecycle/2026-10-06", { predictions: [prediction("rule.model_news.v1"), prediction("ai.combined.opus.v1")], prediction_reasons: [{ prediction_id: "p", reason: SAY_BAR }] }],
   ["stock strategies", STOCK_STRATEGIES_PAGE, "stocks/RELIANCE/strategies", { predictions: [prediction("rule.model_news_strict.v1")], strategies: { "rule.model_news.v1": { id: "rule.model_news.v1", family: "rule", name: "Model + news", threshold: 0.55, parameters: { news_weight: 1 } } } }],
   ["stock page", COMPANY_PAGE, "stocks/RELIANCE", { ticker: "RELIANCE", forecast_history: HISTORY, predictions: [prediction("rule.model_news_calm.v1")] }],
-  ["track record", TRACK_RECORD_PAGE, "track-record", { rows: [{ baseline: "always", threshold: 0.55, trades: 4, note: SAY_BAR }, { baseline: "always", threshold: 0.6, trades: 2 }] }],
+  ["track record", TRACK_RECORD_PAGE, "track-record", { track: { backtest: { strategy: [{ key: "1d", baseline: "always_up", threshold: "0.55", positions: 4, planted_cutoff: 0.55, verdict: SAY_BAR }, { key: "1d", baseline: "always_up", threshold: "0.6", positions: 2 }] } } }],
 ];
 
 for (const [name, spec, path, payload] of ENDPOINTS) {
@@ -73,7 +79,25 @@ for (const [name, spec, path, payload] of ENDPOINTS) {
   });
 }
 
-test("track record: the sweep's rows keep apart by a neutral variant letter", () => {
-  const out = publicView({ rows: [{ baseline: "a", threshold: 0.6 }, { baseline: "a", threshold: 0.55 }] });
-  assert.deepEqual(out.rows, [{ baseline: "a", variant: "B" }, { baseline: "a", variant: "A" }]);
+test("track record: the sweep's rows keep apart by a neutral variant letter and keep only their public fields", () => {
+  const out = publicView({ backtest: { strategy: [{ baseline: "a", threshold: 0.6, mean_pct: 1, cutoff_used: 0.6 }, { baseline: "a", threshold: 0.55, mean_pct: 2 }] } });
+  assert.deepEqual(out.backtest.strategy, [{ baseline: "a", variant: "B", mean_pct: 1 }, { baseline: "a", variant: "A", mean_pct: 2 }]);
+});
+
+test("a record of a strategy's decision keeps only its public fields: a setting under a new name is dropped", () => {
+  const row = { strategy_id: "rule.model_news.v1", ticker: "TCS", prob_up: 0.62, qualifies: true, buy_line: 0.55, signal_weights: { news: 1 } };
+  const [out] = publicView({ predictions: [row] }).predictions as Record<string, unknown>[];
+  assert.deepEqual(Object.keys(out).sort(), ["prob_up", "qualifies", "strategy_id", "ticker"]);
+  assert.equal(out.strategy_id, "rule-1");
+});
+
+test("third-party text passes byte for byte: every news payload, and words a strategy sentence would lose", () => {
+  for (const name of ["09-news"]) {
+    const raw = read(name);
+    assert.equal(JSON.stringify(publicView(raw)), JSON.stringify(raw), `${name} changed`);
+  }
+  const news = { items: [{ id: "n1", title: "Budget keeps the new tax regime; Gold bars rally", source: "Reuters" }, { id: "n2", title: "SEBI raises the disclosure threshold; Nifty clears the 25,000 bar", source: "ET" }] };
+  assert.deepEqual(publicView(news), news);
+  const company = publicView({ news: news.items, results: [{ id: "r1", bullets: [{ text: "Margins above the 20% threshold" }] }] });
+  assert.equal(JSON.stringify(company), JSON.stringify({ news: news.items, results: [{ id: "r1", bullets: [{ text: "Margins above the 20% threshold" }] }] }));
 });

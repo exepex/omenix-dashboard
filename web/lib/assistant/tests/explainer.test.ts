@@ -10,7 +10,7 @@ import { githubContext, slackContext } from "../../tools/identity.ts";
 import { SYSTEM_PROMPT } from "../prompt.ts";
 import type { AnswerRecord, SpendState } from "../types.ts";
 
-const TRADE = "acc:rule.model_news.v1:2026-09-29-NVDA-3d@20261005T221500Z";
+const TRADE = "acc:rule-1:2026-09-29-NVDA-3d@20261005T221500Z"; // stored as acc:rule.model_news.v1:…; read tools serve the public id
 
 function answerOf(data: unknown): AnswerRecord {
   return (data as { answer: AnswerRecord }).answer;
@@ -18,7 +18,7 @@ function answerOf(data: unknown): AnswerRecord {
 
 test("a question is answered from a read tool, cites a verified id and logs its real cost", async () => {
   const r = assistantRig();
-  r.reads.put("trades", "us", "NVDA", { settled: [{ trade_id: TRADE, net_pct: 3.97 }] });
+  r.reads.put("trades", "us", "NVDA", { settled: [{ trade_id: TRADE.replace("rule-1", "rule.model_news.v1"), net_pct: 3.97 }] });
   r.model.script = [
     toolUse("get_trades", { ticker: "NVDA", market: "india" }),
     { ...finalAnswer({ text: "The paper trade gained 3.97 % after market costs.", cited: [{ id: TRADE, kind: "paper_trades_settled" }] }),

@@ -1,37 +1,23 @@
-// Strategy internals stay private (owner, 13 Oct 2026): screens and APIs show what a strategy family decided (its
-// buys, holds and results), never how it decides. The stock tool's read models carry the registry (description,
-// parameters, chance threshold, the setting a strategy changes against another, and whatever setting a later registry
-// adds) and, on some rows, a strategy's own chance threshold. Every /api/v1 page answer passes through
-// withoutInternals (lib/data/handler.ts) before it leaves the server:
-//   - a registry entry (any value of a `strategies` map) keeps only its public fields: an allow-list, so a new
-//     registry field stays private until it is added here on purpose;
-//   - a setting carried on any other object (a prediction's threshold, …) is dropped wherever it appears;
-//   - the signal model's back-test sweep (track record) keeps its rows apart by a neutral variant letter instead of the
-//     threshold that tells them apart (publicVariants);
-//   - a forecast run (the stock page's forecast history) keeps what it forecast and what changed, never how it was
-//     made: no score points, drivers or inputs, no range model's inputs, calibration or spread, and its list of what
-//     changed names none of them.
-
-/** What a reader may see of a strategy: who it is, which holds it trades, whether it is in its paper test, its count. */
-export const PUBLIC_KEYS = ["id", "family", "name", "horizons", "live", "live_from", "settled_trades"] as const;
-
-/** Settings a strategy decides with, and how an AI trader's chance was made (the model's score it started from and
- *  its adjustment), dropped from every object that carries them outside the registry. */
-export const SETTING_KEYS = ["threshold", "bar", "parameters", "differs_in", "compared_to", "model_prob", "agent_adjustment", "adjustment_reason"] as const;
-
-/** How a forecast run was made, by the list it sits in (rm.stock forecast_history): dropped from each run. */
-const HOW_MADE: Readonly<Record<string, readonly string[]>> = {
-  scores: ["groups", "drivers_up", "drivers_down", "base_rate", "prob_model", "news_score"],
-  ranges: ["inputs", "notes", "calibration_id", "sigma_h", "center"],
-};
+// Strategy internals stay private (owner, 13 Oct 2026): screens and APIs show what a strategy decided (its buys, holds
+// and results), never how it decides. Every /api/v1 answer, every assistant read and every page read passes through
+// withoutInternals (via lib/ui/public-view.ts). Each kind of record keeps only its public fields (public-fields.ts, an
+// allow-list: a field a backend adds later stays private until it is added on purpose):
+//   - a registry entry (any value of a `strategies` map);
+//   - a record of a strategy's decision or result (an object with a `strategy_id`);
+//   - a row of the back-test sweep (track record `backtest.strategy`), with a neutral variant letter in place of the
+//     threshold (publicVariants);
+//   - a stored forecast run, whose list of what changed names only public fields.
+// Any other object loses the known setting keys wherever they appear.
+import { DECISION_FIELDS, REGISTRY_FIELDS, RUN_CHANGE_FIELDS, RUN_FIELDS, SETTING_KEYS, SWEEP_FIELDS } from "./public-fields.ts";
 
 type Json = unknown;
-const isObject = (value: Json): value is Record<string, Json> => typeof value === "object" && value !== null && !Array.isArray(value);
+type Obj = Record<string, Json>;
+const isObject = (value: Json): value is Obj => typeof value === "object" && value !== null && !Array.isArray(value);
+const only = (o: Obj, fields: readonly string[]): Obj => Object.fromEntries(Object.entries(o).filter(([k]) => fields.includes(k)));
 
 /** One registry entry reduced to its public fields. */
 export function publicStrategy(entry: Json): Json {
-  if (!isObject(entry)) return entry;
-  return Object.fromEntries(PUBLIC_KEYS.filter((key) => key in entry).map((key) => [key, entry[key]]));
+  return isObject(entry) ? only(entry, REGISTRY_FIELDS) : entry;
 }
 
 /** Rows that differ only by a threshold (the back-test sweep) keep a neutral letter in its place: A for the lowest. */
@@ -41,16 +27,26 @@ function publicVariants(rows: Json[]): Json[] {
   return rows.map((r) => (isObject(r) && r.threshold != null ? { ...r, variant: String.fromCharCode(65 + levels.indexOf(Number(r.threshold))) } : r));
 }
 
+/** A forecast run with its public fields; its change names only public fields. */
+function publicRun(run: Obj, list: "ranges" | "scores"): Obj {
+  const out = only(run, RUN_FIELDS[list]);
+  if (!isObject(out.change)) return out;
+  const change = only(out.change, RUN_CHANGE_FIELDS[list]);
+  if (Array.isArray(change.changed)) change.changed = change.changed.filter((f) => RUN_FIELDS[list].includes(String(f)));
+  return { ...out, change };
+}
+
 /** The payload with every strategy internal removed (see the header). Returns a new value. */
 export function withoutInternals(payload: Json): Json {
   const walk = (v: Json, key?: string, list?: string): Json => {
     if (Array.isArray(v)) return publicVariants(v).map((x) => walk(x, undefined, key));
     if (!isObject(v)) return v;
-    if (key === "strategies") return Object.fromEntries(Object.entries(v).map(([id, entry]) => [id, isObject(entry) && ("family" in entry || "name" in entry) ? publicStrategy(entry) : walk(entry)]));
-    const drop = [...SETTING_KEYS, ...(list && Object.hasOwn(HOW_MADE, list) ? HOW_MADE[list] : [])] as readonly string[];
-    const run = list && Object.hasOwn(HOW_MADE, list) ? list : undefined;
-    const part = (k: string, x: Json): Json => (!run ? walk(x, k) : k === "change" ? walk(x, k, run) : k === "changed" && Array.isArray(x) ? x.filter((f) => !drop.includes(String(f))) : walk(x, k));
-    return Object.fromEntries(Object.entries(v).filter(([k]) => !drop.includes(k)).map(([k, x]) => [k, part(k, x)]));
+    if (key === "forecast_history") {
+      return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, (k === "ranges" || k === "scores") && Array.isArray(x) ? x.map((r) => (isObject(r) ? publicRun(r, k) : r)) : x]));
+    }
+    if (key === "strategies") return Object.fromEntries(Object.entries(v).map(([id, e]) => [id, isObject(e) && ("family" in e || "name" in e) ? publicStrategy(e) : walk(e)]));
+    const kept = "strategy_id" in v ? only(v, DECISION_FIELDS) : list === "strategy" && "baseline" in v ? only(v, SWEEP_FIELDS) : Object.fromEntries(Object.entries(v).filter(([k]) => !(SETTING_KEYS as readonly string[]).includes(k)));
+    return Object.fromEntries(Object.entries(kept).map(([k, x]) => [k, walk(x, k)]));
   };
   return walk(payload);
 }

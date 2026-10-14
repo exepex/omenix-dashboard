@@ -13,7 +13,8 @@ import type { ForecastHistory, HistoryRange, HistoryScore } from "../types.ts";
 const asRange = (e: HistoryEntry) => e as Extract<HistoryEntry, { kind: "range" }>;
 const asScore = (e: HistoryEntry) => e as Extract<HistoryEntry, { kind: "score" }>;
 // As the API serves it: through the public view (lib/strategy-pages/public-strategies.ts).
-const hdfc = withoutInternals(JSON.parse(readFileSync(new URL("./fixtures/forecast-history-hdfcbank.json", import.meta.url), "utf8"))) as ForecastHistory;
+const stored = JSON.parse(readFileSync(new URL("./fixtures/forecast-history-hdfcbank.json", import.meta.url), "utf8"));
+const hdfc = (withoutInternals({ forecast_history: stored }) as { forecast_history: ForecastHistory }).forecast_history;
 
 test("runs of one horizon in time order; nothing without a history", () => {
   const { ranges, scores } = historyAt(hdfc, 1);
