@@ -21,27 +21,29 @@ function Heat({ title, help, ids, cols, cellOf, p, metric }: {
   return (
     <div className="hm">
       <h3>{title}<HelpTip tip={help} /></h3>
-      <table role="grid" aria-label={title}>
-        <thead><tr><th className="r" />{cols.map((c) => <th key={c.key} scope="col" title={c.full}>{c.label}</th>)}</tr></thead>
-        <tbody>
-          {ids.map((id, i) => (
-            <tr key={id}>
-              <th className="r" scope="row" title={p.strategies[id]?.name}>{p.strategies[id]?.name ?? id}</th>
-              {cols.map((c, j) => {
-                const x = cells[i][j];
-                if (!x) return <td key={c.key} className="e"><span>·</span></td>;
-                const share = shares[i * cols.length + j], up = metric === "net" ? x.net >= 0 : (x.win ?? 0) >= 0.5;
-                return (
-                  <td key={c.key} tabIndex={0} style={{ background: `color-mix(in srgb, var(${up ? "--mb-heat-up" : "--mb-heat-down"}) ${share.toFixed(0)}%, var(--md-sys-color-surface-container-lowest))` }}
-                    data-tip={`${p.strategies[id]?.name ?? id} × ${c.full}: ${plural(x.n, "trade")}, ${pct(x.win)} won, ${money(cur, x.net, moneyDecimals(cur), true)} after market cost.`}>
-                    <span>{metric === "net" ? compactProfit(cur, x.net) : pct(x.win)}</span>
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="md-table-wrap" tabIndex={0} role="region" aria-label={`${title}: scroll sideways for more columns`}>
+        <table role="grid" aria-label={title}>
+          <thead><tr><th className="r" />{cols.map((c) => <th key={c.key} scope="col" title={c.full}>{c.label}</th>)}</tr></thead>
+          <tbody>
+            {ids.map((id, i) => (
+              <tr key={id}>
+                <th className="r" scope="row" title={p.strategies[id]?.name}>{p.strategies[id]?.name ?? id}</th>
+                {cols.map((c, j) => {
+                  const x = cells[i][j];
+                  if (!x) return <td key={c.key} className="e"><span>·</span></td>;
+                  const share = shares[i * cols.length + j], up = metric === "net" ? x.net >= 0 : (x.win ?? 0) >= 0.5;
+                  return (
+                    <td key={c.key} tabIndex={0} style={{ background: `color-mix(in srgb, var(${up ? "--mb-heat-up" : "--mb-heat-down"}) ${share.toFixed(0)}%, var(--md-sys-color-surface-container-lowest))` }}
+                      data-tip={`${p.strategies[id]?.name ?? id} × ${c.full}: ${plural(x.n, "trade")}, ${pct(x.win)} won, ${money(cur, x.net, moneyDecimals(cur), true)} after market cost.`}>
+                      <span>{metric === "net" ? compactProfit(cur, x.net) : pct(x.win)}</span>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

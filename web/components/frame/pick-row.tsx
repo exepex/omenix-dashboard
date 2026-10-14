@@ -38,9 +38,20 @@ function AfterCosts({ x }: { x: Signal }) {
     <div className="cost">
       <span className={`mb-label ${clears ? "success" : "danger"}`} data-tip={tip}>
         <Icon name={clears ? "check" : "close"} />
-        {clears ? `Yes: ${signed(x.exp_gain_pct)} after costs` : `No: ${signed(x.exp_gain_pct)} after costs, below costs`}
+        {`Expected ${signed(x.exp_gain_pct)} after costs`}
       </span>
     </div>
+  );
+}
+
+/** What the strategy picked and whether it is worth a paper buy after costs, in one line (owner, 13 Oct 2026: "Picked to
+ *  buy" beside "No" read as a contradiction). */
+function PickWords({ x }: { x: Signal }) {
+  const chance = `${x.strategy} sees a ${pct1(x.prob_up)} chance of a rise over ${x.horizon} ${x.horizon === 1 ? "day" : "days"}`;
+  return x.exp_gain_pct > 0 ? (
+    <div className="why"><b>Worth a paper buy:</b>{` ${chance}, and the expected gain beats the costs.`}</div>
+  ) : (
+    <div className="why"><b>Not a buy after costs:</b>{` ${chance}, but the costs are larger than the expected gain.`}</div>
   );
 }
 
@@ -85,10 +96,7 @@ export function PickRow({ x, at }: { x: Signal; at: number }) {
           {` · ${asOf(it, data).short}`}
         </small>
       </div>
-      <div className="why">
-        <b>Picked to buy</b>
-        {` at N+${x.horizon} · ${x.strategy} · model ${pct1(x.prob_up)} up`}
-      </div>
+      <PickWords x={x} />
       <AfterCosts x={x} />
       <Record x={x} at={at} sym={it.sym} />
       <TradePair id={x.id} className="act" />

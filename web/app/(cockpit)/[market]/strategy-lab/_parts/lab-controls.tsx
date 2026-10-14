@@ -43,7 +43,7 @@ export function Kpis({ p, slice }: { p: Payload; slice: Slice }) {
         tip="The strategy with the highest profit after market cost in the selected view, basis and horizon. With few trades the lead is mostly luck."
         sub={k.leader ? <span><MoneyDelta currency={cur} value={k.leader.net_pnl} decimals={moneyDecimals(cur)} />{` on ${plural(k.leader.trades, "trade")} `}{tooFewToRank(k.leader) ? <Label tone="neutral">{tooEarly(k.leader.trades)}</Label> : null}</span> : "nothing finished in this slice yet"} />
       <Kpi icon="trending_flat" tone="warn" label="Simple benchmark to beat" value={name(k.bestBaseline)}
-        tip="A deliberately simple strategy, for example “always buy” (the best of three: always buy, follow yesterday, model without news). If a clever strategy can’t beat it after fees, it isn’t adding anything."
+        tip="A deliberately simple strategy, for example “always buy” (the best of three: Always buy, Follow yesterday, Baseline 3). If a clever strategy can’t beat it after fees, it isn’t adding anything."
         sub={k.bestBaseline ? <span><MoneyDelta currency={cur} value={k.bestBaseline.net_pnl} decimals={moneyDecimals(cur)} />{` on ${plural(k.bestBaseline.trades, "trade")}`}</span> : "no baseline trade yet"} />
       <Kpi icon="layers" tone="info" label="Beat the benchmark" value={k.bestBaseline ? `${k.beat} of ${k.contenders}` : DASH}
         tip="How many rule strategies and AI traders with settled trades are ahead of the best baseline in this slice, before the luck test."

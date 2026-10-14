@@ -1,11 +1,13 @@
 // Story W9 criterion 5: the one display-name rule. Over every fixture the app renders (the old pages' mockup data,
 // the UI harness's stored payloads, the frame's and Home's fixtures), no AI model name is left in any text a screen
-// could show; strategy ids (keys, never shown) stay unchanged so links and lookups keep working.
+// could show. Since 13 Oct 2026 every strategy is also named by its fixed public label and addressed by its public id
+// (strategy-labels.ts): no backend name or id is left in any text or key.
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { modelNameIn, namesModel, withoutModelNames } from "../model-names.ts";
+import { STRATEGY_LABELS, publicOf } from "../strategy-labels.ts";
 import { AI_TEAM, applyDisplayNames, citedId, displayNames } from "../strategy-names.ts";
 
 const web = join(import.meta.dirname, "..", "..", "..");
@@ -39,41 +41,42 @@ test("after the rule, no fixture text names an AI model", () => {
   }
 });
 
-test("AI strategies read as the AI team with their role; collisions get letters; other names stay", () => {
+test("every strategy reads as its fixed public label, whatever its backend name", () => {
   const shown = displayNames(new Map([
     ["ai.combined.opus.v1", "AI combined (Opus)"],
     ["ai.combined.sonnet.v1", "AI combined (Sonnet)"],
     ["ai.news_results.sonnet.v1", "AI news & results (Sonnet)"],
     ["rule.model_news.v1", "Model + news"],
+    ["rule.model_news_strict.v1", "Model + news, 60% bar"],
     ["base.always_up.v1", "Always buy"],
+    ["base.model_only.v1", "Model without news"],
   ]));
   assert.deepEqual(Object.fromEntries(shown), {
-    "rule.model_news.v1": "Model + news",
-    "base.always_up.v1": "Always buy",
-    "ai.combined.opus.v1": `${AI_TEAM} · combined A`,
-    "ai.combined.sonnet.v1": `${AI_TEAM} · combined B`,
-    "ai.news_results.sonnet.v1": `${AI_TEAM} · news & results`,
+    "ai.combined.opus.v1": "AI team D", "ai.combined.sonnet.v1": "AI team C", "ai.news_results.sonnet.v1": "AI team A",
+    "rule.model_news.v1": "Rule-based 1", "rule.model_news_strict.v1": "Rule-based 8", "base.always_up.v1": "Always buy", "base.model_only.v1": "Baseline 3",
   });
 });
 
-test("names are replaced everywhere they appear, ids are kept, the input is not changed", () => {
+test("names and ids are replaced everywhere they appear (fields, sentences, map keys); the input is not changed", () => {
   const payload = { strategies: { "ai.combined.opus.v1": { name: "AI combined (Opus)", family: "ai" } }, nearest: { strategy_id: "ai.combined.opus.v1", name: "AI combined (Opus)" }, line: "Closest to passing: AI combined (Opus) (AI trader)" };
-  const out = applyDisplayNames(payload);
-  assert.equal(out.strategies["ai.combined.opus.v1"].name, `${AI_TEAM} · combined`);
-  assert.equal(out.nearest.strategy_id, "ai.combined.opus.v1");
-  assert.equal(out.line, `Closest to passing: ${AI_TEAM} · combined (AI trader)`);
+  const out = applyDisplayNames(payload) as unknown as { strategies: Record<string, { name: string }>; nearest: { strategy_id: string }; line: string };
+  assert.deepEqual(Object.keys(out.strategies), ["ai-d"]);
+  assert.equal(out.strategies["ai-d"].name, "AI team D");
+  assert.equal(out.nearest.strategy_id, "ai-d");
+  assert.equal(out.line, "Closest to passing: AI team D (AI trader)");
   assert.equal(payload.line, "Closest to passing: AI combined (Opus) (AI trader)");
 });
 
-test("clean names are kept as published, even when several AI strategies share one ('AI team')", () => {
-  const payload = { trades: [{ strategy_id: "ai.combined.opus.v1", strategy: "AI team" }, { strategy_id: "ai.news_results.sonnet.v1", strategy: "AI team" }], line: "3 trades: AI team · N+5" };
-  assert.deepEqual(applyDisplayNames(payload), payload);
+test("a family name for a whole team stays ('AI team' trading as one); the strategy's id still becomes public", () => {
+  const out = applyDisplayNames({ trades: [{ strategy_id: "ai.combined.opus.v1", strategy: "AI team" }], line: "3 trades: AI team · N+5" });
+  assert.deepEqual(out, { trades: [{ strategy_id: "ai-d", strategy: "AI team" }], line: "3 trades: AI team · N+5" });
 });
 
 // Judge 45: the rule renames strategies only. Other text is never rewritten; a model name in it is flagged by the
 // detector (the UI harness's gate on every page), so a leak is seen, not hidden.
 test("text outside any strategy name stays exactly as published, and a model named in it is flagged, not rewritten", () => {
-  for (const note of ["Scored by GPT-4o (beta)", "Asked in the Claude app", "Model + news"]) assert.equal(applyDisplayNames({ note }).note, note);
+  for (const note of ["Scored by GPT-4o (beta)", "Asked in the Claude app"]) assert.equal(applyDisplayNames({ note }).note, note);
+  assert.equal(applyDisplayNames({ note: "Model + news beat Always buy" }).note, "Rule-based 1 beat Always buy", "a strategy's own name is always replaced");
   assert.equal(namesModel("Scored by GPT-4o (beta)"), true);
   assert.equal(namesModel("Asked in the Claude app"), true);
 });
@@ -86,49 +89,67 @@ test("security names are never touched: GPT Healthcare and GPT Infraprojects sta
   assert.equal(modelNameIn("Moneyview GPT-4o Limited", { security: true }), "GPT-4o", "the page gate flags it");
 });
 
-test("a quoted id of a strategy the payload does not name reads as its approach and role, never raw", () => {
-  const out = applyDisplayNames({ line: "First settled week: rule.model_news.v1 +7.99 USD on 6 trades, ai.combined.opus.v1 -6.64 USD on 3" });
-  assert.equal(out.line, `First settled week: rule.model_news.v1 +7.99 USD on 6 trades, ${AI_TEAM} · combined -6.64 USD on 3`);
+test("a quoted id reads as the strategy's public label in a sentence, as its public id in an identifier", () => {
+  const out = applyDisplayNames({ line: "First settled week: rule.model_news.v1 +7.99 USD on 6 trades, ai.combined.opus.v1 -6.64 USD on 3", trade: "acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d", hash: "story=tra:acc:rule.model_news_calm.v1:2026-09-29-RELIANCE-3d" });
+  assert.equal(out.line, "First settled week: Rule-based 1 +7.99 USD on 6 trades, AI team D -6.64 USD on 3");
+  assert.equal(out.trade, "acc:ai-d:2026-09-29-RELIANCE-3d");
+  assert.equal(out.hash, "story=tra:acc:rule-7:2026-09-29-RELIANCE-3d");
   assert.equal(namesModel(out.line), false);
 });
 
-test("a strategy id quoted in a sentence reads as its display name (06's first settled week)", () => {
-  const payload = { strategies: { "ai.combined.opus.v1": { name: "AI combined (Opus)" }, "rule.model_news.v1": { name: "Model + news" } }, line: "First settled week: rule.model_news.v1 -3,807.75 INR on 2 trades, ai.combined.opus.v1 -3,807.75 INR on 2" };
-  assert.equal(applyDisplayNames(payload).line, `First settled week: Model + news -3,807.75 INR on 2 trades, ${AI_TEAM} · combined -3,807.75 INR on 2`);
+test("the same record id maps the same way on every page, so links and lookups between pages keep working", () => {
+  const a = applyDisplayNames({ rows: [{ id: "acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d" }] });
+  const b = applyDisplayNames({ story: { id: "acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d" }, other: "rule.model_news.v1" });
+  assert.equal(a.rows[0].id, b.story.id);
+  assert.deepEqual(applyDisplayNames(a), a, "applying it twice changes nothing (the API and the client both apply it)");
 });
 
-test("identifiers (trade and record ids) are keys: never rewritten, so lookups by id keep working", () => {
-  const ids = { trade: "acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d", hash: "story=tra:acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d", strategy: "ai.combined.opus.v1" };
-  assert.deepEqual(applyDisplayNames(ids), ids);
-});
-
-test("a cited id shown as text reads each strategy id as its display name, still traceable, naming no model", () => {
-  const strategies = { "ai.combined.opus.v1": { name: `${AI_TEAM} · combined A` }, "rule.model_news.v1": { name: "Model + news" } };
-  assert.equal(citedId("tra:acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d:biggest_win", strategies), `tra:acc:[${AI_TEAM} · combined A]:2026-09-29-RELIANCE-3d:biggest_win`);
-  assert.equal(citedId("rule.model_news.v1", strategies), "[Model + news]");
+test("a cited id shown as text reads each public id as its label, still traceable, naming no model", () => {
+  const strategies = { "ai-d": { name: "AI team D" }, "rule-1": { name: "Rule-based 1" } };
+  assert.equal(citedId("tra:acc:ai-d:2026-09-29-RELIANCE-3d:biggest_win", strategies), "tra:acc:[AI team D]:2026-09-29-RELIANCE-3d:biggest_win");
+  assert.equal(citedId("tra:acc:ai.combined.opus.v1:2026-09-29-RELIANCE-3d", strategies), "tra:acc:[AI team D]:2026-09-29-RELIANCE-3d");
+  assert.equal(citedId("rule-1", strategies), "[Rule-based 1]");
   assert.equal(namesModel(citedId("acc:ai.unknown.sonnet.v1:x", strategies)), false);
   assert.equal(citedId("news:abc123", strategies), "news:abc123");
 });
 
+// Owner, 13 Oct 2026 (after the deploy of 8893f17): the backend names state the settings, so no label and no API
+// field may carry them or a settings word, for any strategy, including one the table does not know yet.
+const SETTING_WORDS = /news|bar\b|%|calm|regime|global|model|confirmed|major|half|double|strict|pattern|mood|results|combined|opus|sonnet|momentum|always_up|cues/i;
+test("no public label or id carries a backend name or a settings word, for every known strategy and a planted new one", () => {
+  const ids = [...Object.keys(STRATEGY_LABELS), "rule.model_news_regime_80pct.v2", "ai.news_mood.gpt5.v1", "base.always_down.v1"];
+  for (const id of ids) {
+    const { label, id: pub } = publicOf(id);
+    assert.ok(!SETTING_WORDS.test(label) && !SETTING_WORDS.test(pub), `${id} -> ${label} / ${pub}`);
+    assert.ok(!label.includes(id) && !pub.includes(id));
+  }
+  const labels = Object.values(STRATEGY_LABELS).map((x) => x.label), pubs = Object.values(STRATEGY_LABELS).map((x) => x.id);
+  assert.equal(new Set(labels).size, labels.length, "labels are unique");
+  assert.equal(new Set(pubs).size, pubs.length, "public ids are unique");
+  assert.match(publicOf("rule.model_news_regime_80pct.v2").label, /^Rule-based \(new [0-9a-f]{4}\)$/);
+});
 
-// Judge 24 (W9): a fixed list of names was the wrong design. Names come from the allowlist; detection is generic.
-test("names come from the allowlist: a role it knows reads as approach and role, an unknown one as the approach only", () => {
-  const shown = displayNames(new Map([
-    ["ai.combined.fable5.v1", "AI combined (Fable 5)"],
-    ["ai.reasoning.o3.v1", "AI reasoning (o3)"],
-    ["ai.pattern_mood.sonnet.v1", "AI price pattern & mood (Sonnet)"],
-    ["hybrid.momentum.gpt5.v1", "Hybrid momentum (GPT-5)"],
-    ["hybrid.calm.v1", "Rules + a careful reader"],
-    ["rule.model_news.v1", "Model + news (claude-sonnet-5)"],
-  ]));
-  assert.deepEqual(Object.fromEntries(shown), {
-    "ai.combined.fable5.v1": `${AI_TEAM} · combined`,
-    "ai.reasoning.o3.v1": AI_TEAM,
-    "ai.pattern_mood.sonnet.v1": `${AI_TEAM} · price pattern & mood`,
-    "hybrid.momentum.gpt5.v1": "Hybrid B", // letters by id: hybrid.calm sorts first
-    "hybrid.calm.v1": "Hybrid A",
-    "rule.model_news.v1": "Rule-based",
-  });
+test("labels are fixed per strategy: a page with two strategies shows the same labels as the page with all of them", () => {
+  const few = applyDisplayNames({ picks: [{ strategy_id: "rule.model_news_calm.v1", strategy: "Model + news, calm markets only" }, { strategy_id: "ai.pattern_mood.sonnet.v1", strategy: "AI price pattern & mood (Sonnet)" }] });
+  assert.deepEqual(few.picks.map((x) => [x.strategy_id, x.strategy]), [["rule-7", "Rule-based 7"], ["ai-b", "AI team B"]]);
+});
+
+test("after the rule, no fixture carries a backend strategy name or id, in any text or key", () => {
+  const backendNames = new Set<string>();
+  const gather = (v: unknown): void => {
+    if (Array.isArray(v)) return v.forEach(gather);
+    if (!v || typeof v !== "object") return;
+    const o = v as Record<string, unknown>;
+    if (typeof o.id === "string" && /^(rule|base|ai)\./.test(o.id) && typeof o.name === "string" && !/^(AI team|Rule-based|Always buy|Follow yesterday)$/.test(o.name)) backendNames.add(o.name);
+    Object.values(o).forEach(gather);
+  };
+  for (const f of FIXTURES) gather(json(f));
+  assert.ok(backendNames.has("Model + news, 60% bar"), "the fixtures carry the backend names (the rule has work to do)");
+  for (const f of FIXTURES) {
+    const out = JSON.stringify(applyDisplayNames(json(f)));
+    assert.equal(out.match(/\b(?:rule|base|ai)\.[a-z0-9_]+(?:\.[a-z0-9_]+)*\.v\d+\b/)?.[0], undefined, `${f} keeps a backend id`);
+    for (const name of backendNames) assert.ok(!out.includes(JSON.stringify(name)), `${f} keeps "${name}"`);
+  }
 });
 
 test("the detector knows families and id shapes, not a list: each of these is one whole model token", () => {
@@ -176,15 +197,16 @@ test("model ids are replaced as whole tokens where the rule replaces (cited ids)
   assert.equal(withoutModelNames("AI reasoning (o3) and AI combined (Fable 5)", AI_TEAM), "AI reasoning and AI combined");
   const payload = { strategies: [{ id: "ai.combined.fable5.v1", name: "AI combined (Fable 5)" }, { id: "ai.reasoning.o3.v1", name: "AI reasoning (o3)" }], line: "Best: AI reasoning (o3)" };
   const out = applyDisplayNames(payload);
-  assert.deepEqual(out.strategies.map((x) => x.name), [`${AI_TEAM} · combined`, AI_TEAM]);
-  assert.equal(out.line, `Best: ${AI_TEAM}`);
+  assert.deepEqual(out.strategies.map((x) => x.name), [publicOf("ai.combined.fable5.v1").label, publicOf("ai.reasoning.o3.v1").label]);
+  assert.equal(out.line, `Best: ${publicOf("ai.reasoning.o3.v1").label}`);
+  assert.equal(namesModel(JSON.stringify(out)), false);
 });
 
 test("judge 29, minor 2: a baseline named after a model never reaches the screen, in its field or in free text", () => {
   const payload = { strategies: [{ id: "base.llm_only.v1", name: "claude_opus_4 only" }, { id: "base.always_up.v1", name: "Always buy" }], line: "Beaten by claude_opus_4 only today" };
   const out = applyDisplayNames(payload);
-  assert.deepEqual(out.strategies.map((x) => x.name), ["Baseline", "Always buy"]);
-  assert.equal(out.line, "Beaten by Baseline today");
+  assert.deepEqual(out.strategies.map((x) => x.name), [publicOf("base.llm_only.v1").label, "Always buy"]);
+  assert.equal(out.line, `Beaten by ${publicOf("base.llm_only.v1").label} today`);
   assert.equal(namesModel(JSON.stringify(out)), false);
 });
 

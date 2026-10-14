@@ -8,7 +8,7 @@ export const cases = [
     mockup: "12-help",
     widths: [1280, 390],
     waitFor: ".fam",
-    expectText: ["How to read the cockpit", "294 still to go", "HDFC Bank: 2 of 15 at N+1", "₹1,00,000 by default", "Model + news", "the reference"],
+    expectText: ["How to read the cockpit", "294 still to go", "HDFC Bank: 2 of 15 at N+1", "₹1,00,000 by default", "Rule-based 1"],
     expectSelector: ["#paper", "#glossary", ".chk li.no", ".chk li.na", ".toc a[href='#news']"],
   },
   { name: "help-us", path: "/us/help", market: "us", mockup: "12-help", widths: [1280], waitFor: ".fam", expectText: ["How to read the cockpit", "$"] },

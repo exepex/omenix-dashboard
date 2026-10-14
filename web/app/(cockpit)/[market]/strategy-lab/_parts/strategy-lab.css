@@ -93,11 +93,17 @@
 .p-lab .cleg i.k4{background:var(--mb-chart-4)}
 .p-lab .cleg i.grey{background:var(--md-sys-color-outline-variant)}
 .p-lab .hms{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px}
+.p-lab .hms > *{min-width:0}
 .p-lab .hm h3{font:600 13.5px/1.3 var(--md-ref-typeface-plain);margin:0 0 8px;display:flex;align-items:center;gap:6px}
-.p-lab .hm table{border-collapse:separate;border-spacing:2px;width:100%;table-layout:fixed}
-.p-lab .hm th{font-size:11px;font-weight:600;color:var(--md-sys-color-on-surface-variant);padding:2px 2px;text-align:center;white-space:normal;line-height:1.15;overflow:visible}
-.p-lab .hm th.r{text-align:left;width:132px;font-weight:500;color:var(--md-sys-color-on-surface);white-space:normal;line-height:1.2;overflow:visible}
-.p-lab .hm td{text-align:center;font-size:11.5px;font-variant-numeric:tabular-nums;border-radius:6px;padding:0;height:30px;background:var(--md-sys-color-surface-container-low);color:var(--md-sys-color-on-surface);overflow:hidden;white-space:nowrap}
+/* A map with many columns (By company) scrolls sideways inside its card (the design system's .md-table-wrap): every
+   column keeps room for its full signed value, the strategy names stay pinned on the left, and a header too long for
+   its column ends in … with the full name in its tooltip (W14: labels ran into each other and values were cut off). */
+.p-lab .hm .md-table-wrap{padding-bottom:2px}
+.p-lab .hm .md-table-wrap:focus-visible{outline:2px solid var(--md-sys-color-primary);outline-offset:2px}
+.p-lab .hm table{border-collapse:separate;border-spacing:2px;width:100%;min-width:max-content;table-layout:auto}
+.p-lab .hm th{font-size:11px;font-weight:600;color:var(--md-sys-color-on-surface-variant);padding:2px 2px;text-align:center;white-space:nowrap;line-height:1.15;min-width:60px;max-width:84px;overflow:hidden;text-overflow:ellipsis}
+.p-lab .hm th.r{text-align:left;width:132px;min-width:110px;max-width:none;font-weight:500;color:var(--md-sys-color-on-surface);white-space:normal;line-height:1.2;overflow:visible;position:sticky;left:0;z-index:1;background:var(--md-sys-color-surface-container-lowest)}
+.p-lab .hm td{text-align:center;font-size:11.5px;font-variant-numeric:tabular-nums;border-radius:6px;padding:0;height:30px;min-width:60px;background:var(--md-sys-color-surface-container-low);color:var(--md-sys-color-on-surface);white-space:nowrap}
 .p-lab .hm td.e{color:var(--mb-quiet-mark)}
 .p-lab .hm td span{display:block;padding:0 2px}
 .p-lab .hm td[tabindex]:focus-visible{outline:2px solid var(--md-sys-color-primary);outline-offset:-2px}
@@ -132,7 +138,7 @@
   .p-lab .lb .nm .t{white-space:normal}
   .p-lab .lb .mb-label{white-space:normal}
   .p-lab .lb .pn small{white-space:normal}
-  .p-lab .hm th.r{width:92px;font-size:10.5px}
+  .p-lab .hm th.r{width:92px;min-width:92px;font-size:10.5px}
   .p-lab .hm td{font-size:10.5px;height:28px}
   .p-lab .luck svg{display:none}
 }

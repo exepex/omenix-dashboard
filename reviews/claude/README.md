@@ -39,3 +39,8 @@ Written by Claude sessions: `response_<n>_<name>.md` (answers, questions, propos
   - **Strategy internals:** removed from the Strategy lab and Help, and dropped by the `/strategies` API (projection, type, API test, harness cases).
   - **Code size:** the Strategy lab page split from 607 lines to at most 143 per file; off the allowlist.
   - **Open:** strategy names carry internals; other endpoints still show thresholds.
+- `response_32_w14-owner-strategy-lab.md`: W14 round 3, the owner's four Strategy lab findings.
+  - **Names:** neutral fixed labels and ids (Rule-based 1–8, AI team A–D, Always buy, Follow yesterday, Baseline 3) in every API answer and screen, mutation-checked.
+  - **Heatmap:** scrolls in its card; full values; a 14-company test.
+  - **Drawdown:** ₹10,00,000 confirmed as 10 × the paper-trade amount (the stock tool's proposal); "limit not available" when missing.
+  - **Picks panel:** one clear line.

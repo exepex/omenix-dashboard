@@ -157,7 +157,7 @@ export const cases = [
   },
   {
     name: "paper-portfolio-v3-story",
-    path: "/india/stocks/LT/lifecycle/2026-10-12#story=ai.news_results.sonnet.v1%3A2026-10-09-LT-5d&trade=acc%3Aai.news_results.sonnet.v1%3A2026-10-09-LT-5d",
+    path: "/india/stocks/LT/lifecycle/2026-10-12#story=ai-a%3A2026-10-09-LT-5d&trade=acc%3Aai-a%3A2026-10-09-LT-5d",
     market: "india",
     api: realApi(),
     widths: [1280, 390],

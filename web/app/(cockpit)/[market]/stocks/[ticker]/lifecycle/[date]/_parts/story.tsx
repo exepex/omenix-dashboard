@@ -14,8 +14,9 @@ import { fmtDate, holdLabel, money, price } from "../../../../../../../../lib/ui
 import { parseStoryHash, pct1, REASON_WORDS, SIDE_ONE, type Side } from "../../../../../../../../lib/strategy-pages/portfolio-v3.ts";
 import type { LifecyclePayload, TradeCheck } from "../../../../../../../../lib/company-pages/types.ts";
 import type { PageCtx } from "../../../_parts/context.ts";
+import { publicOf } from "../../../../../../../../lib/ui/strategy-labels.ts";
 
-const LESSON_READER = "ai.combined.opus.v1";
+const LESSON_READER = publicOf("ai.combined.opus.v1").id; // the AI team member that reads the lessons, by its public id
 
 /** The hash's story ids, kept in step with the address bar. */
 export function useStoryHash(): { prediction: string | null; trade: string | null } {

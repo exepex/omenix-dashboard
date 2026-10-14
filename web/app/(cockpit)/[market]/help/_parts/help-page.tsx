@@ -393,7 +393,7 @@ function Glossary() {
             ["Wilson 95% interval", "The range the true hit rate is very likely in; it is wide when there are few calls."],
             ["Win rate", "The share of finished trades that made money after fees."],
             ["Signal model", "The explainable up/down probability built from the stored indicators and verified news, refitted monthly; the reference rule strategy trades it as is."],
-            ["Baseline (simple benchmark)", "A deliberately simple strategy a clever one must beat after fees: always buy, follow yesterday, or the signal model without news. These are standard yardsticks in research, not inventions."],
+            ["Baseline (simple benchmark)", "A deliberately simple strategy a clever one must beat after fees: always buy, follow yesterday, or Baseline 3. These are standard yardsticks in research, not inventions."],
             ["Pick rule", "How a family chooses one horizon for its head-to-head trade: best expected gain or highest probability."],
             ["Cost view", "Market cost (the ranking view) or your cost (market cost plus the charges only you pay)."],
             ["Settled (finished)", "A paper trade whose exit close is stored; its profit after costs is final unless a later split correction re-settles it as a new record."],

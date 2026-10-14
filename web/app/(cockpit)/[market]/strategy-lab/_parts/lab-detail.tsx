@@ -28,6 +28,14 @@ function MiniRow({ label, value, max, text, tip }: { label: string; value: numbe
   );
 }
 
+/** The drawdown check's limit in words: the stock tool sets it at 10 times the market's paper-trade amount (₹10,00,000
+ *  in India, $10,000 in the US; lab/constants.py DRAWDOWN_LIMIT_AMOUNTS, a proposal until the owner sets it). A missing
+ *  or non-positive value is said as such, never drawn as a number. */
+export function drawdownLimitWords(currency: string, limit: number | null | undefined): string {
+  if (limit == null || !(limit > 0)) return "limit not available";
+  return `proposed limit: the paper profit may fall at most ${money(currency, limit)} below its best point`;
+}
+
 export function Detail({ p, v, selected }: { p: Payload; v: View; selected: string }) {
   const cur = p.currency, d = moneyDecimals(cur), s = p.strategies[selected];
   if (!s) return <Card label="Strategy in plain words"><CardHead title="In plain words" /><Quiet>No strategy selected.</Quiet></Card>;
@@ -106,7 +114,7 @@ export function Detail({ p, v, selected }: { p: Payload; v: View; selected: stri
             {li(g.trades_needed === 0, g.trades_needed ? `${g.trades_needed} more finished trades needed` : "Enough finished trades", `about ${GO_LIVE_TRADES_ABOUT} per strategy, all trades`)}
             {li(g.months_forward >= GO_LIVE_MONTHS, `${g.months_forward} of ${GO_LIVE_MONTHS} months of forward paper trading`, "counted from the first forward trade")}
             {li(g.beats_best_baseline, g.beats_best_baseline ? "Beats the best baseline after your cost" : "Does not beat the best baseline after your cost yet", `best baseline ${money(cur, g.best_baseline_net_pnl, d, true)}; needs the corrected luck interval to lie above zero`)}
-            {li(g.drawdown_within_limit, g.drawdown_within_limit ? "Drawdown within the limit" : g.drawdown_within_limit === false ? "Drawdown beyond the limit" : "Drawdown: not measured yet", `limit ${money(cur, g.drawdown_limit)} of cumulative loss on the accuracy-view trades`)}
+            {li(g.drawdown_within_limit, g.drawdown_within_limit ? "Drawdown within the limit" : g.drawdown_within_limit === false ? "Drawdown beyond the limit" : "Drawdown: not measured yet", drawdownLimitWords(cur, g.drawdown_limit))}
             {li(g.holds_in_calm_and_volatile, g.holds_in_calm_and_volatile === null || g.holds_in_calm_and_volatile === undefined ? "Calm and jumpy markets: not enough data yet" : g.holds_in_calm_and_volatile ? "Works in calm and jumpy markets" : "Fails in calm or in jumpy markets", "measured per market mood")}
           </ul>
           <p className="note">{g.proven ? "Proven: this strategy has met the bar; Strong signals may appear." : `Not proven. ${p.status.paper_label || PAPER_LABEL}: nothing here is advice.`}</p>

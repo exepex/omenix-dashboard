@@ -59,6 +59,49 @@ async function noInternals(page) {
   return problems;
 }
 
+/** The heatmap "By company" (owner, 13 Oct 2026: labels ran into each other, values were cut off): every value shows
+ *  whole, every column label fits or ends in … with the full name as its tooltip, and the map scrolls inside its card. */
+async function heatmapReadable(page) {
+  const problems = [];
+  const sel = '.p-lab .hm:has(h3:text-is("By company"))';
+  if (!(await page.$(sel))) return ["no By company heatmap"];
+  const r = await page.$eval(sel, (hm) => {
+    const cut = [...hm.querySelectorAll("td span")].filter((s) => s.scrollWidth > s.clientWidth + 1 || s.scrollWidth > s.parentElement.clientWidth + 1).map((s) => s.textContent);
+    const heads = [...hm.querySelectorAll("thead th:not(.r)")];
+    const badHead = heads.filter((th) => th.scrollWidth > th.clientWidth + 1 && getComputedStyle(th).textOverflow !== "ellipsis").map((th) => th.textContent);
+    const noTip = heads.filter((th) => !th.title).map((th) => th.textContent);
+    const box = hm.querySelector(".md-table-wrap");
+    return { cut, badHead, noTip, scrolls: box ? getComputedStyle(box).overflowX : "none", heads: heads.length };
+  });
+  if (r.cut.length) problems.push(`values cut off: ${r.cut.slice(0, 5).join(", ")}`);
+  if (r.badHead.length) problems.push(`column labels overflow without …: ${r.badHead.slice(0, 5).join(", ")}`);
+  if (r.noTip.length) problems.push(`column labels without their full name: ${r.noTip.slice(0, 5).join(", ")}`);
+  if (r.scrolls !== "auto") problems.push(`the map does not scroll inside its card (${r.scrolls})`);
+  return problems;
+}
+
+/** The registry's company map as the owner saw it (13 Oct 2026): 14 companies, long tickers, six-figure results. */
+const MANY = ["ADANIPORTS", "DRREDDY", "HDFCBANK", "HINDALCO", "HINDUNILVR", "ICICIBANK", "INFY", "ITC", "LT", "M&M", "MARUTI", "ONGC", "RELIANCE", "TCS"];
+const manyCompaniesApi = (rest, market) => {
+  if (rest !== "strategies") return undefined;
+  const lab = mockupPayload("05-strategy-lab", market);
+  const base = lab.cells.find((c) => c.dimension === "company");
+  const ids = [...new Set(lab.cells.filter((c) => c.dimension === "company").map((c) => c.strategy_id))];
+  const cells = ids.flatMap((id, i) => MANY.map((t, j) => ({ ...base, week: "all", strategy_id: id, column: t, trades: 3, wins: (i + j) % 3, win_rate: ((i + j) % 3) / 3, net_pnl: ((i + j) % 2 ? -1 : 1) * (823456.78 - 41000 * j) })));
+  return { status: 200, body: envelope(market, "_", { ...lab, cells: [...lab.cells.filter((c) => c.dimension !== "company"), ...cells] }) };
+};
+
+/** No page shows a backend strategy name or id (owner, 13 Oct 2026): they state how a strategy decides. */
+const BACKEND_NAMES = ["Model + news", "Model + half news", "Model + double news", "Model + confirmed news only", "Model + major news only", "Model + news + global cues", "Model + news, calm markets only", "Model + news, 60% bar", "Model without news", "news &amp; results", "price pattern &amp; mood", "AI combined"];
+async function noBackendNames(page) {
+  const html = await page.content();
+  const problems = BACKEND_NAMES.filter((n) => html.includes(n)).map((n) => `shows the backend name "${n}"`);
+  const id = html.match(/\b(?:rule|base|ai)\.[a-z0-9_]+(?:\.[a-z0-9_]+)*\.v\d+\b/);
+  if (id) problems.push(`carries the backend id ${id[0]}`);
+  if (/[#?&][^"']*\b(?:rule|base|ai)\.[a-z0-9_]+\.v\d/.test(page.url())) problems.push(`the address carries a backend id: ${page.url()}`);
+  return problems;
+}
+
 const looks = async (page) => (await affordanceFindings(page)).map((f) => `look: ${f}`);
 
 /** Delay the server's answers (React Server Component requests) to `path` by `ms`, prefetches excepted. */
@@ -197,6 +240,10 @@ export const cases = [
   }),
   { name: "w14-no-internals-lab", path: "/india/strategy-lab", widths: [1280], waitFor: ".p-lab .lb", api: plantedApi, check: noInternals },
   { name: "w14-no-internals-help", path: "/india/help", widths: [1280], waitFor: "#strategies", api: plantedApi, check: noInternals },
+  { name: "w14-lab-heatmap", path: "/india/strategy-lab", widths: [1280, 390], waitFor: ".p-lab .hm", check: heatmapReadable },
+  { name: "w14-lab-heatmap-14-companies", path: "/india/strategy-lab", widths: [1280, 390], waitFor: ".p-lab .hm", api: manyCompaniesApi, check: heatmapReadable },
+  ...[["home", "/india"], ["lab", "/india/strategy-lab"], ["help", "/india/help"], ["rule-vs-ai", "/india/rule-vs-ai"], ["portfolios", "/india/paper-portfolios"], ["stock", "/india/stocks/RELIANCE"], ["strategies", "/india/stocks/RELIANCE/strategies"], ["track-record", "/india/track-record"], ["us-home", "/us"]]
+    .map(([name, path]) => ({ ...(name === "rule-vs-ai" ? ruleVsAi.find((c) => c.name === "rule-vs-ai-india") : {}), mockup: undefined, expectText: undefined, name: `w14-no-backend-names-${name}`, path, widths: [1280], check: noBackendNames })),
   { name: "w14-block-loader", path: "/india/screener", widths: [1280, 390], waitFor: ".mb-scr-presets", check: blockLoader },
   { name: "w14-page-loader", path: "/india/screener", widths: [1280], waitFor: ".mb-scr-look", check: pageLoader },
   { name: "w14-disabled", path: "/india", widths: [1280, 390], waitFor: ".home .mb-apcard", check: disabledLook },

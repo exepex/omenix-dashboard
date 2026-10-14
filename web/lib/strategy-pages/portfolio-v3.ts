@@ -16,7 +16,7 @@ export const SIDE_SHORT: Record<Side, string> = { rule: "Rule", baseline: "Bench
 export const SIDE_ONE: Record<Side, string> = { rule: "Rule strategy", baseline: "Simple benchmark", ai: "AI trader" };
 export const SIDE_ABOUT: Record<Side, string> = {
   rule: "Fixed rules on the signal model’s chance of a rise and the checked news. They buy only when that chance clears their bar.",
-  baseline: "Simple yardsticks the others must beat: “Always buy”, “Follow yesterday” and “Model without news”. A clever strategy that can’t beat these has no edge.",
+  baseline: "Simple yardsticks the others must beat: “Always buy”, “Follow yesterday” and “Baseline 3”. A clever strategy that can’t beat these has no edge.",
   ai: "AI traders reading the news, the prices, or both. Each says how likely a rise is and why, or stays out.",
 };
 

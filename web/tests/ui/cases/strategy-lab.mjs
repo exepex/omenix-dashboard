@@ -16,14 +16,14 @@ export const cases = [
     mockup: "05-strategy-lab",
     widths: [1280, 390],
     waitFor: ".p-lab .cum svg",
-    expectText: [PAPER, "Every strategy, ranked by profit after costs", "Model without news", "too early to tell", "In plain words", "more finished trades needed", "Where each strategy wins and loses", "By reason the price moved"],
+    expectText: [PAPER, "Every strategy, ranked by profit after costs", "Baseline 3", "too early to tell", "In plain words", "more finished trades needed", "Where each strategy wins and loses", "By reason the price moved"],
     expectSelector: [".p-lab .luck svg", ".p-lab .hm td[tabindex]", ".p-lab .chk li.no"],
     check: async (page) => {
       const problems = [];
       const first = (await rowsText(page))[0];
-      if (!first.includes("Model without news")) problems.push(`first ranked row: ${first}`);
+      if (!first.includes("Baseline 3")) problems.push(`first ranked row: ${first}`);
       const selected = await page.$eval(".p-lab .det .big", (b) => b.textContent);
-      if (!selected.startsWith("Model without news")) problems.push(`default selection: ${selected}`);
+      if (!selected.startsWith("Baseline 3")) problems.push(`default selection: ${selected}`);
       return problems;
     },
   },
@@ -37,7 +37,7 @@ export const cases = [
       const problems = [];
       await press(page, "Basis", "Replayed on past years");
       const kept = await page.$eval(".p-lab .det .big", (b) => b.textContent);
-      if (!kept.startsWith("Model without news")) problems.push(`the selection followed the slice: ${kept}`);
+      if (!kept.startsWith("Baseline 3")) problems.push(`the selection followed the slice: ${kept}`);
       const back = await page.textContent(".p-lab .lb");
       if (!back.includes("not run")) problems.push("back-test basis shows no 'not run' strategy");
       if (!(await page.textContent(".p-lab")).includes("Replay on past years.")) problems.push("back-test run facts missing");
@@ -51,18 +51,18 @@ export const cases = [
       await press(page, "Horizon", "3 days");
       if (!(await page.textContent(".p-lab .lb .end, .p-lab .card .end")).includes("3-day hold only")) problems.push("horizon N+3 not shown in the card head");
       await page.click('.p-lab .lb button.sel:has-text("Always buy")');
-      if (!page.url().endsWith("#base.always_up.v1")) problems.push(`hash not updated: ${page.url()}`);
+      if (!page.url().endsWith("#base-1")) problems.push(`hash not updated: ${page.url()}`);
       return problems;
     },
   },
   {
     name: "strategy-lab-hash",
-    path: "/india/strategy-lab#rule.model_news.v1",
+    path: "/india/strategy-lab#rule-1",
     widths: [1280],
     waitFor: ".p-lab .det .big",
     check: async (page) => {
       const big = await page.$eval(".p-lab .det .big", (b) => b.textContent);
-      return big.startsWith("Model + news") ? [] : [`hash did not select the strategy: ${big}`];
+      return big.startsWith("Rule-based 1") ? [] : [`hash did not select the strategy: ${big}`];
     },
   },
   {
