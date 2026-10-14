@@ -53,15 +53,16 @@ This is the owner's personal research platform; wrong screens or numbers cost re
 
 **Judge lanes (owner, 14 Oct 2026; `exepex/trading` `docs/DESK_DECISIONS.md` and `docs/JUDGE.md`).** A change's lane is
 set by what it can damage, not by its size; when unsure, lane 1.
-- **Lane 1, judge PASS before `main`:** every new story or screen, and any diff touching `api/`, `web/lib/`,
-  `web/app/api/`, `web/middleware.ts`, `web/next.config.ts`, `web/vercel.json`, `web/package*.json`, `config/`,
-  `platform/`, `.github/`, `tools/check_code_size.mjs` or its allowlist, or a rule document (`CLAUDE.md`, `AGENTS.md`,
-  `docs/JUDGE.md`, owner checklists), and any change to what data a screen reads or renders (privacy rule: strategy
-  internals stay private). Push to a branch `story/<id>-<short>`, tell the orchestrator, merge only after the PASS
-  (pull, full checks on the merged tree, then push).
-- **Lane 2, orchestrator check before `main`, judge audit after:** styling and wording only, with no change to the data
-  shown, and added tests. The merge message starts "Lane 2:"; the judge's daily 17:30 UTC audit covers every commit
-  since its last audit, and a correctness FAIL is reverted at once (`git revert`).
+- **Lane 1, judge PASS before `main`:** every diff touching any `.ts`, `.tsx`, `.js` or `.mjs` file under `web/`,
+  `api/`, `tools/` (both allowlists included), `scripts/` (vendored third-party code), `config/`, `platform/`,
+  `.github/`, `web/middleware.ts`, `web/next.config.ts`, `web/vercel.json`, `web/package*.json`, a rule document
+  (`CLAUDE.md`, `AGENTS.md`, `docs/JUDGE.md`, owner checklists), or deleting or loosening a test; and any change to
+  what data a screen reads or renders (privacy rule: strategy internals stay private). Push to a branch
+  `story/<id>-<short>`, tell the orchestrator, merge only after the PASS (pull, full checks on the merged tree, then
+  push).
+- **Lane 2, orchestrator check before `main`, judge audit after:** `web/styles` and other CSS, `design/`, and added
+  tests only. The merge message starts "Lane 2:"; the judge's daily 17:30 UTC audit covers every commit since its last
+  audit, and a correctness FAIL is reverted at once (`git revert`).
 - **Lane 3, no judge:** judge files and conversation logs.
 
 Work on `main`; `git pull --no-rebase origin main` before every push (several sessions push here in parallel).
