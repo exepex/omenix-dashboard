@@ -23,6 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 from check_contract import errors  # noqa: E402
+from fno_rules import check_owner_paths, check_probes, check_stress  # noqa: E402
 from fno_walk import payload_name, response_ref, schema_nodes, screen_leaves, screen_operations  # noqa: E402
 
 EXAMPLES_FILE = "fno-screens.json"
@@ -43,6 +44,8 @@ RECORDS = {
     "bootstrap_result": "fno/forecast_scoring/block_bootstrap.py BootstrapResult (G4)",
     "calibration_bin": "fno/forecast_scoring/scores.py CalibrationBin (G4)",
     "check_report": "fno/checks/data_checks.py CheckReport (C3)",
+    "scoring_status": "fno/ai/scoring_gate.py ScoringStatus (G5)",
+    "book_coverage": "fno/forecast_scoring/coverage.py book_coverage, its keys per book (G4)",
     "paper_account": "fno/books/account.py PaperAccount (E1)",
     "account_state": "fno/books/equity.py AccountState (E1)",
     "equity_history": "fno/books/account.py EQUITY_COLUMNS (E1)",
@@ -196,6 +199,9 @@ def check(doc: dict, own: dict, problems: list[str]) -> list:
     check_operations(doc, problems)
     check_examples(doc, problems, own)
     leaves = check_leaves(doc, problems)
+    check_owner_paths(leaves, problems)
+    check_probes(doc, problems)
+    check_stress(doc, problems)
     check_privacy(doc, problems)
     check_card(doc, problems)
     check_sums(doc, problems)

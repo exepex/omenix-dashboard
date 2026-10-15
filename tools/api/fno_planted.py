@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import copy
 
-PLANTED = 21
+PLANTED = 26
 
 
 def _example(doc: dict, name: str) -> dict:
@@ -43,6 +43,11 @@ def _plants():
     yield "TRADE at rung 0", lambda d: _payload(d, card)["evidence"].update(rung=0), "3 was expected"
     yield "TRADE in RED", lambda d: _payload(d, card)["weather"].update(colour="RED"), "is not one of ['GREEN', 'AMBER']"
     yield "net not gross minus costs", lambda d: _payload(d, "getFnoStrategyLab_india_passed")["results"][0].update(net=1), "net is not gross minus costs"
+    yield "card max loss cap raised", lambda d: _schema(d, "FnoCardTrade")["properties"]["max_loss"].update(maximum=50000), "above the Rs 10,000 cap"
+    yield "settle rule deleted", lambda d: _schema(d, "FnoForecastQuestion")["allOf"].pop(1), "settle date under 60"
+    yield "card trade made public", lambda d: _schema(d, "FnoCardTrade").update({"x-visibility": "public"}), "must stay owner-only"
+    yield "objections made public", lambda d: _schema(d, "FnoCard")["properties"]["advocate"]["properties"]["objections"].update({"x-visibility": "public"}), "must stay owner-only"
+    yield "stress above its ceiling", lambda d: _payload(d, card)["stress"]["scenarios"][0].update(loss=10**9), "exceeds the sum of maximum losses"
     yield "nothing never-sent", lambda d: _schema(d, "FnoWeather").pop("x-never-sent"), "x-never-sent must list"
 
 

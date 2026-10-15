@@ -7,7 +7,7 @@ const KEYS = Object.keys(D.states);
 const DEFAULT = KEYS.find(k => D.states[k].case === 'positive') || KEYS[0];
 const CASE = {positive: 'Good case', negative: 'Bad case', empty: 'Empty case'};
 const COLOUR = {GREEN: ['success', 'check', 'yes-ok', 'Calm'], AMBER: ['warn', 'warning', 'watch', 'Take care'], RED: ['danger', 'block', 'no', 'A big move is much more likely than usual']};
-const VERDICT = {better: ['success', 'check', 'Better than the usual chance'], worse: ['danger', 'close', 'Worse than the usual chance'], no_difference: ['neutral', 'trending_flat', 'No clear difference'], not_tested: ['neutral', 'timer', 'Not enough data yet']};
+const VERDICT = {better: ['success', 'check', 'Better'], worse: ['danger', 'close', 'Worse'], no_difference: ['neutral', 'trending_flat', 'No clear difference'], not_tested: ['neutral', 'timer', 'Not enough data yet']};
 
 function now() { return D.states[KEY || DEFAULT]; }
 function wx() { return now().value.payload; }
@@ -21,7 +21,7 @@ function howto(c, text) { return c.el('p', {class: 'howto'}, c.icon('help'), c.e
 function fact(c, k, v, small) { return c.el('div', {class: 'mb-fact'}, c.el('span', {class: 'k'}, k), c.el('b', {}, v), small ? c.el('small', {}, small) : null); }
 /* a weather colour always with its glyph and its word */
 function colourLabel(c, colour) {
-  if (!colour) return c.el('span', {class: 'mb-label neutral'}, c.icon('remove'), 'None');
+  if (!colour) return c.el('span', {class: 'mb-label neutral'}, c.icon('remove'), 'No colour');
   const [cls, glyph] = COLOUR[colour];
   return c.el('span', {class: 'mb-label ' + cls}, c.icon(glyph), colour);
 }

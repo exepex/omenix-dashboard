@@ -17,7 +17,7 @@
     "built_at": "2026-11-16T09:31:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "a9401b3e5dc488d3fe0a41fed6c555505ad80c108239585056122dc3ab68ca3f",
+    "payload_sha256": "9e69894be1fe82381127bedfa7ac991a5642bc2fc1d0bb47605b2ad7d5d0299f",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -117,22 +117,46 @@
      "scores": [
       {
        "question": "V6_1d",
+       "baseline": "base_rate",
        "status": "scoring",
        "n_scored": 140,
        "n_needed": 10,
        "brier": 0.036,
-       "brier_base_rate": 0.039,
+       "brier_baseline": 0.039,
        "skill": 0.077,
        "verdict": "better"
       },
       {
        "question": "V6_5d",
+       "baseline": "base_rate",
        "status": "scoring",
        "n_scored": 28,
        "n_needed": 10,
        "brier": 0.101,
-       "brier_base_rate": 0.118,
+       "brier_baseline": 0.118,
        "skill": 0.144,
+       "verdict": "no_difference"
+      },
+      {
+       "question": "V6_1d",
+       "baseline": "v0_checklist",
+       "status": "scoring",
+       "n_scored": 140,
+       "n_needed": 10,
+       "brier": 0.036,
+       "brier_baseline": 0.037,
+       "skill": 0.027,
+       "verdict": "no_difference"
+      },
+      {
+       "question": "V6_5d",
+       "baseline": "v0_checklist",
+       "status": "scoring",
+       "n_scored": 28,
+       "n_needed": 10,
+       "brier": 0.101,
+       "brier_baseline": 0.104,
+       "skill": 0.029,
        "verdict": "no_difference"
       }
      ],
@@ -158,7 +182,7 @@
     "built_at": "2026-11-16T09:31:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "092e1c5c14db85a461c64f551ea4c4fd84448c74d478c6244f4cf5528c249244",
+    "payload_sha256": "60ba5a2f9135f7bd2c2adfc6de1b72b8c256890d869a25e3e2931b631f5b1ddf",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -265,22 +289,46 @@
      "scores": [
       {
        "question": "V6_1d",
+       "baseline": "base_rate",
        "status": "scoring",
        "n_scored": 150,
        "n_needed": 10,
        "brier": 0.045,
-       "brier_base_rate": 0.039,
+       "brier_baseline": 0.039,
        "skill": -0.154,
        "verdict": "worse"
       },
       {
        "question": "V6_5d",
+       "baseline": "base_rate",
        "status": "scoring",
        "n_scored": 30,
        "n_needed": 10,
        "brier": 0.131,
-       "brier_base_rate": 0.118,
+       "brier_baseline": 0.118,
        "skill": -0.11,
+       "verdict": "no_difference"
+      },
+      {
+       "question": "V6_1d",
+       "baseline": "v0_checklist",
+       "status": "scoring",
+       "n_scored": 150,
+       "n_needed": 10,
+       "brier": 0.045,
+       "brier_baseline": 0.041,
+       "skill": -0.098,
+       "verdict": "worse"
+      },
+      {
+       "question": "V6_5d",
+       "baseline": "v0_checklist",
+       "status": "scoring",
+       "n_scored": 30,
+       "n_needed": 10,
+       "brier": 0.131,
+       "brier_baseline": 0.122,
+       "skill": -0.074,
        "verdict": "no_difference"
       }
      ],
@@ -306,7 +354,7 @@
     "built_at": "2026-11-16T09:31:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "c4ca75d915ed62c8b967c9aaeaa1fc82d81bda02aa56dabc6b92f0a5d7ead59b",
+    "payload_sha256": "b825f60f3ab3410b4932061fef08d2417c46fa21f6a9f4594df8e2e9949e8895",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -356,21 +404,45 @@
      "scores": [
       {
        "question": "V6_1d",
+       "baseline": "base_rate",
        "status": "not_enough_data",
        "n_scored": 0,
        "n_needed": 10,
        "brier": null,
-       "brier_base_rate": null,
+       "brier_baseline": null,
        "skill": null,
        "verdict": "not_tested"
       },
       {
        "question": "V6_5d",
+       "baseline": "base_rate",
        "status": "not_enough_data",
        "n_scored": 0,
        "n_needed": 10,
        "brier": null,
-       "brier_base_rate": null,
+       "brier_baseline": null,
+       "skill": null,
+       "verdict": "not_tested"
+      },
+      {
+       "question": "V6_1d",
+       "baseline": "v0_checklist",
+       "status": "not_enough_data",
+       "n_scored": 0,
+       "n_needed": 10,
+       "brier": null,
+       "brier_baseline": null,
+       "skill": null,
+       "verdict": "not_tested"
+      },
+      {
+       "question": "V6_5d",
+       "baseline": "v0_checklist",
+       "status": "not_enough_data",
+       "n_scored": 0,
+       "n_needed": 10,
+       "brier": null,
+       "brier_baseline": null,
        "skill": null,
        "verdict": "not_tested"
       }

@@ -5,6 +5,7 @@ function whyPart(col, c) {
   col.append(sec(c, ['Weather', colourLabel(c, C.weather.colour)], el('p', {class: 'small', style: 'margin:0'}, C.weather.why),
     howto(c, 'RED means a big move is much more likely than usual: no new trade that day. The weather screen has the details.')));
   col.append(forecast(c, C), advocate(c, C), checks(c, C), evidence(c, C), trades(c, C));
+  col.append(stressPart(c, C));
   if (C.price_of_staying_out) col.append(stayOut(c, C.price_of_staying_out));
   if (C.missing.length || C.previous_misses.length) col.append(misses(c, C));
   col.append(sec(c, 'If you cannot act in time', el('p', {class: 'small', style: 'margin:0'}, C.if_you_cannot_act)),

@@ -17,7 +17,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "62a706816486e0c8a49e56d4b21ef5e0c1431b42c6c5a3377eef0b99c8c0cccf",
+    "payload_sha256": "e78e8542504a1f8cf6c0ca408c39957f4041adfa778c8416316c5e7ce7ba0ba8",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -121,22 +121,22 @@
      "trade": {
       "family": "rule",
       "strategy": "Put spread A, version 1",
-      "what": "NIFTY 29 Dec 2026 put spread: buy 1 lot 22,600 PE, sell 1 lot 22,450 PE",
+      "what": "MOCK NIFTY 29 Dec 2026 put spread at fictional strikes: buy 1 lot 10,600 PE, sell 1 lot 10,450 PE",
       "legs": [
        {
-        "contract": "NIFTY26DEC22600PE",
+        "contract": "MOCKNIFTY26DEC10600PE",
         "side": "buy",
         "lots": 1,
         "option_type": "PE",
-        "strike": 22600,
+        "strike": 10600,
         "expiry": "2026-12-29"
        },
        {
-        "contract": "NIFTY26DEC22450PE",
+        "contract": "MOCKNIFTY26DEC10450PE",
         "side": "sell",
         "lots": 1,
         "option_type": "PE",
-        "strike": 22450,
+        "strike": 10450,
         "expiry": "2026-12-29"
        }
       ],
@@ -200,6 +200,27 @@
        "happened_share": 0.44,
        "mean_brier": 0.251
       }
+     },
+     "stress": {
+      "open_positions": 1,
+      "max_loss_sum": 3984,
+      "scenarios": [
+       {
+        "nifty_move_pct": -5,
+        "vix_move_pct": 50,
+        "loss": 1210
+       },
+       {
+        "nifty_move_pct": -10,
+        "vix_move_pct": 100,
+        "loss": 3984
+       },
+       {
+        "nifty_move_pct": 5,
+        "vix_move_pct": null,
+        "loss": 0
+       }
+      ]
      },
      "advocate": {
       "status": "answered",
@@ -271,7 +292,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "762c85737c8b81153d4279a6ff5ef17fe2f307dc5d18bf39975431b406e1db19",
+    "payload_sha256": "c5bd2c4c632d0050f21e4a8108588fe37ab668263a1a214f0c2ccb399e4a7c88",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -375,22 +396,22 @@
      "trade": {
       "family": "hybrid",
       "strategy": "Buy protected movement, shadow 2",
-      "what": "Shadow only, never traded: NIFTY 29 Dec 2026 call spread, buy 1 lot 22,800 CE, sell 1 lot 23,000 CE",
+      "what": "Shadow only, never traded: MOCK NIFTY 29 Dec 2026 call spread at fictional strikes, buy 1 lot 10,800 CE, sell 1 lot 11,000 CE",
       "legs": [
        {
-        "contract": "NIFTY26DEC22800CE",
+        "contract": "MOCKNIFTY26DEC10800CE",
         "side": "buy",
         "lots": 1,
         "option_type": "CE",
-        "strike": 22800,
+        "strike": 10800,
         "expiry": "2026-12-29"
        },
        {
-        "contract": "NIFTY26DEC23000CE",
+        "contract": "MOCKNIFTY26DEC11000CE",
         "side": "sell",
         "lots": 1,
         "option_type": "CE",
-        "strike": 23000,
+        "strike": 11000,
         "expiry": "2026-12-29"
        }
       ],
@@ -452,6 +473,27 @@
        "mean_brier": null
       }
      },
+     "stress": {
+      "open_positions": 1,
+      "max_loss_sum": 3984,
+      "scenarios": [
+       {
+        "nifty_move_pct": -5,
+        "vix_move_pct": 50,
+        "loss": 1210
+       },
+       {
+        "nifty_move_pct": -10,
+        "vix_move_pct": 100,
+        "loss": 3984
+       },
+       {
+        "nifty_move_pct": 5,
+        "vix_move_pct": null,
+        "loss": 0
+       }
+      ]
+     },
      "advocate": {
       "status": "advocate_unavailable",
       "objections": [],
@@ -510,7 +552,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "73e620c2b922a784fe05eb3584a407031182f98efbcc0f02077f2b8c439d4661",
+    "payload_sha256": "75972bc1bad1d8e86b30f01615d8f41f3cf5dae3596f7dd53a9b2b753d298069",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -636,6 +678,27 @@
        "mean_brier": 0.036
       }
      },
+     "stress": {
+      "open_positions": 2,
+      "max_loss_sum": 7968,
+      "scenarios": [
+       {
+        "nifty_move_pct": -5,
+        "vix_move_pct": 50,
+        "loss": 5320
+       },
+       {
+        "nifty_move_pct": -10,
+        "vix_move_pct": 100,
+        "loss": 7968
+       },
+       {
+        "nifty_move_pct": 5,
+        "vix_move_pct": null,
+        "loss": 640
+       }
+      ]
+     },
      "advocate": {
       "status": "not_needed",
       "objections": [],
@@ -693,7 +756,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "1ba3c351d63da406f3cae1904f9bb0ab0b06db4a752f37032fc1839fb56107f9",
+    "payload_sha256": "7f6f90804cdcf891a16325f330494051df0fd4e6f5a460cff14d78abb3b51051",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -778,6 +841,27 @@
      "reason": "data_check_failed",
      "trade": null,
      "forecast": null,
+     "stress": {
+      "open_positions": 1,
+      "max_loss_sum": 3984,
+      "scenarios": [
+       {
+        "nifty_move_pct": -5,
+        "vix_move_pct": 50,
+        "loss": 1210
+       },
+       {
+        "nifty_move_pct": -10,
+        "vix_move_pct": 100,
+        "loss": 3984
+       },
+       {
+        "nifty_move_pct": 5,
+        "vix_move_pct": null,
+        "loss": 0
+       }
+      ]
+     },
      "advocate": {
       "status": "not_needed",
       "objections": [],
@@ -842,7 +926,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "9ff39efa3d00bc15a09b3d1e7fdb684db588a8b59be4e90b1b1de8302f815cc1",
+    "payload_sha256": "6ac6b9533a43e274b25fa54ad5d4af5ed62cec4b3e9580b7fa90049ea9936a45",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -969,6 +1053,27 @@
        "happened_share": null,
        "mean_brier": null
       }
+     },
+     "stress": {
+      "open_positions": 0,
+      "max_loss_sum": 0,
+      "scenarios": [
+       {
+        "nifty_move_pct": -5,
+        "vix_move_pct": 50,
+        "loss": 0
+       },
+       {
+        "nifty_move_pct": -10,
+        "vix_move_pct": 100,
+        "loss": 0
+       },
+       {
+        "nifty_move_pct": 5,
+        "vix_move_pct": null,
+        "loss": 0
+       }
+      ]
      },
      "advocate": {
       "status": "not_needed",

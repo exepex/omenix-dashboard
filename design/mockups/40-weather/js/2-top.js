@@ -21,6 +21,7 @@ function missing(c, W) {
   const {el} = c;
   return el('section', {class: 'mb-verdict no', 'aria-label': 'No weather today'}, el('span', {class: 'mb-verdict-box', 'aria-hidden': 'true'}, c.icon('warning')),
     el('div', {}, el('div', {class: 'mb-verdict-word'}, 'No weather', el('small', {}, `for ${dlabel(W.session)}: not published`)),
+      el('p', {class: 'why'}, 'No new paper trade today: a missing weather blocks new trades, like RED (owner, 15 Oct 2026).'),
       el('ul', {class: 'list'}, ...W.missing_inputs.map(m => el('li', {}, `${m.input} (${m.story}): ${m.detail}`)))));
 }
 function chancesPart(col, c) {

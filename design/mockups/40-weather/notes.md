@@ -32,7 +32,7 @@ are the measured NIFTY figures quoted in design 2.3; everything else is made up.
 | During the session | `intraday[]` |
 | The last sessions | `recent[]` |
 | How often it is RED | `red_share.*` |
-| Its record | `scores[]` |
+| Its record, against the usual chance and the old v0 checklist (design 2.3) | `scores[]` (`baseline`) |
 | The price of the RED rule | `price_of_calm.*` |
 
 ## Things the owner should know (brutally honest)

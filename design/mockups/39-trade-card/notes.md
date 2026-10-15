@@ -14,7 +14,7 @@ market the screen is absent (the page sends the US market to Home).
 | `india_missing` | negative: NO TRADE, two missing inputs named | `getFnoCard_india_missing` |
 | `india_none` (default) | empty: NO TRADE, no strategy has passed, as a TEST post (the shape of T1's real post of 15 Oct 2026) | `getFnoCard_india_none` |
 
-**Every state is Mock: made-up numbers on a future date (Mon 16 Nov 2026).** No card exists yet (T1 is not built).
+**Every state is Mock: made-up numbers on a future date (Mon 16 Nov 2026), with clearly fictional contracts (`MOCKNIFTY...`, strikes near 10,600, far from any real level; judge 102 minor 1).** No card exists yet (T1 is not built).
 `data.json` is not a second copy: `build.py` reads the catalog's examples (`_platform/catalog_data.py`) and
 `python3 tools/api/check_fno_screens.py` fails if `data.json` ever differs from them.
 
@@ -47,6 +47,7 @@ meaning, unit, backend record, freshness, visibility and whether the backend can
 | Records behind this card | `footer.record_hashes[]` (path and SHA-256) |
 | TEST banner, session note, valid until | `test_post`, `session_note`, `valid_until` |
 | Paper trades so far | `paper_trades_so_far.*` |
+| If the market jumps overnight (design 6.2's daily stress line, owner only) | `stress.*` |
 | Every forecast on record (live and back-fill records apart) | `forecasts_on_record.*` |
 | What the card is missing | `missing[]`, `previous_misses[]` |
 
