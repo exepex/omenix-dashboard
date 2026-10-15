@@ -4,11 +4,12 @@ W2: {exists: true, repo: dashboard, file: X-cross-repository.md, title: 'Azure r
 W6: {exists: true, repo: dashboard, file: X-cross-repository.md, title: Stock reads on Azure and parity}
 W8: {exists: true, repo: dashboard, file: X-cross-repository.md, title: 'The signed-off app frame in the real app (frame config, the bell rules, fixture adapter)'}
 W9: {exists: true, repo: dashboard, file: X-cross-repository.md, title: "The signed-off Home screen in the real app (the needs-you rules)"}
-P1: {exists: true, repo: trading, file: P-publishing.md, title: 'F&O read-model contract: pages today, positions, risk, scoreboard_b, ...'}
+P1: {exists: true, repo: trading, file: P-publishing.md, title: 'F&O data catalog: the read-model contract of the five F&O screens (card, weather, Forecast lab, Strategy lab, paper trades)'}
 P3: {exists: true, repo: trading, file: P-publishing.md, title: 'Atomic publisher to Azure: fno.pages_history, fno.current_publication, run status'}
 P8: {exists: true, repo: trading, file: P-publishing.md, title: 'FII/DII cash-market flows for Markets 34 (owner 14 Oct 2026: publisher fno)'}
 P10: {exists: true, repo: trading, file: P-publishing.md, title: "Home's F&O read models (the F&O books and picks)"}
 C2: {exists: true, repo: trading, file: C-code-roles.md, title: 'Risk manager: the owner limits'}
+C5: {exists: true, repo: trading, file: C-code-roles.md, title: 'Risk buckets and the Rs 20 lakh paper account (the books'' open-risk cap of Rs 1,50,000; on branch story/c5-risk-buckets until it merges)'}
 K4-proposed:
   exists: false
   repo: agentic-stock-prediction

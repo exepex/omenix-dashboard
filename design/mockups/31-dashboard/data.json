@@ -124,7 +124,7 @@
       "pnl": 0.0,
       "approved": [],
       "limit_used": 0.0,
-      "limit_max": 30000.0
+      "limit_max": 150000.0
      },
      "open_now": 3
     },
@@ -140,7 +140,7 @@
       "pnl": 0.0,
       "approved": [],
       "limit_used": 0.0,
-      "limit_max": 30000.0
+      "limit_max": 150000.0
      },
      "open_now": 0,
      "empty": "No hybrid stock strategy yet (planned)."
@@ -173,7 +173,7 @@
       "pnl": 0.0,
       "approved": [],
       "limit_used": 0.0,
-      "limit_max": 30000.0
+      "limit_max": 150000.0
      },
      "open_now": 5
     },

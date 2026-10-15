@@ -40,7 +40,7 @@ def approaches(m: str, S: dict, own: list, strat: list) -> list:
     def book(fam):
         if not india or fam not in BOOK:
             return None
-        return {"name": f"F&O Book {BOOK[fam]}", "value": 500000.0, "pnl": 0.0, "approved": [], "limit_used": 0.0, "limit_max": 30000.0}
+        return {"name": f"F&O Book {BOOK[fam]}", "value": 500000.0, "pnl": 0.0, "approved": [], "limit_used": 0.0, "limit_max": 150000.0}
 
     def total(fam, h2h_row, strats):
         """The group's profit or loss: its strategies' own results added up (the AI team is one team: its own record)."""
