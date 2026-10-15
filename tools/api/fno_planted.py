@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import copy
 
-PLANTED = 26
+PLANTED = 28
 
 
 def _example(doc: dict, name: str) -> dict:
@@ -48,6 +48,8 @@ def _plants():
     yield "card trade made public", lambda d: _schema(d, "FnoCardTrade").update({"x-visibility": "public"}), "must stay owner-only"
     yield "objections made public", lambda d: _schema(d, "FnoCard")["properties"]["advocate"]["properties"]["objections"].update({"x-visibility": "public"}), "must stay owner-only"
     yield "stress above its ceiling", lambda d: _payload(d, card)["stress"]["scenarios"][0].update(loss=10**9), "exceeds the sum of maximum losses"
+    yield "p_value not provisional", lambda d: _schema(d, "FnoForecastComparison")["properties"]["p_value"].pop("x-provisional"), "must stay x-provisional"
+    yield "AI isolation rule deleted", lambda d: _schema(d, "FnoForecastLab")["properties"]["forecasters"]["items"]["allOf"].pop(2), "an AI book declared code"
     yield "nothing never-sent", lambda d: _schema(d, "FnoWeather").pop("x-never-sent"), "x-never-sent must list"
 
 

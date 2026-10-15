@@ -10,6 +10,14 @@ from collections.abc import Callable
 from check_contract import errors
 from fno_walk import response_ref, screen_operations
 
+# operationId -> leaf-path prefixes whose v4 meaning waits for G6 (judge 102 should-fix 1): each must stay x-provisional
+PROVISIONAL_PATHS = {
+    "getFnoForecastLab": ("payload.questions[].scores.comparisons[].p_value", "payload.questions[].scores.comparisons[].interval",
+                          "payload.questions[].scores.comparisons[].verdict", "payload.questions[].scores.comparisons[].min_effect_met",
+                          "payload.questions[].scores.comparisons[].futility_upper_bound", "payload.questions[].scores.n_needed",
+                          "payload.questions[].today.values[].variance", "payload.questions[].settle."),
+    "getFnoWeather": ("payload.scores[].",),
+}
 # operationId -> leaf-path prefixes that must be owner-only (live legs, entry ranges, exits, objections, the stress line)
 OWNER_PATHS = {
     "getFnoCard": ("payload.trade.", "payload.advocate.objections", "payload.stress."),
@@ -35,6 +43,8 @@ PROBES: tuple[tuple[str, str, Callable[[dict], None]], ...] = (
      lambda v: _question(v)["settle"].update(status="projected", r=3.0, projected_date="2028-01-01")),
     ("an AI forecaster without the sealed-same-day label (owner, 14 Oct 2026, condition 2)", "getFnoForecastLab_india_winning",
      lambda v: _ai(v).update(isolation_label="isolated")),
+    ("an AI book declared code with no isolation label (owner, 14 Oct 2026, condition 2)", "getFnoForecastLab_india_winning",
+     lambda v: _ai(v).update(isolation="code", isolation_label=None)),
     ("RED weather that does not block new trades (owner, 14 Oct)", "getFnoWeather_india_red",
      lambda v: v["payload"].update(blocks_new_entries=False)),
     ("a missing weather that does not block new trades (owner, 15 Oct, \"4 A\")", "getFnoWeather_india_missing",
@@ -53,6 +63,13 @@ def check_owner_paths(leaves: list, problems: list[str]) -> None:
         for prefix in OWNER_PATHS.get(leaf.op, ()):
             if leaf.path.startswith(prefix) and leaf.visibility != "owner":
                 problems.append(f"{leaf.op} {leaf.path}: must stay owner-only (live card detail), not {leaf.visibility}")
+
+
+def check_provisional(leaves: list, problems: list[str]) -> None:
+    for leaf in leaves:
+        for prefix in PROVISIONAL_PATHS.get(leaf.op, ()):
+            if leaf.path.startswith(prefix) and not leaf.provisional:
+                problems.append(f"{leaf.op} {leaf.path}: its v4 meaning waits for G6, so it must stay x-provisional")
 
 
 def check_probes(doc: dict, problems: list[str]) -> None:
