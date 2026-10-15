@@ -49,7 +49,8 @@ def _plants():
     yield "objections made public", lambda d: _schema(d, "FnoCard")["properties"]["advocate"]["properties"]["objections"].update({"x-visibility": "public"}), "must stay owner-only"
     yield "stress above its ceiling", lambda d: _payload(d, card)["stress"]["scenarios"][0].update(loss=10**9), "exceeds the sum of maximum losses"
     yield "p_value not provisional", lambda d: _schema(d, "FnoForecastComparison")["properties"]["p_value"].pop("x-provisional"), "must stay x-provisional"
-    yield "AI isolation rule deleted", lambda d: _schema(d, "FnoForecastLab")["properties"]["forecasters"]["items"]["allOf"].pop(2), "an AI book declared code"
+    yield "AI isolation rules deleted", lambda d: _schema(d, "FnoForecastLab")["properties"]["forecasters"]["items"].update(
+        allOf=_schema(d, "FnoForecastLab")["properties"]["forecasters"]["items"]["allOf"][:2]), "an AI book declared code"
     yield "nothing never-sent", lambda d: _schema(d, "FnoWeather").pop("x-never-sent"), "x-never-sent must list"
 
 
