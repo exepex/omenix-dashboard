@@ -99,6 +99,7 @@ FnoWeather:
       else: {properties: {blocks_new_entries: {const: false}}}
 FnoWeatherScore:
   type: object
+  x-provisional: 'protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes'
   description: One weather question's score against the base rate
   additionalProperties: false
   required: [question, status, n_scored, n_needed, brier, brier_base_rate, skill, verdict]

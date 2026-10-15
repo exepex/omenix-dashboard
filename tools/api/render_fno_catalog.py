@@ -31,7 +31,13 @@ How to read the columns:
   owner 15 Oct 2026). Strategy internals are not a column: they are never sent (each screen lists them).
 - **Backend today**: `yes` names the backend record that holds the value today (`<record>:<field>`, records below);
   `no` names the story that builds it. A `no` field is never filled with a made-up value: until its story is built, the
-  page is not published (each endpoint answers 501).
+  page is not published (each endpoint answers 501). `provisional` marks a field whose shape waits for a protocol
+  freeze (protocol v4, story G6, is not frozen yet): it may change when G6 freezes, and a change bumps the contract.
+- **Source of truth (open, the owner decides):** today this file's contract lives in exepex/omenix-dashboard `api/` and
+  exepex/trading pins a byte copy with a drift check (`contracts/omenix-dashboard/pin.json`, `python -m fno market
+  contract-check`). DESK_DECISIONS (13 Oct 2026, "API design kept") says exepex/trading owns the F&O contract. Either way
+  there is one canonical copy plus a pin and a drift check on the other side, so switching means moving these files and
+  reversing the pin.
 
 Backend records named in the tables (exepex/trading):
 
@@ -59,6 +65,7 @@ def screen_section(doc: dict, path: str, op: dict, leaves: list) -> list[str]:
               "|---|---|---|---|---|---|---|"]
     for leaf in leaves:
         today = f"yes (`{leaf.record}`)" if leaf.fill == "built" else f"no: {leaf.catalog.get('story')}"
+        today += f"; provisional: {leaf.provisional}" if leaf.provisional else ""
         lines.append(f"| `{leaf.path.removeprefix('payload.')}` | {cell(leaf.description)} | {cell(leaf.unit)} | "
                      f"{cell(leaf.catalog.get('source'))} | {cell(leaf.catalog.get('freshness'))} | {leaf.visibility} | {today} |")
     return lines + [""]

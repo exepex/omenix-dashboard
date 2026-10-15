@@ -1,6 +1,6 @@
 """Walk the F&O screen pages of the bundled contract (story P1, tag `fno-screens`) and list every leaf field with its
-catalog entry: meaning, unit, visibility, whether the backend can fill it today, the backend record behind it, and the
-inherited x-catalog (publisher, source, freshness, story, status). x-catalog, x-visibility and x-fill are inherited
+catalog entry: meaning, unit, visibility, whether the backend can fill it today, the backend record behind it, whether
+its shape is provisional (x-provisional: it waits for a protocol freeze), and the inherited x-catalog (publisher, source, freshness, story, status). x-catalog, x-visibility, x-fill and x-provisional are inherited
 downward; a property's own keys override; x-record and description belong to the field itself."""
 
 from __future__ import annotations
@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from walk import METHODS, resolve
 
 SCREEN_TAG = "fno-screens"
-INHERITED = ("x-visibility", "x-fill")
+INHERITED = ("x-visibility", "x-fill", "x-provisional")
 MAX_DEPTH = 30
 
 
@@ -24,6 +24,7 @@ class Leaf:
     fill: str | None
     record: str | None
     catalog: dict
+    provisional: str | None = None
 
 
 def screen_operations(doc: dict):
@@ -78,7 +79,7 @@ def walk(doc: dict, op_id: str, node: dict, path: str, base: dict, out: list[Lea
         description, unit = description or target.get("description"), unit or target.get("x-unit")
     children = _children(target, path, description)
     if not children:
-        out.append(Leaf(op_id, path, description, unit, ctx["x-visibility"], ctx["x-fill"], record, ctx["catalog"]))
+        out.append(Leaf(op_id, path, description, unit, ctx["x-visibility"], ctx["x-fill"], record, ctx["catalog"], ctx["x-provisional"]))
         return
     for child, child_path, inherited in children:
         walk(doc, op_id, child, child_path, ctx, out, depth + 1, inherited)
@@ -89,7 +90,7 @@ def screen_leaves(doc: dict) -> list[Leaf]:
     out: list[Leaf] = []
     for _, op in screen_operations(doc):
         name = payload_name(doc, op)
-        base = {"catalog": {}, "x-visibility": None, "x-fill": None}
+        base = {"catalog": {}} | dict.fromkeys(INHERITED)
         walk(doc, op["operationId"], {"$ref": f"#/components/schemas/{name}"}, "payload", base, out)
     return out
 

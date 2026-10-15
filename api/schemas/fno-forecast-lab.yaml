@@ -4,6 +4,7 @@
 
 FnoForecastLab:
   type: object
+  # v3 (Q1-Q5) is frozen and running; every v4-only field carries x-provisional until G6 freezes protocol v4
   description: >-
     What each forecaster said today and how each one scores against its yardstick, per question. Empty state: a
     question with status waiting_for_data names the missing input (V1 waits for 20 sessions of 15-minute quotes);
@@ -84,7 +85,7 @@ FnoForecastQuestion:
                 properties:
                   forecaster: {type: string, pattern: '^[a-z0-9_]+$', x-unit: id, x-fill: built, x-record: 'forecast_record_v2:book', description: The forecaster id}
                   probability: {type: ['number', 'null'], minimum: 0, maximum: 1, x-unit: probability 0-1, x-fill: built, x-record: 'forecast_record_v2:probability', description: 'The chance it said (probability questions; null for variance)'}
-                  variance: {type: ['number', 'null'], exclusiveMinimum: 0, x-unit: annualised variance (vol squared), x-catalog: {story: G7}, description: 'The variance it said, annualised on 252 sessions (variance questions; null for chances)'}
+                  variance: {type: ['number', 'null'], exclusiveMinimum: 0, x-unit: annualised variance (vol squared), x-catalog: {story: G7}, x-provisional: 'protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes', description: 'The variance it said, annualised on 252 sessions (variance questions; null for chances)'}
     scores:
       type: object
       description: The question's scores so far
@@ -111,6 +112,7 @@ FnoForecastQuestion:
           items: {$ref: '#/components/schemas/FnoForecastComparison'}
     settle:
       type: object
+      x-provisional: 'protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes'
       description: 'When the question can be settled (design 5.5 rule: after 60 scored outcomes the statistician measures r and publishes the projected date)'
       additionalProperties: false
       required: [status, r, projected_date]
@@ -138,4 +140,4 @@ FnoForecastComparison:
     interval: {type: ['array', 'null'], minItems: 2, maxItems: 2, description: 'The likely range of mean_diff (95%, unadjusted); null when not tested', items: {type: number, x-unit: "the question's metric", x-fill: built, x-record: 'bootstrap_result:interval', description: 'Low end, then high end of the likely range'}}
     p_value: {type: ['number', 'null'], minimum: 0, maximum: 1, x-unit: probability 0-1, x-fill: built, x-record: 'bootstrap_result:p_value', description: 'The bootstrap p-value as the protocol defines it (v3 two-sided, v4 one-sided); null when not tested'}
     verdict: {type: string, enum: [better, worse, no_difference, not_tested, before_review], x-unit: enum, description: "The backend's verdict under the frozen rule (Holm across the family, minimum effect); not_tested = fewer pairs than n_needed (not enough data yet); before_review = tested, but no claim before the first review"}
-    min_effect_met: {type: ['boolean', 'null'], x-unit: yes/no, description: 'v4: the gain is at least the registered minimum (3% lower QLIKE or Brier skill 0.02); null when not tested or v3'}
+    min_effect_met: {type: ['boolean', 'null'], x-unit: yes/no, x-provisional: 'protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes', description: 'v4: the gain is at least the registered minimum (3% lower QLIKE or Brier skill 0.02); null when not tested or v3'}
