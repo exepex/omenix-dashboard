@@ -33,7 +33,7 @@ FILL = {"built", "not_built"}
 CATALOG = ("publisher", "source", "freshness", "story", "status")
 PATH_PREFIX = "/api/v1/markets/india/fno/"
 RECORD = re.compile(r"^([a-z0-9_]+):([a-z0-9_]+)$")
-PRIVATE = re.compile(r"(^|_)(rules?|thresholds?|filters?|params?|parameters|prompts?|weights?|features?|coefficients?)($|_)")
+PRIVATE = re.compile(r"(^|_)(rules?|thresholds?|filters?|params?|parameters|prompts?|weights?|features?|coefficients?|triggers?|lookbacks?|signals?|settings?|conditions?)($|_)")
 PAGE = re.compile(r"page (\w+)")
 # The backend records a built field may name, and where exepex/trading defines them (its P1 test reads each one)
 RECORDS = {
@@ -140,8 +140,8 @@ def check_privacy(doc: dict, problems: list[str]) -> None:
             problems.append(f"{name}: x-never-sent must list the strategy internals the backend never sends")
         for example_name, example in op_examples(doc, op).values():
             problems += [f"example {example_name}: key {key!r} reads like a strategy internal" for key in example_keys(example["value"]["payload"]) if PRIVATE.search(key)]
-    for name, schema in screen_schemas().items():
-        for where, node in schema_nodes(schema, name):
+    for name in screen_schemas():
+        for where, node in schema_nodes(doc["components"]["schemas"][name], name):
             problems += [f"{where}: property {key!r} reads like a strategy internal" for key in node.get("properties", {}) if PRIVATE.search(key)]
             if "properties" in node and node.get("additionalProperties") is not False and not where.endswith("/if") and "/allOf/" not in where:
                 problems.append(f"{where}: an object of the catalog is closed (additionalProperties: false)")
@@ -155,6 +155,18 @@ def example_keys(value):
     elif isinstance(value, list):
         for sub in value:
             yield from example_keys(sub)
+
+
+def check_sums(doc: dict, problems: list[str]) -> None:
+    """What a schema cannot say: net is gross minus costs, and won plus lost is at most the trades."""
+    for _, op in screen_operations(doc):
+        for name, example in op_examples(doc, op).values():
+            payload = example["value"]["payload"]
+            for row in payload.get("results", []) + payload.get("closed", []):
+                if abs(row["gross"] - row["costs"] - row["net"]) > 0.5:
+                    problems.append(f"example {name}: net is not gross minus costs ({row['gross']} - {row['costs']} != {row['net']})")
+                if row.get("won", 0) + row.get("lost", 0) > row.get("trades", row.get("won", 0) + row.get("lost", 0)):
+                    problems.append(f"example {name}: won plus lost is more than the trades")
 
 
 def check_card(doc: dict, problems: list[str]) -> None:
@@ -185,6 +197,7 @@ def check(doc: dict, own: dict, problems: list[str]) -> list:
     leaves = check_leaves(doc, problems)
     check_privacy(doc, problems)
     check_card(doc, problems)
+    check_sums(doc, problems)
     check_mockups(doc, problems)
     return leaves
 

@@ -17,7 +17,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "ceb40618fbc79a72263d0226521361193f9e704aa07224e475b5adb2548586f0",
+    "payload_sha256": "3574b60c9bfa37ad41df50c6b9fdf3674cff9edd173744dc0e8a633e57a36473",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -72,25 +72,24 @@
        "units": 65,
        "funds_at_entry": 29500
       },
-      "max_loss": 3980,
+      "max_loss": 3984,
       "worst_cases": [
        {
         "scenario": "The worst 5 sessions of March 2020",
-        "loss": 3980
+        "loss": 3984
        },
        {
         "scenario": "The week of 4 June 2024",
-        "loss": 3980
+        "loss": 3984
        }
       ],
       "exit_plan": [
-       "Closes at its registered profit target",
-       "Closes before the expiry week (its registered time exit)",
+       "Closes at its registered exits (a profit target and a time exit), checked once a day",
        "The most it can lose is fixed at entry: no stop-loss order is needed or relied on"
       ],
       "costs": {
        "charges_and_pads": 214,
-       "breakeven_per_unit": 58.3,
+       "breakeven_per_unit": 61.3,
        "tax_rate": 0.312
       },
       "vol_edge": null,
@@ -136,7 +135,7 @@
       "rung": 3,
       "label": "some evidence",
       "real_money_eligible": false,
-      "text": "Rung 3: approved to paper by the owner; 38 paper trades, lower bound -0.02 per rupee risked. Real money: not eligible (gate 8.3 not met)"
+      "text": "Rung 3: approved to paper by the owner; 38 paper trades, lower bound +0.01 per rupee risked (above zero, after every cost). Real money: not eligible (gate 8.3 not met)"
      },
      "footer": {
       "record_hashes": [
@@ -181,7 +180,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "3d77fee98c2b36f4e7749dc919d949aadb8be9c422f9d25a93b7dd20e92a6d3b",
+    "payload_sha256": "7abb71d646a841f77bd3c0ff31a98e4e0a008cca7d7dfbbea92a9426ec1be9ca",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -236,11 +235,11 @@
        "units": 65,
        "funds_at_entry": 31200
       },
-      "max_loss": 5290,
+      "max_loss": 5296,
       "worst_cases": [
        {
         "scenario": "The worst 5 sessions of March 2020",
-        "loss": 5290
+        "loss": 5296
        }
       ],
       "exit_plan": [
@@ -329,7 +328,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "603bb4562c838d9f7f463b00671198fa9f541c2739cf0e97d26051577602fc78",
+    "payload_sha256": "1ce2b3a5db761429d3d65ed151ba5f48d198e3bc3639be39f2666d48f39c8914",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -382,7 +381,7 @@
      "reason_text": "No new trade today: the weather is RED",
      "weather": {
       "colour": "RED",
-      "why": "RED: a 2% day is 2.8 times as likely as usual (India VIX up 22% in 3 sessions; Union Budget next session)"
+      "why": "RED: a 2% day is 2.8 times as likely as usual (India VIX up 22% in 3 sessions; RBI policy decision next session)"
      },
      "evidence": {
       "rung": null,
@@ -421,7 +420,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "68b8fb7a9c3ca2f6adc98328d5caff893088b26fe4d4d29f1510ea60c6c64974",
+    "payload_sha256": "5e17e37bfe187de866a4eeaa11f9dcf01e7f381bedbdf1926b18069e149ca3f4",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -456,7 +455,7 @@
        {
         "input": "3 pm Groww quotes of NIFTY monthly options",
         "story": "A4",
-        "detail": "41 of 60 contracts had no bid or ask at 15:00; retried until 15:10"
+        "detail": "41 of 60 contracts had no bid or ask at 15:00; no later quote may enter the card"
        },
        {
         "input": "India VIX level at 15:00",

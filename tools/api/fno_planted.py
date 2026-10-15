@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import copy
 
-PLANTED = 16
+PLANTED = 21
 
 
 def _example(doc: dict, name: str) -> dict:
@@ -38,6 +38,11 @@ def _plants():
     yield "private key", lambda d: _payload(d, card)["trade"].update(entry_rule="x"), "reads like a strategy internal"
     yield "card not PAPER ONLY", lambda d: _schema(d, "FnoCard")["properties"]["label"].update(const="PAPER"), "must be the constant PAPER ONLY"
     yield "mockup drift", lambda d: _payload(d, "getFnoWeather_india_green").update(p_big_1d=0.031), "differ from the catalog"
+    yield "open object", lambda d: _schema(d, "FnoCardTrade").pop("additionalProperties"), "is closed (additionalProperties: false)"
+    yield "private property", lambda d: _schema(d, "FnoCardTrade")["properties"].update(entry_threshold={"type": "number"}), "reads like a strategy internal"
+    yield "TRADE at rung 0", lambda d: _payload(d, card)["evidence"].update(rung=0), "3 was expected"
+    yield "TRADE in RED", lambda d: _payload(d, card)["weather"].update(colour="RED"), "is not one of ['GREEN', 'AMBER']"
+    yield "net not gross minus costs", lambda d: _payload(d, "getFnoStrategyLab_india_passed")["results"][0].update(net=1), "net is not gross minus costs"
     yield "nothing never-sent", lambda d: _schema(d, "FnoWeather").pop("x-never-sent"), "x-never-sent must list"
 
 

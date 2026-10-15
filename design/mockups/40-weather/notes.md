@@ -10,7 +10,7 @@ built by M1 (slice A) and scored by G8. India only, F&O only: absent in the US m
 |---|---|---|
 | `india_green` (default) | positive: GREEN, beats the usual chance on the one-day question, RED saved money this month | `api/examples/fno-screens.json`, `getFnoWeather_india_green` |
 | `india_red` | negative: RED, an intraday upgrade, over-alarming (16.4% of sessions), RED cost money this month | `getFnoWeather_india_red` |
-| `india_missing` | empty: not published, the missing input named, no score yet | `getFnoWeather_india_missing` |
+| `india_missing` | empty: not published, the missing input named, no score yet; new entries blocked (fails closed) | `getFnoWeather_india_missing` |
 
 **Every state is Mock: made-up numbers on a future date (Mon 16 Nov 2026).** The base rates shown (4.1% and 13.7%)
 are the measured NIFTY figures quoted in design 2.3; everything else is made up. `data.json` is built from the catalog

@@ -17,7 +17,7 @@
     "built_at": "2026-11-16T09:31:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "140d0cff3d45b70601fee98de5a268f64885e4d67518649655eb7d4087151673",
+    "payload_sha256": "a9401b3e5dc488d3fe0a41fed6c555505ad80c108239585056122dc3ab68ca3f",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -62,11 +62,6 @@
      ],
      "recent": [
       {
-       "session": "2026-11-03",
-       "colour": "GREEN",
-       "big_move": false
-      },
-      {
        "session": "2026-11-04",
        "colour": "GREEN",
        "big_move": false
@@ -78,6 +73,11 @@
       },
       {
        "session": "2026-11-06",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-08",
        "colour": "GREEN",
        "big_move": false
       },
@@ -158,7 +158,7 @@
     "built_at": "2026-11-16T09:31:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "2989fd5819fc1c6826f82ffd5aa61396e67bf633fbde8a553d2923881995bf93",
+    "payload_sha256": "092e1c5c14db85a461c64f551ea4c4fd84448c74d478c6244f4cf5528c249244",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -199,7 +199,7 @@
       },
       {
        "driver": "scheduled_event",
-       "text": "Union Budget next session",
+       "text": "RBI policy decision next session",
        "push": "riskier"
       },
       {
@@ -210,22 +210,22 @@
      ],
      "recent": [
       {
-       "session": "2026-11-03",
-       "colour": "GREEN",
-       "big_move": false
-      },
-      {
        "session": "2026-11-04",
        "colour": "GREEN",
        "big_move": false
       },
       {
        "session": "2026-11-05",
-       "colour": "AMBER",
+       "colour": "GREEN",
        "big_move": false
       },
       {
        "session": "2026-11-06",
+       "colour": "AMBER",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-08",
        "colour": "AMBER",
        "big_move": true
       },
@@ -306,7 +306,7 @@
     "built_at": "2026-11-16T09:31:00Z",
     "schema_version": "2.7.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "511b97cd20fb30f9ac3eec989495b72280f1e8f93c5b8ed0315d008308151ebc",
+    "payload_sha256": "c4ca75d915ed62c8b967c9aaeaa1fc82d81bda02aa56dabc6b92f0a5d7ead59b",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -333,7 +333,7 @@
      "base_rate_5d": 0.137,
      "intraday": [],
      "colour": null,
-     "blocks_new_entries": false,
+     "blocks_new_entries": true,
      "p_big_1d": null,
      "p_big_5d": null,
      "times_usual_1d": null,

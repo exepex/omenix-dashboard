@@ -12,6 +12,7 @@ from walk import METHODS, resolve
 SCREEN_TAG = "fno-screens"
 INHERITED = ("x-visibility", "x-fill", "x-provisional")
 MAX_DEPTH = 30
+OWNER = "owner"
 
 
 @dataclass
@@ -49,6 +50,8 @@ def _context(base: dict, node: dict) -> dict:
     ctx = {"catalog": {**base["catalog"], **node.get("x-catalog", {})}}
     for key in INHERITED:
         ctx[key] = node.get(key, base.get(key))
+    if base.get("x-visibility") == OWNER:
+        ctx["x-visibility"] = OWNER  # never downgraded: a shared schema inside an owner-only object stays owner-only
     return ctx
 
 

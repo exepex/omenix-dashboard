@@ -39,6 +39,6 @@ function evidence(c, C) {
     el('p', {class: 'small', style: 'margin:6px 0 0'}, el('span', {class: 'mb-label danger'}, c.icon('block'), 'Real money: not eligible')));
 }
 function stayOut(c, P) {
-  const {el} = c, text = {not_measured_yet: 'Not measured yet: the shadow fills of the skipped trade come later.', nothing_skipped: 'Nothing was skipped: no approved strategy wanted a trade.', measured: `Staying out ${P.shadow_net > 0 ? 'cost' : 'saved'} ${rs(c, Math.abs(P.shadow_net))} on paper.`}[P.status];
+  const {el} = c, text = {not_measured_yet: 'Not measured yet: the shadow fills of the skipped trade come later.', nothing_skipped: 'Nothing was skipped: no approved strategy wanted a trade.', measured: !P.shadow_net ? 'Staying out made no difference on paper.' : `Staying out ${P.shadow_net > 0 ? 'cost' : 'saved'} ${rs(c, Math.abs(P.shadow_net))} on paper.`}[P.status];
   return sec(c, 'The price of staying out', el('p', {class: 'small', style: 'margin:0'}, text));
 }

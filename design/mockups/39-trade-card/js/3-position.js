@@ -8,7 +8,7 @@ function positionPart(col, c) {
     col.append(sec(c, 'The position', el('p', {class: 'small muted', style: 'margin:0'}, 'No position today: a NO TRADE card carries none. The reason is at the top; the price of staying out is below.')));
     return;
   }
-  col.append(sec(c, [el('span', {}, C.status === 'WATCH' ? 'The shadow position (never traded)' : 'The paper position'), owner(c)],
+  col.append(sec(c, [el('span', {}, C.status === 'WATCH' ? 'The shadow position (never traded)' : 'The paper position'), c.paperTag(), owner(c)],
     el('p', {class: 'what'}, T.what),
     el('p', {class: 'small muted', style: 'margin:0 0 8px'}, `${T.strategy} · ${apName(T.family)}`),
     legs(c, T), entry(c, T), sizeFacts(c, T), maxLoss(c, T)),
@@ -16,7 +16,7 @@ function positionPart(col, c) {
     howto(c, 'Stress tests of the same position through the worst stretches on record. They show the worst case, never an edge.')),
   sec(c, 'How it ends', el('ul', {class: 'list'}, ...T.exit_plan.map(x => el('li', {}, x))),
     el('h2', {style: 'margin-top:12px'}, 'What would prove it wrong'), el('ul', {class: 'list'}, ...T.proves_wrong.map(x => el('li', {}, x)))),
-  sec(c, 'Costs and tax', el('div', {class: 'facts3'},
+  sec(c, ['Costs and tax', c.paperTag()], el('div', {class: 'facts3'},
     fact(c, 'Charges and pads', rs(c, T.costs.charges_and_pads), 'A round trip, with worse fills assumed'),
     fact(c, 'Breaks even at', rsUnit(c, T.costs.breakeven_per_unit) + ' a unit', 'After costs'),
     fact(c, 'Tax scenario', `${(T.costs.tax_rate * 100).toFixed(1)}%`, 'On the year’s net F&O profit')),
@@ -38,7 +38,7 @@ function entry(c, T) {
     el('div', {class: 'range', role: 'img', 'aria-label': `Enter between ${E.min_per_unit} and ${E.max_per_unit} a unit; ${debit ? 'never above the high end' : 'never below the low end'}`},
       el('span', {class: 'track'}), el('span', {class: 'ok', style: `left:${at(E.min_per_unit)};width:calc(${at(E.max_per_unit)} - ${at(E.min_per_unit)})`}),
       el('span', {class: 'stop', style: `left:${at(debit ? E.max_per_unit : E.min_per_unit)}`})),
-    el('div', {class: 'range-keys'}, el('span', {}, 'Cheaper'), el('span', {}, debit ? `Do not enter above ${rsUnit(c, E.max_per_unit)}` : `Do not enter below ${rsUnit(c, E.min_per_unit)}`), el('span', {}, 'Dearer')),
+    el('div', {class: 'range-keys'}, el('span', {}, debit ? 'Cheaper' : 'Less received'), el('span', {}, debit ? `Do not enter above ${rsUnit(c, E.max_per_unit)}` : `Do not enter below ${rsUnit(c, E.min_per_unit)}`), el('span', {}, debit ? 'Dearer' : 'More received')),
     howto(c, `Prices from the 15:00 bid and ask. The card is valid until ${ist(E.valid_until)}; after that it is stale.`));
 }
 function sizeFacts(c, T) {
