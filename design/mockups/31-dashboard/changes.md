@@ -26,3 +26,11 @@ listed here, each approved by the owner (through the orchestrator).
   - **Until C5 merges, exepex/trading's main still publishes 30,000** (C2's `max_stress_loss_rs`), so the dashboard
     merges only after C5 (orchestrator, judge 102 addendum 2).
   - Claims: exepex/trading `reviews/claude/response_102_p1-data-catalog.md`.
+
+- **15 Oct 2026: the F&O books' account size, data only (judge 135 note; story C5 merged in exepex/trading).**
+  - Each F&O book's `value` goes from Rs 5 lakh to Rs 20 lakh, C5's `risk.profiles.books.paper_account_rs`. The
+    Manual account stays Rs 5 lakh (its own owner-changeable default).
+  - Source: `_platform/home_data.py`; the schema and path wording in `api/` follow. Rebuilt with `build.py`;
+    `api/examples/blocks.json` and the catalog regenerated; the web fixture re-synced. Checks: `check_page.js` and
+    `check_text.js`: 0 findings.
+  - Not changed: the Strategy lab mock (`_platform/lab_data.py` `fno_capital`) still works out F&O returns on Rs 5 lakh.

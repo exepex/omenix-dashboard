@@ -117,7 +117,7 @@
     x-read-model: 'fno.pages_history page risk (P1''s page, published by P10)'
     x-freshness: 'fno_calendar; 3 pm run and post-close marks'
     x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
-    x-empty: 'never empty: three books always exist (Rs 5 lakh each); approved empty means no approved strategy yet'
+    x-empty: 'never empty: three books always exist (Rs 20 lakh each, story C5); approved empty means no approved strategy yet'
     x-feeds: [h31.who-trades, s30.order-account]
     x-shared: 'one set of book accounts: the group cards show each book''s profit or loss; the order window lists the same books as not tradable'
     responses:

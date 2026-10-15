@@ -120,7 +120,7 @@
      },
      "book": {
       "name": "F&O Book 1",
-      "value": 500000.0,
+      "value": 2000000.0,
       "pnl": 0.0,
       "approved": [],
       "limit_used": 0.0,
@@ -136,7 +136,7 @@
      "total": null,
      "book": {
       "name": "F&O Book 2",
-      "value": 500000.0,
+      "value": 2000000.0,
       "pnl": 0.0,
       "approved": [],
       "limit_used": 0.0,
@@ -169,7 +169,7 @@
      },
      "book": {
       "name": "F&O Book 3",
-      "value": 500000.0,
+      "value": 2000000.0,
       "pnl": 0.0,
       "approved": [],
       "limit_used": 0.0,
