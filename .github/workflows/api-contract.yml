@@ -28,3 +28,7 @@ jobs:
         run: python3 tools/api/check_contract.py
       - name: Catalog is current
         run: python3 tools/api/render_catalog.py --check
+      - name: F&O data catalog (story P1)
+        run: python3 tools/api/check_fno_screens.py
+      - name: F&O field tables are current
+        run: python3 tools/api/render_fno_catalog.py --check
