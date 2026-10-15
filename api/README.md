@@ -23,7 +23,7 @@ Checks in this repository (CI job `api-contract`; also run before every push):
 block fields and back, zero gaps; no endpoint mixes independent blocks) and `python3 tools/api/check_contract.py`
 (OpenAPI 3.1 validation of the whole bundle, every example valid and current, the catalog complete, the screen rules,
 planted breaks caught), `python3 tools/api/check_fno_screens.py` (the F&O data catalog: three cases, Mock, Paper,
-visibility, backend records, privacy, mockups equal to the examples, planted breaks) and
+visibility, backend records, privacy, mockups equal to the examples, rule probes) and
 `python3 tools/api/render_fno_catalog.py --check`.
 
 Versioning: 2.0.0 was the wave of 2026-10-08 (the owner approved the major bump: the mockups' payloads replaced the
