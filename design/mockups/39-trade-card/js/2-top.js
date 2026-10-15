@@ -9,6 +9,7 @@ function topPart(main, c) {
     el('div', {class: 'acts'}, el('span', {class: 'small muted'}, 'Mock state:'),
       el('div', {class: 'md-segmented dense qpick', role: 'group', 'aria-label': 'Mock state'}, ...KEYS.map(k => el('button', {type: 'button', 'aria-pressed': String(k === (KEY || DEFAULT)), 'data-tip': D.states[k].about, onclick: () => { KEY = k; c.rerender(); }},
         `${CASE[D.states[k].case]}: ${D.states[k].value.payload.status}${D.states[k].value.payload.reason ? ' · ' + reasonShort(D.states[k].value.payload.reason) : ''}`)))));
+  if (C.test_post) main.append(c.el('p', {class: 'mb-alert info', role: 'note', style: 'margin-top:12px'}, c.icon('info'), c.el('span', {}, 'TEST post: a one-off check of live delivery, not the day’s card.')));
   main.append(verdict(c, C), times(c, C));
 }
 function reasonShort(reason) { return {no_approved_strategy: 'no strategy', weather_red: 'RED', data_check_failed: 'data missing', risk_bucket_full: 'risk full', budget_stop: 'budget', cost_wall: 'costs', advocate_hard_rule: 'hard rule'}[reason]; }
@@ -16,7 +17,7 @@ function verdict(c, C) {
   const {el} = c, [cls, glyph, sub] = STATUS[C.status];
   return el('section', {class: 'mb-verdict ' + cls, 'aria-label': 'The card'},
     el('span', {class: 'mb-verdict-box', 'aria-hidden': 'true'}, c.icon(glyph)),
-    el('div', {}, el('div', {class: 'mb-verdict-word'}, C.status, el('small', {}, `${sub} · ${dlabel(C.session)}`)), el('p', {class: 'why'}, C.reason_text)));
+    el('div', {}, el('div', {class: 'mb-verdict-word'}, C.status, el('small', {}, `${sub} · ${dlabel(C.session)} · ${C.session_note} · valid until ${ist(C.valid_until)}`)), el('p', {class: 'why'}, C.reason_text)));
 }
 function times(c, C) {
   const {el} = c, T = C.timing, sent = T.delivery === 'sent';

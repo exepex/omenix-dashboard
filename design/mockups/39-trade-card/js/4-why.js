@@ -4,20 +4,25 @@ function whyPart(col, c) {
   const {el} = c, C = card();
   col.append(sec(c, ['Weather', colourLabel(c, C.weather.colour)], el('p', {class: 'small', style: 'margin:0'}, C.weather.why),
     howto(c, 'RED means a big move is much more likely than usual: no new trade that day. The weather screen has the details.')));
-  col.append(forecast(c, C), advocate(c, C), checks(c, C), evidence(c, C));
+  col.append(forecast(c, C), advocate(c, C), checks(c, C), evidence(c, C), trades(c, C));
   if (C.price_of_staying_out) col.append(stayOut(c, C.price_of_staying_out));
+  if (C.missing.length || C.previous_misses.length) col.append(misses(c, C));
   col.append(sec(c, 'If you cannot act in time', el('p', {class: 'small', style: 'margin:0'}, C.if_you_cannot_act)),
-    sec(c, 'Records behind this card', el('div', {class: 'hashes'}, ...C.footer.record_hashes.map(h => el('code', {'data-tip': h.sha256}, `${h.kind} ${h.sha256.slice(0, 12)}`))),
+    sec(c, 'Records behind this card', el('div', {class: 'hashes'}, ...C.footer.record_hashes.map(h => el('code', {'data-tip': `${h.path} ${h.sha256}`}, `${h.path.split('/').pop()} ${h.sha256.slice(0, 12)}`))),
       howto(c, 'Each number on the card is copied from these records; their fingerprints (SHA-256) are in the Slack post, so the card can be checked later.')));
 }
 function forecast(c, C) {
   const {el} = c, F = C.forecast;
   if (!F) return sec(c, 'The forecast', el('p', {class: 'small muted', style: 'margin:0'}, 'This card rests on no forecast.'));
-  const R = F.record;
   return sec(c, 'The forecast', el('p', {class: 'small', style: 'margin:0'}, F.plain),
-    el('div', {class: 'chance', role: 'img', 'aria-label': `${F.forecaster}: ${pct(F.probability)}`}, el('span', {class: 'track'}, el('i', {style: `width:${(F.probability * 100).toFixed(1)}%`})), el('b', {}, pct(F.probability))),
-    el('p', {class: 'small muted', style: 'margin:0'}, `${F.forecaster}. ` + (R.days ? `Its record: it said ${pct(R.said_from)} to ${pct(R.said_to)} on ${R.days} days; it happened on ${pct(R.happened_share)} of them.` : `No record yet: it has never said ${pct(R.said_from)} to ${pct(R.said_to)} before.`)),
-    howto(c, 'A chance, not a promise. The record says whether its chances have been honest so far.'));
+    el('div', {class: 'chance', role: 'img', 'aria-label': `${F.forecaster}: ${pct(F.probability)}`}, el('span', {class: 'track'}, el('i', {style: `width:${((F.probability || 0) * 100).toFixed(1)}%`})), el('b', {}, pct(F.probability))),
+    el('p', {class: 'small muted', style: 'margin:0'}, `${F.forecaster}. Live: ${trackText(F.live)} Back-fill (made after the fact, not live): ${trackText(F.backfill)}`),
+    howto(c, 'A chance, not a promise. The record says whether its chances have been honest so far; only the live record counts as evidence.'));
+}
+/* a track record in words: "it said 30% to 40% on 140 days; it happened on 41%" */
+function trackText(R) {
+  return {scored: `it said ${pct(R.said_from)} to ${pct(R.said_to)} on ${R.days} days; it happened on ${pct(R.happened_share)} (${R.scored} scored).`,
+    not_enough_data: `not enough data yet (${R.scored} scored).`, no_bin: `no record at this level yet (${R.scored} scored).`, no_report: 'no score report yet.'}[R.status];
 }
 function advocate(c, C) {
   const {el} = c, A = C.advocate;

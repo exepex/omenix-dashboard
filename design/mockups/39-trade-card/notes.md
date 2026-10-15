@@ -12,13 +12,15 @@ market the screen is absent (the page sends the US market to Home).
 | `india_watch` | positive: WATCH (a shadow, never traded; the advocate did not answer in time) | `getFnoCard_india_watch` |
 | `india_red` | negative: NO TRADE, weather RED | `getFnoCard_india_red` |
 | `india_missing` | negative: NO TRADE, two missing inputs named | `getFnoCard_india_missing` |
-| `india_none` (default) | empty: NO TRADE, no strategy has passed (the shape of the real state) | `getFnoCard_india_none` |
+| `india_none` (default) | empty: NO TRADE, no strategy has passed, as a TEST post (the shape of T1's real post of 15 Oct 2026) | `getFnoCard_india_none` |
 
 **Every state is Mock: made-up numbers on a future date (Mon 16 Nov 2026).** No card exists yet (T1 is not built).
 `data.json` is not a second copy: `build.py` reads the catalog's examples (`_platform/catalog_data.py`) and
 `python3 tools/api/check_fno_screens.py` fails if `data.json` ever differs from them.
 
 ## Contract
+
+Addendum (orchestrator, 15 Oct 2026): T1's first real post (#fno-desk, 15 Oct) showed fields the contract lacked; added: the TEST flag, the session note, the card's valid-until time, paper trades so far per book, every question's house forecast with its live and back-fill records apart, the gaps and earlier misses, and the records used by path and SHA-256. exepex/trading tests T1's real delivery record against FnoCard.
 
 The schema is `FnoCard` (`api/schemas/fno-card.yaml`), endpoint `GET /api/v1/markets/india/fno/card`; every field's
 meaning, unit, backend record, freshness, visibility and whether the backend can fill it today is in
@@ -42,7 +44,11 @@ meaning, unit, backend record, freshness, visibility and whether the backend can
 | How far the strategy has come | `evidence.*` |
 | The price of staying out | `price_of_staying_out.*` |
 | If you cannot act in time | `if_you_cannot_act` |
-| Records behind this card | `footer.record_hashes[]` |
+| Records behind this card | `footer.record_hashes[]` (path and SHA-256) |
+| TEST banner, session note, valid until | `test_post`, `session_note`, `valid_until` |
+| Paper trades so far | `paper_trades_so_far.*` |
+| Every forecast on record (live and back-fill records apart) | `forecasts_on_record.*` |
+| What the card is missing | `missing[]`, `previous_misses[]` |
 
 ## Things the owner should know (brutally honest)
 

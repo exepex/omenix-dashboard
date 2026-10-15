@@ -41,6 +41,7 @@ RECORDS = {
     "forecast_record_v2": "fno/forecast/schema_v2.py RECORD_COLUMNS_V2 (G1, G3)",
     "score_summary": "fno/forecast_scoring/scores.py ScoreSummary (G4)",
     "bootstrap_result": "fno/forecast_scoring/block_bootstrap.py BootstrapResult (G4)",
+    "calibration_bin": "fno/forecast_scoring/scores.py CalibrationBin (G4)",
     "check_report": "fno/checks/data_checks.py CheckReport (C3)",
     "paper_account": "fno/books/account.py PaperAccount (E1)",
     "account_state": "fno/books/equity.py AccountState (E1)",
