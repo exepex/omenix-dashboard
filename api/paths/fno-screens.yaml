@@ -1,0 +1,131 @@
+# Story P1 (owner decision, 15 Oct 2026): the F&O data catalog's five screens, India only (absent in the US, not empty).
+# Tag fno-screens: checked by tools/api/check_fno_screens.py (examples in three cases, Mock labels, Paper on money,
+# visibility, the backend record behind every built field); the field tables are api/catalog/fno-screens.md (generated).
+# Planned: each answers 501 until exepex/trading publishes the page (P2, P3) and W3 builds the screen.
+/api/v1/markets/india/fno/card:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoCard
+    summary: "The daily trade card, PAPER ONLY: TRADE, NO TRADE with its reason, or WATCH"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page card (P1 page; published by P2/P3 in the F&O publication)'
+    x-freshness: 'fno_calendar; once a session day at card_sent_at (target 15:08 IST)'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'status NO TRADE, reason no_approved_strategy (the real state while no strategy has passed)'
+    responses:
+      '200':
+        description: 'The FnoCard page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoCardResponse'}
+            examples:
+              india_trade: {$ref: '#/components/examples/getFnoCard_india_trade'}
+              india_watch: {$ref: '#/components/examples/getFnoCard_india_watch'}
+              india_red: {$ref: '#/components/examples/getFnoCard_india_red'}
+              india_missing: {$ref: '#/components/examples/getFnoCard_india_missing'}
+              india_none: {$ref: '#/components/examples/getFnoCard_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/weather:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoWeather
+    summary: "The session's market weather: GREEN, AMBER or RED, its drivers, its record and the price of the RED rule"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page weather (P1 page; published by P2/P3 in the F&O publication)'
+    x-freshness: 'fno_calendar; 15:00 IST each session; intraday upgrades every 15 minutes'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'status not_published with the missing input named'
+    responses:
+      '200':
+        description: 'The FnoWeather page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoWeatherResponse'}
+            examples:
+              india_green: {$ref: '#/components/examples/getFnoWeather_india_green'}
+              india_red: {$ref: '#/components/examples/getFnoWeather_india_red'}
+              india_missing: {$ref: '#/components/examples/getFnoWeather_india_missing'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/forecast-lab:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoForecastLab
+    summary: "The Forecast lab: today's forecasts and each question's scores against its yardstick (protocols v3 and v4)"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page forecast_lab (P1 page; published by P2/P3 in the F&O publication)'
+    x-freshness: 'fno_calendar; after each session''s close'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'a question waiting_for_data names its missing input; not_tested says not enough data yet'
+    responses:
+      '200':
+        description: 'The FnoForecastLab page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoForecastLabResponse'}
+            examples:
+              india_winning: {$ref: '#/components/examples/getFnoForecastLab_india_winning'}
+              india_losing: {$ref: '#/components/examples/getFnoForecastLab_india_losing'}
+              india_waiting: {$ref: '#/components/examples/getFnoForecastLab_india_waiting'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/strategy-lab:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoStrategyLab
+    summary: "The F&O Strategy lab: every trial counted, each idea's gate, each approved version's paper record per book"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page strategy_lab (P1 page; published by P2/P3 in the F&O publication)'
+    x-freshness: 'fno_calendar; after each ledger change and each session''s close'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'any_passed false, results empty: no strategy has passed (today''s real state)'
+    responses:
+      '200':
+        description: 'The FnoStrategyLab page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoStrategyLabResponse'}
+            examples:
+              india_passed: {$ref: '#/components/examples/getFnoStrategyLab_india_passed'}
+              india_paused: {$ref: '#/components/examples/getFnoStrategyLab_india_paused'}
+              india_none: {$ref: '#/components/examples/getFnoStrategyLab_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/paper-trades:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoPaperTrades
+    summary: "Each book's paper account, open positions and closed trades after costs"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page paper_trades (P1 page; published by P2/P3 in the F&O publication)'
+    x-freshness: 'fno_calendar; after each fill or exit; marks after the close'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'open and closed empty, each account at its opening value'
+    responses:
+      '200':
+        description: 'The FnoPaperTrades page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoPaperTradesResponse'}
+            examples:
+              india_won: {$ref: '#/components/examples/getFnoPaperTrades_india_won'}
+              india_lost: {$ref: '#/components/examples/getFnoPaperTrades_india_lost'}
+              india_none: {$ref: '#/components/examples/getFnoPaperTrades_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}

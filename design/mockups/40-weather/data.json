@@ -1,0 +1,389 @@
+{
+ "_mock": true,
+ "_note": "MOCK: the F&O data catalog's example weather (made-up numbers on a future date), in the contract the backend will publish (story P1). No weather record exists yet. Research and paper only.",
+ "page": "weather",
+ "source": "api/examples/fno-screens.json (the F&O data catalog, exepex/trading story P1)",
+ "operation": "getFnoWeather",
+ "states": {
+  "india_green": {
+   "case": "positive",
+   "summary": "Mock (india): GREEN weather",
+   "about": "Calm drivers; the weather beats the usual chance on the one-day question; this month the RED rule saved Rs 1,240 (the 2 blocked trades would have lost it)",
+   "value": {
+    "market": "india",
+    "page_key": "weather",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:31:00Z",
+    "schema_version": "2.7.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "140d0cff3d45b70601fee98de5a268f64885e4d67518649655eb7d4087151673",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:31:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "session": "2026-11-16",
+     "status": "published",
+     "missing_inputs": [],
+     "model_version": "weather-v1",
+     "base_rate_1d": 0.041,
+     "base_rate_5d": 0.137,
+     "intraday": [],
+     "colour": "GREEN",
+     "blocks_new_entries": false,
+     "p_big_1d": 0.03,
+     "p_big_5d": 0.11,
+     "times_usual_1d": 0.73,
+     "times_usual_5d": 0.8,
+     "drivers": [
+      {
+       "driver": "vix_level",
+       "text": "India VIX at 11.2, low for the last year",
+       "push": "calmer"
+      },
+      {
+       "driver": "realised_volatility",
+       "text": "NIFTY moved less than 0.6% a day for 10 sessions",
+       "push": "calmer"
+      },
+      {
+       "driver": "scheduled_event",
+       "text": "No major event in the next 5 sessions",
+       "push": "calmer"
+      }
+     ],
+     "recent": [
+      {
+       "session": "2026-11-03",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-04",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-05",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-06",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-09",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-11",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-12",
+       "colour": "AMBER",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-13",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-16",
+       "colour": "GREEN",
+       "big_move": null
+      }
+     ],
+     "red_share": {
+      "sessions": 250,
+      "red_sessions": 21,
+      "share": 0.084,
+      "max_share": 0.15,
+      "over_alarming": false
+     },
+     "scores": [
+      {
+       "question": "V6_1d",
+       "status": "scoring",
+       "n_scored": 140,
+       "n_needed": 10,
+       "brier": 0.036,
+       "brier_base_rate": 0.039,
+       "skill": 0.077,
+       "verdict": "better"
+      },
+      {
+       "question": "V6_5d",
+       "status": "scoring",
+       "n_scored": 28,
+       "n_needed": 10,
+       "brier": 0.101,
+       "brier_base_rate": 0.118,
+       "skill": 0.144,
+       "verdict": "no_difference"
+      }
+     ],
+     "price_of_calm": {
+      "month": "2026-11",
+      "status": "measured",
+      "blocked_trades": 2,
+      "risk_avoided": 7960,
+      "shadow_net": -1240
+     }
+    }
+   }
+  },
+  "india_red": {
+   "case": "negative",
+   "summary": "Mock (india): RED weather, over-alarming",
+   "about": "RED blocks new entries; an intraday upgrade; RED on 16.4% of the last 250 sessions (above the 15% maximum); the RED rule cost Rs 4,810 this month",
+   "value": {
+    "market": "india",
+    "page_key": "weather",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:31:00Z",
+    "schema_version": "2.7.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "2989fd5819fc1c6826f82ffd5aa61396e67bf633fbde8a553d2923881995bf93",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:31:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "session": "2026-11-16",
+     "status": "published",
+     "missing_inputs": [],
+     "model_version": "weather-v1",
+     "base_rate_1d": 0.041,
+     "base_rate_5d": 0.137,
+     "intraday": [
+      {
+       "at": "2026-11-16T06:15:00Z",
+       "from": "AMBER",
+       "to": "RED",
+       "why": "India VIX up 11% since the open"
+      }
+     ],
+     "colour": "RED",
+     "blocks_new_entries": true,
+     "p_big_1d": 0.115,
+     "p_big_5d": 0.41,
+     "times_usual_1d": 2.8,
+     "times_usual_5d": 2.99,
+     "drivers": [
+      {
+       "driver": "vix_change",
+       "text": "India VIX up 22% in 3 sessions",
+       "push": "riskier"
+      },
+      {
+       "driver": "scheduled_event",
+       "text": "Union Budget next session",
+       "push": "riskier"
+      },
+      {
+       "driver": "us_overnight",
+       "text": "S&P 500 fell 2.4% overnight",
+       "push": "riskier"
+      }
+     ],
+     "recent": [
+      {
+       "session": "2026-11-03",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-04",
+       "colour": "GREEN",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-05",
+       "colour": "AMBER",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-06",
+       "colour": "AMBER",
+       "big_move": true
+      },
+      {
+       "session": "2026-11-09",
+       "colour": "RED",
+       "big_move": true
+      },
+      {
+       "session": "2026-11-11",
+       "colour": "RED",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-12",
+       "colour": "AMBER",
+       "big_move": false
+      },
+      {
+       "session": "2026-11-13",
+       "colour": "AMBER",
+       "big_move": true
+      },
+      {
+       "session": "2026-11-16",
+       "colour": "RED",
+       "big_move": null
+      }
+     ],
+     "red_share": {
+      "sessions": 250,
+      "red_sessions": 41,
+      "share": 0.164,
+      "max_share": 0.15,
+      "over_alarming": true
+     },
+     "scores": [
+      {
+       "question": "V6_1d",
+       "status": "scoring",
+       "n_scored": 150,
+       "n_needed": 10,
+       "brier": 0.045,
+       "brier_base_rate": 0.039,
+       "skill": -0.154,
+       "verdict": "worse"
+      },
+      {
+       "question": "V6_5d",
+       "status": "scoring",
+       "n_scored": 30,
+       "n_needed": 10,
+       "brier": 0.131,
+       "brier_base_rate": 0.118,
+       "skill": -0.11,
+       "verdict": "no_difference"
+      }
+     ],
+     "price_of_calm": {
+      "month": "2026-11",
+      "status": "measured",
+      "blocked_trades": 6,
+      "risk_avoided": 23700,
+      "shadow_net": 4810
+     }
+    }
+   }
+  },
+  "india_missing": {
+   "case": "empty",
+   "summary": "Mock (india): no weather today, the missing input named",
+   "about": "Not published: the 15:00 VIX level is missing; no score yet (not enough data)",
+   "value": {
+    "market": "india",
+    "page_key": "weather",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:31:00Z",
+    "schema_version": "2.7.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "511b97cd20fb30f9ac3eec989495b72280f1e8f93c5b8ed0315d008308151ebc",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:31:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "session": "2026-11-16",
+     "status": "not_published",
+     "missing_inputs": [
+      {
+       "input": "India VIX level at 15:00",
+       "story": "A16",
+       "detail": "No 15-minute snapshot between 14:45 and 15:00 (the recorder's host was down)"
+      }
+     ],
+     "model_version": "weather-v1",
+     "base_rate_1d": 0.041,
+     "base_rate_5d": 0.137,
+     "intraday": [],
+     "colour": null,
+     "blocks_new_entries": false,
+     "p_big_1d": null,
+     "p_big_5d": null,
+     "times_usual_1d": null,
+     "times_usual_5d": null,
+     "drivers": [],
+     "recent": [
+      {
+       "session": "2026-11-16",
+       "colour": null,
+       "big_move": null
+      }
+     ],
+     "red_share": {
+      "sessions": 0,
+      "red_sessions": 0,
+      "share": null,
+      "max_share": 0.15,
+      "over_alarming": false
+     },
+     "scores": [
+      {
+       "question": "V6_1d",
+       "status": "not_enough_data",
+       "n_scored": 0,
+       "n_needed": 10,
+       "brier": null,
+       "brier_base_rate": null,
+       "skill": null,
+       "verdict": "not_tested"
+      },
+      {
+       "question": "V6_5d",
+       "status": "not_enough_data",
+       "n_scored": 0,
+       "n_needed": 10,
+       "brier": null,
+       "brier_base_rate": null,
+       "skill": null,
+       "verdict": "not_tested"
+      }
+     ],
+     "price_of_calm": {
+      "month": "2026-11",
+      "status": "not_measured_yet",
+      "blocked_trades": null,
+      "risk_avoided": null,
+      "shadow_net": null
+     }
+    }
+   }
+  }
+ }
+}

@@ -31,3 +31,10 @@ or to the contract needs the owner's sign-off again, a data correction does not.
   - Rebuilt with `build.py`. Checks: `check_page.js` (no console errors, no external requests, no overflow) and
     `check_text.js` (0 findings).
   - Claims: `reviews/claude/response_30_w14-ui.md`.
+
+## 15 Oct 2026: the F&O data catalog (story P1)
+
+The F&O part's "Proposed contract" above is superseded by `FnoStrategyLab` (`api/schemas/fno-strategy-lab.yaml`) and
+`FnoPaperTrades` (`api/schemas/fno-paper-trades.yaml`): every trial counted, each idea's gate, each approved version's
+paper record per book after every cost, with the honest empty state "no strategy has passed". This mockup keeps its
+signed-off data until W3 rebuilds the F&O tab on the catalog; the stock part is unchanged.

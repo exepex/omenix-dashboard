@@ -156,3 +156,11 @@ Overview definitions (proposed, for G4/P2 to compute and publish; the mockup's c
 - `node design/system/shoot_states.js` on all 8 states (1280 and 390 px): no console errors, no overflow, no external requests.
 - `node design/system/check_text.js design/mockups/37-forecasts/page.html "" ex=start ex=early ex=review "ex=review&range=all&rv=month" "ex=review&range=5&rv=day" "ex=review&range=custom&from=2027-03-01&to=2027-03-31&rv=week&rq=4" "ex=review&det=1&q=5"`: 0 findings.
 - `python3 design/mockups/37-forecasts/build.py` twice gives the same bytes.
+
+## Data catalog (story P1, 15 Oct 2026)
+
+The F&O data catalog defines the Forecast lab's new contract for design v2 (`FnoForecastLab`, `api/schemas/fno-forecast-lab.yaml`,
+examples in `api/examples/fno-screens.json`): protocol v3 (Q1-Q5) and v4 (V1-V7) side by side, each question against its
+predeclared primary baseline. It supersedes the "Proposed contract" section above. This mockup still shows its own
+draft-1 data (five questions only, built by `_platform/forecast_*.py`); rebuilding the screen on the catalog is W3's
+work (slice C). Until then the two differ: the catalog is the contract.
