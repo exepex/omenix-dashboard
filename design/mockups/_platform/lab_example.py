@@ -14,6 +14,7 @@ import numpy as np
 from forecast_example import example_dates
 
 SEED = 20261014
+FNO_CAPITAL = 2000000   # each F&O book's paper account (exepex/trading C5: risk.profiles.books.paper_account_rs)
 STORMY = range(55, 86)   # trading days of a made-up stormy patch (volatile regime)
 TICKERS = {"india": ["RELIANCE", "HDFCBANK", "INFY", "TCS", "ICICIBANK", "MARUTI", "ITC", "LT", "SBIN", "BHARTIARTL"],
            "us": ["NVDA", "AAPL", "MSFT", "AMZN", "GOOGL", "META", "JPM", "XOM", "UNH", "TSLA"]}
@@ -86,7 +87,7 @@ def fno_trades(rng, fam: str, days: int, mkt: np.ndarray) -> list:
             net = round(max(-10000.0, (rng.normal(win, abs(win) * 0.45) if won else rng.normal(loss, abs(loss) * 0.5)) - 120), 2)   # the ₹10,000 cap includes charges
             kind = FNO_TRADES[int(rng.integers(0, len(FNO_TRADES)))]
             reason = ("calm_market" if net > 0 else "big_move") if "Sold" in kind else ("trend_right" if net > 0 else "trend_wrong")
-            out.append([d, d + hold, kind, net, round(100 * net / 500000, 3), reason, "Book " + {"rule": "1", "hybrid": "2", "ai": "3"}[fam]])
+            out.append([d, d + hold, kind, net, round(100 * net / FNO_CAPITAL, 3), reason, "Book " + {"rule": "1", "hybrid": "2", "ai": "3"}[fam]])
     return out
 
 
