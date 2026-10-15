@@ -60,6 +60,8 @@ def _children(node: dict, path: str, description: str | None) -> list[tuple[dict
     kids = [(child, f"{path}.{key}", None) for key, child in (node.get("properties") or {}).items()]
     if isinstance(node.get("items"), dict):
         kids.append((node["items"], f"{path}[]", None))
+    elif node.get("prefixItems"):  # a fixed list of one shape per position (the stress line): one field per shape
+        kids.append(({"$ref": node["prefixItems"][0]["$ref"]}, f"{path}[]", None))
     if isinstance(node.get("additionalProperties"), dict):
         kids.append((node["additionalProperties"], f"{path}.*", None))
     for branch in (node.get("anyOf") or []) + (node.get("oneOf") or []):

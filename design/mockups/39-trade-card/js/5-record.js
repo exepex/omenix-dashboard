@@ -9,7 +9,7 @@ function stressPart(c, C) {
   const {el} = c, X = C.stress;
   return sec(c, ['If the market jumps overnight', c.paperTag(), owner(c)],
     el('p', {class: 'small muted', style: 'margin:0 0 6px'}, `${X.open_positions} open paper position${X.open_positions === 1 ? '' : 's'}; together they can lose at most ${rs(c, X.max_loss_sum)}.`),
-    ...X.scenarios.map(s => el('div', {class: 'cap'}, el('b', {class: 'small'}, `NIFTY ${s.nifty_move_pct > 0 ? '+' : '−'}${Math.abs(s.nifty_move_pct)}%${s.vix_move_pct == null ? '' : `, India VIX +${s.vix_move_pct}%`}: lose ${rs(c, s.loss)}`),
+    ...X.scenarios.map(s => el('div', {class: 'cap'}, el('b', {class: 'small'}, `NIFTY ${s.nifty_move_pct > 0 ? '+' : '−'}${Math.abs(s.nifty_move_pct)}%${s.vix_move_pct ? `, India VIX +${s.vix_move_pct}%` : ', volatility unchanged'}: lose ${rs(c, s.loss)}`),
       el('div', {class: 'bar', role: 'img', 'aria-label': `${rs(c, s.loss)} of at most ${rs(c, X.max_loss_sum)}`}, el('i', {style: `width:${X.max_loss_sum ? (s.loss / X.max_loss_sum * 100).toFixed(1) : 0}%`})))),
     howto(c, 'Information only. Every position has a fixed maximum loss, so no line can go past the total; the bars show how close the book is to it.'));
 }

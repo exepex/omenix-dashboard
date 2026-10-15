@@ -39,6 +39,10 @@ PROBES: tuple[tuple[str, str, Callable[[dict], None]], ...] = (
      lambda v: v["payload"].update(blocks_new_entries=False)),
     ("a missing weather that does not block new trades (owner, 15 Oct, \"4 A\")", "getFnoWeather_india_missing",
      lambda v: v["payload"].update(blocks_new_entries=False)),
+    ("a stress line other than the three paired scenarios (design 6.2, response 113 #4)", "getFnoCard_india_trade",
+     lambda v: v["payload"]["stress"]["scenarios"][2].update(vix_move_pct=50)),
+    ("a fourth stress scenario", "getFnoCard_india_trade",
+     lambda v: v["payload"]["stress"]["scenarios"].append(dict(v["payload"]["stress"]["scenarios"][0]))),
     ("real money eligible before the real-money gate (design 8.3)", "getFnoStrategyLab_india_passed",
      lambda v: v["payload"]["real_money"].update(eligible=True)),
 )  # fmt: skip

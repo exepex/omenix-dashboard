@@ -147,7 +147,7 @@ def check_privacy(doc: dict, problems: list[str]) -> None:
     for name in screen_schemas():
         for where, node in schema_nodes(doc["components"]["schemas"][name], name):
             problems += [f"{where}: property {key!r} reads like a strategy internal" for key in node.get("properties", {}) if PRIVATE.search(key)]
-            if "properties" in node and node.get("additionalProperties") is not False and not where.endswith("/if") and "/allOf/" not in where:
+            if "properties" in node and "$ref" not in node and node.get("additionalProperties") is not False and not where.endswith("/if") and "/allOf/" not in where:
                 problems.append(f"{where}: an object of the catalog is closed (additionalProperties: false)")
 
 
