@@ -14,11 +14,9 @@ How to read the columns:
   `no` names the story that builds it. A `no` field is never filled with a made-up value: until its story is built, the
   page is not published (each endpoint answers 501). `provisional` marks a field whose shape waits for a protocol
   freeze (protocol v4, story G6, is not frozen yet): it may change when G6 freezes, and a change bumps the contract.
-- **Source of truth (open, the owner decides):** today this file's contract lives in exepex/omenix-dashboard `api/` and
-  exepex/trading pins a byte copy with a drift check (`contracts/omenix-dashboard/pin.json`, `python -m fno market
-  contract-check`). DESK_DECISIONS (13 Oct 2026, "API design kept") says exepex/trading owns the F&O contract. Either way
-  there is one canonical copy plus a pin and a drift check on the other side, so switching means moving these files and
-  reversing the pin.
+- **Source of truth (owner, 15 Oct 2026: "contract A"):** this repository's `api/` is the single master contract for
+  stock and F&O; exepex/trading keeps a pinned byte copy with hashes and a drift check (`contracts/omenix-dashboard/pin.json`,
+  `python -m fno market contract-check`).
 
 Backend records named in the tables (exepex/trading):
 
