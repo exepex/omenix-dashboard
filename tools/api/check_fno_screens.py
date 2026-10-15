@@ -9,7 +9,7 @@
   4. Strategy internals stay private: each page lists what is never sent, and no property or example key is named like a
      rule, threshold, filter, parameter, prompt, weight or feature. Every object is closed (a planted extra field fails).
   5. The card says PAPER ONLY; every mockup built on the catalog shows exactly the catalog's examples (one copy, DRY).
-  6. Planted breaks of each rule are caught (fno_planted.py).
+  6. Probes: invalid pages the schema must refuse (fno_rules.py).
 Usage: pip install -r tools/api/requirements.txt; python3 tools/api/check_fno_screens.py. Exit 1 on any problem."""
 
 from __future__ import annotations
@@ -211,16 +211,12 @@ def check(doc: dict, own: dict, problems: list[str]) -> list:
 
 
 def main() -> int:
-    from fno_planted import PLANTED, planted
     doc, problems = bundle.bundle(), []
     leaves = check(doc, own_examples(), problems)
-    caught = planted(doc, own_examples(), check)
-    if caught != PLANTED:
-        problems.append(f"planted breaks: {caught} of {PLANTED} caught")
     ops = list(screen_operations(doc))
     examples = sum(len(op_examples(doc, op)) for _, op in ops)
     print(f"fno screens: {len(ops)} pages, {examples} Mock examples, {len(leaves)} leaf fields "
-          f"({sum(leaf.fill == 'built' for leaf in leaves)} built today), {caught} of {PLANTED} planted breaks caught")
+          f"({sum(leaf.fill == 'built' for leaf in leaves)} built today)")
     for problem in problems:
         print("  PROBLEM", problem)
     print("fno screens: every rule holds" if not problems else f"fno screens: {len(problems)} problem(s)")
