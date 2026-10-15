@@ -38,3 +38,10 @@ The F&O part's "Proposed contract" above is superseded by `FnoStrategyLab` (`api
 `FnoPaperTrades` (`api/schemas/fno-paper-trades.yaml`): every trial counted, each idea's gate, each approved version's
 paper record per book after every cost, with the honest empty state "no strategy has passed". This mockup keeps its
 signed-off data until W3 rebuilds the F&O tab on the catalog; the stock part is unchanged.
+
+- **15 Oct 2026: the F&O books' account size, data only (judge 135 note; story C5 merged in exepex/trading).**
+  - `fno_capital` goes from Rs 5 lakh to Rs 20 lakh (C5's `risk.profiles.books.paper_account_rs`), one constant
+    `FNO_CAPITAL` in `_platform/lab_example.py` that `lab_data.py` reads. Rupee results are unchanged; every F&O
+    "% on its account" is a quarter of before, and the NIFTY comparison holds Rs 20 lakh.
+  - Rebuilt with `build.py`. Checks: `check_totals.js` (9 lines add up), `shoot_states.js` (16 shots of 9 states),
+    `check_page.js` and `check_text.js`: 0 findings.

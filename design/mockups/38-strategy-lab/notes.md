@@ -20,7 +20,7 @@ should trust the system with real money ... the end goal is net profitable trade
    6 months, net profit after charges, at most ₹10,000 lost on one trade, the evaluation test, calm and stormy).
 2. **Who made the most, since the start:** simple cards (profit after charges, return, won/lost bar, average win and
    loss, a running line) or a detailed view (win rate, profit factor, per trade, worst fall, best and worst trade),
-   with the comparison: the baselines for stocks, holding NIFTY with the same ₹5 lakh for F&O.
+   with the comparison: the baselines for stocks, holding NIFTY with the same ₹20 lakh for F&O.
 3. **A period you choose:** 1 week to 1 year, all, or picked dates: who won it, a table, and one chart of every family
    with the comparison line, as a running total or weekly or monthly bars.
 4. **Month by month:** a coloured cell per family and month, the total and the months up.
@@ -91,7 +91,7 @@ state:
    family's stock trade has settled; F&O paper trading starts with slice 3. The first real verdict is at least 2 months
    away for stocks (300 trades each) and 6 months for F&O. Until then, the real screen is mostly empty, by design.
 2. **Both books together is a total line only** (your choice (a)). The two books use different money (₹1 lakh a stock
-   trade, a ₹5 lakh F&O account), so a combined profit says who made more rupees, not who uses money better; rankings,
+   trade, a ₹20 lakh F&O account), so a combined profit says who made more rupees, not who uses money better; rankings,
    win rates and readiness stay per book.
 3. **Win rate alone misleads, and costs decide.** In the Example, F&O Rule-based wins 65% of its trades but makes only
    ₹215 on them, because one loss wipes out about two wins; after its data costs it is at −₹7,785. In the US Example,

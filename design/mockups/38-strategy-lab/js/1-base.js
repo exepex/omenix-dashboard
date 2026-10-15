@@ -53,7 +53,7 @@ function reference(asset = ASSET) { return asset === 'stocks' ? 'baseline' : 'ni
 /* holding NIFTY with the F&O book's money (₹5 lakh), as daily P&L points from day a, for comparison */
 function niftyLine(c, a, b) {
   const lv = (state().index || {})[c.m]; if (!lv) return [];
-  const cap = mk(c).fno_capital || 500000, base = lv[a - 1];
+  const cap = mk(c).fno_capital || 2000000, base = lv[a - 1];
   return Array.from({length: b - a + 1}, (_, i) => [a + i, cap * (lv[a + i - 1] / base - 1)]);
 }
 /* costs beyond the market charges in each trade (judge 55; DESK_DESIGN 12.8: the verdict is net after execution and
