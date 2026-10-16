@@ -18,7 +18,7 @@ function pct(p) { return p == null ? '—' : `${Math.round(p * 100)}%`; }
 function ist(iso) { return iso ? new Date(iso).toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'}) + ' IST' : 'not sent'; }
 function dlabel(iso) { return new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', {weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'}); }
 function sec(c, title, ...kids) { return c.el('section', {class: 'card sec', 'aria-label': typeof title === 'string' ? title : null}, c.el('h2', {}, title), ...kids); }
-function howto(c, text) { return c.el('p', {class: 'howto'}, c.icon('help'), c.el('span', {}, text)); }
+function howto(c, text) { return c.el('p', {class: 'mb-howto'}, c.icon('help'), c.el('span', {}, text)); }
 function fact(c, k, v, small) { return c.el('div', {class: 'mb-fact'}, c.el('span', {class: 'k'}, k), c.el('b', {}, v), small ? c.el('small', {}, small) : null); }
 function owner(c) { return c.el('span', {class: 'owner', 'data-tip': 'Owner only: live strikes and entry ranges are kept in Google Drive and your signed-in dashboard, never in a public repository (owner, 15 Oct 2026).'}, c.icon('lock'), 'Owner only'); }
 /* a weather colour always with its glyph and its word */
