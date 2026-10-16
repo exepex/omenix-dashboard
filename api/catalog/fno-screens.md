@@ -326,6 +326,27 @@ Backend records named in the tables (exepex/trading):
 | `questions[].series[].points[].n` | Answers scored so far: forecasts whose answer is known (G4's counts.resolved), up to the horizon after each was made | count | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | yes (`score_summary:scored`) |
 | `questions[].series[].points[].mean_loss` | Average miss score over those n answers: Brier (v3, G4's ScoreSummary.mean_brier) or QLIKE (v4: G8 adds it; the record named holds only Brier today) | the question's metric | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | yes (`score_summary:mean_brier`) |
 
+## The F&O pages held back in this publication, so each held page says so on screen (contract 2.13)
+
+`GET /api/v1/markets/india/fno/page-holds` · `getFnoPageHolds` · fno.pages_history page page_holds (published in every F&O publication by P11; judge 251)
+
+- **Freshness:** with every publication
+- **Empty state:** holds empty (every page published normally)
+- **What it holds:** The pages held back in this publication, each with the first session it was held in a row, the reason it was held and what the screen shows meanwhile. Empty state: holds empty (every page published normally)
+- **Mock examples:**
+  - `india_none` (positive): Mock (india): every page published. A normal day: nothing held back
+  - `india_held` (negative): Mock (india): three pages held back. The Forecast lab keeps its 11 Nov page (an answer day's calendar is missing); the paper books show nothing (an open trade has no marks); the card shows the previous card under its own notice
+  - `india_first` (empty): Mock (india): the first publication. No page has been held yet
+- **Never sent (strategy internals):** the held page's figures or the value that broke the rule (only which page, since when and which rule)
+- **Fields:** 4, of which the backend can fill 0 today
+
+| Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
+|---|---|---|---|---|---|---|
+| `holds[].page_key` | The held page's key (e.g. forecast_lab, paper_trades, today, risk, card) | id | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].since` | The first session of this hold in a row | date (IST) | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].reason` | The rule that held it, a fixed sentence from P11's list (never a value: no digits) | text | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].shows` | previous_page = the page keeps its last published row, dated by its own as_of; nothing = no row is shown, because the old one would state something no longer true (the screen says "not published") | enum | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+
 ## The F&O Strategy lab: every trial counted, each idea's gate, each approved version's paper record per book
 
 `GET /api/v1/markets/india/fno/strategy-lab` · `getFnoStrategyLab` · fno.pages_history page strategy_lab (P1 page; published by P2/P3 in the F&O publication)

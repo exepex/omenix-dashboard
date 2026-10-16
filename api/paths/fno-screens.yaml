@@ -105,6 +105,31 @@
               india_none: {$ref: '#/components/examples/getFnoForecastHistory_india_none'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/page-holds:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoPageHolds
+    summary: "The F&O pages held back in this publication, so each held page says so on screen (contract 2.13)"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page page_holds (published in every F&O publication by P11; judge 251)'
+    x-freshness: 'with every publication'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'holds empty (every page published normally)'
+    responses:
+      '200':
+        description: 'The FnoPageHolds page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoPageHoldsResponse'}
+            examples:
+              india_none: {$ref: '#/components/examples/getFnoPageHolds_india_none'}
+              india_held: {$ref: '#/components/examples/getFnoPageHolds_india_held'}
+              india_first: {$ref: '#/components/examples/getFnoPageHolds_india_first'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
 /api/v1/markets/india/fno/strategy-lab:
   get:
     tags: [fno-screens]

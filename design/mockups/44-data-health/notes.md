@@ -25,3 +25,9 @@ FnoDataHealth (`api/schemas/fno-data-health.yaml`), page `data_health`, contract
 1. **Only dates, counts and statuses**, never a data value (a close, a quote or an open interest).
 2. **A failed publish keeps yesterday's pages**: the screen says so instead of showing half-written data.
 3. **The stock side's data health is a separate section later**, never mixed into this one.
+
+**Pages held back (contract 2.13.0, `getFnoPageHolds`, page `page_holds`; judge 251 on P11):** drawn below the health
+rows in the same case as the state (data.json `also`): none on a good day; in the bad case the Forecast lab (an answer
+day's calendar missing, its last page shown), the paper books (an open trade without marks, nothing shown) and the card
+(a risk rule broken, the previous card under its own notice); none in the empty case. Each reason is a fixed sentence,
+never a value (the schema refuses digits). Every held page also says so on its own screen.
