@@ -13,10 +13,8 @@
 :where(.weather) .chance .track i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--mb-chart-1)}
 :where(.weather) .chance .base{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--md-sys-color-on-surface)}
 :where(.weather) .chance b{text-align:right;font-variant-numeric:tabular-nums}
-:where(.weather) .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:4px;margin-top:6px}
-:where(.weather) .strip span{display:grid;justify-items:center;gap:2px;padding:6px 2px;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);font-size:11px;color:var(--md-sys-color-on-surface-variant);min-width:0}
-:where(.weather) .strip span .mb-label{padding:2px 4px}
 :where(.weather) .drivers{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
 :where(.weather) .drivers li{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px}
+:where(.weather) .history-link{margin:8px 0 0}
 @media (max-width:699px){:where(.weather) .facts3{grid-template-columns:1fr 1fr}}
 @media (max-width:599px){:where(.weather) .mb-verdict .mb-verdict-word{font-size:36px}}

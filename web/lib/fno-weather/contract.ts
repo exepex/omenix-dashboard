@@ -83,3 +83,16 @@ export interface FnoWeather {
   scores: WeatherScore[];
   price_of_calm: PriceOfCalm;
 }
+
+/** One session of the weather's history (contract 2.8.0, page `weather_history`): colour and label only; the chances
+ *  stay on the weather page until the owner's weather-levels choice. */
+export interface HistorySession {
+  session: string;
+  colour: WeatherColour | null;
+  label: RecordLabel;
+}
+
+export interface FnoWeatherHistory {
+  sessions: HistorySession[];
+  counts: { green: number; amber: number; red: number; not_scored: number; live: number; backfill: number };
+}

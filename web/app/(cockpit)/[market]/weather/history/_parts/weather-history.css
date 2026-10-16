@@ -1,0 +1,13 @@
+/* The weather history's own page rules (story W3a part 2; 46-weather-history/template.html), scoped with :where so the
+   design system's component rules keep their weight. The day strip is shared with the weather page
+   (components/fno-common/fno-screen.css). */
+:where(.weather-history) .sec h3{font:600 13.5px/1.3 var(--md-ref-typeface-plain);margin:12px 0 4px}
+:where(.weather-history) .facts4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+:where(.weather-history) .mix{display:flex;height:14px;border-radius:3px;overflow:hidden;background:var(--md-sys-color-surface-container);margin-top:10px}
+:where(.weather-history) .mix i{display:block;height:100%}
+:where(.weather-history) .mix .g{background:var(--mb-color-up-container)}
+:where(.weather-history) .mix .a{background:var(--mb-color-warn-container)}
+:where(.weather-history) .mix .r{background:var(--mb-color-down-container)}
+:where(.weather-history) .mix .n{background:var(--mb-color-neutral-container)}
+:where(.weather-history) .counted{margin:10px 0 0}
+@media (max-width:599px){:where(.weather-history) .facts4{grid-template-columns:repeat(2,minmax(0,1fr))}}
