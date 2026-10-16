@@ -17,7 +17,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.12.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "a77c79a34c60ebbaef0fe9712f62fa248b8bbd3e4177a632fa944661e47a9d61",
+    "payload_sha256": "4a73a2403090f437522a0dd6b9020a146f0a5bf8cdf6a8ad2a8a123609c36d26",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -33,6 +33,7 @@
      "label": "PAPER ONLY",
      "test_post": false,
      "session": "2026-11-16",
+     "withheld": null,
      "session_note": "NSE regular session",
      "timing": {
       "market_data_cutoff": "2026-11-16T09:30:00Z",
@@ -293,7 +294,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.12.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "da7c30a21ad644a416df8dd6d195a1784b3c0b82020665f2aecb293967d97d98",
+    "payload_sha256": "3a4ffdfe7b878009b48bc9b114a47e96b1386dca593509939e50ed6b9a5baf49",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -309,6 +310,7 @@
      "label": "PAPER ONLY",
      "test_post": false,
      "session": "2026-11-16",
+     "withheld": null,
      "session_note": "NSE regular session",
      "timing": {
       "market_data_cutoff": "2026-11-16T09:30:00Z",
@@ -554,7 +556,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.12.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "0be6d2177dadb1beb1cf4c22455fdcddd4ad91c573f796f0041e7b5e81d4207c",
+    "payload_sha256": "64bc7a88d01852156fdca44a9d3e456e52705fc95902a26e323c4ec6fe950d10",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -570,6 +572,7 @@
      "label": "PAPER ONLY",
      "test_post": false,
      "session": "2026-11-16",
+     "withheld": null,
      "session_note": "NSE regular session",
      "timing": {
       "market_data_cutoff": "2026-11-16T09:30:00Z",
@@ -746,6 +749,214 @@
     }
    }
   },
+  "india_withheld": {
+   "case": "negative",
+   "summary": "Mock (india): today's card held back, a risk rule broken",
+   "about": "Today's card broke a risk rule (its maximum loss above the book's cap), so it was held back; the page shows the previous session's card, dated 13 Nov, never as today's",
+   "value": {
+    "market": "india",
+    "page_key": "card",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.12.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "df34dfd7a67aa1777b2abd468bb706b0fe122c5b851763a5e35620a59ae814fb",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "label": "PAPER ONLY",
+     "test_post": false,
+     "session": "2026-11-13",
+     "withheld": {
+      "session": "2026-11-16",
+      "reason_text": "Today's card was held back: a risk rule was broken"
+     },
+     "session_note": "NSE regular session",
+     "timing": {
+      "market_data_cutoff": "2026-11-13T09:30:00Z",
+      "decision_finalized_at": "2026-11-13T09:36:00Z",
+      "card_sent_at": "2026-11-13T09:38:00Z",
+      "delivery": "sent"
+     },
+     "valid_until": "2026-11-13T09:55:00Z",
+     "paper_trades_so_far": {
+      "total": 38,
+      "by_book": [
+       {
+        "family": "rule",
+        "trades": 38
+       },
+       {
+        "family": "hybrid",
+        "trades": 0
+       },
+       {
+        "family": "ai",
+        "trades": 0
+       }
+      ]
+     },
+     "forecasts_on_record": {
+      "capture_day": "2026-11-13",
+      "late_generated_at": null,
+      "report_day": "2026-11-13",
+      "house_forecaster": "baseline_b_base_rate",
+      "other_forecasters": 3,
+      "questions": [
+       {
+        "question": "Q1",
+        "plain": "Will NIFTY be higher in 20 sessions?",
+        "probability": 0.58,
+        "forecaster": "Past average",
+        "backfill": {
+         "status": "scored",
+         "scored": 670,
+         "said_from": 0.5,
+         "said_to": 0.6,
+         "days": 175,
+         "happened_share": 0.57,
+         "mean_brier": 0.245
+        },
+        "live": {
+         "status": "no_bin",
+         "scored": 24,
+         "said_from": null,
+         "said_to": null,
+         "days": null,
+         "happened_share": null,
+         "mean_brier": null
+        }
+       },
+       {
+        "question": "Q4",
+        "plain": "Will India VIX be higher in 10 sessions?",
+        "probability": 0.47,
+        "forecaster": "Past average",
+        "backfill": {
+         "status": "scored",
+         "scored": 680,
+         "said_from": 0.4,
+         "said_to": 0.5,
+         "days": 680,
+         "happened_share": 0.45,
+         "mean_brier": 0.25
+        },
+        "live": {
+         "status": "not_enough_data",
+         "scored": 0,
+         "said_from": null,
+         "said_to": null,
+         "days": null,
+         "happened_share": null,
+         "mean_brier": null
+        }
+       }
+      ]
+     },
+     "missing": [],
+     "previous_misses": [],
+     "reason": "weather_red",
+     "trade": null,
+     "forecast": {
+      "question": "V6_1d",
+      "plain": "Will NIFTY move at least 2% tomorrow?",
+      "probability": 0.115,
+      "forecaster": "Weather",
+      "backfill": {
+       "status": "scored",
+       "scored": 2159,
+       "said_from": 0.1,
+       "said_to": 0.2,
+       "days": 31,
+       "happened_share": 0.19,
+       "mean_brier": 0.039
+      },
+      "live": {
+       "status": "scored",
+       "scored": 140,
+       "said_from": 0.1,
+       "said_to": 0.2,
+       "days": 4,
+       "happened_share": 0.25,
+       "mean_brier": 0.036
+      }
+     },
+     "stress": {
+      "open_positions": 2,
+      "max_loss_sum": 7968,
+      "scenarios": [
+       {
+        "nifty_move_pct": -5,
+        "vix_move_pct": 50,
+        "loss": 5320
+       },
+       {
+        "nifty_move_pct": -10,
+        "vix_move_pct": 100,
+        "loss": 7968
+       },
+       {
+        "nifty_move_pct": 5,
+        "vix_move_pct": 0,
+        "loss": 640
+       }
+      ]
+     },
+     "advocate": {
+      "status": "not_needed",
+      "objections": [],
+      "verdict": null
+     },
+     "data_checks": {
+      "passed": true,
+      "missing_inputs": []
+     },
+     "price_of_staying_out": {
+      "status": "not_measured_yet",
+      "shadow_net": null
+     },
+     "if_you_cannot_act": "Nothing to act on today.",
+     "status": "NO TRADE",
+     "reason_text": "No new trade today: the weather is RED",
+     "weather": {
+      "colour": "RED",
+      "why": "RED: a 2% day is 2.8 times as likely as usual (India VIX up 22% in 3 sessions; RBI policy decision next session)"
+     },
+     "evidence": {
+      "rung": null,
+      "label": null,
+      "real_money_eligible": false,
+      "text": "RED blocks every new entry (the owner's survival rule); open positions follow their exit plans"
+     },
+     "footer": {
+      "record_hashes": [
+       {
+        "path": "journal/book1_rules/decisions/2026-11-13.json",
+        "sha256": "45d3bad04bae0a3e99c73efa21c9986541c8877690494be1c2de7b0319b25e28"
+       },
+       {
+        "path": "research/packs/2026-11-13/common.json",
+        "sha256": "318cd3a1b6a8d78768e4c5fea89bb232acf7ba0ede188e134a9cfe1f83c07e45"
+       },
+       {
+        "path": "research/weather/2026-11-13.json",
+        "sha256": "a12d10e235a0f5c05823d123f24cddda3418d43ab18e8107b4a52f488fadd60d"
+       }
+      ]
+     }
+    }
+   }
+  },
   "india_missing": {
    "case": "negative",
    "summary": "Mock (india): NO TRADE, a missing input named",
@@ -758,7 +969,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.12.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "d220a3f44e4ccd2f9a5baeb71c0470107005a6234ea53e579a64b0ddb04401f5",
+    "payload_sha256": "d6b0e26ba853c0dfba30012919e606c7b63b0bfefddcccbb59079e83a200efe6",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -774,6 +985,7 @@
      "label": "PAPER ONLY",
      "test_post": false,
      "session": "2026-11-16",
+     "withheld": null,
      "session_note": "NSE regular session",
      "timing": {
       "market_data_cutoff": "2026-11-16T09:30:00Z",
@@ -928,7 +1140,7 @@
     "built_at": "2026-11-16T09:38:00Z",
     "schema_version": "2.12.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "d7e0361c3e3cbd2800fd0f3b258c1d0b7f1de15138175fbb400a0617e799df4e",
+    "payload_sha256": "4752db8e25b0a83a126d38e12900c5d7d6bdd29ba1eca9fd87131d0d1bfc6767",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -944,6 +1156,7 @@
      "label": "PAPER ONLY",
      "test_post": true,
      "session": "2026-11-16",
+     "withheld": null,
      "session_note": "NSE regular session",
      "timing": {
       "market_data_cutoff": "2026-11-16T09:30:00Z",

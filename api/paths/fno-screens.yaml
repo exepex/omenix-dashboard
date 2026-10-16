@@ -25,6 +25,7 @@
               india_trade: {$ref: '#/components/examples/getFnoCard_india_trade'}
               india_watch: {$ref: '#/components/examples/getFnoCard_india_watch'}
               india_red: {$ref: '#/components/examples/getFnoCard_india_red'}
+              india_withheld: {$ref: '#/components/examples/getFnoCard_india_withheld'}
               india_missing: {$ref: '#/components/examples/getFnoCard_india_missing'}
               india_none: {$ref: '#/components/examples/getFnoCard_india_none'}
       '501': {$ref: '#/components/responses/NotImplemented'}

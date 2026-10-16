@@ -47,10 +47,11 @@ Backend records named in the tables (exepex/trading):
   - `india_trade` (positive): Mock (india): TRADE card, PAPER ONLY. A rule-based put spread approved to paper; AMBER weather; three objections, no hard-rule breach. Made-up numbers on a future date
   - `india_watch` (positive): Mock (india): WATCH card, a shadow never traded. A hybrid candidate's shadow decision; the advocate did not answer in time, so code checks only
   - `india_red` (negative): Mock (india): NO TRADE, weather RED. RED blocks new entries; the price of staying out is not measured yet
+  - `india_withheld` (negative): Mock (india): today's card held back, a risk rule broken. Today's card broke a risk rule (its maximum loss above the book's cap), so it was held back; the page shows the previous session's card, dated 13 Nov, never as today's
   - `india_missing` (negative): Mock (india): NO TRADE, a missing input named. The data checks failed; each missing input is named with the story that brings it
   - `india_none` (empty): Mock (india): NO TRADE, no strategy has passed. The shape of the real state while no strategy is approved to paper, as a TEST post of live delivery (like T1's first post of 15 Oct 2026); the house forecast has no live record yet
 - **Never sent (strategy internals):** the strategy's entry conditions, filters and thresholds (why it chose this day beyond the forecast and weather shown); the AI team's and the devil's advocate's prompts and model settings; the strategy's parameters and any fitted value
-- **Fields:** 108, of which the backend can fill 29 today
+- **Fields:** 110, of which the backend can fill 29 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
@@ -58,6 +59,8 @@ Backend records named in the tables (exepex/trading):
 | `test_post` | True for a one-off check of live delivery, not the day's card (the post says TEST) | yes/no | T1's delivery record (research/cards/deliveries/, card_delivery/v1: test) | once a session day at card_sent_at (target 15:08 IST) | public | no: T1 |
 | `session` | The NSE session the card is for | date (IST) | the day's card record (T1's CardBuilder from the decision, risk, forecast, weather and objection records) | once a session day at card_sent_at (target 15:08 IST) | public | no: T1 |
 | `session_note` | What kind of day it is, e.g. "NSE regular session", or that the calendar could not say | text | T1's TradeCard.session (from the NSE session calendar, A7) | once a session day at card_sent_at (target 15:08 IST) | public | no: T1 |
+| `withheld.session` | The session whose card was held back (today) | date (IST) | P2's per-page hold (the card page's run status) | once a session day at card_sent_at (target 15:08 IST) | public | no: P2 |
+| `withheld.reason_text` | The owner's sentence, shown as is (owner, 16 Oct 2026); never the trade's figures | text | P2's per-page hold (the card page's run status) | once a session day at card_sent_at (target 15:08 IST) | public | no: P2 |
 | `status` | TRADE = a paper trade of a strategy approved to paper; NO TRADE = nothing today, with a reason; WATCH = a candidate's shadow decision, for learning, never to be traded | enum | the day's card record (T1's CardBuilder from the decision, risk, forecast, weather and objection records) | once a session day at card_sent_at (target 15:08 IST) | public | no: T1 |
 | `reason` | Why there is no trade (NO TRADE only; null otherwise) | enum | the day's card record (T1's CardBuilder from the decision, risk, forecast, weather and objection records) | once a session day at card_sent_at (target 15:08 IST) | public | no: T1 |
 | `reason_text` | The status in one plain sentence, e.g. "No trade today: no strategy has passed its test yet" | text | the day's card record (T1's CardBuilder from the decision, risk, forecast, weather and objection records) | once a session day at card_sent_at (target 15:08 IST) | public | no: T1 |
