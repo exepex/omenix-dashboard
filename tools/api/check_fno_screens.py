@@ -55,7 +55,7 @@ RECORDS = {
 # Mockups whose data.json is built from the catalog: folder -> the operation whose examples it shows
 MOCKUPS = {"37-forecasts": "getFnoForecastLab", "39-trade-card": "getFnoCard", "40-weather": "getFnoWeather", "41-paper-books": "getFnoPaperTrades",
            "42-scoreboards": "getFnoScoreboards", "43-budget": "getFnoBudget", "44-data-health": "getFnoDataHealth",
-           "45-strategy-lab-fno": "getFnoStrategyLab"}
+           "45-strategy-lab-fno": "getFnoStrategyLab", "46-weather-history": "getFnoWeatherHistory"}
 
 
 def canonical(payload) -> bytes:
