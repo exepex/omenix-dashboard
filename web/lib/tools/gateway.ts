@@ -21,7 +21,7 @@ const LEGAL_ROUTES = new Set(["/about", "/privacy", "/terms"]);
 const READ = ["GET", "HEAD"];
 /** Google Search Console's ownership file (web/public/google<16 hex>.html, the "HTML file" method). */
 const GOOGLE_FILE = /^\/google[0-9a-f]{16}\.html$/;
-const OAUTH_ROUTES: Record<string, { method: string; target: string }> = {
+export const OAUTH_ROUTES: Record<string, { method: string; target: string }> = {
   "/oauth/authorize": { method: "GET", target: "/mcp/oauth/authorize" },
   "/oauth/token": { method: "POST", target: "/mcp/oauth/token" },
   "/oauth/register": { method: "POST", target: "/mcp/oauth/register" },

@@ -7,6 +7,8 @@
 //                                                     contract's examples, taken from 30-shell and 31-dashboard)
 //   web/lib/fixtures/blocks-33-34.generated.json    <- api/examples/blocks-33-34.json (the Screener's and Markets'
 //                                                     block examples, W12: W11's contract examples from 33 and 34)
+//   web/lib/fixtures/fno-screens.generated.json   <- api/examples/fno-screens.json (the F&O screens' examples, P1; read by
+//                                                     the screens' fixture adapters, W3)
 //   web/lib/legal/pages.generated.json              <- mockups/36-legal/app.json (the privacy and terms pages)
 //   web/app/icon.svg, favicon.ico, apple-icon.png   <- brand/favicon/ (the logo tile; Next.js serves them as the icons)
 // Run from web/: `node tools/sync-design.mjs`; `--check` exits 1 when a copy is out of date (lib/ui/tests/design-sync.test.ts).
@@ -32,6 +34,7 @@ export function expectedCopies() {
     "lib/shell/fixture/shell.generated.json": read("mockups/30-shell/data.json"),
     "lib/fixtures/blocks.generated.json": readFileSync(join(design, "..", "api", "examples", "blocks.json"), "utf8"),
     "lib/fixtures/blocks-33-34.generated.json": readFileSync(join(design, "..", "api", "examples", "blocks-33-34.json"), "utf8"),
+    "lib/fixtures/fno-screens.generated.json": readFileSync(join(design, "..", "api", "examples", "fno-screens.json"), "utf8"),
     "lib/legal/pages.generated.json": read("mockups/36-legal/app.json"),
     "app/icon.svg": read("brand/favicon/tile.svg"),
     "app/favicon.ico": readFileSync(join(design, "brand", "favicon", "favicon.ico")),

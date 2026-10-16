@@ -11,7 +11,7 @@ const repo = join(import.meta.dirname, "..", "..", "..", "..");
 type Envelope = { value: { page_key: string; publisher: string; market: string } };
 const examples: Record<string, Envelope> = Object.assign(
   {},
-  ...["blocks.json", "blocks-33-34.json"].map((f) => JSON.parse(readFileSync(join(repo, "api/examples", f), "utf8"))),
+  ...["blocks.json", "blocks-33-34.json", "fno-screens.json"].map((f) => JSON.parse(readFileSync(join(repo, "api/examples", f), "utf8"))),
 );
 
 test("every block the dashboard reads from exepex/trading names the contract's page key", () => {
@@ -28,10 +28,11 @@ test("every block the dashboard reads from exepex/trading names the contract's p
   assert.equal(FNO_PAGES.getFnoPicks, "today");
 });
 
-test("no exepex/trading block of the contract is missing from the dashboard's map (Home, frame and Markets)", () => {
+test("no exepex/trading block of the contract is missing from the dashboard's map (Home, frame, Markets and the F&O screens)", () => {
   const read = new Set(Object.keys(FNO_PAGES));
   const fnoBlocks = new Set(Object.entries(examples).filter(([, e]) => e.value.publisher === "fno").map(([name]) => name.split("_")[0]));
-  // the F&O blocks the screens do not read yet (contract search, contract quote, order rules: the order window is not built)
-  const notRead = new Set(["searchFnoContracts", "getFnoContract", "getFnoOrderRules"]);
+  // the F&O blocks the screens do not read yet (contract search, contract quote, order rules: the order window is not built;
+  // P1's other screens: W3b to W3h)
+  const notRead = new Set(["searchFnoContracts", "getFnoContract", "getFnoOrderRules", "getFnoCard", "getFnoForecastLab", "getFnoStrategyLab", "getFnoPaperTrades"]);
   assert.deepEqual([...fnoBlocks].filter((b) => !read.has(b) && !notRead.has(b)), []);
 });

@@ -12,7 +12,7 @@ export interface PageRoute {
   segment: string;
   /** The approved mockup's folder ("" for the component gallery, which has none). */
   mockup: string;
-  owner: "B7" | "B8" | "B14" | "B15" | "B16" | "W12";
+  owner: "B7" | "B8" | "B14" | "B15" | "B16" | "W12" | "W3";
   /** The read endpoint under /api/v1/markets/{market}/ ("" when the page has none). */
   endpoint: string;
   /** A screen of the frame's navigation (the per-stock pages are reached from a company; lib/shell/nav.ts). */
@@ -33,6 +33,8 @@ export const PAGES: readonly PageRoute[] = [
   { key: "assistant", label: "Assistant", icon: "bolt", segment: "assistant", mockup: "11-assistant", owner: "B8", endpoint: "", nav: true },
   { key: "screener", label: "Screener", icon: "filter_list", segment: "screener", mockup: "33-screener", owner: "W12", endpoint: "screener", nav: true },
   { key: "markets", label: "Markets", icon: "monitoring", segment: "markets", mockup: "34-markets", owner: "W12", endpoint: "overview", nav: true },
+  /* India only (F&O): the page answers 404 in the US and its navigation item is absent there (lib/shell/nav.ts). */
+  { key: "weather", label: "Market weather", icon: "sensors", segment: "weather", mockup: "40-weather", owner: "W3", endpoint: "fno/weather", nav: true },
   { key: "help", label: "Help", icon: "help", segment: "help", mockup: "12-help", owner: "B7", endpoint: "", nav: true },
   /* Not a page of SPEC section 6: the shared components drawn with labelled sample values, for the page sessions and
      the UI harness. Not in the navigation. */

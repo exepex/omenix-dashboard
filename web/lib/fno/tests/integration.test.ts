@@ -33,6 +33,7 @@ const skip = bin || process.env.CI ? false : "no PostgreSQL binaries installed";
 const repo = join(import.meta.dirname, "..", "..", "..", "..");
 const examples = JSON.parse(readFileSync(join(repo, "api/examples/blocks-33-34.json"), "utf8"));
 const homeExamples = JSON.parse(readFileSync(join(repo, "api/examples/blocks.json"), "utf8"));
+const screenExamples = JSON.parse(readFileSync(join(repo, "api/examples/fno-screens.json"), "utf8"));
 const home = (op: string) => homeExamples[op].value.payload;
 const day = JSON.parse(readFileSync(join(repo, "design/mockups/33-screener/data.json"), "utf8")).markets.india;
 const ex = (op: string) => examples[op].value.payload;
@@ -51,6 +52,8 @@ const PAGES: Record<FnoPageKey, unknown> = {
   today: home("getFnoPicks_india"),
   risk: home("getFnoBooks_india"),
   fno_events: ex("getFnoEvents_india_calendar"),
+  // the F&O screens' pages (P1's contract examples)
+  weather: screenExamples.getFnoWeather_india_green.value.payload,
 };
 const KEYS = Object.keys(PAGES) as FnoPageKey[];
 const IST = (date: string, time: string) => new Date(`${date}T${time}:00+05:30`);
