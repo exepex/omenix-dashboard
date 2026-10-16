@@ -50,7 +50,7 @@ Backend records named in the tables (exepex/trading):
   - `india_missing` (negative): Mock (india): NO TRADE, a missing input named. The data checks failed; each missing input is named with the story that brings it
   - `india_none` (empty): Mock (india): NO TRADE, no strategy has passed. The shape of the real state while no strategy is approved to paper, as a TEST post of live delivery (like T1's first post of 15 Oct 2026); the house forecast has no live record yet
 - **Never sent (strategy internals):** the strategy's entry conditions, filters and thresholds (why it chose this day beyond the forecast and weather shown); the AI team's and the devil's advocate's prompts and model settings; the strategy's parameters and any fitted value
-- **Fields:** 107, of which the backend can fill 29 today
+- **Fields:** 108, of which the backend can fill 29 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
@@ -91,6 +91,7 @@ Backend records named in the tables (exepex/trading):
 | `trade.size.units` | Lots times the lot size | units | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.size.funds_at_entry` | Money tied up at entry (C2 and A14: the debit plus the short leg's margin) | INR (Paper) | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.max_loss` | Most it can lose, charges included, fixed at entry (at most Rs 10,000 a trade, owner 14 Oct 2026) | INR (Paper) | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
+| `trade.max_loss_cap` | The most one trade may lose, charges included, as the book's profile sets it (Rs 10,000, owner 14 Oct 2026; 2.11.0: sent, never copied into a screen). The schema's maximum is the owner's ceiling of 14 Oct: raising it is a contract change | INR (Paper) | the book's C5 profile (config risk.profiles.<profile>.max_loss_per_trade_rs) | once a session day at card_sent_at (target 15:08 IST) | owner | no: C5 |
 | `trade.worst_cases[].scenario` | e.g. "The worst 5 sessions of March 2020" | text | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.worst_cases[].loss` | The loss in that stretch | INR (Paper) | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.exit_plan[]` | One exit | text | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
