@@ -83,3 +83,17 @@ screen's own words assumed it is always plain history, and both are fixed:
 New test `lib/fno-forecast-lab/tests/yardstick.test.ts`: a baseline is never called the yardstick by its kind, and a
 book named as `primary_baseline` shows as the yardstick under its own name, both in the overview and on each
 question. No code path changes; the words do.
+
+## Addendum 3: judge 249's should-fix (not every baseline is plain history)
+
+Accepted. Exepex/trading's research/forecasts/PROTOCOL.md defines three baselines, and only one is plain history: (a)
+is read from option prices (line 82), (b) is the past base rate (line 93) and (c) is a simple OLS model (line 97).
+Addendum 2 had labelled every baseline "Baseline (plain history)", which was false for two of the three.
+
+- The "What" column now says "Baseline" alone, beside each forecaster's own name from the payload ("Option prices,
+  premium removed", "How often it happened", "Recent movement"). The name says which baseline it is, so the screen
+  states nothing it cannot know. The comment at view.ts says the same.
+- The test checks all three baselines: each says "Baseline", keeps its own name, and the words "plain history" appear
+  nowhere in the forecaster rows.
+
+npm test 531/531; typecheck and build pass.

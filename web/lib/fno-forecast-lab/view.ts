@@ -58,9 +58,12 @@ const STATE: Record<Forecaster["status"], Look> = {
   not_running: { tone: "neutral", icon: "timer", word: "Not running" },
   not_started: { tone: "neutral", icon: "remove", word: "Not started" },
 };
-/** What each forecaster is. A baseline is plain history; which forecaster is a question's yardstick is the payload's
- *  `primary_baseline` (under protocol v3 a book, Rule-based), never assumed from its kind. */
-const KIND: Record<Forecaster["kind"], string> = { family: "Book", baseline: "Baseline (plain history)", weather: "Weather", house: "The card’s forecast" };
+
+/** What each forecaster is. A baseline is only "Baseline": the three differ (option prices, the past base rate, a
+ *  simple model; exepex/trading research/forecasts/PROTOCOL.md) and each one's own name says which. Which forecaster
+ *  is a question's yardstick is the payload's `primary_baseline` (under protocol v3 a book, Rule-based), never assumed
+ *  from its kind. */
+const KIND: Record<Forecaster["kind"], string> = { family: "Book", baseline: "Baseline", weather: "Weather", house: "The card’s forecast" };
 
 export interface ForecasterRow {
   id: string;
