@@ -19,6 +19,7 @@ export const FNO_PAGES = {
   getFnoForecastLab: "forecast_lab",
   getFnoStrategyLab: "strategy_lab",
   getFnoPaperTrades: "paper_trades",
+  getFnoDataHealth: "data_health",
   getFnoBudget: "budget",
 } as const;
 

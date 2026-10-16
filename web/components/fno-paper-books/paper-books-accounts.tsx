@@ -32,7 +32,7 @@ function Book({ b }: { b: BookCard }) {
 }
 
 export function PaperBookCards({ p }: { p: FnoPaperTrades }) {
-  return <div className="books">{booksOf(p).map((b) => <Book key={b.family} b={b} />)}</div>;
+  return <div className="cards3">{booksOf(p).map((b) => <Book key={b.family} b={b} />)}</div>;
 }
 
 export function PaperShadows({ p }: { p: FnoPaperTrades }) {
@@ -40,7 +40,7 @@ export function PaperShadows({ p }: { p: FnoPaperTrades }) {
   return (
     <Sec title={<>Shadow tests<PaperTag label="Paper" /></>} aria="Shadow tests">
       {shadows.length ? (
-        <div className="books">{shadows.map((s) => <Fact key={s.name} k={s.kind} v={s.name} note={s.detail} />)}</div>
+        <div className="cards3">{shadows.map((s) => <Fact key={s.name} k={s.kind} v={s.name} note={s.detail} />)}</div>
       ) : <Quiet>{NO_SHADOWS}</Quiet>}
       <HowTo>Shadow tests trade on paper beside the books to test a candidate; they are never part of a book or its results.</HowTo>
     </Sec>
