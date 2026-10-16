@@ -32,8 +32,8 @@ test("no exepex/trading block of the contract is missing from the dashboard's ma
   const read = new Set(Object.keys(FNO_PAGES));
   const fnoBlocks = new Set(Object.entries(examples).filter(([, e]) => e.value.publisher === "fno").map(([name]) => name.split("_")[0]));
   // the F&O blocks the screens do not read yet (contract search, contract quote, order rules: the order window is not built;
-  // P1's other screens: W3f to W3h; contract 2.8.0's scoreboards and budget: W3h, W3g; 2.9.0's forecast history: W3b)
+  // P1's other screens: W3f and W3h; contract 2.8.0's scoreboards: W3h; 2.9.0's forecast history: W3b)
   const notRead = new Set(["searchFnoContracts", "getFnoContract", "getFnoOrderRules", "getFnoCard",
-    "getFnoScoreboards", "getFnoBudget", "getFnoForecastHistory"]);
+    "getFnoScoreboards", "getFnoForecastHistory"]);
   assert.deepEqual([...fnoBlocks].filter((b) => !read.has(b) && !notRead.has(b)), []);
 });

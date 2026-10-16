@@ -1,7 +1,7 @@
 /* The paper books' own page rules (story W3c; 41-paper-books/template.html), scoped with :where so the design system's
    component rules keep their weight. The bar track is shared (components/fno-common/fno-screen.css). */
 :where(.paper-books) .sec .cards3{margin-top:0}
-:where(.paper-books) .facts2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+:where(.paper-books) .facts2{margin-top:8px}
 :where(.paper-books) .change{margin:6px 0 0}
 :where(.paper-books) .cap{margin-top:10px}
 :where(.paper-books) .legs{display:flex;flex-wrap:wrap;gap:4px}

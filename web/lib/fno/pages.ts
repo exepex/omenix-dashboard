@@ -20,6 +20,7 @@ export const FNO_PAGES = {
   getFnoStrategyLab: "strategy_lab",
   getFnoPaperTrades: "paper_trades",
   getFnoDataHealth: "data_health",
+  getFnoBudget: "budget",
 } as const;
 
 export type FnoBlockName = keyof typeof FNO_PAGES;
