@@ -79,6 +79,31 @@
               india_waiting: {$ref: '#/components/examples/getFnoForecastLab_india_waiting'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/forecast-lab/history:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoForecastHistory
+    summary: "The Forecast lab's running scores, session by session, for the race chart and a period you choose (contract 2.9)"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page forecast_history (published by P2 in the F&O publication; owner, 16 Oct 2026, response 226 field A)'
+    x-freshness: 'fno_calendar; after each session''s close'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'questions empty (no session scored yet)'
+    responses:
+      '200':
+        description: 'The FnoForecastHistory page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoForecastHistoryResponse'}
+            examples:
+              india_ahead: {$ref: '#/components/examples/getFnoForecastHistory_india_ahead'}
+              india_behind: {$ref: '#/components/examples/getFnoForecastHistory_india_behind'}
+              india_none: {$ref: '#/components/examples/getFnoForecastHistory_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
 /api/v1/markets/india/fno/strategy-lab:
   get:
     tags: [fno-screens]
@@ -133,7 +158,7 @@
   get:
     tags: [fno-screens]
     operationId: getFnoWeatherHistory
-    summary: "Every session's weather colour and label, for the colour strip (colour only until the owner's weather-levels choice)"
+    summary: "Every session's weather colour, label and chances of a big move, for the colour strip and the chances chart"
     x-status: planned
     x-publisher: fno
     x-read-model: 'fno.pages_history page weather_history (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)'
