@@ -1,4 +1,4 @@
-// Today's card's read model (story W3f; contract FnoCard, api/schemas/fno-card.yaml, P1 and T1's addendum): what the
+// Today's card's read model (story W3f; contract FnoCard, api/schemas/fno-card.yaml, P1, T1's addendum and 2.11.0): what the
 // page `card` of exepex/trading's F&O publication carries. PAPER ONLY; what the desk decided and why in plain words,
 // never the strategy's rules, prompts or parameters (the contract's x-never-sent). The position, the stress line and
 // the objections are owner only (the dashboard is behind sign-in). Types only.
@@ -24,6 +24,8 @@ export interface CardTrade {
   entry: { kind: "debit" | "credit"; min_per_unit: number; max_per_unit: number; valid_until: string };
   size: { lots: number; units: number; funds_at_entry: number };
   max_loss: number;
+  /** The most one paper trade may lose, from the book's C5 profile (contract 2.11.0). */
+  max_loss_cap: number;
   worst_cases: { scenario: string; loss: number }[];
   exit_plan: string[];
   costs: { charges_and_pads: number; breakeven_per_unit: number; tax_rate: number };

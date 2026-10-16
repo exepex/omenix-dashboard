@@ -1,7 +1,6 @@
 /* The market weather's own page rules (story W3a; 40-weather/template.html), scoped with :where so the design system's
    component rules keep their weight. The F&O screens' shared layout is components/fno-common/fno-screen.css. */
 :where(.weather) .cap{margin-top:4px}
-:where(.weather) .chance .base{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--md-sys-color-on-surface)}
 :where(.weather) .drivers{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
 :where(.weather) .drivers li{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px}
 :where(.weather) .history-link{margin:8px 0 0}

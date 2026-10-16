@@ -1,7 +1,7 @@
 // The AI usage and budget in words (story W3g; design/mockups/43-budget, its 2-budget.js): the month's AI book and role
 // minutes against the cap with the level, and the minutes by kind of work. Minutes only: no rupees, no model name, no
-// session. BG1's alert share and the cap's share of the basis are not in the payload (contract 2.10.0), so the screen
-// names neither (no copied 80% or "half"); the level itself is the payload's. Pure.
+// session. BG1's shares (the cap's share of the basis, the alert and the stop) are the payload's own (contract 2.11.0),
+// never a copy in the screen. Pure.
 import type { BudgetLevel, FnoBudget, WorkGroup } from "./contract.ts";
 
 export type Tone = "success" | "warn" | "danger" | "neutral";
@@ -37,9 +37,12 @@ export interface CapView {
   used: { k: string; v: string; note: string };
   cap: { k: string; v: string; note: string };
   bar: number | null;
+  /** Where the alert mark sits on the bar, in percent of the cap. */
+  tick: number;
   aria: string;
   words: string;
   note: string | null;
+  howTo: string;
 }
 
 export function capOf(b: FnoBudget): CapView {
@@ -47,11 +50,13 @@ export function capOf(b: FnoBudget): CapView {
   return {
     level: LEVEL[b.level],
     used: { k: "Used", v: minutes(b.books_and_roles_minutes), note: `in ${monthWords(b.month)}` },
-    cap: { k: "Cap", v: minutes(b.cap_minutes), note: `out of ${minutes(b.basis_minutes)} ${b.basis === "plan" ? "in your plan" : "measured"}` },
+    cap: { k: "Cap", v: minutes(b.cap_minutes), note: `${b.share_pct}% of ${minutes(b.basis_minutes)} ${b.basis === "plan" ? "in your plan" : "measured"}` },
     bar: pct === null ? null : Math.min(100, Math.round(pct * 10) / 10),
-    aria: pct === null ? "Nothing to measure yet" : `${Math.round(pct)}% of the cap used`,
-    words: pct === null ? "Nothing to measure yet." : `${Math.round(pct)}% of the cap used. Near the cap an alert goes out; at the cap the AI roles stop, the AI forecasters last.`,
+    tick: Math.min(100, b.alert_pct),
+    aria: pct === null ? "Nothing to measure yet" : `${Math.round(pct)}% of the cap used; the alert is at ${b.alert_pct}%`,
+    words: pct === null ? "Nothing to measure yet." : `${Math.round(pct)}% of the cap used. At ${b.alert_pct}% an alert goes out; at ${b.stop_pct}% the AI roles stop, the AI forecasters last.`,
     note: b.note || null,
+    howTo: `The budget is counted in minutes of AI sessions, not money. The AI books and roles may use at most ${b.share_pct}% of the basis.`,
   };
 }
 

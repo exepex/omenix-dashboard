@@ -1,7 +1,7 @@
 // The card's position in words (story W3f; design/mockups/39-trade-card, its 3-position.js), TRADE and WATCH only and
 // owner only: what, the legs, the entry range, how much, the most it can lose, the worst stretches, the exits, what
-// would prove it wrong, costs and tax and the volatility edge. The per-trade loss cap is not in the payload (contract
-// 2.10.0), so the screen shows the most it can lose alone and never a copy of the owner's cap. Pure.
+// would prove it wrong, costs and tax and the volatility edge. The per-trade loss cap is the payload's own
+// (`trade.max_loss_cap`, contract 2.11.0), never a copy in the screen. Pure.
 import { money } from "../ui/format.ts";
 import type { CardTrade, FnoCard } from "./contract.ts";
 import { dayLabel, ist, type Look } from "./view.ts";
@@ -36,7 +36,7 @@ export interface Position {
   legs: LegRow[];
   entry: EntryRange;
   size: { k: string; v: string; note?: string }[];
-  maxLoss: string;
+  maxLoss: { words: string; bar: number; aria: string; note: string };
   worstCases: string[];
   exits: string[];
   provesWrong: string[];
@@ -73,6 +73,18 @@ function entryOf(t: CardTrade): EntryRange {
   };
 }
 
+/** The most it can lose against the cap a trade may lose, both from the payload. */
+function maxLossOf(t: CardTrade) {
+  const share = Math.min(1, t.max_loss / t.max_loss_cap);
+  const pct = `${Math.round(share * 100)}%`;
+  return {
+    words: `The most it can lose: ${rs(t.max_loss)}, charges included`,
+    bar: round1(share * 100),
+    aria: `${pct} of the ${rs(t.max_loss_cap)} cap`,
+    note: `${pct} of the ${rs(t.max_loss_cap)} a trade may lose. Fixed at entry: no stop-loss order is needed.`,
+  };
+}
+
 /** The position, or null on a NO TRADE card (it carries none). */
 export function positionOf(c: FnoCard): Position | null {
   const t = c.trade;
@@ -88,7 +100,7 @@ export function positionOf(c: FnoCard): Position | null {
       { k: "Money tied up", v: rs(t.size.funds_at_entry), note: "The debit plus the short leg’s margin" },
       { k: "Paper", v: "No real money" },
     ],
-    maxLoss: `The most it can lose: ${rs(t.max_loss)}, charges included. Fixed at entry: no stop-loss order is needed.`,
+    maxLoss: maxLossOf(t),
     worstCases: t.worst_cases.map((w) => `${w.scenario}: loss ${rs(w.loss)}`),
     exits: t.exit_plan,
     provesWrong: t.proves_wrong,
