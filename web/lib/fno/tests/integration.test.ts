@@ -57,6 +57,7 @@ const PAGES: Record<FnoPageKey, unknown> = {
   weather_history: screenExamples.getFnoWeatherHistory_india_stormy.value.payload,
   forecast_lab: screenExamples.getFnoForecastLab_india_winning.value.payload,
   strategy_lab: screenExamples.getFnoStrategyLab_india_passed.value.payload,
+  paper_trades: screenExamples.getFnoPaperTrades_india_won.value.payload,
   data_health: screenExamples.getFnoDataHealth_india_problems.value.payload,
 };
 const KEYS = Object.keys(PAGES) as FnoPageKey[];

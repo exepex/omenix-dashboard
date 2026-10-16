@@ -19,7 +19,7 @@ function Run({ title, run, howTo }: { title: string; run: RunView; howTo: string
 
 export function HealthRuns({ h }: { h: FnoDataHealth }) {
   return (
-    <div className="runs">
+    <div className="cards3">
       <Run title="The last publish" run={publishOf(h)} howTo="Runs every morning at 07:10 IST. A failed run keeps the previous pages; nothing half-written is shown." />
       <Run title="The daily health check" run={checkOf(h)} howTo="Runs at 17:51 IST and checks that every expected file and job of the day exists." />
     </div>
