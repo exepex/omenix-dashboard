@@ -23,7 +23,7 @@ FnoPageHolds:
         additionalProperties: false
         required: [page_key, since, reason, shows]
         properties:
-          page_key: {type: string, pattern: '^[a-z_]+$', x-unit: id, description: "The held page's key (e.g. forecast_lab, paper_trades, today, risk, card)"}
+          page_key: {type: string, pattern: '^[a-z_]+$', x-unit: id, description: "The held page's key (e.g. today and risk on Home, card)"}
           since: {type: string, format: date, x-unit: date (IST), description: 'The first session of this hold in a row'}
-          reason: {type: string, minLength: 1, pattern: '^[^0-9]*$', x-unit: text, description: "The rule that held it, a fixed sentence from P11's list (never a value: no digits)"}
+          reason: {type: string, minLength: 1, pattern: '^[^0-9]*$', x-unit: text, description: "Why it is held: one of P11's fixed sentences, in plain words, owned by its code (never a value, never a story or record code: no digits)"}
           shows: {type: string, enum: [previous_page, nothing], x-unit: enum, description: 'previous_page = the page keeps its last published row, dated by its own as_of; nothing = no row is shown, because the old one would state something no longer true (the screen says "not published")'}

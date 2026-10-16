@@ -335,16 +335,16 @@ Backend records named in the tables (exepex/trading):
 - **What it holds:** The pages held back in this publication, each with the first session it was held in a row, the reason it was held and what the screen shows meanwhile. Empty state: holds empty (every page published normally)
 - **Mock examples:**
   - `india_none` (positive): Mock (india): every page published. A normal day: nothing held back
-  - `india_held` (negative): Mock (india): three pages held back. The Forecast lab keeps its 11 Nov page (an answer day's calendar is missing); the paper books show nothing (an open trade has no marks); the card shows the previous card under its own notice
+  - `india_held` (negative): Mock (india): four pages held back. Home's picks and books show nothing (a page that would state something no longer true); the paper books and the card show their previous page (the card under its own notice)
   - `india_first` (empty): Mock (india): the first publication. No page has been held yet
 - **Never sent (strategy internals):** the held page's figures or the value that broke the rule (only which page, since when and which rule)
 - **Fields:** 4, of which the backend can fill 0 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
-| `holds[].page_key` | The held page's key (e.g. forecast_lab, paper_trades, today, risk, card) | id | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].page_key` | The held page's key (e.g. today and risk on Home, card) | id | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
 | `holds[].since` | The first session of this hold in a row | date (IST) | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
-| `holds[].reason` | The rule that held it, a fixed sentence from P11's list (never a value: no digits) | text | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].reason` | Why it is held: one of P11's fixed sentences, in plain words, owned by its code (never a value, never a story or record code: no digits) | text | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
 | `holds[].shows` | previous_page = the page keeps its last published row, dated by its own as_of; nothing = no row is shown, because the old one would state something no longer true (the screen says "not published") | enum | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
 
 ## The F&O Strategy lab: every trial counted, each idea's gate, each approved version's paper record per book
