@@ -1,5 +1,6 @@
 // Today's card's layout (story W3f; 39-trade-card 9-mount.js): the head, how current the F&O data is, then the card
-// read once through the CardData interface (lib/fno-card/wiring.ts chooses the adapter): the verdict and its times,
+// read once through the CardData interface (lib/fno-card/wiring.ts chooses the adapter): a held-back notice when
+// today's card was withheld (only the notice when the card on record is not earlier), the verdict and its times,
 // the position beside why and how sure, and every forecast on record. PAPER ONLY; the examples say Example through
 // the frame's rule.
 import { blockSection } from "../../../../../components/blocks/block-section.tsx";
@@ -10,8 +11,9 @@ import { Icon } from "../../../../../components/ui/icon.tsx";
 import { PaperTag } from "../../../../../components/ui/primitives.tsx";
 import { CardPosition } from "../../../../../components/fno-card/card-position.tsx";
 import { CardFooter, CardMisses, CardOnRecord, CardStayOut, CardStress, CardTradesSoFar } from "../../../../../components/fno-card/card-record.tsx";
-import { CardTimes, CardVerdict } from "../../../../../components/fno-card/card-top.tsx";
+import { CardHeldBack, CardTimes, CardVerdict } from "../../../../../components/fno-card/card-top.tsx";
 import { CardAdvocate, CardChecks, CardEvidence, CardForecast, CardWeather } from "../../../../../components/fno-card/card-why.tsx";
+import { heldBackOf } from "../../../../../lib/fno-card/view.ts";
 import { cardData, cardLive } from "../../../../../lib/fno-card/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
@@ -20,7 +22,7 @@ import "./card.css";
 const LEDE = "Every trading day, after the day’s decisions are final, the desk sends one card: a paper trade, no trade with the reason, or a shadow to watch. It says how much the trade can lose, why, how sure the forecast is, and what would prove it wrong. Paper only: no card ever asks you to place a real order.";
 
 const CardBlock = () =>
-  blockSection("Today’s card", () => cardData.card(), (c) => (
+  blockSection("Today’s card", () => cardData.card(), (c) => heldBackOf(c)?.showCard === false ? <CardHeldBack c={c} /> : (
     <>
       <CardVerdict c={c} />
       <CardTimes c={c} />

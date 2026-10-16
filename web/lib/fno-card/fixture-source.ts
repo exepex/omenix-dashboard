@@ -9,7 +9,7 @@ import type { CardData } from "./source.ts";
 /** Strategy versions carry display names only (the contract never sends a backend id), so no strategy-name rule. */
 const read = exampleReader(raw, { strategies: false });
 
-export const CARD_EXAMPLES = ["getFnoCard_india_none", "getFnoCard_india_trade", "getFnoCard_india_watch", "getFnoCard_india_red", "getFnoCard_india_missing"] as const;
+export const CARD_EXAMPLES = ["getFnoCard_india_none", "getFnoCard_india_trade", "getFnoCard_india_watch", "getFnoCard_india_red", "getFnoCard_india_missing", "getFnoCard_india_withheld"] as const;
 
 export const fixtureCardData: CardData = { card: async () => read<FnoCard>(CARD_EXAMPLES[0]) };
 
