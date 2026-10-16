@@ -5,6 +5,29 @@ the screen is built by the W3 builder in `web/`, the page by P2b). It replaces t
 data (`_platform/forecast_data.py`, removed) and "proposed contract" the
 catalog's `FnoForecastLab` superseded. India only, F&O only: absent in the US market.
 
+## The owner's 13 Oct 2026 requests: kept, changed or dropped (judge 217 should-fix 2)
+
+The replaced third draft (13 Oct, before contract 2.x) was built from two rounds of the owner's feedback on its own
+made-up data. The rebuild draws only what `FnoForecastLab` carries. Each request:
+
+| Owner's request (13 Oct) | Now | Why |
+|---|---|---|
+| Call it a lab, not a contest | **Kept** ("Forecast lab") | |
+| Plain language everywhere; plain question names | **Kept** | Question names are the payload's `plain` text; labels are plain words |
+| Today's predictions on top, the past below, saying which is which | **Kept** | "Today: what each forecaster says" (with each answer date), then "The past" |
+| Which family is best at which prediction | **Kept** | One row per question from the backend's own verdicts against its yardstick |
+| Overall ranked cards | **Changed**: ranked within each question, no rank across questions | The questions use different miss scores (Brier for chances, QLIKE for move sizes); ranking across them would add unlike numbers. Reasoning only |
+| Official statistics folded away "for the curious" | **Kept** | Per question, folded: average difference, likely range, p-value; v4 marked not frozen |
+| Say how long it runs | **Changed**: per question, when it could settle | `settle` gives a projected date per question, not one end date for the lab |
+| Who wins and loses and why; costliest mistakes as sentences ("what made the difference" story cards) | **Dropped for now** | The contract has no per-day forecasts with their outcomes; inventing them on screen would be made-up data. Needs a new field |
+| A period you choose (last week to since the start, or picked dates), its table and the race chart; one line graph of all families by day | **Dropped for now** | The contract has scores since the start only, no per-day or per-period series. Needs a new field |
+
+**To bring back the dropped two** (proposal, owner's call; reasoning only): a 2.9 addition of (1) a per-question,
+per-forecaster series of the running average miss score by session (the race chart and the period chooser), and (2)
+the last few settled forecasts with their outcomes (the "costliest mistakes" sentences). Both come from records the
+backend keeps (G4 scores, the forecast records); both are public-safe (answers and outcomes, never a rule). Not added
+in 2.8.0 because the orchestrator scoped 2.8 to the W3 pages and P2 would have to build them.
+
 ## Data used
 
 | State (URL `#s=`) | Case | Source |

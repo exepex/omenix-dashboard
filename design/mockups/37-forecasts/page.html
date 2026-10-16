@@ -2175,7 +2175,7 @@ return {mount, el, icon, svgEl, money, num, sgn, delta, P, st};
 </script>
 <script>
 /* 37-forecasts page runtime: the Forecast lab (forecasters, their questions and scores), drawn from the F&O data catalog's Mock
-   examples (contract 2.8.0; story W3). Split by purpose: 1 state and helpers, 2 the page, 9 mount.
+   examples (contract 2.8.0; story W3). Split by purpose: 1 state and helpers, 2 today, 3 who beats the yardstick, 4 each question, 5 the forecasters, 9 mount.
    The screen computes nothing beyond drawing: every figure is the payload's. Tokens only; never colour alone. */
 let KEY = null;
 /* URL: s (a state key of data.json); the default is the good case */
@@ -2212,26 +2212,38 @@ function srcLine(c, op, tip) {
     c.el('span', {class: 'mb-asof', 'data-tip': 'api/examples/fno-screens.json, operation ' + op}, c.icon('schedule'), 'F&O data catalog: ' + op),
     c.el('span', {class: 'mb-tag mock', 'data-tip': tip}, 'Mock: made up'));
 }
-/* The standing line, the protocols and the forecasters: who answers, how each is kept from seeing outcomes, and how
-   many days counted (a missing day is shown, never treated as zero skill). */
-const STATE = {running: ['success', 'check', 'Running'], not_running: ['neutral', 'timer', 'Not running'], not_started: ['neutral', 'remove', 'Not started']};
-const KIND = {family: 'Book', baseline: 'Yardstick', weather: 'Weather', house: 'The card\'s forecast'};
-function fname(id) { const f = pay().forecasters.find(x => x.id === id); return f ? f.name : id; }
-function forecastersPart(main, c) {
-  const {el} = c, P = pay();
-  main.append(el('p', {class: 'small', style: 'margin:12px 0 0'}, c.icon('info'), ' ', P.standing),
-    el('div', {class: 'stack'}, sec(c, 'Who forecasts', el('div', {class: 'chips'}, ...P.protocols.map(p => el('span', {class: 'md-chip small', 'data-tip': p.questions.join(', ')}, `Protocol ${p.version}: ${p.status === 'frozen' ? 'frozen' : 'draft (nothing counts yet)'}`))),
-      el('div', {class: 'md-table-wrap'}, el('table', {class: 'md-table tstack'},
-        el('thead', {}, el('tr', {}, ...['Forecaster', 'What it is', 'State', 'Kept from the answers by', 'Days counted'].map(h => el('th', {scope: 'col'}, h)))),
-        el('tbody', {}, ...P.forecasters.map(f => { const [cls, g, w] = STATE[f.status], v = f.coverage;
-          return el('tr', {}, el('td', {'data-k': 'Forecaster'}, f.family ? family(c, f.family) : f.name), el('td', {'data-k': 'What it is'}, KIND[f.kind]),
-            el('td', {'data-k': 'State'}, el('span', {class: 'mb-label ' + cls}, c.icon(g), w)),
-            el('td', {'data-k': 'Kept from the answers by'}, f.isolation === 'code' ? 'Plain code' : f.isolation_label || 'Full isolation'),
-            el('td', {'data-k': 'Days counted'}, v ? `${v.counted_days} of ${v.pack_days}` : '—', v ? el('small', {}, `${v.missing_days} missing · ${v.late_days} late · ${v.unscored_days} not scored`) : null)); })))),
-      howto(c, 'A late or missing forecast is not counted and is shown here, never filled in. "Sealed same day" means an AI book commits to its answer before the deadline; it is not full isolation.'))));
+/* Today's forecasts on top, the past below, each said plainly (owner, 13 Oct 2026, second feedback round). */
+function todayPart(main, c) {
+  const {el} = c, qs = pay().questions.filter(q => q.today);
+  main.append(el('div', {class: 'stack'}, sec(c, 'Today: what each forecaster says',
+    qs.length ? el('div', {class: 'md-table-wrap'}, el('table', {class: 'md-table tstack'},
+      el('thead', {}, el('tr', {}, ...['Question', 'Answers', 'Answer known on'].map(h => el('th', {scope: 'col'}, h)))),
+      el('tbody', {}, ...qs.map(q => el('tr', {}, el('td', {'data-k': 'Question'}, q.plain),
+        el('td', {'data-k': 'Answers'}, q.today.values.map(v => `${fname(v.forecaster)} ${answer(q, v)}${VSTATUS[v.status]}`).join(' · ')),
+        el('td', {'data-k': 'Answer known on'}, dlabel(q.today.answer_on))))))) : el('p', {class: 'empty muted'}, 'No forecast was made today.'),
+    howto(c, 'Nobody is right or wrong yet: these answers are known only on the answer date. Everything below is the past, forecasts whose answers are known.'))));
 }
-/* One card per question: today's answers, each forecaster's average miss score, the comparison against the yardstick
-   with its verdict, and when it could settle. Waiting and not-started questions say why. */
+/* Which forecaster beats the yardstick on which question (owner, 13 Oct 2026): one row per question, from the
+   backend's own verdicts. No rank across questions: Brier and QLIKE scores are on different scales. */
+function namesWith(S, verdict) { return S.comparisons.filter(m => m.verdict === verdict).map(m => fname(m.forecaster)); }
+function bestCell(c, S) {
+  const better = namesWith(S, 'better'), worse = namesWith(S, 'worse');
+  if (!S.comparisons.length) return c.el('span', {class: 'mb-label neutral'}, c.icon('timer'), 'Not tested yet');
+  return c.el('span', {}, better.length ? c.el('span', {class: 'mb-label success'}, c.icon('check'), 'Better: ' + better.join(', ')) : c.el('span', {class: 'mb-label neutral'}, c.icon('trending_flat'), 'Nobody better yet'),
+    worse.length ? c.el('small', {}, 'Worse: ' + worse.join(', ')) : null);
+}
+function bestPart(main, c) {
+  const {el} = c, qs = pay().questions.filter(q => q.scores);
+  main.append(el('div', {class: 'stack'}, sec(c, 'The past: who beats the yardstick, question by question',
+    qs.length ? el('div', {class: 'md-table-wrap'}, el('table', {class: 'md-table tstack'},
+      el('thead', {}, el('tr', {}, ...['Question', 'Against the yardstick', 'Yardstick'].map(h => el('th', {scope: 'col'}, h)))),
+      el('tbody', {}, ...qs.map(q => el('tr', {}, el('td', {'data-k': 'Question'}, q.plain), el('td', {'data-k': 'Against the yardstick'}, bestCell(c, q.scores)),
+        el('td', {'data-k': 'Yardstick'}, fname(q.primary_baseline))))))) : el('p', {class: 'empty muted'}, 'No question has a score yet.'),
+    howto(c, 'Each question has its own yardstick, fixed before any result. A forecaster is "better" only when the test says so over many days, not after one good week.'))));
+}
+/* One card per question (the past): forecasters ranked by their average miss score (best first, unscored last), the
+   comparison against the yardstick with its verdict, the official numbers folded away, and when it could settle.
+   Waiting and not-started questions say why. */
 const QSTATE = {scoring: ['success', 'check', 'Scoring'], waiting_for_data: ['warn', 'schedule', 'Waiting for data'], not_started: ['neutral', 'remove', 'Not started']};
 const VERDICT = {better: ['success', 'check', 'Better than the yardstick'], worse: ['danger', 'close', 'Worse than the yardstick'], no_difference: ['neutral', 'trending_flat', 'No clear difference'],
   futile: ['neutral', 'block', 'Cannot win: stop testing'], not_tested: ['neutral', 'timer', 'Not enough days yet'], before_review: ['neutral', 'event', 'Before its review date']};
@@ -2241,21 +2253,49 @@ function settle(s) {
   return s.status === 'not_measured' ? 'Too few days to say when it could settle (under 60).' : s.status === 'projected' ? `Could settle around ${dlabel(s.projected_date)}.`
     : `Would need until ${s.projected_date ? dlabel(s.projected_date) : 'more than 2 years'}: too long to wait.`;
 }
+function ranked(rows) { return [...rows].sort((a, b) => (a.mean_loss == null) - (b.mean_loss == null) || a.mean_loss - b.mean_loss); }
+function num(x, d) { return x == null ? '—' : x.toFixed(d); }
+/* the official statistics, folded away "for the curious" (owner, 13 Oct 2026) */
+function curious(c, q) {
+  const {el} = c;
+  return el('details', {class: 'small', style: 'margin-top:8px'}, el('summary', {}, 'For the curious: the test\'s numbers'),
+    el('ul', {style: 'margin:6px 0 0;padding-left:18px'}, ...q.scores.comparisons.map(m => el('li', {},
+      `${fname(m.forecaster)}: average difference ${num(m.mean_diff, 4)} (below zero favours it), likely range ${m.interval ? m.interval.map(x => x.toFixed(4)).join(' to ') : '—'}, p-value ${num(m.p_value, 3)}`))),
+    q.protocol === 'v4' ? el('p', {class: 'muted', style: 'margin:6px 0 0'}, 'Protocol v4 is not frozen yet: these numbers may change meaning when it is.') : null);
+}
 function questionCard(c, q) {
   const {el} = c, [cls, g, w] = QSTATE[q.status], S = q.scores;
   return el('section', {class: 'card sec q', 'aria-label': q.plain}, el('h2', {}, q.plain, el('span', {class: 'mb-label ' + cls}, c.icon(g), w), el('small', {}, `${q.id} · protocol ${q.protocol} · answer in ${q.horizon_sessions} session${q.horizon_sessions === 1 ? '' : 's'}`)),
     q.waiting_for.length ? el('ul', {class: 'small', style: 'margin:0 0 8px;padding-left:18px'}, ...q.waiting_for.map(m => el('li', {}, `${m.input} (${m.story}): ${m.detail}`))) : null,
-    q.today ? el('p', {class: 'small', style: 'margin:0 0 8px'}, el('b', {}, `Today (${dlabel(q.today.made_on)}): `), q.today.values.map(v => `${fname(v.forecaster)} ${answer(q, v)}${VSTATUS[v.status]}`).join(' · ')) : null,
     S && S.per_forecaster.length ? el('div', {class: 'md-table-wrap'}, el('table', {class: 'md-table tstack'},
-      el('thead', {}, el('tr', {}, ...['Forecaster', 'Days', 'Missing', `Average miss (${q.metric === 'brier' ? 'Brier' : 'QLIKE'}, lower is better)`].map(h => el('th', {scope: 'col'}, h)))),
-      el('tbody', {}, ...S.per_forecaster.map(p => el('tr', {}, el('td', {'data-k': 'Forecaster'}, fname(p.forecaster)), el('td', {class: 'md-numeric', 'data-k': 'Days'}, String(p.n)),
+      el('thead', {}, el('tr', {}, ...['Rank', 'Forecaster', 'Days', 'Missing', `Average miss (${q.metric === 'brier' ? 'Brier' : 'QLIKE'}, lower is better)`].map(h => el('th', {scope: 'col'}, h)))),
+      el('tbody', {}, ...ranked(S.per_forecaster).map((p, i) => el('tr', {}, el('td', {class: 'md-numeric', 'data-k': 'Rank'}, p.mean_loss == null ? '—' : String(i + 1)), el('td', {'data-k': 'Forecaster'}, fname(p.forecaster)), el('td', {class: 'md-numeric', 'data-k': 'Days'}, String(p.n)),
         el('td', {class: 'md-numeric', 'data-k': 'Missing'}, String(p.n_missing)), el('td', {class: 'md-numeric', 'data-k': 'Average miss'}, p.mean_loss == null ? '—' : p.mean_loss.toFixed(3))))))) : null,
     S && S.comparisons.length ? el('ul', {class: 'drivers', style: 'list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px'}, ...S.comparisons.map(m => { const [vc, vg, vw] = VERDICT[m.verdict];
       return el('li', {class: 'small'}, el('span', {class: 'mb-label ' + vc}, c.icon(vg), vw), ` ${fname(m.forecaster)} against ${fname(m.baseline)}, ${m.n_pairs} days compared`); })) : null,
+    S && S.comparisons.length ? curious(c, q) : null,
     S ? el('p', {class: 'small muted', style: 'margin:8px 0 0'}, settle(q.settle)) : null,
     howto(c, `The yardstick is ${fname(q.primary_baseline)}, fixed before any result was seen. "Better" needs the whole interval below zero, not one lucky month.`));
 }
 function questionsPart(main, c) { main.append(c.el('div', {class: 'stack'}, ...pay().questions.map(q => questionCard(c, q)))); }
+/* The standing line (first on the page), then, last, the protocols and the forecasters: who answers, how each is kept from seeing outcomes, and how
+   many days counted (a missing day is shown, never treated as zero skill). */
+const STATE = {running: ['success', 'check', 'Running'], not_running: ['neutral', 'timer', 'Not running'], not_started: ['neutral', 'remove', 'Not started']};
+const KIND = {family: 'Book', baseline: 'Yardstick', weather: 'Weather', house: 'The card\'s forecast'};
+function fname(id) { const f = pay().forecasters.find(x => x.id === id); return f ? f.name : id; }
+function standingPart(main, c) { main.append(c.el('p', {class: 'small', style: 'margin:12px 0 0'}, c.icon('info'), ' ', pay().standing)); }
+function forecastersPart(main, c) {
+  const {el} = c, P = pay();
+  main.append(el('div', {class: 'stack'}, sec(c, 'Who forecasts', el('div', {class: 'chips'}, ...P.protocols.map(p => el('span', {class: 'md-chip small', 'data-tip': p.questions.join(', ')}, `Protocol ${p.version}: ${p.status === 'frozen' ? 'frozen' : 'draft (nothing counts yet)'}`))),
+      el('div', {class: 'md-table-wrap'}, el('table', {class: 'md-table tstack'},
+        el('thead', {}, el('tr', {}, ...['Forecaster', 'What it is', 'State', 'Kept from the answers by', 'Days counted'].map(h => el('th', {scope: 'col'}, h)))),
+        el('tbody', {}, ...P.forecasters.map(f => { const [cls, g, w] = STATE[f.status], v = f.coverage;
+          return el('tr', {}, el('td', {'data-k': 'Forecaster'}, f.family ? family(c, f.family) : f.name), el('td', {'data-k': 'What it is'}, KIND[f.kind]),
+            el('td', {'data-k': 'State'}, el('span', {class: 'mb-label ' + cls}, c.icon(g), w)),
+            el('td', {'data-k': 'Kept from the answers by'}, f.isolation === 'code' ? 'Plain code' : f.isolation_label || 'Full isolation'),
+            el('td', {'data-k': 'Days counted'}, v ? `${v.counted_days} of ${v.pack_days}` : '—', v ? el('small', {}, `${v.missing_days} missing · ${v.late_days} late · ${v.unscored_days} not scored`) : null)); })))),
+      howto(c, 'A late or missing forecast is not counted and is shown here, never filled in. "Sealed same day" means an AI book commits to its answer before the deadline; it is not full isolation.'))));
+}
 /* Mount last: every function and state the render uses is defined by now (files 1-3). */
 PF.mount({screen: 'forecasts', group: 'strategies', strip: false, dataLabel: 'Mock examples from the F&O data catalog (story P1)',
   readHash(h) { KEY = h.get('s') in D.states ? h.get('s') : null; PF.st.wlOff = h.get('wloff') !== '0'; },
@@ -2263,7 +2303,7 @@ PF.mount({screen: 'forecasts', group: 'strategies', strip: false, dataLabel: 'Mo
   render(main, c) {
     if (!c.P.fno) { location.replace('../31-dashboard/page.html#m=' + c.m); return; }   /* India only: absent in the US */
     topPart(main, c, 'Forecast lab', 'Forecast lab', 'Every forecaster answers the same questions each day before the deadline. Each is scored against a fixed yardstick, so you can see who reads the market better than plain history.', false);
-    forecastersPart(main, c); questionsPart(main, c);
+    standingPart(main, c); todayPart(main, c); bestPart(main, c); questionsPart(main, c); forecastersPart(main, c);
     main.append(srcLine(c, 'getFnoForecastLab', 'Every number is made up.'));
   }});
 

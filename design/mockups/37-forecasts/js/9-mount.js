@@ -5,6 +5,6 @@ PF.mount({screen: 'forecasts', group: 'strategies', strip: false, dataLabel: 'Mo
   render(main, c) {
     if (!c.P.fno) { location.replace('../31-dashboard/page.html#m=' + c.m); return; }   /* India only: absent in the US */
     topPart(main, c, 'Forecast lab', 'Forecast lab', 'Every forecaster answers the same questions each day before the deadline. Each is scored against a fixed yardstick, so you can see who reads the market better than plain history.', false);
-    forecastersPart(main, c); questionsPart(main, c);
+    standingPart(main, c); todayPart(main, c); bestPart(main, c); questionsPart(main, c); forecastersPart(main, c);
     main.append(srcLine(c, 'getFnoForecastLab', 'Every number is made up.'));
   }});
