@@ -13,8 +13,10 @@ const WIRING = "lib/home/wiring";
 const LOADERS = "app/(cockpit)/[market]/_home/blocks.tsx";
 const FORBIDDEN = [ADAPTER, /^lib\/home\/wiring$/, /^lib\/shell\/(fixture-source$|azure-source$|fixture\/|wiring$)/, /^lib\/fno\//, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
 
+/** Each F&O screen's own fixture adapter (story W3: lib/fno-<screen>/) reads the examples too. */
+const FNO_SCREEN_FIXTURE = /^lib\/fno-[a-z-]+\/fixture-source$/;
 export const adapterImports = (files: Source[]) =>
-  files.filter((f) => ![WIRING, "lib/home/fixture-source", "lib/overview/fixture-source", "lib/screener/fixture-source", "lib/fno-weather/fixture-source", "lib/fixtures/examples"].includes(canonical(f.path))).flatMap((f) => importsOf(f).filter((m) => ADAPTER.test(m)).map((m) => `${f.path} imports ${m}`));
+  files.filter((f) => ![WIRING, "lib/home/fixture-source", "lib/overview/fixture-source", "lib/screener/fixture-source", "lib/fixtures/examples"].includes(canonical(f.path)) && !FNO_SCREEN_FIXTURE.test(canonical(f.path))).flatMap((f) => importsOf(f).filter((m) => ADAPTER.test(m)).map((m) => `${f.path} imports ${m}`));
 export const wiringReaders = (files: Source[]) => files.filter((f) => importsOf(f).includes(WIRING)).map((f) => f.path);
 export const forbiddenReach = (start: Source[], all: Source[]) => [...reachable(start, all)].filter((m) => FORBIDDEN.some((re) => re.test(m))).sort();
 

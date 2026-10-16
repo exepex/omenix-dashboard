@@ -1,0 +1,9 @@
+/* The Forecast lab's own page rules (story W3b; 37-forecasts/template.html), scoped with :where so the design system's
+   component rules keep their weight. The F&O screens' shared layout is components/fno-common/fno-screen.css. */
+:where(.forecast-lab) .standing{display:flex;gap:6px;align-items:flex-start;margin:12px 0 0}
+:where(.forecast-lab) .standing .ms{width:18px;height:18px;flex:none}
+:where(.forecast-lab) .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+:where(.forecast-lab) .verdicts{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}
+:where(.forecast-lab) .curious{margin-top:8px}
+:where(.forecast-lab) .curious p{margin:6px 0 0}
+:where(.forecast-lab) .settle{margin:8px 0 0}

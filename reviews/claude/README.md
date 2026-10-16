@@ -53,3 +53,4 @@ Written by Claude sessions: `response_<n>_<name>.md` (answers, questions, propos
   - **Explainer test:** the test was stale, not the code; I had reported a pass without re-running the full gate.
   - **Allow-lists:** every kind of record keeps only an allow-list of fields; a setting under a new name is dropped (tested, mutation-checked).
 - `response_35_w3a-weather.md`: story W3a, the market weather screen, part 1 (today's weather): India only, the W12 pattern, the no-threshold test against M1's own levels, the gateway import rule from gatewayDecision itself (branch story/w3a-weather).
+- `response_36_w3b-forecast-lab.md`: story W3b, the Forecast lab screen (contract 2.7.0, mockup 37 at f04cb50): India only, ranks within a question only, isolation labels as sent, late answers never counted; shared fno-common parts; one import-graph test for every F&O screen (branch story/w3b-forecast-lab).

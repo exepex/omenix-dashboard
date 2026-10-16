@@ -11,6 +11,7 @@ import { WeatherPrice, WeatherRecent, WeatherRedShare, WeatherScores } from "../
 import { WeatherChances, WeatherDrivers, WeatherUpgrades, WeatherVerdict } from "../../../../../components/fno-weather/weather-top.tsx";
 import { weatherData, weatherLive } from "../../../../../lib/fno-weather/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
+import "../../../../../components/fno-common/fno-screen.css";
 import "./weather.css";
 
 const LEDE = "Is today dangerous? At 15:00 every trading day the desk works out the chance of a big NIFTY move (2% or more) and turns it into a colour. RED means no new paper trade that day. It is a survival rule, not a profit signal.";
@@ -35,7 +36,7 @@ export function WeatherPage() {
     </>
   );
   return (
-    <div className="weather">
+    <div className="fno-screen weather">
       <FramePageHead crumbs={["Markets", "Market weather"]} title="Market weather" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
