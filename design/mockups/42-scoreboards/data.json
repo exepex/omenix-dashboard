@@ -1,0 +1,235 @@
+{
+ "_mock": true,
+ "_note": "MOCK: the F&O data catalog's example scoreboards page (made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.8.0). Research and paper only.",
+ "page": "scoreboards",
+ "source": "api/examples/fno-screens.json (the F&O data catalog, exepex/trading story P1)",
+ "operation": "getFnoScoreboards",
+ "states": {
+  "india_ahead": {
+   "case": "positive",
+   "summary": "Mock (india): Rule-based leads, early days",
+   "about": "Both boards ran; too few trades for the do-nothing test",
+   "value": {
+    "market": "india",
+    "page_key": "scoreboards",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "1ebea161f9650a9630a7f758c1c427cdc7a83c0c5d7101af1a54a2a248b1959b",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "board_b": {
+      "status": "ok",
+      "as_of": "2026-11-16",
+      "label": "Whole systems since the common start (1 Oct 2026)",
+      "do_nothing_net": 18400,
+      "books": [
+       {
+        "family": "rule",
+        "trades": 14,
+        "net": 26120,
+        "worst_month": -6200,
+        "max_drawdown": 9400,
+        "beats_do_nothing": "not_tested"
+       },
+       {
+        "family": "hybrid",
+        "trades": 11,
+        "net": 9840,
+        "worst_month": -11300,
+        "max_drawdown": 14100,
+        "beats_do_nothing": "not_tested"
+       },
+       {
+        "family": "ai",
+        "trades": 9,
+        "net": -4230,
+        "worst_month": -8800,
+        "max_drawdown": 12600,
+        "beats_do_nothing": "not_tested"
+       }
+      ]
+     },
+     "board_a": {
+      "status": "ok",
+      "as_of": "2026-11-16",
+      "label": "Matched decisions on a standard shadow account",
+      "do_nothing_net": 18400,
+      "books": [
+       {
+        "family": "rule",
+        "trades": 14,
+        "net": 21900,
+        "worst_month": -5100,
+        "max_drawdown": 8100,
+        "beats_do_nothing": "not_tested"
+       },
+       {
+        "family": "hybrid",
+        "trades": 14,
+        "net": 23300,
+        "worst_month": -7400,
+        "max_drawdown": 9900,
+        "beats_do_nothing": "not_tested"
+       },
+       {
+        "family": "ai",
+        "trades": 14,
+        "net": 15200,
+        "worst_month": -9100,
+        "max_drawdown": 11800,
+        "beats_do_nothing": "not_tested"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "india_behind": {
+   "case": "negative",
+   "summary": "Mock (india): every book behind doing nothing",
+   "about": "Board B: all three books below the index fund; board A still a pilot",
+   "value": {
+    "market": "india",
+    "page_key": "scoreboards",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "11863f9c5643860e38338ab4d61b857d82fa5e067c68543ff83a31771246211e",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "board_b": {
+      "status": "ok",
+      "as_of": "2026-11-16",
+      "label": "Whole systems since the common start (1 Oct 2026)",
+      "do_nothing_net": 31200,
+      "books": [
+       {
+        "family": "rule",
+        "trades": 22,
+        "net": -18450,
+        "worst_month": -16200,
+        "max_drawdown": 24800,
+        "beats_do_nothing": "no"
+       },
+       {
+        "family": "hybrid",
+        "trades": 19,
+        "net": -27300,
+        "worst_month": -19800,
+        "max_drawdown": 31100,
+        "beats_do_nothing": "no"
+       },
+       {
+        "family": "ai",
+        "trades": 16,
+        "net": -9100,
+        "worst_month": -12400,
+        "max_drawdown": 17700,
+        "beats_do_nothing": "no"
+       }
+      ]
+     },
+     "board_a": {
+      "status": "pilot",
+      "as_of": "2026-11-16",
+      "label": "Pilot: before the common start, no verdict",
+      "do_nothing_net": null,
+      "books": [
+       {
+        "family": "rule",
+        "trades": 3,
+        "net": -2100,
+        "worst_month": null,
+        "max_drawdown": 2600,
+        "beats_do_nothing": null
+       },
+       {
+        "family": "hybrid",
+        "trades": 3,
+        "net": -3900,
+        "worst_month": null,
+        "max_drawdown": 4100,
+        "beats_do_nothing": null
+       },
+       {
+        "family": "ai",
+        "trades": 3,
+        "net": 400,
+        "worst_month": null,
+        "max_drawdown": 1800,
+        "beats_do_nothing": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  "india_none": {
+   "case": "empty",
+   "summary": "Mock (india): no scoreboard has run",
+   "about": "Both boards not run yet",
+   "value": {
+    "market": "india",
+    "page_key": "scoreboards",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "474e690ac3f601116402cb0f7a2880652956acd37a1d522d437a1c30c450bf89",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "board_b": {
+      "status": "not_run",
+      "as_of": null,
+      "label": "Not run yet",
+      "do_nothing_net": null,
+      "books": []
+     },
+     "board_a": {
+      "status": "not_run",
+      "as_of": null,
+      "label": "Not run yet",
+      "do_nothing_net": null,
+      "books": []
+     }
+    }
+   }
+  }
+ }
+}

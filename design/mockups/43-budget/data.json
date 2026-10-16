@@ -1,0 +1,162 @@
+{
+ "_mock": true,
+ "_note": "MOCK: the F&O data catalog's example budget page (made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.8.0). Research and paper only.",
+ "page": "budget",
+ "source": "api/examples/fno-screens.json (the F&O data catalog, exepex/trading story P1)",
+ "operation": "getFnoBudget",
+ "states": {
+  "india_ok": {
+   "case": "positive",
+   "summary": "Mock (india): well under the cap",
+   "about": "AI books and roles at 34% of their cap",
+   "value": {
+    "market": "india",
+    "page_key": "budget",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "59c723f796e4b8b1dfc74037ba8d0f7859b1dbd09b68d29a5baf7ae7ec919f5e",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "month": "2026-11",
+     "level": "ok",
+     "books_and_roles_minutes": 312.0,
+     "basis_minutes": 1840.0,
+     "cap_minutes": 920.0,
+     "pct_of_cap": 33.9,
+     "basis": "measured",
+     "note": "",
+     "groups": [
+      {
+       "group": "development",
+       "minutes": 1528.0,
+       "runs": 61
+      },
+      {
+       "group": "ai_books",
+       "minutes": 214.0,
+       "runs": 22
+      },
+      {
+       "group": "post_mortem",
+       "minutes": 54.0,
+       "runs": 3
+      },
+      {
+       "group": "ai_roles",
+       "minutes": 44.0,
+       "runs": 8
+      }
+     ]
+    }
+   }
+  },
+  "india_alert": {
+   "case": "negative",
+   "summary": "Mock (india): past the 80% alert",
+   "about": "AI books and roles at 84% of their cap: alert",
+   "value": {
+    "market": "india",
+    "page_key": "budget",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "218bc3dd55659fb07a0de9ab552f49c38511d62cc3fbfeb846aa6106d62711fa",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "month": "2026-11",
+     "level": "alert",
+     "books_and_roles_minutes": 790.0,
+     "basis_minutes": 1880.0,
+     "cap_minutes": 940.0,
+     "pct_of_cap": 84.0,
+     "basis": "measured",
+     "note": "",
+     "groups": [
+      {
+       "group": "development",
+       "minutes": 1090.0,
+       "runs": 40
+      },
+      {
+       "group": "ai_books",
+       "minutes": 520.0,
+       "runs": 22
+      },
+      {
+       "group": "ai_roles",
+       "minutes": 210.0,
+       "runs": 30
+      },
+      {
+       "group": "post_mortem",
+       "minutes": 60.0,
+       "runs": 3
+      }
+     ]
+    }
+   }
+  },
+  "india_none": {
+   "case": "empty",
+   "summary": "Mock (india): nothing measured yet",
+   "about": "No timing record this month: level unknown",
+   "value": {
+    "market": "india",
+    "page_key": "budget",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "b4c13c39074b9ebe5e379602ee3f17193fe9b51a0928e816648c037eef5dd74c",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "month": "2026-11",
+     "level": "unknown",
+     "books_and_roles_minutes": 0.0,
+     "basis_minutes": 0.0,
+     "cap_minutes": 0.0,
+     "pct_of_cap": null,
+     "basis": "measured",
+     "note": "Nothing measured yet this month: no routine has written its timing record",
+     "groups": []
+    }
+   }
+  }
+ }
+}
