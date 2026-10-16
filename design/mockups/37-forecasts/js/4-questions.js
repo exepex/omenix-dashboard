@@ -7,7 +7,7 @@ const VERDICT = {better: ['success', 'check', 'Better than the yardstick'], wors
 const VSTATUS = {counted: '', pending: ' (pending)', late: ' (late, not counted)', breach: ' (audit breach, not counted)', model_mismatch: ' (wrong model, not counted)'};
 function answer(q, v) { return q.kind === 'probability' ? (v.probability == null ? '—' : `${Math.round(v.probability * 100)}%`) : (v.variance == null ? '—' : v.variance.toFixed(4)); }
 function settle(s) {
-  return s.status === 'not_measured' ? 'Too few days to say when it could settle (under 60).' : s.status === 'projected' ? `Could settle around ${dlabel(s.projected_date)}.`
+  return s.status === 'not_measured' ? 'Not measured yet: it needs 60 scored days and the settle measurement.' : s.status === 'projected' ? `Could settle around ${dlabel(s.projected_date)}.`
     : `Would need until ${s.projected_date ? dlabel(s.projected_date) : 'more than 2 years'}: too long to wait.`;
 }
 function ranked(rows) { return [...rows].sort((a, b) => (a.mean_loss == null) - (b.mean_loss == null) || a.mean_loss - b.mean_loss); }

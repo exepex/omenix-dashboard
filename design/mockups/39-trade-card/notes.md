@@ -11,6 +11,7 @@ market the screen is absent (the page sends the US market to Home).
 | `india_trade` | positive: TRADE | `api/examples/fno-screens.json`, example `getFnoCard_india_trade` |
 | `india_watch` | positive: WATCH (a shadow, never traded; the advocate did not answer in time) | `getFnoCard_india_watch` |
 | `india_red` | negative: NO TRADE, weather RED | `getFnoCard_india_red` |
+| `india_withheld` | negative: today's card held back because a risk rule was broken (its maximum loss above the book's cap); the page shows the previous session's card, dated 13 Nov, under the owner's sentence (owner, 16 Oct 2026; contract 2.12.0 `withheld`) | `getFnoCard_india_withheld` |
 | `india_missing` | negative: NO TRADE, two missing inputs named | `getFnoCard_india_missing` |
 | `india_none` (default) | empty: NO TRADE, no strategy has passed, as a TEST post (the shape of T1's real post of 15 Oct 2026) | `getFnoCard_india_none` |
 
