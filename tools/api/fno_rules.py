@@ -5,10 +5,12 @@ probe through, which fails the check (the examples stay valid either way, so the
 from __future__ import annotations
 
 import copy
+import re
 from collections.abc import Callable
+from pathlib import Path
 
 from check_contract import errors
-from fno_walk import response_ref, screen_operations
+from fno_walk import response_ref, schema_nodes, screen_operations
 
 # operationId -> leaf-path prefixes whose v4 meaning waits for G6 (judge 102 should-fix 1): each must stay x-provisional
 PROVISIONAL_PATHS = {
@@ -116,3 +118,45 @@ def check_stress(doc: dict, problems: list[str]) -> None:
             stress = doc["components"]["examples"][name]["value"]["payload"].get("stress")
             if stress and any(s["loss"] > stress["max_loss_sum"] for s in stress["scenarios"]):
                 problems.append(f"example {name}: a stress line exceeds the sum of maximum losses")
+
+
+def config_figures(schemas: dict, examples: dict) -> set[str]:
+    """The owner's config figures the contract sends (fields whose catalog source is the config), as a screen would
+    write them: 10000, 10,000 (Western) and 1,50,000 (Indian). Only 1,000 and up: small shares (50, 80) are too common
+    in code to search for safely."""
+    keys = set()
+    for name, schema in schemas.items():
+        for _, node in schema_nodes(schema, name):
+            for key, sub in node.get("properties", {}).items():
+                source = str((sub.get("x-catalog") or {}).get("source", "")) if isinstance(sub, dict) else ""
+                if "config" in source:
+                    keys.add(key)
+    values = {int(v) for v in _values(examples, keys) if isinstance(v, (int, float)) and v >= 1000 and v == int(v)}
+    return {form for v in values for form in (str(v), f"{v:,}", _indian(v))}
+
+
+def check_copied_figures(figures: set[str], mockups: Path, folders: list[str], problems: list[str]) -> None:
+    """No catalog mockup writes a config figure into its own code: it reads the field (judge 233)."""
+    pattern = re.compile(r"(?<![\d,.])(" + "|".join(sorted(map(re.escape, figures), key=len, reverse=True)) + r")(?![\d,])") if figures else None
+    for folder in folders:
+        for script in sorted((mockups / folder / "js").glob("*.js")):
+            for number, line in enumerate(script.read_text(encoding="utf-8").splitlines(), start=1):
+                if pattern and pattern.search(line):
+                    problems.append(f"{folder}/js/{script.name}:{number}: writes the config figure {pattern.search(line).group(1)}; read the contract field instead")
+
+
+def _values(node, keys: set[str]):
+    if isinstance(node, dict):
+        for key, sub in node.items():
+            if key in keys and not isinstance(sub, (dict, list)):
+                yield sub
+            yield from _values(sub, keys)
+    elif isinstance(node, list):
+        for sub in node:
+            yield from _values(sub, keys)
+
+
+def _indian(value: int) -> str:
+    head, tail = str(value)[:-3], str(value)[-3:]
+    groups = [head[max(0, i - 2):i] for i in range(len(head), 0, -2)][::-1]
+    return ",".join(groups + [tail]) if head else tail
