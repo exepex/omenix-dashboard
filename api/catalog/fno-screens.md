@@ -399,7 +399,7 @@ Backend records named in the tables (exepex/trading):
   - `india_lost` (negative): Mock (india): two losing trades, with missed fills. A maximum-loss exit (at 60 minutes its entry would have been missed: the price had moved) and a time exit made before E8 existed, so its owner-timing fills are null, never invented; the monitor is not running yet (LM1), so its fields are null
   - `india_none` (empty): Mock (india): no paper trade yet. Every book at its opening Rs 20 lakh; nothing open, nothing closed
 - **Never sent (strategy internals):** the rules that opened or closed a trade (only what was done and why in plain words)
-- **Fields:** 48, of which the backend can fill 11 today
+- **Fields:** 49, of which the backend can fill 11 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
@@ -411,7 +411,8 @@ Backend records named in the tables (exepex/trading):
 | `accounts[].value` | Marked value: cash plus open positions at their marks | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`account_state:marked_equity`) |
 | `accounts[].cash` | Cash | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`account_state:cash`) |
 | `accounts[].open_trades` | Open positions | count | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`account_state:open_trades`) |
-| `accounts[].open_max_loss` | Sum of the open positions' maximum losses (the account cap is Rs 1.5 lakh, owner 15 Oct 2026) | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
+| `accounts[].open_max_loss` | Sum of the open positions' maximum losses, against open_risk_cap | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
+| `accounts[].open_risk_cap` | The book's published cap on its open positions' maximum losses (Rs 1,50,000, owner 15 Oct 2026; 2.9.0: sent, never copied into a screen) | INR (Paper) | the C5 profile's open-risk cap (config risk.profiles.books.open_risk_cap_rs) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
 | `shadows[].name` | The shadow's display name (never its rules) | text | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
 | `shadows[].label` | shadow = a candidate tested on paper beside the books; measurement = B0, the measuring account | enum | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
 | `shadows[].as_of` | The session of the marks | date (IST) | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |

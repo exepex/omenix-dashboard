@@ -34,8 +34,9 @@ screen is built by the W3 builder in `web/`, the page by P2c). India only, F&O o
 
 1. **Legs are owner only.** They are published to the private database and shown only on the signed-in dashboard,
    never in a public repository; the strategy shows its display name, never its rules.
-2. **The Rs 1,50,000 open-risk cap is drawn from the config value (C5), not sent in the payload.** The screen story
-   may add it as a field if the cap can change per book.
+2. **The open-risk cap is sent (contract 2.9.0, `accounts[].open_risk_cap`, Rs 1,50,000 from C5's config):** the
+   mockup drew a copied 1,50,000 before; the W3 builder pointed out that a copy goes silently wrong when the config
+   changes, so the bar now reads the payload, like the pause limit.
 3. **Added in contract 2.8.0 and drawn:** shadow test accounts in their own section, never part of a book (B0 is the
    measurement account); each book's distance to its pause (its loss from its high against the published Rs 1,20,000
    limit, never a strategy's threshold); the monitor's alerts on an open position, text and time only, owner only.

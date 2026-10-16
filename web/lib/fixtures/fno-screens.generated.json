@@ -8560,7 +8560,7 @@
    "built_at": "2026-11-16T12:05:00Z",
    "schema_version": "2.9.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "57a04b49303b7f9b6a9a62ae764cf0b1bc2fc4049bcbbefe86b38158f71ddffd",
+   "payload_sha256": "ac8a657d291feb04e175234d0edb7fbcc165369f9388b72f5f1b9bcabb208406",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -8582,6 +8582,7 @@
       "cash": 1999414,
       "open_trades": 1,
       "open_max_loss": 3984,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
@@ -8595,6 +8596,7 @@
       "cash": 2000000,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
@@ -8608,6 +8610,7 @@
       "cash": 2000000,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
@@ -8718,7 +8721,7 @@
    "built_at": "2026-11-16T12:05:00Z",
    "schema_version": "2.9.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "a7f2cf8b1fc45c552200c45f95342f17407f49a9eda86c6d5ce4e57ec2dc2563",
+   "payload_sha256": "2a1026692a11705ec104f05ff011cee1717706dd3d98043a837885c70483c21c",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -8740,6 +8743,7 @@
       "cash": 1992892,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 10204,
        "pause_at": 120000
@@ -8753,6 +8757,7 @@
       "cash": 2000000,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
@@ -8766,6 +8771,7 @@
       "cash": 2000000,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
@@ -8844,7 +8850,7 @@
    "built_at": "2026-11-16T12:05:00Z",
    "schema_version": "2.9.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "e24a4bf231a38ae23bdfd745d7cb3baec1ac1aad9f277ea2c8c6499855338171",
+   "payload_sha256": "412b7007bc5d20fdcfd2290bf55d24db43f62030982792a5f0b9d35fce81aa20",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -8866,6 +8872,7 @@
       "cash": 2000000,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
@@ -8879,6 +8886,7 @@
       "cash": 2000000,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
@@ -8892,6 +8900,7 @@
       "cash": 2000000,
       "open_trades": 0,
       "open_max_loss": 0,
+      "open_risk_cap": 150000,
       "brake": {
        "loss_from_high": 0,
        "pause_at": 120000
