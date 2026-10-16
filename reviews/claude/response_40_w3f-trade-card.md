@@ -80,3 +80,28 @@ there are about 10 or fewer, so the old wording was wrong in a way that matters.
   screen are contract facts, not the card's send time: the 15:00 bid and ask (the market-data cutoff), and the
   forecast capture's 15:15 deadline.
 - Mockup 39's 2-top.js:8 has the same sentence. The screens lead fixes it on the 2.11 branch (design/ is theirs).
+
+## Addendum 2: today's card held back (contract 2.12.0, owner 16 Oct 2026: "hold the card only, and say so on screen")
+
+Branch `story/w3f-withheld`, on `story/fno-contract-2-12` 7db3830 (judge D PASS) merged with main 9241b4d (no
+conflicts). It merges once 2.12 is on main.
+
+- **Contract type:** `withheld: { session, reason_text } | null`.
+- **The notice:** `heldBackOf` gives a red `role="alert"` notice with the owner's sentence, today's date, and "Below is
+  the card of <its session>, not today’s", as mockup 39 shows. It sits after the TEST note and before the verdict, in
+  the mockup's order.
+- **The verdict line:** a held card's sub-line says "Previous session’s card", never "A paper trade today" or "Nothing
+  to do today".
+- **One step beyond mockup 39 (reasoning only):** the held card's own reason is dated, for example "On Fri 13 Nov
+  2026: No new trade today: the weather is RED". The card's own words say "today", and under a held-back notice
+  "today" means the earlier session.
+- **Contract error (agreed with the screens lead):** if the card on record is not from an earlier session than the
+  held-back one, only the notice is shown, saying "The card on record is not from an earlier session, so it is not
+  shown". The schema cannot compare two fields; the page never shows such a card as today's.
+- **Tests:** `lib/fno-card/tests/withheld.test.ts` covers the notice's words and dates, the verdict line and the dated
+  reason, a normal day unchanged, and the contract error for an equal and a later date. The no-fixed-time test still
+  passes.
+- **Gates:** check_code_size, check_contract, check_fno_screens and the design copies pass; typecheck passes; `npm
+  test` 575/575 with 0 skipped; build passes.
+- **Screenshot:** of the held-back state at 1280 and 390 px, with india_withheld made the default temporarily and then
+  reverted. It shows no overflow and no console errors.
