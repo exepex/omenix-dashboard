@@ -140,3 +140,7 @@ On this tree:
 
 Open: the crumbs are plain text, as on every frame page (`FramePageHead` takes strings). The way back to the weather
 page is the browser, or the nav's Market weather.
+
+Judge 221 optional note, taken on this branch: `weather.test.ts` again asserts the whole red-share sentence for the RED
+and rebuilt examples (`assert.equal`, not `startsWith`), so the 15% limit and "RED still blocks until you approve it"
+are pinned again. Accepted because the note is correct: the `startsWith` let the sentence's tail change unnoticed.
