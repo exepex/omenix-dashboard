@@ -25,8 +25,9 @@ screen is built by the W3 builder in `web/`, the page by P2c). India only, F&O o
 
 | Element | Fields |
 |---|---|
-| One card per book (never summed) | `accounts[].family`, `value`, `opening_value`, `cash`, `open_trades`, `open_max_loss`, `as_of` |
-| Open positions | `open[]`: `family`, `strategy`, `structure`, `legs` (owner only), `opened_on`, `max_loss`, `unrealised`, `days_to_expiry` |
+| One card per book (never summed) | `accounts[].family`, `value`, `opening_value`, `cash`, `open_trades`, `open_max_loss`, `as_of`, `brake` |
+| Shadow tests | `shadows[]` |
+| Open positions | `open[]`: `family`, `strategy`, `structure`, `legs` and `alerts` (owner only), `opened_on`, `max_loss`, `unrealised`, `days_to_expiry` |
 | Closed trades | `closed[]`: `family`, `strategy`, `exit`, `opened_on`, `closed_on`, `result`, `gross`, `costs`, `net`, `fills[]` |
 
 ## Things the owner should know (brutally honest)
@@ -35,7 +36,7 @@ screen is built by the W3 builder in `web/`, the page by P2c). India only, F&O o
    never in a public repository; the strategy shows its display name, never its rules.
 2. **The Rs 1,50,000 open-risk cap is drawn from the config value (C5), not sent in the payload.** The screen story
    may add it as a field if the cap can change per book.
-3. **Not in the contract yet, so not drawn:** shadow test accounts (they must sit apart from the books, E6), the
-   drawdown brake's distance (Rs 1.2 lakh below the high), and the monitor's alerts (`monitor` and `alerts_today` are
-   null until LM1 runs). Adding them is a contract change (lane 1), proposed for the W3c story.
+3. **Added in contract 2.8.0 and drawn:** shadow test accounts in their own section, never part of a book (B0 is the
+   measurement account); each book's distance to its pause (its loss from its high against the published Rs 1,20,000
+   limit, never a strategy's threshold); the monitor's alerts on an open position, text and time only, owner only.
 4. **The three fills (5, 30, 60 minutes) are one decision seen three ways**, never three trades; the verdict uses 60.

@@ -21,7 +21,7 @@ PROVISIONAL_PATHS = {
 # operationId -> leaf-path prefixes that must be owner-only (live legs, entry ranges, exits, objections, the stress line)
 OWNER_PATHS = {
     "getFnoCard": ("payload.trade.", "payload.advocate.objections", "payload.stress."),
-    "getFnoPaperTrades": ("payload.open[].legs",),
+    "getFnoPaperTrades": ("payload.open[].legs", "payload.open[].alerts[]"),
 }
 
 

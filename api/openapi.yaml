@@ -74,6 +74,9 @@ info:
     additions only): four more India-only F&O pages: the weather's history (`weather_history`, never an input's level),
     scoreboards A and B (`scoreboards`, never combined), AI usage against BG1's minutes cap (`budget`, no model names)
     and data health (`data_health`, dates, counts and statuses only), each with Mock examples in its three cases.
+    Also added to existing pages: the weather's back-fill labels (`recent[].label`, `red_share.basis`,
+    `scores[].exploratory`); paper trades' shadow accounts (`shadows`, never summed with a book), each book's distance to
+    its pause (`accounts[].brake`) and the monitor's alerts on an open position (`open[].alerts`, owner only).
 
     Serve-time fields (2.0 page payloads): the stored payload carries no time of its build, so a rebuild of the same data
     keeps its hash. The route adds `cutoff` and `built_at` (the row's envelope) at the top of a page payload and
