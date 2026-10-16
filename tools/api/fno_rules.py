@@ -35,6 +35,10 @@ def _ai(value: dict) -> dict:
     return next(f for f in value["payload"]["forecasters"] if f["isolation"] == "sealed_same_day")
 
 
+def _rebuilt(value: dict) -> dict:
+    return next(s for s in value["payload"]["questions"][0]["series"] if s["label"] == "backfill_exploratory")
+
+
 # (what the schema must refuse, the example it starts from, the change that makes it invalid)
 PROBES: tuple[tuple[str, str, Callable[[dict], None]], ...] = (
     ("a TRADE card above the Rs 10,000 cap a trade (owner, 14 Oct 2026)", "getFnoCard_india_trade",
@@ -57,6 +61,10 @@ PROBES: tuple[tuple[str, str, Callable[[dict], None]], ...] = (
      lambda v: v["payload"]["stress"]["scenarios"].append(dict(v["payload"]["stress"]["scenarios"][0]))),
     ("real money eligible before the real-money gate (design 8.3)", "getFnoStrategyLab_india_passed",
      lambda v: v["payload"]["real_money"].update(eligible=True)),
+    ("a rebuilt score series without its back-fill file (judge 224)", "getFnoForecastHistory_india_ahead",
+     lambda v: _rebuilt(v).update(backfill_sha256=None)),
+    ("a live score series naming a back-fill file (judge 224)", "getFnoForecastHistory_india_ahead",
+     lambda v: v["payload"]["questions"][0]["series"][0].update(backfill_sha256=_rebuilt(v)["backfill_sha256"])),
 )  # fmt: skip
 
 

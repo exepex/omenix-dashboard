@@ -30,7 +30,7 @@ function Card({ card }: { card: QuestionCard }) {
           </table>
         </div>
       ) : null}
-      {card.verdicts.length ? <ul className="verdicts">{card.verdicts.map((v) => <li key={v.text} className="small"><Label tone={v.look.tone} icon={v.look.icon}>{v.look.word}</Label> {v.text}</li>)}</ul> : null}
+      {card.verdicts.length ? <ul className="marks">{card.verdicts.map((v) => <li key={v.text} className="small"><Label tone={v.look.tone} icon={v.look.icon}>{v.look.word}</Label> {v.text}</li>)}</ul> : null}
       {card.numbers.length ? (
         <details className="small curious">
           <summary>For the curious: the test’s numbers</summary>

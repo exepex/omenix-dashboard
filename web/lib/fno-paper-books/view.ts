@@ -1,7 +1,6 @@
 // The paper books in words (story W3c; design/mockups/41-paper-books, its 2-books.js): one card per book, its own
 // account and never added to another; the shadow tests apart. Every figure is the payload's; the screen sums nothing
-// across books. The open-risk cap is not in the payload (contract 2.8.0), so the screen shows the open risk alone and
-// never a copy of the owner's cap. Pure.
+// across books; the open-risk cap is the payload's own (contract 2.9), never a copy in the screen. Pure.
 import { fmtDateYear, money } from "../ui/format.ts";
 import type { BookAccount, FnoPaperTrades, ShadowAccount } from "./contract.ts";
 
@@ -30,7 +29,7 @@ export interface BookCard {
   opening: string;
   cash: string;
   open: string;
-  openRisk: string;
+  openRisk: { bar: number; aria: string; words: string };
   brake: { bar: number; aria: string; words: string };
 }
 
@@ -45,7 +44,11 @@ export function bookOf(a: BookAccount): BookCard {
     opening: ` since its opening ${rs(a.opening_value)}`,
     cash: rs(a.cash),
     open: String(a.open_trades),
-    openRisk: `Open risk ${rs(a.open_max_loss)} (the open positions' maximum losses)`,
+    openRisk: {
+      bar: width(a.open_max_loss, a.open_risk_cap),
+      aria: `Open risk ${rs(a.open_max_loss)} of the ${rs(a.open_risk_cap)} cap`,
+      words: `Open risk ${rs(a.open_max_loss)} of its ${rs(a.open_risk_cap)} cap (the open positions' maximum losses)`,
+    },
     brake: { bar: width(a.brake.loss_from_high, a.brake.pause_at), aria: `${below} below its high; it pauses at ${pause}`, words: `${below} below its high; it pauses new trades at ${pause}` },
   };
 }

@@ -17,7 +17,7 @@ test("one card per book, in the payload's order, each its own account (no total 
   const rule = cards[0];
   assert.deepEqual([rule.value, rule.cash, rule.open, rule.marks], ["₹20,03,054", "₹19,99,414", "1", "at the marks of 16 Nov 2026"]);
   assert.deepEqual(rule.change, { tone: "success", icon: "trending_up", word: "Up +₹3,054" });
-  assert.equal(rule.openRisk, "Open risk ₹3,984 (the open positions' maximum losses)");
+  assert.deepEqual(rule.openRisk, { bar: 2.7, aria: "Open risk ₹3,984 of the ₹1,50,000 cap", words: "Open risk ₹3,984 of its ₹1,50,000 cap (the open positions' maximum losses)" });
   assert.ok(!JSON.stringify(cards).includes("60,03,054"), "no sum of the three books' values");
 });
 
@@ -29,8 +29,13 @@ test("a losing book says Down with its sign; its distance to the pause is its lo
   assert.equal(booksOf(lost)[1].brake.bar, 0);
 });
 
-test("an untouched book is Flat at its opening value", () => {
-  for (const c of booksOf(none)) assert.deepEqual([c.value, c.change.word, c.open], ["₹20,00,000", "Flat ₹0", "0"]);
+test("an untouched book is Flat at its opening value, with no open risk", () => {
+  for (const c of booksOf(none)) assert.deepEqual([c.value, c.change.word, c.open, c.openRisk.bar], ["₹20,00,000", "Flat ₹0", "0", 0]);
+});
+
+test("the cap is the payload's own: a different cap moves the bar, the screen holds no copy", () => {
+  const account = { ...won.accounts[0], open_max_loss: 30000, open_risk_cap: 60000 };
+  assert.deepEqual([booksOf({ ...won, accounts: [account] })[0].openRisk.bar, booksOf({ ...won, accounts: [account] })[0].openRisk.words], [50, "Open risk ₹30,000 of its ₹60,000 cap (the open positions' maximum losses)"]);
 });
 
 test("shadow tests are their own cards; B0 is labelled Measurement", () => {

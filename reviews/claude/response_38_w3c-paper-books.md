@@ -52,3 +52,17 @@ Branch `story/w3c-paper-books`, from main 1972241 (contract 2.8.0). Mockup `desi
 - check_code_size, check_contract, check_fno_screens and the design copies pass; typecheck passes; `npm test`
   511/511 with 0 skipped; build passes.
 - Screenshots at 1280 and 390 px show no horizontal overflow and no console errors; `/us/paper-books` gives 404.
+
+## Addendum 1: merged with main ea75be3 (W3d and the 2.9 follow-ups); the cap bar is drawn
+
+- **Merge:** main ea75be3 (W3d, contract 2.9 with `accounts[].open_risk_cap`) is merged in. The five conflicts are the
+  ones the trial merge found, all from both sides adding lines:
+  - `pages.ts` and the integration test now have both `strategy_lab` and `paper_trades`;
+  - `pages.test` notRead drops both screens and keeps 2.9's `getFnoForecastHistory`;
+  - `weather.css` keeps only `.cap{margin-top:4px}`: W3d moved the verdict rules to fno-screen.css, and W3c moved the
+    bar track there;
+  - the reviews README lists 37, then 38.
+- **The cap bar:** the "open risk of its cap" bar is drawn from `accounts[].open_risk_cap`, which the screens lead
+  added at my request (C5's config, Rs 1,50,000), as mockup 41 now reads it. The screen holds no copy of the number:
+  a test gives a different cap and checks that the bar and words follow it, and a grep of the screen's code finds no
+  150000. The "Open, honest" note above about the missing bar is closed by this.

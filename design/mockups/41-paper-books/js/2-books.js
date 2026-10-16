@@ -10,7 +10,7 @@ function topPart(main, c) {
         CASE[D.states[k].case])))));
 }
 function bookCard(c, a) {
-  const {el} = c, change = a.value - a.opening_value, cap = 150000;
+  const {el} = c, change = a.value - a.opening_value, cap = a.open_risk_cap;
   return el('section', {class: 'card sec', 'aria-label': `${SHELL.families[a.family].label} book`},
     el('h2', {}, family(c, a.family), c.paperTag()),
     fact(c, 'Value', rs(c, a.value), `at the marks of ${dlabel(a.as_of)}`),

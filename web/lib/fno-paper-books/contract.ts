@@ -17,6 +17,8 @@ export interface BookAccount {
   cash: number;
   open_trades: number;
   open_max_loss: number;
+  /** The book's published open-risk cap (C5's config, contract 2.9). */
+  open_risk_cap: number;
   brake: Brake;
 }
 

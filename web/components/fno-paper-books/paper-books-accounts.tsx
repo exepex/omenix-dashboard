@@ -11,17 +11,21 @@ const Fact = ({ k, v, note }: { k: string; v: string; note?: string }) => (
   <div className="mb-fact"><span className="k">{k}</span><b>{v}</b>{note ? <small>{note}</small> : null}</div>
 );
 
+const Bar = ({ bar }: { bar: BookCard["brake"] }) => (
+  <div className="cap">
+    <div className="bar" role="img" aria-label={bar.aria}><i style={{ width: `${bar.bar}%` }} /></div>
+    <small className="muted">{bar.words}</small>
+  </div>
+);
+
 function Book({ b }: { b: BookCard }) {
   return (
     <Sec title={<><ApBadge family={b.family} /><PaperTag label="Paper" /></>} aria={`${b.family} book`}>
       <Fact k="Value" v={b.value} note={b.marks} />
       <p className="change"><Label tone={b.change.tone} icon={b.change.icon}>{b.change.word}</Label><small className="muted">{b.opening}</small></p>
       <div className="facts2"><Fact k="Cash" v={b.cash} /><Fact k="Open positions" v={b.open} /></div>
-      <p className="small muted risk">{b.openRisk}</p>
-      <div className="cap">
-        <div className="bar" role="img" aria-label={b.brake.aria}><i style={{ width: `${b.brake.bar}%` }} /></div>
-        <small className="muted">{b.brake.words}</small>
-      </div>
+      <Bar bar={b.openRisk} />
+      <Bar bar={b.brake} />
       <HowTo>Value is cash plus the open positions at their latest quotes. A book with no trade stays at its opening value.</HowTo>
     </Sec>
   );

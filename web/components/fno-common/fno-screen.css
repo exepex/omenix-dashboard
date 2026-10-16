@@ -10,6 +10,13 @@
 :where(.fno-screen) .sec h2 small{font-weight:400;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
 :where(.fno-screen) .list{margin:6px 0 0;padding-left:18px;display:grid;gap:4px;font-size:13.5px}
 :where(.fno-screen) .md-table td small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
+:where(.fno-screen) .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+:where(.fno-screen) .marks{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}
+:where(.fno-screen) .mb-verdict{margin-top:16px}
+:where(.fno-screen) .mb-verdict.watch{background:var(--mb-color-info-container);color:var(--mb-color-on-info-container)}
+:where(.fno-screen) .mb-verdict.watch .mb-verdict-box{background:var(--mb-color-info)}
+:where(.fno-screen) .mb-verdict .why{font-size:15px;font-weight:600;margin:0}
+:where(.fno-screen) .tabs{margin:12px 0 0}
 :where(.fno-screen) .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:4px;margin-top:6px}
 :where(.fno-screen) .strip span{display:grid;justify-items:center;gap:2px;padding:6px 2px;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);font-size:11px;color:var(--md-sys-color-on-surface-variant);min-width:0}
 :where(.fno-screen) .strip span .mb-label{padding:2px 4px}
@@ -19,4 +26,4 @@
 :where(.fno-screen) .src{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
 @media (max-width:1439px){:where(.fno-screen) table.tstack thead{display:none}:where(.fno-screen) table.tstack,:where(.fno-screen) table.tstack tbody,:where(.fno-screen) table.tstack tr,:where(.fno-screen) table.tstack td{display:block;width:auto}:where(.fno-screen) table.tstack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}:where(.fno-screen) table.tstack td{border:0;padding:2px 0;text-align:left}:where(.fno-screen) table.tstack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}:where(.fno-screen) table.tstack td small{display:inline;margin-left:6px}}
 @media (max-width:1099px){:where(.fno-screen) .cols{grid-template-columns:1fr}}
-@media (max-width:599px){:where(.fno-screen) .md-table th,:where(.fno-screen) .md-table td{padding:8px 6px;white-space:normal}}
+@media (max-width:599px){:where(.fno-screen) .md-table th,:where(.fno-screen) .md-table td{padding:8px 6px;white-space:normal}:where(.fno-screen) .mb-verdict .mb-verdict-word{font-size:36px}}
