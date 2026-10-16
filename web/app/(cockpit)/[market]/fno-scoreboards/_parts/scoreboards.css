@@ -1,0 +1,5 @@
+/* The F&O scoreboards' own page rules (story W3h; 42-scoreboards/template.html), scoped with :where so the design
+   system's component rules keep their weight. The F&O screens' shared layout is components/fno-common/fno-screen.css. */
+:where(.fno-boards) .what{margin:0 0 8px}
+:where(.fno-boards) .standing{margin:0 0 6px}
+:where(.fno-boards) .yardstick{margin:8px 0 0}

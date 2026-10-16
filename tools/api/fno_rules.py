@@ -63,6 +63,8 @@ PROBES: tuple[tuple[str, str, Callable[[dict], None]], ...] = (
      lambda v: v["payload"]["stress"]["scenarios"].append(dict(v["payload"]["stress"]["scenarios"][0]))),
     ("real money eligible before the real-money gate (design 8.3)", "getFnoStrategyLab_india_passed",
      lambda v: v["payload"]["real_money"].update(eligible=True)),
+    ("a held-back card in other words than the owner's (owner, 16 Oct 2026)", "getFnoCard_india_withheld",
+     lambda v: v["payload"]["withheld"].update(reason_text="Card withheld")),
     ("a rebuilt score series without its back-fill file (judge 224)", "getFnoForecastHistory_india_ahead",
      lambda v: _rebuilt(v).update(backfill_sha256=None)),
     ("a live score series naming a back-fill file (judge 224)", "getFnoForecastHistory_india_ahead",

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: market-brief app API
-  version: 2.11.0
+  version: 2.12.0
   summary: Read API over the precomputed read models (docs/ARCHITECTURE.md section 4), plus planned governed writes.
   description: |
     Research only: nothing here places, routes or suggests a trade, and nothing is investment advice.
@@ -98,6 +98,15 @@ info:
     trade is rejected; the card page is not published yet. The schema's `maximum: 10000` stays as the owner's ceiling.
     Also BG1's three shares on the budget page (`share_pct`, `alert_pct`, `stop_pct`, from its config), required, so
     the screen's cap, alert mark and stop line never copy 50, 80 or 100; the budget page is not published yet.
+
+    Version 2.12 (the P2 builder, checked on G1's PROTOCOL.md section 8, 16 Oct 2026): the Forecast lab follows G1.
+    For v3, `primary_baseline` is book1_rules and `comparisons` hold only the registered tests (Book 2 and Book 3
+    against Book 1); a book against a baseline is secondary and descriptive and never a comparison. Settle's
+    `not_measured` also covers "no measurement built yet". The Mock examples are dated so every verdict is possible
+    under the protocol (better or worse only after the first review). Also the card's `withheld` (owner, 16 Oct 2026):
+    when today's card broke a risk rule (its maximum loss above its book's cap), the page carries the previous
+    session's card, dated by its own session, under the owner's sentence "Today's card was held back: a risk rule was
+    broken"; null on every normal day. Required: a 2.11 card is rejected; the card page is not published yet.
 
     Serve-time fields (2.0 page payloads): the stored payload carries no time of its build, so a rebuild of the same data
     keeps its hash. The route adds `cutoff` and `built_at` (the row's envelope) at the top of a page payload and
