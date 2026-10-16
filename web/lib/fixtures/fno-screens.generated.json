@@ -11226,7 +11226,7 @@
    "built_at": "2026-11-16T09:38:00Z",
    "schema_version": "2.13.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "c5e748ac196fbe9913dfadff3dd4b0ebd9ccc24999eceb99d8db95ff184eca31",
+   "payload_sha256": "c454b6d248889cc0ea07a32dd3e78690bb5ab10e7fd71d64dba630fc5bc0d616",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -11243,7 +11243,7 @@
      {
       "page_key": "today",
       "since": "2026-11-12",
-      "reason": "A strategy is approved, and this page does not build its picks yet, so nothing is shown rather than an empty panel that is no longer true",
+      "reason": "A strategy is approved, and this page cannot build its picks yet, so nothing is shown rather than an empty panel that is no longer true",
       "shows": "nothing"
      },
      {
@@ -11255,13 +11255,13 @@
      {
       "page_key": "risk",
       "since": "2026-11-16",
-      "reason": "A book holds an open trade, and this page does not compute its risk used yet, so nothing is shown rather than a wrong figure",
+      "reason": "A book holds an open trade whose risk this page cannot compute yet, so nothing is shown rather than a wrong figure",
       "shows": "nothing"
      },
      {
       "page_key": "card",
       "since": "2026-11-16",
-      "reason": "A risk rule was broken: the risk sizing or the validity check let a trade past its book's per-trade cap",
+      "reason": "A risk rule was broken: the sizing or validity checks let a trade past its book's per-trade cap",
       "shows": "previous_page"
      }
     ]
