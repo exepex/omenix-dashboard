@@ -24,7 +24,16 @@
 :where(.fno-screen) .cap .bar{position:relative;height:12px;border-radius:3px;background:var(--md-sys-color-surface-container)}
 :where(.fno-screen) .cap .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--mb-color-down)}
 :where(.fno-screen) .cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+:where(.fno-screen) .facts2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+:where(.fno-screen) .facts3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+:where(.fno-screen) .chance{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:8px;align-items:center;margin:6px 0}
+:where(.fno-screen) .chance .track{position:relative;height:14px;border-radius:3px;background:var(--md-sys-color-surface-container)}
+:where(.fno-screen) .chance .track i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--mb-chart-1)}
+:where(.fno-screen) .chance b{text-align:right;font-variant-numeric:tabular-nums}
+:where(.fno-screen) .legs code,:where(.fno-screen) .hashes code{font-size:11.5px;padding:2px 6px;border-radius:3px;background:var(--md-sys-color-surface-container);overflow-wrap:anywhere}
 :where(.fno-screen) .src{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
 @media (max-width:1439px){:where(.fno-screen) table.tstack thead{display:none}:where(.fno-screen) table.tstack,:where(.fno-screen) table.tstack tbody,:where(.fno-screen) table.tstack tr,:where(.fno-screen) table.tstack td{display:block;width:auto}:where(.fno-screen) table.tstack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}:where(.fno-screen) table.tstack td{border:0;padding:2px 0;text-align:left}:where(.fno-screen) table.tstack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}:where(.fno-screen) table.tstack td small{display:inline;margin-left:6px}}
 @media (max-width:1099px){:where(.fno-screen) .cols,:where(.fno-screen) .cards3{grid-template-columns:1fr}}
+:where(.fno-screen) .muted{color:var(--md-sys-color-on-surface-variant)}
+@media (max-width:699px){:where(.fno-screen) .facts3{grid-template-columns:1fr 1fr}}
 @media (max-width:599px){:where(.fno-screen) .md-table th,:where(.fno-screen) .md-table td{padding:8px 6px;white-space:normal}:where(.fno-screen) .mb-verdict .mb-verdict-word{font-size:36px}}
