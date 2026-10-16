@@ -31,7 +31,7 @@ test("the three times in their order, in IST, then the delivery", () => {
   assert.deepEqual([unsent.times[2].v, unsent.delivery.word], ["not sent", "Alert NOT sent"]);
 });
 
-test("the position: legs, the entry range drawn on its scale, size, the most it can lose (no copied cap), costs", () => {
+test("the position: legs, the entry range drawn on its scale, size, the most it can lose against its cap, costs", () => {
   const p = positionOf(trade);
   assert.ok(p);
   assert.equal(p.title, "The paper position");
@@ -40,10 +40,15 @@ test("the position: legs, the entry range drawn on its scale, size, the most it 
   assert.deepEqual(p.entry.keys, ["Cheaper", "Do not enter above ₹58.00", "Dearer"]);
   assert.equal(p.entry.validity, "Prices from the 15:00 bid and ask. The card is valid until 15:25 IST; after that it is stale.");
   assert.deepEqual(p.size.map((f) => f.v), ["1 lot (65 units)", "₹29,500", "No real money"]);
-  assert.equal(p.maxLoss, "The most it can lose: ₹3,984, charges included. Fixed at entry: no stop-loss order is needed.");
+  assert.deepEqual(p.maxLoss, { words: "The most it can lose: ₹3,984, charges included", bar: 39.8, aria: "40% of the ₹10,000 cap", note: "40% of the ₹10,000 a trade may lose. Fixed at entry: no stop-loss order is needed." });
   assert.deepEqual(p.costs.map((f) => f.v), ["₹214", "₹61.30 a unit", "31.2%"]);
   assert.deepEqual(p.worstCases, ["The worst 5 sessions of March 2020: loss ₹3,984", "The week of 4 June 2024: loss ₹3,984"]);
   assert.equal(p.volEdge, null);
+});
+
+test("the cap is the payload's own: a different cap moves the bar and the words (no copy in the screen)", () => {
+  const smaller = { ...trade, trade: { ...trade.trade!, max_loss_cap: 5000 } };
+  assert.deepEqual([positionOf(smaller)!.maxLoss.bar, positionOf(smaller)!.maxLoss.aria], [79.7, "80% of the ₹5,000 cap"]);
 });
 
 test("a credit entry stops at its low end", () => {

@@ -58,7 +58,11 @@ export function CardPosition({ c }: { c: FnoCard }) {
         <Legs p={p} />
         <Entry e={p.entry} />
         <div className="block"><Facts facts={p.size} /></div>
-        <p className="small block"><b>{p.maxLoss}</b></p>
+        <div className="cap block">
+          <b className="small">{p.maxLoss.words}</b>
+          <div className="bar" role="img" aria-label={p.maxLoss.aria}><i style={{ width: `${p.maxLoss.bar}%` }} /></div>
+          <small className="muted">{p.maxLoss.note}</small>
+        </div>
       </Sec>
       <Sec title="If it goes badly" aria="If it goes badly">
         <ul className="list">{p.worstCases.map((w) => <li key={w}>{w}</li>)}</ul>
