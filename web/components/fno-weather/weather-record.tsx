@@ -1,8 +1,11 @@
 // The weather screen's record (story W3a; design/mockups/40-weather 3-record.js): the last sessions' colours against
 // what happened, how often it is RED against its frozen maximum, its score against the usual chance and the old v0
-// checklist, and this month's price of the RED rule (Paper). Every word comes from lib/fno-weather/record-view.ts.
+// checklist, and this month's price of the RED rule (Paper). The last sessions link to the full history
+// (46-weather-history). Every word comes from lib/fno-weather/record-view.ts.
 import type { FnoWeather } from "../../lib/fno-weather/contract.ts";
 import { priceOf, recentOf, redShareOf, scoresOf } from "../../lib/fno-weather/record-view.ts";
+import Link from "next/link";
+import { pagePath } from "../../lib/ui/routes.ts";
 import { Label, PaperTag } from "../ui/primitives.tsx";
 import { HowTo, Quiet, Sec } from "../fno-common/screen-bits.tsx";
 import { ColourLabel } from "./weather-bits.tsx";
@@ -14,6 +17,7 @@ export function WeatherRecent({ w }: { w: FnoWeather }) {
         {recentOf(w).map((r) => <span key={r.day} role="listitem">{r.day}<ColourLabel look={r.label} />{r.outcome}{r.rebuilt ? <small>rebuilt</small> : null}</span>)}
       </div>
       <HowTo>Each session’s colour and whether a 2% move came next; “rebuilt” marks a day worked out later from history, not on the day. A RED with no move is not a mistake on its own; only many sessions tell.</HowTo>
+      <p className="small history-link"><Link href={pagePath("india", "weather-history")}>Every session and the counts by colour</Link></p>
     </Sec>
   );
 }

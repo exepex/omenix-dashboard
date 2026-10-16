@@ -16,3 +16,9 @@ test("its route: /india/weather, mockup 40, endpoint fno/weather, story W3", () 
   const page = pageByKey("weather");
   assert.deepEqual([pagePath("india", "weather"), page.mockup, page.endpoint, page.owner], ["/india/weather", "40-weather", "fno/weather", "W3"]);
 });
+
+test("the weather history: /india/weather/history, mockup 46, endpoint fno/weather-history, not in the navigation", () => {
+  const page = pageByKey("weather-history");
+  assert.deepEqual([pagePath("india", "weather-history"), page.mockup, page.endpoint, page.owner, page.nav], ["/india/weather/history", "46-weather-history", "fno/weather-history", "W3", false]);
+  assert.ok(!items(true).some(([, i]) => i === "weather-history"));
+});
