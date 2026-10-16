@@ -50,7 +50,7 @@ Backend records named in the tables (exepex/trading):
   - `india_missing` (negative): Mock (india): NO TRADE, a missing input named. The data checks failed; each missing input is named with the story that brings it
   - `india_none` (empty): Mock (india): NO TRADE, no strategy has passed. The shape of the real state while no strategy is approved to paper, as a TEST post of live delivery (like T1's first post of 15 Oct 2026); the house forecast has no live record yet
 - **Never sent (strategy internals):** the strategy's entry conditions, filters and thresholds (why it chose this day beyond the forecast and weather shown); the AI team's and the devil's advocate's prompts and model settings; the strategy's parameters and any fitted value
-- **Fields:** 107, of which the backend can fill 29 today
+- **Fields:** 108, of which the backend can fill 29 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
@@ -91,6 +91,7 @@ Backend records named in the tables (exepex/trading):
 | `trade.size.units` | Lots times the lot size | units | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.size.funds_at_entry` | Money tied up at entry (C2 and A14: the debit plus the short leg's margin) | INR (Paper) | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.max_loss` | Most it can lose, charges included, fixed at entry (at most Rs 10,000 a trade, owner 14 Oct 2026) | INR (Paper) | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
+| `trade.max_loss_cap` | The most one trade may lose, charges included, as the book's profile sets it (Rs 10,000, owner 14 Oct 2026; 2.11.0: sent, never copied into a screen). The schema's maximum is the owner's ceiling of 14 Oct: raising it is a contract change | INR (Paper) | the book's C5 profile (config risk.profiles.<profile>.max_loss_per_trade_rs) | once a session day at card_sent_at (target 15:08 IST) | owner | no: C5 |
 | `trade.worst_cases[].scenario` | e.g. "The worst 5 sessions of March 2020" | text | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.worst_cases[].loss` | The loss in that stretch | INR (Paper) | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
 | `trade.exit_plan[]` | One exit | text | the day's decision record (D3) and the risk manager's sizing (C2, A14) | once a session day at card_sent_at (target 15:08 IST) | owner | no: T1 |
@@ -404,7 +405,7 @@ Backend records named in the tables (exepex/trading):
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
 | `accounts[].brake.loss_from_high` | Closed equity below its highest close so far | INR (Paper) | the book's equity history (E1) and the C5 profile's drawdown brake (config risk.profiles.books.drawdown_brake_rs) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
-| `accounts[].brake.pause_at` | The published pause limit: at this loss from the high the book opens nothing new until the owner restarts it (Rs 1,20,000) | INR (Paper) | the book's equity history (E1) and the C5 profile's drawdown brake (config risk.profiles.books.drawdown_brake_rs) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
+| `accounts[].brake.pause_at` | The published pause limit: at this loss from the high the book opens nothing new until the owner restarts it (Rs 1,20,000) | INR (Paper) | the C5 profile's drawdown brake (config risk.profiles.books.drawdown_brake_rs) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
 | `accounts[].family` | The book, translated from its account's book id: book1_rules is rule, book2_hybrid is hybrid, book3_ai is ai | enum | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`paper_account:book`) |
 | `accounts[].as_of` | The session of the marks | date (IST) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`equity_history:date`) |
 | `accounts[].opening_value` | Opening balance plus top-ups in force, Rs 20 lakh a book | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`account_state:capital`) |
@@ -532,17 +533,20 @@ Backend records named in the tables (exepex/trading):
   - `india_alert` (negative): Mock (india): past the 80% alert. AI books and roles at 84% of their cap: alert
   - `india_none` (empty): Mock (india): nothing measured yet. No timing record this month: level unknown
 - **Never sent (strategy internals):** the AI model's name, a session id or a routine's prompt
-- **Fields:** 11, of which the backend can fill 0 today
+- **Fields:** 14, of which the backend can fill 0 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
 | `month` | The month measured | month (YYYY-MM) | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
-| `level` | ok below 80% of the cap; alert from 80%; stop from 100% (AI roles stop, the AI forecasters last); unknown when nothing can be measured | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `level` | ok below alert_pct of the cap; alert from alert_pct; stop from stop_pct (AI roles stop, the AI forecasters last); unknown when nothing can be measured | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `books_and_roles_minutes` | The AI books' and roles' session minutes this month | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `basis_minutes` | What the cap is a share of: all measured session minutes (until December 2026), then the owner's plan minutes | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
-| `cap_minutes` | The cap: 50% of the basis | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `cap_minutes` | The cap: share_pct of the basis | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `pct_of_cap` | Books and roles as a share of the cap; null with nothing to measure against | percent | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `basis` | measured = a share of measured minutes; plan = a share of the owner's plan minutes | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `share_pct` | The cap as a share of the basis (50, owner 15 Oct 2026; 2.11.0: sent, never copied into a screen) | percent | BG1's config (budget.books_and_roles_share_pct) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `alert_pct` | The share of the cap at which the alert goes out (80, owner 15 Oct 2026) | percent | BG1's config (budget.alert_pct) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `stop_pct` | The share of the cap at which the AI roles stop (100, owner 15 Oct 2026) | percent | BG1's config (budget.stop_pct) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `note` | Why the level is unknown, or why it is a lower bound (a routine not yet timing itself); empty when complete | text | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `groups[].group` | Which kind of work used the minutes | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `groups[].minutes` | Minutes this month | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |

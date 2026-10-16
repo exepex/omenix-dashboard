@@ -17,7 +17,7 @@ from platform_build import run  # noqa: E402
 
 def compose() -> dict:
     return screen_payload("getFnoDataHealth", page="data-health", note="MOCK: the F&O data catalog's example data-health page "
-                          "(made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.10.0). "
+                          "(made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.11.0). "
                           "Research and paper only.")
 
 

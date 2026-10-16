@@ -15,9 +15,9 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.10.0",
+    "schema_version": "2.11.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "b621152103ec964562582345cef2848c2c0c9419ee63297f5e67a44ca5f8c50d",
+    "payload_sha256": "a77c79a34c60ebbaef0fe9712f62fa248b8bbd3e4177a632fa944661e47a9d61",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -152,6 +152,7 @@
        "funds_at_entry": 29500
       },
       "max_loss": 3984,
+      "max_loss_cap": 10000,
       "worst_cases": [
        {
         "scenario": "The worst 5 sessions of March 2020",
@@ -290,9 +291,9 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.10.0",
+    "schema_version": "2.11.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "5e8ea05b306eba9a41ec5fb4e902f93f848f3918b610266685ddf4b31d9a34f8",
+    "payload_sha256": "da7c30a21ad644a416df8dd6d195a1784b3c0b82020665f2aecb293967d97d98",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -427,6 +428,7 @@
        "funds_at_entry": 31200
       },
       "max_loss": 5296,
+      "max_loss_cap": 10000,
       "worst_cases": [
        {
         "scenario": "The worst 5 sessions of March 2020",
@@ -550,7 +552,7 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.10.0",
+    "schema_version": "2.11.0",
     "source_commit": "0000000mock",
     "payload_sha256": "0be6d2177dadb1beb1cf4c22455fdcddd4ad91c573f796f0041e7b5e81d4207c",
     "publisher": "fno",
@@ -754,7 +756,7 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.10.0",
+    "schema_version": "2.11.0",
     "source_commit": "0000000mock",
     "payload_sha256": "d220a3f44e4ccd2f9a5baeb71c0470107005a6234ea53e579a64b0ddb04401f5",
     "publisher": "fno",
@@ -924,7 +926,7 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.10.0",
+    "schema_version": "2.11.0",
     "source_commit": "0000000mock",
     "payload_sha256": "d7e0361c3e3cbd2800fd0f3b258c1d0b7f1de15138175fbb400a0617e799df4e",
     "publisher": "fno",

@@ -33,7 +33,7 @@ meaning, unit, backend record, freshness, visibility and whether the backend can
 | Verdict header (glyph, word, colour) | `status`, `reason_text`, `session` |
 | The card's three times | `timing.*` |
 | The position (owner only) | `trade.what`, `trade.strategy`, `trade.family`, `trade.legs[]`, `trade.entry.*`, `trade.size.*` |
-| The most it can lose against the Rs 10,000 cap | `trade.max_loss` |
+| The most it can lose against the per-trade cap (Rs 10,000, sent since contract 2.11.0, never copied) | `trade.max_loss`, `trade.max_loss_cap` |
 | If it goes badly | `trade.worst_cases[]` |
 | How it ends, what would prove it wrong | `trade.exit_plan[]`, `trade.proves_wrong[]` |
 | Costs and tax, volatility edge | `trade.costs.*`, `trade.vol_edge.*` |
