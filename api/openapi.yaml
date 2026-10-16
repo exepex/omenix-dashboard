@@ -81,9 +81,9 @@ info:
     its pause (`accounts[].brake`) and the monitor's alerts on an open position (`open[].alerts`, owner only).
 
     Version 2.9 (owner, 16 Oct 2026, exepex/trading docs/DESK_DECISIONS.md: weather levels public; the Forecast lab's
-    field A only): the Forecast lab's running scores, session by session (`forecast_history`, its own page: each
-    forecaster's running average miss score after every scored session, for the race chart and a period the owner
-    picks); and each session's chances back on the weather's history (`weather_history`: `p_big_1d`, `p_big_5d`,
+    field A only): the Forecast lab's running scores (`forecast_history`, its own page: each forecaster's running
+    average miss as each day's G4 report gives it, live and rebuilt from history apart, for the race chart and a
+    period the owner picks, which counts the answers that came in during it); and each session's chances back on the weather's history (`weather_history`: `p_big_1d`, `p_big_5d`,
     `base_rate_1d`, `base_rate_5d`, required). A 2.8 `weather_history` payload is rejected; no F&O screen page is
     published yet. Single forecasts with their outcomes (field B) wait for about 60 scored live days.
 
