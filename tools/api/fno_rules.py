@@ -86,7 +86,11 @@ def check_probes(doc: dict, problems: list[str]) -> None:
     refs = {name: response_ref(op) for _, op in screen_operations(doc) for name in _names(op)}
     for what, name, change in PROBES:
         value = copy.deepcopy(doc["components"]["examples"][name]["value"])
-        change(value)
+        try:
+            change(value)
+        except (KeyError, IndexError, StopIteration) as missing:  # the example lost what the probe changes (judge 224)
+            problems.append(f"probe on {name} cannot plant {what}: its example lacks the part it changes ({missing!r})")
+            continue
         if not errors(doc, refs[name], value):
             problems.append(f"the schema lets through {what} (probe on {name})")
 
