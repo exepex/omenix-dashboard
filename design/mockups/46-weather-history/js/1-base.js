@@ -1,5 +1,5 @@
 /* 46-weather-history page runtime: the market weather's history (each session's colour and label, the counts), drawn
-   from the F&O data catalog's Mock examples (contract 2.11.0; story W3a part 2). Split by purpose: 1 state and helpers,
+   from the F&O data catalog's Mock examples (contract 2.12.0; story W3a part 2). Split by purpose: 1 state and helpers,
    2 the counts, 3 session by session, 4 the chances, 9 mount. The screen computes nothing beyond drawing. Tokens only;
    never colour alone. */
 let KEY = null;

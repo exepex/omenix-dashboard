@@ -1,4 +1,4 @@
-"""Weather history mockup (story W3a part 2, exepex/trading docs/stories/W3-fno-screens.md; contract 2.11.0).
+"""Weather history mockup (story W3a part 2, exepex/trading docs/stories/W3-fno-screens.md; contract 2.12.0).
 
     python design/mockups/46-weather-history/build.py [--out DIR]     (build 30-shell first: it writes the shell's data)
 
@@ -17,7 +17,7 @@ from platform_build import run  # noqa: E402
 
 def compose() -> dict:
     return screen_payload("getFnoWeatherHistory", page="weather_history", note="MOCK: the F&O data catalog's example weather history "
-                          "(made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.11.0). "
+                          "(made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.12.0). "
                           "Research and paper only.")
 
 

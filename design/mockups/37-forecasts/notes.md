@@ -30,9 +30,9 @@ forecasts with their outcomes for the "costliest mistakes" cards, waits until ab
 
 | State (URL `#s=`) | Case | Source |
 |---|---|---|
-| `india_winning` (default) | positive: the Hybrid book beats its yardstick on Q1; rules level with it | `api/examples/fno-screens.json`, `getFnoForecastLab_india_winning` |
-| `india_losing` | negative: the AI team worse than the yardstick; a v4 question that cannot win (stop testing); late and breached answers not counted | `getFnoForecastLab_india_losing` |
-| `india_waiting` | empty: not enough days; V1 waits for the 15-minute recorder; V6 not started | `getFnoForecastLab_india_waiting` |
+| `india_winning` (default) | positive, 16 Jun 2027 (after the first review): Hybrid better than Book 1 on Q1, the AI team level with it | `api/examples/fno-screens.json`, `getFnoForecastLab_india_winning` |
+| `india_losing` | negative, 16 Jun 2027: the AI team worse than Book 1 on Q4; a v4 question that cannot win (stop testing); late and breached answers not counted | `getFnoForecastLab_india_losing` |
+| `india_waiting` | empty, 30 Nov 2026 (before the review): 12 answers, not tested yet; V1 waits for the 15-minute recorder; V6 not started | `getFnoForecastLab_india_waiting` |
 
 "A period you choose" draws `getFnoForecastHistory` (contract 2.9) in the same case as the state: `india_ahead` with the
 good case, `india_behind` with the bad case, `india_none` (no answer scored) with the empty case (data.json `also`;
@@ -46,8 +46,14 @@ day, with gaps. So a period's average is over the answers that came in during it
 the screen says so. Live and rebuilt-from-history (G4's `live_1500_proxy` and `close_proxy`) are separate series,
 never joined; the rebuilt one carries the Exploratory mark. Scoring by the day a forecast was made needs field B.
 
-**Every state is Mock: made-up numbers on a future date (16 Nov 2026).** `data.json` is built from the catalog
-(`_platform/catalog_data.py`), one copy of the data.
+**Every state is Mock: made-up numbers on future dates, kept consistent with G1's protocol** (the P2 builder, checked
+on PROTOCOL.md section 8, 16 Oct 2026; strong evidence). v3's registered tests are Book 2 and Book 3 against Book 1
+(the yardstick, `primary_baseline` book1_rules); a book against a baseline is secondary and descriptive, so it is
+never a comparison here (its score still shows in each question's table). No comparison is called better or worse
+before the first review, six months of common-start trading from 14 Oct 2026. So the good and bad cases are dated
+16 Jun 2027, after that review, and the empty case 30 Nov 2026, before it, with too few answers to test; live scores
+start only when a question's first answer resolves (11 Nov 2026 for Q1). The shell's clock shows 16 Jun 2027 in every
+state. `data.json` is built from the catalog (`_platform/catalog_data.py`), one copy of the data.
 
 **Real data today (exepex/trading, 16 Oct):** protocol v2 live on 2 days (14 and 15 Oct), G4 summaries for 3 days, one
 exploratory v4 report (v4 not frozen), the AI books' 2 days with no on-time answer. The screen will look most like

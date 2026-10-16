@@ -14,7 +14,7 @@ const waiting = labExample("getFnoForecastLab_india_waiting");
 
 test("today's answers name each forecaster, say when the answer is known, and never count a late or breached answer", () => {
   const [q1] = todayOf(winning);
-  assert.equal(q1.knownOn, "15 Dec 2026", "Q1 is a 20-session question made on 16 Nov");
+  assert.equal(q1.knownOn, "14 Jul 2027", "Q1 is a 20-session question made on 16 Jun 2027");
   assert.match(q1.answers, /^Rule-based 52% · Hybrid 61% · AI team 58% · /);
   const q4 = todayOf(losing)[0];
   assert.match(q4.answers, /AI team 91% \(late, not counted\) · Hybrid 52% \(audit breach, not counted\)/);
