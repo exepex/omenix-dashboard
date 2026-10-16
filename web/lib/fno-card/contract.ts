@@ -1,4 +1,4 @@
-// Today's card's read model (story W3f; contract FnoCard, api/schemas/fno-card.yaml, P1, T1's addendum and 2.11.0): what the
+// Today's card's read model (story W3f; contract FnoCard, api/schemas/fno-card.yaml, P1, T1's addendum, 2.11.0 and 2.12.0): what the
 // page `card` of exepex/trading's F&O publication carries. PAPER ONLY; what the desk decided and why in plain words,
 // never the strategy's rules, prompts or parameters (the contract's x-never-sent). The position, the stress line and
 // the objections are owner only (the dashboard is behind sign-in). Types only.
@@ -63,6 +63,9 @@ export interface FnoCard {
   test_post: boolean;
   session: string;
   session_note: string;
+  /** Set when today's card was held back because a risk rule was broken: the card below is the previous session's
+   *  (contract 2.12.0, owner 16 Oct 2026). null on every normal day. */
+  withheld: { session: string; reason_text: string } | null;
   status: CardStatus;
   reason: NoTradeReason | null;
   reason_text: string;

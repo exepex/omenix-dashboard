@@ -1,8 +1,8 @@
-// Today's card's top (story W3f; design/mockups/39-trade-card 2-top.js): the TEST note, the verdict (TRADE, NO TRADE,
+// Today's card's top (story W3f; design/mockups/39-trade-card 2-top.js): the TEST note, a held-back notice, the verdict (TRADE, NO TRADE,
 // WATCH) with its glyph, word and reason, and the card's three times with the delivery. Every word comes from
 // lib/fno-card/view.ts.
 import type { FnoCard } from "../../lib/fno-card/contract.ts";
-import { headerOf, timesOf } from "../../lib/fno-card/view.ts";
+import { headerOf, heldBackOf, timesOf } from "../../lib/fno-card/view.ts";
 import { Icon } from "../ui/icon.tsx";
 import { Fact, LookLabel } from "./card-bits.tsx";
 
@@ -11,6 +11,7 @@ export function CardVerdict({ c }: { c: FnoCard }) {
   return (
     <>
       {h.test ? <p className="mb-alert info test" role="note"><Icon name="info" /><span>{h.test}</span></p> : null}
+      <CardHeldBack c={c} />
       <section className={`mb-verdict ${h.verdict}`} aria-label="The card">
         <span className="mb-verdict-box" aria-hidden="true"><Icon name={h.icon} /></span>
         <div>
@@ -20,6 +21,12 @@ export function CardVerdict({ c }: { c: FnoCard }) {
       </section>
     </>
   );
+}
+
+/** Today's card held back (owner, 16 Oct 2026): a red alert with the owner's sentence and both dates. */
+export function CardHeldBack({ c }: { c: FnoCard }) {
+  const h = heldBackOf(c);
+  return h ? <p className="mb-alert danger test" role="alert"><Icon name="block" /><span><b>{h.reason}</b>{h.rest}</span></p> : null;
 }
 
 export function CardTimes({ c }: { c: FnoCard }) {
