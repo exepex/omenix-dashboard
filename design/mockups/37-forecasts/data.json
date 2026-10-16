@@ -1067,7 +1067,7 @@
      "built_at": "2026-11-16T12:10:00Z",
      "schema_version": "2.9.0",
      "source_commit": "0000000mock",
-     "payload_sha256": "f07fe666ee534242b29fabac805486afb1ec0f4989855fff2cca552ba8c25f1e",
+     "payload_sha256": "91701e1afa3e56f4c7953a96a638bb90f8216d85bd6b397e221035e068907a65",
      "publisher": "fno",
      "freshness": {
       "state": "fresh",
@@ -1090,6 +1090,7 @@
          {
           "forecaster": "book1_rules",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-03-19",
@@ -1896,6 +1897,7 @@
          {
           "forecaster": "book2_hybrid",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-03-19",
@@ -2702,6 +2704,7 @@
          {
           "forecaster": "book3_ai",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-03-20",
@@ -3503,6 +3506,7 @@
          {
           "forecaster": "baseline_b_base_rate",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-03-19",
@@ -4309,6 +4313,7 @@
          {
           "forecaster": "book1_rules",
           "label": "backfill_exploratory",
+          "backfill_sha256": "3b3d0508b1e88e603b5f233af7b05440f8ff7e9c2027f027cd2866df851dab3d",
           "points": [
            {
             "as_of": "2026-10-30",
@@ -4375,6 +4380,7 @@
          {
           "forecaster": "baseline_b_base_rate",
           "label": "backfill_exploratory",
+          "backfill_sha256": "3b3d0508b1e88e603b5f233af7b05440f8ff7e9c2027f027cd2866df851dab3d",
           "points": [
            {
             "as_of": "2026-10-30",
@@ -4449,6 +4455,7 @@
          {
           "forecaster": "book2_hybrid",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-10-08",
@@ -4585,6 +4592,7 @@
          {
           "forecaster": "baseline_premium_adjusted_implied",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-10-08",
@@ -4721,6 +4729,7 @@
          {
           "forecaster": "baseline_har",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-10-08",
@@ -4872,7 +4881,7 @@
      "built_at": "2026-11-16T12:10:00Z",
      "schema_version": "2.9.0",
      "source_commit": "0000000mock",
-     "payload_sha256": "cd222784a7da3cc98fad52857a95920a375e7575aee17e9538bde9789b97eb90",
+     "payload_sha256": "5ad8bace033b13b6a6764e86f650a787311cd94aeaf86bb563c543245a1b501e",
      "publisher": "fno",
      "freshness": {
       "state": "fresh",
@@ -4895,6 +4904,7 @@
          {
           "forecaster": "book3_ai",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-04-03",
@@ -5651,6 +5661,7 @@
          {
           "forecaster": "baseline_b_base_rate",
           "label": "live",
+          "backfill_sha256": null,
           "points": [
            {
             "as_of": "2026-04-03",
