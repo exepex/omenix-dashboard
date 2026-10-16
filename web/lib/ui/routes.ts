@@ -37,6 +37,7 @@ export const PAGES: readonly PageRoute[] = [
   { key: "weather", label: "Market weather", icon: "sensors", segment: "weather", mockup: "40-weather", owner: "W3", endpoint: "fno/weather", nav: true },
   { key: "weather-history", label: "Weather history", icon: "history", segment: "weather/history", mockup: "46-weather-history", owner: "W3", endpoint: "fno/weather-history", nav: false },
   { key: "paper-books", label: "Paper books", icon: "account_balance", segment: "paper-books", mockup: "41-paper-books", owner: "W3", endpoint: "fno/paper-books", nav: true },
+  { key: "budget", label: "AI usage and budget", icon: "timer", segment: "budget", mockup: "43-budget", owner: "W3", endpoint: "fno/budget", nav: true },
   { key: "forecasts", label: "Forecast lab", icon: "query_stats", segment: "forecast-lab", mockup: "37-forecasts", owner: "W3", endpoint: "fno/forecast-lab", nav: true },
   /* The Strategy lab's F&O tab (India only): reached from the lab's tabs, not the navigation. */
   { key: "lab-fno", label: "Strategy lab: F&O", icon: "science", segment: "strategy-lab/fno", mockup: "45-strategy-lab-fno", owner: "W3", endpoint: "fno/strategy-lab", nav: false },
