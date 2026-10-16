@@ -3,16 +3,17 @@
 function recordPart(col, c) {
   const {el} = c, W = wx(), R = W.red_share, P = W.price_of_calm;
   col.append(sec(c, 'The last sessions', el('div', {class: 'strip', role: 'list'}, ...W.recent.map(r => el('span', {role: 'listitem'}, dshort(r.session), colourLabel(c, r.colour),
-    r.big_move == null ? 'not known yet' : r.big_move ? '2% move' : 'no big move'))), howto(c, 'Each session’s colour and whether a 2% move came next. A RED with no move is not a mistake on its own; only many sessions tell.')),
+    r.big_move == null ? 'not known yet' : r.big_move ? '2% move' : 'no big move', r.label === 'backfill_exploratory' ? el('small', {}, 'rebuilt') : null))), howto(c, 'Each session’s colour and whether a 2% move came next. A RED with no move is not a mistake on its own; only many sessions tell.'),
+    el('p', {class: 'small', style: 'margin:8px 0 0'}, el('a', {href: '../46-weather-history/page.html'}, 'Every session and the counts by colour'))),
   sec(c, ['How often it is RED', !R.sessions ? el('span', {class: 'mb-label neutral'}, c.icon('remove'), 'No sessions yet') : R.over_alarming ? el('span', {class: 'mb-label danger'}, c.icon('warning'), 'Over-alarming') : el('span', {class: 'mb-label success'}, c.icon('check'), 'Within the limit')],
     el('div', {class: 'cap'}, el('div', {class: 'bar', role: 'img', 'aria-label': `${pct(R.share, 1)} of sessions RED; the limit is ${pct(R.max_share)}`}, el('i', {style: `width:${Math.min(100, (R.share || 0) / (2 * R.max_share) * 100).toFixed(1)}%`})),
-      el('small', {class: 'muted'}, R.sessions ? `RED on ${R.red_sessions} of the last ${R.sessions} sessions (${pct(R.share, 1)}); the limit is ${pct(R.max_share)}. Above it, a new version must be proposed; RED still blocks until you approve it.` : 'No session counted yet.'))),
+      el('small', {class: 'muted'}, R.sessions ? `RED on ${R.red_sessions} of the last ${R.sessions} sessions${R.basis === 'backfill_exploratory' ? ' rebuilt from history (exploratory)' : ''} (${pct(R.share, 1)}); the limit is ${pct(R.max_share)}. Above it, a new version must be proposed; RED still blocks until you approve it.` : 'No session counted yet.'))),
   sec(c, 'Its record against the usual chance', el('div', {class: 'md-table-wrap'}, el('table', {class: 'md-table tstack'},
     el('thead', {}, el('tr', {}, ...['Question', 'Against', 'Days', 'Miss score', 'Its miss score', 'Verdict'].map(h => el('th', {scope: 'col'}, h)))),
     el('tbody', {}, ...W.scores.map(s => { const [cls, g, w] = VERDICT[s.verdict];
       return el('tr', {}, el('td', {'data-k': 'Question'}, s.question === 'V6_1d' ? 'Next session' : 'Within 5 sessions'), el('td', {'data-k': 'Against'}, s.baseline === 'base_rate' ? 'The usual chance' : 'The old checklist (v0)'), el('td', {class: 'md-numeric', 'data-k': 'Days'}, String(s.n_scored), el('small', {}, `test needs ${s.n_needed}`)),
         el('td', {class: 'md-numeric', 'data-k': 'Miss score'}, s.brier == null ? '—' : s.brier.toFixed(3)), el('td', {class: 'md-numeric', 'data-k': 'Its miss score'}, s.brier_baseline == null ? '—' : s.brier_baseline.toFixed(3)),
-        el('td', {'data-k': 'Verdict'}, el('span', {class: 'mb-label ' + cls}, c.icon(g), w))); })))),
+        el('td', {'data-k': 'Verdict'}, el('span', {class: 'mb-label ' + cls}, c.icon(g), w), s.exploratory ? el('small', {}, 'Exploratory: scored on days rebuilt from history, not a confirmed result') : null)); })))),
     howto(c, 'Miss score (Brier): 0 is perfect; lower is better. The weather must beat both the usual chance and the old checklist (v0) to replace it.')),
   sec(c, ['This month’s price of the RED rule', c.paperTag()], P.status === 'measured' ? el('div', {class: 'facts3'}, fact(c, 'Trades blocked', String(P.blocked_trades)),
       fact(c, 'Risk avoided', rs(c, P.risk_avoided), 'Their maximum losses'),

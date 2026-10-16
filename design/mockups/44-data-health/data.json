@@ -1,0 +1,187 @@
+{
+ "_mock": true,
+ "_note": "MOCK: the F&O data catalog's example data-health page (made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.8.0). Research and paper only.",
+ "page": "data-health",
+ "source": "api/examples/fno-screens.json (the F&O data catalog, exepex/trading story P1)",
+ "operation": "getFnoDataHealth",
+ "states": {
+  "india_ok": {
+   "case": "positive",
+   "summary": "Mock (india): everything arrived",
+   "about": "Every source up to date; the publish and the health check passed",
+   "value": {
+    "market": "india",
+    "page_key": "data_health",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "544665f1f846ff9c549da93b27b23a2d8951023eccf054cafa269693e43c0885",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "as_of": "2026-11-16",
+     "sources": [
+      {
+       "source": "index-close",
+       "plain": "NIFTY daily close (NSE)",
+       "last_day": "2026-11-16",
+       "rows": 2449,
+       "gaps": 0,
+       "status": "ok"
+      },
+      {
+       "source": "fo-bhavcopy",
+       "plain": "NSE F&O end-of-day file",
+       "last_day": "2026-11-16",
+       "rows": 716,
+       "gaps": 0,
+       "status": "ok"
+      },
+      {
+       "source": "participant-oi",
+       "plain": "Open interest by participant (NSE)",
+       "last_day": "2026-11-16",
+       "rows": 1955,
+       "gaps": 0,
+       "status": "ok"
+      },
+      {
+       "source": "vix",
+       "plain": "India VIX daily (NSE)",
+       "last_day": "2026-11-16",
+       "rows": 4210,
+       "gaps": 0,
+       "status": "ok"
+      }
+     ],
+     "publish": {
+      "status": "published",
+      "run_on": "2026-11-16",
+      "reason": null
+     },
+     "health_check": {
+      "status": "ok",
+      "run_on": "2026-11-16",
+      "problems": 0
+     }
+    }
+   }
+  },
+  "india_problems": {
+   "case": "negative",
+   "summary": "Mock (india): a late file and a failed publish",
+   "about": "Two sources behind, the publish failed (the previous one stays current), three problems",
+   "value": {
+    "market": "india",
+    "page_key": "data_health",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "49667a231e8e128cc2d5a5d649a115346811e61934b72971a6c61c5804811df5",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "as_of": "2026-11-16",
+     "sources": [
+      {
+       "source": "fo-bhavcopy",
+       "plain": "NSE F&O end-of-day file",
+       "last_day": "2026-11-12",
+       "rows": 712,
+       "gaps": 2,
+       "status": "gaps"
+      },
+      {
+       "source": "participant-oi",
+       "plain": "Open interest by participant (NSE)",
+       "last_day": "2026-11-13",
+       "rows": 1952,
+       "gaps": 0,
+       "status": "stale"
+      },
+      {
+       "source": "index-close",
+       "plain": "NIFTY daily close (NSE)",
+       "last_day": "2026-11-16",
+       "rows": 2449,
+       "gaps": 0,
+       "status": "ok"
+      }
+     ],
+     "publish": {
+      "status": "failed",
+      "run_on": "2026-11-16",
+      "reason": "the F&O end-of-day file for the session was not on NSE's site by 08:30 IST"
+     },
+     "health_check": {
+      "status": "problems",
+      "run_on": "2026-11-16",
+      "problems": 3
+     }
+    }
+   }
+  },
+  "india_none": {
+   "case": "empty",
+   "summary": "Mock (india): nothing run yet",
+   "about": "No source row; the publish and the health check have not run",
+   "value": {
+    "market": "india",
+    "page_key": "data_health",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T09:38:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "5cdac27b2e162942edb27a3e6c29d61b971937d5ef30adcd7f04fcc285be1ffb",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T09:38:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "as_of": "2026-11-16",
+     "sources": [],
+     "publish": {
+      "status": "not_run",
+      "run_on": null,
+      "reason": null
+     },
+     "health_check": {
+      "status": "not_run",
+      "run_on": null,
+      "problems": 0
+     }
+    }
+   }
+  }
+ }
+}

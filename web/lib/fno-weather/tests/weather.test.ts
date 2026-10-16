@@ -40,7 +40,7 @@ test("the two chances against the usual chance, on a scale that ends at 50%", ()
 });
 
 test("drivers are the backend's words with the way they pushed; an upgrade's time is shown in IST", () => {
-  assert.deepEqual(driversOf(red)[0], { tone: "danger", icon: "trending_up", push: "Riskier", text: "India VIX up 22% in 3 sessions" });
+  assert.deepEqual(driversOf(red)[0], { tone: "danger", icon: "trending_up", push: "Riskier", text: "India VIX up 22% over 5 sessions" });
   assert.equal(driversOf(green)[0].push, "Calmer");
   assert.deepEqual(driversOf(missing), []);
   assert.deepEqual(upgradesOf(red), [{ at: "11:45 IST", from: "AMBER", to: "RED", why: "India VIX up 11% since the open" }]);
@@ -48,11 +48,11 @@ test("drivers are the backend's words with the way they pushed; an upgrade's tim
 
 test("the record: the last sessions, RED's share against its 15% maximum, the scores and the price of the RED rule", () => {
   const recent = recentOf(green);
-  assert.deepEqual(recent.at(-1), { day: "16 Nov", label: { tone: "success", icon: "check", word: "GREEN" }, outcome: "not known yet" });
+  assert.deepEqual(recent.at(-1), { day: "16 Nov", label: { tone: "success", icon: "check", word: "GREEN" }, outcome: "not known yet", rebuilt: false });
   assert.equal(redShareOf(red).state, "Over-alarming");
   assert.ok(redShareOf(red).words.startsWith("RED on 41 of the last 250 sessions (16.4%); the limit is 15%. Above it, a new version must be proposed"));
-  assert.equal(redShareOf(missing).words, "No session counted yet.");
-  assert.deepEqual(scoresOf(green)[0], { question: "Next session", against: "The usual chance", days: "140", needs: "test needs 10", brier: "0.036", brierBaseline: "0.039", verdict: { tone: "success", icon: "check", word: "Better" } });
+  assert.ok(redShareOf(missing).words.startsWith("RED on 13 of the last 250 sessions rebuilt from history (exploratory) (5.2%)"), "a rebuilt share says so");
+  assert.deepEqual(scoresOf(green)[0], { question: "Next session", against: "The usual chance", days: "140", needs: "test needs 10", brier: "0.036", brierBaseline: "0.039", verdict: { tone: "success", icon: "check", word: "Better" }, exploratory: null });
 });
 
 test("RED's price is Paper and honest: saved, cost, or not measured yet (never a guess)", () => {
@@ -62,4 +62,12 @@ test("RED's price is Paper and honest: saved, cost, or not measured yet (never a
   const cost = priceOf(red);
   assert.ok(cost.kind === "measured" && cost.facts[2].label === "RED cost" && cost.facts[2].value === "₹4,810");
   assert.deepEqual(priceOf(missing), { kind: "words", text: "Not measured yet: the blocked trades’ shadow results come later." });
+});
+
+test("2.8.0's labels: a day, a RED share or a score rebuilt from history is always said to be, never shown as live", () => {
+  assert.ok(recentOf(missing).slice(0, -1).every((r) => r.rebuilt) && !recentOf(missing).at(-1)!.rebuilt, "the strip marks rebuilt days, not the unrecorded one");
+  assert.ok(recentOf(green).every((r) => !r.rebuilt));
+  assert.ok(!redShareOf(green).words.includes("rebuilt"));
+  assert.ok(scoresOf(missing).every((s) => s.exploratory === "Exploratory: scored on days rebuilt from history, not a confirmed result"));
+  assert.ok(scoresOf(red).every((s) => s.exploratory === null));
 });

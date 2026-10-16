@@ -30,9 +30,9 @@ are the measured NIFTY figures quoted in design 2.3; everything else is made up.
 | The chance of a big move | `p_big_1d`, `p_big_5d`, `base_rate_1d`, `base_rate_5d`, `times_usual_1d`, `times_usual_5d` |
 | What moved it | `drivers[]` |
 | During the session | `intraday[]` |
-| The last sessions | `recent[]` |
-| How often it is RED | `red_share.*` |
-| Its record, against the usual chance and the old v0 checklist (design 2.3) | `scores[]` (`baseline`) |
+| The last sessions (a "rebuilt" mark on back-filled days; a link to the full history, mockup 46) | `recent[]` (`label`) |
+| How often it is RED ("rebuilt from history (exploratory)" when so) | `red_share.*` (`basis`) |
+| Its record, against the usual chance and the old v0 checklist (design 2.3); an exploratory score says "Exploratory: scored on days rebuilt from history, not a confirmed result" (the W3 screen's wording, 16 Oct) | `scores[]` (`baseline`, `exploratory`) |
 | The price of the RED rule | `price_of_calm.*` |
 
 ## Things the owner should know (brutally honest)

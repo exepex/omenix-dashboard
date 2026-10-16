@@ -1,0 +1,365 @@
+{
+ "_mock": true,
+ "_note": "MOCK: the F&O data catalog's example paper books (made-up numbers on a future date), in the contract the backend will publish (stories P1, P2c). Research and paper only.",
+ "page": "paper-books",
+ "source": "api/examples/fno-screens.json (the F&O data catalog, exepex/trading story P1)",
+ "operation": "getFnoPaperTrades",
+ "states": {
+  "india_won": {
+   "case": "positive",
+   "summary": "Mock (india): a winning closed trade and an open position",
+   "about": "Rule-based won Rs 3,096 after costs at the desk's execution fill, Rs 2,860 at the 60-minute owner-timing fill the verdict uses; one put spread open with one monitor alert; a measurement account and one shadow test beside the books",
+   "value": {
+    "market": "india",
+    "page_key": "paper_trades",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T12:05:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "57a04b49303b7f9b6a9a62ae764cf0b1bc2fc4049bcbbefe86b38158f71ddffd",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T12:05:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "accounts": [
+      {
+       "family": "rule",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2003054,
+       "cash": 1999414,
+       "open_trades": 1,
+       "open_max_loss": 3984,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      },
+      {
+       "family": "hybrid",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "cash": 2000000,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      },
+      {
+       "family": "ai",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "cash": 2000000,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      }
+     ],
+     "shadows": [
+      {
+       "name": "B0 measurement account",
+       "label": "measurement",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "open_trades": 0
+      },
+      {
+       "name": "Call spread test, version 1",
+       "label": "shadow",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2001420,
+       "open_trades": 1
+      }
+     ],
+     "open": [
+      {
+       "trade_id": "book1-2026-11-16-1",
+       "family": "rule",
+       "strategy": "Put spread A, version 1",
+       "structure": "put spread",
+       "legs": [
+        {
+         "contract": "MOCKNIFTY26DEC10600PE",
+         "side": "buy",
+         "lots": 1,
+         "option_type": "PE",
+         "strike": 10600,
+         "expiry": "2026-12-29"
+        },
+        {
+         "contract": "MOCKNIFTY26DEC10450PE",
+         "side": "sell",
+         "lots": 1,
+         "option_type": "PE",
+         "strike": 10450,
+         "expiry": "2026-12-29"
+        }
+       ],
+       "opened_on": "2026-11-16",
+       "max_loss": 3984,
+       "mark_value": 3640,
+       "unrealised": -42,
+       "days_to_expiry": 29,
+       "monitor": "alert_only",
+       "alerts_today": 1,
+       "alerts": [
+        {
+         "at": "2026-11-16T07:45:00Z",
+         "text": "F&O monitor: information, no action: book1-2026-11-16-1 has used 52% of its maximum loss at 13:15 IST; the paper record changes only at the next daily run's execution snapshot"
+        }
+       ]
+      }
+     ],
+     "closed": [
+      {
+       "trade_id": "book1-2026-11-02-1",
+       "family": "rule",
+       "strategy": "Put spread A, version 1",
+       "structure": "put spread",
+       "opened_on": "2026-11-02",
+       "closed_on": "2026-11-12",
+       "gross": 3310,
+       "costs": 214,
+       "net": 3096,
+       "result": "won",
+       "exit": "take_profit",
+       "fills": [
+        {
+         "minutes": 5,
+         "outcome": "filled",
+         "net": 3180
+        },
+        {
+         "minutes": 30,
+         "outcome": "filled",
+         "net": 3020
+        },
+        {
+         "minutes": 60,
+         "outcome": "filled",
+         "net": 2860
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  "india_lost": {
+   "case": "negative",
+   "summary": "Mock (india): two losing trades, with missed fills",
+   "about": "A maximum-loss exit (at 60 minutes its entry would have been missed: the price had moved) and a time exit made before E8 existed, so its owner-timing fills are null, never invented; the monitor is not running yet (LM1), so its fields are null",
+   "value": {
+    "market": "india",
+    "page_key": "paper_trades",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T12:05:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "a7f2cf8b1fc45c552200c45f95342f17407f49a9eda86c6d5ce4e57ec2dc2563",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T12:05:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "accounts": [
+      {
+       "family": "rule",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 1992892,
+       "cash": 1992892,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 10204,
+        "pause_at": 120000
+       }
+      },
+      {
+       "family": "hybrid",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "cash": 2000000,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      },
+      {
+       "family": "ai",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "cash": 2000000,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      }
+     ],
+     "shadows": [
+      {
+       "name": "Call spread test, version 1",
+       "label": "shadow",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 1994310,
+       "open_trades": 0
+      }
+     ],
+     "open": [],
+     "closed": [
+      {
+       "trade_id": "book1-2026-11-09-1",
+       "family": "rule",
+       "strategy": "Put spread A, version 1",
+       "structure": "put spread",
+       "opened_on": "2026-11-09",
+       "closed_on": "2026-11-13",
+       "gross": -3770,
+       "costs": 214,
+       "net": -3984,
+       "result": "lost",
+       "exit": "max_loss_exit",
+       "fills": [
+        {
+         "minutes": 5,
+         "outcome": "filled",
+         "net": -3984
+        },
+        {
+         "minutes": 30,
+         "outcome": "filled",
+         "net": -3984
+        },
+        {
+         "minutes": 60,
+         "outcome": "missed_price_moved",
+         "net": null
+        }
+       ]
+      },
+      {
+       "trade_id": "book1-2026-11-03-1",
+       "family": "rule",
+       "strategy": "Put spread A, version 1",
+       "structure": "put spread",
+       "opened_on": "2026-11-03",
+       "closed_on": "2026-11-11",
+       "gross": -2910,
+       "costs": 214,
+       "net": -3124,
+       "result": "lost",
+       "exit": "time_exit",
+       "fills": null
+      }
+     ]
+    }
+   }
+  },
+  "india_none": {
+   "case": "empty",
+   "summary": "Mock (india): no paper trade yet",
+   "about": "Every book at its opening Rs 20 lakh; nothing open, nothing closed",
+   "value": {
+    "market": "india",
+    "page_key": "paper_trades",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T12:05:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "e24a4bf231a38ae23bdfd745d7cb3baec1ac1aad9f277ea2c8c6499855338171",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T12:05:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "accounts": [
+      {
+       "family": "rule",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "cash": 2000000,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      },
+      {
+       "family": "hybrid",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "cash": 2000000,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      },
+      {
+       "family": "ai",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "cash": 2000000,
+       "open_trades": 0,
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      }
+     ],
+     "shadows": [],
+     "open": [],
+     "closed": []
+    }
+   }
+  }
+ }
+}

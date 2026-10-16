@@ -1,30 +1,15 @@
 # 37 Forecast lab: why it looks like this
 
-- **Today first, the past below** (owner, 13 Oct 2026). A visitor first wants to know what the families expect now;
-  each prediction says the date its answer comes, so it is clear it is about the future. The track record follows:
-  overall since the start, then any period the user picks, then why, then each prediction.
-- **A lab, not a contest.** It never ends; the top says so in one line, with when the official verdict comes.
-- **Plain words first, statistics last.** Names a retail user knows ("Up or down", "Fear rising", "Past average"),
-  a "why it matters" line on every prediction, mistakes as sentences; the official tests stay one tap away.
-- **Points instead of Brier at the top.** "Points ahead of the yardstick" reads like a sports table; the miss score
-  stays one tap away in each card and in the detail.
-- **No rank before 40 settled days.** An early lead on six forecasts is noise; the card says so instead of crowning it.
-- **Profit decides, said at the top.** A good forecaster could still lose money; the screen must never suggest that a
-  family trades because it forecasts well (design 12.7).
-- **Verdicts in three channels.** Each verdict has a glyph, a word and a colour (tick and green "Better, proven"; cross
-  and red "Worse, proven"; flat arrow and grey "No clear difference"; timer and amber "Not proven yet"; block and grey
-  "Not running yet"), owner's rule: never colour alone.
-- **"Not proven yet" is a number, not a mood.** Each test shows its settled days against the 40 it needs, and until the
-  first review every gap is shown but not judged, so an early lead cannot be read as proof.
-- **Plain words for the statistics.** "Miss score" for the Brier score (0 perfect, 0.25 = always saying 50%), "likely
-  range" for the bootstrap interval, "honest about its confidence" for calibration, "45 tests at once" for the
-  multiple-comparison correction; each block has a "how to read it" line.
-- **Every element has its good, bad and empty case:** the empty real state with its reason and steps; families
-  winning, losing and level; a family not running (never shown as zero); a missed day (counted, never scored); a day
-  with no answer (never scored); a forecaster too sure of itself and one close to honest; leaned the right and the wrong way.
-- **Examples cannot pass for history:** they are labelled Example, made up, and counted in day numbers, not dates.
-- **Strategy internals stay private:** the screen shows the chances each family gave and how they scored, never how
-  it forecasts. The yardsticks, which are public research methods, are explained.
-- **India only:** the whole screen is F&O, so it is absent in the US market (nav item and page).
-- Reused design-system parts only: `.mb-pagehead`, `.mb-ap` family badges, `.mb-dir`, `.mb-mark`, `.mb-label`,
-  `.mb-fact`, `.md-progress`, `.md-segmented`, `.md-table`, `details.md-expansion`, `.quiet`, `svg.plot` with chart tokens.
+- **The standing first:** forecasts diagnose market reading and never promote a book, so that line sits above
+  everything.
+- **Today on top, the past below** (owner, 13 Oct): today's answers with their answer dates first, said to be
+  unknown yet; then, as the past, who beats the yardstick question by question.
+- **One card per question:** forecasters ranked by average miss score (best first; no rank across questions, as the
+  miss scores differ), the verdict against the fixed yardstick as a label with its glyph and word (never colour
+  alone), the test's numbers folded "for the curious", then when it could settle.
+- **Who forecasts, last:** how each is kept from the answers (plain code, sealed same day) and its days counted.
+- What the owner asked for on 13 Oct and is not here yet (period chooser, race chart, "what made the difference"):
+  `notes.md`, with why and what would bring it back.
+- **Every state is labelled Mock**; the source line names the catalog operation.
+- Checks: `check_page.js` per state at 1280 and 390 px (no console errors, no external requests, no overflow);
+  `check_text.js`: 0 findings. Screenshots: `shot-<state>-1280-full`, `-390-full`, `-390-viewport`.

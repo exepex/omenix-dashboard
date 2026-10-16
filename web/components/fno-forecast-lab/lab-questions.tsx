@@ -39,7 +39,7 @@ function Card({ card }: { card: QuestionCard }) {
         </details>
       ) : null}
       {card.settle ? <p className="small muted settle">{card.settle}</p> : null}
-      <HowTo>{`The yardstick is ${card.yardstick}, fixed before any result was seen. “Better” needs the test to say so over many days, not one lucky month.`}</HowTo>
+      <HowTo>{`The yardstick is ${card.yardstick}, fixed before any result was seen. “Better” needs the test to say so over many days, and by enough to matter, not one lucky month.`}</HowTo>
     </Sec>
   );
 }

@@ -81,3 +81,24 @@ main yet. So part 1 covers today's weather (page `weather`). The history view (2
   dashboard's CI cannot read the trading repository to check it.
 - **No real weather is published yet.** M1's live job is not built, and P2a's page lands with the BR1 builder. With
   the database set, the screen shows "not published" until then.
+
+## Addendum 1: contract 2.8.0's weather labels (on story/fno-2-8-merge, at P1's request)
+
+2.8.0 makes three FnoWeather fields required. The screen now shows each one, so nothing rebuilt from history reads as
+live:
+- **`recent[].label`:** a strip day rebuilt from history shows "rebuilt" (mockup 40), and the how-to says what that
+  means.
+- **`red_share.basis`:** a rebuilt share says "rebuilt from history (exploratory)" (mockup 40). On the 2.8.0 empty
+  example it said "RED on 13 of the last 250 sessions" with no mark. That was the honesty gap; it is closed now.
+- **`scores[].exploratory`:** shown beside the verdict as "Exploratory: scored on days rebuilt from history, not a
+  confirmed result". This goes beyond mockup 40, which has no mark there (reasoning only: a back-filled "Better" must
+  not read as a confirmed result).
+
+Two tests are updated, both because the 2.8.0 examples changed. Neither is loosened:
+- the driver wording is now the example's "India VIX up 22% over 5 sessions";
+- the empty case's RED share is now rebuilt, and the test checks that it is said to be.
+
+There is one new test: a day, a share or a score rebuilt from history is always said to be, and a live one never is.
+
+On this tree: check_code_size and the design copies are clean, `npm test` gives 484/484 with 0 skipped, and the build
+passes. The history view (page `weather_history`, colour and label only) is next, as W3a part 2.

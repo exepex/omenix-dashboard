@@ -11,9 +11,9 @@ export function WeatherRecent({ w }: { w: FnoWeather }) {
   return (
     <Sec title="The last sessions" aria="The last sessions">
       <div className="strip" role="list">
-        {recentOf(w).map((r) => <span key={r.day} role="listitem">{r.day}<ColourLabel look={r.label} />{r.outcome}</span>)}
+        {recentOf(w).map((r) => <span key={r.day} role="listitem">{r.day}<ColourLabel look={r.label} />{r.outcome}{r.rebuilt ? <small>rebuilt</small> : null}</span>)}
       </div>
-      <HowTo>Each session’s colour and whether a 2% move came next. A RED with no move is not a mistake on its own; only many sessions tell.</HowTo>
+      <HowTo>Each session’s colour and whether a 2% move came next; “rebuilt” marks a day worked out later from history, not on the day. A RED with no move is not a mistake on its own; only many sessions tell.</HowTo>
     </Sec>
   );
 }
@@ -46,7 +46,7 @@ export function WeatherScores({ w }: { w: FnoWeather }) {
                 <td className="md-numeric" data-k="Days">{s.days}<small>{s.needs}</small></td>
                 <td className="md-numeric" data-k="Miss score">{s.brier}</td>
                 <td className="md-numeric" data-k="Its miss score">{s.brierBaseline}</td>
-                <td data-k="Verdict"><Label tone={s.verdict.tone} icon={s.verdict.icon}>{s.verdict.word}</Label></td>
+                <td data-k="Verdict"><Label tone={s.verdict.tone} icon={s.verdict.icon}>{s.verdict.word}</Label>{s.exploratory ? <small>{s.exploratory}</small> : null}</td>
               </tr>
             ))}
           </tbody>
