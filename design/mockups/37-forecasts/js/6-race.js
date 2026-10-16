@@ -58,7 +58,9 @@ function racePart(main, c) {
   const {el} = c, H = hist(), q = raceQ(H);
   if (!q) { main.append(el('div', {class: 'stack'}, sec(c, 'A period you choose', el('p', {class: 'empty muted'}, 'No answer has been scored yet, so there is no race to show.')))); return; }
   const labels = LABELS.map(([k]) => k).filter(k => q.series.some(s => s.label === k)), label = labels.includes(HLABEL) ? HLABEL : labels[0];
-  const series = q.series.filter(s => s.label === label), all = [...new Set(series.flatMap(s => s.points.map(p => p.as_of)))].sort(), days = raceDays(all);
+  /* the newest back-fill only: a rebuilt back-fill is a new series, never joined to the old (live series carry null) */
+  const newest = q.series.filter(s => s.label === label).at(-1).backfill_sha256;
+  const series = q.series.filter(s => s.label === label && s.backfill_sha256 === newest), all = [...new Set(series.flatMap(s => s.points.map(p => p.as_of)))].sort(), days = raceDays(all);
   const yard = yardOf(q), rows = raceRows(series, days);
   main.append(el('div', {class: 'stack'}, sec(c, ['A period you choose', el('small', {class: 'muted', style: 'font-weight:400'}, q.plain)], racePickers(c, H, q, all, labels),
     label === 'backfill_exploratory' ? el('p', {class: 'small', style: 'margin:8px 0 0'}, el('span', {class: 'mb-label neutral'}, c.icon('science'), 'Exploratory'), ' Rebuilt later from history, never a live record: it cannot show who reads the market better.') : null,

@@ -9,7 +9,8 @@
   4. Strategy internals stay private: each page lists what is never sent, and no property or example key is named like a
      rule, threshold, filter, parameter, prompt, weight or feature. Every object is closed (a planted extra field fails).
   5. The card says PAPER ONLY; every mockup built on the catalog shows exactly the catalog's examples (one copy, DRY).
-  6. Probes: invalid pages the schema must refuse, and values allowed but never sent (fno_rules.py).
+  6. Probes: invalid pages the schema must refuse, and values allowed but never sent (fno_rules.py); a planted
+     mismatch in a mockup's further operations (data.json "also") must be caught.
 Usage: pip install -r tools/api/requirements.txt; python3 tools/api/check_fno_screens.py. Exit 1 on any problem."""
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ import hashlib
 import json
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -151,7 +153,7 @@ def check_privacy(doc: dict, problems: list[str]) -> None:
     for name in screen_schemas():
         for where, node in schema_nodes(doc["components"]["schemas"][name], name):
             problems += [f"{where}: property {key!r} reads like a strategy internal" for key in node.get("properties", {}) if PRIVATE.search(key)]
-            if "properties" in node and "$ref" not in node and node.get("additionalProperties") is not False and not where.endswith("/if") and "/allOf/" not in where:
+            if "properties" in node and "$ref" not in node and node.get("additionalProperties") is not False and not where.endswith(("/if", "/then", "/else")) and "/allOf/" not in where:
                 problems.append(f"{where}: an object of the catalog is closed (additionalProperties: false)")
 
 
@@ -197,6 +199,23 @@ def check_mockups(doc: dict, problems: list[str], mockups: Path = bundle.REPO / 
                 problems.append(f"{folder}/data.json: its data differs from the catalog's {shown_op} examples (rebuild: python3 design/mockups/{folder}/build.py)")
 
 
+def planted_also(doc: dict, problems: list[str]) -> None:
+    """A planted mismatch in a mockup's data.json "also" must be caught (judge 224): each MOCKUPS_ALSO mockup's data,
+    with one example of each further operation emptied, is checked in a scratch folder."""
+    for folder, others in MOCKUPS_ALSO.items():
+        data = json.loads((bundle.REPO / "design/mockups" / folder / "data.json").read_text(encoding="utf-8"))
+        for other in others:
+            next(iter(data["also"][other].values()))["value"]["payload"] = {}
+        with tempfile.TemporaryDirectory() as scratch:
+            (Path(scratch) / folder).mkdir()
+            (Path(scratch) / folder / "data.json").write_text(json.dumps(data), encoding="utf-8")
+            caught: list[str] = []
+            check_mockups(doc, caught, Path(scratch))
+        for other in others:
+            if not any(folder in line and other in line for line in caught):
+                problems.append(f"planted break not caught: {folder}/data.json with a changed {other} example")
+
+
 def own_examples(folder: Path = bundle.API) -> dict:
     return json.loads((folder / "examples" / EXAMPLES_FILE).read_text(encoding="utf-8"))
 
@@ -214,6 +233,7 @@ def check(doc: dict, own: dict, problems: list[str]) -> list:
     check_card(doc, problems)
     check_sums(doc, problems)
     check_mockups(doc, problems)
+    planted_also(doc, problems)
     return leaves
 
 
