@@ -12,6 +12,7 @@ import { PaperBookCards, PaperShadows } from "../../../../../components/fno-pape
 import { PaperClosed, PaperOpen } from "../../../../../components/fno-paper-books/paper-books-trades.tsx";
 import { paperBooksData, paperBooksLive } from "../../../../../lib/fno-paper-books/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
+import { HeldBlock } from "../../_fno/held-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./paper-books.css";
 
@@ -39,7 +40,7 @@ export function PaperBooksPage() {
       <FramePageHead crumbs={["Portfolio", "Paper books"]} title="Paper books" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="the paper books"><BooksBlock /></Part>
+      <Part label="the paper books"><HeldBlock pageKey="paper_trades"><BooksBlock /></HeldBlock></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page paper_trades (stories E1, E4, E7, E8)"><Icon name="schedule" />F&amp;O publication: paper trades</span>
         <span className="mb-tag" data-tip="After each fill or exit; marks after the close of each NSE session.">Not live</span>

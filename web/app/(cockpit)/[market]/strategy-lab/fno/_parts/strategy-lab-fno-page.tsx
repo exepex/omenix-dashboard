@@ -13,6 +13,7 @@ import { Icon } from "../../../../../../components/ui/icon.tsx";
 import { PaperTag } from "../../../../../../components/ui/primitives.tsx";
 import { strategyLabFnoData, strategyLabFnoLive } from "../../../../../../lib/fno-strategy-lab/wiring.ts";
 import { FreshnessBlock } from "../../../_fno/freshness-block.tsx";
+import { HeldBlock } from "../../../_fno/held-block.tsx";
 import "../../../../../../components/fno-common/fno-screen.css";
 
 const LEDE = "Which F&O strategies passed their test, which books may trade them, and what they made on paper after every cost. The stock tab is separate and never combined with this one.";
@@ -39,7 +40,7 @@ export function StrategyLabFnoPage() {
       <LabTabs market="india" active="fno" />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="the Strategy lab: F&O"><LabBlock /></Part>
+      <Part label="the Strategy lab: F&O"><HeldBlock pageKey="strategy_lab"><LabBlock /></HeldBlock></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page strategy_lab (the trial ledger, the version registry and the scorecards)"><Icon name="schedule" />F&amp;O publication: strategy_lab</span>
         <span className="mb-tag" data-tip="After each ledger change and each NSE session's close, shown the next morning.">Not live</span>

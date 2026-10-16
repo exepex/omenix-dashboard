@@ -11,6 +11,7 @@ import { WeatherPrice, WeatherRecent, WeatherRedShare, WeatherScores } from "../
 import { WeatherChances, WeatherDrivers, WeatherUpgrades, WeatherVerdict } from "../../../../../components/fno-weather/weather-top.tsx";
 import { weatherData, weatherLive } from "../../../../../lib/fno-weather/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
+import { HeldBlock } from "../../_fno/held-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./weather.css";
 
@@ -40,7 +41,7 @@ export function WeatherPage() {
       <FramePageHead crumbs={["Markets", "Market weather"]} title="Market weather" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="today’s weather"><TodayBlock /></Part>
+      <Part label="today’s weather"><HeldBlock pageKey="weather"><TodayBlock /></HeldBlock></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page weather (story M1's weather record)"><Icon name="schedule" />F&amp;O publication: weather</span>
         <span className="mb-tag" data-tip="Once a session day at 15:00 IST; the page shows the previous session until the next morning's publish.">Not live</span>

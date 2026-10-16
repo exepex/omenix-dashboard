@@ -9,6 +9,7 @@ import { Icon } from "../../../../../../components/ui/icon.tsx";
 import { HistoryCounts, HistorySessions } from "../../../../../../components/fno-weather/weather-history.tsx";
 import { weatherData, weatherLive } from "../../../../../../lib/fno-weather/wiring.ts";
 import { FreshnessBlock } from "../../../_fno/freshness-block.tsx";
+import { HeldBlock } from "../../../_fno/held-block.tsx";
 import "../../../../../../components/fno-common/fno-screen.css";
 import "./weather-history.css";
 
@@ -34,7 +35,7 @@ export function WeatherHistoryPage() {
       <FramePageHead crumbs={["Markets", "Market weather", "History"]} title="Weather history" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="the weather’s history"><HistoryBlock /></Part>
+      <Part label="the weather’s history"><HeldBlock pageKey="weather_history"><HistoryBlock /></HeldBlock></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page weather_history (story M1's weather record)"><Icon name="schedule" />F&amp;O publication: weather history</span>
         <span className="mb-tag" data-tip="Once a session day at 15:00 IST; the page shows the previous session until the next morning's publish.">Not live</span>
