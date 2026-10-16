@@ -12,6 +12,8 @@ const appCode = (): Source[] => ["app", "components", "lib", "middleware.ts"].fl
 const ADAPTERS = /^lib\/(screener|overview|home)\/(fixture-source$|azure-source$|fixture\/)|^lib\/fixtures\//;
 const WIRINGS = { screener: "lib/screener/wiring", overview: "lib/overview/wiring", fno: "lib/fno/wiring" };
 const FRESHNESS = "app/(cockpit)/[market]/_fno/freshness-block.tsx";
+/** The F&O screens' shared held-back notice and holds list (contract 2.13.0), the one reader of `page_holds`. */
+const HELD = "app/(cockpit)/[market]/_fno/held-block.tsx";
 const PICK = (name: string, type: string) => new RegExp(`^export const ${name}: ${type} = fnoReader \\? \\w+\\(fnoReader\\) : lazyAdapter\\(\\(\\) => import\\("\\./fixture-source\\.ts"\\)\\.then\\(\\(m\\) => m\\.\\w+\\)\\);$`, "gm");
 const LOADERS = { screener: "app/(cockpit)/[market]/screener/_parts/blocks.tsx", markets: "app/(cockpit)/[market]/markets/_parts/blocks.tsx" };
 const FORBIDDEN = [ADAPTERS, /^lib\/(screener|overview|home|shell|fno)\/wiring$/, /^lib\/fno\//, /^lib\/shell\/(fixture-source$|fixture\/)/, /^lib\/data\/(?!constants$)/, /^lib\/tools\//, /^lib\/assistant\//, /^lib\/ui\/(api-client|use-api)$/, /^pg$/, /^@anthropic-ai\//, /^next\/server$/];
@@ -39,7 +41,7 @@ test("no module but a wiring imports an adapter; only each page's loaders read i
   assert.deepEqual(readersOf(appCode(), WIRINGS.overview), [LOADERS.markets]);
   const screenWirings = appCode().map((f) => f.path).filter((p) => FNO_SCREEN.test(canonical(p)) && p.endsWith("/wiring.ts"));
   assert.ok(screenWirings.includes("lib/fno-weather/wiring.ts"), "the F&O screens' wirings are found");
-  assert.deepEqual(readersOf(appCode(), WIRINGS.fno), [FRESHNESS, "lib/home/wiring.ts", "lib/shell/wiring.ts", WIRINGS.screener + ".ts", WIRINGS.overview + ".ts", ...screenWirings].sort());
+  assert.deepEqual(readersOf(appCode(), WIRINGS.fno), [FRESHNESS, HELD, "lib/home/wiring.ts", "lib/shell/wiring.ts", WIRINGS.screener + ".ts", WIRINGS.overview + ".ts", ...screenWirings].sort());
   assert.equal([...readFileSync(join(web, "lib/screener/wiring.ts"), "utf8").matchAll(PICK("screenerData", "ScreenerData"))].length, 1);
   assert.equal([...readFileSync(join(web, "lib/overview/wiring.ts"), "utf8").matchAll(PICK("overviewData", "OverviewData"))].length, 1);
 });

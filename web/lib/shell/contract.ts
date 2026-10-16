@@ -213,9 +213,13 @@ export interface Indices {
 }
 
 /** Which of a market's frame parts come from the F&O tool's publication (W9-F&O), and why one is missing. */
+import type { HeldView } from "../fno-holds/holds.ts";
+
 export interface FnoLive {
   /** A part with no data: its reason (empty, or the read failed), shown where the part would be. */
   missing: Partial<Record<"session" | "indices" | "picks", string>>;
+  /** A part the publication holds back (contract 2.13.0 `page_holds`; judge 256): its notice, shown where it would be. */
+  held?: Partial<Record<"picks", HeldView>>;
 }
 
 export interface MarketShell {

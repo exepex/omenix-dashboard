@@ -11,6 +11,7 @@ import { FramePageHead } from "../../../../../components/ui/frame-page-head.tsx"
 import { Icon } from "../../../../../components/ui/icon.tsx";
 import { forecastLabData, forecastLabLive } from "../../../../../lib/fno-forecast-lab/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
+import { HeldBlock } from "../../_fno/held-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./forecast-lab.css";
 
@@ -36,7 +37,7 @@ export function ForecastLabPage() {
       <FramePageHead crumbs={["Strategies", "Forecast lab"]} title="Forecast lab" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="the Forecast lab"><LabBlock /></Part>
+      <Part label="the Forecast lab"><HeldBlock pageKey="forecast_lab"><LabBlock /></HeldBlock></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page forecast_lab (the forecast records and score reports, G3-G8)"><Icon name="schedule" />F&amp;O publication: forecast_lab</span>
         <span className="mb-tag" data-tip="After each NSE session's close; today's forecasts after the 15:00 cutoff, shown the next morning.">Not live</span>

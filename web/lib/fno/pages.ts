@@ -23,6 +23,7 @@ export const FNO_PAGES = {
   getFnoBudget: "budget",
   getFnoScoreboards: "scoreboards",
   getFnoCard: "card",
+  getFnoPageHolds: "page_holds",
 } as const;
 
 export type FnoBlockName = keyof typeof FNO_PAGES;

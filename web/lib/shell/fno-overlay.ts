@@ -3,6 +3,7 @@
 // stock picks, notifications) stays the labelled example. The frame's clock becomes the read time, so the market status
 // follows the real session. A part with no data carries its reason instead, never an example value. India only: the US
 // slice is never touched. Pure.
+import type { HeldView } from "../fno-holds/holds.ts";
 import type { Part } from "../ui/block-outcome.ts";
 import type { FnoPicks, IndexLevel, Indices, Instrument, MarketShell, Session, ShellPayload } from "./contract.ts";
 
@@ -10,6 +11,8 @@ export interface FnoParts {
   session: Part<Session & { regime?: string }>;
   indices: Part<Indices>;
   picks: Part<FnoPicks>;
+  /** The picks' hold (page `today`); absent or null when not held or the holds are unknown. */
+  picksHeld?: HeldView | null;
 }
 
 const missingOf = (part: Part<unknown>) => ("missing" in part ? part.missing : undefined);
@@ -41,7 +44,7 @@ function liveIndia(shell: MarketShell, parts: FnoParts, fallback: Session): Mark
     status: { session_date: session.session_date, open_utc: session.open_utc, close_utc: session.close_utc, next_open_utc: session.next_open_utc, ...(session.hours_status ? { hours_status: session.hours_status } : {}) },
     fno_state: picks?.fno_state,
     fno_rows: picks?.rows ?? [],
-    fno_live: { missing: { session: missingOf(parts.session), indices: missingOf(parts.indices), picks: missingOf(parts.picks) } },
+    fno_live: { missing: { session: missingOf(parts.session), indices: missingOf(parts.indices), picks: missingOf(parts.picks) }, ...(parts.picksHeld ? { held: { picks: parts.picksHeld } } : {}) },
   };
 }
 

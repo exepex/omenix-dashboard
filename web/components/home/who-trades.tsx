@@ -4,9 +4,11 @@
 // F&O book its own line in India, the strategies collapsed under one button, "Open <group>" for the detail. Baselines
 // are one comparison line. Every figure is a block field; nothing is added up here.
 import type { ReactNode } from "react";
+import type { HeldView } from "../../lib/fno-holds/holds.ts";
 import type { Accounts, FnoBook, Groups, Positions } from "../../lib/home/contract.ts";
 import { groupCards, plural, type GroupCard } from "../../lib/home/groups.ts";
 import { src } from "../../lib/home/sources.ts";
+import { HeldNotice } from "../fno-common/held-notice.tsx";
 import { HelpTip, Icon } from "../ui/icon.tsx";
 import { useFrame } from "../frame/frame-context.tsx";
 import { StockExampleTag } from "../frame/parts.tsx";
@@ -94,13 +96,15 @@ function GroupCardView({ c, booksMissing }: { c: GroupCard; booksMissing: string
   );
 }
 
-/** `books`: null in the US (no F&O line at all); in India an empty list with `booksMissing` when the block has no data. */
-export function WhoTrades({ groups, books, booksMissing, accounts, positions }: { groups: Groups; books: FnoBook[] | null; booksMissing: string | null; accounts: Accounts; positions: Positions }) {
+/** `books`: null in the US (no F&O line at all); in India an empty list with `booksMissing` when the block has no data;
+ *  `booksHeld`: the books' hold notice (page `risk`, judge 256), above the cards. */
+export function WhoTrades({ groups, books, booksMissing, booksHeld = null, accounts, positions }: { groups: Groups; books: FnoBook[] | null; booksMissing: string | null; booksHeld?: HeldView | null; accounts: Accounts; positions: Positions }) {
   const { go } = useFrame();
   const base = groups.baselines.total;
   return (
     <section className="sec" aria-label="Who trades">
       <SectionHead title="Who trades, and how it is going" sub="Each group’s total paper profit or loss. Open a group for each of its strategies." go={["Strategies", "scoreboards"]} />
+      {booksHeld ? <HeldNotice bold={booksHeld.words} rest={booksHeld.nothing ? ". The F&O lines below are not published." : ". The F&O lines below are its last published page, which can be from an earlier session."} /> : null}
       <div className="aps">
         <YouCard accounts={accounts} positions={positions} />
         {groupCards(groups, books).map((c) => <GroupCardView key={c.family} c={c} booksMissing={booksMissing} />)}

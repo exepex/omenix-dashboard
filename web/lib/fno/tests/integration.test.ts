@@ -61,6 +61,7 @@ const PAGES: Record<FnoPageKey, unknown> = {
   data_health: screenExamples.getFnoDataHealth_india_problems.value.payload,
   budget: screenExamples.getFnoBudget_india_alert.value.payload,
   scoreboards: screenExamples.getFnoScoreboards_india_behind.value.payload,
+  page_holds: screenExamples.getFnoPageHolds_india_held.value.payload,
   card: screenExamples.getFnoCard_india_trade.value.payload,
 };
 const KEYS = Object.keys(PAGES) as FnoPageKey[];

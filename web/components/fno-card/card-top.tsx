@@ -3,6 +3,7 @@
 // lib/fno-card/view.ts.
 import type { FnoCard } from "../../lib/fno-card/contract.ts";
 import { headerOf, heldBackOf, timesOf } from "../../lib/fno-card/view.ts";
+import { HeldNotice } from "../fno-common/held-notice.tsx";
 import { Icon } from "../ui/icon.tsx";
 import { Fact, LookLabel } from "./card-bits.tsx";
 
@@ -26,7 +27,7 @@ export function CardVerdict({ c }: { c: FnoCard }) {
 /** Today's card held back (owner, 16 Oct 2026): a red alert with the owner's sentence and both dates. */
 export function CardHeldBack({ c }: { c: FnoCard }) {
   const h = heldBackOf(c);
-  return h ? <p className="mb-alert danger test" role="alert"><Icon name="block" /><span><b>{h.reason}</b>{h.rest}</span></p> : null;
+  return h ? <HeldNotice bold={h.reason} rest={h.rest} /> : null;
 }
 
 export function CardTimes({ c }: { c: FnoCard }) {

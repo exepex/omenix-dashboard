@@ -10,6 +10,7 @@ import { PaperTag } from "../../../../../components/ui/primitives.tsx";
 import { ScoreboardCards } from "../../../../../components/fno-scoreboards/board-card.tsx";
 import { scoreboardsData, scoreboardsLive } from "../../../../../lib/fno-scoreboards/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
+import { HeldBlock } from "../../_fno/held-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./scoreboards.css";
 
@@ -30,7 +31,7 @@ export function ScoreboardsPage() {
       <FramePageHead crumbs={["Strategies", "F&O scoreboards"]} title="F&O scoreboards" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="the F&O scoreboards"><BoardsBlock /></Part>
+      <Part label="the F&O scoreboards"><HeldBlock pageKey="scoreboards"><BoardsBlock /></HeldBlock></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page scoreboards (S2's and S3's board files)"><Icon name="schedule" />F&amp;O publication: scoreboards</span>
         <span className="mb-tag" data-tip="After each scoreboard run, at the 07:10 IST publish.">Not live</span>

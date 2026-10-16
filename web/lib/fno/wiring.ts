@@ -6,6 +6,8 @@ import { nseCalendar } from "./calendar.ts";
 import { fnoDbSettings } from "./config.ts";
 import { fnoQuery } from "./db.ts";
 import type { PublicationState } from "./freshness.ts";
+import type { FnoPageHolds } from "../fno-holds/holds.ts";
+import { readPageHolds } from "./page-holds.ts";
 import { AzureFnoRowStore } from "./store.ts";
 
 const settings = fnoDbSettings();
@@ -14,3 +16,6 @@ export const fnoReader: FnoBlockReader | null = settings ? new PublicationReader
 
 /** The current publication's state, or null with no database (fixtures carry no runtime state). */
 export const fnoStatus = (): Promise<PublicationState | null> => (fnoReader ? fnoReader.status() : Promise.resolve(null));
+
+/** The publication's held pages (contract 2.13.0): lib/fno/page-holds.ts with this root's reader. */
+export const fnoPageHolds = (): Promise<FnoPageHolds | null> => readPageHolds(fnoReader);

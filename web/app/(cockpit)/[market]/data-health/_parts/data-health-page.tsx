@@ -7,9 +7,11 @@ import { Part } from "../../../../../components/blocks/part.tsx";
 import { FramePageHead } from "../../../../../components/ui/frame-page-head.tsx";
 import { Icon } from "../../../../../components/ui/icon.tsx";
 import { HealthRuns } from "../../../../../components/fno-data-health/data-health-runs.tsx";
+import { HealthHolds } from "../../../../../components/fno-data-health/data-health-holds.tsx";
 import { HealthSources } from "../../../../../components/fno-data-health/data-health-sources.tsx";
 import { dataHealthData, dataHealthLive } from "../../../../../lib/fno-data-health/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
+import { HeldBlock, HoldsBlock } from "../../_fno/held-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./data-health.css";
 
@@ -35,7 +37,8 @@ export function DataHealthPage() {
       <FramePageHead crumbs={["Control", "Data health"]} title="Data health" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="the F&O data health"><HealthBlock /></Part>
+      <Part label="the F&O data health"><HeldBlock pageKey="data_health"><HealthBlock /></HeldBlock></Part>
+      <Part label="pages held back"><HoldsBlock render={(holds) => <div className="stack"><HealthHolds holds={holds} /></div>} /></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page data_health (the data manifests, P7's run status and O8's health check)"><Icon name="schedule" />F&amp;O publication: data health</span>
         <span className="mb-tag" data-tip="Daily, at the 07:10 IST publish.">Not live</span>

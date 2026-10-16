@@ -10,6 +10,7 @@ import { BudgetCap } from "../../../../../components/fno-budget/budget-cap.tsx";
 import { BudgetGroups } from "../../../../../components/fno-budget/budget-groups.tsx";
 import { budgetData, budgetLive } from "../../../../../lib/fno-budget/wiring.ts";
 import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
+import { HeldBlock } from "../../_fno/held-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./budget.css";
 
@@ -32,7 +33,7 @@ export function BudgetPage() {
       <FramePageHead crumbs={["Control", "AI usage and budget"]} title="AI usage and budget" meta={meta} />
       <p className="lede">{LEDE}</p>
       <Part label="how current the data is"><FreshnessBlock /></Part>
-      <Part label="AI usage and budget"><BudgetBlock /></Part>
+      <Part label="AI usage and budget"><HeldBlock pageKey="budget"><BudgetBlock /></HeldBlock></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page budget (BG1's cap reading over F8's usage ledger)"><Icon name="schedule" />F&amp;O publication: budget</span>
         <span className="mb-tag" data-tip="After each routine run, at the 07:10 IST publish.">Not live</span>

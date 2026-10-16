@@ -25,4 +25,6 @@ export const fixtureHomeData: HomeData = {
   topNews: block("getTopNews"),
   fnoBooks: async () => example("getFnoBooks_india"),
   fnoEvents: async () => example("getFnoEvents_india"),
+  /** The examples publish normally: no page is held (the W3 screens' fixtures say the same). */
+  fnoHolds: async () => ({ holds: [] }),
 };
