@@ -8,7 +8,7 @@ function healthPart(main, c) {
   const {el} = c, H = pay();
   main.append(el('div', {class: 'books'},
     sec(c, 'The last publish', lab(c, PUB, H.publish.status), el('p', {class: 'small', style: 'margin:8px 0 0'}, H.publish.run_on ? `For the session of ${dlabel(H.publish.run_on)}` : 'No publish yet.'),
-      H.publish.reason ? el('p', {class: 'small', style: 'margin:4px 0 0'}, H.publish.reason) : null, howto(c, 'Runs every session morning, before the market opens. A failed run keeps the previous pages; nothing half-written is shown.')),
+      H.publish.reason ? el('p', {class: 'small', style: 'margin:4px 0 0'}, H.publish.reason) : null, howto(c, 'Runs every session morning. A failed run keeps the previous pages; nothing half-written is shown.')),
     sec(c, 'The daily health check', lab(c, HC, H.health_check.status), el('p', {class: 'small', style: 'margin:8px 0 0'}, H.health_check.run_on ? `${dlabel(H.health_check.run_on)} · ${H.health_check.problems} problem${H.health_check.problems === 1 ? '' : 's'}` : 'No check yet.'),
       howto(c, 'Runs at 17:51 IST and checks that every expected file and job of the day exists.'))),
     el('div', {class: 'stack'}, sec(c, 'Data sources', H.sources.length ? el('div', {class: 'md-table-wrap'}, el('table', {class: 'md-table tstack'},

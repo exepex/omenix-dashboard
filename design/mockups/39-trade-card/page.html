@@ -2233,7 +2233,7 @@ function topPart(main, c) {
   main.append(c.pagehead({crumbs: [['F&O'], ["Today's card"]], title: "Today's card",
     meta: [el('span', {class: 'md-chip small'}, c.icon('public'), 'India · F&O · NIFTY'), el('span', {class: 'mb-label paper'}, C.label),
       el('span', {class: 'mb-tag mock', 'data-tip': 'Made-up numbers on a future date, from the F&O data catalog; never a real card.'}, 'Mock')]}));
-  main.append(el('p', {class: 'lede'}, 'Every trading day at about 15:08 the desk sends one card: a paper trade, no trade with the reason, or a shadow to watch. It says how much the trade can lose, why, how sure the forecast is, and what would prove it wrong. Paper only: no card ever asks you to place a real order.'),
+  main.append(el('p', {class: 'lede'}, 'Every trading day, after the 3 pm quotes, the desk sends one card: a paper trade, no trade with the reason, or a shadow to watch. It says how much the trade can lose, why, how sure the forecast is, and what would prove it wrong. Paper only: no card ever asks you to place a real order.'),
     el('div', {class: 'acts'}, el('span', {class: 'small muted'}, 'Mock state:'),
       el('div', {class: 'md-segmented dense qpick', role: 'group', 'aria-label': 'Mock state'}, ...KEYS.map(k => el('button', {type: 'button', 'aria-pressed': String(k === (KEY || DEFAULT)), 'data-tip': D.states[k].about, onclick: () => { KEY = k; c.rerender(); }},
         `${CASE[D.states[k].case]}: ${D.states[k].value.payload.status}${D.states[k].value.payload.reason ? ' · ' + reasonShort(D.states[k].value.payload.reason) : ''}`)))));
