@@ -18,8 +18,18 @@ function bookCard(c, a) {
     el('div', {class: 'facts2', style: 'margin-top:8px'}, fact(c, 'Cash', rs(c, a.cash)), fact(c, 'Open positions', String(a.open_trades))),
     el('div', {class: 'cap'}, el('div', {class: 'bar', role: 'img', 'aria-label': `Open risk ${rs(c, a.open_max_loss)} of the ${rs(c, cap)} cap`}, el('i', {style: `width:${Math.min(100, a.open_max_loss / cap * 100).toFixed(1)}%`})),
       el('small', {class: 'muted'}, `Open risk ${rs(c, a.open_max_loss)} of its ${rs(c, cap)} cap (the open positions' maximum losses)`)),
+    el('div', {class: 'cap'}, el('div', {class: 'bar', role: 'img', 'aria-label': `${rs(c, a.brake.loss_from_high)} below its high; it pauses at ${rs(c, a.brake.pause_at)}`}, el('i', {style: `width:${Math.min(100, a.brake.loss_from_high / a.brake.pause_at * 100).toFixed(1)}%`})),
+      el('small', {class: 'muted'}, `${rs(c, a.brake.loss_from_high)} below its high; it pauses new trades at ${rs(c, a.brake.pause_at)}`)),
     howto(c, 'Value is cash plus the open positions at their latest quotes. A book with no trade stays at its opening value.'));
 }
 function booksPart(main, c) {
   main.append(c.el('div', {class: 'books'}, ...pay().accounts.map(a => bookCard(c, a))));
+}
+/* Shadow tests: each its own small card, never added to a book; B0 is the measuring account */
+function shadowsPart(main, c) {
+  const {el} = c, S = pay().shadows;
+  main.append(el('div', {class: 'stack'}, sec(c, ['Shadow tests', c.paperTag()], S.length ? el('div', {class: 'books'}, ...S.map(s => el('div', {class: 'mb-fact'},
+    el('span', {class: 'k'}, s.label === 'measurement' ? 'Measurement' : 'Shadow'), el('b', {}, s.name), el('small', {}, `${rs(c, s.value)} · ${s.open_trades} open · since ${rs(c, s.opening_value)}`))))
+    : el('p', {class: 'empty muted'}, 'No shadow test running.'),
+    howto(c, 'Shadow tests trade on paper beside the books to test a candidate; they are never part of a book or its results.'))));
 }

@@ -9,7 +9,7 @@ function openPart(stack, c) {
       el('tbody', {}, ...O.map(t => el('tr', {}, el('td', {'data-k': 'Book'}, family(c, t.family)), el('td', {'data-k': 'Strategy'}, t.strategy, el('small', {}, t.structure)),
         el('td', {'data-k': 'Legs'}, legs(c, t)), el('td', {'data-k': 'Opened'}, dlabel(t.opened_on)),
         el('td', {class: 'md-numeric', 'data-k': 'Most it can lose'}, rs(c, t.max_loss)), el('td', {'data-k': 'So far'}, pnlLabel(c, t.unrealised)),
-        el('td', {class: 'md-numeric', 'data-k': 'Days left'}, String(t.days_to_expiry))))))) : el('p', {class: 'empty muted'}, 'No open position.'),
+        el('td', {class: 'md-numeric', 'data-k': 'Days left'}, String(t.days_to_expiry), t.alerts.map(x => el('small', {}, c.icon('lock'), ` ${x.text}`)))))))) : el('p', {class: 'empty muted'}, 'No open position.'),
     howto(c, '"Most it can lose" is fixed when the trade opens. "So far" is at the latest quotes, before exit costs.')));
 }
 function fills(c, t) {

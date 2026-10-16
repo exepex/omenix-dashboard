@@ -4,7 +4,7 @@ PF.mount({screen: 'paper-books', group: 'portfolio', strip: false, dataLabel: 'M
   writeHash(h) { if (KEY) h.set('s', KEY); if (!PF.st.wlOff) h.set('wloff', '0'); },
   render(main, c) {
     if (!c.P.fno) { location.replace('../31-dashboard/page.html#m=' + c.m); return; }   /* India only: absent in the US */
-    topPart(main, c); booksPart(main, c);
+    topPart(main, c); booksPart(main, c); shadowsPart(main, c);
     const stack = c.el('div', {class: 'stack'}); openPart(stack, c); closedPart(stack, c);
     main.append(stack, c.el('div', {class: 'src', role: 'note', 'aria-label': 'Where the figures come from'},
       c.el('span', {class: 'mb-asof', 'data-tip': 'api/examples/fno-screens.json, operation getFnoPaperTrades'}, c.icon('schedule'), 'F&O data catalog: getFnoPaperTrades'),

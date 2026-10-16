@@ -8,7 +8,7 @@
   "india_won": {
    "case": "positive",
    "summary": "Mock (india): a winning closed trade and an open position",
-   "about": "Rule-based won Rs 3,096 after costs at the desk's execution fill, Rs 2,860 at the 60-minute owner-timing fill the verdict uses; one put spread open",
+   "about": "Rule-based won Rs 3,096 after costs at the desk's execution fill, Rs 2,860 at the 60-minute owner-timing fill the verdict uses; one put spread open with one monitor alert; a measurement account and one shadow test beside the books",
    "value": {
     "market": "india",
     "page_key": "paper_trades",
@@ -17,7 +17,7 @@
     "built_at": "2026-11-16T12:05:00Z",
     "schema_version": "2.8.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "87d5b63a3db975fa3e3557345496bd13198b6dbee31203591b53f8c874613feb",
+    "payload_sha256": "57a04b49303b7f9b6a9a62ae764cf0b1bc2fc4049bcbbefe86b38158f71ddffd",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -38,7 +38,11 @@
        "value": 2003054,
        "cash": 1999414,
        "open_trades": 1,
-       "open_max_loss": 3984
+       "open_max_loss": 3984,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
       },
       {
        "family": "hybrid",
@@ -47,7 +51,11 @@
        "value": 2000000,
        "cash": 2000000,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
       },
       {
        "family": "ai",
@@ -56,7 +64,29 @@
        "value": 2000000,
        "cash": 2000000,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      }
+     ],
+     "shadows": [
+      {
+       "name": "B0 measurement account",
+       "label": "measurement",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2000000,
+       "open_trades": 0
+      },
+      {
+       "name": "Call spread test, version 1",
+       "label": "shadow",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 2001420,
+       "open_trades": 1
       }
      ],
      "open": [
@@ -88,8 +118,14 @@
        "mark_value": 3640,
        "unrealised": -42,
        "days_to_expiry": 29,
-       "monitor": null,
-       "alerts_today": null
+       "monitor": "alert_only",
+       "alerts_today": 1,
+       "alerts": [
+        {
+         "at": "2026-11-16T07:45:00Z",
+         "text": "F&O monitor: information, no action: book1-2026-11-16-1 has used 52% of its maximum loss at 13:15 IST; the paper record changes only at the next daily run's execution snapshot"
+        }
+       ]
       }
      ],
      "closed": [
@@ -139,7 +175,7 @@
     "built_at": "2026-11-16T12:05:00Z",
     "schema_version": "2.8.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "244ffe6e945932f913fd2a99b35fad5ad6a3a723d981afb2938eb0dae7b96e15",
+    "payload_sha256": "a7f2cf8b1fc45c552200c45f95342f17407f49a9eda86c6d5ce4e57ec2dc2563",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -160,7 +196,11 @@
        "value": 1992892,
        "cash": 1992892,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 10204,
+        "pause_at": 120000
+       }
       },
       {
        "family": "hybrid",
@@ -169,7 +209,11 @@
        "value": 2000000,
        "cash": 2000000,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
       },
       {
        "family": "ai",
@@ -178,7 +222,21 @@
        "value": 2000000,
        "cash": 2000000,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
+      }
+     ],
+     "shadows": [
+      {
+       "name": "Call spread test, version 1",
+       "label": "shadow",
+       "as_of": "2026-11-16",
+       "opening_value": 2000000,
+       "value": 1994310,
+       "open_trades": 0
       }
      ],
      "open": [],
@@ -243,7 +301,7 @@
     "built_at": "2026-11-16T12:05:00Z",
     "schema_version": "2.8.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "9d36ef18b2920efef22b049381af910b32e5ce3b5f458b7ec54de3560a352840",
+    "payload_sha256": "e24a4bf231a38ae23bdfd745d7cb3baec1ac1aad9f277ea2c8c6499855338171",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -264,7 +322,11 @@
        "value": 2000000,
        "cash": 2000000,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
       },
       {
        "family": "hybrid",
@@ -273,7 +335,11 @@
        "value": 2000000,
        "cash": 2000000,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
       },
       {
        "family": "ai",
@@ -282,9 +348,14 @@
        "value": 2000000,
        "cash": 2000000,
        "open_trades": 0,
-       "open_max_loss": 0
+       "open_max_loss": 0,
+       "brake": {
+        "loss_from_high": 0,
+        "pause_at": 120000
+       }
       }
      ],
+     "shadows": [],
      "open": [],
      "closed": []
     }
