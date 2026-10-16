@@ -25,3 +25,7 @@ FnoBudget (`api/schemas/fno-budget.yaml`), page `budget`, contract 2.8.0; field 
 1. **Minutes, not rupees.** BG1 caps session minutes; the subscription's real cost is not a paper figure, so it is not on this screen.
 2. **No AI model name and no session id** appear anywhere (exepex/trading decision: no screen names an AI model).
 3. **Building the tool counts in the basis**, so the cap grows with development work; the note says when the measure is only a lower bound.
+
+**Shares sent, never copied (contract 2.11.0; the W3 builder, 16 Oct 2026):** the cap's share of the basis (50), the
+alert (80) and the stop (100) come from BG1's config as `share_pct`, `alert_pct` and `stop_pct`; the bar's alert mark
+and every sentence read them, so a changed config can never leave the screen showing old numbers.

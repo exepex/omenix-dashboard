@@ -9580,7 +9580,7 @@
    "built_at": "2026-11-16T09:38:00Z",
    "schema_version": "2.11.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "59c723f796e4b8b1dfc74037ba8d0f7859b1dbd09b68d29a5baf7ae7ec919f5e",
+   "payload_sha256": "bb53a79f244857e619ec8640cabf4802b96fc699296659b9e3695c2516e0b471",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -9600,6 +9600,9 @@
     "cap_minutes": 920.0,
     "pct_of_cap": 33.9,
     "basis": "measured",
+    "share_pct": 50,
+    "alert_pct": 80,
+    "stop_pct": 100,
     "note": "",
     "groups": [
      {
@@ -9638,7 +9641,7 @@
    "built_at": "2026-11-16T09:38:00Z",
    "schema_version": "2.11.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "218bc3dd55659fb07a0de9ab552f49c38511d62cc3fbfeb846aa6106d62711fa",
+   "payload_sha256": "95c303e85adbaa4aed95aa18c56c68258ba2f7a424de307686ab4d165b0d828a",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -9658,6 +9661,9 @@
     "cap_minutes": 940.0,
     "pct_of_cap": 84.0,
     "basis": "measured",
+    "share_pct": 50,
+    "alert_pct": 80,
+    "stop_pct": 100,
     "note": "",
     "groups": [
      {
@@ -9696,7 +9702,7 @@
    "built_at": "2026-11-16T09:38:00Z",
    "schema_version": "2.11.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "b4c13c39074b9ebe5e379602ee3f17193fe9b51a0928e816648c037eef5dd74c",
+   "payload_sha256": "df717daf6c334c2d4c2974b66f891b7e8989a5ec776352e160a09f03f5f1b634",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -9716,6 +9722,9 @@
     "cap_minutes": 0.0,
     "pct_of_cap": null,
     "basis": "measured",
+    "share_pct": 50,
+    "alert_pct": 80,
+    "stop_pct": 100,
     "note": "Nothing measured yet this month: no routine has written its timing record",
     "groups": []
    }

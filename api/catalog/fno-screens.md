@@ -533,17 +533,20 @@ Backend records named in the tables (exepex/trading):
   - `india_alert` (negative): Mock (india): past the 80% alert. AI books and roles at 84% of their cap: alert
   - `india_none` (empty): Mock (india): nothing measured yet. No timing record this month: level unknown
 - **Never sent (strategy internals):** the AI model's name, a session id or a routine's prompt
-- **Fields:** 11, of which the backend can fill 0 today
+- **Fields:** 14, of which the backend can fill 0 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
 | `month` | The month measured | month (YYYY-MM) | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
-| `level` | ok below 80% of the cap; alert from 80%; stop from 100% (AI roles stop, the AI forecasters last); unknown when nothing can be measured | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `level` | ok below alert_pct of the cap; alert from alert_pct; stop from stop_pct (AI roles stop, the AI forecasters last); unknown when nothing can be measured | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `books_and_roles_minutes` | The AI books' and roles' session minutes this month | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `basis_minutes` | What the cap is a share of: all measured session minutes (until December 2026), then the owner's plan minutes | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
-| `cap_minutes` | The cap: 50% of the basis | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `cap_minutes` | The cap: share_pct of the basis | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `pct_of_cap` | Books and roles as a share of the cap; null with nothing to measure against | percent | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `basis` | measured = a share of measured minutes; plan = a share of the owner's plan minutes | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `share_pct` | The cap as a share of the basis (50, owner 15 Oct 2026; 2.11.0: sent, never copied into a screen) | percent | BG1's config (budget.books_and_roles_share_pct) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `alert_pct` | The share of the cap at which the alert goes out (80, owner 15 Oct 2026) | percent | BG1's config (budget.alert_pct) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `stop_pct` | The share of the cap at which the AI roles stop (100, owner 15 Oct 2026) | percent | BG1's config (budget.stop_pct) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `note` | Why the level is unknown, or why it is a lower bound (a routine not yet timing itself); empty when complete | text | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `groups[].group` | Which kind of work used the minutes | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
 | `groups[].minutes` | Minutes this month | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
