@@ -1,0 +1,6 @@
+/* The F&O data health's own page rules (story W3e; 44-data-health/template.html), scoped with :where so the design
+   system's component rules keep their weight. The F&O screens' shared layout is components/fno-common/fno-screen.css. */
+:where(.data-health) .runs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+:where(.data-health) .run{margin:8px 0 0}
+:where(.data-health) .reason{margin:4px 0 0}
+@media (max-width:1099px){:where(.data-health) .runs{grid-template-columns:1fr}}
