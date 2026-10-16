@@ -27,7 +27,8 @@ FnoDataHealth (`api/schemas/fno-data-health.yaml`), page `data_health`, contract
 3. **The stock side's data health is a separate section later**, never mixed into this one.
 
 **Pages held back (contract 2.13.0, `getFnoPageHolds`, page `page_holds`; judge 251 on P11):** drawn below the health
-rows in the same case as the state (data.json `also`): none on a good day; in the bad case the Forecast lab (an answer
-day's calendar missing, its last page shown), the paper books (an open trade without marks, nothing shown) and the card
-(a risk rule broken, the previous card under its own notice); none in the empty case. Each reason is a fixed sentence,
-never a value (the schema refuses digits). Every held page also says so on its own screen.
+rows in the same case as the state (data.json `also`): none on a good day; in the bad case Home's picks and books
+(nothing shown, since their old pages would state something no longer true) and the card (the previous card under its
+own notice); none in the empty case. Each reason is one of P11's fixed sentences, owned by its code, in plain words
+with no digits (the schema refuses digits, so no value and no story code can enter; judge 255). Every held page also
+says so on its own screen.
