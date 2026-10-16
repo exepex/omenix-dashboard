@@ -1,5 +1,5 @@
 // Contract 2.13.0 (judge 251 on P11): a held F&O page says so on its own screen. The words come from P1's examples
-// (none, held); the structure rule checks that every F&O screen's loader except the card's wraps its page in the one
+// (none, held: P11's four sentences); the structure rule checks that every F&O screen's loader except the card's wraps its page in the one
 // HeldBlock with its own page key, so no screen can forget the notice.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
@@ -16,23 +16,25 @@ const held = read<FnoPageHolds>("getFnoPageHolds_india_held");
 const none = read<FnoPageHolds>("getFnoPageHolds_india_none");
 
 test("a page held with its previous page: the notice above it, dated, with the rule", () => {
-  assert.deepEqual(holdOf(held, "forecast_lab"), { words: "Forecast lab held back since 12 Nov 2026: A forecast's answer day falls in a year whose NSE calendar is not published yet", nothing: false });
+  assert.deepEqual(holdOf(held, "paper_trades"), { words: "Paper books held back since 16 Nov 2026: A book holds an open trade, and this page cannot mark it for the session yet", nothing: false });
 });
 
 test("a page held with nothing: the notice and not published", () => {
-  assert.deepEqual(holdOf(held, "paper_trades"), { words: "Paper books held back since 16 Nov 2026: An open trade has no marks for the session yet", nothing: true });
+  assert.deepEqual(holdOf(held, "today"), { words: "Picks held back since 12 Nov 2026: A strategy is approved, and this page cannot build its picks yet, so nothing is shown rather than an empty panel that is no longer true", nothing: true });
+  assert.deepEqual(holdOf(held, "risk"), { words: "Books on Home held back since 16 Nov 2026: A book holds an open trade whose risk this page cannot compute yet, so nothing is shown rather than a wrong figure", nothing: true });
 });
 
 test("no hold, or holds unknown: no notice is invented", () => {
-  assert.equal(holdOf(none, "forecast_lab"), null);
+  assert.equal(holdOf(none, "paper_trades"), null);
   assert.equal(holdOf(held, "weather"), null);
-  assert.equal(holdOf(null, "forecast_lab"), null);
+  assert.equal(holdOf(null, "paper_trades"), null);
 });
 
 test("data health's table lists every hold, oldest first as sent", () => {
   assert.deepEqual(holdRowsOf(held).map((r) => [r.page, r.since, r.shows]), [
-    ["Forecast lab", "12 Nov 2026", "Its last published page, dated, under a held-back notice"],
-    ["Paper books", "16 Nov 2026", "Not published, with the notice"],
+    ["Picks", "12 Nov 2026", "Not published, with the notice"],
+    ["Paper books", "16 Nov 2026", "Its last published page, dated, under a held-back notice"],
+    ["Books on Home", "16 Nov 2026", "Not published, with the notice"],
     ["Today's card", "16 Nov 2026", "Its last published page, dated, under a held-back notice"],
   ]);
   assert.deepEqual(holdRowsOf(none), []);

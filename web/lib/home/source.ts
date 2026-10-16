@@ -2,6 +2,7 @@
 // on its own and a backend can fill one block at a time. Components never see an adapter; the market page's loaders
 // read this interface through lib/home/wiring.ts.
 import type { Market } from "../data/constants.ts";
+import type { FnoPageHolds } from "../fno-holds/holds.ts";
 import type { Accounts, Attention, Events, FnoBooks, Groups, Positions, Session, StrategyTrades, TopNews, TrackedMoves } from "./contract.ts";
 
 export interface HomeData {
@@ -18,4 +19,6 @@ export interface HomeData {
   fnoBooks(): Promise<FnoBooks>;
   /** India only: the F&O tool's expiry dates (W9-F&O), shown in "Coming up" beside the stock tool's events. */
   fnoEvents(): Promise<Events>;
+  /** India only: the F&O pages held back (contract 2.13.0), so the books (page `risk`) say so when held (judge 256). */
+  fnoHolds(): Promise<FnoPageHolds | null>;
 }

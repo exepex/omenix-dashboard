@@ -10,6 +10,8 @@ import { OpenTrades } from "../../../../components/home/open-trades.tsx";
 import { WhoTrades } from "../../../../components/home/who-trades.tsx";
 import type { Market } from "../../../../lib/data/constants.ts";
 import { comingUp, dayAt, HOME_EVENTS } from "../../../../lib/home/events.ts";
+import { holdOf, NOT_PUBLISHED } from "../../../../lib/fno-holds/holds.ts";
+import { FNO_PAGES } from "../../../../lib/fno/pages.ts";
 import { settle, type Part } from "../../../../lib/ui/block-outcome.ts";
 import { homeData, homeLive } from "../../../../lib/home/wiring.ts";
 
@@ -25,13 +27,19 @@ const missingOf = (part: Part<unknown> | null) => (part && "missing" in part ? p
 export const MarketBlock = ({ market }: { market: Market }) =>
   blockSection("Market", () => Promise.all([sessionOf(market), homeData.trackedMoves(market)]), ([session, moves]) => <MarketBand session={valueOf(session)} missing={missingOf(session)} moves={moves} />);
 
+/** The books' hold (page `risk`, contract 2.13.0; judge 256); unknown holds (a failed read) show no notice. */
+const booksHeldOf = async () => {
+  const holds = await settle("The held pages", homeData.fnoHolds());
+  return "value" in holds ? holdOf(holds.value, FNO_PAGES.getFnoBooks) : null;
+};
+
 /** F&O books exist only in India: in the US the read is never made, so no F&O element can appear. */
 export const WhoTradesBlock = ({ market, fno }: { market: Market; fno: boolean }) =>
   blockSection(
     "Who trades",
-    () => Promise.all([homeData.groups(market), fno ? settle("The F&O books", homeData.fnoBooks()) : Promise.resolve(null), homeData.accounts(market), homeData.positions(market)]),
-    ([groups, books, accounts, positions]) => (
-      <WhoTrades groups={groups} books={books ? (valueOf(books)?.books ?? []) : null} booksMissing={missingOf(books)} accounts={accounts} positions={positions} />
+    () => Promise.all([homeData.groups(market), fno ? settle("The F&O books", homeData.fnoBooks()) : Promise.resolve(null), fno ? booksHeldOf() : Promise.resolve(null), homeData.accounts(market), homeData.positions(market)]),
+    ([groups, books, held, accounts, positions]) => (
+      <WhoTrades groups={groups} books={books ? (valueOf(books)?.books ?? []) : null} booksMissing={held?.nothing ? NOT_PUBLISHED : missingOf(books)} booksHeld={held} accounts={accounts} positions={positions} />
     ),
   );
 
