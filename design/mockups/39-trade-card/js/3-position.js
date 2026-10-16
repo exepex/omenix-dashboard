@@ -1,4 +1,4 @@
-/* The position (TRADE and WATCH): what, the entry range, how much, the most it can lose against the Rs 10,000 cap,
+/* The position (TRADE and WATCH): what, the entry range, how much, the most it can lose against the book's per-trade cap,
    the worst stretches, the exits, costs and tax, the volatility edge and what would prove it wrong. */
 
 function positionPart(col, c) {
@@ -47,6 +47,6 @@ function sizeFacts(c, T) {
 function maxLoss(c, T) {
   const {el} = c, share = Math.min(1, T.max_loss / T.max_loss_cap);
   return el('div', {class: 'cap', style: 'margin-top:12px'}, el('b', {class: 'small'}, `The most it can lose: ${rs(c, T.max_loss)}, charges included`),
-    el('div', {class: 'bar', role: 'img', 'aria-label': `${Math.round(share * 100)}% of the Rs 10,000 cap`}, el('i', {style: `width:${(share * 100).toFixed(1)}%`})),
+    el('div', {class: 'bar', role: 'img', 'aria-label': `${Math.round(share * 100)}% of the ${rs(c, T.max_loss_cap)} cap`}, el('i', {style: `width:${(share * 100).toFixed(1)}%`})),
     el('small', {class: 'muted'}, `${Math.round(share * 100)}% of the ${rs(c, T.max_loss_cap)} a trade may lose. Fixed at entry: no stop-loss order is needed.`));
 }
