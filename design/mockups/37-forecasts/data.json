@@ -866,7 +866,7 @@
     "built_at": "2026-11-30T12:10:00Z",
     "schema_version": "2.12.0",
     "source_commit": "0000000mock",
-    "payload_sha256": "3dcc32a54ee1e310db591e9d707f4ef7f77e2e75983c22379f6d49d3ac2aee0f",
+    "payload_sha256": "a30836587d3eb6210e79efeab747de489ebcb1928dd91474d7b5d5ca14352d80",
     "publisher": "fno",
     "freshness": {
      "state": "fresh",
@@ -918,6 +918,16 @@
        "status": "running",
        "isolation": "code",
        "isolation_label": null,
+       "coverage": null
+      },
+      {
+       "id": "book2_hybrid",
+       "name": "Hybrid",
+       "kind": "family",
+       "family": "hybrid",
+       "status": "not_started",
+       "isolation": "sealed_same_day",
+       "isolation_label": "sealed same day (not full F1)",
        "coverage": null
       },
       {
@@ -995,6 +1005,17 @@
          }
         ],
         "comparisons": [
+         {
+          "forecaster": "book2_hybrid",
+          "baseline": "book1_rules",
+          "n_pairs": 0,
+          "mean_diff": null,
+          "interval": null,
+          "p_value": null,
+          "verdict": "not_tested",
+          "min_effect_met": null,
+          "futility_upper_bound": null
+         },
          {
           "forecaster": "book3_ai",
           "baseline": "book1_rules",
