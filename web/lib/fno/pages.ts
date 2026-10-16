@@ -22,6 +22,7 @@ export const FNO_PAGES = {
   getFnoDataHealth: "data_health",
   getFnoBudget: "budget",
   getFnoScoreboards: "scoreboards",
+  getFnoCard: "card",
 } as const;
 
 export type FnoBlockName = keyof typeof FNO_PAGES;

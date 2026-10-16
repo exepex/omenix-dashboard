@@ -40,6 +40,7 @@ export const PAGES: readonly PageRoute[] = [
   { key: "data-health", label: "Data health", icon: "dns", segment: "data-health", mockup: "44-data-health", owner: "W3", endpoint: "fno/data-health", nav: true },
   { key: "budget", label: "AI usage and budget", icon: "timer", segment: "budget", mockup: "43-budget", owner: "W3", endpoint: "fno/budget", nav: true },
   { key: "fno-scoreboards", label: "F&O scoreboards", icon: "leaderboard", segment: "fno-scoreboards", mockup: "42-scoreboards", owner: "W3", endpoint: "fno/scoreboards", nav: true },
+  { key: "card", label: "Today's card", icon: "receipt_long", segment: "card", mockup: "39-trade-card", owner: "W3", endpoint: "fno/card", nav: true },
   { key: "forecasts", label: "Forecast lab", icon: "query_stats", segment: "forecast-lab", mockup: "37-forecasts", owner: "W3", endpoint: "fno/forecast-lab", nav: true },
   /* The Strategy lab's F&O tab (India only): reached from the lab's tabs, not the navigation. */
   { key: "lab-fno", label: "Strategy lab: F&O", icon: "science", segment: "strategy-lab/fno", mockup: "45-strategy-lab-fno", owner: "W3", endpoint: "fno/strategy-lab", nav: false },

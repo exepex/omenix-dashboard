@@ -5,6 +5,5 @@
 :where(.paper-books) .change{margin:6px 0 0}
 :where(.paper-books) .cap{margin-top:10px}
 :where(.paper-books) .legs{display:flex;flex-wrap:wrap;gap:4px}
-:where(.paper-books) .legs code{font-size:11.5px;padding:2px 6px;border-radius:3px;background:var(--md-sys-color-surface-container);overflow-wrap:anywhere}
 :where(.paper-books) .fills{display:flex;flex-wrap:wrap;gap:4px}
 :where(.paper-books) .owner{display:inline-flex;align-items:center;gap:4px;font-weight:400}
