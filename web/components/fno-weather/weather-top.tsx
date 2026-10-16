@@ -5,7 +5,8 @@ import type { FnoWeather } from "../../lib/fno-weather/contract.ts";
 import { chancesOf, colourLabel, driversOf, NO_DRIVERS, NO_UPGRADES, upgradesOf, verdictOf } from "../../lib/fno-weather/view.ts";
 import { Icon } from "../ui/icon.tsx";
 import { Label } from "../ui/primitives.tsx";
-import { ColourLabel, HowTo, Quiet, Sec } from "./weather-bits.tsx";
+import { HowTo, Quiet, Sec } from "../fno-common/screen-bits.tsx";
+import { ColourLabel } from "./weather-bits.tsx";
 
 export function WeatherVerdict({ w }: { w: FnoWeather }) {
   const v = verdictOf(w);
