@@ -43,7 +43,8 @@ export interface Answer {
 
 export interface Today {
   made_on: string;
-  answer_on: string;
+  /** null while the answer day falls in a year whose NSE session calendar is not published yet (contract 2.13.0). */
+  answer_on: string | null;
   values: Answer[];
 }
 

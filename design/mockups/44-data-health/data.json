@@ -1,6 +1,6 @@
 {
  "_mock": true,
- "_note": "MOCK: the F&O data catalog's example data-health page (made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.12.0). Research and paper only.",
+ "_note": "MOCK: the F&O data catalog's example data-health page (made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.13.0). Research and paper only.",
  "page": "data-health",
  "source": "api/examples/fno-screens.json (the F&O data catalog, exepex/trading story P1)",
  "operation": "getFnoDataHealth",
@@ -15,7 +15,7 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.12.0",
+    "schema_version": "2.13.0",
     "source_commit": "0000000mock",
     "payload_sha256": "544665f1f846ff9c549da93b27b23a2d8951023eccf054cafa269693e43c0885",
     "publisher": "fno",
@@ -88,7 +88,7 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.12.0",
+    "schema_version": "2.13.0",
     "source_commit": "0000000mock",
     "payload_sha256": "49667a231e8e128cc2d5a5d649a115346811e61934b72971a6c61c5804811df5",
     "publisher": "fno",
@@ -153,7 +153,7 @@
     "as_of": "2026-11-16",
     "cutoff": "2026-11-16T09:30:00Z",
     "built_at": "2026-11-16T09:38:00Z",
-    "schema_version": "2.12.0",
+    "schema_version": "2.13.0",
     "source_commit": "0000000mock",
     "payload_sha256": "5cdac27b2e162942edb27a3e6c29d61b971937d5ef30adcd7f04fcc285be1ffb",
     "publisher": "fno",
@@ -179,6 +179,122 @@
       "status": "not_run",
       "run_on": null,
       "problems": 0
+     }
+    }
+   }
+  }
+ },
+ "also": {
+  "getFnoPageHolds": {
+   "india_none": {
+    "case": "positive",
+    "summary": "Mock (india): every page published",
+    "about": "A normal day: nothing held back",
+    "value": {
+     "market": "india",
+     "page_key": "page_holds",
+     "as_of": "2026-11-16",
+     "cutoff": "2026-11-16T09:30:00Z",
+     "built_at": "2026-11-16T09:38:00Z",
+     "schema_version": "2.13.0",
+     "source_commit": "0000000mock",
+     "payload_sha256": "742634e6f83b803b41d08e356c62f37552a8454bbb694800db864d735a3d203c",
+     "publisher": "fno",
+     "freshness": {
+      "state": "fresh",
+      "rule": "fno_calendar",
+      "built_at": "2026-11-16T09:38:00Z",
+      "age_minutes": 0,
+      "reason": null
+     },
+     "paper": "Paper",
+     "product": "fno",
+     "publication_id": "mock-fno-2026-11-16",
+     "payload": {
+      "holds": []
+     }
+    }
+   },
+   "india_held": {
+    "case": "negative",
+    "summary": "Mock (india): four pages held back",
+    "about": "Home's picks and books show nothing (a page that would state something no longer true); the paper books and the card show their previous page (the card under its own notice)",
+    "value": {
+     "market": "india",
+     "page_key": "page_holds",
+     "as_of": "2026-11-16",
+     "cutoff": "2026-11-16T09:30:00Z",
+     "built_at": "2026-11-16T09:38:00Z",
+     "schema_version": "2.13.0",
+     "source_commit": "0000000mock",
+     "payload_sha256": "c454b6d248889cc0ea07a32dd3e78690bb5ab10e7fd71d64dba630fc5bc0d616",
+     "publisher": "fno",
+     "freshness": {
+      "state": "fresh",
+      "rule": "fno_calendar",
+      "built_at": "2026-11-16T09:38:00Z",
+      "age_minutes": 0,
+      "reason": null
+     },
+     "paper": "Paper",
+     "product": "fno",
+     "publication_id": "mock-fno-2026-11-16",
+     "payload": {
+      "holds": [
+       {
+        "page_key": "today",
+        "since": "2026-11-12",
+        "reason": "A strategy is approved, and this page cannot build its picks yet, so nothing is shown rather than an empty panel that is no longer true",
+        "shows": "nothing"
+       },
+       {
+        "page_key": "paper_trades",
+        "since": "2026-11-16",
+        "reason": "A book holds an open trade, and this page cannot mark it for the session yet",
+        "shows": "previous_page"
+       },
+       {
+        "page_key": "risk",
+        "since": "2026-11-16",
+        "reason": "A book holds an open trade whose risk this page cannot compute yet, so nothing is shown rather than a wrong figure",
+        "shows": "nothing"
+       },
+       {
+        "page_key": "card",
+        "since": "2026-11-16",
+        "reason": "A risk rule was broken: the sizing or validity checks let a trade past its book's per-trade cap",
+        "shows": "previous_page"
+       }
+      ]
+     }
+    }
+   },
+   "india_first": {
+    "case": "empty",
+    "summary": "Mock (india): the first publication",
+    "about": "No page has been held yet",
+    "value": {
+     "market": "india",
+     "page_key": "page_holds",
+     "as_of": "2026-10-17",
+     "cutoff": "2026-10-17T09:30:00Z",
+     "built_at": "2026-10-17T09:38:00Z",
+     "schema_version": "2.13.0",
+     "source_commit": "0000000mock",
+     "payload_sha256": "742634e6f83b803b41d08e356c62f37552a8454bbb694800db864d735a3d203c",
+     "publisher": "fno",
+     "freshness": {
+      "state": "fresh",
+      "rule": "fno_calendar",
+      "built_at": "2026-10-17T09:38:00Z",
+      "age_minutes": 0,
+      "reason": null
+     },
+     "paper": "Paper",
+     "product": "fno",
+     "publication_id": "mock-fno-2026-10-17",
+     "payload": {
+      "holds": []
      }
     }
    }

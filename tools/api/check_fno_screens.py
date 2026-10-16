@@ -60,7 +60,7 @@ MOCKUPS = {"37-forecasts": "getFnoForecastLab", "39-trade-card": "getFnoCard", "
            "42-scoreboards": "getFnoScoreboards", "43-budget": "getFnoBudget", "44-data-health": "getFnoDataHealth",
            "45-strategy-lab-fno": "getFnoStrategyLab", "46-weather-history": "getFnoWeatherHistory"}
 # ...and the further operations a mockup draws beside its states (data.json "also": operation -> its examples)
-MOCKUPS_ALSO = {"37-forecasts": ("getFnoForecastHistory",)}
+MOCKUPS_ALSO = {"37-forecasts": ("getFnoForecastHistory",), "44-data-health": ("getFnoPageHolds",)}
 
 
 def canonical(payload) -> bytes:

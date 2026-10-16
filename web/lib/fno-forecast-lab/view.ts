@@ -26,6 +26,9 @@ export function answerOf(q: Question, a: Answer): string {
   return value + STATUS_NOTE[a.status];
 }
 
+/** Said when the answer day falls in a year whose NSE trading days are not published yet (contract 2.13.0). */
+export const ANSWER_DAY_UNKNOWN = "Not known yet: NSE has not published that year’s trading days";
+
 export interface TodayRow {
   question: string;
   answers: string;
@@ -33,7 +36,7 @@ export interface TodayRow {
 }
 
 export const todayOf = (lab: FnoForecastLab): TodayRow[] =>
-  lab.questions.flatMap((q) => (q.today ? [{ question: q.plain, answers: q.today.values.map((a) => `${nameOf(lab, a.forecaster)} ${answerOf(q, a)}`).join(" · "), knownOn: dayYear(q.today.answer_on) }] : []));
+  lab.questions.flatMap((q) => (q.today ? [{ question: q.plain, answers: q.today.values.map((a) => `${nameOf(lab, a.forecaster)} ${answerOf(q, a)}`).join(" · "), knownOn: q.today.answer_on ? dayYear(q.today.answer_on) : ANSWER_DAY_UNKNOWN }] : []));
 
 export interface BestRow {
   question: string;

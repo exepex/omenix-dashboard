@@ -239,7 +239,7 @@ Backend records named in the tables (exepex/trading):
 - **Mock examples:**
   - `india_winning` (positive): Mock (india): forecasters beating their yardsticks. After the first review: Hybrid better than Book 1 (rules) on Q1; the weather better on V6; Hybrid better on V2 by more than the minimum effect
   - `india_losing` (negative): Mock (india): forecasters losing to their yardsticks. After the first review: AI team worse than Book 1 (rules) on Q4 (too sure when wrong); today its Q4 forecast was late and Hybrid's day was a transcript breach, so neither counts; on V2 the AI team is futile (its improvement cannot reach the 3% minimum); V3 has 6 of the 40 days its test needs
-  - `india_waiting` (empty): Mock (india): not enough data yet. Q1 has 12 of the 40 days its test needs; the AI team's forecast today was generated after 15:15 IST, so it is late and not counted; no common start yet, so no coverage; V1 waits for the 15-minute quotes (A16); protocol v4 is still a draft
+  - `india_waiting` (empty): Mock (india): not enough data yet. 4 Dec 2026: Q1 has 12 of the 40 days its test needs, and its answer day is not known yet (it falls in 2027, whose NSE session calendar is not published); the AI team's forecast today was generated after 15:15 IST, so it is late and not counted; no common start yet, so no coverage; V1 waits for the 15-minute quotes (A16); protocol v4 is still a draft
 - **Never sent (strategy internals):** how any forecaster forecasts: its inputs, method, prompts or fitted values (only what it said and how it scored)
 - **Fields:** 53, of which the backend can fill 13 today
 
@@ -274,7 +274,7 @@ Backend records named in the tables (exepex/trading):
 | `questions[].waiting_for[].story` | The exepex/trading story that provides it (e.g. A16) | id | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | no: G8 |
 | `questions[].waiting_for[].detail` | What is missing exactly, or what has to happen first | text | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | no: G8 |
 | `questions[].today.made_on` | The session the forecast was made (before 15:00) | date (IST) | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | yes (`forecast_record_v2:date`) |
-| `questions[].today.answer_on` | The session the answer is known | date (IST) | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | no: G8 |
+| `questions[].today.answer_on` | The session the answer is known; null when that session falls in a year whose NSE session calendar is not published yet (shown as not known yet, never guessed; e.g. from about 3 Dec for a 20-session question until NSE publishes next year's holidays) | date (IST) | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | no: G8 |
 | `questions[].today.values[].status` | counted = on time and scorable; pending = its audit is not done yet; late = generated after 15:15 IST (never counted); breach = a transcript breach made the day unscored; model_mismatch = not the registered model (unscored) | enum | G3's generated_at against the 15:15 IST deadline (ForecastRecordV2.on_time) and G5's scoring gate (ScoringStatus) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | no: G5 |
 | `questions[].today.values[].forecaster` | The forecaster id | id | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | yes (`forecast_record_v2:book`) |
 | `questions[].today.values[].probability` | The chance it said (probability questions; null for variance) | probability 0-1 | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | yes (`forecast_record_v2:probability`) |
@@ -325,6 +325,27 @@ Backend records named in the tables (exepex/trading):
 | `questions[].series[].points[].as_of` | The day of G4's report | date (IST) | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
 | `questions[].series[].points[].n` | Answers scored so far: forecasts whose answer is known (G4's counts.resolved), up to the horizon after each was made | count | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | yes (`score_summary:scored`) |
 | `questions[].series[].points[].mean_loss` | Average miss score over those n answers: Brier (v3, G4's ScoreSummary.mean_brier) or QLIKE (v4: G8 adds it; the record named holds only Brier today) | the question's metric | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | yes (`score_summary:mean_brier`) |
+
+## The F&O pages held back in this publication, so each held page says so on screen (contract 2.13)
+
+`GET /api/v1/markets/india/fno/page-holds` · `getFnoPageHolds` · fno.pages_history page page_holds (published in every F&O publication by P11; judge 251)
+
+- **Freshness:** with every publication
+- **Empty state:** holds empty (every page published normally)
+- **What it holds:** The pages held back in this publication, each with the first session it was held in a row, the reason it was held and what the screen shows meanwhile. Empty state: holds empty (every page published normally)
+- **Mock examples:**
+  - `india_none` (positive): Mock (india): every page published. A normal day: nothing held back
+  - `india_held` (negative): Mock (india): four pages held back. Home's picks and books show nothing (a page that would state something no longer true); the paper books and the card show their previous page (the card under its own notice)
+  - `india_first` (empty): Mock (india): the first publication. No page has been held yet
+- **Never sent (strategy internals):** the held page's figures or the value that broke the rule (only which page, since when and which rule)
+- **Fields:** 4, of which the backend can fill 0 today
+
+| Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
+|---|---|---|---|---|---|---|
+| `holds[].page_key` | The held page's key (e.g. today and risk on Home, card) | id | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].since` | The first session of this hold in a row | date (IST) | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].reason` | Why it is held: one of P11's fixed sentences, in plain words, owned by its code (never a value, never a story or record code: no digits) | text | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
+| `holds[].shows` | previous_page = the page keeps its last published row, dated by its own as_of; nothing = no row is shown, because the old one would state something no longer true (the screen says "not published") | enum | P11's per-page hold (the publication's held list and fno.run_status) | with every publication | public | no: P11 |
 
 ## The F&O Strategy lab: every trial counted, each idea's gate, each approved version's paper record per book
 

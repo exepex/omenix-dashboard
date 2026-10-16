@@ -6,6 +6,6 @@ function todayPart(main, c) {
       el('thead', {}, el('tr', {}, ...['Question', 'Answers', 'Answer known on'].map(h => el('th', {scope: 'col'}, h)))),
       el('tbody', {}, ...qs.map(q => el('tr', {}, el('td', {'data-k': 'Question'}, q.plain),
         el('td', {'data-k': 'Answers'}, q.today.values.map(v => `${fname(v.forecaster)} ${answer(q, v)}${VSTATUS[v.status]}`).join(' · ')),
-        el('td', {'data-k': 'Answer known on'}, dlabel(q.today.answer_on))))))) : el('p', {class: 'empty muted'}, 'No forecast was made today.'),
+        el('td', {'data-k': 'Answer known on'}, q.today.answer_on ? dlabel(q.today.answer_on) : 'Not known yet: NSE has not published that year’s trading days')))))) : el('p', {class: 'empty muted'}, 'No forecast was made today.'),
     howto(c, 'Nobody is right or wrong yet: these answers are known only on the answer date. Everything below is the past, forecasts whose answers are known.'))));
 }
