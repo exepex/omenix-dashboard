@@ -11184,5 +11184,111 @@
     }
    }
   }
+ },
+ "getFnoPageHolds_india_none": {
+  "summary": "Mock (india): every page published",
+  "description": "A normal day: nothing held back",
+  "x-case": "positive",
+  "value": {
+   "market": "india",
+   "page_key": "page_holds",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.13.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "742634e6f83b803b41d08e356c62f37552a8454bbb694800db864d735a3d203c",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "holds": []
+   }
+  }
+ },
+ "getFnoPageHolds_india_held": {
+  "summary": "Mock (india): three pages held back",
+  "description": "The Forecast lab keeps its 11 Nov page (an answer day's calendar is missing); the paper books show nothing (an open trade has no marks); the card shows the previous card under its own notice",
+  "x-case": "negative",
+  "value": {
+   "market": "india",
+   "page_key": "page_holds",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.13.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "ad64d7a2c9dc149943c12f62448ed6c211e169526d3d1bb140ac786ee296de25",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "holds": [
+     {
+      "page_key": "forecast_lab",
+      "since": "2026-11-12",
+      "reason": "A forecast's answer day falls in a year whose NSE calendar is not published yet",
+      "shows": "previous_page"
+     },
+     {
+      "page_key": "paper_trades",
+      "since": "2026-11-16",
+      "reason": "An open trade has no marks for the session yet",
+      "shows": "nothing"
+     },
+     {
+      "page_key": "card",
+      "since": "2026-11-16",
+      "reason": "A trade broke a risk rule: its maximum loss is above its book's cap",
+      "shows": "previous_page"
+     }
+    ]
+   }
+  }
+ },
+ "getFnoPageHolds_india_first": {
+  "summary": "Mock (india): the first publication",
+  "description": "No page has been held yet",
+  "x-case": "empty",
+  "value": {
+   "market": "india",
+   "page_key": "page_holds",
+   "as_of": "2026-10-17",
+   "cutoff": "2026-10-17T09:30:00Z",
+   "built_at": "2026-10-17T09:38:00Z",
+   "schema_version": "2.13.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "742634e6f83b803b41d08e356c62f37552a8454bbb694800db864d735a3d203c",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-10-17T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-10-17",
+   "payload": {
+    "holds": []
+   }
+  }
  }
 }
