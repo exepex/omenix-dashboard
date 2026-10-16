@@ -1,7 +1,7 @@
 // Story W3 (the W12 pattern, every F&O screen): each screen's components depend only on its contract types and views,
 // never on an adapter, a wiring or a data client; its adapter is one line of lib/fno-<screen>/wiring.ts, read only by
-// the screen's page loader under one W3 route. The screens are found from their wirings, so a new one is checked
-// without editing this file. Uses the one import resolver of the W8 structure tests.
+// page loaders under W3 routes (the weather has two pages: today and its history). The screens are found from their
+// wirings, so a new one is checked without editing this file. Uses the one import resolver of the W8 structure tests.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -17,6 +17,7 @@ const PICK = () => new RegExp(`^export const \\w+: \\w+ = fnoReader \\? azure\\w
 
 const forbiddenReach = (start: Source[], all: Source[]) => [...reachable(start, all)].filter((m) => FORBIDDEN.some((re) => re.test(m))).sort();
 const readersOf = (files: Source[], wiring: string) => files.filter((f) => importsOf(f).includes(wiring)).map((f) => f.path);
+const notLoaders = (readers: string[]) => readers.filter((r) => !LOADERS.some((dir) => r.startsWith(dir)));
 
 test("the F&O screens are found: the weather and the Forecast lab at least", () => {
   assert.ok(SCREENS.includes("fno-weather") && SCREENS.includes("fno-forecast-lab"), SCREENS.join(", "));
@@ -30,10 +31,10 @@ for (const screen of SCREENS) {
     assert.deepEqual(forbiddenReach(components, appCode()), []);
   });
 
-  test(`${screen}: only its page loader reads its wiring; one line picks the adapter`, () => {
+  test(`${screen}: only W3 page loaders read its wiring; one line picks the adapter`, () => {
     const readers = readersOf(appCode(), `lib/${screen}/wiring`);
-    assert.equal(readers.length, 1, readers.join(", "));
-    assert.ok(LOADERS.some((dir) => readers[0].startsWith(dir)), `${readers[0]} is a W3 page loader`);
+    assert.ok(readers.length >= 1, `lib/${screen}/wiring is read`);
+    assert.deepEqual(notLoaders(readers), [], "every reader is a W3 page loader");
     assert.equal([...readFileSync(join(web, `lib/${screen}/wiring.ts`), "utf8").matchAll(PICK())].length, 1);
   });
 }
@@ -44,5 +45,6 @@ test("the checks catch planted breaches: an adapter, the wiring, a data client",
   for (const line of ['import { fixtureWeatherData } from "@/lib/fno-weather/fixture-source";', 'import { forecastLabData } from "../../lib/fno-forecast-lab/wiring";', 'import { fnoQuery } from "@/lib/fno/db";']) {
     assert.ok(forbiddenReach([comp(line)], [...real, comp(line)]).length >= 1, line);
   }
-  assert.equal(readersOf([...real, comp('import { weatherData } from "@/lib/fno-weather/wiring";')], "lib/fno-weather/wiring").length, 2);
+  const planted = readersOf([...real, comp('import { weatherData } from "@/lib/fno-weather/wiring";')], "lib/fno-weather/wiring");
+  assert.deepEqual(notLoaders(planted), ["components/fno-weather/planted.tsx"]);
 });

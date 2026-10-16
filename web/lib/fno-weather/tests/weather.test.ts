@@ -50,8 +50,8 @@ test("the record: the last sessions, RED's share against its 15% maximum, the sc
   const recent = recentOf(green);
   assert.deepEqual(recent.at(-1), { day: "16 Nov", label: { tone: "success", icon: "check", word: "GREEN" }, outcome: "not known yet", rebuilt: false });
   assert.equal(redShareOf(red).state, "Over-alarming");
-  assert.ok(redShareOf(red).words.startsWith("RED on 41 of the last 250 sessions (16.4%); the limit is 15%. Above it, a new version must be proposed"));
-  assert.ok(redShareOf(missing).words.startsWith("RED on 13 of the last 250 sessions rebuilt from history (exploratory) (5.2%)"), "a rebuilt share says so");
+  assert.equal(redShareOf(red).words, "RED on 41 of the last 250 sessions (16.4%); the limit is 15%. Above it, a new version must be proposed; RED still blocks until you approve it.");
+  assert.equal(redShareOf(missing).words, "RED on 13 of the last 250 sessions rebuilt from history (exploratory) (5.2%); the limit is 15%. Above it, a new version must be proposed; RED still blocks until you approve it.", "a rebuilt share says so");
   assert.deepEqual(scoresOf(green)[0], { question: "Next session", against: "The usual chance", days: "140", needs: "test needs 10", brier: "0.036", brierBaseline: "0.039", verdict: { tone: "success", icon: "check", word: "Better" }, exploratory: null });
 });
 

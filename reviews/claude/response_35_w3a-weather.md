@@ -102,3 +102,45 @@ There is one new test: a day, a share or a score rebuilt from history is always 
 
 On this tree: check_code_size and the design copies are clean, `npm test` gives 484/484 with 0 skipped, and the build
 passes. The history view (page `weather_history`, colour and label only) is next, as W3a part 2.
+
+## Addendum 2: W3a part 2, the weather history (mockup 46, contract 2.8.0 page `weather_history`)
+
+Branch `story/w3a-weather-history`, stacked on `story/fno-weather-history-mockup` (d6429b4), which is stacked on
+`story/fno-2-8-merge` (c70d1a9). It merges after both.
+
+What it adds:
+- **Data:** `FnoWeatherHistory` types, `WeatherData.history()`, the Azure page `weather_history` (`FNO_PAGES`, removed
+  from the not-read list), the three examples (calm, stormy, none), and the integration test's page record.
+- **View:** `lib/fno-weather/history-view.ts`, pure. It gives the counts (number and share per colour, "Not scored"
+  with "An input was missing; blocks like RED"), the colour bar (a colour with no session gets no part; the aria label
+  names every count), "N made live · M rebuilt from history (exploratory)", and one strip per month, oldest first. It
+  sorts by date itself, so the payload's order does not matter. Every figure is the payload's. The counts are not
+  re-derived from the sessions, because the backend owns them.
+- **Page:** `/india/weather/history`, India only (static params, `dynamicParams = false`, `/us/weather/history` gives
+  404), route `weather-history` (mockup 46, endpoint fno/weather-history, nav false). The weather page's "The last
+  sessions" links to it ("Every session and the counts by colour", as in mockup 40). Colour and label only: no chance
+  and no level appear. The no-threshold test now also scans what the history views say for all three examples.
+- **CSS:** the day strip moved from weather.css to the shared fno-screen.css (both pages use it). `.facts4`, `.mix`
+  and `.sec h3` are in the history page's own CSS.
+
+Tests and their reasons:
+- **New:** `lib/fno-weather/tests/history.test.ts` (5 tests over calm, stormy and none, with hand-written expected
+  values) and one route test.
+- **Changed, please check:** `screens-import-graph.test.ts`. It said "exactly one reader of a screen's wiring". The
+  weather now has two page loaders, so it now says "every reader is a W3 page loader, and there is at least one". The
+  planted test still proves a component reading the wiring is caught. It is a real loosening: another W3 screen's
+  loader may now read the weather wiring and pass. I judged that harmless (a page loader may read any screen's data),
+  but it is a weakened test under the lane rules, so it is named here.
+
+On this tree:
+- check_code_size and check_contract pass, check_fno_screens passes (9 pages), and the design copies are current;
+- `npm test` gives 499/499 with 0 skipped; typecheck and build pass;
+- screenshots at 1280 and 390 px show no horizontal overflow and no console errors;
+- `/us/weather/history` gives 404.
+
+Open: the crumbs are plain text, as on every frame page (`FramePageHead` takes strings). The way back to the weather
+page is the browser, or the nav's Market weather.
+
+Judge 221 optional note, taken on this branch: `weather.test.ts` again asserts the whole red-share sentence for the RED
+and rebuilt examples (`assert.equal`, not `startsWith`), so the 15% limit and "RED still blocks until you approve it"
+are pinned again. Accepted because the note is correct: the `startsWith` let the sentence's tail change unnoticed.

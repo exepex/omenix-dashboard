@@ -1,12 +1,13 @@
 // Story W3a, owner 16 Oct 2026: the weather screen shows the colour, the input values and the reason, never the level
 // at which an input or a chance turns a colour. Checked against M1's own configured levels (./m1-levels.ts), not bare
 // numbers, in two places: the screen's own code (no level as a number, a "N%" or a "N times") and everything its
-// views say for the good, bad and empty examples (no threshold wording, no per-input `reaches`). Each rule is a pure
-// check, proven to catch a planted break.
+// views say for the good, bad and empty examples, today's and the history's (no threshold wording, no per-input
+// `reaches`). Each rule is a pure check, proven to catch a planted break.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { sources, type Source } from "../../shell/tests/imports.ts";
-import { WEATHER_EXAMPLES, weatherExample } from "../fixture-source.ts";
+import { HISTORY_EXAMPLES, historyExample, WEATHER_EXAMPLES, weatherExample } from "../fixture-source.ts";
+import { countsOf, monthsOf } from "../history-view.ts";
 import { priceOf, recentOf, redShareOf, scoresOf } from "../record-view.ts";
 import { chancesOf, driversOf, upgradesOf, verdictOf } from "../view.ts";
 import { ALL_LEVELS, QUESTION_SIZE } from "./m1-levels.ts";
@@ -42,7 +43,8 @@ const viewsOf = (name: (typeof WEATHER_EXAMPLES)[number]) => {
   const w = weatherExample(name);
   return [verdictOf(w), chancesOf(w), driversOf(w), upgradesOf(w), recentOf(w), redShareOf(w), scoresOf(w), priceOf(w)];
 };
-const allSaid = () => WEATHER_EXAMPLES.flatMap((n) => viewsOf(n).map((v) => JSON.stringify(v)));
+const historySaid = (name: (typeof HISTORY_EXAMPLES)[number]) => [countsOf(historyExample(name)), monthsOf(historyExample(name))];
+const allSaid = () => [...WEATHER_EXAMPLES.flatMap(viewsOf), ...HISTORY_EXAMPLES.flatMap(historySaid)].map((v) => JSON.stringify(v));
 
 test("the screen's code names none of M1's levels (as a number, a percent or a multiple)", () => {
   assert.ok(screenCode().length >= 8, "the scan covers the screen's files");
