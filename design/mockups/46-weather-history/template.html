@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Omenix · F&amp;O weather history</title>
-<meta name="description" content="The market weather's history: every session's colour, whether it was made live or rebuilt from history, and the counts by colour. Every state is a Mock example from the F&amp;O data catalog. India, F&amp;O only. Research and paper only.">
+<meta name="description" content="The market weather's history: every session's colour, its chance of a big move beside the usual chance, whether it was made live or rebuilt from history, and the counts by colour. Every state is a Mock example from the F&amp;O data catalog. India, F&amp;O only. Research and paper only.">
 <!--@@SYSTEM_CSS@@-->
 <!--@@SHARED_CSS@@-->
 <style>
@@ -24,6 +24,13 @@
 .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:4px;margin-top:6px}
 .strip span{display:grid;justify-items:center;gap:2px;padding:6px 2px;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);font-size:11px;color:var(--md-sys-color-on-surface-variant);min-width:0}
 .strip span .mb-label{padding:2px 4px}
+.plot .line{fill:none;stroke-width:2;vector-effect:non-scaling-stroke}.plot .l1{stroke:var(--mb-chart-1)}.plot .line.y{stroke:var(--md-sys-color-outline);stroke-dasharray:6 4}
+.plot .grid{stroke:var(--md-sys-color-surface-container-high);stroke-width:1}.plot .red{fill:var(--mb-color-down)}
+.plot text{font:11px var(--md-ref-typeface-plain);fill:var(--md-sys-color-on-surface-variant)}
+svg.plot.race{width:100%;height:auto;display:block;margin-top:8px}
+.keys{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--md-sys-color-on-surface-variant);margin:6px 0 4px}
+.keys i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px}.keys i.l1{background:var(--mb-chart-1)}
+.keys i.y{background:repeating-linear-gradient(90deg,var(--md-sys-color-outline) 0 5px,transparent 5px 8px)}.keys i.dot{width:8px;height:8px;border-radius:50%;background:var(--mb-color-down)}
 .src{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
 .empty{font-size:13.5px;margin:0}
 @media (max-width:599px){.facts4{grid-template-columns:repeat(2,minmax(0,1fr))}}

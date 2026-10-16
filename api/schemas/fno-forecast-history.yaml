@@ -1,0 +1,56 @@
+# Contract 2.9 (owner, 16 Oct 2026, exepex/trading docs/DESK_DECISIONS.md: "A only now"; reviews/claude/response_226):
+# the Forecast lab's running score, session by session, as its own page, so the screen can draw the race chart and
+# score any period the owner picks. Field B (settled forecasts with their outcomes) waits for about 60 scored live days.
+
+FnoForecastHistory:
+  type: object
+  description: >-
+    For each question, each forecaster's running average miss score after every scored session since the start of its
+    protocol. The average over a chosen period is the screen's one subtraction: (n2 × m2 − n1 × m1) / (n2 − n1) between
+    the period's last session (n2, m2) and the session before it starts (n1, m1). Empty state: questions empty (no
+    session scored yet)
+  x-catalog: {publisher: fno, source: "G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports)", freshness: 'after the close of each NSE session (outcomes resolve, scores refresh)', story: G8, status: planned}
+  x-visibility: public
+  x-fill: not_built
+  x-never-sent:
+    - "how any forecaster forecasts: its inputs, method, prompts or fitted values (only how it scored)"
+    - "single forecasts and their outcomes (field B, after about 60 scored live days; owner, 16 Oct 2026)"
+  additionalProperties: false
+  required: [questions]
+  properties:
+    questions:
+      type: array
+      description: One entry per question with at least one scored session, in the Forecast lab's order
+      items: {$ref: '#/components/schemas/FnoForecastHistoryQuestion'}
+
+FnoForecastHistoryQuestion:
+  type: object
+  description: One question's running scores
+  additionalProperties: false
+  required: [id, protocol, plain, metric, primary_baseline, series]
+  properties:
+    id: {type: string, pattern: '^(Q[1-5]|V[1-7](_1d|_5d)?)$', x-unit: id, description: 'Q1-Q5 (v3) or V1-V7 (v4)'}
+    protocol: {type: string, enum: [v3, v4], x-unit: id, description: Its protocol version}
+    plain: {type: string, minLength: 1, x-unit: text, description: 'The question in plain words (the Forecast lab''s own text)'}
+    metric: {type: string, enum: [brier, qlike], x-unit: enum, description: 'The miss score: Brier (0 perfect) for chances, QLIKE (lower is better) for variance'}
+    primary_baseline: {type: string, pattern: '^[a-z0-9_]+$', x-unit: id, description: 'The yardstick it must beat; its series is in series too'}
+    series:
+      type: array
+      description: One series per forecaster, the yardstick included
+      items:
+        type: object
+        additionalProperties: false
+        required: [forecaster, points]
+        properties:
+          forecaster: {type: string, pattern: '^[a-z0-9_]+$', x-unit: id, description: The forecaster id (its name is on the Forecast lab page)}
+          points:
+            type: array
+            description: One point per session it was scored, oldest first; a session it gave no forecast is left out, never filled in
+            items:
+              type: object
+              additionalProperties: false
+              required: [session, n, mean_loss]
+              properties:
+                session: {type: string, format: date, x-unit: date (IST), description: "The session after whose close the score was taken (the as_of of G4's report for that day)"}
+                n: {type: integer, minimum: 1, x-unit: count, x-fill: built, x-record: 'score_summary:scored', description: Days scored so far}
+                mean_loss: {type: number, x-unit: the question's metric, x-fill: built, x-record: 'score_summary:mean_brier', description: 'Average miss score over those n days: Brier (v3, G4''s ScoreSummary.mean_brier) or QLIKE (v4: G8 adds it; the record named holds only Brier today)'}

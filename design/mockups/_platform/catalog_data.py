@@ -4,6 +4,7 @@ when a mockup's data.json differs from the catalog.
 
     from catalog_data import screen_payload      # design/mockups/_platform on sys.path
     screen_payload("getFnoCard", page="card", note="...")
+    screen_payload("getFnoForecastLab", page="forecasts", note="...", also=("getFnoForecastHistory",))   # more pages
 """
 from __future__ import annotations
 
@@ -27,5 +28,7 @@ def screen_states(op_id: str) -> dict:
             for key, (_, ex) in op_examples(doc, op).items()}
 
 
-def screen_payload(op_id: str, page: str, note: str) -> dict:
-    return {"_mock": True, "_note": note, "page": page, "source": SOURCE, "operation": op_id, "states": screen_states(op_id)}
+def screen_payload(op_id: str, page: str, note: str, also: tuple[str, ...] = ()) -> dict:
+    """op_id's examples are the mockup's states; each operation in `also` is drawn beside them (data.json "also")."""
+    payload = {"_mock": True, "_note": note, "page": page, "source": SOURCE, "operation": op_id, "states": screen_states(op_id)}
+    return payload | ({"also": {other: screen_states(other) for other in also}} if also else {})

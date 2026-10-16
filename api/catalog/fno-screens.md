@@ -295,6 +295,32 @@ Backend records named in the tables (exepex/trading):
 | `questions[].settle.r` | Spread of the daily loss differences divided by the registered effect; null until measured | ratio | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | no: G8; provisional: protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes |
 | `questions[].settle.projected_date` | The projected settle date; null until measured | date | the forecast records (G3, G5; v4: G7) and the score reports (G4 forecast_scores/v1; v4: G8) | after the close of each NSE session (outcomes resolve, scores refresh); today's forecasts after the 15:00 cutoff | public | no: G8; provisional: protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes |
 
+## The Forecast lab's running scores, session by session, for the race chart and a period you choose (contract 2.9)
+
+`GET /api/v1/markets/india/fno/forecast-lab/history` · `getFnoForecastHistory` · fno.pages_history page forecast_history (published by P2 in the F&O publication; owner, 16 Oct 2026, response 226 field A)
+
+- **Freshness:** fno_calendar; after each session's close
+- **Empty state:** questions empty (no session scored yet)
+- **What it holds:** For each question, each forecaster's running average miss score after every scored session since the start of its protocol. The average over a chosen period is the screen's one subtraction: (n2 × m2 − n1 × m1) / (n2 − n1) between the period's last session (n2, m2) and the session before it starts (n1, m1). Empty state: questions empty (no session scored yet)
+- **Mock examples:**
+  - `india_ahead` (positive): Mock (india): Hybrid pulling ahead of the yardstick. Q1 over 160 sessions: Hybrid's running average settles below the base rate's (0.236 against 0.248); V2 over 26 sessions: Hybrid below the option-price yardstick
+  - `india_behind` (negative): Mock (india): the AI team falling behind. Q4 over 150 sessions: the AI team's running average stays above the base rate's (0.301 against 0.249)
+  - `india_none` (empty): Mock (india): no session scored yet. No question has a scored session
+- **Never sent (strategy internals):** how any forecaster forecasts: its inputs, method, prompts or fitted values (only how it scored); single forecasts and their outcomes (field B, after about 60 scored live days; owner, 16 Oct 2026)
+- **Fields:** 9, of which the backend can fill 2 today
+
+| Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
+|---|---|---|---|---|---|---|
+| `questions[].id` | Q1-Q5 (v3) or V1-V7 (v4) | id | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
+| `questions[].protocol` | Its protocol version | id | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
+| `questions[].plain` | The question in plain words (the Forecast lab's own text) | text | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
+| `questions[].metric` | The miss score: Brier (0 perfect) for chances, QLIKE (lower is better) for variance | enum | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
+| `questions[].primary_baseline` | The yardstick it must beat; its series is in series too | id | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
+| `questions[].series[].forecaster` | The forecaster id (its name is on the Forecast lab page) | id | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
+| `questions[].series[].points[].session` | The session after whose close the score was taken (the as_of of G4's report for that day) | date (IST) | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | no: G8 |
+| `questions[].series[].points[].n` | Days scored so far | count | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | yes (`score_summary:scored`) |
+| `questions[].series[].points[].mean_loss` | Average miss score over those n days: Brier (v3, G4's ScoreSummary.mean_brier) or QLIKE (v4: G8 adds it; the record named holds only Brier today) | the question's metric | G4's daily score reports (research/forecasts/scores/<day>.json, ScoreSummary per forecaster; v4: G8's reports) | after the close of each NSE session (outcomes resolve, scores refresh) | public | yes (`score_summary:mean_brier`) |
+
 ## The F&O Strategy lab: every trial counted, each idea's gate, each approved version's paper record per book
 
 `GET /api/v1/markets/india/fno/strategy-lab` · `getFnoStrategyLab` · fno.pages_history page strategy_lab (P1 page; published by P2/P3 in the F&O publication)
@@ -425,25 +451,29 @@ Backend records named in the tables (exepex/trading):
 | `closed[].fills[].outcome` | missed_price_moved = the price left the card's entry range; missed_no_quote = no valid quote at that snapshot (never a synthetic fill) | enum | E8's owner-timing fill records | after each fill or exit; marks after the close of each NSE session | public | no: E8 |
 | `closed[].fills[].net` | The trade's net at that fill; null when missed | INR (Paper) | E8's owner-timing fill records | after each fill or exit; marks after the close of each NSE session | public | no: E8 |
 
-## Every session's weather colour and label, for the colour strip (colour only until the owner's weather-levels choice)
+## Every session's weather colour, label and chances of a big move, for the colour strip and the chances chart
 
 `GET /api/v1/markets/india/fno/weather/history` · `getFnoWeatherHistory` · fno.pages_history page weather_history (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)
 
 - **Freshness:** fno_calendar; once a session day at the 07:10 IST publish
 - **Empty state:** sessions empty and every count 0 (no weather record yet)
-- **What it holds:** Every session's weather colour and label, oldest first, and the counts by colour and by label. Colour only: the day's chances of a big move are on the weather page (getFnoWeather), never in this history. Empty state: sessions empty and every count 0 (no weather record yet)
+- **What it holds:** Every session's weather colour, label and two chances of a big NIFTY move beside the usual chance, oldest first, and the counts by colour and by label. Empty state: sessions empty and every count 0 (no weather record yet)
 - **Mock examples:**
   - `india_calm` (positive): Mock (india): a calm month, one AMBER. 30 sessions: 20 rebuilt from history, 10 live; mostly GREEN
   - `india_stormy` (negative): Mock (india): a stormy fortnight. Three RED sessions, one AMBER and one not scored (an input missing)
   - `india_none` (empty): Mock (india): no weather record yet. No session has a weather record
-- **Never sent (strategy internals):** the weather inputs' values and the colour each input reaches (owner, 16 Oct 2026: never the level at which an input turns a colour); the US cue (kept in Drive); each session's chances of a big move and the usual chances (strict form until the owner's weather-levels choice: beside the colours they would give the colour rule's floors back)
-- **Fields:** 9, of which the backend can fill 0 today
+- **Never sent (strategy internals):** the weather inputs' values and the colour each input reaches (owner, 16 Oct 2026: never the level at which an input turns a colour); the US cue (kept in Drive)
+- **Fields:** 13, of which the backend can fill 0 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
 | `sessions[].session` | The NSE session | date (IST) | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `sessions[].colour` | The operative colour; null when the day was not scored (it then blocks new trades like RED) | enum | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `sessions[].label` | live = made on the day before the cutoff; backfill_exploratory = rebuilt later from history, never a live record | enum | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `sessions[].p_big_1d` | Chance that NIFTY's next-session move is at least 2% either way; null when not scored | probability 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `sessions[].p_big_5d` | Chance that the largest move over the next 5 sessions is at least 2% either way; null when not scored | probability 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `sessions[].base_rate_1d` | How often a 2% day happened over the 750 sessions before it (the usual chance) | share 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `sessions[].base_rate_5d` | How often a 5-session window held a 2% move over the 750 sessions before it | share 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `counts.green` | Sessions GREEN | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `counts.amber` | Sessions AMBER | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `counts.red` | Sessions RED | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |

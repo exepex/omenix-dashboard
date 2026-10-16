@@ -9,7 +9,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "b621152103ec964562582345cef2848c2c0c9419ee63297f5e67a44ca5f8c50d",
    "publisher": "fno",
@@ -284,7 +284,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "5e8ea05b306eba9a41ec5fb4e902f93f848f3918b610266685ddf4b31d9a34f8",
    "publisher": "fno",
@@ -544,7 +544,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "0be6d2177dadb1beb1cf4c22455fdcddd4ad91c573f796f0041e7b5e81d4207c",
    "publisher": "fno",
@@ -748,7 +748,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "d220a3f44e4ccd2f9a5baeb71c0470107005a6234ea53e579a64b0ddb04401f5",
    "publisher": "fno",
@@ -918,7 +918,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "d7e0361c3e3cbd2800fd0f3b258c1d0b7f1de15138175fbb400a0617e799df4e",
    "publisher": "fno",
@@ -1128,7 +1128,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:31:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "54051ea4ebbd19ab395d22e5e8fc3b73288f0e1a6de3e8108147f149ec3befbe",
    "publisher": "fno",
@@ -1307,7 +1307,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:31:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "b7fbb06b3a9e43da515b9983886a08e3c8fce59567726b54735860ea04013324",
    "publisher": "fno",
@@ -1493,7 +1493,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:31:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "bd87b6244a2a833eb05abf1c2dc888843764f41134d2f9ae3458b448ae26774d",
    "publisher": "fno",
@@ -1662,7 +1662,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:10:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "8bef9c9f89347a87e3da19c73e7256f443b81d9201507f390402c69941842397",
    "publisher": "fno",
@@ -2110,7 +2110,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:10:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "7fc7b4dc1f9dd02af45cf49fa94c25ed451cb9fe20edfff4f49efb49fd9ba3af",
    "publisher": "fno",
@@ -2491,7 +2491,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:10:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "1ecddc6a940bcffeda9d1ed676ee6fcb708127bd69861d992b5b7270f01e9f61",
    "publisher": "fno",
@@ -2699,6 +2699,5192 @@
    }
   }
  },
+ "getFnoForecastHistory_india_ahead": {
+  "summary": "Mock (india): Hybrid pulling ahead of the yardstick",
+  "description": "Q1 over 160 sessions: Hybrid's running average settles below the base rate's (0.236 against 0.248); V2 over 26 sessions: Hybrid below the option-price yardstick",
+  "x-case": "positive",
+  "value": {
+   "market": "india",
+   "page_key": "forecast_history",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T12:10:00Z",
+   "schema_version": "2.9.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "0711d3027b0c1b390350d5c084a3c443eb3c11b50aa254726b6af5afa6361d1e",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T12:10:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "questions": [
+     {
+      "id": "Q1",
+      "protocol": "v3",
+      "plain": "Will NIFTY be higher in 20 sessions?",
+      "metric": "brier",
+      "primary_baseline": "baseline_b_base_rate",
+      "series": [
+       {
+        "forecaster": "book1_rules",
+        "points": [
+         {
+          "session": "2026-04-07",
+          "n": 1,
+          "mean_loss": 0.2562
+         },
+         {
+          "session": "2026-04-08",
+          "n": 2,
+          "mean_loss": 0.2594
+         },
+         {
+          "session": "2026-04-09",
+          "n": 3,
+          "mean_loss": 0.2616
+         },
+         {
+          "session": "2026-04-10",
+          "n": 4,
+          "mean_loss": 0.2631
+         },
+         {
+          "session": "2026-04-13",
+          "n": 5,
+          "mean_loss": 0.264
+         },
+         {
+          "session": "2026-04-14",
+          "n": 6,
+          "mean_loss": 0.2645
+         },
+         {
+          "session": "2026-04-15",
+          "n": 7,
+          "mean_loss": 0.2646
+         },
+         {
+          "session": "2026-04-16",
+          "n": 8,
+          "mean_loss": 0.2643
+         },
+         {
+          "session": "2026-04-17",
+          "n": 9,
+          "mean_loss": 0.2637
+         },
+         {
+          "session": "2026-04-20",
+          "n": 10,
+          "mean_loss": 0.2628
+         },
+         {
+          "session": "2026-04-21",
+          "n": 11,
+          "mean_loss": 0.2616
+         },
+         {
+          "session": "2026-04-22",
+          "n": 12,
+          "mean_loss": 0.2601
+         },
+         {
+          "session": "2026-04-23",
+          "n": 13,
+          "mean_loss": 0.2585
+         },
+         {
+          "session": "2026-04-24",
+          "n": 14,
+          "mean_loss": 0.2568
+         },
+         {
+          "session": "2026-04-27",
+          "n": 15,
+          "mean_loss": 0.255
+         },
+         {
+          "session": "2026-04-28",
+          "n": 16,
+          "mean_loss": 0.2531
+         },
+         {
+          "session": "2026-04-29",
+          "n": 17,
+          "mean_loss": 0.2513
+         },
+         {
+          "session": "2026-04-30",
+          "n": 18,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-05-01",
+          "n": 19,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-05-04",
+          "n": 20,
+          "mean_loss": 0.2461
+         },
+         {
+          "session": "2026-05-05",
+          "n": 21,
+          "mean_loss": 0.2447
+         },
+         {
+          "session": "2026-05-06",
+          "n": 22,
+          "mean_loss": 0.2434
+         },
+         {
+          "session": "2026-05-07",
+          "n": 23,
+          "mean_loss": 0.2423
+         },
+         {
+          "session": "2026-05-08",
+          "n": 24,
+          "mean_loss": 0.2414
+         },
+         {
+          "session": "2026-05-11",
+          "n": 25,
+          "mean_loss": 0.2408
+         },
+         {
+          "session": "2026-05-12",
+          "n": 26,
+          "mean_loss": 0.2404
+         },
+         {
+          "session": "2026-05-13",
+          "n": 27,
+          "mean_loss": 0.2402
+         },
+         {
+          "session": "2026-05-14",
+          "n": 28,
+          "mean_loss": 0.2402
+         },
+         {
+          "session": "2026-05-15",
+          "n": 29,
+          "mean_loss": 0.2405
+         },
+         {
+          "session": "2026-05-18",
+          "n": 30,
+          "mean_loss": 0.2409
+         },
+         {
+          "session": "2026-05-19",
+          "n": 31,
+          "mean_loss": 0.2415
+         },
+         {
+          "session": "2026-05-20",
+          "n": 32,
+          "mean_loss": 0.2422
+         },
+         {
+          "session": "2026-05-21",
+          "n": 33,
+          "mean_loss": 0.2431
+         },
+         {
+          "session": "2026-05-22",
+          "n": 34,
+          "mean_loss": 0.2441
+         },
+         {
+          "session": "2026-05-25",
+          "n": 35,
+          "mean_loss": 0.2451
+         },
+         {
+          "session": "2026-05-26",
+          "n": 36,
+          "mean_loss": 0.2462
+         },
+         {
+          "session": "2026-05-27",
+          "n": 37,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-05-28",
+          "n": 38,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-05-29",
+          "n": 39,
+          "mean_loss": 0.2493
+         },
+         {
+          "session": "2026-06-01",
+          "n": 40,
+          "mean_loss": 0.2502
+         },
+         {
+          "session": "2026-06-02",
+          "n": 41,
+          "mean_loss": 0.251
+         },
+         {
+          "session": "2026-06-03",
+          "n": 42,
+          "mean_loss": 0.2517
+         },
+         {
+          "session": "2026-06-04",
+          "n": 43,
+          "mean_loss": 0.2523
+         },
+         {
+          "session": "2026-06-05",
+          "n": 44,
+          "mean_loss": 0.2527
+         },
+         {
+          "session": "2026-06-08",
+          "n": 45,
+          "mean_loss": 0.253
+         },
+         {
+          "session": "2026-06-09",
+          "n": 46,
+          "mean_loss": 0.2532
+         },
+         {
+          "session": "2026-06-10",
+          "n": 47,
+          "mean_loss": 0.2531
+         },
+         {
+          "session": "2026-06-11",
+          "n": 48,
+          "mean_loss": 0.253
+         },
+         {
+          "session": "2026-06-12",
+          "n": 49,
+          "mean_loss": 0.2527
+         },
+         {
+          "session": "2026-06-15",
+          "n": 50,
+          "mean_loss": 0.2523
+         },
+         {
+          "session": "2026-06-16",
+          "n": 51,
+          "mean_loss": 0.2518
+         },
+         {
+          "session": "2026-06-17",
+          "n": 52,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-06-18",
+          "n": 53,
+          "mean_loss": 0.2506
+         },
+         {
+          "session": "2026-06-19",
+          "n": 54,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-06-22",
+          "n": 55,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-06-23",
+          "n": 56,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-06-24",
+          "n": 57,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-06-25",
+          "n": 58,
+          "mean_loss": 0.247
+         },
+         {
+          "session": "2026-06-26",
+          "n": 59,
+          "mean_loss": 0.2464
+         },
+         {
+          "session": "2026-06-29",
+          "n": 60,
+          "mean_loss": 0.2458
+         },
+         {
+          "session": "2026-06-30",
+          "n": 61,
+          "mean_loss": 0.2453
+         },
+         {
+          "session": "2026-07-01",
+          "n": 62,
+          "mean_loss": 0.2449
+         },
+         {
+          "session": "2026-07-02",
+          "n": 63,
+          "mean_loss": 0.2446
+         },
+         {
+          "session": "2026-07-03",
+          "n": 64,
+          "mean_loss": 0.2445
+         },
+         {
+          "session": "2026-07-06",
+          "n": 65,
+          "mean_loss": 0.2444
+         },
+         {
+          "session": "2026-07-07",
+          "n": 66,
+          "mean_loss": 0.2444
+         },
+         {
+          "session": "2026-07-08",
+          "n": 67,
+          "mean_loss": 0.2445
+         },
+         {
+          "session": "2026-07-09",
+          "n": 68,
+          "mean_loss": 0.2447
+         },
+         {
+          "session": "2026-07-10",
+          "n": 69,
+          "mean_loss": 0.245
+         },
+         {
+          "session": "2026-07-13",
+          "n": 70,
+          "mean_loss": 0.2454
+         },
+         {
+          "session": "2026-07-14",
+          "n": 71,
+          "mean_loss": 0.2458
+         },
+         {
+          "session": "2026-07-15",
+          "n": 72,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-07-16",
+          "n": 73,
+          "mean_loss": 0.2468
+         },
+         {
+          "session": "2026-07-17",
+          "n": 74,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-07-20",
+          "n": 75,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-07-21",
+          "n": 76,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-22",
+          "n": 77,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-07-23",
+          "n": 78,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-07-24",
+          "n": 79,
+          "mean_loss": 0.2496
+         },
+         {
+          "session": "2026-07-27",
+          "n": 80,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-07-28",
+          "n": 81,
+          "mean_loss": 0.2502
+         },
+         {
+          "session": "2026-07-29",
+          "n": 82,
+          "mean_loss": 0.2504
+         },
+         {
+          "session": "2026-07-30",
+          "n": 83,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-07-31",
+          "n": 84,
+          "mean_loss": 0.2506
+         },
+         {
+          "session": "2026-08-03",
+          "n": 85,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-08-04",
+          "n": 86,
+          "mean_loss": 0.2504
+         },
+         {
+          "session": "2026-08-05",
+          "n": 87,
+          "mean_loss": 0.2503
+         },
+         {
+          "session": "2026-08-06",
+          "n": 88,
+          "mean_loss": 0.2501
+         },
+         {
+          "session": "2026-08-07",
+          "n": 89,
+          "mean_loss": 0.2498
+         },
+         {
+          "session": "2026-08-10",
+          "n": 90,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-08-11",
+          "n": 91,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-08-12",
+          "n": 92,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-08-13",
+          "n": 93,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-08-14",
+          "n": 94,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-08-17",
+          "n": 95,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-18",
+          "n": 96,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-08-19",
+          "n": 97,
+          "mean_loss": 0.2471
+         },
+         {
+          "session": "2026-08-20",
+          "n": 98,
+          "mean_loss": 0.2469
+         },
+         {
+          "session": "2026-08-21",
+          "n": 99,
+          "mean_loss": 0.2466
+         },
+         {
+          "session": "2026-08-24",
+          "n": 100,
+          "mean_loss": 0.2465
+         },
+         {
+          "session": "2026-08-25",
+          "n": 101,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-08-26",
+          "n": 102,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-08-27",
+          "n": 103,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-08-28",
+          "n": 104,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-08-31",
+          "n": 105,
+          "mean_loss": 0.2464
+         },
+         {
+          "session": "2026-09-01",
+          "n": 106,
+          "mean_loss": 0.2465
+         },
+         {
+          "session": "2026-09-02",
+          "n": 107,
+          "mean_loss": 0.2466
+         },
+         {
+          "session": "2026-09-03",
+          "n": 108,
+          "mean_loss": 0.2468
+         },
+         {
+          "session": "2026-09-04",
+          "n": 109,
+          "mean_loss": 0.247
+         },
+         {
+          "session": "2026-09-07",
+          "n": 110,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-09-08",
+          "n": 111,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-09-09",
+          "n": 112,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-09-10",
+          "n": 113,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-09-11",
+          "n": 114,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-14",
+          "n": 115,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-09-15",
+          "n": 116,
+          "mean_loss": 0.2486
+         },
+         {
+          "session": "2026-09-16",
+          "n": 117,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-09-17",
+          "n": 118,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-09-18",
+          "n": 119,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-09-21",
+          "n": 120,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-09-22",
+          "n": 121,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-09-23",
+          "n": 122,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-09-24",
+          "n": 123,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-09-25",
+          "n": 124,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-09-28",
+          "n": 125,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-09-29",
+          "n": 126,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-09-30",
+          "n": 127,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-10-01",
+          "n": 128,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-10-02",
+          "n": 129,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-10-05",
+          "n": 130,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-10-06",
+          "n": 131,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-10-07",
+          "n": 132,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-08",
+          "n": 133,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-09",
+          "n": 134,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-10-12",
+          "n": 135,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-10-13",
+          "n": 136,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-10-14",
+          "n": 137,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-10-15",
+          "n": 138,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-10-16",
+          "n": 139,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-10-19",
+          "n": 140,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-10-20",
+          "n": 141,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-10-21",
+          "n": 142,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-10-22",
+          "n": 143,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-10-23",
+          "n": 144,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-10-26",
+          "n": 145,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-10-27",
+          "n": 146,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-10-28",
+          "n": 147,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-10-29",
+          "n": 148,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-30",
+          "n": 149,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-11-02",
+          "n": 150,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-03",
+          "n": 151,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-04",
+          "n": 152,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-05",
+          "n": 153,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-11-06",
+          "n": 154,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-11-09",
+          "n": 155,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-11-10",
+          "n": 156,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-11-11",
+          "n": 157,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-11-12",
+          "n": 158,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-13",
+          "n": 159,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-16",
+          "n": 160,
+          "mean_loss": 0.248
+         }
+        ]
+       },
+       {
+        "forecaster": "book2_hybrid",
+        "points": [
+         {
+          "session": "2026-04-07",
+          "n": 1,
+          "mean_loss": 0.2908
+         },
+         {
+          "session": "2026-04-08",
+          "n": 2,
+          "mean_loss": 0.2767
+         },
+         {
+          "session": "2026-04-09",
+          "n": 3,
+          "mean_loss": 0.2699
+         },
+         {
+          "session": "2026-04-13",
+          "n": 4,
+          "mean_loss": 0.2651
+         },
+         {
+          "session": "2026-04-14",
+          "n": 5,
+          "mean_loss": 0.2611
+         },
+         {
+          "session": "2026-04-15",
+          "n": 6,
+          "mean_loss": 0.2574
+         },
+         {
+          "session": "2026-04-16",
+          "n": 7,
+          "mean_loss": 0.2539
+         },
+         {
+          "session": "2026-04-17",
+          "n": 8,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-04-20",
+          "n": 9,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-04-21",
+          "n": 10,
+          "mean_loss": 0.2441
+         },
+         {
+          "session": "2026-04-22",
+          "n": 11,
+          "mean_loss": 0.2411
+         },
+         {
+          "session": "2026-04-23",
+          "n": 12,
+          "mean_loss": 0.2383
+         },
+         {
+          "session": "2026-04-24",
+          "n": 13,
+          "mean_loss": 0.2356
+         },
+         {
+          "session": "2026-04-27",
+          "n": 14,
+          "mean_loss": 0.2332
+         },
+         {
+          "session": "2026-04-28",
+          "n": 15,
+          "mean_loss": 0.2311
+         },
+         {
+          "session": "2026-04-29",
+          "n": 16,
+          "mean_loss": 0.2293
+         },
+         {
+          "session": "2026-04-30",
+          "n": 17,
+          "mean_loss": 0.2277
+         },
+         {
+          "session": "2026-05-01",
+          "n": 18,
+          "mean_loss": 0.2265
+         },
+         {
+          "session": "2026-05-04",
+          "n": 19,
+          "mean_loss": 0.2257
+         },
+         {
+          "session": "2026-05-05",
+          "n": 20,
+          "mean_loss": 0.2251
+         },
+         {
+          "session": "2026-05-06",
+          "n": 21,
+          "mean_loss": 0.2249
+         },
+         {
+          "session": "2026-05-07",
+          "n": 22,
+          "mean_loss": 0.225
+         },
+         {
+          "session": "2026-05-08",
+          "n": 23,
+          "mean_loss": 0.2254
+         },
+         {
+          "session": "2026-05-11",
+          "n": 24,
+          "mean_loss": 0.2261
+         },
+         {
+          "session": "2026-05-12",
+          "n": 25,
+          "mean_loss": 0.227
+         },
+         {
+          "session": "2026-05-13",
+          "n": 26,
+          "mean_loss": 0.228
+         },
+         {
+          "session": "2026-05-14",
+          "n": 27,
+          "mean_loss": 0.2293
+         },
+         {
+          "session": "2026-05-15",
+          "n": 28,
+          "mean_loss": 0.2306
+         },
+         {
+          "session": "2026-05-18",
+          "n": 29,
+          "mean_loss": 0.2321
+         },
+         {
+          "session": "2026-05-19",
+          "n": 30,
+          "mean_loss": 0.2335
+         },
+         {
+          "session": "2026-05-20",
+          "n": 31,
+          "mean_loss": 0.235
+         },
+         {
+          "session": "2026-05-21",
+          "n": 32,
+          "mean_loss": 0.2364
+         },
+         {
+          "session": "2026-05-22",
+          "n": 33,
+          "mean_loss": 0.2378
+         },
+         {
+          "session": "2026-05-25",
+          "n": 34,
+          "mean_loss": 0.239
+         },
+         {
+          "session": "2026-05-26",
+          "n": 35,
+          "mean_loss": 0.2401
+         },
+         {
+          "session": "2026-05-27",
+          "n": 36,
+          "mean_loss": 0.241
+         },
+         {
+          "session": "2026-05-28",
+          "n": 37,
+          "mean_loss": 0.2418
+         },
+         {
+          "session": "2026-05-29",
+          "n": 38,
+          "mean_loss": 0.2424
+         },
+         {
+          "session": "2026-06-01",
+          "n": 39,
+          "mean_loss": 0.2427
+         },
+         {
+          "session": "2026-06-04",
+          "n": 40,
+          "mean_loss": 0.2429
+         },
+         {
+          "session": "2026-06-05",
+          "n": 41,
+          "mean_loss": 0.2429
+         },
+         {
+          "session": "2026-06-08",
+          "n": 42,
+          "mean_loss": 0.2427
+         },
+         {
+          "session": "2026-06-09",
+          "n": 43,
+          "mean_loss": 0.2423
+         },
+         {
+          "session": "2026-06-10",
+          "n": 44,
+          "mean_loss": 0.2417
+         },
+         {
+          "session": "2026-06-11",
+          "n": 45,
+          "mean_loss": 0.2411
+         },
+         {
+          "session": "2026-06-12",
+          "n": 46,
+          "mean_loss": 0.2403
+         },
+         {
+          "session": "2026-06-15",
+          "n": 47,
+          "mean_loss": 0.2394
+         },
+         {
+          "session": "2026-06-16",
+          "n": 48,
+          "mean_loss": 0.2385
+         },
+         {
+          "session": "2026-06-17",
+          "n": 49,
+          "mean_loss": 0.2375
+         },
+         {
+          "session": "2026-06-18",
+          "n": 50,
+          "mean_loss": 0.2365
+         },
+         {
+          "session": "2026-06-19",
+          "n": 51,
+          "mean_loss": 0.2356
+         },
+         {
+          "session": "2026-06-22",
+          "n": 52,
+          "mean_loss": 0.2347
+         },
+         {
+          "session": "2026-06-23",
+          "n": 53,
+          "mean_loss": 0.2338
+         },
+         {
+          "session": "2026-06-24",
+          "n": 54,
+          "mean_loss": 0.2331
+         },
+         {
+          "session": "2026-06-25",
+          "n": 55,
+          "mean_loss": 0.2325
+         },
+         {
+          "session": "2026-06-26",
+          "n": 56,
+          "mean_loss": 0.232
+         },
+         {
+          "session": "2026-06-29",
+          "n": 57,
+          "mean_loss": 0.2316
+         },
+         {
+          "session": "2026-06-30",
+          "n": 58,
+          "mean_loss": 0.2313
+         },
+         {
+          "session": "2026-07-01",
+          "n": 59,
+          "mean_loss": 0.2312
+         },
+         {
+          "session": "2026-07-02",
+          "n": 60,
+          "mean_loss": 0.2313
+         },
+         {
+          "session": "2026-07-03",
+          "n": 61,
+          "mean_loss": 0.2314
+         },
+         {
+          "session": "2026-07-06",
+          "n": 62,
+          "mean_loss": 0.2317
+         },
+         {
+          "session": "2026-07-07",
+          "n": 63,
+          "mean_loss": 0.2321
+         },
+         {
+          "session": "2026-07-08",
+          "n": 64,
+          "mean_loss": 0.2326
+         },
+         {
+          "session": "2026-07-09",
+          "n": 65,
+          "mean_loss": 0.2331
+         },
+         {
+          "session": "2026-07-10",
+          "n": 66,
+          "mean_loss": 0.2337
+         },
+         {
+          "session": "2026-07-13",
+          "n": 67,
+          "mean_loss": 0.2344
+         },
+         {
+          "session": "2026-07-14",
+          "n": 68,
+          "mean_loss": 0.2351
+         },
+         {
+          "session": "2026-07-15",
+          "n": 69,
+          "mean_loss": 0.2357
+         },
+         {
+          "session": "2026-07-16",
+          "n": 70,
+          "mean_loss": 0.2364
+         },
+         {
+          "session": "2026-07-17",
+          "n": 71,
+          "mean_loss": 0.237
+         },
+         {
+          "session": "2026-07-20",
+          "n": 72,
+          "mean_loss": 0.2376
+         },
+         {
+          "session": "2026-07-21",
+          "n": 73,
+          "mean_loss": 0.2381
+         },
+         {
+          "session": "2026-07-22",
+          "n": 74,
+          "mean_loss": 0.2385
+         },
+         {
+          "session": "2026-07-23",
+          "n": 75,
+          "mean_loss": 0.2389
+         },
+         {
+          "session": "2026-07-24",
+          "n": 76,
+          "mean_loss": 0.2391
+         },
+         {
+          "session": "2026-07-27",
+          "n": 77,
+          "mean_loss": 0.2393
+         },
+         {
+          "session": "2026-07-28",
+          "n": 78,
+          "mean_loss": 0.2393
+         },
+         {
+          "session": "2026-07-29",
+          "n": 79,
+          "mean_loss": 0.2393
+         },
+         {
+          "session": "2026-07-30",
+          "n": 80,
+          "mean_loss": 0.2392
+         },
+         {
+          "session": "2026-07-31",
+          "n": 81,
+          "mean_loss": 0.239
+         },
+         {
+          "session": "2026-08-03",
+          "n": 82,
+          "mean_loss": 0.2387
+         },
+         {
+          "session": "2026-08-04",
+          "n": 83,
+          "mean_loss": 0.2383
+         },
+         {
+          "session": "2026-08-05",
+          "n": 84,
+          "mean_loss": 0.238
+         },
+         {
+          "session": "2026-08-06",
+          "n": 85,
+          "mean_loss": 0.2375
+         },
+         {
+          "session": "2026-08-07",
+          "n": 86,
+          "mean_loss": 0.2371
+         },
+         {
+          "session": "2026-08-10",
+          "n": 87,
+          "mean_loss": 0.2366
+         },
+         {
+          "session": "2026-08-12",
+          "n": 88,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-08-13",
+          "n": 89,
+          "mean_loss": 0.2357
+         },
+         {
+          "session": "2026-08-14",
+          "n": 90,
+          "mean_loss": 0.2352
+         },
+         {
+          "session": "2026-08-17",
+          "n": 91,
+          "mean_loss": 0.2349
+         },
+         {
+          "session": "2026-08-18",
+          "n": 92,
+          "mean_loss": 0.2345
+         },
+         {
+          "session": "2026-08-19",
+          "n": 93,
+          "mean_loss": 0.2342
+         },
+         {
+          "session": "2026-08-20",
+          "n": 94,
+          "mean_loss": 0.234
+         },
+         {
+          "session": "2026-08-21",
+          "n": 95,
+          "mean_loss": 0.2338
+         },
+         {
+          "session": "2026-08-24",
+          "n": 96,
+          "mean_loss": 0.2338
+         },
+         {
+          "session": "2026-08-25",
+          "n": 97,
+          "mean_loss": 0.2337
+         },
+         {
+          "session": "2026-08-26",
+          "n": 98,
+          "mean_loss": 0.2338
+         },
+         {
+          "session": "2026-08-27",
+          "n": 99,
+          "mean_loss": 0.2339
+         },
+         {
+          "session": "2026-08-28",
+          "n": 100,
+          "mean_loss": 0.234
+         },
+         {
+          "session": "2026-08-31",
+          "n": 101,
+          "mean_loss": 0.2342
+         },
+         {
+          "session": "2026-09-01",
+          "n": 102,
+          "mean_loss": 0.2345
+         },
+         {
+          "session": "2026-09-02",
+          "n": 103,
+          "mean_loss": 0.2347
+         },
+         {
+          "session": "2026-09-03",
+          "n": 104,
+          "mean_loss": 0.235
+         },
+         {
+          "session": "2026-09-04",
+          "n": 105,
+          "mean_loss": 0.2354
+         },
+         {
+          "session": "2026-09-07",
+          "n": 106,
+          "mean_loss": 0.2357
+         },
+         {
+          "session": "2026-09-08",
+          "n": 107,
+          "mean_loss": 0.236
+         },
+         {
+          "session": "2026-09-09",
+          "n": 108,
+          "mean_loss": 0.2363
+         },
+         {
+          "session": "2026-09-10",
+          "n": 109,
+          "mean_loss": 0.2365
+         },
+         {
+          "session": "2026-09-11",
+          "n": 110,
+          "mean_loss": 0.2368
+         },
+         {
+          "session": "2026-09-14",
+          "n": 111,
+          "mean_loss": 0.237
+         },
+         {
+          "session": "2026-09-15",
+          "n": 112,
+          "mean_loss": 0.2371
+         },
+         {
+          "session": "2026-09-16",
+          "n": 113,
+          "mean_loss": 0.2373
+         },
+         {
+          "session": "2026-09-17",
+          "n": 114,
+          "mean_loss": 0.2374
+         },
+         {
+          "session": "2026-09-18",
+          "n": 115,
+          "mean_loss": 0.2374
+         },
+         {
+          "session": "2026-09-21",
+          "n": 116,
+          "mean_loss": 0.2374
+         },
+         {
+          "session": "2026-09-23",
+          "n": 117,
+          "mean_loss": 0.2374
+         },
+         {
+          "session": "2026-09-24",
+          "n": 118,
+          "mean_loss": 0.2373
+         },
+         {
+          "session": "2026-09-25",
+          "n": 119,
+          "mean_loss": 0.2372
+         },
+         {
+          "session": "2026-09-28",
+          "n": 120,
+          "mean_loss": 0.237
+         },
+         {
+          "session": "2026-09-29",
+          "n": 121,
+          "mean_loss": 0.2369
+         },
+         {
+          "session": "2026-09-30",
+          "n": 122,
+          "mean_loss": 0.2367
+         },
+         {
+          "session": "2026-10-01",
+          "n": 123,
+          "mean_loss": 0.2365
+         },
+         {
+          "session": "2026-10-02",
+          "n": 124,
+          "mean_loss": 0.2363
+         },
+         {
+          "session": "2026-10-05",
+          "n": 125,
+          "mean_loss": 0.2362
+         },
+         {
+          "session": "2026-10-06",
+          "n": 126,
+          "mean_loss": 0.236
+         },
+         {
+          "session": "2026-10-07",
+          "n": 127,
+          "mean_loss": 0.2358
+         },
+         {
+          "session": "2026-10-08",
+          "n": 128,
+          "mean_loss": 0.2357
+         },
+         {
+          "session": "2026-10-09",
+          "n": 129,
+          "mean_loss": 0.2356
+         },
+         {
+          "session": "2026-10-12",
+          "n": 130,
+          "mean_loss": 0.2355
+         },
+         {
+          "session": "2026-10-13",
+          "n": 131,
+          "mean_loss": 0.2354
+         },
+         {
+          "session": "2026-10-14",
+          "n": 132,
+          "mean_loss": 0.2353
+         },
+         {
+          "session": "2026-10-15",
+          "n": 133,
+          "mean_loss": 0.2353
+         },
+         {
+          "session": "2026-10-16",
+          "n": 134,
+          "mean_loss": 0.2353
+         },
+         {
+          "session": "2026-10-19",
+          "n": 135,
+          "mean_loss": 0.2353
+         },
+         {
+          "session": "2026-10-20",
+          "n": 136,
+          "mean_loss": 0.2354
+         },
+         {
+          "session": "2026-10-21",
+          "n": 137,
+          "mean_loss": 0.2354
+         },
+         {
+          "session": "2026-10-22",
+          "n": 138,
+          "mean_loss": 0.2355
+         },
+         {
+          "session": "2026-10-23",
+          "n": 139,
+          "mean_loss": 0.2356
+         },
+         {
+          "session": "2026-10-26",
+          "n": 140,
+          "mean_loss": 0.2356
+         },
+         {
+          "session": "2026-10-27",
+          "n": 141,
+          "mean_loss": 0.2357
+         },
+         {
+          "session": "2026-10-28",
+          "n": 142,
+          "mean_loss": 0.2358
+         },
+         {
+          "session": "2026-10-29",
+          "n": 143,
+          "mean_loss": 0.2359
+         },
+         {
+          "session": "2026-10-30",
+          "n": 144,
+          "mean_loss": 0.236
+         },
+         {
+          "session": "2026-11-02",
+          "n": 145,
+          "mean_loss": 0.236
+         },
+         {
+          "session": "2026-11-03",
+          "n": 146,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-04",
+          "n": 147,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-05",
+          "n": 148,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-06",
+          "n": 149,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-09",
+          "n": 150,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-10",
+          "n": 151,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-11",
+          "n": 152,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-12",
+          "n": 153,
+          "mean_loss": 0.2361
+         },
+         {
+          "session": "2026-11-13",
+          "n": 154,
+          "mean_loss": 0.236
+         },
+         {
+          "session": "2026-11-16",
+          "n": 155,
+          "mean_loss": 0.236
+         }
+        ]
+       },
+       {
+        "forecaster": "book3_ai",
+        "points": [
+         {
+          "session": "2026-04-08",
+          "n": 1,
+          "mean_loss": 0.3168
+         },
+         {
+          "session": "2026-04-09",
+          "n": 2,
+          "mean_loss": 0.2914
+         },
+         {
+          "session": "2026-04-10",
+          "n": 3,
+          "mean_loss": 0.2781
+         },
+         {
+          "session": "2026-04-13",
+          "n": 4,
+          "mean_loss": 0.2688
+         },
+         {
+          "session": "2026-04-14",
+          "n": 5,
+          "mean_loss": 0.2615
+         },
+         {
+          "session": "2026-04-15",
+          "n": 6,
+          "mean_loss": 0.2554
+         },
+         {
+          "session": "2026-04-16",
+          "n": 7,
+          "mean_loss": 0.2503
+         },
+         {
+          "session": "2026-04-17",
+          "n": 8,
+          "mean_loss": 0.2459
+         },
+         {
+          "session": "2026-04-20",
+          "n": 9,
+          "mean_loss": 0.2422
+         },
+         {
+          "session": "2026-04-21",
+          "n": 10,
+          "mean_loss": 0.2392
+         },
+         {
+          "session": "2026-04-22",
+          "n": 11,
+          "mean_loss": 0.2367
+         },
+         {
+          "session": "2026-04-23",
+          "n": 12,
+          "mean_loss": 0.2349
+         },
+         {
+          "session": "2026-04-24",
+          "n": 13,
+          "mean_loss": 0.2337
+         },
+         {
+          "session": "2026-04-27",
+          "n": 14,
+          "mean_loss": 0.233
+         },
+         {
+          "session": "2026-04-28",
+          "n": 15,
+          "mean_loss": 0.2328
+         },
+         {
+          "session": "2026-04-29",
+          "n": 16,
+          "mean_loss": 0.2331
+         },
+         {
+          "session": "2026-04-30",
+          "n": 17,
+          "mean_loss": 0.2339
+         },
+         {
+          "session": "2026-05-01",
+          "n": 18,
+          "mean_loss": 0.2351
+         },
+         {
+          "session": "2026-05-04",
+          "n": 19,
+          "mean_loss": 0.2366
+         },
+         {
+          "session": "2026-05-06",
+          "n": 20,
+          "mean_loss": 0.2384
+         },
+         {
+          "session": "2026-05-07",
+          "n": 21,
+          "mean_loss": 0.2404
+         },
+         {
+          "session": "2026-05-08",
+          "n": 22,
+          "mean_loss": 0.2426
+         },
+         {
+          "session": "2026-05-11",
+          "n": 23,
+          "mean_loss": 0.2448
+         },
+         {
+          "session": "2026-05-12",
+          "n": 24,
+          "mean_loss": 0.2472
+         },
+         {
+          "session": "2026-05-13",
+          "n": 25,
+          "mean_loss": 0.2494
+         },
+         {
+          "session": "2026-05-14",
+          "n": 26,
+          "mean_loss": 0.2517
+         },
+         {
+          "session": "2026-05-15",
+          "n": 27,
+          "mean_loss": 0.2537
+         },
+         {
+          "session": "2026-05-18",
+          "n": 28,
+          "mean_loss": 0.2556
+         },
+         {
+          "session": "2026-05-19",
+          "n": 29,
+          "mean_loss": 0.2573
+         },
+         {
+          "session": "2026-05-20",
+          "n": 30,
+          "mean_loss": 0.2587
+         },
+         {
+          "session": "2026-05-21",
+          "n": 31,
+          "mean_loss": 0.2598
+         },
+         {
+          "session": "2026-05-22",
+          "n": 32,
+          "mean_loss": 0.2607
+         },
+         {
+          "session": "2026-05-25",
+          "n": 33,
+          "mean_loss": 0.2612
+         },
+         {
+          "session": "2026-05-26",
+          "n": 34,
+          "mean_loss": 0.2615
+         },
+         {
+          "session": "2026-05-27",
+          "n": 35,
+          "mean_loss": 0.2614
+         },
+         {
+          "session": "2026-05-28",
+          "n": 36,
+          "mean_loss": 0.2611
+         },
+         {
+          "session": "2026-05-29",
+          "n": 37,
+          "mean_loss": 0.2605
+         },
+         {
+          "session": "2026-06-01",
+          "n": 38,
+          "mean_loss": 0.2596
+         },
+         {
+          "session": "2026-06-03",
+          "n": 39,
+          "mean_loss": 0.2586
+         },
+         {
+          "session": "2026-06-04",
+          "n": 40,
+          "mean_loss": 0.2574
+         },
+         {
+          "session": "2026-06-05",
+          "n": 41,
+          "mean_loss": 0.2561
+         },
+         {
+          "session": "2026-06-08",
+          "n": 42,
+          "mean_loss": 0.2547
+         },
+         {
+          "session": "2026-06-09",
+          "n": 43,
+          "mean_loss": 0.2532
+         },
+         {
+          "session": "2026-06-10",
+          "n": 44,
+          "mean_loss": 0.2518
+         },
+         {
+          "session": "2026-06-11",
+          "n": 45,
+          "mean_loss": 0.2504
+         },
+         {
+          "session": "2026-06-12",
+          "n": 46,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-06-15",
+          "n": 47,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-06-16",
+          "n": 48,
+          "mean_loss": 0.2467
+         },
+         {
+          "session": "2026-06-17",
+          "n": 49,
+          "mean_loss": 0.2458
+         },
+         {
+          "session": "2026-06-18",
+          "n": 50,
+          "mean_loss": 0.245
+         },
+         {
+          "session": "2026-06-19",
+          "n": 51,
+          "mean_loss": 0.2445
+         },
+         {
+          "session": "2026-06-22",
+          "n": 52,
+          "mean_loss": 0.2441
+         },
+         {
+          "session": "2026-06-23",
+          "n": 53,
+          "mean_loss": 0.2439
+         },
+         {
+          "session": "2026-06-24",
+          "n": 54,
+          "mean_loss": 0.244
+         },
+         {
+          "session": "2026-06-25",
+          "n": 55,
+          "mean_loss": 0.2442
+         },
+         {
+          "session": "2026-06-26",
+          "n": 56,
+          "mean_loss": 0.2446
+         },
+         {
+          "session": "2026-06-29",
+          "n": 57,
+          "mean_loss": 0.2452
+         },
+         {
+          "session": "2026-07-01",
+          "n": 58,
+          "mean_loss": 0.2459
+         },
+         {
+          "session": "2026-07-02",
+          "n": 59,
+          "mean_loss": 0.2467
+         },
+         {
+          "session": "2026-07-03",
+          "n": 60,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-07-06",
+          "n": 61,
+          "mean_loss": 0.2486
+         },
+         {
+          "session": "2026-07-07",
+          "n": 62,
+          "mean_loss": 0.2496
+         },
+         {
+          "session": "2026-07-08",
+          "n": 63,
+          "mean_loss": 0.2506
+         },
+         {
+          "session": "2026-07-09",
+          "n": 64,
+          "mean_loss": 0.2516
+         },
+         {
+          "session": "2026-07-10",
+          "n": 65,
+          "mean_loss": 0.2525
+         },
+         {
+          "session": "2026-07-13",
+          "n": 66,
+          "mean_loss": 0.2533
+         },
+         {
+          "session": "2026-07-14",
+          "n": 67,
+          "mean_loss": 0.2541
+         },
+         {
+          "session": "2026-07-15",
+          "n": 68,
+          "mean_loss": 0.2547
+         },
+         {
+          "session": "2026-07-16",
+          "n": 69,
+          "mean_loss": 0.2552
+         },
+         {
+          "session": "2026-07-17",
+          "n": 70,
+          "mean_loss": 0.2556
+         },
+         {
+          "session": "2026-07-20",
+          "n": 71,
+          "mean_loss": 0.2558
+         },
+         {
+          "session": "2026-07-21",
+          "n": 72,
+          "mean_loss": 0.2559
+         },
+         {
+          "session": "2026-07-22",
+          "n": 73,
+          "mean_loss": 0.2559
+         },
+         {
+          "session": "2026-07-23",
+          "n": 74,
+          "mean_loss": 0.2557
+         },
+         {
+          "session": "2026-07-24",
+          "n": 75,
+          "mean_loss": 0.2554
+         },
+         {
+          "session": "2026-07-27",
+          "n": 76,
+          "mean_loss": 0.255
+         },
+         {
+          "session": "2026-07-29",
+          "n": 77,
+          "mean_loss": 0.2545
+         },
+         {
+          "session": "2026-07-30",
+          "n": 78,
+          "mean_loss": 0.2539
+         },
+         {
+          "session": "2026-07-31",
+          "n": 79,
+          "mean_loss": 0.2532
+         },
+         {
+          "session": "2026-08-03",
+          "n": 80,
+          "mean_loss": 0.2526
+         },
+         {
+          "session": "2026-08-04",
+          "n": 81,
+          "mean_loss": 0.2519
+         },
+         {
+          "session": "2026-08-05",
+          "n": 82,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-08-06",
+          "n": 83,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-08-07",
+          "n": 84,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-08-10",
+          "n": 85,
+          "mean_loss": 0.2493
+         },
+         {
+          "session": "2026-08-11",
+          "n": 86,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-08-12",
+          "n": 87,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-08-13",
+          "n": 88,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-08-14",
+          "n": 89,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-08-17",
+          "n": 90,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-18",
+          "n": 91,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-19",
+          "n": 92,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-20",
+          "n": 93,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-08-21",
+          "n": 94,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-08-24",
+          "n": 95,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-08-26",
+          "n": 96,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-08-27",
+          "n": 97,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-08-28",
+          "n": 98,
+          "mean_loss": 0.2496
+         },
+         {
+          "session": "2026-08-31",
+          "n": 99,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-09-01",
+          "n": 100,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-09-02",
+          "n": 101,
+          "mean_loss": 0.251
+         },
+         {
+          "session": "2026-09-03",
+          "n": 102,
+          "mean_loss": 0.2514
+         },
+         {
+          "session": "2026-09-04",
+          "n": 103,
+          "mean_loss": 0.2518
+         },
+         {
+          "session": "2026-09-07",
+          "n": 104,
+          "mean_loss": 0.2522
+         },
+         {
+          "session": "2026-09-08",
+          "n": 105,
+          "mean_loss": 0.2525
+         },
+         {
+          "session": "2026-09-09",
+          "n": 106,
+          "mean_loss": 0.2527
+         },
+         {
+          "session": "2026-09-10",
+          "n": 107,
+          "mean_loss": 0.2529
+         },
+         {
+          "session": "2026-09-11",
+          "n": 108,
+          "mean_loss": 0.253
+         },
+         {
+          "session": "2026-09-14",
+          "n": 109,
+          "mean_loss": 0.2531
+         },
+         {
+          "session": "2026-09-15",
+          "n": 110,
+          "mean_loss": 0.2531
+         },
+         {
+          "session": "2026-09-16",
+          "n": 111,
+          "mean_loss": 0.253
+         },
+         {
+          "session": "2026-09-17",
+          "n": 112,
+          "mean_loss": 0.2529
+         },
+         {
+          "session": "2026-09-18",
+          "n": 113,
+          "mean_loss": 0.2528
+         },
+         {
+          "session": "2026-09-21",
+          "n": 114,
+          "mean_loss": 0.2526
+         },
+         {
+          "session": "2026-09-23",
+          "n": 115,
+          "mean_loss": 0.2523
+         },
+         {
+          "session": "2026-09-24",
+          "n": 116,
+          "mean_loss": 0.2521
+         },
+         {
+          "session": "2026-09-25",
+          "n": 117,
+          "mean_loss": 0.2518
+         },
+         {
+          "session": "2026-09-28",
+          "n": 118,
+          "mean_loss": 0.2515
+         },
+         {
+          "session": "2026-09-29",
+          "n": 119,
+          "mean_loss": 0.2513
+         },
+         {
+          "session": "2026-09-30",
+          "n": 120,
+          "mean_loss": 0.251
+         },
+         {
+          "session": "2026-10-01",
+          "n": 121,
+          "mean_loss": 0.2507
+         },
+         {
+          "session": "2026-10-02",
+          "n": 122,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-10-05",
+          "n": 123,
+          "mean_loss": 0.2503
+         },
+         {
+          "session": "2026-10-06",
+          "n": 124,
+          "mean_loss": 0.2502
+         },
+         {
+          "session": "2026-10-07",
+          "n": 125,
+          "mean_loss": 0.2501
+         },
+         {
+          "session": "2026-10-08",
+          "n": 126,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-10-09",
+          "n": 127,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-10-12",
+          "n": 128,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-10-13",
+          "n": 129,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-10-14",
+          "n": 130,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-10-15",
+          "n": 131,
+          "mean_loss": 0.2501
+         },
+         {
+          "session": "2026-10-16",
+          "n": 132,
+          "mean_loss": 0.2502
+         },
+         {
+          "session": "2026-10-19",
+          "n": 133,
+          "mean_loss": 0.2503
+         },
+         {
+          "session": "2026-10-21",
+          "n": 134,
+          "mean_loss": 0.2504
+         },
+         {
+          "session": "2026-10-22",
+          "n": 135,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-10-23",
+          "n": 136,
+          "mean_loss": 0.2507
+         },
+         {
+          "session": "2026-10-26",
+          "n": 137,
+          "mean_loss": 0.2508
+         },
+         {
+          "session": "2026-10-27",
+          "n": 138,
+          "mean_loss": 0.2509
+         },
+         {
+          "session": "2026-10-28",
+          "n": 139,
+          "mean_loss": 0.251
+         },
+         {
+          "session": "2026-10-29",
+          "n": 140,
+          "mean_loss": 0.2511
+         },
+         {
+          "session": "2026-10-30",
+          "n": 141,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-11-02",
+          "n": 142,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-11-03",
+          "n": 143,
+          "mean_loss": 0.2513
+         },
+         {
+          "session": "2026-11-04",
+          "n": 144,
+          "mean_loss": 0.2513
+         },
+         {
+          "session": "2026-11-05",
+          "n": 145,
+          "mean_loss": 0.2513
+         },
+         {
+          "session": "2026-11-06",
+          "n": 146,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-11-09",
+          "n": 147,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-11-10",
+          "n": 148,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-11-11",
+          "n": 149,
+          "mean_loss": 0.2511
+         },
+         {
+          "session": "2026-11-12",
+          "n": 150,
+          "mean_loss": 0.2511
+         },
+         {
+          "session": "2026-11-13",
+          "n": 151,
+          "mean_loss": 0.251
+         },
+         {
+          "session": "2026-11-16",
+          "n": 152,
+          "mean_loss": 0.251
+         }
+        ]
+       },
+       {
+        "forecaster": "baseline_b_base_rate",
+        "points": [
+         {
+          "session": "2026-04-07",
+          "n": 1,
+          "mean_loss": 0.2541
+         },
+         {
+          "session": "2026-04-08",
+          "n": 2,
+          "mean_loss": 0.2532
+         },
+         {
+          "session": "2026-04-09",
+          "n": 3,
+          "mean_loss": 0.2528
+         },
+         {
+          "session": "2026-04-10",
+          "n": 4,
+          "mean_loss": 0.2525
+         },
+         {
+          "session": "2026-04-13",
+          "n": 5,
+          "mean_loss": 0.2522
+         },
+         {
+          "session": "2026-04-14",
+          "n": 6,
+          "mean_loss": 0.2519
+         },
+         {
+          "session": "2026-04-15",
+          "n": 7,
+          "mean_loss": 0.2516
+         },
+         {
+          "session": "2026-04-16",
+          "n": 8,
+          "mean_loss": 0.2512
+         },
+         {
+          "session": "2026-04-17",
+          "n": 9,
+          "mean_loss": 0.2509
+         },
+         {
+          "session": "2026-04-20",
+          "n": 10,
+          "mean_loss": 0.2505
+         },
+         {
+          "session": "2026-04-21",
+          "n": 11,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-04-22",
+          "n": 12,
+          "mean_loss": 0.2496
+         },
+         {
+          "session": "2026-04-23",
+          "n": 13,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-04-24",
+          "n": 14,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-04-27",
+          "n": 15,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-04-28",
+          "n": 16,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-04-29",
+          "n": 17,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-04-30",
+          "n": 18,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-05-01",
+          "n": 19,
+          "mean_loss": 0.247
+         },
+         {
+          "session": "2026-05-04",
+          "n": 20,
+          "mean_loss": 0.2468
+         },
+         {
+          "session": "2026-05-05",
+          "n": 21,
+          "mean_loss": 0.2466
+         },
+         {
+          "session": "2026-05-06",
+          "n": 22,
+          "mean_loss": 0.2464
+         },
+         {
+          "session": "2026-05-07",
+          "n": 23,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-05-08",
+          "n": 24,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-05-11",
+          "n": 25,
+          "mean_loss": 0.2463
+         },
+         {
+          "session": "2026-05-12",
+          "n": 26,
+          "mean_loss": 0.2464
+         },
+         {
+          "session": "2026-05-13",
+          "n": 27,
+          "mean_loss": 0.2465
+         },
+         {
+          "session": "2026-05-14",
+          "n": 28,
+          "mean_loss": 0.2466
+         },
+         {
+          "session": "2026-05-15",
+          "n": 29,
+          "mean_loss": 0.2468
+         },
+         {
+          "session": "2026-05-18",
+          "n": 30,
+          "mean_loss": 0.247
+         },
+         {
+          "session": "2026-05-19",
+          "n": 31,
+          "mean_loss": 0.2472
+         },
+         {
+          "session": "2026-05-20",
+          "n": 32,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-05-21",
+          "n": 33,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-05-22",
+          "n": 34,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-05-25",
+          "n": 35,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-05-26",
+          "n": 36,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-05-27",
+          "n": 37,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-05-28",
+          "n": 38,
+          "mean_loss": 0.2486
+         },
+         {
+          "session": "2026-05-29",
+          "n": 39,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-06-01",
+          "n": 40,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-06-02",
+          "n": 41,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-06-03",
+          "n": 42,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-06-04",
+          "n": 43,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-06-05",
+          "n": 44,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-06-08",
+          "n": 45,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-06-09",
+          "n": 46,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-06-10",
+          "n": 47,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-06-11",
+          "n": 48,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-06-12",
+          "n": 49,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-06-15",
+          "n": 50,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-06-16",
+          "n": 51,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-06-17",
+          "n": 52,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-06-18",
+          "n": 53,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-06-19",
+          "n": 54,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-06-22",
+          "n": 55,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-06-23",
+          "n": 56,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-06-24",
+          "n": 57,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-06-25",
+          "n": 58,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-06-26",
+          "n": 59,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-06-29",
+          "n": 60,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-06-30",
+          "n": 61,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-07-01",
+          "n": 62,
+          "mean_loss": 0.2472
+         },
+         {
+          "session": "2026-07-02",
+          "n": 63,
+          "mean_loss": 0.2472
+         },
+         {
+          "session": "2026-07-03",
+          "n": 64,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-07-06",
+          "n": 65,
+          "mean_loss": 0.2473
+         },
+         {
+          "session": "2026-07-07",
+          "n": 66,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-07-08",
+          "n": 67,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-07-09",
+          "n": 68,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-07-10",
+          "n": 69,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-07-13",
+          "n": 70,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-07-14",
+          "n": 71,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-07-15",
+          "n": 72,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-07-16",
+          "n": 73,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-07-17",
+          "n": 74,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-07-20",
+          "n": 75,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-21",
+          "n": 76,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-22",
+          "n": 77,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-07-23",
+          "n": 78,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-24",
+          "n": 79,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-27",
+          "n": 80,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-28",
+          "n": 81,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-29",
+          "n": 82,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-30",
+          "n": 83,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-31",
+          "n": 84,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-08-03",
+          "n": 85,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-08-04",
+          "n": 86,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-08-05",
+          "n": 87,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-08-06",
+          "n": 88,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-08-07",
+          "n": 89,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-08-10",
+          "n": 90,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-08-11",
+          "n": 91,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-08-12",
+          "n": 92,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-08-13",
+          "n": 93,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-08-14",
+          "n": 94,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-08-17",
+          "n": 95,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-08-18",
+          "n": 96,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-19",
+          "n": 97,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-20",
+          "n": 98,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-08-21",
+          "n": 99,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-08-24",
+          "n": 100,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-08-25",
+          "n": 101,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-08-26",
+          "n": 102,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-08-27",
+          "n": 103,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-28",
+          "n": 104,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-08-31",
+          "n": 105,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-09-01",
+          "n": 106,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-09-02",
+          "n": 107,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-09-03",
+          "n": 108,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-09-04",
+          "n": 109,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-09-07",
+          "n": 110,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-09-08",
+          "n": 111,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-09-09",
+          "n": 112,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-09-10",
+          "n": 113,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-09-11",
+          "n": 114,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-14",
+          "n": 115,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-15",
+          "n": 116,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-16",
+          "n": 117,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-17",
+          "n": 118,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-18",
+          "n": 119,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-21",
+          "n": 120,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-22",
+          "n": 121,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-23",
+          "n": 122,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-24",
+          "n": 123,
+          "mean_loss": 0.2482
+         },
+         {
+          "session": "2026-09-25",
+          "n": 124,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-09-28",
+          "n": 125,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-09-29",
+          "n": 126,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-09-30",
+          "n": 127,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-10-01",
+          "n": 128,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-02",
+          "n": 129,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-05",
+          "n": 130,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-06",
+          "n": 131,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-07",
+          "n": 132,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-08",
+          "n": 133,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-09",
+          "n": 134,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-12",
+          "n": 135,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-13",
+          "n": 136,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-14",
+          "n": 137,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-15",
+          "n": 138,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-16",
+          "n": 139,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-19",
+          "n": 140,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-20",
+          "n": 141,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-21",
+          "n": 142,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-22",
+          "n": 143,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-10-23",
+          "n": 144,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-26",
+          "n": 145,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-27",
+          "n": 146,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-28",
+          "n": 147,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-29",
+          "n": 148,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-10-30",
+          "n": 149,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-02",
+          "n": 150,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-03",
+          "n": 151,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-04",
+          "n": 152,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-05",
+          "n": 153,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-06",
+          "n": 154,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-09",
+          "n": 155,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-10",
+          "n": 156,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-11",
+          "n": 157,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-12",
+          "n": 158,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-13",
+          "n": 159,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-11-16",
+          "n": 160,
+          "mean_loss": 0.248
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "V2",
+      "protocol": "v4",
+      "plain": "How much will NIFTY move over the next 5 sessions?",
+      "metric": "qlike",
+      "primary_baseline": "baseline_premium_adjusted_implied",
+      "series": [
+       {
+        "forecaster": "book2_hybrid",
+        "points": [
+         {
+          "session": "2026-10-12",
+          "n": 1,
+          "mean_loss": -3.237
+         },
+         {
+          "session": "2026-10-13",
+          "n": 2,
+          "mean_loss": -3.2555
+         },
+         {
+          "session": "2026-10-14",
+          "n": 3,
+          "mean_loss": -3.2634
+         },
+         {
+          "session": "2026-10-15",
+          "n": 4,
+          "mean_loss": -3.2707
+         },
+         {
+          "session": "2026-10-16",
+          "n": 5,
+          "mean_loss": -3.2791
+         },
+         {
+          "session": "2026-10-19",
+          "n": 6,
+          "mean_loss": -3.289
+         },
+         {
+          "session": "2026-10-20",
+          "n": 7,
+          "mean_loss": -3.3001
+         },
+         {
+          "session": "2026-10-21",
+          "n": 8,
+          "mean_loss": -3.3123
+         },
+         {
+          "session": "2026-10-22",
+          "n": 9,
+          "mean_loss": -3.3251
+         },
+         {
+          "session": "2026-10-23",
+          "n": 10,
+          "mean_loss": -3.3382
+         },
+         {
+          "session": "2026-10-26",
+          "n": 11,
+          "mean_loss": -3.3511
+         },
+         {
+          "session": "2026-10-27",
+          "n": 12,
+          "mean_loss": -3.3636
+         },
+         {
+          "session": "2026-10-28",
+          "n": 13,
+          "mean_loss": -3.3753
+         },
+         {
+          "session": "2026-10-29",
+          "n": 14,
+          "mean_loss": -3.386
+         },
+         {
+          "session": "2026-10-30",
+          "n": 15,
+          "mean_loss": -3.3954
+         },
+         {
+          "session": "2026-11-02",
+          "n": 16,
+          "mean_loss": -3.4033
+         },
+         {
+          "session": "2026-11-03",
+          "n": 17,
+          "mean_loss": -3.4097
+         },
+         {
+          "session": "2026-11-04",
+          "n": 18,
+          "mean_loss": -3.4146
+         },
+         {
+          "session": "2026-11-05",
+          "n": 19,
+          "mean_loss": -3.4179
+         },
+         {
+          "session": "2026-11-06",
+          "n": 20,
+          "mean_loss": -3.4197
+         },
+         {
+          "session": "2026-11-09",
+          "n": 21,
+          "mean_loss": -3.4203
+         },
+         {
+          "session": "2026-11-10",
+          "n": 22,
+          "mean_loss": -3.4196
+         },
+         {
+          "session": "2026-11-11",
+          "n": 23,
+          "mean_loss": -3.4181
+         },
+         {
+          "session": "2026-11-12",
+          "n": 24,
+          "mean_loss": -3.4158
+         },
+         {
+          "session": "2026-11-13",
+          "n": 25,
+          "mean_loss": -3.413
+         },
+         {
+          "session": "2026-11-16",
+          "n": 26,
+          "mean_loss": -3.41
+         }
+        ]
+       },
+       {
+        "forecaster": "baseline_premium_adjusted_implied",
+        "points": [
+         {
+          "session": "2026-10-12",
+          "n": 1,
+          "mean_loss": -3.1187
+         },
+         {
+          "session": "2026-10-13",
+          "n": 2,
+          "mean_loss": -3.1797
+         },
+         {
+          "session": "2026-10-14",
+          "n": 3,
+          "mean_loss": -3.2105
+         },
+         {
+          "session": "2026-10-15",
+          "n": 4,
+          "mean_loss": -3.2319
+         },
+         {
+          "session": "2026-10-16",
+          "n": 5,
+          "mean_loss": -3.2489
+         },
+         {
+          "session": "2026-10-19",
+          "n": 6,
+          "mean_loss": -3.2632
+         },
+         {
+          "session": "2026-10-20",
+          "n": 7,
+          "mean_loss": -3.2755
+         },
+         {
+          "session": "2026-10-21",
+          "n": 8,
+          "mean_loss": -3.2862
+         },
+         {
+          "session": "2026-10-22",
+          "n": 9,
+          "mean_loss": -3.2954
+         },
+         {
+          "session": "2026-10-23",
+          "n": 10,
+          "mean_loss": -3.3032
+         },
+         {
+          "session": "2026-10-26",
+          "n": 11,
+          "mean_loss": -3.3097
+         },
+         {
+          "session": "2026-10-27",
+          "n": 12,
+          "mean_loss": -3.3149
+         },
+         {
+          "session": "2026-10-28",
+          "n": 13,
+          "mean_loss": -3.3189
+         },
+         {
+          "session": "2026-10-29",
+          "n": 14,
+          "mean_loss": -3.3216
+         },
+         {
+          "session": "2026-10-30",
+          "n": 15,
+          "mean_loss": -3.3234
+         },
+         {
+          "session": "2026-11-02",
+          "n": 16,
+          "mean_loss": -3.3241
+         },
+         {
+          "session": "2026-11-03",
+          "n": 17,
+          "mean_loss": -3.3241
+         },
+         {
+          "session": "2026-11-04",
+          "n": 18,
+          "mean_loss": -3.3233
+         },
+         {
+          "session": "2026-11-05",
+          "n": 19,
+          "mean_loss": -3.322
+         },
+         {
+          "session": "2026-11-06",
+          "n": 20,
+          "mean_loss": -3.3203
+         },
+         {
+          "session": "2026-11-09",
+          "n": 21,
+          "mean_loss": -3.3184
+         },
+         {
+          "session": "2026-11-10",
+          "n": 22,
+          "mean_loss": -3.3163
+         },
+         {
+          "session": "2026-11-11",
+          "n": 23,
+          "mean_loss": -3.3144
+         },
+         {
+          "session": "2026-11-12",
+          "n": 24,
+          "mean_loss": -3.3126
+         },
+         {
+          "session": "2026-11-13",
+          "n": 25,
+          "mean_loss": -3.3111
+         },
+         {
+          "session": "2026-11-16",
+          "n": 26,
+          "mean_loss": -3.31
+         }
+        ]
+       },
+       {
+        "forecaster": "baseline_har",
+        "points": [
+         {
+          "session": "2026-10-12",
+          "n": 1,
+          "mean_loss": -3.1498
+         },
+         {
+          "session": "2026-10-13",
+          "n": 2,
+          "mean_loss": -3.2347
+         },
+         {
+          "session": "2026-10-14",
+          "n": 3,
+          "mean_loss": -3.2787
+         },
+         {
+          "session": "2026-10-15",
+          "n": 4,
+          "mean_loss": -3.3079
+         },
+         {
+          "session": "2026-10-16",
+          "n": 5,
+          "mean_loss": -3.3291
+         },
+         {
+          "session": "2026-10-19",
+          "n": 6,
+          "mean_loss": -3.3449
+         },
+         {
+          "session": "2026-10-20",
+          "n": 7,
+          "mean_loss": -3.3565
+         },
+         {
+          "session": "2026-10-21",
+          "n": 8,
+          "mean_loss": -3.3647
+         },
+         {
+          "session": "2026-10-22",
+          "n": 9,
+          "mean_loss": -3.37
+         },
+         {
+          "session": "2026-10-23",
+          "n": 10,
+          "mean_loss": -3.3729
+         },
+         {
+          "session": "2026-10-26",
+          "n": 11,
+          "mean_loss": -3.3737
+         },
+         {
+          "session": "2026-10-27",
+          "n": 12,
+          "mean_loss": -3.3727
+         },
+         {
+          "session": "2026-10-28",
+          "n": 13,
+          "mean_loss": -3.3704
+         },
+         {
+          "session": "2026-10-29",
+          "n": 14,
+          "mean_loss": -3.3669
+         },
+         {
+          "session": "2026-10-30",
+          "n": 15,
+          "mean_loss": -3.3626
+         },
+         {
+          "session": "2026-11-02",
+          "n": 16,
+          "mean_loss": -3.3579
+         },
+         {
+          "session": "2026-11-03",
+          "n": 17,
+          "mean_loss": -3.353
+         },
+         {
+          "session": "2026-11-04",
+          "n": 18,
+          "mean_loss": -3.3481
+         },
+         {
+          "session": "2026-11-05",
+          "n": 19,
+          "mean_loss": -3.3435
+         },
+         {
+          "session": "2026-11-06",
+          "n": 20,
+          "mean_loss": -3.3394
+         },
+         {
+          "session": "2026-11-09",
+          "n": 21,
+          "mean_loss": -3.3358
+         },
+         {
+          "session": "2026-11-10",
+          "n": 22,
+          "mean_loss": -3.3331
+         },
+         {
+          "session": "2026-11-11",
+          "n": 23,
+          "mean_loss": -3.3311
+         },
+         {
+          "session": "2026-11-12",
+          "n": 24,
+          "mean_loss": -3.3299
+         },
+         {
+          "session": "2026-11-13",
+          "n": 25,
+          "mean_loss": -3.3296
+         },
+         {
+          "session": "2026-11-16",
+          "n": 26,
+          "mean_loss": -3.33
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "getFnoForecastHistory_india_behind": {
+  "summary": "Mock (india): the AI team falling behind",
+  "description": "Q4 over 150 sessions: the AI team's running average stays above the base rate's (0.301 against 0.249)",
+  "x-case": "negative",
+  "value": {
+   "market": "india",
+   "page_key": "forecast_history",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T12:10:00Z",
+   "schema_version": "2.9.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "f3179a163d787e6f77b6a8bde899b3495a50256bd31cc5f6744b3b0e56d96c0a",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T12:10:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "questions": [
+     {
+      "id": "Q4",
+      "protocol": "v3",
+      "plain": "Will India VIX be higher in 10 sessions?",
+      "metric": "brier",
+      "primary_baseline": "baseline_b_base_rate",
+      "series": [
+       {
+        "forecaster": "book3_ai",
+        "points": [
+         {
+          "session": "2026-04-21",
+          "n": 1,
+          "mean_loss": 0.3691
+         },
+         {
+          "session": "2026-04-22",
+          "n": 2,
+          "mean_loss": 0.3549
+         },
+         {
+          "session": "2026-04-23",
+          "n": 3,
+          "mean_loss": 0.3485
+         },
+         {
+          "session": "2026-04-24",
+          "n": 4,
+          "mean_loss": 0.3439
+         },
+         {
+          "session": "2026-04-27",
+          "n": 5,
+          "mean_loss": 0.3399
+         },
+         {
+          "session": "2026-04-28",
+          "n": 6,
+          "mean_loss": 0.336
+         },
+         {
+          "session": "2026-04-29",
+          "n": 7,
+          "mean_loss": 0.332
+         },
+         {
+          "session": "2026-04-30",
+          "n": 8,
+          "mean_loss": 0.328
+         },
+         {
+          "session": "2026-05-01",
+          "n": 9,
+          "mean_loss": 0.3238
+         },
+         {
+          "session": "2026-05-04",
+          "n": 10,
+          "mean_loss": 0.3196
+         },
+         {
+          "session": "2026-05-05",
+          "n": 11,
+          "mean_loss": 0.3154
+         },
+         {
+          "session": "2026-05-06",
+          "n": 12,
+          "mean_loss": 0.3112
+         },
+         {
+          "session": "2026-05-07",
+          "n": 13,
+          "mean_loss": 0.3072
+         },
+         {
+          "session": "2026-05-08",
+          "n": 14,
+          "mean_loss": 0.3034
+         },
+         {
+          "session": "2026-05-11",
+          "n": 15,
+          "mean_loss": 0.2998
+         },
+         {
+          "session": "2026-05-12",
+          "n": 16,
+          "mean_loss": 0.2965
+         },
+         {
+          "session": "2026-05-13",
+          "n": 17,
+          "mean_loss": 0.2936
+         },
+         {
+          "session": "2026-05-14",
+          "n": 18,
+          "mean_loss": 0.2911
+         },
+         {
+          "session": "2026-05-15",
+          "n": 19,
+          "mean_loss": 0.289
+         },
+         {
+          "session": "2026-05-18",
+          "n": 20,
+          "mean_loss": 0.2874
+         },
+         {
+          "session": "2026-05-19",
+          "n": 21,
+          "mean_loss": 0.2863
+         },
+         {
+          "session": "2026-05-20",
+          "n": 22,
+          "mean_loss": 0.2856
+         },
+         {
+          "session": "2026-05-21",
+          "n": 23,
+          "mean_loss": 0.2854
+         },
+         {
+          "session": "2026-05-22",
+          "n": 24,
+          "mean_loss": 0.2856
+         },
+         {
+          "session": "2026-05-25",
+          "n": 25,
+          "mean_loss": 0.2862
+         },
+         {
+          "session": "2026-05-26",
+          "n": 26,
+          "mean_loss": 0.2872
+         },
+         {
+          "session": "2026-05-27",
+          "n": 27,
+          "mean_loss": 0.2885
+         },
+         {
+          "session": "2026-05-28",
+          "n": 28,
+          "mean_loss": 0.29
+         },
+         {
+          "session": "2026-05-29",
+          "n": 29,
+          "mean_loss": 0.2918
+         },
+         {
+          "session": "2026-06-01",
+          "n": 30,
+          "mean_loss": 0.2938
+         },
+         {
+          "session": "2026-06-02",
+          "n": 31,
+          "mean_loss": 0.2958
+         },
+         {
+          "session": "2026-06-03",
+          "n": 32,
+          "mean_loss": 0.2979
+         },
+         {
+          "session": "2026-06-04",
+          "n": 33,
+          "mean_loss": 0.3
+         },
+         {
+          "session": "2026-06-05",
+          "n": 34,
+          "mean_loss": 0.302
+         },
+         {
+          "session": "2026-06-08",
+          "n": 35,
+          "mean_loss": 0.3039
+         },
+         {
+          "session": "2026-06-09",
+          "n": 36,
+          "mean_loss": 0.3056
+         },
+         {
+          "session": "2026-06-10",
+          "n": 37,
+          "mean_loss": 0.3071
+         },
+         {
+          "session": "2026-06-11",
+          "n": 38,
+          "mean_loss": 0.3084
+         },
+         {
+          "session": "2026-06-12",
+          "n": 39,
+          "mean_loss": 0.3095
+         },
+         {
+          "session": "2026-06-15",
+          "n": 40,
+          "mean_loss": 0.3102
+         },
+         {
+          "session": "2026-06-16",
+          "n": 41,
+          "mean_loss": 0.3107
+         },
+         {
+          "session": "2026-06-17",
+          "n": 42,
+          "mean_loss": 0.3109
+         },
+         {
+          "session": "2026-06-18",
+          "n": 43,
+          "mean_loss": 0.3108
+         },
+         {
+          "session": "2026-06-19",
+          "n": 44,
+          "mean_loss": 0.3104
+         },
+         {
+          "session": "2026-06-22",
+          "n": 45,
+          "mean_loss": 0.3098
+         },
+         {
+          "session": "2026-06-23",
+          "n": 46,
+          "mean_loss": 0.309
+         },
+         {
+          "session": "2026-06-24",
+          "n": 47,
+          "mean_loss": 0.308
+         },
+         {
+          "session": "2026-06-25",
+          "n": 48,
+          "mean_loss": 0.3069
+         },
+         {
+          "session": "2026-06-26",
+          "n": 49,
+          "mean_loss": 0.3056
+         },
+         {
+          "session": "2026-06-29",
+          "n": 50,
+          "mean_loss": 0.3042
+         },
+         {
+          "session": "2026-06-30",
+          "n": 51,
+          "mean_loss": 0.3029
+         },
+         {
+          "session": "2026-07-01",
+          "n": 52,
+          "mean_loss": 0.3015
+         },
+         {
+          "session": "2026-07-02",
+          "n": 53,
+          "mean_loss": 0.3001
+         },
+         {
+          "session": "2026-07-03",
+          "n": 54,
+          "mean_loss": 0.2989
+         },
+         {
+          "session": "2026-07-06",
+          "n": 55,
+          "mean_loss": 0.2977
+         },
+         {
+          "session": "2026-07-07",
+          "n": 56,
+          "mean_loss": 0.2967
+         },
+         {
+          "session": "2026-07-08",
+          "n": 57,
+          "mean_loss": 0.2958
+         },
+         {
+          "session": "2026-07-09",
+          "n": 58,
+          "mean_loss": 0.2951
+         },
+         {
+          "session": "2026-07-10",
+          "n": 59,
+          "mean_loss": 0.2946
+         },
+         {
+          "session": "2026-07-13",
+          "n": 60,
+          "mean_loss": 0.2943
+         },
+         {
+          "session": "2026-07-14",
+          "n": 61,
+          "mean_loss": 0.2942
+         },
+         {
+          "session": "2026-07-15",
+          "n": 62,
+          "mean_loss": 0.2943
+         },
+         {
+          "session": "2026-07-16",
+          "n": 63,
+          "mean_loss": 0.2946
+         },
+         {
+          "session": "2026-07-17",
+          "n": 64,
+          "mean_loss": 0.295
+         },
+         {
+          "session": "2026-07-20",
+          "n": 65,
+          "mean_loss": 0.2956
+         },
+         {
+          "session": "2026-07-21",
+          "n": 66,
+          "mean_loss": 0.2963
+         },
+         {
+          "session": "2026-07-22",
+          "n": 67,
+          "mean_loss": 0.2971
+         },
+         {
+          "session": "2026-07-23",
+          "n": 68,
+          "mean_loss": 0.298
+         },
+         {
+          "session": "2026-07-24",
+          "n": 69,
+          "mean_loss": 0.2989
+         },
+         {
+          "session": "2026-07-27",
+          "n": 70,
+          "mean_loss": 0.2999
+         },
+         {
+          "session": "2026-07-28",
+          "n": 71,
+          "mean_loss": 0.3008
+         },
+         {
+          "session": "2026-07-29",
+          "n": 72,
+          "mean_loss": 0.3017
+         },
+         {
+          "session": "2026-07-30",
+          "n": 73,
+          "mean_loss": 0.3026
+         },
+         {
+          "session": "2026-07-31",
+          "n": 74,
+          "mean_loss": 0.3034
+         },
+         {
+          "session": "2026-08-03",
+          "n": 75,
+          "mean_loss": 0.3041
+         },
+         {
+          "session": "2026-08-04",
+          "n": 76,
+          "mean_loss": 0.3047
+         },
+         {
+          "session": "2026-08-05",
+          "n": 77,
+          "mean_loss": 0.3051
+         },
+         {
+          "session": "2026-08-06",
+          "n": 78,
+          "mean_loss": 0.3054
+         },
+         {
+          "session": "2026-08-07",
+          "n": 79,
+          "mean_loss": 0.3056
+         },
+         {
+          "session": "2026-08-10",
+          "n": 80,
+          "mean_loss": 0.3057
+         },
+         {
+          "session": "2026-08-11",
+          "n": 81,
+          "mean_loss": 0.3056
+         },
+         {
+          "session": "2026-08-12",
+          "n": 82,
+          "mean_loss": 0.3054
+         },
+         {
+          "session": "2026-08-13",
+          "n": 83,
+          "mean_loss": 0.3051
+         },
+         {
+          "session": "2026-08-14",
+          "n": 84,
+          "mean_loss": 0.3047
+         },
+         {
+          "session": "2026-08-17",
+          "n": 85,
+          "mean_loss": 0.3042
+         },
+         {
+          "session": "2026-08-18",
+          "n": 86,
+          "mean_loss": 0.3036
+         },
+         {
+          "session": "2026-08-19",
+          "n": 87,
+          "mean_loss": 0.303
+         },
+         {
+          "session": "2026-08-20",
+          "n": 88,
+          "mean_loss": 0.3023
+         },
+         {
+          "session": "2026-08-21",
+          "n": 89,
+          "mean_loss": 0.3017
+         },
+         {
+          "session": "2026-08-24",
+          "n": 90,
+          "mean_loss": 0.301
+         },
+         {
+          "session": "2026-08-25",
+          "n": 91,
+          "mean_loss": 0.3004
+         },
+         {
+          "session": "2026-08-26",
+          "n": 92,
+          "mean_loss": 0.2998
+         },
+         {
+          "session": "2026-08-27",
+          "n": 93,
+          "mean_loss": 0.2993
+         },
+         {
+          "session": "2026-08-28",
+          "n": 94,
+          "mean_loss": 0.2989
+         },
+         {
+          "session": "2026-08-31",
+          "n": 95,
+          "mean_loss": 0.2985
+         },
+         {
+          "session": "2026-09-01",
+          "n": 96,
+          "mean_loss": 0.2982
+         },
+         {
+          "session": "2026-09-02",
+          "n": 97,
+          "mean_loss": 0.298
+         },
+         {
+          "session": "2026-09-03",
+          "n": 98,
+          "mean_loss": 0.2979
+         },
+         {
+          "session": "2026-09-04",
+          "n": 99,
+          "mean_loss": 0.2979
+         },
+         {
+          "session": "2026-09-07",
+          "n": 100,
+          "mean_loss": 0.298
+         },
+         {
+          "session": "2026-09-08",
+          "n": 101,
+          "mean_loss": 0.2982
+         },
+         {
+          "session": "2026-09-09",
+          "n": 102,
+          "mean_loss": 0.2984
+         },
+         {
+          "session": "2026-09-10",
+          "n": 103,
+          "mean_loss": 0.2987
+         },
+         {
+          "session": "2026-09-11",
+          "n": 104,
+          "mean_loss": 0.299
+         },
+         {
+          "session": "2026-09-14",
+          "n": 105,
+          "mean_loss": 0.2994
+         },
+         {
+          "session": "2026-09-15",
+          "n": 106,
+          "mean_loss": 0.2998
+         },
+         {
+          "session": "2026-09-16",
+          "n": 107,
+          "mean_loss": 0.3002
+         },
+         {
+          "session": "2026-09-17",
+          "n": 108,
+          "mean_loss": 0.3006
+         },
+         {
+          "session": "2026-09-18",
+          "n": 109,
+          "mean_loss": 0.301
+         },
+         {
+          "session": "2026-09-21",
+          "n": 110,
+          "mean_loss": 0.3014
+         },
+         {
+          "session": "2026-09-22",
+          "n": 111,
+          "mean_loss": 0.3018
+         },
+         {
+          "session": "2026-09-23",
+          "n": 112,
+          "mean_loss": 0.3021
+         },
+         {
+          "session": "2026-09-24",
+          "n": 113,
+          "mean_loss": 0.3023
+         },
+         {
+          "session": "2026-09-25",
+          "n": 114,
+          "mean_loss": 0.3025
+         },
+         {
+          "session": "2026-09-28",
+          "n": 115,
+          "mean_loss": 0.3027
+         },
+         {
+          "session": "2026-09-29",
+          "n": 116,
+          "mean_loss": 0.3028
+         },
+         {
+          "session": "2026-09-30",
+          "n": 117,
+          "mean_loss": 0.3028
+         },
+         {
+          "session": "2026-10-01",
+          "n": 118,
+          "mean_loss": 0.3028
+         },
+         {
+          "session": "2026-10-02",
+          "n": 119,
+          "mean_loss": 0.3027
+         },
+         {
+          "session": "2026-10-05",
+          "n": 120,
+          "mean_loss": 0.3026
+         },
+         {
+          "session": "2026-10-06",
+          "n": 121,
+          "mean_loss": 0.3024
+         },
+         {
+          "session": "2026-10-07",
+          "n": 122,
+          "mean_loss": 0.3022
+         },
+         {
+          "session": "2026-10-08",
+          "n": 123,
+          "mean_loss": 0.302
+         },
+         {
+          "session": "2026-10-09",
+          "n": 124,
+          "mean_loss": 0.3018
+         },
+         {
+          "session": "2026-10-12",
+          "n": 125,
+          "mean_loss": 0.3016
+         },
+         {
+          "session": "2026-10-13",
+          "n": 126,
+          "mean_loss": 0.3014
+         },
+         {
+          "session": "2026-10-14",
+          "n": 127,
+          "mean_loss": 0.3012
+         },
+         {
+          "session": "2026-10-15",
+          "n": 128,
+          "mean_loss": 0.301
+         },
+         {
+          "session": "2026-10-16",
+          "n": 129,
+          "mean_loss": 0.3008
+         },
+         {
+          "session": "2026-10-19",
+          "n": 130,
+          "mean_loss": 0.3006
+         },
+         {
+          "session": "2026-10-20",
+          "n": 131,
+          "mean_loss": 0.3005
+         },
+         {
+          "session": "2026-10-21",
+          "n": 132,
+          "mean_loss": 0.3004
+         },
+         {
+          "session": "2026-10-22",
+          "n": 133,
+          "mean_loss": 0.3003
+         },
+         {
+          "session": "2026-10-23",
+          "n": 134,
+          "mean_loss": 0.3003
+         },
+         {
+          "session": "2026-10-26",
+          "n": 135,
+          "mean_loss": 0.3003
+         },
+         {
+          "session": "2026-10-27",
+          "n": 136,
+          "mean_loss": 0.3003
+         },
+         {
+          "session": "2026-10-28",
+          "n": 137,
+          "mean_loss": 0.3003
+         },
+         {
+          "session": "2026-10-29",
+          "n": 138,
+          "mean_loss": 0.3004
+         },
+         {
+          "session": "2026-10-30",
+          "n": 139,
+          "mean_loss": 0.3005
+         },
+         {
+          "session": "2026-11-02",
+          "n": 140,
+          "mean_loss": 0.3005
+         },
+         {
+          "session": "2026-11-03",
+          "n": 141,
+          "mean_loss": 0.3006
+         },
+         {
+          "session": "2026-11-04",
+          "n": 142,
+          "mean_loss": 0.3007
+         },
+         {
+          "session": "2026-11-05",
+          "n": 143,
+          "mean_loss": 0.3008
+         },
+         {
+          "session": "2026-11-06",
+          "n": 144,
+          "mean_loss": 0.3009
+         },
+         {
+          "session": "2026-11-09",
+          "n": 145,
+          "mean_loss": 0.3009
+         },
+         {
+          "session": "2026-11-10",
+          "n": 146,
+          "mean_loss": 0.301
+         },
+         {
+          "session": "2026-11-11",
+          "n": 147,
+          "mean_loss": 0.301
+         },
+         {
+          "session": "2026-11-12",
+          "n": 148,
+          "mean_loss": 0.301
+         },
+         {
+          "session": "2026-11-13",
+          "n": 149,
+          "mean_loss": 0.301
+         },
+         {
+          "session": "2026-11-16",
+          "n": 150,
+          "mean_loss": 0.301
+         }
+        ]
+       },
+       {
+        "forecaster": "baseline_b_base_rate",
+        "points": [
+         {
+          "session": "2026-04-21",
+          "n": 1,
+          "mean_loss": 0.2526
+         },
+         {
+          "session": "2026-04-22",
+          "n": 2,
+          "mean_loss": 0.2525
+         },
+         {
+          "session": "2026-04-23",
+          "n": 3,
+          "mean_loss": 0.2526
+         },
+         {
+          "session": "2026-04-24",
+          "n": 4,
+          "mean_loss": 0.2527
+         },
+         {
+          "session": "2026-04-27",
+          "n": 5,
+          "mean_loss": 0.2527
+         },
+         {
+          "session": "2026-04-28",
+          "n": 6,
+          "mean_loss": 0.2527
+         },
+         {
+          "session": "2026-04-29",
+          "n": 7,
+          "mean_loss": 0.2525
+         },
+         {
+          "session": "2026-04-30",
+          "n": 8,
+          "mean_loss": 0.2523
+         },
+         {
+          "session": "2026-05-01",
+          "n": 9,
+          "mean_loss": 0.2521
+         },
+         {
+          "session": "2026-05-04",
+          "n": 10,
+          "mean_loss": 0.2518
+         },
+         {
+          "session": "2026-05-05",
+          "n": 11,
+          "mean_loss": 0.2515
+         },
+         {
+          "session": "2026-05-06",
+          "n": 12,
+          "mean_loss": 0.2511
+         },
+         {
+          "session": "2026-05-07",
+          "n": 13,
+          "mean_loss": 0.2508
+         },
+         {
+          "session": "2026-05-08",
+          "n": 14,
+          "mean_loss": 0.2504
+         },
+         {
+          "session": "2026-05-11",
+          "n": 15,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-05-12",
+          "n": 16,
+          "mean_loss": 0.2496
+         },
+         {
+          "session": "2026-05-13",
+          "n": 17,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-05-14",
+          "n": 18,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-05-15",
+          "n": 19,
+          "mean_loss": 0.2486
+         },
+         {
+          "session": "2026-05-18",
+          "n": 20,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-05-19",
+          "n": 21,
+          "mean_loss": 0.248
+         },
+         {
+          "session": "2026-05-20",
+          "n": 22,
+          "mean_loss": 0.2478
+         },
+         {
+          "session": "2026-05-21",
+          "n": 23,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-05-22",
+          "n": 24,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-05-25",
+          "n": 25,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-05-26",
+          "n": 26,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-05-27",
+          "n": 27,
+          "mean_loss": 0.2474
+         },
+         {
+          "session": "2026-05-28",
+          "n": 28,
+          "mean_loss": 0.2475
+         },
+         {
+          "session": "2026-05-29",
+          "n": 29,
+          "mean_loss": 0.2476
+         },
+         {
+          "session": "2026-06-01",
+          "n": 30,
+          "mean_loss": 0.2477
+         },
+         {
+          "session": "2026-06-02",
+          "n": 31,
+          "mean_loss": 0.2479
+         },
+         {
+          "session": "2026-06-03",
+          "n": 32,
+          "mean_loss": 0.2481
+         },
+         {
+          "session": "2026-06-04",
+          "n": 33,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-06-05",
+          "n": 34,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-06-08",
+          "n": 35,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-06-09",
+          "n": 36,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-06-10",
+          "n": 37,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-06-11",
+          "n": 38,
+          "mean_loss": 0.2493
+         },
+         {
+          "session": "2026-06-12",
+          "n": 39,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-06-15",
+          "n": 40,
+          "mean_loss": 0.2496
+         },
+         {
+          "session": "2026-06-16",
+          "n": 41,
+          "mean_loss": 0.2498
+         },
+         {
+          "session": "2026-06-17",
+          "n": 42,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-06-18",
+          "n": 43,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-06-19",
+          "n": 44,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-06-22",
+          "n": 45,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-06-23",
+          "n": 46,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-06-24",
+          "n": 47,
+          "mean_loss": 0.25
+         },
+         {
+          "session": "2026-06-25",
+          "n": 48,
+          "mean_loss": 0.2499
+         },
+         {
+          "session": "2026-06-26",
+          "n": 49,
+          "mean_loss": 0.2498
+         },
+         {
+          "session": "2026-06-29",
+          "n": 50,
+          "mean_loss": 0.2497
+         },
+         {
+          "session": "2026-06-30",
+          "n": 51,
+          "mean_loss": 0.2496
+         },
+         {
+          "session": "2026-07-01",
+          "n": 52,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-07-02",
+          "n": 53,
+          "mean_loss": 0.2493
+         },
+         {
+          "session": "2026-07-03",
+          "n": 54,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-07-06",
+          "n": 55,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-07-07",
+          "n": 56,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-07-08",
+          "n": 57,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-07-09",
+          "n": 58,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-07-10",
+          "n": 59,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-13",
+          "n": 60,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-14",
+          "n": 61,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-07-15",
+          "n": 62,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-16",
+          "n": 63,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-17",
+          "n": 64,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-20",
+          "n": 65,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-21",
+          "n": 66,
+          "mean_loss": 0.2483
+         },
+         {
+          "session": "2026-07-22",
+          "n": 67,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-07-23",
+          "n": 68,
+          "mean_loss": 0.2484
+         },
+         {
+          "session": "2026-07-24",
+          "n": 69,
+          "mean_loss": 0.2485
+         },
+         {
+          "session": "2026-07-27",
+          "n": 70,
+          "mean_loss": 0.2486
+         },
+         {
+          "session": "2026-07-28",
+          "n": 71,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-07-29",
+          "n": 72,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-07-30",
+          "n": 73,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-07-31",
+          "n": 74,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-08-03",
+          "n": 75,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-08-04",
+          "n": 76,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-08-05",
+          "n": 77,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-08-06",
+          "n": 78,
+          "mean_loss": 0.2493
+         },
+         {
+          "session": "2026-08-07",
+          "n": 79,
+          "mean_loss": 0.2494
+         },
+         {
+          "session": "2026-08-10",
+          "n": 80,
+          "mean_loss": 0.2494
+         },
+         {
+          "session": "2026-08-11",
+          "n": 81,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-08-12",
+          "n": 82,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-08-13",
+          "n": 83,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-08-14",
+          "n": 84,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-08-17",
+          "n": 85,
+          "mean_loss": 0.2495
+         },
+         {
+          "session": "2026-08-18",
+          "n": 86,
+          "mean_loss": 0.2494
+         },
+         {
+          "session": "2026-08-19",
+          "n": 87,
+          "mean_loss": 0.2494
+         },
+         {
+          "session": "2026-08-20",
+          "n": 88,
+          "mean_loss": 0.2493
+         },
+         {
+          "session": "2026-08-21",
+          "n": 89,
+          "mean_loss": 0.2493
+         },
+         {
+          "session": "2026-08-24",
+          "n": 90,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-08-25",
+          "n": 91,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-08-26",
+          "n": 92,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-08-27",
+          "n": 93,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-08-28",
+          "n": 94,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-08-31",
+          "n": 95,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-09-01",
+          "n": 96,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-09-02",
+          "n": 97,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-09-03",
+          "n": 98,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-04",
+          "n": 99,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-07",
+          "n": 100,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-08",
+          "n": 101,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-09",
+          "n": 102,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-10",
+          "n": 103,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-11",
+          "n": 104,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-14",
+          "n": 105,
+          "mean_loss": 0.2487
+         },
+         {
+          "session": "2026-09-15",
+          "n": 106,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-09-16",
+          "n": 107,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-09-17",
+          "n": 108,
+          "mean_loss": 0.2488
+         },
+         {
+          "session": "2026-09-18",
+          "n": 109,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-09-21",
+          "n": 110,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-09-22",
+          "n": 111,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-09-23",
+          "n": 112,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-09-24",
+          "n": 113,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-09-25",
+          "n": 114,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-09-28",
+          "n": 115,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-09-29",
+          "n": 116,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-09-30",
+          "n": 117,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-10-01",
+          "n": 118,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-10-02",
+          "n": 119,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-10-05",
+          "n": 120,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-10-06",
+          "n": 121,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-10-07",
+          "n": 122,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-10-08",
+          "n": 123,
+          "mean_loss": 0.2492
+         },
+         {
+          "session": "2026-10-09",
+          "n": 124,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-10-12",
+          "n": 125,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-10-13",
+          "n": 126,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-10-14",
+          "n": 127,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-10-15",
+          "n": 128,
+          "mean_loss": 0.2491
+         },
+         {
+          "session": "2026-10-16",
+          "n": 129,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-10-19",
+          "n": 130,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-10-20",
+          "n": 131,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-10-21",
+          "n": 132,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-10-22",
+          "n": 133,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-10-23",
+          "n": 134,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-10-26",
+          "n": 135,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-10-27",
+          "n": 136,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-10-28",
+          "n": 137,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-10-29",
+          "n": 138,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-10-30",
+          "n": 139,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-11-02",
+          "n": 140,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-11-03",
+          "n": 141,
+          "mean_loss": 0.2489
+         },
+         {
+          "session": "2026-11-04",
+          "n": 142,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-05",
+          "n": 143,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-06",
+          "n": 144,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-09",
+          "n": 145,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-10",
+          "n": 146,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-11",
+          "n": 147,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-12",
+          "n": 148,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-13",
+          "n": 149,
+          "mean_loss": 0.249
+         },
+         {
+          "session": "2026-11-16",
+          "n": 150,
+          "mean_loss": 0.249
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "getFnoForecastHistory_india_none": {
+  "summary": "Mock (india): no session scored yet",
+  "description": "No question has a scored session",
+  "x-case": "empty",
+  "value": {
+   "market": "india",
+   "page_key": "forecast_history",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T12:10:00Z",
+   "schema_version": "2.9.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "5c9253d29ca1fc9c4f7683bfe5dadd87e2dbce3e46af6ee80404bc7259b41e1e",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T12:10:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "questions": []
+   }
+  }
+ },
  "getFnoStrategyLab_india_passed": {
   "summary": "Mock (india): one strategy passed and makes money on paper",
   "description": "Trial 61 of 64 passed; its paper record after every cost and against the index fund and cash; real money still not eligible",
@@ -2709,7 +7895,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:12:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "0e4fb9078c583c74055984adef4b5e4d285d62b67316e482263381148d69c9cd",
    "publisher": "fno",
@@ -2875,7 +8061,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:12:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "94df81430986c11ff4de60049c9179f741babeb1c1582cf13d2b08853c2e2262",
    "publisher": "fno",
@@ -3032,7 +8218,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:12:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "eca9c9a225cbaba21b961a0a585f0dd058fd376c3233e30a0f6c438bf1ffdf3d",
    "publisher": "fno",
@@ -3163,7 +8349,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:05:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "57a04b49303b7f9b6a9a62ae764cf0b1bc2fc4049bcbbefe86b38158f71ddffd",
    "publisher": "fno",
@@ -3321,7 +8507,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:05:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "a7f2cf8b1fc45c552200c45f95342f17407f49a9eda86c6d5ce4e57ec2dc2563",
    "publisher": "fno",
@@ -3447,7 +8633,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:05:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "e24a4bf231a38ae23bdfd745d7cb3baec1ac1aad9f277ea2c8c6499855338171",
    "publisher": "fno",
@@ -3519,9 +8705,9 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "3c2e4fbc856295df82761b73878b3ddcb014e9f630f8e633765bbfb0a3f1a98b",
+   "payload_sha256": "9c86e6bd4e926bb04a6589f2b79dacf79552dafa08855dfd4ce46daf7acb096e",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -3538,152 +8724,272 @@
      {
       "session": "2026-10-06",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-07",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-08",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-09",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-12",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-13",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-14",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-15",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-16",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-19",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-20",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-21",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-22",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-23",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-26",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-27",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-28",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-29",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-30",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-02",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-03",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-04",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-05",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-06",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-09",
       "colour": "AMBER",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.07,
+      "p_big_5d": 0.22,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-10",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-11",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-12",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-13",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-16",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      }
     ],
     "counts": {
@@ -3707,9 +9013,9 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "216840a1a0ad49d614cd2ee15b5fcd7d5d77b3db7fc46a6ca20136f43fb5d7f2",
+   "payload_sha256": "713d92abc02b0bc7e48905a1a7ef768ab96f001e793a4922550d98a660cb6694",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -3726,152 +9032,272 @@
      {
       "session": "2026-10-06",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-07",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-08",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-09",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-12",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-13",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-14",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-15",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-16",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-19",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-20",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-21",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-22",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-23",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-26",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-27",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-28",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-29",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-10-30",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-02",
       "colour": "GREEN",
-      "label": "backfill_exploratory"
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-03",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-04",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-05",
       "colour": "RED",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.14,
+      "p_big_5d": 0.41,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-06",
       "colour": "RED",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.14,
+      "p_big_5d": 0.41,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-09",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-10",
       "colour": null,
-      "label": "live"
+      "label": "live",
+      "p_big_1d": null,
+      "p_big_5d": null,
+      "base_rate_1d": null,
+      "base_rate_5d": null
      },
      {
       "session": "2026-11-11",
       "colour": "RED",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.14,
+      "p_big_5d": 0.41,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-12",
       "colour": "AMBER",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.075,
+      "p_big_5d": 0.24,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-13",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      },
      {
       "session": "2026-11-16",
       "colour": "GREEN",
-      "label": "live"
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
      }
     ],
     "counts": {
@@ -3895,7 +9321,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "1e03ceace783f6fbecc1f8d7dcb6f66ace7ef3635c47b9107d25cda2babd6221",
    "publisher": "fno",
@@ -3932,7 +9358,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "59c723f796e4b8b1dfc74037ba8d0f7859b1dbd09b68d29a5baf7ae7ec919f5e",
    "publisher": "fno",
@@ -3990,7 +9416,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "218bc3dd55659fb07a0de9ab552f49c38511d62cc3fbfeb846aa6106d62711fa",
    "publisher": "fno",
@@ -4048,7 +9474,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "b4c13c39074b9ebe5e379602ee3f17193fe9b51a0928e816648c037eef5dd74c",
    "publisher": "fno",
@@ -4085,7 +9511,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "544665f1f846ff9c549da93b27b23a2d8951023eccf054cafa269693e43c0885",
    "publisher": "fno",
@@ -4158,7 +9584,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "49667a231e8e128cc2d5a5d649a115346811e61934b72971a6c61c5804811df5",
    "publisher": "fno",
@@ -4223,7 +9649,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "5cdac27b2e162942edb27a3e6c29d61b971937d5ef30adcd7f04fcc285be1ffb",
    "publisher": "fno",
@@ -4263,7 +9689,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "1ebea161f9650a9630a7f758c1c427cdc7a83c0c5d7101af1a54a2a248b1959b",
    "publisher": "fno",
@@ -4355,7 +9781,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "11863f9c5643860e38338ab4d61b857d82fa5e067c68543ff83a31771246211e",
    "publisher": "fno",
@@ -4447,7 +9873,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.8.0",
+   "schema_version": "2.9.0",
    "source_commit": "0000000mock",
    "payload_sha256": "474e690ac3f601116402cb0f7a2880652956acd37a1d522d437a1c30c450bf89",
    "publisher": "fno",

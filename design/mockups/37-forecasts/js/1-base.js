@@ -1,5 +1,5 @@
 /* 37-forecasts page runtime: the Forecast lab (forecasters, their questions and scores), drawn from the F&O data catalog's Mock
-   examples (contract 2.8.0; story W3). Split by purpose: 1 state and helpers, 2 today, 3 who beats the yardstick, 4 each question, 5 the forecasters, 9 mount.
+   examples (contract 2.9.0; story W3). Split by purpose: 1 state and helpers, 2 today, 3 who beats the yardstick, 4 each question, 5 the forecasters, 6 a period you choose (page forecast_history), 9 mount.
    The screen computes nothing beyond drawing: every figure is the payload's. Tokens only; never colour alone. */
 let KEY = null;
 /* URL: s (a state key of data.json); the default is the good case */
@@ -11,6 +11,7 @@ function now() { return D.states[KEY || DEFAULT]; }
 function pay() { return now().value.payload; }
 function rs(c, x) { return c.money(x, 0, false, 'INR'); }
 function signed(c, x) { return (x > 0 ? '+' : x < 0 ? '−' : '') + rs(c, Math.abs(x)); }
+function dshort(iso) { return new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', {day: 'numeric', month: 'short', timeZone: 'UTC'}); }
 function dlabel(iso) { return new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'}); }
 function sec(c, title, ...kids) { return c.el('section', {class: 'card sec', 'aria-label': typeof title === 'string' ? title : null}, c.el('h2', {}, title), ...kids); }
 function howto(c, text) { return c.el('p', {class: 'howto'}, c.icon('help'), c.el('span', {}, text)); }
