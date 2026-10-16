@@ -14,7 +14,7 @@ import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./forecast-lab.css";
 
-const LEDE = "Every forecaster answers the same questions each day before the deadline. Each is scored against a fixed yardstick, so you can see who reads the market better than plain history.";
+const LEDE = "Every forecaster answers the same questions each day before the deadline. Each question has a yardstick fixed before any result, so you can see who beats it.";
 
 const LabBlock = () =>
   blockSection("The Forecast lab", () => forecastLabData.lab(), (lab) => (
