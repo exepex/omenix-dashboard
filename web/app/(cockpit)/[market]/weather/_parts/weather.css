@@ -4,9 +4,7 @@
 :where(.weather) .mb-verdict.watch{background:var(--mb-color-info-container);color:var(--mb-color-on-info-container)}
 :where(.weather) .mb-verdict.watch .mb-verdict-box{background:var(--mb-color-info)}
 :where(.weather) .mb-verdict .why{font-size:15px;font-weight:600;margin:0}
-:where(.weather) .cap{display:grid;gap:4px;margin-top:4px}
-:where(.weather) .cap .bar{position:relative;height:12px;border-radius:3px;background:var(--md-sys-color-surface-container)}
-:where(.weather) .cap .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--mb-color-down)}
+:where(.weather) .cap{margin-top:4px}
 :where(.weather) .facts3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 :where(.weather) .chance{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:8px;align-items:center;margin:6px 0}
 :where(.weather) .chance .track{position:relative;height:14px;border-radius:3px;background:var(--md-sys-color-surface-container)}

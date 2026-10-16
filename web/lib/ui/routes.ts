@@ -36,6 +36,7 @@ export const PAGES: readonly PageRoute[] = [
   /* India only (F&O): the page answers 404 in the US and its navigation item is absent there (lib/shell/nav.ts). */
   { key: "weather", label: "Market weather", icon: "sensors", segment: "weather", mockup: "40-weather", owner: "W3", endpoint: "fno/weather", nav: true },
   { key: "weather-history", label: "Weather history", icon: "history", segment: "weather/history", mockup: "46-weather-history", owner: "W3", endpoint: "fno/weather-history", nav: false },
+  { key: "paper-books", label: "Paper books", icon: "account_balance", segment: "paper-books", mockup: "41-paper-books", owner: "W3", endpoint: "fno/paper-books", nav: true },
   { key: "forecasts", label: "Forecast lab", icon: "query_stats", segment: "forecast-lab", mockup: "37-forecasts", owner: "W3", endpoint: "fno/forecast-lab", nav: true },
   { key: "help", label: "Help", icon: "help", segment: "help", mockup: "12-help", owner: "B7", endpoint: "", nav: true },
   /* Not a page of SPEC section 6: the shared components drawn with labelled sample values, for the page sessions and

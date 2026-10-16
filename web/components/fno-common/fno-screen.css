@@ -13,6 +13,9 @@
 :where(.fno-screen) .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:4px;margin-top:6px}
 :where(.fno-screen) .strip span{display:grid;justify-items:center;gap:2px;padding:6px 2px;border-radius:var(--mb-panel-radius);background:var(--md-sys-color-surface-container-low);font-size:11px;color:var(--md-sys-color-on-surface-variant);min-width:0}
 :where(.fno-screen) .strip span .mb-label{padding:2px 4px}
+:where(.fno-screen) .cap{display:grid;gap:4px}
+:where(.fno-screen) .cap .bar{position:relative;height:12px;border-radius:3px;background:var(--md-sys-color-surface-container)}
+:where(.fno-screen) .cap .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--mb-color-down)}
 :where(.fno-screen) .src{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
 @media (max-width:1439px){:where(.fno-screen) table.tstack thead{display:none}:where(.fno-screen) table.tstack,:where(.fno-screen) table.tstack tbody,:where(.fno-screen) table.tstack tr,:where(.fno-screen) table.tstack td{display:block;width:auto}:where(.fno-screen) table.tstack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}:where(.fno-screen) table.tstack td{border:0;padding:2px 0;text-align:left}:where(.fno-screen) table.tstack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}:where(.fno-screen) table.tstack td small{display:inline;margin-left:6px}}
 @media (max-width:1099px){:where(.fno-screen) .cols{grid-template-columns:1fr}}
