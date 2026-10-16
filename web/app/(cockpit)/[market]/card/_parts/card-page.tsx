@@ -17,7 +17,7 @@ import { FreshnessBlock } from "../../_fno/freshness-block.tsx";
 import "../../../../../components/fno-common/fno-screen.css";
 import "./card.css";
 
-const LEDE = "Every trading day at about 15:08 the desk sends one card: a paper trade, no trade with the reason, or a shadow to watch. It says how much the trade can lose, why, how sure the forecast is, and what would prove it wrong. Paper only: no card ever asks you to place a real order.";
+const LEDE = "Every trading day, after the day’s decisions are final, the desk sends one card: a paper trade, no trade with the reason, or a shadow to watch. It says how much the trade can lose, why, how sure the forecast is, and what would prove it wrong. Paper only: no card ever asks you to place a real order.";
 
 const CardBlock = () =>
   blockSection("Today’s card", () => cardData.card(), (c) => (
@@ -51,7 +51,7 @@ export function CardPage() {
       <Part label="today’s card"><CardBlock /></Part>
       <div className="src" role="note" aria-label="Where the figures come from">
         <span className="mb-asof" data-tip="exepex/trading's F&O publication, page card (T1's card record)"><Icon name="schedule" />F&amp;O publication: card</span>
-        <span className="mb-tag" data-tip="Once a session day at about 15:08 IST; the page shows the previous session until the next morning's publish.">Not live</span>
+        <span className="mb-tag" data-tip="Once a session day, after the day's decisions are final (the card's own times are on it); the page shows the previous session until the next morning's publish.">Not live</span>
       </div>
     </div>
   );

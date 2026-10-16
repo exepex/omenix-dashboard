@@ -65,3 +65,18 @@ All expected values are the examples' own numbers, written by hand.
   539/539 with 0 skipped; build passes.
 - Screenshots at 1280 and 390 px of the card and the weather page show no horizontal overflow and no console errors.
   `/us/card` gives 404.
+
+## Addendum 1: judge 234's should-fix (no fixed card time)
+
+Accepted after checking the sources. Trading's T-cards.md:179 says the card at about 15:08 is earlier than both the
+decisions (15:12) and C3's check (15:15), "So T2 never assumes a time"; E8:52-56 says O1 posts after `quotes_done`,
+"so T is 15:15 or later". With the card valid until 15:25, "about 15:08" would suggest about 17 minutes to act when
+there are about 10 or fewer, so the old wording was wrong in a way that matters.
+
+- The lede now says "after the day’s decisions are final", and the source tip says the same. The payload's own three
+  times, already shown, carry the real time.
+- A new test, `lib/fno-card/tests/no-fixed-time.test.ts`, scans the card screen's code for a clock time given to the
+  card ("at about 15:08", "at 15:15") and is proven to catch a planted break. The two remaining clock times in the
+  screen are contract facts, not the card's send time: the 15:00 bid and ask (the market-data cutoff), and the
+  forecast capture's 15:15 deadline.
+- Mockup 39's 2-top.js:8 has the same sentence. The screens lead fixes it on the 2.11 branch (design/ is theirs).

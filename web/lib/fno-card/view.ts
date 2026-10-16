@@ -14,7 +14,7 @@ export interface Look {
 /** India's clock: the payload's times are UTC and India keeps no daylight saving. */
 const IST = "+05:30";
 
-/** "15:08 IST", or "not sent" for a time that does not exist yet. */
+/** "15:15 IST", or "not sent" for a time that does not exist yet. */
 export const ist = (iso: string | null) => (iso ? fmtLocal(iso, "india", IST) : "not sent");
 
 /** "Mon 16 Nov 2026". */
