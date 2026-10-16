@@ -172,9 +172,9 @@ Backend records named in the tables (exepex/trading):
 - **Mock examples:**
   - `india_green` (positive): Mock (india): GREEN weather. Calm drivers; the weather beats the usual chance on the one-day question; this month the RED rule saved Rs 1,240 (the 2 blocked trades would have lost it)
   - `india_red` (negative): Mock (india): RED weather, over-alarming. RED blocks new entries; an intraday upgrade; RED on 16.4% of the last 250 sessions (above the 15% maximum); the RED rule cost Rs 4,810 this month
-  - `india_missing` (empty): Mock (india): no weather today, the missing input named. Not published: the 15:00 VIX level is missing; no score yet (not enough data)
-- **Never sent (strategy internals):** the weather model's fitted coefficients and inputs beyond the named drivers
-- **Fields:** 43, of which the backend can fill 0 today
+  - `india_missing` (empty): Mock (india): no weather today, the missing input named. Not published: the 15:00 VIX level is missing; no live record yet, so the strip and the RED share show the back-fill, labelled exploratory
+- **Never sent (strategy internals):** the weather model's fitted coefficients and inputs beyond the named drivers; the level at which an input turns a colour, each input's reaches colour, and the US cue (owner, 16 Oct 2026)
+- **Fields:** 46, of which the backend can fill 0 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
@@ -192,21 +192,24 @@ Backend records named in the tables (exepex/trading):
 | `base_rate_5d` | How often a 5-session window held a 2% move over the last 750 sessions | share 0-1 | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `times_usual_1d` | p_big_1d divided by base_rate_1d ("2.7 times the usual chance") | ratio | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `times_usual_5d` | p_big_5d divided by base_rate_5d | ratio | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
-| `drivers[].driver` | Which driver | enum | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
-| `drivers[].text` | In plain words, e.g. "India VIX up 14% in 5 sessions" | text | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
-| `drivers[].push` | Which way it pushed the weather | enum | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
+| `drivers[].driver` | Which driver (us_overnight is never sent: the US cue is kept in Drive) | enum | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
+| `drivers[].text` | The input's value in plain words, never the level at which it turns a colour (owner, 16 Oct 2026), e.g. "India VIX up 4% over 5 sessions" | text | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
+| `drivers[].push` | The sign of the input's change since the previous session, never a level (exepex/trading docs/stories/W3-fno-screens.md, rule 4) | enum | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `intraday[].at` | The snapshot time of the upgrade | UTC time | the live monitor's alert records (LM1) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: LM1 |
 | `intraday[].from` | Colour before (always AMBER: design 2.3 allows only AMBER to RED inside a session) | enum | the live monitor's alert records (LM1) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: LM1 |
 | `intraday[].to` | Colour after (always RED) | enum | the live monitor's alert records (LM1) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: LM1 |
 | `intraday[].why` | The driver in plain words | text | the live monitor's alert records (LM1) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: LM1 |
 | `recent[].session` | The session | date (IST) | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
+| `recent[].label` | live = made on the day; backfill_exploratory = rebuilt later from history, never a live record; null when the session has no record (2.8.0) | enum | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `recent[].colour` | Its colour; null when none was published | enum | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `recent[].big_move` | A 2% move came next session; null while not known yet | yes/no | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
+| `red_share.basis` | Which records the share counts: live, or rebuilt from history (exploratory) while no live record exists (2.8.0) | enum | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `red_share.sessions` | Sessions counted (up to the last 250) | count | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `red_share.red_sessions` | Of them RED | count | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `red_share.share` | red_sessions / sessions; null with no session | share 0-1 | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `red_share.max_share` | The frozen maximum (owner, 15 Oct 2026) | share 0-1 | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
 | `red_share.over_alarming` | Share above the maximum | yes/no | the session's weather record (M1's WeatherModel, scored as V6 by G8) | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: M1 |
+| `scores[].exploratory` | True when the score is over days rebuilt from history (G8's exploratory report), never a confirmatory result (2.8.0) | yes/no | G8's v4 score report for V6 | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: G8; provisional: protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes |
 | `scores[].question` | V6_1d = a 2% move next session; V6_5d = within 5 sessions | id | G8's v4 score report for V6 | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: G8; provisional: protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes |
 | `scores[].baseline` | The yardstick: base_rate = how often it happened over 750 sessions; v0_checklist = the frozen v0 weather rule (response 94), scored on the same questions | enum | G8's v4 score report for V6 | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: G8; provisional: protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes |
 | `scores[].status` | not_enough_data = fewer scored days than the test needs | enum | G8's v4 score report for V6 | once a session day at 15:00 IST; intraday upgrades (amber to red only) from the live monitor every 15 minutes | public | no: G8; provisional: protocol v4 (G6) is not frozen or merged yet: this shape may change when G6 freezes |
@@ -365,14 +368,16 @@ Backend records named in the tables (exepex/trading):
 - **Empty state:** open and closed empty, each account at its opening value
 - **What it holds:** Each book's paper account, open positions and closed trades after costs, with the fills at the three owner reaction times. Empty state: open and closed empty and each account at its opening value (no paper trade yet)
 - **Mock examples:**
-  - `india_won` (positive): Mock (india): a winning closed trade and an open position. Rule-based won Rs 3,096 after costs at the desk's execution fill, Rs 2,860 at the 60-minute owner-timing fill the verdict uses; one put spread open
+  - `india_won` (positive): Mock (india): a winning closed trade and an open position. Rule-based won Rs 3,096 after costs at the desk's execution fill, Rs 2,860 at the 60-minute owner-timing fill the verdict uses; one put spread open with one monitor alert; a measurement account and one shadow test beside the books
   - `india_lost` (negative): Mock (india): two losing trades, with missed fills. A maximum-loss exit (at 60 minutes its entry would have been missed: the price had moved) and a time exit made before E8 existed, so its owner-timing fills are null, never invented; the monitor is not running yet (LM1), so its fields are null
   - `india_none` (empty): Mock (india): no paper trade yet. Every book at its opening Rs 20 lakh; nothing open, nothing closed
 - **Never sent (strategy internals):** the rules that opened or closed a trade (only what was done and why in plain words)
-- **Fields:** 38, of which the backend can fill 11 today
+- **Fields:** 48, of which the backend can fill 11 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
+| `accounts[].brake.loss_from_high` | Closed equity below its highest close so far | INR (Paper) | the book's equity history (E1) and the C5 profile's drawdown brake (config risk.profiles.books.drawdown_brake_rs) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
+| `accounts[].brake.pause_at` | The published pause limit: at this loss from the high the book opens nothing new until the owner restarts it (Rs 1,20,000) | INR (Paper) | the book's equity history (E1) and the C5 profile's drawdown brake (config risk.profiles.books.drawdown_brake_rs) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
 | `accounts[].family` | The book, translated from its account's book id: book1_rules is rule, book2_hybrid is hybrid, book3_ai is ai | enum | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`paper_account:book`) |
 | `accounts[].as_of` | The session of the marks | date (IST) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`equity_history:date`) |
 | `accounts[].opening_value` | Opening balance plus top-ups in force, Rs 20 lakh a book | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`account_state:capital`) |
@@ -380,6 +385,12 @@ Backend records named in the tables (exepex/trading):
 | `accounts[].cash` | Cash | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`account_state:cash`) |
 | `accounts[].open_trades` | Open positions | count | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`account_state:open_trades`) |
 | `accounts[].open_max_loss` | Sum of the open positions' maximum losses (the account cap is Rs 1.5 lakh, owner 15 Oct 2026) | INR (Paper) | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: C5 |
+| `shadows[].name` | The shadow's display name (never its rules) | text | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
+| `shadows[].label` | shadow = a candidate tested on paper beside the books; measurement = B0, the measuring account | enum | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
+| `shadows[].as_of` | The session of the marks | date (IST) | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
+| `shadows[].opening_value` | Its opening value | INR (Paper) | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
+| `shadows[].value` | Its marked value | INR (Paper) | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
+| `shadows[].open_trades` | Open positions | count | each registered shadow's paper account (fno/desk/shadow_books.py) | after each fill or exit; marks after the close of each NSE session | public | no: E6 |
 | `open[].trade_id` | The trade's id | id | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`desk_event:trade_id`) |
 | `open[].family` | Its book | enum | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: P2 |
 | `open[].strategy` | The version's display name (never its rules) | text | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: P2 |
@@ -397,6 +408,8 @@ Backend records named in the tables (exepex/trading):
 | `open[].days_to_expiry` | NSE sessions left to expiry | sessions | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: P2 |
 | `open[].monitor` | The live monitor's mode for its version; null until LM1 runs (never a mode for a monitor that does not exist) | enum | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: LM1 |
 | `open[].alerts_today` | Monitor alerts on it today; null until LM1 runs | count | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: LM1 |
+| `open[].alerts[].at` | The snapshot time | UTC time | LM1's alert records (private, Drive) | after each fill or exit; marks after the close of each NSE session | owner | no: LM1 |
+| `open[].alerts[].text` | The alert as sent to #fno-desk (never a price) | text | LM1's alert records (private, Drive) | after each fill or exit; marks after the close of each NSE session | owner | no: LM1 |
 | `closed[].trade_id` | The trade's id | id | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | yes (`trade_line:trade_id`) |
 | `closed[].family` | Its book | enum | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: P2 |
 | `closed[].strategy` | The version's display name | text | each book's paper account (E1: journal/<book>/account/), the desk's fill and event records (E4, E7) and the owner-timing fills (E8) | after each fill or exit; marks after the close of each NSE session | public | no: P2 |
@@ -411,3 +424,124 @@ Backend records named in the tables (exepex/trading):
 | `closed[].fills[].minutes` | The assumed owner reaction time | minutes | E8's owner-timing fill records | after each fill or exit; marks after the close of each NSE session | public | no: E8 |
 | `closed[].fills[].outcome` | missed_price_moved = the price left the card's entry range; missed_no_quote = no valid quote at that snapshot (never a synthetic fill) | enum | E8's owner-timing fill records | after each fill or exit; marks after the close of each NSE session | public | no: E8 |
 | `closed[].fills[].net` | The trade's net at that fill; null when missed | INR (Paper) | E8's owner-timing fill records | after each fill or exit; marks after the close of each NSE session | public | no: E8 |
+
+## Every session's weather colour and label, for the colour strip (colour only until the owner's weather-levels choice)
+
+`GET /api/v1/markets/india/fno/weather/history` · `getFnoWeatherHistory` · fno.pages_history page weather_history (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)
+
+- **Freshness:** fno_calendar; once a session day at the 07:10 IST publish
+- **Empty state:** sessions empty and every count 0 (no weather record yet)
+- **What it holds:** Every session's weather colour and label, oldest first, and the counts by colour and by label. Colour only: the day's chances of a big move are on the weather page (getFnoWeather), never in this history. Empty state: sessions empty and every count 0 (no weather record yet)
+- **Mock examples:**
+  - `india_calm` (positive): Mock (india): a calm month, one AMBER. 30 sessions: 20 rebuilt from history, 10 live; mostly GREEN
+  - `india_stormy` (negative): Mock (india): a stormy fortnight. Three RED sessions, one AMBER and one not scored (an input missing)
+  - `india_none` (empty): Mock (india): no weather record yet. No session has a weather record
+- **Never sent (strategy internals):** the weather inputs' values and the colour each input reaches (owner, 16 Oct 2026: never the level at which an input turns a colour); the US cue (kept in Drive); each session's chances of a big move and the usual chances (strict form until the owner's weather-levels choice: beside the colours they would give the colour rule's floors back)
+- **Fields:** 9, of which the backend can fill 0 today
+
+| Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
+|---|---|---|---|---|---|---|
+| `sessions[].session` | The NSE session | date (IST) | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `sessions[].colour` | The operative colour; null when the day was not scored (it then blocks new trades like RED) | enum | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `sessions[].label` | live = made on the day before the cutoff; backfill_exploratory = rebuilt later from history, never a live record | enum | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `counts.green` | Sessions GREEN | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `counts.amber` | Sessions AMBER | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `counts.red` | Sessions RED | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `counts.not_scored` | Sessions with no colour (an input missing) | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `counts.live` | Sessions made live | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+| `counts.backfill` | Sessions rebuilt from history (exploratory) | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
+
+## Scoreboard B (whole systems) and scoreboard A (matched decisions), per book, never combined
+
+`GET /api/v1/markets/india/fno/scoreboards` · `getFnoScoreboards` · fno.pages_history page scoreboards (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)
+
+- **Freshness:** fno_calendar; after each scoreboard run, at the 07:10 IST publish
+- **Empty state:** both boards not_run
+- **What it holds:** Scoreboard B (whole systems) and scoreboard A (matched decisions), each per book after all costs, with the do-nothing yardstick. Empty state: both boards not_run (no scoreboard has run yet)
+- **Mock examples:**
+  - `india_ahead` (positive): Mock (india): Rule-based leads, early days. Both boards ran; too few trades for the do-nothing test
+  - `india_behind` (negative): Mock (india): every book behind doing nothing. Board B: all three books below the index fund; board A still a pilot
+  - `india_none` (empty): Mock (india): no scoreboard has run. Both boards not run yet
+- **Never sent (strategy internals):** the strategies' rules, and the AI model's name
+- **Fields:** 20, of which the backend can fill 0 today
+
+| Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
+|---|---|---|---|---|---|---|
+| `board_b.status` | pilot = before the common start date (shown, never a verdict); not_run = no run yet | enum | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.as_of` | The session of the run; null when not run | date (IST) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.label` | The board's standing in plain words, e.g. "Pilot: before the common start, no verdict" | text | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.do_nothing_net` | What holding a NIFTY index fund with the same money made over the same days (the do-nothing yardstick); null when not run | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.books[].family` | The book | enum | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.books[].trades` | Closed trades counted | count | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.books[].net` | Profit or loss after every cost (charges, pads, AI cost allocated) | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.books[].worst_month` | Its worst calendar month; null with no full month | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.books[].max_drawdown` | Largest fall from a high | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_b.books[].beats_do_nothing` | Whether its net beat the do-nothing yardstick by the test S1 freezes; not_tested before enough trades; null in a pilot | enum | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.status` | pilot = before the common start date (shown, never a verdict); not_run = no run yet | enum | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.as_of` | The session of the run; null when not run | date (IST) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.label` | The board's standing in plain words, e.g. "Pilot: before the common start, no verdict" | text | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.do_nothing_net` | What holding a NIFTY index fund with the same money made over the same days (the do-nothing yardstick); null when not run | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.books[].family` | The book | enum | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.books[].trades` | Closed trades counted | count | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.books[].net` | Profit or loss after every cost (charges, pads, AI cost allocated) | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.books[].worst_month` | Its worst calendar month; null with no full month | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.books[].max_drawdown` | Largest fall from a high | INR (Paper) | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+| `board_a.books[].beats_do_nothing` | Whether its net beat the do-nothing yardstick by the test S1 freezes; not_tested before enough trades; null in a pilot | enum | S2's and S3's board files (research/scoreboards/{B,A}/<date>.json, kept in Drive) | after each scoreboard run, at the 07:10 IST publish | public | no: S2 |
+
+## This month's AI minutes against BG1's cap and its level, by group (no model names)
+
+`GET /api/v1/markets/india/fno/budget` · `getFnoBudget` · fno.pages_history page budget (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)
+
+- **Freshness:** fno_calendar; after each routine run, at the 07:10 IST publish
+- **Empty state:** level unknown with the note saying nothing is measured yet
+- **What it holds:** This month's AI minutes against BG1's cap and its level, by group, with what the measure covers. Empty state: level unknown, every group at 0 minutes and the note saying nothing is measured yet
+- **Mock examples:**
+  - `india_ok` (positive): Mock (india): well under the cap. AI books and roles at 34% of their cap
+  - `india_alert` (negative): Mock (india): past the 80% alert. AI books and roles at 84% of their cap: alert
+  - `india_none` (empty): Mock (india): nothing measured yet. No timing record this month: level unknown
+- **Never sent (strategy internals):** the AI model's name, a session id or a routine's prompt
+- **Fields:** 11, of which the backend can fill 0 today
+
+| Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
+|---|---|---|---|---|---|---|
+| `month` | The month measured | month (YYYY-MM) | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `level` | ok below 80% of the cap; alert from 80%; stop from 100% (AI roles stop, the AI forecasters last); unknown when nothing can be measured | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `books_and_roles_minutes` | The AI books' and roles' session minutes this month | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `basis_minutes` | What the cap is a share of: all measured session minutes (until December 2026), then the owner's plan minutes | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `cap_minutes` | The cap: 50% of the basis | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `pct_of_cap` | Books and roles as a share of the cap; null with nothing to measure against | percent | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `basis` | measured = a share of measured minutes; plan = a share of the owner's plan minutes | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `note` | Why the level is unknown, or why it is a lower bound (a routine not yet timing itself); empty when complete | text | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `groups[].group` | Which kind of work used the minutes | enum | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `groups[].minutes` | Minutes this month | minutes | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+| `groups[].runs` | Runs counted | count | BG1's cap reading (fno/budget/cap.py CapReading) over F8's usage ledger (accounting/ai_usage.csv) | after each routine run, at the 07:10 IST publish | public | no: BG1 |
+
+## Each data source's last day, rows and gaps, the last publish run and the last health check
+
+`GET /api/v1/markets/india/fno/data-health` · `getFnoDataHealth` · fno.pages_history page data_health (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)
+
+- **Freshness:** fno_calendar; daily at the 07:10 IST publish
+- **Empty state:** no source rows; publish and health check not_run
+- **What it holds:** Each data source's last day, rows and gaps, the last publish run and the last daily health check. Empty state: no source rows and both runs not_run
+- **Mock examples:**
+  - `india_ok` (positive): Mock (india): everything arrived. Every source up to date; the publish and the health check passed
+  - `india_problems` (negative): Mock (india): a late file and a failed publish. Two sources behind, the publish failed (the previous one stays current), three problems
+  - `india_none` (empty): Mock (india): nothing run yet. No source row; the publish and the health check have not run
+- **Never sent (strategy internals):** any data value (a quote, a close, an open interest): only dates, counts and statuses
+- **Fields:** 13, of which the backend can fill 0 today
+
+| Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
+|---|---|---|---|---|---|---|
+| `as_of` | The session the page describes | date (IST) | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `sources[].source` | The manifest id, e.g. index-close | id | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `sources[].plain` | What it is in plain words, e.g. "NIFTY daily close (NSE)" | text | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `sources[].last_day` | The last session it holds; null when it holds none | date (IST) | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `sources[].rows` | Rows held | count | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `sources[].gaps` | Sessions missing that the NSE calendar says should be there | count | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `sources[].status` | stale = its last day is older than its due day; gaps = sessions missing; missing = no file | enum | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `publish.status` | failed keeps the previous publication current | enum | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `publish.run_on` | The session it published; null when not run | date (IST) | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `publish.reason` | Why it failed, in plain words (never a value); null otherwise | text | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `health_check.status` | problems = at least one expected file or run missing | enum | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `health_check.run_on` | The day it checked; null when not run | date (IST) | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
+| `health_check.problems` | Problems found | count | the data manifests (research/data/manifests/), the check files (vix, global cues), fno.run_status (P7) and O8's run record (research/ops/health_runs.csv) | daily, at the 07:10 IST publish | public | no: O8 |
