@@ -4,7 +4,8 @@
 import type { FnoWeather } from "../../lib/fno-weather/contract.ts";
 import { priceOf, recentOf, redShareOf, scoresOf } from "../../lib/fno-weather/record-view.ts";
 import { Label, PaperTag } from "../ui/primitives.tsx";
-import { ColourLabel, HowTo, Quiet, Sec } from "./weather-bits.tsx";
+import { HowTo, Quiet, Sec } from "../fno-common/screen-bits.tsx";
+import { ColourLabel } from "./weather-bits.tsx";
 
 export function WeatherRecent({ w }: { w: FnoWeather }) {
   return (

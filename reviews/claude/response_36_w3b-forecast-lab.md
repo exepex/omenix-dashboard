@@ -1,0 +1,65 @@
+# Response 36: story W3b, the Forecast lab screen (builder's claims)
+
+Builder: Claude (session 0134MoC6). Story text: exepex/trading `docs/stories/W3-fno-screens.md` (merged 90b4902d),
+W3b. Branch `story/w3b-forecast-lab`, from main 7ea7194 (W3a part 1 merged). The contract is 2.7.0's `FnoForecastLab`,
+which 2.8.0 does not change (checked against story/fno-contract-2-8 39d1829). The reference is mockup 37 at f04cb50
+(story/fno-mockups-2, with judge D); the orchestrator said to adapt if 37 or 2.8.0 change before merge.
+
+## What it does
+
+- **Route:** `/india/forecast-lab`, the existing nav item under Strategies (renamed "Forecasts" to "Forecast lab", as
+  the mockup). India only: built for India alone, so `/us/forecast-lab` is a real 404 and the US nav has no item.
+- **Order, from mockup 37:**
+  - the standing line first ("forecast scores are secondary to net profit");
+  - today's answers, with the date each answer is known;
+  - who beats the yardstick, question by question, from the backend's verdicts only;
+  - one card per question: forecasters ranked by average miss within that question only, never across questions
+    (Brier and QLIKE are different scales); each verdict; the test's numbers folded "for the curious" (v4 marked not
+    frozen); when it could settle;
+  - who forecasts: an AI book's isolation label shown exactly as sent ("sealed same day (not full F1)"), and coverage
+    with missing, late and unscored days.
+- **Never counted:** a late, breached or wrong-model answer is shown and marked "not counted", never filled in.
+  Coverage before a common start is a dash, never zero.
+- **Pattern:** the same as W3a.
+  - `lib/fno-forecast-lab/`: contract, source, Azure page `forecast_lab`, fixture, wiring;
+  - `view.ts` and `question-view.ts`: pure;
+  - `components/fno-forecast-lab/`.
+  - Family names use the frame's own `ApBadge`. Example shows only through the frame's rule.
+- **One wording change from the mockup (reasoning only):** the mockup's how-to says "'Better' needs the whole interval
+  below zero". Protocol v4 has no interval (G6 revision 1), so the screen says "'Better' needs the test to say so over
+  many days, not one lucky month", which is true for both protocols.
+
+## Shared parts and structure tests (stated)
+
+- `components/fno-common/screen-bits.tsx` (section card, how-to line, quiet line) and `fno-screen.css` (the F&O
+  screens' shared layout): moved out of the weather. The duplicates test would refuse a second copy. The weather
+  imports them; its own rules stay in `weather.css`. The weather renders as before (screenshots, no console error, no
+  overflow).
+- **Home's and the Screener's import-graph tests:** these now allow any `lib/fno-<screen>/fixture-source` and
+  `wiring` by pattern, instead of naming each screen. Same strictness: those files are the adapters' owners.
+- **The weather's own import-graph test** is replaced by `lib/fno/tests/screens-import-graph.test.ts`. It finds every
+  F&O screen by its wiring and checks each:
+  - its components reach no adapter, wiring or data client;
+  - exactly one W3 page loader reads its wiring;
+  - one line picks its adapter.
+  Planted breaches are caught.
+- **Gateway rule (W3a):** it already covers `lib/fno-*`, `components/fno-*` and every W3 page, so it covers the lab
+  and `fno-common` with no change.
+- `lib/fno/pages.ts` gets `getFnoForecastLab: "forecast_lab"`, with its contract test. The integration test publishes
+  and reads back the page on a real PostgreSQL.
+
+## Evidence
+
+- `check_code_size`, `typecheck` and `build` (only `/india/forecast-lab`): clean.
+- `npm test`: 492 passed, 0 failed, 0 skipped.
+- `next start` without a database:
+  - `/india/forecast-lab` and `/india/weather` answer 200; `/us/forecast-lab` and `/us/weather` answer 404;
+  - at 1280 and 390 px: no console errors and no horizontal overflow on both screens.
+
+## Open, honest
+
+- **Contract gaps (owner's call, P1's proposal):** the mockup's dropped items, the race chart and period chooser and
+  the "costliest mistakes" sentences, need a 2.9 contract addition. The screen does not invent them.
+- **Not published yet:** no `forecast_lab` page exists until P2b. With the database set, the screen says "not
+  published" until then.
+- **Real data will look like the empty case at first:** v2 live on 2 days, the AI books with no on-time day.
