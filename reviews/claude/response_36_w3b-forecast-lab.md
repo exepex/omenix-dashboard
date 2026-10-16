@@ -63,3 +63,10 @@ which 2.8.0 does not change (checked against story/fno-contract-2-8 39d1829). Th
 - **Not published yet:** no `forecast_lab` page exists until P2b. With the database set, the screen says "not
   published" until then.
 - **Real data will look like the empty case at first:** v2 live on 2 days, the AI books with no on-time day.
+
+## Addendum 1: judge 220's note (1), on story/fno-2-8-merge
+
+v4's "better" also needs the minimum effect (PROTOCOL_v4 section 4 item 4). Each question card's how-to now reads:
+"'Better' needs the test to say so over many days, and by enough to matter, not one lucky month." Note (2) is still
+open: the pattern exemption in Home's test against the per-screen test finding screens by their wiring. It is
+harmless today, as the judge said.
