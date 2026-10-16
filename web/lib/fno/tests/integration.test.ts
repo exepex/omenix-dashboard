@@ -55,6 +55,7 @@ const PAGES: Record<FnoPageKey, unknown> = {
   // the F&O screens' pages (P1's contract examples)
   weather: screenExamples.getFnoWeather_india_green.value.payload,
   forecast_lab: screenExamples.getFnoForecastLab_india_winning.value.payload,
+  strategy_lab: screenExamples.getFnoStrategyLab_india_passed.value.payload,
 };
 const KEYS = Object.keys(PAGES) as FnoPageKey[];
 const IST = (date: string, time: string) => new Date(`${date}T${time}:00+05:30`);
