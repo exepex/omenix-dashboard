@@ -22,8 +22,12 @@ export interface IntradayUpgrade {
   why: string;
 }
 
+/** live = made on the day; backfill_exploratory = rebuilt later from history, never a live record (contract 2.8.0). */
+export type RecordLabel = "live" | "backfill_exploratory";
+
 export interface RecentSession {
   session: string;
+  label: RecordLabel | null;
   colour: WeatherColour | null;
   big_move: boolean | null;
 }
@@ -34,6 +38,7 @@ export interface RedShare {
   share: number | null;
   max_share: number;
   over_alarming: boolean;
+  basis: RecordLabel;
 }
 
 export interface WeatherScore {
@@ -46,6 +51,8 @@ export interface WeatherScore {
   brier_baseline: number | null;
   skill: number | null;
   verdict: "better" | "worse" | "no_difference" | "not_tested";
+  /** Scored over days rebuilt from history (G8's exploratory report), never a confirmatory result (2.8.0). */
+  exploratory: boolean;
 }
 
 export interface PriceOfCalm {

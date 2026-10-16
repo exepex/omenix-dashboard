@@ -9,10 +9,14 @@ export interface SessionCell {
   day: string;
   label: ReturnType<typeof colourLabel>;
   outcome: string;
+  /** "rebuilt" when the day was rebuilt from history, never a live record (2.8.0). */
+  rebuilt: boolean;
 }
 
+export const REBUILT_WORDS = "rebuilt from history (exploratory)";
+
 export const recentOf = (w: FnoWeather): SessionCell[] =>
-  w.recent.map((r) => ({ day: fmtDate(r.session, false), label: colourLabel(r.colour), outcome: r.big_move === null ? "not known yet" : r.big_move ? "2% move" : "no big move" }));
+  w.recent.map((r) => ({ day: fmtDate(r.session, false), label: colourLabel(r.colour), outcome: r.big_move === null ? "not known yet" : r.big_move ? "2% move" : "no big move", rebuilt: r.label === "backfill_exploratory" }));
 
 export interface RedShareView {
   tone: Tone;
@@ -28,7 +32,7 @@ export function redShareOf(w: FnoWeather): RedShareView {
   const r = w.red_share;
   const [tone, icon, state]: [Tone, string, string] = !r.sessions ? ["neutral", "remove", "No sessions yet"] : r.over_alarming ? ["danger", "warning", "Over-alarming"] : ["success", "check", "Within the limit"];
   const words = r.sessions
-    ? `RED on ${r.red_sessions} of the last ${r.sessions} sessions (${pct(r.share, 1)}); the limit is ${pct(r.max_share)}. Above it, a new version must be proposed; RED still blocks until you approve it.`
+    ? `RED on ${r.red_sessions} of the last ${r.sessions} sessions${r.basis === "backfill_exploratory" ? ` ${REBUILT_WORDS}` : ""} (${pct(r.share, 1)}); the limit is ${pct(r.max_share)}. Above it, a new version must be proposed; RED still blocks until you approve it.`
     : "No session counted yet.";
   return { tone, icon, state, bar: Math.min(100, Math.round(((r.share ?? 0) / (2 * r.max_share)) * 1000) / 10), aria: `${pct(r.share, 1)} of sessions RED; the limit is ${pct(r.max_share)}`, words };
 }
@@ -48,7 +52,11 @@ export interface ScoreRow {
   brier: string;
   brierBaseline: string;
   verdict: { tone: Tone; icon: string; word: string };
+  /** Said beside the verdict when the score is over rebuilt days: never a confirmatory result. */
+  exploratory: string | null;
 }
+
+export const EXPLORATORY_SCORE = "Exploratory: scored on days rebuilt from history, not a confirmed result";
 
 const brier = (x: number | null) => (x === null ? DASH : x.toFixed(3));
 
@@ -63,6 +71,7 @@ export const scoresOf = (w: FnoWeather): ScoreRow[] =>
       brier: brier(s.brier),
       brierBaseline: brier(s.brier_baseline),
       verdict: { tone, icon, word },
+      exploratory: s.exploratory ? EXPLORATORY_SCORE : null,
     };
   });
 

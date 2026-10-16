@@ -45,3 +45,7 @@ signed-off data until W3 rebuilds the F&O tab on the catalog; the stock part is 
     "% on its account" is a quarter of before, and the NIFTY comparison holds Rs 20 lakh.
   - Rebuilt with `build.py`. Checks: `check_totals.js` (9 lines add up), `shoot_states.js` (16 shots of 9 states),
     `check_page.js` and `check_text.js`: 0 findings.
+
+- **16 Oct 2026: the F&O tab moves to 45-strategy-lab-fno (story W3d).** 45 is built on the catalog's
+  `FnoStrategyLab`; this page keeps the stock tab and its signed-off data. Its F&O example data stays only for the
+  "both books together" total line until the web screen draws that line from both pages.
