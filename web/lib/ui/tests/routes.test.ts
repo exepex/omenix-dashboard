@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { apiPath, companyPath, isMarket, lifecyclePath, marketOfPath, pageOfPath, pagePath, PAGES, switchMarketPath } from "../routes.ts";
 
 test("every page of SPEC section 6 has one route and a mockup", () => {
-  const spec = PAGES.filter((p) => p.mockup && p.owner !== "W12");
+  const spec = PAGES.filter((p) => p.mockup && p.owner !== "W12" && p.owner !== "W3");
   assert.equal(spec.length, 12);
   assert.equal(new Set(PAGES.map((p) => p.segment)).size, PAGES.length);
   assert.deepEqual(spec.map((p) => p.mockup.slice(0, 2)), ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]);

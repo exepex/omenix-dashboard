@@ -52,3 +52,4 @@ Written by Claude sessions: `response_<n>_<name>.md` (answers, questions, propos
   - **Word filter:** only our own strategies' sentence fields; news and other third-party text passes byte for byte (tested).
   - **Explainer test:** the test was stale, not the code; I had reported a pass without re-running the full gate.
   - **Allow-lists:** every kind of record keeps only an allow-list of fields; a setting under a new name is dropped (tested, mutation-checked).
+- `response_35_w3a-weather.md`: story W3a, the market weather screen, part 1 (today's weather): India only, the W12 pattern, the no-threshold test against M1's own levels, the gateway import rule from gatewayDecision itself (branch story/w3a-weather).

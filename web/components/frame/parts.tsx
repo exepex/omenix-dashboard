@@ -58,7 +58,7 @@ export function Tk({ id, children }: { id: string; children?: string }) {
 }
 
 /** "Example data" on a view of example records; never on a value read from a backend's publication (`item.live`). */
-export function ExampleTag({ item }: { item?: Instrument }) {
+export function ExampleTag({ item }: { item?: Pick<Instrument, "live"> }) {
   const { shell, data } = useFrame();
   if (!exampleTagShown(data, item)) return null;
   return (

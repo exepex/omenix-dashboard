@@ -569,6 +569,9 @@ select.mb-input { appearance: auto; font: var(--md-sys-typescale-body-medium); }
 .mb-wl-note { display: flex; gap: 8px; align-items: flex-start; margin: 8px 12px; padding: 8px 10px; border-radius: var(--mb-panel-radius); background: var(--md-sys-color-surface-container-low); font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
 .mb-wl-note .ms { width: 16px; height: 16px; flex: none; margin-top: 1px; }
 .mb-wl-note b { color: var(--md-sys-color-on-surface); }
+/* "How to read it": one quiet line with a help glyph under a figure a beginner could misread (the F&O screens, mockups 37-40) */
+.mb-howto { display: flex; gap: 6px; align-items: flex-start; margin: 8px 0 0; font-size: 12.5px; color: var(--md-sys-color-on-surface-variant); }
+.mb-howto .ms { width: 16px; height: 16px; flex: none; margin-top: 1px; }
 .mb-pager { justify-content: flex-end; gap: 4px; font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); }
 .mb-pager > span { margin-right: auto; padding-left: 4px; }
 .mb-sig-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 3px 10px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--md-sys-color-surface-container-high); }
