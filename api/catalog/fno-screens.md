@@ -425,29 +425,25 @@ Backend records named in the tables (exepex/trading):
 | `closed[].fills[].outcome` | missed_price_moved = the price left the card's entry range; missed_no_quote = no valid quote at that snapshot (never a synthetic fill) | enum | E8's owner-timing fill records | after each fill or exit; marks after the close of each NSE session | public | no: E8 |
 | `closed[].fills[].net` | The trade's net at that fill; null when missed | INR (Paper) | E8's owner-timing fill records | after each fill or exit; marks after the close of each NSE session | public | no: E8 |
 
-## Every session's weather colour and chances of a big move, for the colour strip and the chart
+## Every session's weather colour and label, for the colour strip (colour only until the owner's weather-levels choice)
 
 `GET /api/v1/markets/india/fno/weather/history` · `getFnoWeatherHistory` · fno.pages_history page weather_history (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)
 
 - **Freshness:** fno_calendar; once a session day at the 07:10 IST publish
 - **Empty state:** sessions empty and every count 0 (no weather record yet)
-- **What it holds:** Every session's weather colour and its two chances of a big NIFTY move beside the usual chance, newest last, and the counts by colour and by label. Empty state: sessions empty and every count 0 (no weather record yet)
+- **What it holds:** Every session's weather colour and label, oldest first, and the counts by colour and by label. Colour only: the day's chances of a big move are on the weather page (getFnoWeather), never in this history. Empty state: sessions empty and every count 0 (no weather record yet)
 - **Mock examples:**
   - `india_calm` (positive): Mock (india): a calm month, one AMBER. 30 sessions: 20 rebuilt from history, 10 live; mostly GREEN
   - `india_stormy` (negative): Mock (india): a stormy fortnight. Three RED sessions, one AMBER and one not scored (an input missing)
   - `india_none` (empty): Mock (india): no weather record yet. No session has a weather record
-- **Never sent (strategy internals):** the weather inputs' values and the colour each input reaches (owner, 16 Oct 2026: never the level at which an input turns a colour); the US cue (kept in Drive)
-- **Fields:** 13, of which the backend can fill 0 today
+- **Never sent (strategy internals):** the weather inputs' values and the colour each input reaches (owner, 16 Oct 2026: never the level at which an input turns a colour); the US cue (kept in Drive); each session's chances of a big move and the usual chances (strict form until the owner's weather-levels choice: beside the colours they would give the colour rule's floors back)
+- **Fields:** 9, of which the backend can fill 0 today
 
 | Field | Meaning | Unit | Source record (backend) | Freshness | Visibility | Backend today |
 |---|---|---|---|---|---|---|
 | `sessions[].session` | The NSE session | date (IST) | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `sessions[].colour` | The operative colour; null when the day was not scored (it then blocks new trades like RED) | enum | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `sessions[].label` | live = made on the day before the cutoff; backfill_exploratory = rebuilt later from history, never a live record | enum | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
-| `sessions[].p_big_1d` | Chance that NIFTY's next-session move is at least 2% either way | probability 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
-| `sessions[].p_big_5d` | Chance that the largest move over the next 5 sessions is at least 2% either way | probability 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
-| `sessions[].base_rate_1d` | How often a 2% day happened over the 750 sessions before it | share 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
-| `sessions[].base_rate_5d` | How often a 5-session window held a 2% move over the 750 sessions before it | share 0-1 | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `counts.green` | Sessions GREEN | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `counts.amber` | Sessions AMBER | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |
 | `counts.red` | Sessions RED | count | M1's weather records (research/forecasts/v4/weather/<YYYY>/<day>.json) | once a session day, at the 07:10 IST publish | public | no: M1 |

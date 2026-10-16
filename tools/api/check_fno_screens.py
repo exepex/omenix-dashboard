@@ -9,7 +9,7 @@
   4. Strategy internals stay private: each page lists what is never sent, and no property or example key is named like a
      rule, threshold, filter, parameter, prompt, weight or feature. Every object is closed (a planted extra field fails).
   5. The card says PAPER ONLY; every mockup built on the catalog shows exactly the catalog's examples (one copy, DRY).
-  6. Probes: invalid pages the schema must refuse (fno_rules.py).
+  6. Probes: invalid pages the schema must refuse, and values allowed but never sent (fno_rules.py).
 Usage: pip install -r tools/api/requirements.txt; python3 tools/api/check_fno_screens.py. Exit 1 on any problem."""
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bundle  # noqa: E402
 from check_contract import errors  # noqa: E402
-from fno_rules import check_owner_paths, check_probes, check_provisional, check_stress  # noqa: E402
+from fno_rules import check_never_sent_values, check_owner_paths, check_probes, check_provisional, check_stress  # noqa: E402
 from fno_walk import payload_name, response_ref, schema_nodes, screen_leaves, screen_operations  # noqa: E402
 
 EXAMPLES_FILE = "fno-screens.json"
@@ -203,6 +203,7 @@ def check(doc: dict, own: dict, problems: list[str]) -> list:
     check_provisional(leaves, problems)
     check_probes(doc, problems)
     check_stress(doc, problems)
+    check_never_sent_values(doc, problems)
     check_privacy(doc, problems)
     check_card(doc, problems)
     check_sums(doc, problems)

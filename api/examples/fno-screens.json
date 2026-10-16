@@ -3521,7 +3521,7 @@
    "built_at": "2026-11-16T09:38:00Z",
    "schema_version": "2.8.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "9c86e6bd4e926bb04a6589f2b79dacf79552dafa08855dfd4ce46daf7acb096e",
+   "payload_sha256": "3c2e4fbc856295df82761b73878b3ddcb014e9f630f8e633765bbfb0a3f1a98b",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -3538,272 +3538,152 @@
      {
       "session": "2026-10-06",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-07",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-08",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-09",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-12",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-13",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-14",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-15",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-16",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-19",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-20",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-21",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-22",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-23",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-26",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-27",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-28",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-29",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-30",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-11-02",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-11-03",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-04",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-05",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-06",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-09",
       "colour": "AMBER",
-      "label": "live",
-      "p_big_1d": 0.07,
-      "p_big_5d": 0.22,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-10",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-11",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-12",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-13",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-16",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.03,
-      "p_big_5d": 0.11,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      }
     ],
     "counts": {
@@ -3829,7 +3709,7 @@
    "built_at": "2026-11-16T09:38:00Z",
    "schema_version": "2.8.0",
    "source_commit": "0000000mock",
-   "payload_sha256": "713d92abc02b0bc7e48905a1a7ef768ab96f001e793a4922550d98a660cb6694",
+   "payload_sha256": "216840a1a0ad49d614cd2ee15b5fcd7d5d77b3db7fc46a6ca20136f43fb5d7f2",
    "publisher": "fno",
    "freshness": {
     "state": "fresh",
@@ -3846,272 +3726,152 @@
      {
       "session": "2026-10-06",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-07",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-08",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-09",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-12",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-13",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-14",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-15",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-16",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-19",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-20",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-21",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-22",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-23",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-26",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-27",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-28",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-29",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-10-30",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-11-02",
       "colour": "GREEN",
-      "label": "backfill_exploratory",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "backfill_exploratory"
      },
      {
       "session": "2026-11-03",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-04",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-05",
       "colour": "RED",
-      "label": "live",
-      "p_big_1d": 0.14,
-      "p_big_5d": 0.41,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-06",
       "colour": "RED",
-      "label": "live",
-      "p_big_1d": 0.14,
-      "p_big_5d": 0.41,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-09",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-10",
       "colour": null,
-      "label": "live",
-      "p_big_1d": null,
-      "p_big_5d": null,
-      "base_rate_1d": null,
-      "base_rate_5d": null
+      "label": "live"
      },
      {
       "session": "2026-11-11",
       "colour": "RED",
-      "label": "live",
-      "p_big_1d": 0.14,
-      "p_big_5d": 0.41,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-12",
       "colour": "AMBER",
-      "label": "live",
-      "p_big_1d": 0.075,
-      "p_big_5d": 0.24,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-13",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      },
      {
       "session": "2026-11-16",
       "colour": "GREEN",
-      "label": "live",
-      "p_big_1d": 0.035,
-      "p_big_5d": 0.12,
-      "base_rate_1d": 0.041,
-      "base_rate_5d": 0.137
+      "label": "live"
      }
     ],
     "counts": {

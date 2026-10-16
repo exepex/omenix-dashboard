@@ -23,6 +23,8 @@ OWNER_PATHS = {
     "getFnoCard": ("payload.trade.", "payload.advocate.objections", "payload.stress."),
     "getFnoPaperTrades": ("payload.open[].legs", "payload.open[].alerts[]"),
 }
+# (operationId, payload list, field, value): a value the schema allows but the page never sends (judge 217 note B)
+NEVER_SENT_VALUES = (("getFnoWeather", "drivers", "driver", "us_overnight"),)
 
 
 def _question(value: dict) -> dict:
@@ -84,6 +86,15 @@ def check_probes(doc: dict, problems: list[str]) -> None:
 def _names(op: dict) -> list[str]:
     examples = op["responses"]["200"]["content"]["application/json"].get("examples", {})
     return [ref["$ref"].rsplit("/", 1)[1] for ref in examples.values()]
+
+
+def check_never_sent_values(doc: dict, problems: list[str]) -> None:
+    ops = {op["operationId"]: op for _, op in screen_operations(doc)}
+    for op_id, key, field, value in NEVER_SENT_VALUES:
+        for name in _names(ops[op_id]):
+            rows = doc["components"]["examples"][name]["value"]["payload"].get(key) or []
+            if any(row[field] == value for row in rows):
+                problems.append(f"example {name}: {key}[].{field} is {value}, which is never sent")
 
 
 def check_stress(doc: dict, problems: list[str]) -> None:
