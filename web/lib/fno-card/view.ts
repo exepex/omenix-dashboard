@@ -41,9 +41,36 @@ export interface Header {
 
 export const TEST_NOTE = "TEST post: a one-off check of live delivery, not the day’s card.";
 
+export const PREVIOUS_CARD = "Previous session’s card";
+
+/** The verdict line: a held-back day's card is the previous session's, so it never says "today" in the screen's own
+ *  words, and its own reason is dated by its session (owner, 16 Oct 2026; contract 2.12.0). */
 export function headerOf(c: FnoCard): Header {
   const s = STATUS[c.status];
-  return { status: c.status, verdict: s.verdict, icon: s.icon, detail: `${s.sub} · ${dayLabel(c.session)} · ${c.session_note} · valid until ${ist(c.valid_until)}`, why: c.reason_text, label: c.label, test: c.test_post ? TEST_NOTE : null };
+  const sub = c.withheld ? PREVIOUS_CARD : s.sub;
+  const why = c.withheld ? `On ${dayLabel(c.session)}: ${c.reason_text}` : c.reason_text;
+  return { status: c.status, verdict: s.verdict, icon: s.icon, detail: `${sub} · ${dayLabel(c.session)} · ${c.session_note} · valid until ${ist(c.valid_until)}`, why, label: c.label, test: c.test_post ? TEST_NOTE : null };
+}
+
+export interface HeldBack {
+  reason: string;
+  rest: string;
+  /** False when the card on record is not from an earlier session than the held-back one: a contract error, so the
+   *  card is not shown at all (it could only be read as today's). */
+  showCard: boolean;
+}
+
+/** Today's card held back: the owner's sentence, and the card below dated as the previous session's; null on a normal
+ *  day. ISO dates compare as text. */
+export function heldBackOf(c: FnoCard): HeldBack | null {
+  const w = c.withheld;
+  if (!w) return null;
+  const earlier = c.session < w.session;
+  return {
+    reason: w.reason_text,
+    rest: earlier ? ` (${dayLabel(w.session)}). Below is the card of ${dayLabel(c.session)}, not today’s.` : ` (${dayLabel(w.session)}). The card on record is not from an earlier session, so it is not shown.`,
+    showCard: earlier,
+  };
 }
 
 export interface TimeFact {
