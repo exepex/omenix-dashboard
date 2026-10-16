@@ -18,6 +18,7 @@ export const FNO_PAGES = {
   getFnoWeatherHistory: "weather_history",
   getFnoForecastLab: "forecast_lab",
   getFnoStrategyLab: "strategy_lab",
+  getFnoPaperTrades: "paper_trades",
 } as const;
 
 export type FnoBlockName = keyof typeof FNO_PAGES;
