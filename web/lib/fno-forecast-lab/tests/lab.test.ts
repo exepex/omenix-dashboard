@@ -6,7 +6,7 @@ import { navGroups } from "../../shell/nav.ts";
 import { pageByKey, pagePath } from "../../ui/routes.ts";
 import { labExample } from "../fixture-source.ts";
 import { questionOf, ranked, settleWords } from "../question-view.ts";
-import { answerOf, bestOf, forecastersOf, protocolsOf, todayOf } from "../view.ts";
+import { ANSWER_DAY_UNKNOWN, answerOf, bestOf, forecastersOf, protocolsOf, todayOf } from "../view.ts";
 
 const winning = labExample("getFnoForecastLab_india_winning");
 const losing = labExample("getFnoForecastLab_india_losing");
@@ -21,6 +21,12 @@ test("today's answers name each forecaster, say when the answer is known, and ne
   const v2 = losing.questions.find((q) => q.id === "V2")!;
   assert.equal(answerOf(v2, v2.today!.values[0]), "0.0251");
   assert.equal(todayOf(waiting).length, 1, "a waiting or not-started question made no forecast today");
+});
+
+test("an answer day in a year without NSE's published trading days says so, never a guessed date (contract 2.13.0)", () => {
+  const [q1] = todayOf(waiting);
+  assert.equal(q1.knownOn, ANSWER_DAY_UNKNOWN);
+  assert.equal(ANSWER_DAY_UNKNOWN, "Not known yet: NSE has not published that year’s trading days");
 });
 
 test("who beats the yardstick comes from the backend's verdicts only, question by question", () => {
