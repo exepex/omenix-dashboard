@@ -70,3 +70,16 @@ v4's "better" also needs the minimum effect (PROTOCOL_v4 section 4 item 4). Each
 "'Better' needs the test to say so over many days, and by enough to matter, not one lucky month." Note (2) is still
 open: the pattern exemption in Home's test against the per-screen test finding screens by their wiring. It is
 harmless today, as the judge said.
+
+## Addendum 2: the yardstick is not always a baseline (contract 2.12.0's note, G1's protocol v3)
+
+The screens lead said that under protocol v3 the yardstick is book1_rules ("Rule-based"), not a baseline. Two of the
+screen's own words assumed it is always plain history, and both are fixed:
+- the lede said "who reads the market better than plain history". It now says "Each question has a yardstick fixed
+  before any result, so you can see who beats it";
+- the "What" column called every baseline "Yardstick". A baseline is now "Baseline (plain history)", and the yardstick
+  is whatever the payload names as `primary_baseline`, as before.
+
+New test `lib/fno-forecast-lab/tests/yardstick.test.ts`: a baseline is never called the yardstick by its kind, and a
+book named as `primary_baseline` shows as the yardstick under its own name, both in the overview and on each
+question. No code path changes; the words do.
