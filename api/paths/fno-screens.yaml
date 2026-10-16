@@ -133,7 +133,7 @@
   get:
     tags: [fno-screens]
     operationId: getFnoWeatherHistory
-    summary: "Every session's weather colour and chances of a big move, for the colour strip and the chart"
+    summary: "Every session's weather colour and label, for the colour strip (colour only until the owner's weather-levels choice)"
     x-status: planned
     x-publisher: fno
     x-read-model: 'fno.pages_history page weather_history (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)'

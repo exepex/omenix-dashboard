@@ -71,7 +71,9 @@ info:
     Both repositories test against it: tools/api/check_fno_screens.py here, the pinned copy in exepex/trading.
 
     Version 2.8 (exepex/trading docs/stories/W3-fno-screens.md, owner decision 16 Oct 2026 "F&O screens start now";
-    additions only): four more India-only F&O pages: the weather's history (`weather_history`, never an input's level),
+    no F&O screen page is published yet, so its new required fields, which reject a 2.7 payload, break no live page):
+    four more India-only F&O pages: the weather's history (`weather_history`, colour and label only, never an input's
+    level or the chances, until the owner's weather-levels choice),
     scoreboards A and B (`scoreboards`, never combined), AI usage against BG1's minutes cap (`budget`, no model names)
     and data health (`data_health`, dates, counts and statuses only), each with Mock examples in its three cases.
     Also added to existing pages: the weather's back-fill labels (`recent[].label`, `red_share.basis`,
