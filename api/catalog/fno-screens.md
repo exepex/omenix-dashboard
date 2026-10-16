@@ -335,7 +335,7 @@ Backend records named in the tables (exepex/trading):
 - **What it holds:** The pages held back in this publication, each with the first session it was held in a row, the reason it was held and what the screen shows meanwhile. Empty state: holds empty (every page published normally)
 - **Mock examples:**
   - `india_none` (positive): Mock (india): every page published. A normal day: nothing held back
-  - `india_held` (negative): Mock (india): three pages held back. Home's picks and books show nothing (a page that would state something no longer true); the card shows the previous card under its own notice
+  - `india_held` (negative): Mock (india): four pages held back. Home's picks and books show nothing (a page that would state something no longer true); the paper books and the card show their previous page (the card under its own notice)
   - `india_first` (empty): Mock (india): the first publication. No page has been held yet
 - **Never sent (strategy internals):** the held page's figures or the value that broke the rule (only which page, since when and which rule)
 - **Fields:** 4, of which the backend can fill 0 today

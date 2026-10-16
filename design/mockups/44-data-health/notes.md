@@ -28,7 +28,7 @@ FnoDataHealth (`api/schemas/fno-data-health.yaml`), page `data_health`, contract
 
 **Pages held back (contract 2.13.0, `getFnoPageHolds`, page `page_holds`; judge 251 on P11):** drawn below the health
 rows in the same case as the state (data.json `also`): none on a good day; in the bad case Home's picks and books
-(nothing shown, since their old pages would state something no longer true) and the card (the previous card under its
+(nothing shown, since their old pages would state something no longer true), the paper books and the card (their previous page, the card under its
 own notice); none in the empty case. Each reason is one of P11's fixed sentences, owned by its code, in plain words
 with no digits (the schema refuses digits, so no value and no story code can enter; judge 255). Every held page also
 says so on its own screen.
