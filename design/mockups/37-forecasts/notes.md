@@ -32,7 +32,7 @@ forecasts with their outcomes for the "costliest mistakes" cards, waits until ab
 |---|---|---|
 | `india_winning` (default) | positive, 16 Jun 2027 (after the first review): Hybrid better than Book 1 on Q1, the AI team level with it | `api/examples/fno-screens.json`, `getFnoForecastLab_india_winning` |
 | `india_losing` | negative, 16 Jun 2027: the AI team worse than Book 1 on Q4; a v4 question that cannot win (stop testing); late and breached answers not counted | `getFnoForecastLab_india_losing` |
-| `india_waiting` | empty, 30 Nov 2026 (before the review): 12 answers, not tested yet; V1 waits for the 15-minute recorder; V6 not started | `getFnoForecastLab_india_waiting` |
+| `india_waiting` | empty, 4 Dec 2026 (before the review): 12 answers, not tested yet; Q1's answer day not known yet (it falls in 2027, whose NSE calendar is not out; contract 2.13.0); V1 waits for the 15-minute recorder; V6 not started | `getFnoForecastLab_india_waiting` |
 
 "A period you choose" draws `getFnoForecastHistory` (contract 2.9) in the same case as the state: `india_ahead` with the
 good case, `india_behind` with the bad case, `india_none` (no answer scored) with the empty case (data.json `also`;
@@ -51,7 +51,7 @@ on PROTOCOL.md section 8, 16 Oct 2026; strong evidence). v3's registered tests a
 (the yardstick, `primary_baseline` book1_rules); a book against a baseline is secondary and descriptive, so it is
 never a comparison here (its score still shows in each question's table). No comparison is called better or worse
 before the first review, six months of common-start trading from 14 Oct 2026. So the good and bad cases are dated
-16 Jun 2027, after that review, and the empty case 30 Nov 2026, before it, with too few answers to test; live scores
+16 Jun 2027, after that review, and the empty case 4 Dec 2026, before it, with too few answers to test; live scores
 start only when a question's first answer resolves (11 Nov 2026 for Q1). The shell's clock shows 16 Jun 2027 in every
 state. `data.json` is built from the catalog (`_platform/catalog_data.py`), one copy of the data.
 

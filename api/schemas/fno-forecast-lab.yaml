@@ -98,7 +98,7 @@ FnoForecastQuestion:
           required: [made_on, answer_on, values]
           properties:
             made_on: {type: string, format: date, x-unit: date (IST), x-fill: built, x-record: 'forecast_record_v2:date', description: The session the forecast was made (before 15:00)}
-            answer_on: {type: string, format: date, x-unit: date (IST), description: The session the answer is known}
+            answer_on: {type: ['string', 'null'], format: date, x-unit: date (IST), description: "The session the answer is known; null when that session falls in a year whose NSE session calendar is not published yet (shown as not known yet, never guessed; e.g. from about 3 Dec for a 20-session question until NSE publishes next year's holidays)"}
             values:
               type: array
               description: One value per forecaster that forecast today (a missing forecast is left out and counted, never imputed)
