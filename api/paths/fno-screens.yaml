@@ -129,3 +129,103 @@
               india_none: {$ref: '#/components/examples/getFnoPaperTrades_india_none'}
       '501': {$ref: '#/components/responses/NotImplemented'}
       '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/weather/history:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoWeatherHistory
+    summary: "Every session's weather colour and chances of a big move, for the colour strip and the chart"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page weather_history (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)'
+    x-freshness: 'fno_calendar; once a session day at the 07:10 IST publish'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'sessions empty and every count 0 (no weather record yet)'
+    responses:
+      '200':
+        description: 'The FnoWeatherHistory page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoWeatherHistoryResponse'}
+            examples:
+              india_calm: {$ref: '#/components/examples/getFnoWeatherHistory_india_calm'}
+              india_stormy: {$ref: '#/components/examples/getFnoWeatherHistory_india_stormy'}
+              india_none: {$ref: '#/components/examples/getFnoWeatherHistory_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/scoreboards:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoScoreboards
+    summary: "Scoreboard B (whole systems) and scoreboard A (matched decisions), per book, never combined"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page scoreboards (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)'
+    x-freshness: 'fno_calendar; after each scoreboard run, at the 07:10 IST publish'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'both boards not_run'
+    responses:
+      '200':
+        description: 'The FnoScoreboards page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoScoreboardsResponse'}
+            examples:
+              india_ahead: {$ref: '#/components/examples/getFnoScoreboards_india_ahead'}
+              india_behind: {$ref: '#/components/examples/getFnoScoreboards_india_behind'}
+              india_none: {$ref: '#/components/examples/getFnoScoreboards_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/budget:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoBudget
+    summary: "This month's AI minutes against BG1's cap and its level, by group (no model names)"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page budget (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)'
+    x-freshness: 'fno_calendar; after each routine run, at the 07:10 IST publish'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'level unknown with the note saying nothing is measured yet'
+    responses:
+      '200':
+        description: 'The FnoBudget page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoBudgetResponse'}
+            examples:
+              india_ok: {$ref: '#/components/examples/getFnoBudget_india_ok'}
+              india_alert: {$ref: '#/components/examples/getFnoBudget_india_alert'}
+              india_none: {$ref: '#/components/examples/getFnoBudget_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}
+/api/v1/markets/india/fno/data-health:
+  get:
+    tags: [fno-screens]
+    operationId: getFnoDataHealth
+    summary: "Each data source's last day, rows and gaps, the last publish run and the last health check"
+    x-status: planned
+    x-publisher: fno
+    x-read-model: 'fno.pages_history page data_health (published by P2 in the F&O publication, docs/stories/W3-fno-screens.md)'
+    x-freshness: 'fno_calendar; daily at the 07:10 IST publish'
+    x-cache: 'keyed by publication_id; browser private, no-cache + ETag'
+    x-empty: 'no source rows; publish and health check not_run'
+    responses:
+      '200':
+        description: 'The FnoDataHealth page'
+        headers:
+          ETag: {$ref: '#/components/headers/ETag'}
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FnoDataHealthResponse'}
+            examples:
+              india_ok: {$ref: '#/components/examples/getFnoDataHealth_india_ok'}
+              india_problems: {$ref: '#/components/examples/getFnoDataHealth_india_problems'}
+              india_none: {$ref: '#/components/examples/getFnoDataHealth_india_none'}
+      '501': {$ref: '#/components/responses/NotImplemented'}
+      '503': {$ref: '#/components/responses/Unavailable'}

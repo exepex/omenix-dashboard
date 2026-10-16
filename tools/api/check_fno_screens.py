@@ -53,7 +53,7 @@ RECORDS = {
     "desk_event": "fno/desk/records.py DeskEvent (E4)",
 }
 # Mockups whose data.json is built from the catalog: folder -> the operation whose examples it shows
-MOCKUPS = {"39-trade-card": "getFnoCard", "40-weather": "getFnoWeather"}
+MOCKUPS = {"39-trade-card": "getFnoCard", "40-weather": "getFnoWeather", "41-paper-books": "getFnoPaperTrades"}
 
 
 def canonical(payload) -> bytes:

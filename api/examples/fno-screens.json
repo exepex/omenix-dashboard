@@ -9,7 +9,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "b621152103ec964562582345cef2848c2c0c9419ee63297f5e67a44ca5f8c50d",
    "publisher": "fno",
@@ -284,7 +284,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "5e8ea05b306eba9a41ec5fb4e902f93f848f3918b610266685ddf4b31d9a34f8",
    "publisher": "fno",
@@ -544,7 +544,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "0be6d2177dadb1beb1cf4c22455fdcddd4ad91c573f796f0041e7b5e81d4207c",
    "publisher": "fno",
@@ -748,7 +748,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "d220a3f44e4ccd2f9a5baeb71c0470107005a6234ea53e579a64b0ddb04401f5",
    "publisher": "fno",
@@ -918,7 +918,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:38:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "d7e0361c3e3cbd2800fd0f3b258c1d0b7f1de15138175fbb400a0617e799df4e",
    "publisher": "fno",
@@ -1128,7 +1128,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:31:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "9e69894be1fe82381127bedfa7ac991a5642bc2fc1d0bb47605b2ad7d5d0299f",
    "publisher": "fno",
@@ -1293,7 +1293,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:31:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "60ba5a2f9135f7bd2c2adfc6de1b72b8c256890d869a25e3e2931b631f5b1ddf",
    "publisher": "fno",
@@ -1465,7 +1465,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T09:31:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "b825f60f3ab3410b4932061fef08d2417c46fa21f6a9f4594df8e2e9949e8895",
    "publisher": "fno",
@@ -1580,7 +1580,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:10:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "8bef9c9f89347a87e3da19c73e7256f443b81d9201507f390402c69941842397",
    "publisher": "fno",
@@ -2028,7 +2028,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:10:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "7fc7b4dc1f9dd02af45cf49fa94c25ed451cb9fe20edfff4f49efb49fd9ba3af",
    "publisher": "fno",
@@ -2409,7 +2409,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:10:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "1ecddc6a940bcffeda9d1ed676ee6fcb708127bd69861d992b5b7270f01e9f61",
    "publisher": "fno",
@@ -2627,7 +2627,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:12:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "0e4fb9078c583c74055984adef4b5e4d285d62b67316e482263381148d69c9cd",
    "publisher": "fno",
@@ -2793,7 +2793,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:12:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "94df81430986c11ff4de60049c9179f741babeb1c1582cf13d2b08853c2e2262",
    "publisher": "fno",
@@ -2950,7 +2950,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:12:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "eca9c9a225cbaba21b961a0a585f0dd058fd376c3233e30a0f6c438bf1ffdf3d",
    "publisher": "fno",
@@ -3081,7 +3081,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:05:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "87d5b63a3db975fa3e3557345496bd13198b6dbee31203591b53f8c874613feb",
    "publisher": "fno",
@@ -3203,7 +3203,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:05:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "244ffe6e945932f913fd2a99b35fad5ad6a3a723d981afb2938eb0dae7b96e15",
    "publisher": "fno",
@@ -3307,7 +3307,7 @@
    "as_of": "2026-11-16",
    "cutoff": "2026-11-16T09:30:00Z",
    "built_at": "2026-11-16T12:05:00Z",
-   "schema_version": "2.7.0",
+   "schema_version": "2.8.0",
    "source_commit": "0000000mock",
    "payload_sha256": "9d36ef18b2920efef22b049381af910b32e5ce3b5f458b7ec54de3560a352840",
    "publisher": "fno",
@@ -3353,6 +3353,1216 @@
     ],
     "open": [],
     "closed": []
+   }
+  }
+ },
+ "getFnoWeatherHistory_india_calm": {
+  "summary": "Mock (india): a calm month, one AMBER",
+  "description": "30 sessions: 20 rebuilt from history, 10 live; mostly GREEN",
+  "x-case": "positive",
+  "value": {
+   "market": "india",
+   "page_key": "weather_history",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "9c86e6bd4e926bb04a6589f2b79dacf79552dafa08855dfd4ce46daf7acb096e",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "sessions": [
+     {
+      "session": "2026-10-06",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-07",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-08",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-09",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-12",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-13",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-14",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-15",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-16",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-19",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-20",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-21",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-22",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-23",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-26",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-27",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-28",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-29",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-30",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-02",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-03",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-04",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-05",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-06",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-09",
+      "colour": "AMBER",
+      "label": "live",
+      "p_big_1d": 0.07,
+      "p_big_5d": 0.22,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-10",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-11",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-12",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-13",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-16",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.03,
+      "p_big_5d": 0.11,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     }
+    ],
+    "counts": {
+     "green": 29,
+     "amber": 1,
+     "red": 0,
+     "not_scored": 0,
+     "live": 10,
+     "backfill": 20
+    }
+   }
+  }
+ },
+ "getFnoWeatherHistory_india_stormy": {
+  "summary": "Mock (india): a stormy fortnight",
+  "description": "Three RED sessions, one AMBER and one not scored (an input missing)",
+  "x-case": "negative",
+  "value": {
+   "market": "india",
+   "page_key": "weather_history",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "713d92abc02b0bc7e48905a1a7ef768ab96f001e793a4922550d98a660cb6694",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "sessions": [
+     {
+      "session": "2026-10-06",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-07",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-08",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-09",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-12",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-13",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-14",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-15",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-16",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-19",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-20",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-21",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-22",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-23",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-26",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-27",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-28",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-29",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-10-30",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-02",
+      "colour": "GREEN",
+      "label": "backfill_exploratory",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-03",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-04",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-05",
+      "colour": "RED",
+      "label": "live",
+      "p_big_1d": 0.14,
+      "p_big_5d": 0.41,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-06",
+      "colour": "RED",
+      "label": "live",
+      "p_big_1d": 0.14,
+      "p_big_5d": 0.41,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-09",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-10",
+      "colour": null,
+      "label": "live",
+      "p_big_1d": null,
+      "p_big_5d": null,
+      "base_rate_1d": null,
+      "base_rate_5d": null
+     },
+     {
+      "session": "2026-11-11",
+      "colour": "RED",
+      "label": "live",
+      "p_big_1d": 0.14,
+      "p_big_5d": 0.41,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-12",
+      "colour": "AMBER",
+      "label": "live",
+      "p_big_1d": 0.075,
+      "p_big_5d": 0.24,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-13",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     },
+     {
+      "session": "2026-11-16",
+      "colour": "GREEN",
+      "label": "live",
+      "p_big_1d": 0.035,
+      "p_big_5d": 0.12,
+      "base_rate_1d": 0.041,
+      "base_rate_5d": 0.137
+     }
+    ],
+    "counts": {
+     "green": 25,
+     "amber": 1,
+     "red": 3,
+     "not_scored": 1,
+     "live": 10,
+     "backfill": 20
+    }
+   }
+  }
+ },
+ "getFnoWeatherHistory_india_none": {
+  "summary": "Mock (india): no weather record yet",
+  "description": "No session has a weather record",
+  "x-case": "empty",
+  "value": {
+   "market": "india",
+   "page_key": "weather_history",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "1e03ceace783f6fbecc1f8d7dcb6f66ace7ef3635c47b9107d25cda2babd6221",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "sessions": [],
+    "counts": {
+     "green": 0,
+     "amber": 0,
+     "red": 0,
+     "not_scored": 0,
+     "live": 0,
+     "backfill": 0
+    }
+   }
+  }
+ },
+ "getFnoBudget_india_ok": {
+  "summary": "Mock (india): well under the cap",
+  "description": "AI books and roles at 34% of their cap",
+  "x-case": "positive",
+  "value": {
+   "market": "india",
+   "page_key": "budget",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "59c723f796e4b8b1dfc74037ba8d0f7859b1dbd09b68d29a5baf7ae7ec919f5e",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "month": "2026-11",
+    "level": "ok",
+    "books_and_roles_minutes": 312.0,
+    "basis_minutes": 1840.0,
+    "cap_minutes": 920.0,
+    "pct_of_cap": 33.9,
+    "basis": "measured",
+    "note": "",
+    "groups": [
+     {
+      "group": "development",
+      "minutes": 1528.0,
+      "runs": 61
+     },
+     {
+      "group": "ai_books",
+      "minutes": 214.0,
+      "runs": 22
+     },
+     {
+      "group": "post_mortem",
+      "minutes": 54.0,
+      "runs": 3
+     },
+     {
+      "group": "ai_roles",
+      "minutes": 44.0,
+      "runs": 8
+     }
+    ]
+   }
+  }
+ },
+ "getFnoBudget_india_alert": {
+  "summary": "Mock (india): past the 80% alert",
+  "description": "AI books and roles at 84% of their cap: alert",
+  "x-case": "negative",
+  "value": {
+   "market": "india",
+   "page_key": "budget",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "218bc3dd55659fb07a0de9ab552f49c38511d62cc3fbfeb846aa6106d62711fa",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "month": "2026-11",
+    "level": "alert",
+    "books_and_roles_minutes": 790.0,
+    "basis_minutes": 1880.0,
+    "cap_minutes": 940.0,
+    "pct_of_cap": 84.0,
+    "basis": "measured",
+    "note": "",
+    "groups": [
+     {
+      "group": "development",
+      "minutes": 1090.0,
+      "runs": 40
+     },
+     {
+      "group": "ai_books",
+      "minutes": 520.0,
+      "runs": 22
+     },
+     {
+      "group": "ai_roles",
+      "minutes": 210.0,
+      "runs": 30
+     },
+     {
+      "group": "post_mortem",
+      "minutes": 60.0,
+      "runs": 3
+     }
+    ]
+   }
+  }
+ },
+ "getFnoBudget_india_none": {
+  "summary": "Mock (india): nothing measured yet",
+  "description": "No timing record this month: level unknown",
+  "x-case": "empty",
+  "value": {
+   "market": "india",
+   "page_key": "budget",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "b4c13c39074b9ebe5e379602ee3f17193fe9b51a0928e816648c037eef5dd74c",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "month": "2026-11",
+    "level": "unknown",
+    "books_and_roles_minutes": 0.0,
+    "basis_minutes": 0.0,
+    "cap_minutes": 0.0,
+    "pct_of_cap": null,
+    "basis": "measured",
+    "note": "Nothing measured yet this month: no routine has written its timing record",
+    "groups": []
+   }
+  }
+ },
+ "getFnoDataHealth_india_ok": {
+  "summary": "Mock (india): everything arrived",
+  "description": "Every source up to date; the publish and the health check passed",
+  "x-case": "positive",
+  "value": {
+   "market": "india",
+   "page_key": "data_health",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "544665f1f846ff9c549da93b27b23a2d8951023eccf054cafa269693e43c0885",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "as_of": "2026-11-16",
+    "sources": [
+     {
+      "source": "index-close",
+      "plain": "NIFTY daily close (NSE)",
+      "last_day": "2026-11-16",
+      "rows": 2449,
+      "gaps": 0,
+      "status": "ok"
+     },
+     {
+      "source": "fo-bhavcopy",
+      "plain": "NSE F&O end-of-day file",
+      "last_day": "2026-11-16",
+      "rows": 716,
+      "gaps": 0,
+      "status": "ok"
+     },
+     {
+      "source": "participant-oi",
+      "plain": "Open interest by participant (NSE)",
+      "last_day": "2026-11-16",
+      "rows": 1955,
+      "gaps": 0,
+      "status": "ok"
+     },
+     {
+      "source": "vix",
+      "plain": "India VIX daily (NSE)",
+      "last_day": "2026-11-16",
+      "rows": 4210,
+      "gaps": 0,
+      "status": "ok"
+     }
+    ],
+    "publish": {
+     "status": "published",
+     "run_on": "2026-11-16",
+     "reason": null
+    },
+    "health_check": {
+     "status": "ok",
+     "run_on": "2026-11-16",
+     "problems": 0
+    }
+   }
+  }
+ },
+ "getFnoDataHealth_india_problems": {
+  "summary": "Mock (india): a late file and a failed publish",
+  "description": "Two sources behind, the publish failed (the previous one stays current), three problems",
+  "x-case": "negative",
+  "value": {
+   "market": "india",
+   "page_key": "data_health",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "49667a231e8e128cc2d5a5d649a115346811e61934b72971a6c61c5804811df5",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "as_of": "2026-11-16",
+    "sources": [
+     {
+      "source": "fo-bhavcopy",
+      "plain": "NSE F&O end-of-day file",
+      "last_day": "2026-11-12",
+      "rows": 712,
+      "gaps": 2,
+      "status": "gaps"
+     },
+     {
+      "source": "participant-oi",
+      "plain": "Open interest by participant (NSE)",
+      "last_day": "2026-11-13",
+      "rows": 1952,
+      "gaps": 0,
+      "status": "stale"
+     },
+     {
+      "source": "index-close",
+      "plain": "NIFTY daily close (NSE)",
+      "last_day": "2026-11-16",
+      "rows": 2449,
+      "gaps": 0,
+      "status": "ok"
+     }
+    ],
+    "publish": {
+     "status": "failed",
+     "run_on": "2026-11-16",
+     "reason": "the F&O end-of-day file for the session was not on NSE's site by 08:30 IST"
+    },
+    "health_check": {
+     "status": "problems",
+     "run_on": "2026-11-16",
+     "problems": 3
+    }
+   }
+  }
+ },
+ "getFnoDataHealth_india_none": {
+  "summary": "Mock (india): nothing run yet",
+  "description": "No source row; the publish and the health check have not run",
+  "x-case": "empty",
+  "value": {
+   "market": "india",
+   "page_key": "data_health",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "5cdac27b2e162942edb27a3e6c29d61b971937d5ef30adcd7f04fcc285be1ffb",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "as_of": "2026-11-16",
+    "sources": [],
+    "publish": {
+     "status": "not_run",
+     "run_on": null,
+     "reason": null
+    },
+    "health_check": {
+     "status": "not_run",
+     "run_on": null,
+     "problems": 0
+    }
+   }
+  }
+ },
+ "getFnoScoreboards_india_ahead": {
+  "summary": "Mock (india): Rule-based leads, early days",
+  "description": "Both boards ran; too few trades for the do-nothing test",
+  "x-case": "positive",
+  "value": {
+   "market": "india",
+   "page_key": "scoreboards",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "1ebea161f9650a9630a7f758c1c427cdc7a83c0c5d7101af1a54a2a248b1959b",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "board_b": {
+     "status": "ok",
+     "as_of": "2026-11-16",
+     "label": "Whole systems since the common start (1 Oct 2026)",
+     "do_nothing_net": 18400,
+     "books": [
+      {
+       "family": "rule",
+       "trades": 14,
+       "net": 26120,
+       "worst_month": -6200,
+       "max_drawdown": 9400,
+       "beats_do_nothing": "not_tested"
+      },
+      {
+       "family": "hybrid",
+       "trades": 11,
+       "net": 9840,
+       "worst_month": -11300,
+       "max_drawdown": 14100,
+       "beats_do_nothing": "not_tested"
+      },
+      {
+       "family": "ai",
+       "trades": 9,
+       "net": -4230,
+       "worst_month": -8800,
+       "max_drawdown": 12600,
+       "beats_do_nothing": "not_tested"
+      }
+     ]
+    },
+    "board_a": {
+     "status": "ok",
+     "as_of": "2026-11-16",
+     "label": "Matched decisions on a standard shadow account",
+     "do_nothing_net": 18400,
+     "books": [
+      {
+       "family": "rule",
+       "trades": 14,
+       "net": 21900,
+       "worst_month": -5100,
+       "max_drawdown": 8100,
+       "beats_do_nothing": "not_tested"
+      },
+      {
+       "family": "hybrid",
+       "trades": 14,
+       "net": 23300,
+       "worst_month": -7400,
+       "max_drawdown": 9900,
+       "beats_do_nothing": "not_tested"
+      },
+      {
+       "family": "ai",
+       "trades": 14,
+       "net": 15200,
+       "worst_month": -9100,
+       "max_drawdown": 11800,
+       "beats_do_nothing": "not_tested"
+      }
+     ]
+    }
+   }
+  }
+ },
+ "getFnoScoreboards_india_behind": {
+  "summary": "Mock (india): every book behind doing nothing",
+  "description": "Board B: all three books below the index fund; board A still a pilot",
+  "x-case": "negative",
+  "value": {
+   "market": "india",
+   "page_key": "scoreboards",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "11863f9c5643860e38338ab4d61b857d82fa5e067c68543ff83a31771246211e",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "board_b": {
+     "status": "ok",
+     "as_of": "2026-11-16",
+     "label": "Whole systems since the common start (1 Oct 2026)",
+     "do_nothing_net": 31200,
+     "books": [
+      {
+       "family": "rule",
+       "trades": 22,
+       "net": -18450,
+       "worst_month": -16200,
+       "max_drawdown": 24800,
+       "beats_do_nothing": "no"
+      },
+      {
+       "family": "hybrid",
+       "trades": 19,
+       "net": -27300,
+       "worst_month": -19800,
+       "max_drawdown": 31100,
+       "beats_do_nothing": "no"
+      },
+      {
+       "family": "ai",
+       "trades": 16,
+       "net": -9100,
+       "worst_month": -12400,
+       "max_drawdown": 17700,
+       "beats_do_nothing": "no"
+      }
+     ]
+    },
+    "board_a": {
+     "status": "pilot",
+     "as_of": "2026-11-16",
+     "label": "Pilot: before the common start, no verdict",
+     "do_nothing_net": null,
+     "books": [
+      {
+       "family": "rule",
+       "trades": 3,
+       "net": -2100,
+       "worst_month": null,
+       "max_drawdown": 2600,
+       "beats_do_nothing": null
+      },
+      {
+       "family": "hybrid",
+       "trades": 3,
+       "net": -3900,
+       "worst_month": null,
+       "max_drawdown": 4100,
+       "beats_do_nothing": null
+      },
+      {
+       "family": "ai",
+       "trades": 3,
+       "net": 400,
+       "worst_month": null,
+       "max_drawdown": 1800,
+       "beats_do_nothing": null
+      }
+     ]
+    }
+   }
+  }
+ },
+ "getFnoScoreboards_india_none": {
+  "summary": "Mock (india): no scoreboard has run",
+  "description": "Both boards not run yet",
+  "x-case": "empty",
+  "value": {
+   "market": "india",
+   "page_key": "scoreboards",
+   "as_of": "2026-11-16",
+   "cutoff": "2026-11-16T09:30:00Z",
+   "built_at": "2026-11-16T09:38:00Z",
+   "schema_version": "2.8.0",
+   "source_commit": "0000000mock",
+   "payload_sha256": "474e690ac3f601116402cb0f7a2880652956acd37a1d522d437a1c30c450bf89",
+   "publisher": "fno",
+   "freshness": {
+    "state": "fresh",
+    "rule": "fno_calendar",
+    "built_at": "2026-11-16T09:38:00Z",
+    "age_minutes": 0,
+    "reason": null
+   },
+   "paper": "Paper",
+   "product": "fno",
+   "publication_id": "mock-fno-2026-11-16",
+   "payload": {
+    "board_b": {
+     "status": "not_run",
+     "as_of": null,
+     "label": "Not run yet",
+     "do_nothing_net": null,
+     "books": []
+    },
+    "board_a": {
+     "status": "not_run",
+     "as_of": null,
+     "label": "Not run yet",
+     "do_nothing_net": null,
+     "books": []
+    }
    }
   }
  }
