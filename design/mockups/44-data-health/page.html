@@ -2213,7 +2213,7 @@ function srcLine(c, op, tip) {
 /* The last publish and health check first (did today's data arrive?), then each source, worst first. Dates, counts
    and statuses only: never a data value. */
 const SRC = {ok: ['success', 'check', 'Up to date'], stale: ['warn', 'schedule', 'Behind'], gaps: ['warn', 'warning', 'Days missing'], missing: ['danger', 'block', 'No file']};
-const PUB = {published: ['success', 'check', 'Published'], failed: ['danger', 'close', 'Failed: yesterday\'s pages stay'], publishing: ['neutral', 'sync', 'Publishing'], not_run: ['neutral', 'remove', 'Not run yet']};
+const PUB = {published: ['success', 'check', 'Published'], failed: ['danger', 'close', 'Failed: yesterday\'s pages stay'], publishing: ['neutral', 'schedule', 'Publishing'], not_run: ['neutral', 'remove', 'Not run yet']};
 const HC = {ok: ['success', 'check', 'All expected files and runs found'], problems: ['danger', 'warning', 'Problems found'], not_run: ['neutral', 'remove', 'Not run yet']};
 function lab(c, m, k) { const [cls, g, w] = m[k]; return c.el('span', {class: 'mb-label ' + cls}, c.icon(g), w); }
 function healthPart(main, c) {

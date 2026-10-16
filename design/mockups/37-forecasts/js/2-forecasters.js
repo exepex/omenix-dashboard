@@ -1,6 +1,6 @@
 /* The standing line, the protocols and the forecasters: who answers, how each is kept from seeing outcomes, and how
    many days counted (a missing day is shown, never treated as zero skill). */
-const STATE = {running: ['success', 'check', 'Running'], not_running: ['neutral', 'pause', 'Not running'], not_started: ['neutral', 'remove', 'Not started']};
+const STATE = {running: ['success', 'check', 'Running'], not_running: ['neutral', 'timer', 'Not running'], not_started: ['neutral', 'remove', 'Not started']};
 const KIND = {family: 'Book', baseline: 'Yardstick', weather: 'Weather', house: 'The card\'s forecast'};
 function fname(id) { const f = pay().forecasters.find(x => x.id === id); return f ? f.name : id; }
 function forecastersPart(main, c) {

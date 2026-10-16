@@ -1,0 +1,463 @@
+{
+ "_mock": true,
+ "_note": "MOCK: the F&O data catalog's example Strategy lab (F&O) (made-up numbers on a future date), in the contract the backend will publish (story W3, contract 2.8.0). Research and paper only.",
+ "page": "strategy-lab-fno",
+ "source": "api/examples/fno-screens.json (the F&O data catalog, exepex/trading story P1)",
+ "operation": "getFnoStrategyLab",
+ "states": {
+  "india_passed": {
+   "case": "positive",
+   "summary": "Mock (india): one strategy passed and makes money on paper",
+   "about": "Trial 61 of 64 passed; its paper record after every cost and against the index fund and cash; real money still not eligible",
+   "value": {
+    "market": "india",
+    "page_key": "strategy_lab",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T12:12:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "0e4fb9078c583c74055984adef4b5e4d285d62b67316e482263381148d69c9cd",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T12:12:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "headline": {
+      "any_passed": true,
+      "text": "1 strategy passed its test (trial 61 of 64; about 0.6 passes expected by chance alone)"
+     },
+     "factory": {
+      "trials_total": 64,
+      "by_status": {
+       "idea": 2,
+       "screened_out": 6,
+       "exploratory_shadow": 2,
+       "registered": 1,
+       "testing": 1,
+       "passed": 1,
+       "failed": 51,
+       "retired": 0
+      },
+      "expected_false_passes": 0.64,
+      "pass_level": 0.01
+     },
+     "ideas": [
+      {
+       "trial": 61,
+       "title": "A small protected put spread",
+       "rests_on": "Q1",
+       "gate": "G6",
+       "status": "passed",
+       "verdict": "pass",
+       "label": "some evidence"
+      },
+      {
+       "trial": 58,
+       "title": "Sell protected premium when movement is forecast well below what options price in",
+       "rests_on": "V2",
+       "gate": "G5",
+       "status": "exploratory_shadow",
+       "verdict": null,
+       "label": "reasoning only"
+      },
+      {
+       "trial": 57,
+       "title": "Buy protected movement when movement is forecast well above what options price in",
+       "rests_on": "V2",
+       "gate": "G1",
+       "status": "screened_out",
+       "verdict": null,
+       "label": "reasoning only"
+      }
+     ],
+     "books": [
+      {
+       "family": "rule",
+       "approved": [
+        "Put spread A, version 1"
+       ],
+       "trading": true,
+       "why_not": null,
+       "ai_and_data_costs": 1850
+      },
+      {
+       "family": "hybrid",
+       "approved": [],
+       "trading": false,
+       "why_not": "Its candidate is still a shadow",
+       "ai_and_data_costs": 6420
+      },
+      {
+       "family": "ai",
+       "approved": [],
+       "trading": false,
+       "why_not": "No strategy of its own has passed yet",
+       "ai_and_data_costs": null
+      }
+     ],
+     "results": [
+      {
+       "strategy": "Put spread A, version 1",
+       "family": "rule",
+       "rung": 3,
+       "status": "active",
+       "pause_reason": null,
+       "trades": 38,
+       "won": 24,
+       "lost": 14,
+       "gross": 21480,
+       "costs": 8132,
+       "net": 13348,
+       "net_after_tax": 9183,
+       "net_per_risk": {
+        "value": 0.077,
+        "lower_bound": 0.01
+       },
+       "worst_trade": -3910,
+       "max_drawdown": 7420,
+       "fill_error_per_unit": 0.4,
+       "vs_index_fund": 2300,
+       "vs_cash": 5100
+      }
+     ],
+     "real_money": {
+      "eligible": false,
+      "checks": [
+       {
+        "id": 1,
+        "plain": "Paper record: the lower bound of net per unit of risk is above zero after every cost, with the registered sample",
+        "met": true
+       },
+       {
+        "id": 2,
+        "plain": "After tax, it beats a NIFTY 50 index fund per rupee of capital tied, over the same months",
+        "met": false
+       },
+       {
+        "id": 3,
+        "plain": "Every trade stayed within its loss cap, and so did the crash replays (2020, June 2024)",
+        "met": true
+       },
+       {
+        "id": 4,
+        "plain": "Paper fills were honest: within the assumed pad of the next real quote",
+        "met": true
+       },
+       {
+        "id": 5,
+        "plain": "The evidence holds after counting every idea tried (a second untouched period or a multiplicity adjustment)",
+        "met": null
+       },
+       {
+        "id": 6,
+        "plain": "It fits the smaller real-money cap, and SEBI and tax rules are re-checked",
+        "met": null
+       },
+       {
+        "id": 7,
+        "plain": "The owner approves in writing",
+        "met": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  "india_paused": {
+   "case": "negative",
+   "summary": "Mock (india): an approved strategy losing and paused",
+   "about": "It crossed the Rs 30,000 pause line; a retired idea; real money not eligible",
+   "value": {
+    "market": "india",
+    "page_key": "strategy_lab",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T12:12:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "94df81430986c11ff4de60049c9179f741babeb1c1582cf13d2b08853c2e2262",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T12:12:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "headline": {
+      "any_passed": true,
+      "text": "1 strategy passed its test, then lost on paper and is paused for review"
+     },
+     "factory": {
+      "trials_total": 64,
+      "by_status": {
+       "idea": 2,
+       "screened_out": 6,
+       "exploratory_shadow": 2,
+       "registered": 1,
+       "testing": 1,
+       "passed": 1,
+       "failed": 51,
+       "retired": 0
+      },
+      "expected_false_passes": 0.64,
+      "pass_level": 0.01
+     },
+     "ideas": [
+      {
+       "trial": 61,
+       "title": "A small protected put spread",
+       "rests_on": "Q1",
+       "gate": "G6",
+       "status": "passed",
+       "verdict": "pass",
+       "label": "some evidence"
+      },
+      {
+       "trial": 59,
+       "title": "A protected four-leg structure",
+       "rests_on": null,
+       "gate": "G6",
+       "status": "failed",
+       "verdict": "fail",
+       "label": "strong evidence"
+      }
+     ],
+     "books": [
+      {
+       "family": "rule",
+       "approved": [
+        "Put spread A, version 1"
+       ],
+       "trading": true,
+       "why_not": null,
+       "ai_and_data_costs": null
+      },
+      {
+       "family": "hybrid",
+       "approved": [],
+       "trading": false,
+       "why_not": "No strategy of its own has passed yet",
+       "ai_and_data_costs": null
+      },
+      {
+       "family": "ai",
+       "approved": [],
+       "trading": false,
+       "why_not": "No strategy of its own has passed yet",
+       "ai_and_data_costs": null
+      }
+     ],
+     "results": [
+      {
+       "strategy": "Put spread A, version 1",
+       "family": "rule",
+       "rung": 3,
+       "status": "paused",
+       "pause_reason": "It lost Rs 30,840 in total, past the Rs 30,000 pause line: new entries wait for your review",
+       "trades": 22,
+       "won": 9,
+       "lost": 13,
+       "gross": -26132,
+       "costs": 4708,
+       "net": -30840,
+       "net_after_tax": -30840,
+       "net_per_risk": {
+        "value": -0.352,
+        "lower_bound": -0.71
+       },
+       "worst_trade": -9620,
+       "max_drawdown": 34100,
+       "fill_error_per_unit": 0.6,
+       "vs_index_fund": -41200,
+       "vs_cash": -35600
+      }
+     ],
+     "real_money": {
+      "eligible": false,
+      "checks": [
+       {
+        "id": 1,
+        "plain": "Paper record: the lower bound of net per unit of risk is above zero after every cost, with the registered sample",
+        "met": false
+       },
+       {
+        "id": 2,
+        "plain": "After tax, it beats a NIFTY 50 index fund per rupee of capital tied, over the same months",
+        "met": false
+       },
+       {
+        "id": 3,
+        "plain": "Every trade stayed within its loss cap, and so did the crash replays (2020, June 2024)",
+        "met": true
+       },
+       {
+        "id": 4,
+        "plain": "Paper fills were honest: within the assumed pad of the next real quote",
+        "met": true
+       },
+       {
+        "id": 5,
+        "plain": "The evidence holds after counting every idea tried (a second untouched period or a multiplicity adjustment)",
+        "met": false
+       },
+       {
+        "id": 6,
+        "plain": "It fits the smaller real-money cap, and SEBI and tax rules are re-checked",
+        "met": null
+       },
+       {
+        "id": 7,
+        "plain": "The owner approves in writing",
+        "met": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  "india_none": {
+   "case": "empty",
+   "summary": "Mock (india): no strategy has passed",
+   "about": "The honest empty state: every try counted, none passed, no book trades",
+   "value": {
+    "market": "india",
+    "page_key": "strategy_lab",
+    "as_of": "2026-11-16",
+    "cutoff": "2026-11-16T09:30:00Z",
+    "built_at": "2026-11-16T12:12:00Z",
+    "schema_version": "2.8.0",
+    "source_commit": "0000000mock",
+    "payload_sha256": "eca9c9a225cbaba21b961a0a585f0dd058fd376c3233e30a0f6c438bf1ffdf3d",
+    "publisher": "fno",
+    "freshness": {
+     "state": "fresh",
+     "rule": "fno_calendar",
+     "built_at": "2026-11-16T12:12:00Z",
+     "age_minutes": 0,
+     "reason": null
+    },
+    "paper": "Paper",
+    "product": "fno",
+    "publication_id": "mock-fno-2026-11-16",
+    "payload": {
+     "headline": {
+      "any_passed": false,
+      "text": "No strategy has passed its test yet: 58 ideas tried, 0 passed"
+     },
+     "factory": {
+      "trials_total": 58,
+      "by_status": {
+       "idea": 3,
+       "screened_out": 4,
+       "exploratory_shadow": 1,
+       "registered": 2,
+       "testing": 0,
+       "passed": 0,
+       "failed": 48,
+       "retired": 0
+      },
+      "expected_false_passes": 0.58,
+      "pass_level": 0.01
+     },
+     "ideas": [
+      {
+       "trial": 58,
+       "title": "Sell protected premium when movement is forecast well below what options price in",
+       "rests_on": "V2",
+       "gate": "G5",
+       "status": "exploratory_shadow",
+       "verdict": null,
+       "label": "reasoning only"
+      },
+      {
+       "trial": 57,
+       "title": "Buy protected movement when movement is forecast well above what options price in",
+       "rests_on": "V2",
+       "gate": "G1",
+       "status": "screened_out",
+       "verdict": null,
+       "label": "reasoning only"
+      }
+     ],
+     "books": [
+      {
+       "family": "rule",
+       "approved": [],
+       "trading": false,
+       "why_not": "No strategy approved to paper yet: Experiment 1 passed none",
+       "ai_and_data_costs": null
+      },
+      {
+       "family": "hybrid",
+       "approved": [],
+       "trading": false,
+       "why_not": "Books 2 and 3 trade on paper only after a strategy has passed (owner, 15 Oct 2026); until then they forecast and are scored",
+       "ai_and_data_costs": null
+      },
+      {
+       "family": "ai",
+       "approved": [],
+       "trading": false,
+       "why_not": "Books 2 and 3 trade on paper only after a strategy has passed (owner, 15 Oct 2026); until then they forecast and are scored",
+       "ai_and_data_costs": null
+      }
+     ],
+     "results": [],
+     "real_money": {
+      "eligible": false,
+      "checks": [
+       {
+        "id": 1,
+        "plain": "Paper record: the lower bound of net per unit of risk is above zero after every cost, with the registered sample",
+        "met": null
+       },
+       {
+        "id": 2,
+        "plain": "After tax, it beats a NIFTY 50 index fund per rupee of capital tied, over the same months",
+        "met": null
+       },
+       {
+        "id": 3,
+        "plain": "Every trade stayed within its loss cap, and so did the crash replays (2020, June 2024)",
+        "met": null
+       },
+       {
+        "id": 4,
+        "plain": "Paper fills were honest: within the assumed pad of the next real quote",
+        "met": null
+       },
+       {
+        "id": 5,
+        "plain": "The evidence holds after counting every idea tried (a second untouched period or a multiplicity adjustment)",
+        "met": null
+       },
+       {
+        "id": 6,
+        "plain": "It fits the smaller real-money cap, and SEBI and tax rules are re-checked",
+        "met": null
+       },
+       {
+        "id": 7,
+        "plain": "The owner approves in writing",
+        "met": null
+       }
+      ]
+     }
+    }
+   }
+  }
+ }
+}
