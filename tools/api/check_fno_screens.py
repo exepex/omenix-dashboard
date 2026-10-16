@@ -52,10 +52,12 @@ RECORDS = {
     "trade_line": "fno/accounting/ledgers.py TradeLine (C1)",
     "desk_event": "fno/desk/records.py DeskEvent (E4)",
 }
-# Mockups whose data.json is built from the catalog: folder -> the operation whose examples it shows
+# Mockups whose data.json is built from the catalog: folder -> the operation whose examples it shows as its states
 MOCKUPS = {"37-forecasts": "getFnoForecastLab", "39-trade-card": "getFnoCard", "40-weather": "getFnoWeather", "41-paper-books": "getFnoPaperTrades",
            "42-scoreboards": "getFnoScoreboards", "43-budget": "getFnoBudget", "44-data-health": "getFnoDataHealth",
            "45-strategy-lab-fno": "getFnoStrategyLab", "46-weather-history": "getFnoWeatherHistory"}
+# ...and the further operations a mockup draws beside its states (data.json "also": operation -> its examples)
+MOCKUPS_ALSO = {"37-forecasts": ("getFnoForecastHistory",)}
 
 
 def canonical(payload) -> bytes:
@@ -188,9 +190,11 @@ def check_mockups(doc: dict, problems: list[str], mockups: Path = bundle.REPO / 
             problems.append(f"{folder}: no data.json")
             continue
         data = json.loads(path.read_text(encoding="utf-8"))
-        want = {key: example["value"] for key, (_, example) in op_examples(doc, ops[op_id]).items()}
-        if {key: state["value"] for key, state in data.get("states", {}).items()} != want:
-            problems.append(f"{folder}/data.json: its states differ from the catalog's {op_id} examples (rebuild: python3 design/mockups/{folder}/build.py)")
+        shown = {op_id: data.get("states", {})} | {also: data.get("also", {}).get(also, {}) for also in MOCKUPS_ALSO.get(folder, ())}
+        for shown_op, states in shown.items():
+            want = {key: example["value"] for key, (_, example) in op_examples(doc, ops[shown_op]).items()}
+            if {key: state["value"] for key, state in states.items()} != want:
+                problems.append(f"{folder}/data.json: its data differs from the catalog's {shown_op} examples (rebuild: python3 design/mockups/{folder}/build.py)")
 
 
 def own_examples(folder: Path = bundle.API) -> dict:

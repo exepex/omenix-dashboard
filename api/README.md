@@ -28,5 +28,5 @@ visibility, backend records, privacy, mockups equal to the examples, rule probes
 
 Versioning: 2.0.0 was the wave of 2026-10-08 (the owner approved the major bump: the mockups' payloads replaced the
 never-built 1.0 payloads of watchlist, stocks/{ticker}, track-record and news); 2.1.0 adds the block endpoints (W10,
-additions only); 2.2.0 adds the screener and Markets overview blocks (W11, additions only); 2.7.0 adds the F&O data catalog (P1, additions only); 2.8.0 adds four F&O pages: weather history, scoreboards, budget, data health (W3, additions only). Additions bump the minor version, and a major version needs the owner. A page payload uses catalogue
+additions only); 2.2.0 adds the screener and Markets overview blocks (W11, additions only); 2.7.0 adds the F&O data catalog (P1, additions only); 2.8.0 adds four F&O pages: weather history, scoreboards, budget, data health (W3, additions only); 2.9.0 adds the Forecast lab's running scores (`forecast_history`) and the chances on the weather history (owner, 16 Oct 2026). Additions bump the minor version, and a major version needs the owner. A page payload uses catalogue
 fields only (`docs/DATA_CATALOGUE.md` of the stock repository); a missing field is a data request.

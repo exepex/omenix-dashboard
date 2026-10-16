@@ -18,15 +18,13 @@ made-up data. The rebuild draws only what `FnoForecastLab` carries. Each request
 | Which family is best at which prediction | **Kept** | One row per question from the backend's own verdicts against its yardstick |
 | Overall ranked cards | **Changed**: ranked within each question, no rank across questions | The questions use different miss scores (Brier for chances, QLIKE for move sizes); ranking across them would add unlike numbers. Reasoning only |
 | Official statistics folded away "for the curious" | **Kept** | Per question, folded: average difference, likely range, p-value; v4 marked not frozen |
+| A period you choose (last week to since the start, or picked dates), its table and the race chart; one line graph of all families by day | **Kept, from contract 2.9** | "A period you choose": a question picker, last week, last month, last 3 months, since the start, or From/To dates; a race chart of each forecaster's average miss over the answers that came in from the period's start (the yardstick dashed; live and rebuilt from history apart) and a ranked table, from `getFnoForecastHistory` (owner, 16 Oct 2026, field A). Descriptive only: no test over a chosen period |
 | Say how long it runs | **Changed**: per question, when it could settle | `settle` gives a projected date per question, not one end date for the lab |
-| Who wins and loses and why; costliest mistakes as sentences ("what made the difference" story cards) | **Dropped for now** | The contract has no per-day forecasts with their outcomes; inventing them on screen would be made-up data. Needs a new field |
-| A period you choose (last week to since the start, or picked dates), its table and the race chart; one line graph of all families by day | **Dropped for now** | The contract has scores since the start only, no per-day or per-period series. Needs a new field |
+| Who wins and loses and why; costliest mistakes as sentences ("what made the difference" story cards) | **Waiting** (owner, 16 Oct 2026) | Needs field B (settled forecasts with their outcomes), which the owner put off until about 60 live days are scored; until then too few misses mean anything |
 
-**To bring back the dropped two** (proposal, owner's call; reasoning only): a 2.9 addition of (1) a per-question,
-per-forecaster series of the running average miss score by session (the race chart and the period chooser), and (2)
-the last few settled forecasts with their outcomes (the "costliest mistakes" sentences). Both come from records the
-backend keeps (G4 scores, the forecast records); both are public-safe (answers and outcomes, never a rule). Not added
-in 2.8.0 because the orchestrator scoped 2.8 to the W3 pages and P2 would have to build them.
+**Owner's decision (16 Oct 2026, exepex/trading `docs/DESK_DECISIONS.md`; proposal in response 226):** field A, the
+running score by session, is in contract 2.9 (`getFnoForecastHistory`, its own page) and drawn above. Field B, settled
+forecasts with their outcomes for the "costliest mistakes" cards, waits until about 60 live days are scored.
 
 ## Data used
 
@@ -35,6 +33,18 @@ in 2.8.0 because the orchestrator scoped 2.8 to the W3 pages and P2 would have t
 | `india_winning` (default) | positive: the Hybrid book beats its yardstick on Q1; rules level with it | `api/examples/fno-screens.json`, `getFnoForecastLab_india_winning` |
 | `india_losing` | negative: the AI team worse than the yardstick; a v4 question that cannot win (stop testing); late and breached answers not counted | `getFnoForecastLab_india_losing` |
 | `india_waiting` | empty: not enough days; V1 waits for the 15-minute recorder; V6 not started | `getFnoForecastLab_india_waiting` |
+
+"A period you choose" draws `getFnoForecastHistory` (contract 2.9) in the same case as the state: `india_ahead` with the
+good case, `india_behind` with the bad case, `india_none` (no answer scored) with the empty case (data.json `also`;
+`tools/api/check_fno_screens.py` checks it against the catalog too). URL `q=` picks the question, `p=` the period in
+days (7, 30, 91; since the start by default) and `r=backfill` the record rebuilt from history. Screenshots
+`shot-india_winning-v2-last-month-*` (V2 over the last month) and `shot-india_winning-rebuilt-*` (Q1's back-fill).
+
+**What a period counts (P2 builder, checked on G4's real reports of 13, 15 and 16 Oct; strong evidence):** G4 scores a
+forecast when its answer is known, up to the question's horizon later (20 sessions for Q1), and writes one report a
+day, with gaps. So a period's average is over the answers that came in during it, mostly forecasts made before it, and
+the screen says so. Live and rebuilt-from-history (G4's `live_1500_proxy` and `close_proxy`) are separate series,
+never joined; the rebuilt one carries the Exploratory mark. Scoring by the day a forecast was made needs field B.
 
 **Every state is Mock: made-up numbers on a future date (16 Nov 2026).** `data.json` is built from the catalog
 (`_platform/catalog_data.py`), one copy of the data.

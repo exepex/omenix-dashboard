@@ -28,6 +28,15 @@
 .md-table td small{display:block;font-size:12px;color:var(--md-sys-color-on-surface-variant)}
 .empty{font-size:13.5px;margin:0}
 .q h2 small{font-weight:400;color:var(--md-sys-color-on-surface-variant);font-size:12.5px}
+.plot .line{fill:none;stroke-width:2;vector-effect:non-scaling-stroke}.plot .l1{stroke:var(--mb-chart-1)}.plot .l2{stroke:var(--mb-chart-2)}.plot .l3{stroke:var(--mb-chart-3)}.plot .l4{stroke:var(--mb-chart-4)}
+.plot .line.y{stroke:var(--md-sys-color-outline);stroke-dasharray:6 4}
+.plot .grid{stroke:var(--md-sys-color-surface-container-high);stroke-width:1}
+.plot text{font:11px var(--md-ref-typeface-plain);fill:var(--md-sys-color-on-surface-variant)}
+.keys{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--md-sys-color-on-surface-variant);margin:6px 0 4px}
+.keys i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px}.keys i.l1{background:var(--mb-chart-1)}.keys i.l2{background:var(--mb-chart-2)}.keys i.l3{background:var(--mb-chart-3)}.keys i.l4{background:var(--mb-chart-4)}
+.keys i.y{background:repeating-linear-gradient(90deg,var(--md-sys-color-outline) 0 5px,transparent 5px 8px)}
+svg.plot.race{width:100%;height:auto;display:block;margin-top:8px}
+.dpick{display:flex;align-items:center;gap:6px}.dpick .mb-input{height:32px;width:auto;font-size:13px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
 @media (max-width:1439px){table.tstack thead{display:none}table.tstack,table.tstack tbody,table.tstack tr,table.tstack td{display:block;width:auto}table.tstack tr{padding:8px 0;border-top:1px solid var(--md-sys-color-surface-container-high)}table.tstack td{border:0;padding:2px 0;text-align:left}table.tstack td[data-k]::before{content:attr(data-k) ": ";color:var(--md-sys-color-on-surface-variant);font-size:12px}table.tstack td small{display:inline;margin-left:6px}}
 @media (max-width:1099px){.books{grid-template-columns:1fr}}
