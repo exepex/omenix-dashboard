@@ -392,7 +392,7 @@ J3):**
    `check_pages`, because the page is still the build of that data. `check_mockups` catches that case (data differs
    from the examples). The two checks together tie the page to the contract, as the text says.
 
-**Answers to judge 5 (text round 1, `reviews/judge/judge_5_*`), by number:**
+**Answers to judge 5 (text round 1, `reviews/judge/judge_5_W3i-2-page-check.md`), by number:**
 1. **Accepted.** The story now says lane 1, and the merge message is the orchestrator's: it must start "Lane 1:".
    Commit `807cd2f`'s title says "Lane 2:"; I leave it as it is rather than rewrite pushed history.
 2. **Accepted** (checked: `render` embeds the four sources; `api-contract.yml:32` runs the check; `CLAUDE.md`'s gates
