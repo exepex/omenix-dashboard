@@ -55,3 +55,18 @@ Plants (mine, each restored): 6 planted, 6 behaved as claimed.
 
 Open from the text: findings 1 and 2 (should fix) and 3 (minor). The story's lane line, the merge message, and two
 or three sentences of text are all it needs. Round 2 can be judged by reading.
+
+## Addendum 2: round 2, text and code (head 4bc6134ca39071fe3bd0e6f43710f7d4a4e656d9)
+
+**PASS**, lane 1. Since 807cd2f, only `docs/stories/W3i-card-reasons.md` changed, plus the merge of `main`, which
+brought the judge files. `git diff 807cd2f 4bc6134 -- tools design web api` is empty, so addendum 1's code evidence
+(cmp 10/10, gates, 6/6 plants) holds unchanged. Judged by reading.
+
+| Finding | Verdict | Judge's evidence |
+|---|---|---|
+| 1 lane | Accepted, fixed | the story says lane 1 with its reason; 807cd2f's "Lane 2:" title stays (no history rewrite), and the merge message must start "Lane 1:" |
+| 2 coupling | Accepted, fixed | names the four embedded sources, the CI effect (`api-contract.yml:32` runs the check, `CLAUDE.md`'s gates do not), the remedy, and pages 30-35 and 38 left unchecked; adding the check to the pre-push gates is proposed as a separate lane-1 item, rightly kept out of this story |
+| 3 plant line | Accepted, fixed | now "only `check_mockups` reports it", matching the claims' correction 2 |
+
+No new findings. For the orchestrator: start the merge message with "Lane 1:", and decide the proposed pre-push gate
+item.
