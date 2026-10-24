@@ -56,3 +56,22 @@ None (text round). The story's plants P1-P3 are judged at code time; P3 relies o
 
 - The trading `WORK_REGISTER` row for this builder (`T-cards.md:783-784`) is the orchestrator's to add.
 - Question 2 (`step_warning`) is sound reasoning only; it is a contract change, so it is paused too (finding 1).
+
+## Addendum 1: round 2 (`story/fno-card-reasons` at 8b11a5a75)
+
+**PASS**, lane 1. Only `docs/stories/W3i-card-reasons.md` changed since 6de707e06, apart from the merge of `main`
+(e80b574). Judged by reading, with each claim checked against the files.
+
+| Round-1 finding | Verdict | Judge's evidence |
+|---|---|---|
+| 1 blocking: the pause covers Part A | Accepted, fixed | lines 238, 243, 244, 294 quoted correctly; both parts wait; question 1 gives (a) A only, (b) A and B, (c) neither, with (c)'s cost (T1e cannot merge; C4 refusal days keep failing the delivery test) |
+| 2 should fix: side effects of the bump | Accepted, fixed | the table matches my grep exactly: build.py notes in 37, 42-46 (46 has two, incl. `build.py:1`); notes.md in 37 and 44; `1-base.js` in 37, 42-46; `dataLabel` in 42, 43, 44, 46; `44/js/3-holds.js:1` kept as history; `sync-design.mjs:14,52` has `--check`; `design-sync.test.ts` exists |
+| 3 should fix: YAML read | Accepted, fixed | `reason:` at four spaces is unique (`fno-card.yaml:37`); its flow `enum:` is one line; three plants, no new package; list moves to new `reasons.ts`, `contract.ts` stays types only |
+| 4 minor: test plan 1 | Accepted, fixed | positives move to `check_card_reasons` (`check_fno_screens.py` is 256 lines); both negative probes marked new |
+
+New findings: none blocking or should fix. One minor, which is not required for PASS: option (b) in question 1 does
+not state its own cost (mockup 39 is unapproved, line 243, and the UI freezes on 26 Oct, line 294). Adding one
+clause would make the owner's choice fully plain.
+
+`node tools/check_code_size.mjs` passes. No code yet, so no plants. Nothing is built before the owner answers
+question 1. The ruling is the owner's, not the judge's.
