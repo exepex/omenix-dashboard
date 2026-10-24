@@ -64,6 +64,17 @@ def page_js(here: str) -> str:
     return "".join(read(os.path.join(folder, name)) for name in sorted(os.listdir(folder)) if name.endswith(".js"))
 
 
+def page_html(here: str) -> str:
+    """The page as `build.py` writes it, from the folder's committed data.json (or the shell's), template and js/; writes
+    nothing, so a check can compare it with the committed page.html (W3i-2)."""
+    own = os.path.join(here, "data.json")
+    shell = json.loads(read(SHELL_DATA))
+    data = shell if os.path.abspath(own) == os.path.abspath(SHELL_DATA) else json.loads(read(own))
+    assert data.get("_mock") is True, "every platform payload is labelled Mock"
+    template = read(os.path.join(here, "template.html")).replace(PAGE_JS, f"<script>\n{page_js(here)}\n</script>")
+    return render(template, shell, None if data is shell else data)
+
+
 def run(here: str, summary=None, compose=None) -> None:
     """`compose()`, when given, returns the page's payload and is written to data.json first (deterministic)."""
     parser = argparse.ArgumentParser(description="Build this platform mockup into page.html")
@@ -74,15 +85,11 @@ def run(here: str, summary=None, compose=None) -> None:
         with open(own, "w", encoding="utf-8") as handle:
             json.dump(compose(), handle, indent=1, ensure_ascii=False)
             handle.write("\n")
-    shell = json.loads(read(SHELL_DATA))
-    data = shell if os.path.abspath(own) == os.path.abspath(SHELL_DATA) else json.loads(read(own))
-    assert data.get("_mock") is True, "every platform payload is labelled Mock"
-    template = read(os.path.join(here, "template.html")).replace(PAGE_JS, f"<script>\n{page_js(here)}\n</script>")
-    html = render(template, shell, None if data is shell else data)
+    html = page_html(here)
     os.makedirs(args.out, exist_ok=True)
     out = os.path.join(args.out, "page.html")
     with open(out, "w", encoding="utf-8") as handle:
         handle.write(html)
     if summary:
-        print(summary(shell, data))
+        print(summary(json.loads(read(SHELL_DATA)), json.loads(read(own))))
     print(out, len(html), "bytes")
