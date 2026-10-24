@@ -3,7 +3,8 @@
 **Repository:** exepex/omenix-dashboard · **Lane:** 1 (`api/`, `.ts`; part B also `design/`, which rides in this
 lane-1 story) · **Size:** S (part A), S (part B) · **Asked by:** the orchestrator, 24 Oct 2026, for exepex/trading's
 T1e (owner, 24 Oct 2026, DESK_DECISIONS "The card warns when any step failed") · **Branch:** `story/fno-card-reasons`
-· **Status:** text round 2 (answers judge 3, below), to the judge; no code until the judge and the owner say yes
+· **Status:** text round 2 (answers judge 3, below), to the judge. Owner's answer to question 1: (a), part A only
+(24 Oct 2026, below). Code starts after the text PASS
 
 **Description:** As the owner, I want every reason the F&O backend can put on the daily card to be allowed by the
 dashboard's contract, so that a real card day never fails validation and never drops out of my dashboard, and, once I
@@ -61,7 +62,7 @@ plain warning, never hidden.
   - **Part B** (the warning on the card screen, examples and mockup 39's states): screen design, so it waits for the
     owner's review of the F&O mockups. Specified in full below so that it is ready.
 
-## Part A: the contract (built only after the owner's exception, question 1)
+## Part A: the contract (allowed by the owner's exception (a), 24 Oct 2026)
 
 Scope, in:
 1. `api/schemas/fno-card.yaml`: `reason`'s enum gains `trade_fields_not_built`, `hard_rule_breach` and
@@ -149,7 +150,7 @@ Test plan (part A):
    `check_card_reasons`); P2 one example left at 2.13.0 (`check_fno_screens`); P3 a mockup `data.json` left unregenerated
    (`check_mockups`).
 
-## Part B: the card screen's reason line and warning (only after the owner allows it)
+## Part B: the card screen's reason line and warning (not allowed: the owner chose (a); kept for later)
 
 Built only when the owner lifts the 16 Oct pause for the card screen (question 1). Until then nothing below is built.
 
@@ -221,6 +222,11 @@ dropped, the glyph dropped, the label replacing `reason_text`, each caught by a 
 
    Recommendation: (a) (reasoning only). It unblocks T1e and fixes a bug that exists today, and it changes nothing
    the owner sees. Part B waits for the owner's review of the F&O mockups. Nothing is built before the answer.
+
+   **Answered (owner, 24 Oct 2026: "2. Option A"; exepex/trading `docs/DESK_DECISIONS.md` line 331 at `c63eb7e0b`,
+   "Dashboard: the contract's reason list only (UI pause exception a)"):** part A only. "No screen change: the 16 Oct
+   UI pause stays for screens." Part A changes no app screen; its mockup edits are the version values and labels of
+   item 3's table only, as option (a) said. Part B and question 2 stay paused.
 2. Should the backend send a separate `step_warning` field, so that the screen can warn on every day the Slack card
    does? This is a contract change, so the pause covers it too. Recommendation: yes, with part B (reasoning only:
    without it, the screen misses the warning on exactly the worst days).
