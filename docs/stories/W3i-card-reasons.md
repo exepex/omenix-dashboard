@@ -82,7 +82,7 @@ Scope, in:
    | `api/examples/fno-screens.json` | the 36 `"schema_version": "2.13.0"` become `"2.14.0"`; nothing else | it has no generator, so one scripted, exact replace of that string; checked by `check_fno_screens.py:103` (every example equals `info.version`) and by `git diff --numstat` showing exactly 36 changed lines |
    | `api/catalog/fno-screens.md` | the enum list | `render_fno_catalog.py`, then `--check` |
    | `web/lib/fixtures/fno-screens.generated.json` | the same 36 values | `node tools/sync-design.mjs` from `web/`; `--check` (and `lib/ui/tests/design-sync.test.ts`) |
-   | the nine F&O mockups' `data.json` and `page.html` (37, 39, 40, 41, 42, 43, 44, 45, 46; each `page.html` embeds its data) | `schema_version` | each mockup's own `build.py`, which reads the examples; checked by `check_mockups` (`check_fno_screens.py:188`) |
+   | the nine F&O mockups' `data.json` and `page.html` (37, 39, 40, 41, 42, 43, 44, 45, 46; each `page.html` embeds its data) | `schema_version` | each mockup's own `build.py`, which reads the examples; `data.json` checked by `check_mockups` (`check_fno_screens.py:188`). Correction (judge 4, minor 1): `check_mockups` checks `data.json` only; nothing checked `page.html` until follow-up W3i-2 below |
    | the "contract 2.13.0" labels: `js/9-mount.js` `dataLabel` in 42, 43, 44 and 46 (shown on the page); the `note` strings in `build.py` of 37, 42, 43, 44, 45, 46 (in the data); the header comments in `js/1-base.js` of 37, 42, 43, 44, 45, 46 and `46/build.py:1`; `37/notes.md`, `44/notes.md` | become "contract 2.14.0" | by hand, then each `build.py` again. They change because a page that shows 2.14.0 data must not say 2.13.0. Mentions that name when something was added (for example `44/js/3-holds.js:1`, "contract 2.13, page page_holds") stay as they are, since they are history |
    | screenshots | re-shot (1280 and 390 px, `check_page.js`) for every mockup whose rendered text changes: 42, 43, 44 and 46 for certain (`dataLabel`), and 37 and 45 if their `note` is drawn | the builder compares each page's rendered text before and after; a page whose text is unchanged keeps its screenshots |
 
@@ -302,4 +302,51 @@ needs T1e's branch and the re-pin.
   46.
 - No new dependency.
 - Judge 3 addendum 1's minor (option (b)'s cost) is moot now that the owner has answered (a).
+
+## Follow-up W3i-2: every F&O mockup page equals its build (judge 4, minor 1)
+
+**Lane:** 2 (orchestrator, 24 Oct 2026). It adds a check, and refactors the mockup builder with no change to its
+output; no data, contract or screen changes. **Status:** text, to the orchestrator.
+
+**Why (strong evidence):** judge 4's plant P5 set mockup 42's `page.html` back to 2.13.0, and every check still
+passed. `check_mockups` compares only `data.json` with the examples (`check_fno_screens.py:203-215` at `76ef53f`), and
+`page.html` embeds its own copy of the data (`platform_build.render`). So a stale or hand-edited page goes unseen.
+The committed pages are correct today: judge 4 rebuilt all nine and got no diff.
+
+**Scope, in:**
+1. `design/mockups/_platform/platform_build.py`:
+   - a new pure function `page_html(here) -> str` builds the page from the folder's committed `data.json`,
+     `template.html`, `js/` and the shell's data, and writes nothing;
+   - `run()` uses it, so `build.py` writes exactly what `page_html` returns (one way to build, DRY);
+   - a mockup without a `compose` behaves as before.
+2. `tools/api/check_fno_screens.py`, new `check_pages`: for each of the nine folders in `MOCKUPS`, the committed
+   `page.html` must equal `page_html(folder)` byte for byte. Otherwise the problem names the folder and the rebuild
+   command.
+   - It builds from the committed `data.json`, which `check_mockups` already holds equal to the examples, so together
+     the two checks tie the page to the contract.
+   - It never runs `build.py`, which rewrites `data.json`, so the check changes no file.
+3. A built-in plant, `planted_page`, following `planted_also`: mockup 42's built page with "contract 2.14.0" changed
+   is written to a scratch folder, and `check_pages` on that folder must report 42. If it does not, that is a
+   problem.
+
+**Out:** the other mockups (01-35, 38) are not in `MOCKUPS` and are not catalog-built; extending the check to them is
+not asked for. The shell's own data changing would correctly flag every F&O page as stale.
+
+**Acceptance criteria:**
+- C1. On today's tree, `check_fno_screens.py` reports "every rule holds", and rebuilding the nine pages through
+  `build.py` gives no diff.
+- C2. Judge 4's P5 (42's `page.html` set back to 2.13.0) is reported by `check_pages`, naming 42. So is a page built
+  from a stale `data.json`.
+- C3. The plant `planted_page` runs on every check.
+- C4. `run()` output is byte-identical before and after the refactor, for all nine F&O mockups and for mockup 30.
+- C5. The gates: `node tools/check_code_size.mjs`; `check_contract.py`; `check_fno_screens.py`;
+  `render_fno_catalog.py --check`; then `cd web && npm ci --ignore-scripts && npm run typecheck && npm test &&
+  npm run build`. No file grows past 350 lines.
+
+**Plants (manual, each then restored):**
+- P5, judge 4's plant;
+- one character changed in 44's embedded JavaScript;
+- 40's `data.json` and `page.html` both left at 2.13.0, which `check_mockups` and `check_pages` both report;
+- `check_pages` removed from `check()`, which is caught by the review of the diff and by `planted_page`'s message
+  never appearing. This one is stated honestly: a removed check cannot test itself.
 
