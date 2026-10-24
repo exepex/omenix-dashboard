@@ -29,6 +29,8 @@ import bundle  # noqa: E402
 from check_contract import errors  # noqa: E402
 from fno_rules import check_copied_figures, check_never_sent_values, check_owner_paths, check_probes, check_provisional, check_stress, config_figures  # noqa: E402
 from fno_walk import payload_name, response_ref, schema_nodes, screen_leaves, screen_operations  # noqa: E402
+sys.path.insert(0, str(bundle.REPO / "design/mockups/_platform"))
+from platform_build import page_html  # noqa: E402
 
 EXAMPLES_FILE = "fno-screens.json"
 SCHEMA_PREFIX = "fno-"
@@ -232,6 +234,29 @@ def planted_also(doc: dict, problems: list[str]) -> None:
                 problems.append(f"planted break not caught: {folder}/data.json with a changed {other} example")
 
 
+def check_pages(problems: list[str], mockups: Path = bundle.REPO / "design/mockups") -> None:
+    """Each mockup's committed page.html must be its build of the committed data.json (W3i-2): the page embeds its own
+    copy of the data, which check_mockups does not see. Built in memory; build.py is never run (it rewrites data.json)."""
+    for folder in MOCKUPS:
+        if (mockups / folder / "page.html").read_text(encoding="utf-8") != page_html(str(bundle.REPO / "design/mockups" / folder)):
+            problems.append(f"{folder}/page.html: not its build (rebuild: python3 design/mockups/{folder}/build.py)")
+
+
+def planted_page(problems: list[str]) -> None:
+    """A planted stale page must be caught (W3i-2; judge 4's P5): 42's page with its contract label changed, in a
+    scratch folder that holds every mockup's fresh build, so a real stale page elsewhere cannot blur the result."""
+    with tempfile.TemporaryDirectory() as scratch:
+        for folder in MOCKUPS:
+            (Path(scratch) / folder).mkdir()
+            page = page_html(str(bundle.REPO / "design/mockups" / folder))
+            planted = page.replace("contract 2.", "contract 1.") if folder == "42-scoreboards" else page
+            (Path(scratch) / folder / "page.html").write_text(planted, encoding="utf-8")
+        caught: list[str] = []
+        check_pages(caught, Path(scratch))
+    if not caught or any(not line.startswith("42-scoreboards/") for line in caught):
+        problems.append(f"planted break not caught: 42-scoreboards/page.html with a changed contract label ({caught})")
+
+
 def own_examples(folder: Path = bundle.API) -> dict:
     return json.loads((folder / "examples" / EXAMPLES_FILE).read_text(encoding="utf-8"))
 
@@ -251,6 +276,8 @@ def check(doc: dict, own: dict, problems: list[str]) -> list:
     check_sums(doc, problems)
     check_mockups(doc, problems)
     planted_also(doc, problems)
+    check_pages(problems)
+    planted_page(problems)
     check_copied_figures(config_figures(screen_schemas(), own), bundle.REPO / "design/mockups", list(MOCKUPS), problems)
     return leaves
 

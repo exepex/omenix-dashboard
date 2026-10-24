@@ -306,7 +306,7 @@ needs T1e's branch and the re-pin.
 ## Follow-up W3i-2: every F&O mockup page equals its build (judge 4, minor 1)
 
 **Lane:** 2 (orchestrator, 24 Oct 2026). It adds a check, and refactors the mockup builder with no change to its
-output; no data, contract or screen changes. **Status:** text, to the orchestrator.
+output; no data, contract or screen changes. **Status:** built, claims below, to the orchestrator.
 
 **Why (strong evidence):** judge 4's plant P5 set mockup 42's `page.html` back to 2.13.0, and every check still
 passed. `check_mockups` compares only `data.json` with the examples (`check_fno_screens.py:203-215` at `76ef53f`), and
@@ -349,4 +349,28 @@ not asked for. The shell's own data changing would correctly flag every F&O page
 - 40's `data.json` and `page.html` both left at 2.13.0, which `check_mockups` and `check_pages` both report;
 - `check_pages` removed from `check()`, which is caught by the review of the diff and by `planted_page`'s message
   never appearing. This one is stated honestly: a removed check cannot test itself.
+
+### Claims: W3i-2 as built (builder, 24 Oct 2026)
+
+| Criterion | Claim | Evidence |
+|---|---|---|
+| C1 | On this tree the check reports "every rule holds", and rebuilding all nine pages in place leaves `git status` clean | checked |
+| C2 | Judge 4's P5 is reported by `check_pages`, naming 42, and so is one changed character in 44's embedded JavaScript | checked (plants below) |
+| C3 | `planted_page` runs in `check()` on every run | tested: with the page comparison switched off, it reports "planted break not caught" |
+| C4 | `run()` writes byte-identical pages before and after the refactor | checked: `cmp` of `--out` builds before and after, for 30 and all nine F&O mockups, all the same |
+| C5 | Gates | checked: `check_code_size`; `check_contract` ("every planted break caught"); `check_fno_screens` ("every rule holds", about 2 s); `render_fno_catalog --check`; `npm ci --ignore-scripts`, typecheck, `npm test` 591/591 with 0 skipped, build. `check_fno_screens.py` is 299 lines, `platform_build.py` 95 |
+
+**Plants, each run and then restored:**
+- 42's page set back to 2.13.0: `42-scoreboards/page.html: not its build`.
+- One space added to a `function` in 44's page: `44-data-health/page.html: not its build`.
+- 40's `data.json` made stale: `check_mockups` reports the data, and `check_pages` reports the page.
+- The page comparison disabled: `planted_page` reports "planted break not caught".
+
+**Two corrections to the text above, with reasons:**
+1. `planted_page` copies each mockup's fresh build into the scratch folder, not the committed page. My first draft
+   copied the committed pages, so a real stale page elsewhere also made the plant report "not caught", which was
+   misleading. Seen in the 44 plant; fixed.
+2. C2's "a page built from a stale `data.json`": a page and its `data.json` made stale together and consistently pass
+   `check_pages`, because the page is still the build of that data. `check_mockups` catches that case (data differs
+   from the examples). The two checks together tie the page to the contract, as the text says.
 
