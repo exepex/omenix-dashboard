@@ -299,7 +299,7 @@ needs T1e's branch and the re-pin.
 **Self-review:**
 - The diff matches the claims.
 - Every new file is under 350 lines: `check_fno_screens.py` 272, `fno_rules.py` 170, `reasons.ts` 16, and the test
-  51.
+  46.
 - No new dependency.
 - Judge 3 addendum 1's minor (option (b)'s cost) is moot now that the owner has answered (a).
 
