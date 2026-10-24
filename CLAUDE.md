@@ -107,7 +107,10 @@ Work on `main`; `git pull --no-rebase origin main` before every push (several se
   depend on typed read-model contracts, never on SQL or a vendor SDK. Choose the simplest pattern that keeps parts
   swappable (KISS).
 - Before every push: `node tools/check_code_size.mjs` (the 350-line limit; inherited files over it are listed in
-  `tools/code_size_allowlist.txt` with their current size, which may only shrink) and
+  `tools/code_size_allowlist.txt` with their current size, which may only shrink),
+  `python3 tools/api/check_fno_screens.py` (the F&O catalog and each F&O mockup page against its build; needs
+  `pip install -r tools/api/requirements.txt`; CI runs it in `api-contract.yml`, so a design-system, shell or mockup
+  edit that leaves a page stale fails here, not in CI; owner, 24 Oct 2026) and
   `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build` must pass.
 - Secrets only in Vercel's environment variables. Automatic deployments are off (`web/vercel.json`); the owner
   deploys by hand.
