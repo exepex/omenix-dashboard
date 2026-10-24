@@ -4,7 +4,7 @@
 lane-1 story) · **Size:** S (part A), S (part B) · **Asked by:** the orchestrator, 24 Oct 2026, for exepex/trading's
 T1e (owner, 24 Oct 2026, DESK_DECISIONS "The card warns when any step failed") · **Branch:** `story/fno-card-reasons`
 · **Status:** text round 2 (answers judge 3, below), to the judge. Owner's answer to question 1: (a), part A only
-(24 Oct 2026, below). Code starts after the text PASS
+(24 Oct 2026, below). Text PASS (judge 3 addendum 1); part A built, claims at the end, to the judge
 
 **Description:** As the owner, I want every reason the F&O backend can put on the daily card to be allowed by the
 dashboard's contract, so that a real card day never fails validation and never drops out of my dashboard, and, once I
@@ -251,3 +251,55 @@ dropped, the glyph dropped, the label replacing `reason_text`, each caught by a 
 **Depends:** nothing in this repository; exepex/trading re-pins after part A merges, then T1e can merge ·
 **Judge verifies:** the criteria above, the backend meanings against `fno/constants.py` and `T-cards.md` (T2, T1e),
 and that part A changes no screen.
+
+## Claims: part A as built (builder, 24 Oct 2026)
+
+Evidence levels: **tested** means a check in this commit fails if the claim breaks; **checked** means I ran it once.
+
+| Criterion | Claim | Evidence |
+|---|---|---|
+| A1 | The enum is the 2.13 list plus `trade_fields_not_built`, `hard_rule_breach`, `step_problems`, then `null`; the description gives each new code's backend meaning and the backend's order | tested: `check_card_reasons` (the `none` card with each new code validates) and the new probe `new_reason` (refused) |
+| A2 | A TRADE card with a reason is still refused | tested: new probe "a TRADE card with a reason" on `getFnoCard_india_trade` |
+| A3 | `info.version` 2.14.0; the 36 F&O examples say 2.14.0, and only that changed in them | tested: `check_fno_screens.py:103`; checked: `git diff --numstat api/examples` = 36/36, and no changed line in `api/examples` or `design/` other than a 2.13.0 → 2.14.0 value or label |
+| A4 | `NO_TRADE_REASONS` (`web/lib/fno-card/reasons.ts`) equals the yaml enum, order included; `contract.ts` imports the type and stays types only | tested: `web/lib/fno-card/tests/reasons.test.ts` |
+| A5 | No file under `web/components/` or `web/app/`, and not `view.ts`, changed | checked: `git diff --stat` |
+| A6 | Gates on this tree | checked: `check_code_size` passes; `check_contract.py` "OpenAPI 3.1 valid; examples valid and current; ... every planted break caught"; `check_fno_screens.py` "every rule holds"; `render_fno_catalog.py --check` current; `npm ci --ignore-scripts`, `typecheck`, `npm test` 591/591 with 0 skipped, `npm run build` pass |
+| Item 5 | A 2.13 reader shows the same words for a new code | tested: `reasons.test.ts`, `headerOf` with `step_problems` gives the `none` card's own `why` |
+
+**Plants, each run and then restored (checked):**
+- P1, `step_problems` taken out of the yaml: `check_card_reasons` reports it, and `reasons.test.ts` fails.
+- `step_problems` taken out of `NO_TRADE_REASONS`: `reasons.test.ts` fails, naming it.
+- `new_reason` added to the enum: the probe "a card reason outside the contract's list" reports it.
+- The TRADE `reason: null` rule removed: the TRADE-with-reason probe reports it.
+- P2, one example left at 2.13.0: `check_fno_screens` reports the example, and mockup 39's data differs.
+- P3, mockup 40's `data.json` left at 2.13.0: `check_mockups` reports it.
+- P4, the rejected mapping (a rule tying `hard_rule_breach` to `advocate.verdict`): `check_card_reasons` reports
+  that `hard_rule_breach` is refused.
+- Reader plants (in the test): the `reason:` key missing, and the enum split over two lines, both throw "reason enum
+  not found".
+
+**Mockups and screenshots (item 3, checked):** the nine F&O mockups were rebuilt with their own `build.py`. I
+compared each state's rendered text before and after, in Chromium:
+- 37, 39, 40, 41 and 45: no change. Their screenshots are kept.
+- 42, 43, 44 and 46: the data label changed. Every state was re-shot with `check_page.js` at 1280 and 390 px,
+  including 46's `india_stormy` with `h=5d`. All 13 shots report no console errors, no overflow and no external
+  requests.
+
+**One departure from item 3's table, with reason:** `37/notes.md:35` and `44/notes.md:29` still say 2.13.0.
+- Both name the version that added a feature: Q1's unknown answer day, and the page holds.
+- By the table's own rule, history mentions stay as they are; the table had wrongly listed these two lines as current
+  labels.
+- The current-version labels did change: `dataLabel` in 42, 43, 44 and 46, the `build.py` notes and 46's docstring,
+  and `1-base.js` in 37 and 42-46.
+
+**Next, outside this repository:** exepex/trading re-pins 2.14.0 after this merges. Then T1e's
+`test_every_reason_the_card_can_give_is_in_the_pinned_contract` should go green. I could not run it here: it
+needs T1e's branch and the re-pin.
+
+**Self-review:**
+- The diff matches the claims.
+- Every new file is under 350 lines: `check_fno_screens.py` 272, `fno_rules.py` 170, `reasons.ts` 16, and the test
+  51.
+- No new dependency.
+- Judge 3 addendum 1's minor (option (b)'s cost) is moot now that the owner has answered (a).
+

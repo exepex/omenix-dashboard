@@ -16,6 +16,7 @@ Usage: pip install -r tools/api/requirements.txt; python3 tools/api/check_fno_sc
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import re
@@ -185,6 +186,20 @@ def check_card(doc: dict, problems: list[str]) -> None:
         problems.append("FnoCard.label must be the constant PAPER ONLY")
 
 
+# The codes exepex/trading's card already gives that 2.14.0 added (W3i): each must be accepted on a NO TRADE card
+CARD_REASONS_ADDED = ("trade_fields_not_built", "hard_rule_breach", "step_problems")
+
+
+def check_card_reasons(doc: dict, problems: list[str]) -> None:
+    """The empty card with each added reason must validate: no rule ties these codes to other fields (W3i)."""
+    ref = response_ref(next(op for _, op in screen_operations(doc) if op["operationId"] == "getFnoCard"))
+    for code in CARD_REASONS_ADDED:
+        value = copy.deepcopy(doc["components"]["examples"]["getFnoCard_india_none"]["value"])
+        value["payload"]["reason"] = code
+        if found := errors(doc, ref, value):
+            problems.append(f"a NO TRADE card with reason {code} is refused: {found[0]}")
+
+
 def check_mockups(doc: dict, problems: list[str], mockups: Path = bundle.REPO / "design/mockups") -> None:
     ops = {op["operationId"]: op for _, op in screen_operations(doc)}
     for folder, op_id in MOCKUPS.items():
@@ -232,6 +247,7 @@ def check(doc: dict, own: dict, problems: list[str]) -> list:
     check_never_sent_values(doc, problems)
     check_privacy(doc, problems)
     check_card(doc, problems)
+    check_card_reasons(doc, problems)
     check_sums(doc, problems)
     check_mockups(doc, problems)
     planted_also(doc, problems)
