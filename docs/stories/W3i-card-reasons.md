@@ -305,8 +305,10 @@ needs T1e's branch and the re-pin.
 
 ## Follow-up W3i-2: every F&O mockup page equals its build (judge 4, minor 1)
 
-**Lane:** 2 (orchestrator, 24 Oct 2026). It adds a check, and refactors the mockup builder with no change to its
-output; no data, contract or screen changes. **Status:** built, claims below, to the orchestrator.
+**Lane:** 1 (judge 5, finding 1: it edits `tools/api/check_fno_screens.py`, and `CLAUDE.md` puts `tools/` and every
+non-CSS code file in lane 1; the earlier "lane 2" was wrong). It adds a check, and refactors the mockup builder with
+no change to its output; no data, contract or screen changes. **Status:** text round 2 (answers judge 5); code
+unchanged at `807cd2f`, verified by judge 5 addendum 1.
 
 **Why (strong evidence):** judge 4's plant P5 set mockup 42's `page.html` back to 2.13.0, and every check still
 passed. `check_mockups` compares only `data.json` with the examples (`check_fno_screens.py:203-215` at `76ef53f`), and
@@ -329,8 +331,23 @@ The committed pages are correct today: judge 4 rebuilt all nine and got no diff.
    is written to a scratch folder, and `check_pages` on that folder must report 42. If it does not, that is a
    problem.
 
-**Out:** the other mockups (01-35, 38) are not in `MOCKUPS` and are not catalog-built; extending the check to them is
-not asked for. The shell's own data changing would correctly flag every F&O page as stale.
+**Out:** the other platform pages (30-35 and 38) are not in `MOCKUPS`, so they stay unchecked and can still go stale
+silently. Extending the check to them is not asked for.
+
+**The coupling this check creates (judge 5, finding 2; strong evidence: `platform_build.render`, judge 5's plant
+J3):**
+- Each F&O page embeds `design/system` (through `inline_system`), `design/mockups/_shared/shell.css`,
+  `design/mockups/_platform/js/*.js` and 30-shell's `data.json`.
+- So any edit to one of them, even one comment in `components.css`, makes `check_fno_screens.py` report all nine F&O
+  pages until each is rebuilt. Most such edits are lane-2 design work.
+- `check_fno_screens.py` is not in `CLAUDE.md`'s pre-push gates, but CI's `api-contract` job runs it
+  (`.github/workflows/api-contract.yml:32`). So a design commit can pass its local gates and still turn
+  `api-contract` red.
+- Remedy, for whoever changes those files: rebuild the nine F&O pages (each `python3 design/mockups/<nn>/build.py`) in
+  the same commit, or run `python3 tools/api/check_fno_screens.py` before pushing design work. The problem message
+  names the rebuild command for each page.
+- **Proposed later, as a separate item, not in this story:** add `python3 tools/api/check_fno_screens.py` to
+  `CLAUDE.md`'s pre-push gates. That is a rule-document change, lane 1, which the owner sees.
 
 **Acceptance criteria:**
 - C1. On today's tree, `check_fno_screens.py` reports "every rule holds", and rebuilding the nine pages through
@@ -346,7 +363,8 @@ not asked for. The shell's own data changing would correctly flag every F&O page
 **Plants (manual, each then restored):**
 - P5, judge 4's plant;
 - one character changed in 44's embedded JavaScript;
-- 40's `data.json` and `page.html` both left at 2.13.0, which `check_mockups` and `check_pages` both report;
+- 40's `data.json` and `page.html` both left at 2.13.0: only `check_mockups` reports it, because a page built from its
+  own stale data equals its build (the limit in claims correction 2);
 - `check_pages` removed from `check()`, which is caught by the review of the diff and by `planted_page`'s message
   never appearing. This one is stated honestly: a removed check cannot test itself.
 
@@ -373,4 +391,13 @@ not asked for. The shell's own data changing would correctly flag every F&O page
 2. C2's "a page built from a stale `data.json`": a page and its `data.json` made stale together and consistently pass
    `check_pages`, because the page is still the build of that data. `check_mockups` catches that case (data differs
    from the examples). The two checks together tie the page to the contract, as the text says.
+
+**Answers to judge 5 (text round 1, `reviews/judge/judge_5_*`), by number:**
+1. **Accepted.** The story now says lane 1, and the merge message is the orchestrator's: it must start "Lane 1:".
+   Commit `807cd2f`'s title says "Lane 2:"; I leave it as it is rather than rewrite pushed history.
+2. **Accepted** (checked: `render` embeds the four sources; `api-contract.yml:32` runs the check; `CLAUDE.md`'s gates
+   do not). The coupling, the CI effect, the remedy and the unchecked pages 30-35 and 38 are now in "Out" and the
+   coupling paragraph. Adding the check to the pre-push gates is proposed as a separate lane-1 item.
+3. **Accepted.** The plant line now matches the limit: only `check_mockups` reports a page and data that are stale
+   together.
 
