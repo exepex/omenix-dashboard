@@ -5,9 +5,9 @@
 import type { FnoFamily } from "../fno-forecast-lab/contract.ts";
 import type { Leg } from "../fno-paper-books/contract.ts";
 import type { MissingInput, WeatherColour } from "../fno-weather/contract.ts";
+import type { NoTradeReason } from "./reasons.ts";
 
 export type CardStatus = "TRADE" | "NO TRADE" | "WATCH";
-export type NoTradeReason = "no_approved_strategy" | "weather_red" | "data_check_failed" | "risk_bucket_full" | "budget_stop" | "cost_wall" | "advocate_hard_rule";
 
 export interface CardTiming {
   market_data_cutoff: string;

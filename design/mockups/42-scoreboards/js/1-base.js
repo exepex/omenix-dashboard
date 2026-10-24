@@ -1,5 +1,5 @@
 /* 42-scoreboards page runtime: the F&O scoreboards (B whole systems, A matched decisions; never combined), drawn from the F&O data catalog's Mock
-   examples (contract 2.13.0; story W3). Split by purpose: 1 state and helpers, 2 the page, 9 mount.
+   examples (contract 2.14.0; story W3). Split by purpose: 1 state and helpers, 2 the page, 9 mount.
    The screen computes nothing beyond drawing: every figure is the payload's. Tokens only; never colour alone. */
 let KEY = null;
 /* URL: s (a state key of data.json); the default is the good case */
