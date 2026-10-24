@@ -3,7 +3,7 @@
 **Repository:** exepex/omenix-dashboard · **Lane:** 1 (`api/`, `.ts`; part B also `design/`, which rides in this
 lane-1 story) · **Size:** S (part A), S (part B) · **Asked by:** the orchestrator, 24 Oct 2026, for exepex/trading's
 T1e (owner, 24 Oct 2026, DESK_DECISIONS "The card warns when any step failed") · **Branch:** `story/fno-card-reasons`
-· **Status:** text round 1, to the judge
+· **Status:** text round 2 (answers judge 3, below), to the judge; no code until the judge and the owner say yes
 
 **Description:** As the owner, I want every reason the F&O backend can put on the daily card to be allowed by the
 dashboard's contract, so that a real card day never fails validation and never drops out of my dashboard, and, once I
@@ -44,15 +44,24 @@ plain warning, never hidden.
   tool, not the product. So part A changes nothing on any screen.
 - **No real card reaches the dashboard yet.** No page builder in `fno/market_read_models/` publishes the `card` page
   (searched: no `getFnoCard`/`card` page builder); the only live consumer of the enum is the backend's delivery test.
-- **The owner paused screen work** (exepex/trading DESK_DECISIONS, 16 Oct 2026: "don't design the screen ... I didn't
-  like UI mockups": the F&O mockups 37 and 39-46 are not approved, "no agent designs screens until the owner says
-  so", "nothing more is built on" the W3 screens; 21 Oct: "UI paused"). The 24 Oct T1e decision is about the Slack
-  card, not the dashboard screen. So this story is split:
-  - **Part A, now:** the contract and the typed read-model contract only. No new UI surface.
-  - **Part B, only after the owner says so:** the warning on the card screen and mockup 39's new state. The orchestrator
-    asks the owner (question 1). Specified in full below so that it is ready.
+- **The owner paused screens, mockups and contract versions** (exepex/trading `docs/DESK_DECISIONS.md` on main):
+  - line 238, 16 Oct: "No new mockups, screens **or contract versions** start";
+  - line 243, 16 Oct: the F&O mockups 37 and 39-46 are not approved; "No agent designs screens until the owner says
+    so"; nothing more is built on the W3 screens;
+  - line 244, 16 Oct: "No dashboard screens, mockups, **contracts** or read-model publishing pages ... are started or
+    extended";
+  - line 294, 22 Oct (cut-list): from Mon 26 Oct the UI is frozen.
 
-## Part A: the contract (built now)
+  The 24 Oct T1e row (line 322) is about the Slack card and lifts none of these. So **both parts wait for the owner**
+  (question 1):
+  - **Part A** (the contract version, the typed read-model contract, and the mechanical version change in the
+    mockups): it needs an owner exception, because it starts contract version 2.14.0. The case for it: it unblocks
+    T1e's warning, and it repairs a bug that exists today, since a C4 refusal day (`hard_rule_breach`) already fails
+    the backend's delivery test on main (T1e text, `T-cards.md:752-754` at `b673e0ddd`). It adds no screen element.
+  - **Part B** (the warning on the card screen, examples and mockup 39's states): screen design, so it waits for the
+    owner's review of the F&O mockups. Specified in full below so that it is ready.
+
+## Part A: the contract (built only after the owner's exception, question 1)
 
 Scope, in:
 1. `api/schemas/fno-card.yaml`: `reason`'s enum gains `trade_fields_not_built`, `hard_rule_breach` and
@@ -63,16 +72,26 @@ Scope, in:
    the registry rung, so any rule would invent a relation the backend does not send; and the backend's test builds
    each real card from the `none` example with only `reason` swapped (`test_p1_t1_card.py:35-48`), so a rule would
    fail real days.
-3. **Version 2.14.0**, additions only: every 2.13 payload stays valid. `api/openapi.yaml` `info.version` and one
-   "Version 2.14" paragraph (what was added and why, that the card page is not published yet); `api/README.md`'s
-   versioning line; every F&O example's `schema_version` (36 in `api/examples/fno-screens.json`, required by
-   `check_fno_screens.py:103`), regenerated with the repository's tools, never by hand, and with them the generated
-   fixture `web/lib/fixtures/fno-screens.generated.json` and the F&O mockups' `data.json` (`check_mockups`: a
-   mockup's data must equal the examples). Only `schema_version` changes in those files; build scripts are
-   deterministic. If a mockup's page shows the version, its screenshots are re-shot; otherwise not.
-4. `api/catalog/fno-screens.md`, regenerated (`render_fno_catalog.py`).
-5. `web/lib/fno-card/contract.ts`: `NoTradeReason` gains the three codes, with a one-line meaning each.
-6. A dashboard reader on 2.13 that receives a new code still works: it checks the major version only and renders
+3. **Version 2.14.0**, additions only: every 2.13 payload stays valid. Every file that changes, and how:
+
+   | File(s) | Change | How it is made and checked |
+   |---|---|---|
+   | `api/openapi.yaml` | `info.version` 2.14.0 and one "Version 2.14" paragraph (what was added and why; the card page is not published yet; the codes have no example until part B) | by hand; `check_contract.py` |
+   | `api/README.md` | the versioning line gains 2.14.0 | by hand |
+   | `api/examples/fno-screens.json` | the 36 `"schema_version": "2.13.0"` become `"2.14.0"`; nothing else | it has no generator, so one scripted, exact replace of that string; checked by `check_fno_screens.py:103` (every example equals `info.version`) and by `git diff --numstat` showing exactly 36 changed lines |
+   | `api/catalog/fno-screens.md` | the enum list | `render_fno_catalog.py`, then `--check` |
+   | `web/lib/fixtures/fno-screens.generated.json` | the same 36 values | `node tools/sync-design.mjs` from `web/`; `--check` (and `lib/ui/tests/design-sync.test.ts`) |
+   | the nine F&O mockups' `data.json` and `page.html` (37, 39, 40, 41, 42, 43, 44, 45, 46; each `page.html` embeds its data) | `schema_version` | each mockup's own `build.py`, which reads the examples; checked by `check_mockups` (`check_fno_screens.py:188`) |
+   | the "contract 2.13.0" labels: `js/9-mount.js` `dataLabel` in 42, 43, 44 and 46 (shown on the page); the `note` strings in `build.py` of 37, 42, 43, 44, 45, 46 (in the data); the header comments in `js/1-base.js` of 37, 42, 43, 44, 45, 46 and `46/build.py:1`; `37/notes.md`, `44/notes.md` | become "contract 2.14.0" | by hand, then each `build.py` again. They change because a page that shows 2.14.0 data must not say 2.13.0. Mentions that name when something was added (for example `44/js/3-holds.js:1`, "contract 2.13, page page_holds") stay as they are, since they are history |
+   | screenshots | re-shot (1280 and 390 px, `check_page.js`) for every mockup whose rendered text changes: 42, 43, 44 and 46 for certain (`dataLabel`), and 37 and 45 if their `note` is drawn | the builder compares each page's rendered text before and after; a page whose text is unchanged keeps its screenshots |
+
+   These mockup edits are mechanical (version only, no design change), but they still touch paused mockups, so they
+   are part of question 1's exception.
+4. **The codes in TypeScript.** `web/lib/fno-card/contract.ts:4` says "Types only", so the runtime list does not go
+   there. A new file, `web/lib/fno-card/reasons.ts`, holds `NO_TRADE_REASONS` (`as const`, all ten codes, each with a
+   one-line meaning) and `export type NoTradeReason = (typeof NO_TRADE_REASONS)[number]`. `contract.ts` imports the
+   type from it and stays types only.
+5. A dashboard reader on 2.13 that receives a new code still works: it checks the major version only and renders
    `reason_text`, never the code (reasoning from `view.ts:51`; tested in part A test 3).
 
 Out, with where it goes:
@@ -93,25 +112,41 @@ Acceptance criteria (part A):
 - A2. A TRADE or WATCH card with any non-null reason still fails (the existing `allOf`, unchanged).
 - A3. `info.version` is 2.14.0 and every F&O example says 2.14.0; every 2.13 example payload, with only its version
   changed, still validates (additions only).
-- A4. `NoTradeReason` in `web/lib/fno-card/contract.ts` equals the yaml enum without `null`, checked by a test that
-  reads the yaml, so a future code added to one and not the other fails.
-- A5. No screen, component or view file changes in part A (`git diff --stat` lists none under `web/components/`,
-  `web/app/` or `web/lib/fno-card/view.ts`); mockups change only in `schema_version` inside `data.json`.
+- A4. `NO_TRADE_REASONS` (`web/lib/fno-card/reasons.ts`) equals the yaml enum without `null`, in the same order,
+  checked by a test that reads the yaml (test plan 2), so a code added to one and not the other fails.
+  `contract.ts` still holds types only.
+- A5. No screen, component or view file changes in part A: `git diff --stat` lists none under `web/components/` or
+  `web/app/`, and not `web/lib/fno-card/view.ts`. The only mockup changes are the version values and labels in
+  item 3's table, and the screenshots that table names.
 - A6. The gates: `node tools/check_code_size.mjs`; `python3 tools/api/check_contract.py`,
   `python3 tools/api/check_fno_screens.py`, `python3 tools/api/render_fno_catalog.py --check`; then
   `cd web && npm ci --ignore-scripts && npm run typecheck && npm test && npm run build`. All pass.
 
 Test plan (part A):
-1. `tools/api/fno_rules.py` gains probes: the `none` example with `reason` set to each new code validates (positive);
-   `new_reason` fails (negative, kept); `trade` with `reason: step_problems` fails (negative).
-2. `web/lib/fno-card/tests/reasons.test.ts` (new): reads `api/schemas/fno-card.yaml`, takes `reason`'s enum, and
-   compares it with a runtime list exported beside `NoTradeReason` (`NO_TRADE_REASONS`, `as const`, the type derived
-   from it, so type and list cannot differ). Plant: drop `step_problems` from the list; the test must fail and name
-   it.
+1. **Schema checks, in `tools/api/check_fno_screens.py`** (256 lines now; it stays under 350).
+   - Positive, new function `check_card_reasons`: the `none` example with `reason` set to each of the three new
+     codes validates. These cannot go in `fno_rules.py`, because its probes are invalid pages only (its docstring).
+   - Negative, two new probes in `fno_rules.py` (neither exists today): the `none` example with `reason: new_reason`
+     is refused, and the `trade` example with `reason: step_problems` is refused.
+2. **`web/lib/fno-card/tests/reasons.test.ts` (new).** `web/` has no YAML parser, and none is added (no package
+   change). The test reads `api/schemas/fno-card.yaml` as text, through a small function `reasonEnum(text)` in the
+   test file:
+   - it finds the line `reason:` at four spaces of indent;
+   - it takes the first `enum: [...]` line after it, before the next key at the same indent;
+   - it splits the list and drops `null`.
+
+   It throws "reason enum not found" when either line is missing, so a moved or reshaped schema fails loudly and never
+   passes as empty. The test compares the result with `NO_TRADE_REASONS`, order included. Plants proving the reader:
+   - a text without the `reason:` key throws;
+   - a text whose `enum:` line lacks `step_problems` gives a list that fails the comparison, naming `step_problems`;
+   - a flow-style enum split over two lines throws, so the reader never reads half a list.
+
+   If the schema is later written in block style, this test fails and its reader is changed with it (stated in a
+   comment).
 3. `headerOf` on the `none` example with `reason: step_problems` gives the same `why` (its `reason_text`): no screen
    output depends on the code in part A.
-4. Plants, each must fail a named check and be restored: P1 a new code left out of the yaml (test 2 and probe 1);
-   P2 one example left at 2.13.0 (`check_fno_screens`); P3 a mockup `data.json` left unregenerated
+4. Plants, each must fail a named check and be restored: P1 a new code left out of the yaml (test 2 and
+   `check_card_reasons`); P2 one example left at 2.13.0 (`check_fno_screens`); P3 a mockup `data.json` left unregenerated
    (`check_mockups`).
 
 ## Part B: the card screen's reason line and warning (only after the owner allows it)
@@ -177,12 +212,35 @@ dropped, the glyph dropped, the label replacing `reason_text`, each caught by a 
 
 ## Questions for the orchestrator (to the owner where marked)
 
-1. **(owner)** May the card screen and mockup 39 get part B's warning now, or does the 16 Oct "no screen design" stay?
-   Recommendation: part A now (reasoning only: it unblocks T1e and changes no screen); part B when the owner reviews
-   the F&O mockups.
-2. Should the backend send a separate `step_warning` field so the screen can warn on every day the Slack card does?
-   Recommendation: yes, with part B (reasoning only: today the screen would miss the warning on exactly the worst days).
-3. Confirm adding `trade_fields_not_built` (recommended above, strong evidence).
+1. **(owner)** The pause (lines 238, 243, 244 and 294) covers contract versions and mockups. May this story have an
+   exception?
+   - **(a) Part A only.** Contract 2.14.0, the typed list, and the version-only mockup changes of item 3's table. No
+     screen element.
+   - **(b) Parts A and B.** Also the card screen's warning and mockup 39's states.
+   - **(c) Neither.** Then T1e cannot merge, and C4 refusal days keep failing the backend's delivery test.
+
+   Recommendation: (a) (reasoning only). It unblocks T1e and fixes a bug that exists today, and it changes nothing
+   the owner sees. Part B waits for the owner's review of the F&O mockups. Nothing is built before the answer.
+2. Should the backend send a separate `step_warning` field, so that the screen can warn on every day the Slack card
+   does? This is a contract change, so the pause covers it too. Recommendation: yes, with part B (reasoning only:
+   without it, the screen misses the warning on exactly the worst days).
+3. `trade_fields_not_built` is included (orchestrator, 24 Oct: all three codes).
+
+## Answers to judge 3 (round 1, `reviews/judge/judge_3_W3i-card-reasons.md`), by number
+
+1. **Accepted** (checked: DESK_DECISIONS lines 238, 244 and 294 say what the judge quotes). I had read the pause as
+   covering screens only. Now both parts wait for the owner, and question 1 covers part A as an exception, with its
+   case.
+2. **Accepted** (checked: no generator reads into `api/examples/fno-screens.json`; nine `page.html` files embed
+   `2.13.0`; the `dataLabel` text in 42, 43, 44 and 46; `web/tools/sync-design.mjs:10`). Item 3 is now a table of
+   every file, with how each is changed and checked, the decision on the labels (they change), and the screenshots
+   rule. A5 is corrected to match it.
+3. **Accepted** (checked: `web/package.json` has no YAML parser; `contract.ts:4` says "Types only"). The test reads
+   the one `enum:` line with plants, and adds no dependency. The runtime list goes in a new `reasons.ts`, so
+   `contract.ts` stays types only.
+4. **Accepted** (checked: the `fno_rules.py` docstring says its probes are invalid pages; there is no `new_reason`
+   probe and no probe for a TRADE card with a reason). The positive checks move to `check_card_reasons`, and both
+   negative probes are marked new.
 
 **Depends:** nothing in this repository; exepex/trading re-pins after part A merges, then T1e can merge ·
 **Judge verifies:** the criteria above, the backend meanings against `fno/constants.py` and `T-cards.md` (T2, T1e),
